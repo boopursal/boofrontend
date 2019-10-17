@@ -1,9 +1,9 @@
 import React, {useEffect, useCallback, useRef, useState} from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment} from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment, CircularProgress, Avatar} from '@material-ui/core';
 import {useForm} from '@fuse/hooks';
 import * as Actions from './store/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {TextFieldFormsy} from '@fuse';
+import {TextFieldFormsy, FuseUtils} from '@fuse';
 import Formsy from 'formsy-react';
 import _ from '@lodash';
 
@@ -23,6 +23,8 @@ function AdminsDialog(props)
     const dispatch = useDispatch();
     const adminsDialog = useSelector(({adminsApp}) => adminsApp.admins.adminsDialog);
     const user = useSelector(({auth}) => auth.user);
+    const imageReqInProgress = useSelector(({adminsApp}) => adminsApp.admins.imageReqInProgress);
+    const avatar = useSelector(({adminsApp}) => adminsApp.admins.avatar);
 
     const {form, handleChange, setForm} = useForm(defaultFormState);
 
@@ -36,7 +38,6 @@ function AdminsDialog(props)
             /**
              * Dialog type: 'edit'
              */
-            console.log(adminsDialog.data);
             if ( adminsDialog.type === 'edit' && adminsDialog.data )
             {
                 setForm({...adminsDialog.data});
@@ -67,14 +68,31 @@ function AdminsDialog(props)
 
     }, [adminsDialog.props.open, initDialog]);
 
-    
+    useEffect(() => {
+        
+        if(avatar){
+            setForm(_.set({...form}, 'avatar', avatar));
+        }else{
+            setForm(_.set({...form}, 'avatar', null));
+        }
+
+    }, [avatar]);
 
     function closeComposeDialog()
     {
         adminsDialog.type === 'edit' ? dispatch(Actions.closeEditAdminsDialog()) : dispatch(Actions.closeNewAdminsDialog());
     }
 
-    
+    function handleUploadChange(e)
+    {
+        const file = e.target.files[0];
+        if ( !file )
+        {
+            return;
+        }
+        dispatch(Actions.uploadImage(file));
+        
+    }
 
     function handleSubmit(event)
     {
@@ -126,7 +144,16 @@ function AdminsDialog(props)
                         {adminsDialog.type === 'new' ? 'Nouveau Admins' : 'Edit Admins'}
                     </Typography>
                 </Toolbar>
+                <div className="flex flex-col items-center justify-center pb-24">
                 
+                {imageReqInProgress ? 
+                    <Avatar className="">
+                        <CircularProgress size={24}  />
+                    </Avatar>
+                    :
+                    <Avatar className="w-96 h-96" alt="contact avatar" src={form.avatar? FuseUtils.getUrl()+form.avatar.url : "assets/images/avatars/images.png"}/>
+                    }
+                </div>
             </AppBar>
             <Formsy 
             onValidSubmit={handleSubmit}
@@ -353,6 +380,15 @@ function AdminsDialog(props)
                                     </div> 
                                     </div>) : ''
                     }
+
+                    <div className="flex">
+                        <input
+                            accept="image/*"
+                            id="button-file"
+                            type="file"
+                            onChange={handleUploadChange}
+                        />     
+                    </div>
                     
                    
                 </DialogContent>
@@ -363,7 +399,7 @@ function AdminsDialog(props)
                             variant="contained"
                             color="primary"
                             type="submit"
-                            disabled={!isFormValid}
+                            disabled={!isFormValid || imageReqInProgress}
                         >
                             Ajouter
                         </Button>
@@ -374,7 +410,7 @@ function AdminsDialog(props)
                             variant="contained"
                             color="primary"
                             type="submit"
-                            disabled={!isFormValid}
+                            disabled={!isFormValid || imageReqInProgress}
                         >
                             Modifier
                         </Button>

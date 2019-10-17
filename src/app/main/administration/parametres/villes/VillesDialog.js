@@ -30,7 +30,6 @@ function VillesDialog(props)
             /**
              * Dialog type: 'edit'
              */
-            console.log(VillesDialog.data)
             if ( VillesDialog.type === 'edit' && VillesDialog.data )
             {
                let pays={

@@ -29,7 +29,6 @@ function SousSecteursDialog(props)
             /**
              * Dialog type: 'edit'
              */
-            console.log(SousSecteursDialog.data)
             if ( SousSecteursDialog.type === 'edit' && SousSecteursDialog.data )
             {
                let secteur={

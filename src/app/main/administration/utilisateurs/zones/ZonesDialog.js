@@ -1,9 +1,9 @@
 import React, {useEffect, useCallback, useRef, useState} from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment} from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment, Avatar, CircularProgress} from '@material-ui/core';
 import {useForm} from '@fuse/hooks';
 import * as Actions from './store/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {TextFieldFormsy} from '@fuse';
+import {TextFieldFormsy, FuseUtils} from '@fuse';
 import Formsy from 'formsy-react';
 import _ from '@lodash';
 import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
@@ -17,7 +17,8 @@ const defaultFormState = {
     codepostal:  null,
     phone: '',
     email: '',
-    pays : null
+    pays : null,
+    
 };
 
 function ZonesDialog(props)
@@ -25,6 +26,8 @@ function ZonesDialog(props)
     const dispatch = useDispatch();
     const ZonesDialog = useSelector(({zonesApp}) => zonesApp.zones.zonesDialog);
     const Pays = useSelector(({zonesApp}) => zonesApp.zones.pays);
+    const imageReqInProgress = useSelector(({zonesApp}) => zonesApp.zones.imageReqInProgress);
+    const avatar = useSelector(({zonesApp}) => zonesApp.zones.avatar);
    
     const {form, handleChange, setForm} = useForm(defaultFormState);
 
@@ -73,7 +76,16 @@ function ZonesDialog(props)
 
     }, [ZonesDialog.props.open, initDialog]);
 
-    
+    useEffect(() => {
+        
+        if(avatar){
+            setForm(_.set({...form}, 'avatar', avatar));
+        }else{
+            setForm(_.set({...form}, 'avatar', null));
+        }
+
+    }, [avatar]);
+
 
     function closeComposeDialog()
     {
@@ -152,7 +164,22 @@ function ZonesDialog(props)
                         {ZonesDialog.type === 'new' ? 'Nouvelle Zone' : 'Edit Zone'}
                     </Typography>
                 </Toolbar>
-                
+                <div className="flex flex-col items-center justify-center pb-24">
+                    {imageReqInProgress ? 
+                    <Avatar className="">
+                        <CircularProgress size={24}  />
+                    </Avatar>
+                    :
+                    <Avatar className="w-96 h-96" alt="contact avatar" src={form.avatar? FuseUtils.getUrl()+form.avatar.url : "assets/images/avatars/images.png"}/>
+                    }
+                    
+                    {ZonesDialog.type === 'edit' && (
+                        <Typography variant="h6" color="inherit" className="pt-8">
+                            {form.firstName}&ensp;
+                            {form.lastName}
+                        </Typography>
+                    )}
+                </div>
             </AppBar>
             <Formsy 
             onValidSubmit={handleSubmit}
@@ -425,7 +452,7 @@ function ZonesDialog(props)
                             variant="contained"
                             color="primary"
                             type="submit"
-                            disabled={!isFormValid}
+                            disabled={!isFormValid || imageReqInProgress}
                         >
                             Ajouter
                         </Button>
@@ -436,7 +463,7 @@ function ZonesDialog(props)
                             variant="contained"
                             color="primary"
                             type="submit"
-                            disabled={!isFormValid}
+                            disabled={!isFormValid || imageReqInProgress}
                         >
                             Modifier
                         </Button>

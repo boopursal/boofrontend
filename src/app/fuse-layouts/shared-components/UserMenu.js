@@ -3,6 +3,7 @@ import {Avatar, Button, Icon, ListItemIcon, ListItemText, Popover, MenuItem, Typ
 import {useSelector, useDispatch} from 'react-redux';
 import * as authActions from 'app/auth/store/actions';
 import {Link} from 'react-router-dom';
+import { FuseUtils } from '@fuse';
 
 function UserMenu(props)
 {
@@ -25,7 +26,7 @@ function UserMenu(props)
             <Button className="h-64" onClick={userMenuClick}>
                 {user.data.photoURL ?
                     (
-                        <Avatar className="" alt="user photo" src={user.data.photoURL}/>
+                        <Avatar className="" alt="user photo" src={FuseUtils.getUrl()+user.data.photoURL}/>
                     )
                     :
                     (

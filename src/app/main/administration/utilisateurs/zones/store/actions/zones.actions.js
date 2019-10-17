@@ -17,8 +17,10 @@ export const ADD_ZONE = '[ZONES APP] ADD ZONE';
 export const SAVE_ERROR = '[ZONES APP] SAVE ERROR';
 export const UPDATE_ZONE = '[ZONES APP] UPDATE ZONE';
 export const REMOVE_ZONE = '[ZONES APP] REMOVE ZONE';
-export const UPLOAD_IMAGE = '[ZONES APP] UPLOAD ZONE';
 export const STATUT_ZONE = '[ZONES APP] STATUT ZONE';
+export const UPLOAD_IMAGE = '[ZONES APP] UPLOAD IMAGE';
+export const UPLOAD_REQUEST = '[ZONES APP] UPLOAD REQUEST';
+export const UPLOAD_ERROR = '[ZONES APP] UPLOAD ERROR';
 
 export function getPays()
 {
@@ -91,6 +93,9 @@ export function addZone(newZone)
     if (newZone.pays)
     newZone.pays = newZone.pays.map((item => {return item.value}));
 
+    if(newZone.avatar && newZone.avatar.url)
+    newZone.avatar = newZone.avatar['@id'];
+
     return (dispatch, getState) => {
 
        
@@ -110,9 +115,19 @@ export function addZone(newZone)
         ).catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error),
-
-            })
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return key+': '+value;
+                      }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
         });
     };
 }
@@ -165,13 +180,13 @@ export function updateZone(Zone)
 
 export function removeZone(Zone)
 {
-    Zone.del=true;
-    delete Zone.pays;
-    Zone.name=Zone.name+'_deleted-'+Zone.id;
+    
+    let UpdateZone = {del :true,username : Zone.username+'_deleted-'+Zone.id,email : Zone.email+'_deleted-'+Zone.id}
+    
     return (dispatch, getState) => {
 
         
-        const request = agent.put(Zone['@id'],Zone);
+        const request = agent.put(Zone['@id'],UpdateZone);
 
         return request.then((response) =>
             Promise.all([
@@ -225,12 +240,16 @@ export function uploadImage(file)
               'Content-Type': 'multipart/form-data'
             }
         });
-
+        dispatch({
+            type: UPLOAD_REQUEST
+        });
         return request.then((response) =>
+        
             Promise.all([
+                (response),
                 dispatch({
                     type: UPLOAD_IMAGE,
-                    payload: response.data['hydra:member']
+                    payload: response.data
 
                 }),
                 dispatch(showMessage({message: 'Image uploaded!',anchorOrigin: {
@@ -239,6 +258,24 @@ export function uploadImage(file)
                 },
                 variant: 'success'}))
             ])
+        ).catch((error)=>{
+            dispatch({
+                type: UPLOAD_ERROR,
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return key+': '+value;
+                      }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
+        }
+
         );
     };
 }

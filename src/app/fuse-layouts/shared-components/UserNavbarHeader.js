@@ -3,6 +3,7 @@ import {AppBar, Avatar, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/styles';
 import clsx from 'clsx';
 import {useSelector} from 'react-redux';
+import { FuseUtils } from '@fuse';
 
 const useStyles = makeStyles(theme => ({
     root  : {
@@ -54,7 +55,7 @@ function UserNavbarHeader(props)
             <Avatar
                 className={clsx(classes.avatar, "avatar")}
                 alt="user photo"
-                src={user.data.photoURL && user.data.photoURL !== '' ? user.data.photoURL : "assets/images/avatars/profile.jpg"}
+                src={user.data.photoURL && user.data.photoURL !== '' ? FuseUtils.getUrl()+user.data.photoURL : "assets/images/avatars/profile.jpg"}
             />
         </AppBar>
     );

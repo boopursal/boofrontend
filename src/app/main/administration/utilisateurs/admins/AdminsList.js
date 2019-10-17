@@ -5,15 +5,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip'
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
-import * as Actions2 from 'app/store/actions';
 //import AdminsMultiSelectMenu from './AdminsMultiSelectMenu';
-import _ from '@lodash';
 import moment from 'moment';
 function AdminsList(props)
 {
     const dispatch = useDispatch();
     const admins = useSelector(({adminsApp}) => adminsApp.admins.entities);
-    const admins_fields = useSelector(({adminsApp}) => adminsApp.admins);
     const user = useSelector(({auth}) => auth.user);
    // const selectedAdminsIds = useSelector(({adminsApp}) => adminsApp.admins.selectedAdminsIds);
     const searchText = useSelector(({adminsApp}) => adminsApp.admins.searchText);
@@ -37,34 +34,7 @@ function AdminsList(props)
         }
     }, [admins, searchText]);
 
-    useEffect(() => {
-        if ( admins_fields.executed && admins_fields.message)
-        {
-            dispatch(
-                Actions2.showMessage({
-                    message     : admins_fields.message,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: admins_fields.variant//success error info warning null
-                }));
-        }else if ( !admins_fields.executed && admins_fields.message){
-            dispatch(
-                Actions2.showMessage({
-                    message     : _.map(admins_fields.message, function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: admins_fields.variant//success error info warning null
-                }));
-        }
-    }, [dispatch,admins_fields.executed, admins_fields.message,admins_fields.variant]);
+    
 
     if ( !filteredData )
     {

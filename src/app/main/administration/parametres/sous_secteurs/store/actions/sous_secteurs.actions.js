@@ -136,7 +136,6 @@ export function removeSousSecteur(SousSecteur)
     SousSecteur.del=true;
     delete SousSecteur.secteur;
     SousSecteur.name=SousSecteur.name+'_deleted-'+SousSecteur.id;
-    console.log(SousSecteur)
     return (dispatch, getState) => {
 
         

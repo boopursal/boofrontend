@@ -13,8 +13,9 @@ const initialState = {
         },
         data : null
     },
-    image :null,
-    pays : null
+    avatar :null,
+    pays : null,
+    imageReqInProgress:false
 };
 
 const zonesReducer = function (state = initialState, action) {
@@ -97,12 +98,29 @@ const zonesReducer = function (state = initialState, action) {
             };
         }
        
-       
+        case Actions.UPLOAD_REQUEST:
+        {
+            return {
+                ...state,
+                imageReqInProgress:true
+
+            };
+        }
         case Actions.UPLOAD_IMAGE:
         {
             return {
                 ...state,
-                image: action.payload
+                avatar: action.payload,
+                imageReqInProgress:false
+
+            };
+        }
+        case Actions.UPLOAD_ERROR:
+        {
+            return {
+                ...state,
+                imageReqInProgress:false
+
             };
         }
         default:

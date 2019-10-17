@@ -70,7 +70,6 @@ class FuseUtils {
 
     static parseApiErrors(error)
     {
-        console.log(error.response.data['hydra:description'])
         if(error.response.data.violations){
             return error.response.data.violations.reduce(
                 (parsedErrors,violation)=>{

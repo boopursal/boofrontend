@@ -13,9 +13,8 @@ const initialState = {
         },
         data : null
     },
-    executed : false,
-    message  : null,
-    variant :''
+    avatar :null,
+    imageReqInProgress:false
 };
 
 const adminsReducer = function (state = initialState, action) {
@@ -25,8 +24,6 @@ const adminsReducer = function (state = initialState, action) {
         {
             return {
                 ...state,
-                executed : false,
-                message  : null,
                 entities   : _.keyBy(action.payload, 'id')
             };
         }
@@ -90,44 +87,30 @@ const adminsReducer = function (state = initialState, action) {
                 }
             };
         }
-        case Actions.ADD_ADMIN:
+        
+        case Actions.UPLOAD_REQUEST:
         {
             return {
                 ...state,
-                executed : true,
-                message  : "Admin ajouté avec succès",
-                variant : 'success'
-                
+                imageReqInProgress:true
+
             };
         }
-        case Actions.UPDATE_ADMIN:
+        case Actions.UPLOAD_IMAGE:
         {
             return {
                 ...state,
-                executed : true,
-                message  : "Admin modifié avec succès",
-                variant : 'success'
-                
+                avatar: action.payload,
+                imageReqInProgress:false
+
             };
         }
-        case Actions.REMOVE_ADMIN:
+        case Actions.UPLOAD_ERROR:
         {
             return {
                 ...state,
-                executed : true,
-                message  : "Admin supprimé avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.SAVE_ERROR:
-        {
-            return {
-                ...state,
-                executed : false,
-                message  : action.payload,
-                variant : 'error'
-                
+                imageReqInProgress:false
+
             };
         }
         default:

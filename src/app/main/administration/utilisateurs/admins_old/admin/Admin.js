@@ -99,7 +99,6 @@ function Admin(props)
 
     function handleChipChange(value, name)
     {
-        console.log(value);
         //setForm(_.set({...form}, name, value.map(item => item.value)));
         setForm(_.set({...form}, name, value));
     }
