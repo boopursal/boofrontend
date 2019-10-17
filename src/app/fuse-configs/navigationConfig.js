@@ -34,6 +34,13 @@ const navigationConfig = [
                         'icon' : 'verified_user',
                         'url'  : '/users/admin',
                     },
+                    {
+                        'id'   : 'zones-component',
+                        'title': 'Gestion des Admins Comm.',
+                        'type' : 'item',
+                        'icon' : 'verified_user',
+                        'url'  : '/users/zones',
+                    },
                     
                 ]
             },

@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {TextFieldFormsy} from '@fuse';
 import Formsy from 'formsy-react';
 import _ from '@lodash';
+import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
 
 const defaultFormState = {
     username    : '',
@@ -16,14 +17,15 @@ const defaultFormState = {
     codepostal:  null,
     phone: '',
     email: '',
+    pays : null
 };
 
-function AdminsDialog(props)
+function ZonesDialog(props)
 {
     const dispatch = useDispatch();
-    const adminsDialog = useSelector(({adminsApp}) => adminsApp.admins.adminsDialog);
-    const user = useSelector(({auth}) => auth.user);
-
+    const ZonesDialog = useSelector(({zonesApp}) => zonesApp.zones.zonesDialog);
+    const Pays = useSelector(({zonesApp}) => zonesApp.zones.pays);
+   
     const {form, handleChange, setForm} = useForm(defaultFormState);
 
 
@@ -36,68 +38,79 @@ function AdminsDialog(props)
             /**
              * Dialog type: 'edit'
              */
-            console.log(adminsDialog.data);
-            if ( adminsDialog.type === 'edit' && adminsDialog.data )
+            if ( ZonesDialog.type === 'edit' && ZonesDialog.data )
             {
-                setForm({...adminsDialog.data});
+               let pays= ZonesDialog.data.pays.map(item => ({
+                            value: item['@id'],
+                            label: item.name
+                         }));
+                setForm({...ZonesDialog.data});
+                setForm(_.set({...ZonesDialog.data}, 'pays', pays));
             }
 
             /**
              * Dialog type: 'new'
              */
-            if ( adminsDialog.type === 'new' )
+            if ( ZonesDialog.type === 'new' )
             {
                 setForm({
-                    ...adminsDialog.data,
-                    ...defaultFormState
+                    ...defaultFormState,
+                    ...ZonesDialog.data,
                 });
             }
         },
-        [adminsDialog.data, adminsDialog.type, setForm],
+        [ZonesDialog.data, ZonesDialog.type, setForm],
     );
 
     useEffect(() => {
         /**
          * After Dialog Open
          */
-        if ( adminsDialog.props.open )
+        if ( ZonesDialog.props.open )
         {
             initDialog();
         }
 
-    }, [adminsDialog.props.open, initDialog]);
+    }, [ZonesDialog.props.open, initDialog]);
 
     
 
     function closeComposeDialog()
     {
-        adminsDialog.type === 'edit' ? dispatch(Actions.closeEditAdminsDialog()) : dispatch(Actions.closeNewAdminsDialog());
+        ZonesDialog.type === 'edit' ? dispatch(Actions.closeEditZonesDialog()) : dispatch(Actions.closeNewZonesDialog());
     }
 
     
 
     function handleSubmit(event)
     {
-        //event.preventDefault();
         form.codepostal=_.parseInt(form.codepostal);
-        if ( adminsDialog.type === 'new' )
+      //  console.log(form)
+           
+        //event.preventDefault();
+        if ( ZonesDialog.type === 'new' )
         {
-            dispatch(Actions.addAdmin(form));
+            dispatch(Actions.addZone(form));
         }
         else
         {
-            dispatch(Actions.updateAdmin(form));
+            dispatch(Actions.updateZone(form));
         }
         closeComposeDialog();
     }
 
     function handleRemove()
     {
-        dispatch(Actions.removeAdmin(form));
+        
+        dispatch(Actions.removeZone(form));
         dispatch(Actions.closeDialog())
         closeComposeDialog();
     }
-
+    function handleChipChange(value, name)
+    {
+        //setForm(_.set({...form}, name, value.map(item => item.value)));
+        setForm(_.set({...form}, name, value));
+    }
 
     function disableButton()
     {
@@ -106,7 +119,20 @@ function AdminsDialog(props)
 
     function enableButton()
     {
+        
         setIsFormValid(true);
+    }
+
+
+    function handleUploadChange(e)
+    {
+        const file = e.target.files[0];
+        if ( !file )
+        {
+            return;
+        }
+        dispatch(Actions.uploadImage(file));
+        
     }
 
     return (
@@ -114,7 +140,7 @@ function AdminsDialog(props)
             classes={{
                 paper: "m-24"
             }}
-            {...adminsDialog.props}
+            {...ZonesDialog.props}
             onClose={closeComposeDialog}
             fullWidth
             maxWidth="xs"
@@ -123,7 +149,7 @@ function AdminsDialog(props)
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {adminsDialog.type === 'new' ? 'Nouveau Admins' : 'Edit Admins'}
+                        {ZonesDialog.type === 'new' ? 'Nouvelle Zone' : 'Edit Zone'}
                     </Typography>
                 </Toolbar>
                 
@@ -135,7 +161,8 @@ function AdminsDialog(props)
             ref={formRef}
             className="flex flex-col overflow-hidden">
                 <DialogContent classes={{root: "p-24"}}>
-                    <div className="flex">
+                    
+                <div className="flex">
                         
                         <TextFieldFormsy
                             className="mb-24"
@@ -273,7 +300,6 @@ function AdminsDialog(props)
                             label="E-mail"
                             id="email"
                             name="email"
-                            disabled={user.data.email === form.email }
                             value={form.email}
                             onChange={handleChange}
                             variant="outlined"
@@ -306,7 +332,7 @@ function AdminsDialog(props)
                             fullWidth
                         />
                     </div>
-                    {adminsDialog.type === 'new' ? 
+                    {ZonesDialog.type === 'new' ? 
                                     (
                                     <div>
                                     <div className="flex">
@@ -353,11 +379,47 @@ function AdminsDialog(props)
                                     </div> 
                                     </div>) : ''
                     }
-                    
-                   
+                    <div className="flex">
+                       
+                        <SelectReactFormsy
+                            
+                            id="pays"
+                            name="pays"
+                            className="MuiFormControl-fullWidth MuiTextField-root mb-24"
+                            value={
+                                
+                                    form.pays
+                                    
+                                
+                            }
+                            onChange={(value) => handleChipChange(value, 'pays')}
+                            placeholder="Selectionner multiple pays"
+                            textFieldProps={{
+                                label          : 'Pays',
+                                InputLabelProps: {
+                                    shrink: true
+                                },
+                                variant        : 'outlined'
+                            }}
+                            options={Pays}
+                            fullWidth
+                            isMulti
+                            required
+                        />
+                    </div>
+                    <div className="flex">
+                    <input
+                        accept="image/*"
+                        id="button-file"
+                        type="file"
+                        onChange={handleUploadChange}
+                    />     
+                    </div>
+
+                 
                 </DialogContent>
 
-                {adminsDialog.type === 'new' ? (
+                {ZonesDialog.type === 'new' ? (
                     <DialogActions className="justify-between pl-16">
                         <Button
                             variant="contained"
@@ -411,4 +473,4 @@ function AdminsDialog(props)
     );
 }
 
-export default AdminsDialog;
+export default ZonesDialog;

@@ -105,7 +105,7 @@ export function addAdmin(newAdmin)
 
 export function updateAdmin(Admin)
 {
-    if(Admin.avatar)
+    if(Admin.avatar && Admin.avatar.url)
     Admin.avatar = Admin.avatar['@id'];
     return (dispatch, getState) => {
 

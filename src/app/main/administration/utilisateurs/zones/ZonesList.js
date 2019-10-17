@@ -5,20 +5,32 @@ import {useDispatch, useSelector} from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip'
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
-import * as Actions2 from 'app/store/actions';
 //import AdminsMultiSelectMenu from './AdminsMultiSelectMenu';
-import _ from '@lodash';
 import moment from 'moment';
-function AdminsList(props)
+import _ from '@lodash';
+import { withStyles } from '@material-ui/core/styles';
+
+
+function ZonesList(props)
 {
     const dispatch = useDispatch();
-    const admins = useSelector(({adminsApp}) => adminsApp.admins.entities);
-    const admins_fields = useSelector(({adminsApp}) => adminsApp.admins);
-    const user = useSelector(({auth}) => auth.user);
-   // const selectedAdminsIds = useSelector(({adminsApp}) => adminsApp.admins.selectedAdminsIds);
-    const searchText = useSelector(({adminsApp}) => adminsApp.admins.searchText);
+    const Zones = useSelector(({zonesApp}) => zonesApp.zones.entities);
+    
+    //const selectedZonesIds = useSelector(({zonesApp}) => zonesApp.zones.selectedzonesIds);
+    const searchText = useSelector(({zonesApp}) => zonesApp.zones.searchText);
     
     const [filteredData, setFilteredData] = useState(null);
+    
+    const HtmlTooltip = withStyles(theme => ({
+        tooltip: {
+          maxWidth: 220,
+          fontSize: theme.typography.pxToRem(12),
+          border: '1px solid #dadde9',
+          '& b': {
+            fontWeight: theme.typography.fontWeightMedium,
+          },
+        },
+      }))(Tooltip);
 
     useEffect(() => {
         function getFilteredArray(entities, searchText)
@@ -31,40 +43,13 @@ function AdminsList(props)
             return FuseUtils.filterArrayByString(arr, searchText);
         }
 
-        if ( admins )
+        if ( Zones )
         {
-            setFilteredData(getFilteredArray(admins, searchText));
+            setFilteredData(getFilteredArray(Zones, searchText));
         }
-    }, [admins, searchText]);
+    }, [Zones, searchText]);
 
-    useEffect(() => {
-        if ( admins_fields.executed && admins_fields.message)
-        {
-            dispatch(
-                Actions2.showMessage({
-                    message     : admins_fields.message,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: admins_fields.variant//success error info warning null
-                }));
-        }else if ( !admins_fields.executed && admins_fields.message){
-            dispatch(
-                Actions2.showMessage({
-                    message     : _.map(admins_fields.message, function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: admins_fields.variant//success error info warning null
-                }));
-        }
-    }, [dispatch,admins_fields.executed, admins_fields.message,admins_fields.variant]);
+   
 
     if ( !filteredData )
     {
@@ -76,7 +61,7 @@ function AdminsList(props)
         return (
             <div className="flex flex-1 items-center justify-center h-full">
                 <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas d'admins!
+                    Il n'y a pas d'Admins commerciales!
                 </Typography>
             </div>
         );
@@ -94,7 +79,7 @@ function AdminsList(props)
                         onClick  : (e, handleOriginal) => {
                             if ( rowInfo )
                             {
-                                dispatch(Actions.openEditAdminsDialog(rowInfo.original));
+                                dispatch(Actions.openEditZonesDialog(rowInfo.original));
                             }
                         }
                     }
@@ -108,10 +93,10 @@ function AdminsList(props)
                                     event.stopPropagation();
                                 }}
                                 onChange={(event) => {
-                                    event.target.checked ? dispatch(Actions.selectAllAdmins()) : dispatch(Actions.deSelectAllAdmins());
+                                    event.target.checked ? dispatch(Actions.selectAllZones()) : dispatch(Actions.deSelectAllZones());
                                 }}
-                                checked={selectedAdminsIds.length === Object.keys(admins).length && selectedAdminsIds.length > 0}
-                                indeterminate={selectedAdminsIds.length !== Object.keys(admins).length && selectedAdminsIds.length > 0}
+                                checked={selectedZonesIds.length === Object.keys(Zones).length && selectedZonesIds.length > 0}
+                                indeterminate={selectedZonesIds.length !== Object.keys(Zones).length && selectedZonesIds.length > 0}
                             />
                         ),
                         accessor : "",
@@ -120,8 +105,8 @@ function AdminsList(props)
                                     onClick={(event) => {
                                         event.stopPropagation();
                                     }}
-                                    checked={selectedAdminsIds.includes(row.value.id)}
-                                    onChange={() => dispatch(Actions.toggleInSelectedAdmins(row.value.id))}
+                                    checked={selectedZonesIds.includes(row.value.id)}
+                                    onChange={() => dispatch(Actions.toggleInSelectedZones(row.value.id))}
                                 />
                             )
                         },
@@ -131,8 +116,8 @@ function AdminsList(props)
                     },
                     {
                         Header   : () => (
-                            selectedAdminsIds.length > 0 && (
-                                <AdminsMultiSelectMenu/>
+                            selectedZonesIds.length > 0 && (
+                                <ZonesMultiSelectMenu/>
                             )
                         ),
                         width    : 40,
@@ -155,7 +140,8 @@ function AdminsList(props)
 
                             row.original.avatar ?
                             <Avatar className="mr-8" alt={row.original.firstName} src={FuseUtils.getUrl()+row.original.avatar.url}/>
-                            : <Avatar className="mr-8" alt={row.original.firstName} src="assets/images/avatars/images.png"/>
+                            : 
+                            <Avatar className="mr-8" alt={row.original.firstName} src="assets/images/avatars/images.png"/>
                         
                         ,
                         className: "justify-center",
@@ -188,17 +174,47 @@ function AdminsList(props)
                             moment(row.original.created).format('L')
                             
                         
+                    },       
+                    {
+                        Header    : "Nbr.Pays",
+                        className : "font-bold",
+                        Cell  : row => (
+                            <div className="flex items-center">
+                               <HtmlTooltip
+                                    title={
+                                    <React.Fragment>
+                                        
+                                        {
+                                            Object.keys(row.original.pays).length === 0 ? 'Il n\'y aucun pays' : 
+                                            <ul> 
+                                            { 
+                                                _.map(row.original.pays, function(value, key) {
+                                                return <li key={key}> {value.name} </li>;
+                                                })
+                                            }
+                                          </ul>
+                                        }
+                                       
+                                    </React.Fragment>
+                                    }
+                                >
+                                    <Button onClick={(ev)=>{ev.stopPropagation();}} >
+                                        {Object.keys(row.original.pays).length}
+                                    </Button>
+                                </HtmlTooltip>
+                               
+                            </div>
+                        )
                     }, 
                     {
                         Header    : "Statut",
                         Cell  : row => 
-                        user.id !== row.original.id ?
+                        
                         row.original.isactif ?
                         (
                             <Tooltip title="Activé">
                                 <IconButton className="text-green text-20"   onClick={(ev)=>{
                                     ev.stopPropagation();
-                                    if(user.id !== row.original.id)
                                     dispatch(Actions.activeAccount(row.original,false))
                                     
                                 }}><Icon>check_circle</Icon>
@@ -215,17 +231,15 @@ function AdminsList(props)
                             </Tooltip>
                         ) 
                        
-                        : <IconButton className="text-20" ><Icon>check_circle</Icon></IconButton>
-                        
-                    },     
+                    },         
+                                 
                     {
                         Header: "",
                         width : 64,
                         Cell  : row => (
-                            user.id !== row.original.id ?
                             <div className="flex items-center">
                                
-                                <IconButton  className="text-red text-20" 
+                                <IconButton
                                     onClick={(ev)=>{
                                         ev.stopPropagation();
                                         dispatch(Actions.openDialog({
@@ -242,7 +256,7 @@ function AdminsList(props)
                                                         Non
                                                     </Button>
                                                     <Button onClick={(ev) => {
-                                                                dispatch(Actions.removeAdmin(row.original));
+                                                                dispatch(Actions.removeZone(row.original));
                                                                 dispatch(Actions.closeDialog())
                                                             }} color="primary" autoFocus>
                                                         Oui
@@ -255,21 +269,14 @@ function AdminsList(props)
                                     <Icon>delete</Icon>
                                 </IconButton>
                             </div>
-                            : 
-                            <div className="flex items-center">
-                               
-                                <IconButton  className="text-20">
-                                    <Icon>delete</Icon>
-                                </IconButton>
-                            </div>
                         )
                     }
                 ]}
                 defaultPageSize={10}
-                noDataText="No admins found"
+                noDataText="No Admin commercials found"
             />
         </FuseAnimate>
     );
 }
 
-export default AdminsList;
+export default ZonesList;
