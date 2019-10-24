@@ -4,23 +4,36 @@ import {FuseUtils, FuseAnimate} from '@fuse';
 import {useDispatch, useSelector} from 'react-redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
-import * as Actions2 from 'app/store/actions';
 //import SousSecteursMultiSelectMenu from './SousSecteursMultiSelectMenu';
 import _ from '@lodash';
+import Tooltip from '@material-ui/core/Tooltip'
+import { withStyles  } from '@material-ui/core/styles';
 
 function SousSecteursList(props)
 {
     const dispatch = useDispatch();
     const SousSecteurs = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.entities);
-    const SousSecteurs_fields = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs);
+    const pageCount = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.pageCount);
+    const loading = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.loading);
     
     //const selectedSousSecteursIds = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.selectedsous_secteursIds);
     const searchText = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.searchText);
     
     const [filteredData, setFilteredData] = useState(null);
+    const HtmlTooltip = withStyles(theme => ({
+        tooltip: {
+          maxWidth: 220,
+          fontSize: theme.typography.pxToRem(12),
+          border: '1px solid #dadde9',
+          '& b': {
+            fontWeight: theme.typography.fontWeightMedium,
+          },
+        },
+      }))(Tooltip);
+
     useEffect(() => {
         dispatch(Actions.getSecteurs());
-    }, [dispatch]);
+        }, [dispatch]);
     useEffect(() => {
         function getFilteredArray(entities, searchText)
         {
@@ -38,35 +51,7 @@ function SousSecteursList(props)
         }
     }, [SousSecteurs, searchText]);
 
-    useEffect(() => {
-        if ( SousSecteurs_fields.executed && SousSecteurs_fields.message)
-        {
-            dispatch(
-                Actions2.showMessage({
-                    message     : SousSecteurs_fields.message,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: SousSecteurs_fields.variant//success error info warning null
-                }));
-        }else if ( !SousSecteurs_fields.executed && SousSecteurs_fields.message){
-            dispatch(
-                Actions2.showMessage({
-                    message     : _.map(SousSecteurs_fields.message, function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: SousSecteurs_fields.variant//success error info warning null
-                }));
-        }
-    }, [dispatch,SousSecteurs_fields.executed, SousSecteurs_fields.message,SousSecteurs_fields.variant]);
-
+ 
     if ( !filteredData )
     {
         return null;
@@ -150,7 +135,7 @@ function SousSecteursList(props)
                         filterable: false,
                     },
                     {
-                        Header    : "Sous-Secteurs",
+                        Header    : "Nom",
                         accessor  : "name",
                         filterable: true,
                     },       
@@ -161,14 +146,76 @@ function SousSecteursList(props)
                               { row.original.secteur ? row.original.secteur.name : ''}
                             </div>
                         )
-                    },              
+                    },  
+                    {
+                        Header    : "Nbr Acheteurs",
+                        className : "font-bold",
+                        Cell  : row => (
+                            <div className="flex items-center">
+                               <HtmlTooltip
+                                    title={
+                                    <React.Fragment>
+                                        
+                                        {
+                                            Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 ? 'Il n\'y aucun Acheteur' : 
+                                            <ul> 
+                                            { 
+                                                _.map(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del'), function(value, key) {
+                                                return <li key={key}> {value.firstName+' '+value.lastName} </li>;
+                                                })
+                                            }
+                                          </ul>
+                                        }
+                                       
+                                    </React.Fragment>
+                                    }
+                                >
+                                    <Button onClick={(ev)=>{ev.stopPropagation();}} >
+                                        {Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length}
+                                    </Button>
+                                </HtmlTooltip>
+                               
+                            </div>
+                        )
+                    },     
+                    {
+                        Header    : "Nbr Fournisseurs",
+                        className : "font-bold",
+                        Cell  : row => (
+                            <div className="flex items-center">
+                               <HtmlTooltip
+                                    title={
+                                    <React.Fragment>
+                                        
+                                        {
+                                            Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 ? 'Il n\'y aucun Fournisseur' : 
+                                            <ul> 
+                                            { 
+                                                _.map(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del'), function(value, key) {
+                                                return <li key={key}> {value.firstName+' '+value.lastName} </li>;
+                                                })
+                                            }
+                                          </ul>
+                                        }
+                                       
+                                    </React.Fragment>
+                                    }
+                                >
+                                    <Button onClick={(ev)=>{ev.stopPropagation();}} >
+                                        {Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length}
+                                    </Button>
+                                </HtmlTooltip>
+                               
+                            </div>
+                        )
+                    },         
                     {
                         Header: "",
                         width : 64,
                         Cell  : row => (
                             <div className="flex items-center">
                                
-                                <IconButton
+                                <IconButton className="text-red text-20"
                                     onClick={(ev)=>{
                                         ev.stopPropagation();
                                         dispatch(Actions.openDialog({
@@ -177,19 +224,37 @@ function SousSecteursList(props)
                                                 <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
                                                 <DialogContent>
                                                     <DialogContentText id="alert-dialog-description">
-                                                    Voulez vous vraiment supprimer cet enregistrement ?
+                                                    {
+                                                        (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 ) ? 
+                                                        'Voulez vous vraiment supprimer cet enregistrement ?'
+                                                        :
+                                                        'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
+                                                    }
                                                     </DialogContentText>
                                                 </DialogContent>
                                                 <DialogActions>
                                                     <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
                                                         Non
                                                     </Button>
-                                                    <Button onClick={(ev) => {
-                                                                dispatch(Actions.removeSousSecteur(row.original));
-                                                                dispatch(Actions.closeDialog())
-                                                            }} color="primary" autoFocus>
-                                                        Oui
-                                                    </Button>
+                                                    {
+                                                        (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 ) ? 
+                                                        <Button 
+                                                        onClick={(ev) => {
+                                                                    dispatch(Actions.removeSousSecteur(row.original));
+                                                                    dispatch(Actions.closeDialog())
+                                                                }} color="primary" 
+                                                        autoFocus>
+                                                            Oui
+                                                        </Button>
+                                                        :
+                                                        <Button 
+                                                        disabled 
+                                                        color="primary" 
+                                                        autoFocus>
+                                                            Oui
+                                                        </Button>
+                                                    }
+                                                    
                                                 </DialogActions>
                                             </React.Fragment>
                                              )
@@ -201,7 +266,14 @@ function SousSecteursList(props)
                         )
                     }
                 ]}
+                manual
+                pages={pageCount}
                 defaultPageSize={10}
+                loading={loading}
+                showPageSizeOptions={false}
+                onPageChange={(pageIndex) => {
+                    dispatch(Actions.getSousSecteurs(pageIndex+1))
+                }}
                 noDataText="No Sous-Secteur found"
             />
         </FuseAnimate>

@@ -4,22 +4,33 @@ import _ from '@lodash';
 const initialState = {
     entities          : null,
     searchText        : '',
-    selectedSecteursIds: [],
+    selectedZonesIds: [],
     routeParams       : {},
-    secteursDialog     : {
+    commercialsDialog     : {
         type : 'new',
         props: {
             open: false
         },
         data : null
     },
-
+    avatar :null,
+    villes : null,
+    imageReqInProgress:false
 };
 
-const secteursReducer = function (state = initialState, action) {
+const commercialsReducer = function (state = initialState, action) {
     switch ( action.type )
     {
-        case Actions.GET_SECTEURS:
+        case Actions.GET_VILLES:
+        {
+            return {
+                ...state,
+                executed : false,
+                message  : null,
+                villes   : _.keyBy(action.payload, 'id')
+            };
+        }
+        case Actions.GET_COMMERCIALS:
         {
             return {
                 ...state,
@@ -33,38 +44,13 @@ const secteursReducer = function (state = initialState, action) {
                 searchText: action.searchText
             };
         }
-        
-        case Actions.OPEN_NEW_SECTEURS_DIALOG:
+      
+    
+        case Actions.OPEN_EDIT_COMMERCIALS_DIALOG:
         {
             return {
                 ...state,
-                secteursDialog: {
-                    type : 'new',
-                    props: {
-                        open: true
-                    },
-                    data : null
-                }
-            };
-        }
-        case Actions.CLOSE_NEW_SECTEURS_DIALOG:
-        {
-            return {
-                ...state,
-                secteursDialog: {
-                    type : 'new',
-                    props: {
-                        open: false
-                    },
-                    data : null
-                }
-            };
-        }
-        case Actions.OPEN_EDIT_SECTEURS_DIALOG:
-        {
-            return {
-                ...state,
-                secteursDialog: {
+                commercialsDialog: {
                     type : 'edit',
                     props: {
                         open: true
@@ -73,17 +59,43 @@ const secteursReducer = function (state = initialState, action) {
                 }
             };
         }
-        case Actions.CLOSE_EDIT_SECTEURS_DIALOG:
+        case Actions.CLOSE_EDIT_COMMERCIALS_DIALOG:
         {
             return {
                 ...state,
-                secteursDialog: {
+                commercialsDialog: {
                     type : 'edit',
                     props: {
                         open: false
                     },
                     data : null
                 }
+            };
+        }
+       
+        case Actions.UPLOAD_REQUEST:
+        {
+            return {
+                ...state,
+                imageReqInProgress:true
+
+            };
+        }
+        case Actions.UPLOAD_IMAGE:
+        {
+            return {
+                ...state,
+                avatar: action.payload,
+                imageReqInProgress:false
+
+            };
+        }
+        case Actions.UPLOAD_ERROR:
+        {
+            return {
+                ...state,
+                imageReqInProgress:false
+
             };
         }
         default:
@@ -93,4 +105,4 @@ const secteursReducer = function (state = initialState, action) {
     }
 };
 
-export default secteursReducer;
+export default commercialsReducer;

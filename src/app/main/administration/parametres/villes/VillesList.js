@@ -4,15 +4,12 @@ import {FuseUtils, FuseAnimate} from '@fuse';
 import {useDispatch, useSelector} from 'react-redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
-import * as Actions2 from 'app/store/actions';
 //import VillesMultiSelectMenu from './VillesMultiSelectMenu';
-import _ from '@lodash';
 
 function VillesList(props)
 {
     const dispatch = useDispatch();
     const Villes = useSelector(({villesApp}) => villesApp.villes.entities);
-    const Villes_fields = useSelector(({villesApp}) => villesApp.villes);
     
     //const selectedVillesIds = useSelector(({villesApp}) => villesApp.villes.selectedvillesIds);
     const searchText = useSelector(({villesApp}) => villesApp.villes.searchText);
@@ -37,35 +34,6 @@ function VillesList(props)
             setFilteredData(getFilteredArray(Villes, searchText));
         }
     }, [Villes, searchText]);
-
-    useEffect(() => {
-        if ( Villes_fields.executed && Villes_fields.message)
-        {
-            dispatch(
-                Actions2.showMessage({
-                    message     : Villes_fields.message,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: Villes_fields.variant//success error info warning null
-                }));
-        }else if ( !Villes_fields.executed && Villes_fields.message){
-            dispatch(
-                Actions2.showMessage({
-                    message     : _.map(Villes_fields.message, function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: Villes_fields.variant//success error info warning null
-                }));
-        }
-    }, [dispatch,Villes_fields.executed, Villes_fields.message,Villes_fields.variant]);
 
     if ( !filteredData )
     {
@@ -168,7 +136,7 @@ function VillesList(props)
                         Cell  : row => (
                             <div className="flex items-center">
                                
-                                <IconButton
+                                <IconButton className="text-red text-20"
                                     onClick={(ev)=>{
                                         ev.stopPropagation();
                                         dispatch(Actions.openDialog({

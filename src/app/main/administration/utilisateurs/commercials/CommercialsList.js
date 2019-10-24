@@ -11,13 +11,13 @@ import _ from '@lodash';
 import { withStyles } from '@material-ui/core/styles';
 
 
-function ZonesList(props)
+function CommercialsList(props)
 {
     const dispatch = useDispatch();
-    const Zones = useSelector(({zonesApp}) => zonesApp.zones.entities);
+    const Commercials = useSelector(({commercialsApp}) => commercialsApp.commercials.entities);
     
-    //const selectedZonesIds = useSelector(({zonesApp}) => zonesApp.zones.selectedzonesIds);
-    const searchText = useSelector(({zonesApp}) => zonesApp.zones.searchText);
+    //const selectedCommercialsIds = useSelector(({commercialsApp}) => commercialsApp.commercials.selectedcommercialsIds);
+    const searchText = useSelector(({commercialsApp}) => commercialsApp.commercials.searchText);
     
     const [filteredData, setFilteredData] = useState(null);
     
@@ -43,11 +43,11 @@ function ZonesList(props)
             return FuseUtils.filterArrayByString(arr, searchText);
         }
 
-        if ( Zones )
+        if ( Commercials )
         {
-            setFilteredData(getFilteredArray(Zones, searchText));
+            setFilteredData(getFilteredArray(Commercials, searchText));
         }
-    }, [Zones, searchText]);
+    }, [Commercials, searchText]);
 
    
 
@@ -61,7 +61,7 @@ function ZonesList(props)
         return (
             <div className="flex flex-1 items-center justify-center h-full">
                 <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas d'Admins commerciales!
+                    Il n'y a pas de commercials!
                 </Typography>
             </div>
         );
@@ -79,7 +79,7 @@ function ZonesList(props)
                         onClick  : (e, handleOriginal) => {
                             if ( rowInfo )
                             {
-                                dispatch(Actions.openEditZonesDialog(rowInfo.original));
+                                dispatch(Actions.openEditCommercialsDialog(rowInfo.original));
                             }
                         }
                     }
@@ -93,10 +93,10 @@ function ZonesList(props)
                                     event.stopPropagation();
                                 }}
                                 onChange={(event) => {
-                                    event.target.checked ? dispatch(Actions.selectAllZones()) : dispatch(Actions.deSelectAllZones());
+                                    event.target.checked ? dispatch(Actions.selectAllCommercials()) : dispatch(Actions.deSelectAllCommercials());
                                 }}
-                                checked={selectedZonesIds.length === Object.keys(Zones).length && selectedZonesIds.length > 0}
-                                indeterminate={selectedZonesIds.length !== Object.keys(Zones).length && selectedZonesIds.length > 0}
+                                checked={selectedCommercialsIds.length === Object.keys(Commercials).length && selectedCommercialsIds.length > 0}
+                                indeterminate={selectedCommercialsIds.length !== Object.keys(Commercials).length && selectedCommercialsIds.length > 0}
                             />
                         ),
                         accessor : "",
@@ -105,8 +105,8 @@ function ZonesList(props)
                                     onClick={(event) => {
                                         event.stopPropagation();
                                     }}
-                                    checked={selectedZonesIds.includes(row.value.id)}
-                                    onChange={() => dispatch(Actions.toggleInSelectedZones(row.value.id))}
+                                    checked={selectedCommercialsIds.includes(row.value.id)}
+                                    onChange={() => dispatch(Actions.toggleInSelectedCommercials(row.value.id))}
                                 />
                             )
                         },
@@ -116,8 +116,8 @@ function ZonesList(props)
                     },
                     {
                         Header   : () => (
-                            selectedZonesIds.length > 0 && (
-                                <ZonesMultiSelectMenu/>
+                            selectedCommercialsIds.length > 0 && (
+                                <CommercialsMultiSelectMenu/>
                             )
                         ),
                         width    : 40,
@@ -174,9 +174,24 @@ function ZonesList(props)
                             moment(row.original.created).format('L')
                             
                         
-                    },       
+                    }, 
                     {
-                        Header    : "Nbr.Pays",
+                        Header    : "Admin",
+                        width : 140,
+                        Cell  : row => 
+                        
+                        row.original.parent1 ?
+                        (
+                            row.original.parent1.firstName + ' '+ row.original.parent1.lastName
+                        ) :
+                        (
+                            ''
+                        ) 
+                       
+                    },        
+                    {
+                        Header    : "Villes",
+                        width : 64,
                         className : "font-bold",
                         Cell  : row => (
                             <div className="flex items-center">
@@ -185,10 +200,10 @@ function ZonesList(props)
                                     <React.Fragment>
                                         
                                         {
-                                            Object.keys(row.original.pays).length === 0 ? 'Il n\'y aucun pays' : 
+                                            Object.keys(row.original.villes).length === 0 ? 'Il n\'y aucun villes' : 
                                             <ul> 
                                             { 
-                                                _.map(row.original.pays, function(value, key) {
+                                                _.map(row.original.villes, function(value, key) {
                                                 return <li key={key}> {value.name} </li>;
                                                 })
                                             }
@@ -199,7 +214,7 @@ function ZonesList(props)
                                     }
                                 >
                                     <Button onClick={(ev)=>{ev.stopPropagation();}} >
-                                        {Object.keys(row.original.pays).length}
+                                        {Object.keys(row.original.villes).length}
                                     </Button>
                                 </HtmlTooltip>
                                
@@ -208,6 +223,7 @@ function ZonesList(props)
                     }, 
                     {
                         Header    : "Statut",
+                        width : 64,
                         Cell  : row => 
                         
                         row.original.isactif ?
@@ -256,7 +272,7 @@ function ZonesList(props)
                                                         Non
                                                     </Button>
                                                     <Button onClick={(ev) => {
-                                                                dispatch(Actions.removeZone(row.original));
+                                                                dispatch(Actions.removeCommercial(row.original));
                                                                 dispatch(Actions.closeDialog())
                                                             }} color="primary" autoFocus>
                                                         Oui
@@ -273,10 +289,10 @@ function ZonesList(props)
                     }
                 ]}
                 defaultPageSize={10}
-                noDataText="No Admin commercials found"
+                noDataText="No commercial found"
             />
         </FuseAnimate>
     );
 }
 
-export default ZonesList;
+export default CommercialsList;

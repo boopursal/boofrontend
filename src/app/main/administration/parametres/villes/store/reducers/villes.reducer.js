@@ -13,9 +13,6 @@ const initialState = {
         },
         data : null
     },
-    executed : false,
-    message  : null,
-    variant :'',
     pays : null
 };
 
@@ -26,8 +23,6 @@ const villesReducer = function (state = initialState, action) {
         {
             return {
                 ...state,
-                executed : false,
-                message  : null,
                 pays   : _.keyBy(action.payload, 'id')
             };
         }
@@ -96,46 +91,6 @@ const villesReducer = function (state = initialState, action) {
                     },
                     data : null
                 }
-            };
-        }
-        case Actions.ADD_VILLE:
-        {
-            return {
-                ...state,
-                executed : true,
-                message  : "VILLE ajouté avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.UPDATE_VILLE:
-        {
-            return {
-                ...state,
-                executed : true,
-                message  : "VILLE modifié avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.REMOVE_VILLE:
-        {
-            return {
-                ...state,
-                executed : true,
-                message  : "VILLE supprimé avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.SAVE_ERROR:
-        {
-            return {
-                ...state,
-                executed : false,
-                message  : action.payload,
-                variant : 'error'
-                
             };
         }
         default:

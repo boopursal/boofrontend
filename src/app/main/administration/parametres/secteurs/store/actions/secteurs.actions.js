@@ -1,5 +1,7 @@
 import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
+import {showMessage} from 'app/store/actions/fuse';
+import _ from '@lodash';
 
 export const GET_SECTEURS = '[SECTEURS APP] GET SECTEURS';
 export const SET_SEARCH_TEXT = '[SECTEURS APP] SET SEARCH TEXT';
@@ -79,14 +81,29 @@ export function addSecteur(newSecteur)
             Promise.all([
                 dispatch({
                     type: ADD_SECTEUR
-                })
+                }),
+                dispatch(showMessage({message: 'Secteur bien ajouté!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
             ]).then(() => dispatch(getSecteurs()))
         ).catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error),
-
-            })
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return key+': '+value;
+                      }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
         });
     };
 }
@@ -102,15 +119,31 @@ export function updateSecteur(Secteur)
             Promise.all([
                 dispatch({
                     type: UPDATE_SECTEUR
-                })
+                }),
+                dispatch(showMessage({message: 'Secteur bien modifié!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
             ]).then(() => dispatch(getSecteurs()))
         )
         .catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error),
 
-            })
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return key+': '+value;
+                      }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
         });
     };
 }
@@ -128,7 +161,12 @@ export function removeSecteur(Secteur)
             Promise.all([
                 dispatch({
                     type: REMOVE_SECTEUR
-                })
+                }),
+                dispatch(showMessage({message: 'Secteur bien supprimé!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
             ]).then(() => dispatch(getSecteurs()))
         );
     };

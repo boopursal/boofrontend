@@ -1,5 +1,4 @@
 import React from 'react';
-import {Typography} from '@material-ui/core';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/styles';
 
@@ -32,8 +31,7 @@ function Logo()
 
     return (
         <div className={clsx(classes.root, "flex items-center")}>
-            <img className="logo-icon" src="assets/images/logos/fuse.svg" alt="logo"/>
-            <Typography className="text-16 ml-12 font-light logo-text" color="textPrimary">FUSE</Typography>
+            <img className="" src="assets/images/logos/logo.png" alt="logo"/>
            
         </div>
     );

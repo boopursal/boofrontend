@@ -1,6 +1,7 @@
 import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
-
+import {showMessage} from 'app/store/actions/fuse';
+import _ from '@lodash';
 export const GET_PAYS = '[PAYS APP] GET PAYS';
 export const GET_VILLES = '[VILLES APP] GET VILLES';
 export const SET_SEARCH_TEXT = '[VILLES APP] SET SEARCH TEXT';
@@ -94,14 +95,29 @@ export function addVille(newVille)
             Promise.all([
                 dispatch({
                     type: ADD_VILLE
-                })
+                }),
+                dispatch(showMessage({message: 'Ville bien ajouté!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
             ]).then(() => dispatch(getVilles()))
         ).catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error),
-
-            })
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return key+': '+value;
+                    }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
         });
     };
 }
@@ -118,15 +134,30 @@ export function updateVille(Ville)
             Promise.all([
                 dispatch({
                     type: UPDATE_VILLE
-                })
+                }),
+                dispatch(showMessage({message: 'Ville bien modifié!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
             ]).then(() => dispatch(getVilles()))
         )
         .catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error),
-
-            })
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return key+': '+value;
+                      }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
         });
     };
 }
@@ -145,7 +176,12 @@ export function removeVille(Ville)
             Promise.all([
                 dispatch({
                     type: REMOVE_VILLE
-                })
+                }),
+                dispatch(showMessage({message: 'Ville bien supprimé!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
             ]).then(() => dispatch(getVilles()))
         );
     };

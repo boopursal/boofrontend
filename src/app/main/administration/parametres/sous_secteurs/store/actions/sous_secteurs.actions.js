@@ -1,8 +1,11 @@
 import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
+import {showMessage} from 'app/store/actions/fuse';
+import _ from '@lodash';
 
 export const GET_SECTEURS = '[SECTEURS APP] GET SECTEURS';
 export const GET_SOUS_SECTEURS = '[SOUS_SECTEURS APP] GET SOUS_SECTEURS';
+export const REQUEST_SOUS_SECTEURS = '[SOUS_SECTEURS APP] REQUEST SOUS_SECTEURS';
 export const SET_SEARCH_TEXT = '[SOUS_SECTEURS APP] SET SEARCH TEXT';
 export const TOGGLE_IN_SELECTED_SOUS_SECTEURS = '[SOUS_SECTEURS APP] TOGGLE IN SELECTED SOUS_SECTEURS';
 export const SELECT_ALL_SOUS_SECTEURS = '[SOUS_SECTEURS APP] SELECT ALL SOUS_SECTEURS';
@@ -31,17 +34,24 @@ export function getSecteurs()
 }
 
 
-export function getSousSecteurs()
+export function getSousSecteurs(page=1)
 {
-    const request = agent.get('/api/sous_secteurs');
+    const request = agent.get(`/api/sous_secteurs?page=${page}`);
 
-    return (dispatch) =>
-        request.then((response) =>{
+    
+    return (dispatch) =>{
+        dispatch({
+            type   : REQUEST_SOUS_SECTEURS,
+        });
+        return  request.then((response) =>{
+            console.log(response)
             dispatch({
                 type   : GET_SOUS_SECTEURS,
-                payload: response.data['hydra:member']
+                payload: response.data
             })
         });
+    }
+        
 }
 
 export function setSearchText(event)
@@ -94,14 +104,29 @@ export function addSousSecteur(newSousSecteur)
             Promise.all([
                 dispatch({
                     type: ADD_SOUS_SECTEUR
-                })
+                }),
+                dispatch(showMessage({message: 'Sous-secteur bien ajouté!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
             ]).then(() => dispatch(getSousSecteurs()))
         ).catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error),
-
-            })
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return key+': '+value;
+                    }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
         });
     };
 }
@@ -118,15 +143,30 @@ export function updateSousSecteur(SousSecteur)
             Promise.all([
                 dispatch({
                     type: UPDATE_SOUS_SECTEUR
-                })
+                }),
+                dispatch(showMessage({message: 'Sous-secteur bien modifié!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
             ]).then(() => dispatch(getSousSecteurs()))
         )
         .catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error),
-
-            })
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return key+': '+value;
+                      }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
         });
     };
 }
@@ -145,7 +185,12 @@ export function removeSousSecteur(SousSecteur)
             Promise.all([
                 dispatch({
                     type: REMOVE_SOUS_SECTEUR
-                })
+                }),
+                dispatch(showMessage({message: 'Sous-secteur bien supprimé!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
             ]).then(() => dispatch(getSousSecteurs()))
         );
     };

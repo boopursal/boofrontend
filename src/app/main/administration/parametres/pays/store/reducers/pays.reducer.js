@@ -12,10 +12,7 @@ const initialState = {
             open: false
         },
         data : null
-    },
-    executed : false,
-    message  : null,
-    variant :''
+    }
 };
 
 const paysReducer = function (state = initialState, action) {
@@ -25,8 +22,6 @@ const paysReducer = function (state = initialState, action) {
         {
             return {
                 ...state,
-                executed : false,
-                message  : null,
                 entities   : _.keyBy(action.payload, 'id')
             };
         }
@@ -126,46 +121,6 @@ const paysReducer = function (state = initialState, action) {
                     },
                     data : null
                 }
-            };
-        }
-        case Actions.ADD_PAYS:
-        {
-            return {
-                ...state,
-                executed : true,
-                message  : "Pays ajouté avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.UPDATE_PAYS:
-        {
-            return {
-                ...state,
-                executed : true,
-                message  : "Pays modifié avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.REMOVE_PAYS:
-        {
-            return {
-                ...state,
-                executed : true,
-                message  : "Pays supprimé avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.SAVE_ERROR:
-        {
-            return {
-                ...state,
-                executed : false,
-                message  : action.payload,
-                variant : 'error'
-                
             };
         }
         default:

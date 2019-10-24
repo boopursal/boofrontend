@@ -6,14 +6,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip'
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
-import * as Actions2 from 'app/store/actions';
 //import PaysMultiSelectMenu from './PaysMultiSelectMenu';
 import _ from '@lodash';
 function PaysList(props)
 {
     const dispatch = useDispatch();
     const pays = useSelector(({paysApp}) => paysApp.pays.entities);
-    const pays_fields = useSelector(({paysApp}) => paysApp.pays);
    // const selectedPaysIds = useSelector(({paysApp}) => paysApp.pays.selectedPaysIds);
     const searchText = useSelector(({paysApp}) => paysApp.pays.searchText);
     const HtmlTooltip = withStyles(theme => ({
@@ -45,34 +43,7 @@ function PaysList(props)
         }
     }, [pays, searchText]);
 
-    useEffect(() => {
-        if ( pays_fields.executed && pays_fields.message)
-        {
-            dispatch(
-                Actions2.showMessage({
-                    message     : pays_fields.message,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: pays_fields.variant//success error info warning null
-                }));
-        }else if ( !pays_fields.executed && pays_fields.message){
-            dispatch(
-                Actions2.showMessage({
-                    message     : _.map(pays_fields.message, function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: pays_fields.variant//success error info warning null
-                }));
-        }
-    }, [dispatch,pays_fields.executed, pays_fields.message,pays_fields.variant]);
+  
 
     if ( !filteredData )
     {
@@ -171,10 +142,11 @@ function PaysList(props)
                                     <React.Fragment>
                                         
                                         {
-                                            Object.keys(row.original.villes).length === 0 ? 'Il n\'y aucune ville' : 
+                                            
+                                            Object.keys(_.pullAllBy(row.original.villes, [{ 'del': true }], 'del')).length === 0 ? 'Il n\'y aucune ville' : 
                                             <ul> 
                                             { 
-                                                _.map(row.original.villes, function(value, key) {
+                                                _.map(_.pullAllBy(row.original.villes, [{ 'del': true }], 'del'), function(value, key) {
                                                 return <li key={key}> {value.name} </li>;
                                                 })
                                             }
@@ -185,7 +157,7 @@ function PaysList(props)
                                     }
                                 >
                                     <Button onClick={(ev)=>{ev.stopPropagation();}} >
-                                        {Object.keys(row.original.villes).length}
+                                        {Object.keys(_.pullAllBy(row.original.villes, [{ 'del': true }], 'del')).length}
                                     </Button>
                                 </HtmlTooltip>
                                
@@ -198,7 +170,7 @@ function PaysList(props)
                         Cell  : row => (
                             <div className="flex items-center">
                                
-                                <IconButton
+                                <IconButton className="text-red text-20"
                                     onClick={(ev)=>{
                                         ev.stopPropagation();
                                         dispatch(Actions.openDialog({

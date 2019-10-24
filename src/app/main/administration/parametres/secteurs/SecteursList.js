@@ -6,14 +6,12 @@ import { withStyles  } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip'
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
-import * as Actions2 from 'app/store/actions';
 //import SecteursMultiSelectMenu from './SecteursMultiSelectMenu';
 import _ from '@lodash';
 function SecteursList(props)
 {
     const dispatch = useDispatch();
     const Secteurs = useSelector(({secteursApp}) => secteursApp.secteurs.entities);
-    const Secteurs_fields = useSelector(({secteursApp}) => secteursApp.secteurs);
     //const selectedSecteursIds = useSelector(({secteursApp}) => secteursApp.secteurs.selectedSecteursIds);
     const searchText = useSelector(({secteursApp}) => secteursApp.secteurs.searchText);
     const HtmlTooltip = withStyles(theme => ({
@@ -45,35 +43,7 @@ function SecteursList(props)
         }
     }, [Secteurs, searchText]);
 
-    useEffect(() => {
-        if ( Secteurs_fields.executed && Secteurs_fields.message)
-        {
-            dispatch(
-                Actions2.showMessage({
-                    message     : Secteurs_fields.message,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: Secteurs_fields.variant//success error info warning null
-                }));
-        }else if ( !Secteurs_fields.executed && Secteurs_fields.message){
-            dispatch(
-                Actions2.showMessage({
-                    message     : _.map(Secteurs_fields.message, function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: Secteurs_fields.variant//success error info warning null
-                }));
-        }
-    }, [dispatch,Secteurs_fields.executed, Secteurs_fields.message,Secteurs_fields.variant]);
-
+  
     if ( !filteredData )
     {
         return null;
@@ -165,16 +135,18 @@ function SecteursList(props)
                         Header    : "Nbr Sous-secteurs",
                         className : "font-bold",
                         Cell  : row => (
+                            
                             <div className="flex items-center">
+                         
                                <HtmlTooltip
                                     title={
                                     <React.Fragment>
                                         
                                         {
-                                            Object.keys(row.original.sousSecteurs).length === 0 ? 'Il n\'y aucun Sous-secteur' : 
+                                            Object.keys(_.pullAllBy(row.original.sousSecteurs, [{ 'del': true }], 'del')).length === 0 ? 'Il n\'y aucun Sous-secteur' : 
                                             <ul> 
                                             { 
-                                                _.map(row.original.sousSecteurs, function(value, key) {
+                                                _.map(_.pullAllBy(row.original.sousSecteurs, [{ 'del': true }], 'del'), function(value, key) {
                                                 return <li key={key}> {value.name} </li>;
                                                 })
                                             }
@@ -185,7 +157,7 @@ function SecteursList(props)
                                     }
                                 >
                                     <Button onClick={(ev)=>{ev.stopPropagation();}} >
-                                        {Object.keys(row.original.sousSecteurs).length}
+                                        {Object.keys(_.pullAllBy(row.original.sousSecteurs, [{ 'del': true }], 'del')).length}
                                     </Button>
                                 </HtmlTooltip>
                                
@@ -198,7 +170,7 @@ function SecteursList(props)
                         Cell  : row => (
                             <div className="flex items-center">
                                
-                                <IconButton
+                                <IconButton className="text-red text-20"
                                     onClick={(ev)=>{
                                         ev.stopPropagation();
                                         dispatch(Actions.openDialog({
@@ -207,19 +179,39 @@ function SecteursList(props)
                                                 <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
                                                 <DialogContent>
                                                     <DialogContentText id="alert-dialog-description">
-                                                    Voulez vous vraiment supprimer cet enregistrement ?
+                                                    
+                                                    {
+                                                        Object.keys(_.pullAllBy(row.original.sousSecteurs, [{ 'del': true }], 'del')).length === 0 ? 
+                                                        'Voulez vous vraiment supprimer cet enregistrement ?'
+                                                        :
+                                                        'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
+                                                    }
                                                     </DialogContentText>
                                                 </DialogContent>
                                                 <DialogActions>
                                                     <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
                                                         Non
                                                     </Button>
-                                                    <Button onClick={(ev) => {
-                                                                dispatch(Actions.removeSecteur(row.original));
-                                                                dispatch(Actions.closeDialog())
-                                                            }} color="primary" autoFocus>
-                                                        Oui
-                                                    </Button>
+                                                    {
+                                                        Object.keys(_.pullAllBy(row.original.sousSecteurs, [{ 'del': true }], 'del')).length === 0 ? 
+                                                        <Button 
+                                                        onClick={(ev) => {
+                                                                    dispatch(Actions.removeSecteur(row.original));
+                                                                    dispatch(Actions.closeDialog())
+                                                                }} 
+                                                        color="primary" 
+                                                        autoFocus>
+                                                            Oui
+                                                        </Button>
+                                                        :
+                                                        <Button 
+                                                        disabled
+                                                        color="primary" 
+                                                        autoFocus>
+                                                            Oui
+                                                        </Button>
+                                                    }
+                                                    
                                                 </DialogActions>
                                             </React.Fragment>
                                              )
@@ -232,6 +224,7 @@ function SecteursList(props)
                     }
                 ]}
                 defaultPageSize={10}
+               
                 noDataText="No Secteur found"
             />
         </FuseAnimate>

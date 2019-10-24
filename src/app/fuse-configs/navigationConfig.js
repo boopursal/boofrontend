@@ -18,6 +18,7 @@ const navigationConfig = [
     {
         'id'      : 'utilisateurs',
         'title'   : 'Utilisateur',
+        'auth' : authRoles.admin,        
         'type'    : 'group',
         'icon'    : 'build',
         'children': [
@@ -40,6 +41,13 @@ const navigationConfig = [
                         'type' : 'item',
                         'icon' : 'group',
                         'url'  : '/users/zones',
+                    },
+                    {
+                        'id'   : 'commercial-component',
+                        'title': 'Gestion des Comm.',
+                        'type' : 'item',
+                        'icon' : 'group',
+                        'url'  : '/users/commercials',
                     },
                     
                 ]

@@ -1,8 +1,10 @@
 import * as Actions from '../actions';
 import _ from '@lodash';
+import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     entities          : null,
+    pageCount : null,
     searchText        : '',
     selectedSousSecteursIds: [],
     routeParams       : {},
@@ -13,10 +15,8 @@ const initialState = {
         },
         data : null
     },
-    executed : false,
-    message  : null,
-    variant :'',
-    secteur : null
+    secteur : null,
+    loading : false
 };
 
 const sous_secteursReducer = function (state = initialState, action) {
@@ -26,16 +26,24 @@ const sous_secteursReducer = function (state = initialState, action) {
         {
             return {
                 ...state,
-                executed : false,
-                message  : null,
                 secteur   : _.keyBy(action.payload, 'id')
+            };
+        }
+        case Actions.REQUEST_SOUS_SECTEURS:
+        {
+            return {
+                ...state,
+                loading : true
+                
             };
         }
         case Actions.GET_SOUS_SECTEURS:
         {
             return {
                 ...state,
-                entities   : _.keyBy(action.payload, 'id')
+                entities   : _.keyBy(action.payload['hydra:member'], 'id'),
+                pageCount: FuseUtils.hydraPageCount(action.payload),
+                loading : false
             };
         }
         case Actions.SET_SEARCH_TEXT:
@@ -98,46 +106,7 @@ const sous_secteursReducer = function (state = initialState, action) {
                 }
             };
         }
-        case Actions.ADD_SOUS_SECTEUR:
-        {
-            return {
-                ...state,
-                executed : true,
-                message  : "SOUS_SECTEUR ajouté avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.UPDATE_SOUS_SECTEUR:
-        {
-            return {
-                ...state,
-                executed : true,
-                message  : "SOUS_SECTEUR modifié avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.REMOVE_SOUS_SECTEUR:
-        {
-            return {
-                ...state,
-                executed : true,
-                message  : "SOUS_SECTEUR supprimé avec succès",
-                variant : 'success'
-                
-            };
-        }
-        case Actions.SAVE_ERROR:
-        {
-            return {
-                ...state,
-                executed : false,
-                message  : action.payload,
-                variant : 'error'
-                
-            };
-        }
+       
         default:
         {
             return state;

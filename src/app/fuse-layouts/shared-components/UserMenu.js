@@ -81,6 +81,7 @@ function UserMenu(props)
                     </React.Fragment>
                 ) : (
                     <React.Fragment>
+                    {/*
                         <MenuItem component={Link} to="/pages/profile" onClick={userMenuClose}>
                             <ListItemIcon className="min-w-40">
                                 <Icon>account_circle</Icon>
@@ -93,6 +94,7 @@ function UserMenu(props)
                             </ListItemIcon>
                             <ListItemText className="pl-0" primary="Inbox"/>
                         </MenuItem>
+                        */}
                         <MenuItem
                             onClick={() => {
                                 dispatch(authActions.logoutUser());

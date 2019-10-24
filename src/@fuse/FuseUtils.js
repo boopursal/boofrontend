@@ -91,11 +91,23 @@ class FuseUtils {
             },
             {}
         );*/
-    };
+    }
+
     static getUrl()
     {
-        return "http://127.0.0.1:8000";
-    };
+        return "http://192.168.1.124:8000";
+    }
+
+    static hydraPageCount(collection)
+    {
+        if(!collection['hydra:view']){
+            return 1;
+        }
+
+        return Number(
+            collection['hydra:view']['hydra:last'].match(/page=(\d+)/)[1]
+        );
+    }
 
     static searchInObj(itemObj, searchText)
     {

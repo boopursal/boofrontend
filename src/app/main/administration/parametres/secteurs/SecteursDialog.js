@@ -1,22 +1,22 @@
-import React, {useEffect, useCallback, useRef, useState} from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar,  DialogTitle, DialogContentText} from '@material-ui/core';
-import {useForm} from '@fuse/hooks';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText } from '@material-ui/core';
+import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {TextFieldFormsy} from '@fuse';
+import { useDispatch, useSelector } from 'react-redux';
+import { TextFieldFormsy } from '@fuse';
 import Formsy from 'formsy-react';
+import _ from '@lodash';
 
 const defaultFormState = {
-    name    : '',
+    name: '',
 };
 
-function SecteursDialog(props)
-{
+function SecteursDialog(props) {
     const dispatch = useDispatch();
-    const SecteursDialog = useSelector(({secteursApp}) => secteursApp.secteurs.secteursDialog);
-    
+    const SecteursDialog = useSelector(({ secteursApp }) => secteursApp.secteurs.secteursDialog);
 
-    const {form, handleChange, setForm} = useForm(defaultFormState);
+
+    const { form, handleChange, setForm } = useForm(defaultFormState);
 
 
     const [isFormValid, setIsFormValid] = useState(false);
@@ -28,16 +28,14 @@ function SecteursDialog(props)
             /**
              * Dialog type: 'edit'
              */
-            if ( SecteursDialog.type === 'edit' && SecteursDialog.data )
-            {
-                setForm({...SecteursDialog.data});
+            if (SecteursDialog.type === 'edit' && SecteursDialog.data) {
+                setForm({ ...SecteursDialog.data });
             }
 
             /**
              * Dialog type: 'new'
              */
-            if ( SecteursDialog.type === 'new' )
-            {
+            if (SecteursDialog.type === 'new') {
                 setForm({
                     ...defaultFormState,
                     ...SecteursDialog.data,
@@ -51,53 +49,45 @@ function SecteursDialog(props)
         /**
          * After Dialog Open
          */
-        if ( SecteursDialog.props.open )
-        {
+        if (SecteursDialog.props.open) {
             initDialog();
         }
 
     }, [SecteursDialog.props.open, initDialog]);
 
-    
 
-    function closeComposeDialog()
-    {
+
+    function closeComposeDialog() {
         SecteursDialog.type === 'edit' ? dispatch(Actions.closeEditSecteursDialog()) : dispatch(Actions.closeNewSecteursDialog());
     }
 
-    
 
-    function handleSubmit(event)
-    {
+
+    function handleSubmit(event) {
         //event.preventDefault();
 
-        if ( SecteursDialog.type === 'new' )
-        {
+        if (SecteursDialog.type === 'new') {
             dispatch(Actions.addSecteur(form));
         }
-        else
-        {
+        else {
             dispatch(Actions.updateSecteur(form));
         }
         closeComposeDialog();
     }
 
-    function handleRemove()
-    {
-        
+    function handleRemove() {
+
         dispatch(Actions.removeSecteur(form));
         dispatch(Actions.closeDialog())
         closeComposeDialog();
     }
 
 
-    function disableButton()
-    {
+    function disableButton() {
         setIsFormValid(false);
     }
 
-    function enableButton()
-    {
+    function enableButton() {
         setIsFormValid(true);
     }
 
@@ -118,15 +108,15 @@ function SecteursDialog(props)
                         {SecteursDialog.type === 'new' ? 'Nouveau Secteur' : 'Edit Secteur'}
                     </Typography>
                 </Toolbar>
-                
+
             </AppBar>
-            <Formsy 
-            onValidSubmit={handleSubmit}
-            onValid={enableButton}
-            onInvalid={disableButton}
-            ref={formRef}
-            className="flex flex-col overflow-hidden">
-                <DialogContent classes={{root: "p-24"}}>
+            <Formsy
+                onValidSubmit={handleSubmit}
+                onValid={enableButton}
+                onInvalid={disableButton}
+                ref={formRef}
+                className="flex flex-col overflow-hidden">
+                <DialogContent classes={{ root: "p-24" }}>
                     <div className="flex">
                         <div className="min-w-48 pt-20">
                             <Icon color="action">account_circle</Icon>
@@ -151,7 +141,7 @@ function SecteursDialog(props)
                             fullWidth
                         />
                     </div>
-                   
+
                 </DialogContent>
 
                 {SecteursDialog.type === 'new' ? (
@@ -166,43 +156,57 @@ function SecteursDialog(props)
                         </Button>
                     </DialogActions>
                 ) : (
-                    <DialogActions className="justify-between pl-16">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={!isFormValid}
-                        >
-                            Modifier
+                        <DialogActions className="justify-between pl-16">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={!isFormValid}
+                            >
+                                Modifier
                         </Button>
-                        <IconButton
-                            onClick={()=> dispatch(Actions.openDialog({
-                                children: (
-                                    <React.Fragment>
-                                        <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                            Voulez vous vraiment supprimer cet enregistrement ?
-                                            </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
-                                                Non
+                            <IconButton
+                                onClick={() => dispatch(Actions.openDialog({
+                                    children: (
+                                        <React.Fragment>
+                                            <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    {
+                                                        Object.keys(_.pullAllBy(form.sousSecteurs, [{ 'del': true }], 'del')).length === 0 ?
+                                                            'Voulez vous vraiment supprimer cet enregistrement ?'
+                                                            :
+                                                            'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
+                                                    }
+                                                </DialogContentText>
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                    Non
                                             </Button>
-                                            <Button onClick={handleRemove} color="primary" autoFocus>
-                                                Oui
-                                            </Button>
-                                        </DialogActions>
-                                    </React.Fragment>
-                                     )
-                                 }))}
-                            
-                            
-                        >
-                            <Icon>delete</Icon>
-                        </IconButton>
-                    </DialogActions>
-                )}
+
+                                                {
+                                                    Object.keys(_.pullAllBy(form.sousSecteurs, [{ 'del': true }], 'del')).length === 0 ?
+                                                        <Button  onClick={handleRemove} color="primary" autoFocus>
+                                                            Oui
+                                                        </Button>
+                                                        :
+                                                        <Button disabled color="primary" autoFocus>
+                                                            Oui
+                                                        </Button>
+                                                }
+
+                                            </DialogActions>
+                                        </React.Fragment>
+                                    )
+                                }))}
+
+
+                            >
+                                <Icon>delete</Icon>
+                            </IconButton>
+                        </DialogActions>
+                    )}
             </Formsy>
         </Dialog>
     );
