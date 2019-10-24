@@ -103,7 +103,9 @@ class FuseUtils {
         if(!collection['hydra:view']){
             return 1;
         }
-
+        if(!collection['hydra:view']['hydra:last']){
+            return 1;
+        }
         return Number(
             collection['hydra:view']['hydra:last'].match(/page=(\d+)/)[1]
         );

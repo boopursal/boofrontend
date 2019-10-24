@@ -274,6 +274,14 @@ function SousSecteursList(props)
                 onPageChange={(pageIndex) => {
                     dispatch(Actions.getSousSecteurs(pageIndex+1))
                 }}
+                onFilteredChange={(filtered, column) => {
+                    if(filtered[0]['value']['filterValue'])
+                    dispatch(Actions.getSousSecteurs(1,filtered[0]['value']['filterValue']))
+                    else{
+                    dispatch(Actions.getSousSecteurs())
+                        
+                    }
+                }}
                 noDataText="No Sous-Secteur found"
             />
         </FuseAnimate>

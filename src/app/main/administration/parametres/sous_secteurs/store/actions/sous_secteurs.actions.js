@@ -34,9 +34,9 @@ export function getSecteurs()
 }
 
 
-export function getSousSecteurs(page=1)
+export function getSousSecteurs(page=1,name='')
 {
-    const request = agent.get(`/api/sous_secteurs?page=${page}`);
+    const request = agent.get(`/api/sous_secteurs?page=${page}&name=${name}`);
 
     
     return (dispatch) =>{
