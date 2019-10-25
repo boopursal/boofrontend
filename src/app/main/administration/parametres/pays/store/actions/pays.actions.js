@@ -4,6 +4,7 @@ import {showMessage} from 'app/store/actions/fuse';
 import _ from '@lodash';
 
 export const GET_PAYS = '[PAYS APP] GET PAYS';
+export const REQUEST_PAYS = '[PAYS APP] REQUEST PAYS';
 export const SET_SEARCH_TEXT = '[PAYS APP] SET SEARCH TEXT';
 export const TOGGLE_IN_SELECTED_PAYS = '[PAYS APP] TOGGLE IN SELECTED PAYS';
 export const SELECT_ALL_PAYS = '[PAYS APP] SELECT ALL PAYS';
@@ -17,20 +18,28 @@ export const SAVE_ERROR = '[PAYS APP] SAVE ERROR';
 export const UPDATE_PAYS = '[PAYS APP] UPDATE PAYS';
 export const REMOVE_PAYS = '[PAYS APP] REMOVE PAYS';
 export const REMOVE_PAYSS = '[PAYS APP] REMOVE PAYSS';
+export const SET_PARAMETRES_DATA = '[SOUS_SECTEURS APP] SET PARAMETRES DATA';
 
 
-export function getPays()
+export function getPays(parametres)
 {
-    const request = agent.get('/api/pays');
 
-    return (dispatch) =>
-        request.then((response) =>{
+    var name = parametres.name?`=${parametres.name}`:'';
+    const request = agent.get(`/api/pays?page=${parametres.page}&name${name}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+
+    return (dispatch) =>{
+        dispatch({
+            type   : REQUEST_PAYS,
+        });
+        return request.then((response) =>{
             
             dispatch({
                 type   : GET_PAYS,
-                payload: response.data['hydra:member']
+                payload: response.data
             })
         });
+    }
+        
 }
 
 export function setSearchText(event)
@@ -92,7 +101,7 @@ export function closeEditPaysDialog()
     }
 }
 
-export function addPays(newPays)
+export function addPays(newPays,parametres)
 {
     
     return (dispatch, getState) => {
@@ -110,7 +119,7 @@ export function addPays(newPays)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getPays()))).catch((error)=>{
+            ]).then(() => dispatch(getPays(parametres)))).catch((error)=>{
                 dispatch({
                     type: SAVE_ERROR,
                 });
@@ -130,7 +139,7 @@ export function addPays(newPays)
     };
 }
 
-export function updatePays(Pays)
+export function updatePays(Pays,parametres)
 {
     
     return (dispatch, getState) => {
@@ -148,7 +157,7 @@ export function updatePays(Pays)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getPays()))
+            ]).then(() => dispatch(getPays(parametres)))
         )
         .catch((error)=>{
             dispatch({
@@ -170,7 +179,7 @@ export function updatePays(Pays)
     };
 }
 
-export function removePays(Pays)
+export function removePays(Pays,parametres)
 {
     Pays.del=true;
     Pays.name=Pays.name+'_deleted-'+Pays.id;
@@ -189,7 +198,7 @@ export function removePays(Pays)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getPays()))
+            ]).then(() => dispatch(getPays(parametres)))
         );
     };
 }
@@ -214,5 +223,13 @@ export function removePayss(PaysIds)
             ]).then(() => dispatch(getPays()))
         );
     };
+}
+
+export function setParametresData(parametres)
+{
+    return {
+        type      : SET_PARAMETRES_DATA,
+        parametres
+    }
 }
 

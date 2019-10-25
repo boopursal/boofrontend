@@ -5,6 +5,7 @@ import * as Actions from './store/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {TextFieldFormsy} from '@fuse';
 import Formsy from 'formsy-react';
+import _ from '@lodash';
 
 const defaultFormState = {
     name    : '',
@@ -14,7 +15,8 @@ function PaysDialog(props)
 {
     const dispatch = useDispatch();
     const paysDialog = useSelector(({paysApp}) => paysApp.pays.paysDialog);
-    
+    const parametres = useSelector(({paysApp}) => paysApp.pays.parametres);
+   
 
     const {form, handleChange, setForm} = useForm(defaultFormState);
 
@@ -73,11 +75,11 @@ function PaysDialog(props)
 
         if ( paysDialog.type === 'new' )
         {
-            dispatch(Actions.addPays(form));
+            dispatch(Actions.addPays(form,parametres));
         }
         else
         {
-            dispatch(Actions.updatePays(form));
+            dispatch(Actions.updatePays(form,parametres));
         }
         closeComposeDialog();
     }
@@ -85,7 +87,7 @@ function PaysDialog(props)
     function handleRemove()
     {
         
-        dispatch(Actions.removePays(form));
+        dispatch(Actions.removePays(form,parametres));
         dispatch(Actions.closeDialog())
         closeComposeDialog();
     }
@@ -182,16 +184,41 @@ function PaysDialog(props)
                                         <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
-                                            Voulez vous vraiment supprimer cet enregistrement ?
+                                            {
+                                                (
+                                                    Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 
+                                                    && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0 
+                                                    && Object.keys(_.pullAllBy(form.villes, [{ 'del': true }], 'del')).length === 0 
+                                                    && Object.keys(_.pullAllBy(form.zones, [{ 'del': true }], 'del')).length === 0 
+                                                ) 
+                                                ?
+                                                'Voulez vous vraiment supprimer cet enregistrement ?'
+                                                :
+                                                'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
+                                            }
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
                                             <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
                                                 Non
                                             </Button>
-                                            <Button onClick={handleRemove} color="primary" autoFocus>
-                                                Oui
-                                            </Button>
+                                            {
+                                                (
+                                                    Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 
+                                                    && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0 
+                                                    && Object.keys(_.pullAllBy(form.villes, [{ 'del': true }], 'del')).length === 0 
+                                                    && Object.keys(_.pullAllBy(form.zones, [{ 'del': true }], 'del')).length === 0 
+                                                ) 
+                                                ?
+                                                <Button onClick={handleRemove} color="primary" autoFocus>
+                                                    Oui
+                                                </Button>
+                                                :
+                                                <Button disabled color="primary" autoFocus>
+                                                    Oui
+                                                </Button>
+                                            }
+                                            
                                         </DialogActions>
                                     </React.Fragment>
                                      )

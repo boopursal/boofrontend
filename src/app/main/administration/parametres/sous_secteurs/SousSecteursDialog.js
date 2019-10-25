@@ -16,6 +16,7 @@ function SousSecteursDialog(props)
     const dispatch = useDispatch();
     const SousSecteursDialog = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.sous_secteursDialog);
     const Secteur = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.secteur);
+    const parametres = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.parametres);
    
     const {form, handleChange, setForm} = useForm(defaultFormState);
 
@@ -78,11 +79,11 @@ function SousSecteursDialog(props)
         //event.preventDefault();
         if ( SousSecteursDialog.type === 'new' )
         {
-            dispatch(Actions.addSousSecteur(form));
+            dispatch(Actions.addSousSecteur(form,parametres));
         }
         else
         {
-            dispatch(Actions.updateSousSecteur(form));
+            dispatch(Actions.updateSousSecteur(form,parametres));
         }
         closeComposeDialog();
     }
@@ -90,7 +91,7 @@ function SousSecteursDialog(props)
     function handleRemove()
     {
         
-        dispatch(Actions.removeSousSecteur(form));
+        dispatch(Actions.removeSousSecteur(form,parametres));
         dispatch(Actions.closeDialog())
         closeComposeDialog();
     }

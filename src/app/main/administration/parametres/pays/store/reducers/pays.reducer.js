@@ -1,8 +1,19 @@
 import * as Actions from '../actions';
 import _ from '@lodash';
+import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     entities          : null,
+    parametres:{
+        page : 1,
+        name :'',
+        filter: {
+            id : 'id',
+            direction : 'asc'
+        }
+    },
+    pageCount : null,
+    loading : false,
     searchText        : '',
     selectedPaysIds: [],
     routeParams       : {},
@@ -18,11 +29,22 @@ const initialState = {
 const paysReducer = function (state = initialState, action) {
     switch ( action.type )
     {
+        case Actions.REQUEST_PAYS:
+        {
+            return {
+                ...state,
+                loading : true
+                
+            };
+        }
+       
         case Actions.GET_PAYS:
         {
             return {
                 ...state,
-                entities   : _.keyBy(action.payload, 'id')
+                entities   : _.keyBy(action.payload['hydra:member'], 'id'),
+                pageCount: FuseUtils.hydraPageCount(action.payload),
+                loading : false
             };
         }
         case Actions.SET_SEARCH_TEXT:
@@ -121,6 +143,22 @@ const paysReducer = function (state = initialState, action) {
                     },
                     data : null
                 }
+            };
+        }
+
+        case Actions.SET_PARAMETRES_DATA:
+        {
+            return {
+                ...state,
+                parametres:{
+                    page : action.parametres.page,
+                    name :action.parametres.name,
+                    filter: {
+                        id : action.parametres.filter.id,
+                        direction : action.parametres.filter.direction
+                    }
+                }
+                
             };
         }
         default:

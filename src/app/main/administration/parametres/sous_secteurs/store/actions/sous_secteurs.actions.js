@@ -7,6 +7,9 @@ export const GET_SECTEURS = '[SECTEURS APP] GET SECTEURS';
 export const GET_SOUS_SECTEURS = '[SOUS_SECTEURS APP] GET SOUS_SECTEURS';
 export const REQUEST_SOUS_SECTEURS = '[SOUS_SECTEURS APP] REQUEST SOUS_SECTEURS';
 export const SET_SEARCH_TEXT = '[SOUS_SECTEURS APP] SET SEARCH TEXT';
+export const SET_CURRENT_PAGE = '[SOUS_SECTEURS APP] SET CURRENT PAGE';
+export const SET_FILTER_DATA = '[SOUS_SECTEURS APP] SET FILTER DATA';
+export const SET_SORTED_DATA = '[SOUS_SECTEURS APP] SET SORTED DATA';
 export const TOGGLE_IN_SELECTED_SOUS_SECTEURS = '[SOUS_SECTEURS APP] TOGGLE IN SELECTED SOUS_SECTEURS';
 export const SELECT_ALL_SOUS_SECTEURS = '[SOUS_SECTEURS APP] SELECT ALL SOUS_SECTEURS';
 export const DESELECT_ALL_SOUS_SECTEURS = '[SOUS_SECTEURS APP] DESELECT ALL SOUS_SECTEURS';
@@ -34,9 +37,10 @@ export function getSecteurs()
 }
 
 
-export function getSousSecteurs(page=1,name='')
+export function getSousSecteurs(parametres)
 {
-    const request = agent.get(`/api/sous_secteurs?page=${page}&name=${name}`);
+    var name = parametres.name?`=${parametres.name}`:'';
+    const request = agent.get(`/api/sous_secteurs?page=${parametres.page}&name${name}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     
     return (dispatch) =>{
@@ -44,7 +48,6 @@ export function getSousSecteurs(page=1,name='')
             type   : REQUEST_SOUS_SECTEURS,
         });
         return  request.then((response) =>{
-            console.log(response)
             dispatch({
                 type   : GET_SOUS_SECTEURS,
                 payload: response.data
@@ -59,6 +62,33 @@ export function setSearchText(event)
     return {
         type      : SET_SEARCH_TEXT,
         searchText: event.target.value
+    }
+}
+
+
+
+export function setCurrentPage(parametres)
+{
+    return {
+        type      : SET_CURRENT_PAGE,
+        parametres
+    }
+}
+
+
+export function setFilterData(parametres)
+{
+    return {
+        type      : SET_FILTER_DATA,
+        parametres
+    }
+}
+
+export function setSortedData(parametres)
+{
+    return {
+        type      : SET_SORTED_DATA,
+        parametres
     }
 }
 
@@ -92,7 +122,7 @@ export function closeEditSousSecteursDialog()
     }
 }
 
-export function addSousSecteur(newSousSecteur)
+export function addSousSecteur(newSousSecteur,parametres)
 {
     newSousSecteur.secteur = newSousSecteur.secteur.value;
     return (dispatch, getState) => {
@@ -110,7 +140,7 @@ export function addSousSecteur(newSousSecteur)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getSousSecteurs()))
+            ]).then(() => dispatch(getSousSecteurs(parametres)))
         ).catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
@@ -131,7 +161,7 @@ export function addSousSecteur(newSousSecteur)
     };
 }
 
-export function updateSousSecteur(SousSecteur)
+export function updateSousSecteur(SousSecteur,parametres)
 {
     SousSecteur.secteur = SousSecteur.secteur.value;
     return (dispatch, getState) => {
@@ -149,7 +179,7 @@ export function updateSousSecteur(SousSecteur)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getSousSecteurs()))
+            ]).then(() => dispatch(getSousSecteurs(parametres)))
         )
         .catch((error)=>{
             dispatch({
@@ -171,7 +201,7 @@ export function updateSousSecteur(SousSecteur)
     };
 }
 
-export function removeSousSecteur(SousSecteur)
+export function removeSousSecteur(SousSecteur,parametres)
 {
     SousSecteur.del=true;
     delete SousSecteur.secteur;
@@ -191,7 +221,7 @@ export function removeSousSecteur(SousSecteur)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getSousSecteurs()))
+            ]).then(() => dispatch(getSousSecteurs(parametres)))
         );
     };
 }

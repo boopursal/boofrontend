@@ -12,6 +12,10 @@ function PaysList(props)
 {
     const dispatch = useDispatch();
     const pays = useSelector(({paysApp}) => paysApp.pays.entities);
+    const pageCount = useSelector(({paysApp}) => paysApp.pays.pageCount);
+    const loading = useSelector(({paysApp}) => paysApp.pays.loading);
+    const parametres = useSelector(({paysApp}) => paysApp.pays.parametres);
+    
    // const selectedPaysIds = useSelector(({paysApp}) => paysApp.pays.selectedPaysIds);
     const searchText = useSelector(({paysApp}) => paysApp.pays.searchText);
     const HtmlTooltip = withStyles(theme => ({
@@ -130,10 +134,11 @@ function PaysList(props)
                     {
                         Header    : "Pays",
                         accessor  : "name",
-                        filterable: true,
+                        filterable: false,
                     },       
                     {
-                        Header    : "Nbr Villes",
+                        Header    : "Villes",
+                        sortable: false,                        
                         className : "font-bold",
                         Cell  : row => (
                             <div className="flex items-center">
@@ -163,6 +168,105 @@ function PaysList(props)
                                
                             </div>
                         )
+                    },
+                    {
+                        Header    : "Fournisseurs",
+                        sortable: false,                        
+                        className : "font-bold",
+                        Cell  : row => (
+                            <div className="flex items-center">
+                               <HtmlTooltip
+                                    title={
+                                    <React.Fragment>
+                                        
+                                        {
+                                            
+                                            Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 ? 'Il n\'y aucun fournisseurs' : 
+                                            <ul> 
+                                            { 
+                                                _.map(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del'), function(value, key) {
+                                                return <li key={key}> {value.firstName+' '+value.lastName} </li>;
+                                                })
+                                            }
+                                          </ul>
+                                        }
+                                       
+                                    </React.Fragment>
+                                    }
+                                >
+                                    <Button onClick={(ev)=>{ev.stopPropagation();}} >
+                                        {Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length}
+                                    </Button>
+                                </HtmlTooltip>
+                               
+                            </div>
+                        )
+                    }, 
+                    {
+                        Header    : "Acheteurs",
+                        sortable: false,                        
+                        className : "font-bold",
+                        Cell  : row => (
+                            <div className="flex items-center">
+                               <HtmlTooltip
+                                    title={
+                                    <React.Fragment>
+                                        
+                                        {
+                                            
+                                            Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 ? 'Il n\'y aucun acheteurs' : 
+                                            <ul> 
+                                            { 
+                                                _.map(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del'), function(value, key) {
+                                                return <li key={key}> {value.firstName+' '+value.lastName} </li>;
+                                                })
+                                            }
+                                          </ul>
+                                        }
+                                       
+                                    </React.Fragment>
+                                    }
+                                >
+                                    <Button onClick={(ev)=>{ev.stopPropagation();}} >
+                                        {Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length}
+                                    </Button>
+                                </HtmlTooltip>
+                               
+                            </div>
+                        )
+                    },
+                    {
+                        Header    : "Admin Commercials",
+                        sortable: false,                        
+                        className : "font-bold",
+                        Cell  : row => (
+                            <div className="flex items-center">
+                               <HtmlTooltip
+                                    title={
+                                    <React.Fragment>
+                                        
+                                        {
+                                            
+                                            Object.keys(_.pullAllBy(row.original.zones, [{ 'del': true }], 'del')).length === 0 ? 'Il n\'y aucun admin commercial' : 
+                                            <ul> 
+                                            { 
+                                                _.map(_.pullAllBy(row.original.zones, [{ 'del': true }], 'del'), function(value, key) {
+                                                return <li key={key}> {value.firstName+' '+value.lastName} </li>;
+                                                })
+                                            }
+                                          </ul>
+                                        }
+                                       
+                                    </React.Fragment>
+                                    }
+                                >
+                                    <Button onClick={(ev)=>{ev.stopPropagation();}} >
+                                        {Object.keys(_.pullAllBy(row.original.zones, [{ 'del': true }], 'del')).length}
+                                    </Button>
+                                </HtmlTooltip>
+                               
+                            </div>
+                        )
                     },              
                     {
                         Header: "",
@@ -179,19 +283,38 @@ function PaysList(props)
                                                 <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
                                                 <DialogContent>
                                                     <DialogContentText id="alert-dialog-description">
-                                                    Voulez vous vraiment supprimer cet enregistrement ?
+                                                    {
+                                                        (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(row.original.villes, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(row.original.zones, [{ 'del': true }], 'del')).length === 0 ) ? 
+                                                        'Voulez vous vraiment supprimer cet enregistrement ?'
+                                                        :
+                                                        'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
+                                                    }
                                                     </DialogContentText>
                                                 </DialogContent>
                                                 <DialogActions>
                                                     <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
                                                         Non
                                                     </Button>
-                                                    <Button onClick={(ev) => {
-                                                                dispatch(Actions.removePays(row.original));
-                                                                dispatch(Actions.closeDialog())
-                                                            }} color="primary" autoFocus>
-                                                        Oui
-                                                    </Button>
+                                                    {
+                                                        (
+                                                            Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 
+                                                            && Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 
+                                                            && Object.keys(_.pullAllBy(row.original.villes, [{ 'del': true }], 'del')).length === 0 
+                                                            && Object.keys(_.pullAllBy(row.original.zones, [{ 'del': true }], 'del')).length === 0 
+                                                        ) 
+                                                        ? 
+                                                        <Button onClick={(ev) => {
+                                                                    dispatch(Actions.removePays(row.original,parametres));
+                                                                    dispatch(Actions.closeDialog())
+                                                                }} color="primary" autoFocus>
+                                                            Oui
+                                                        </Button>
+                                                        :
+                                                        <Button disabled  color="primary" autoFocus>
+                                                            Oui
+                                                        </Button>
+                                                    }
+                                                    
                                                 </DialogActions>
                                             </React.Fragment>
                                              )
@@ -203,8 +326,27 @@ function PaysList(props)
                         )
                     }
                 ]}
+                manual
+               
+                defaultSortDesc={true}
+                pages={pageCount}
                 defaultPageSize={10}
-                noDataText="No pays found"
+                loading={loading}
+                showPageSizeOptions={false}
+                onPageChange={(pageIndex) => {
+                    parametres.page = pageIndex+1;
+                    dispatch(Actions.setParametresData(parametres))
+                }}
+                
+                onSortedChange={(newSorted, column, shiftKey) => {
+                    parametres.page = 1;
+                    parametres.filter.id=newSorted[0].id;
+                    parametres.filter.direction=newSorted[0].desc? 'desc' : 'asc' ;
+                    dispatch(Actions.setParametresData(parametres))
+                }}
+                noDataText="No Pays found"
+                loadingText='Chargement...'
+                ofText= 'sur'
             />
         </FuseAnimate>
     );

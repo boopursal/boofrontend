@@ -15,6 +15,7 @@ function SousSecteursList(props)
     const SousSecteurs = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.entities);
     const pageCount = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.pageCount);
     const loading = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.loading);
+    const parametres = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.parametres);
     
     //const selectedSousSecteursIds = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.selectedsous_secteursIds);
     const searchText = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.searchText);
@@ -137,10 +138,11 @@ function SousSecteursList(props)
                     {
                         Header    : "Nom",
                         accessor  : "name",
-                        filterable: true,
+                        filterable: false,
                     },       
                     {
                         Header    : "Secteur",
+                        accessor  : "secteur",
                         Cell  : row => (
                             <div className="flex items-center">
                               { row.original.secteur ? row.original.secteur.name : ''}
@@ -149,6 +151,7 @@ function SousSecteursList(props)
                     },  
                     {
                         Header    : "Nbr Acheteurs",
+                        sortable: false,
                         className : "font-bold",
                         Cell  : row => (
                             <div className="flex items-center">
@@ -180,6 +183,7 @@ function SousSecteursList(props)
                     },     
                     {
                         Header    : "Nbr Fournisseurs",
+                        sortable: false,
                         className : "font-bold",
                         Cell  : row => (
                             <div className="flex items-center">
@@ -211,6 +215,7 @@ function SousSecteursList(props)
                     },         
                     {
                         Header: "",
+                        sortable: false,
                         width : 64,
                         Cell  : row => (
                             <div className="flex items-center">
@@ -240,7 +245,7 @@ function SousSecteursList(props)
                                                         (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 ) ? 
                                                         <Button 
                                                         onClick={(ev) => {
-                                                                    dispatch(Actions.removeSousSecteur(row.original));
+                                                                    dispatch(Actions.removeSousSecteur(row.original,parametres));
                                                                     dispatch(Actions.closeDialog())
                                                                 }} color="primary" 
                                                         autoFocus>
@@ -267,22 +272,26 @@ function SousSecteursList(props)
                     }
                 ]}
                 manual
+               
+                defaultSortDesc={true}
                 pages={pageCount}
                 defaultPageSize={10}
                 loading={loading}
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
-                    dispatch(Actions.getSousSecteurs(pageIndex+1))
+                    parametres.page = pageIndex+1;
+                    dispatch(Actions.setCurrentPage(parametres))
                 }}
-                onFilteredChange={(filtered, column) => {
-                    if(filtered[0]['value']['filterValue'])
-                    dispatch(Actions.getSousSecteurs(1,filtered[0]['value']['filterValue']))
-                    else{
-                    dispatch(Actions.getSousSecteurs())
-                        
-                    }
+                
+                onSortedChange={(newSorted, column, shiftKey) => {
+                    parametres.page = 1;
+                    parametres.filter.id=newSorted[0].id === 'secteur' ? 'secteur.id' : newSorted[0].id;
+                    parametres.filter.direction=newSorted[0].desc? 'desc' : 'asc' ;
+                    dispatch(Actions.setSortedData(parametres))
                 }}
                 noDataText="No Sous-Secteur found"
+                loadingText='Chargement...'
+                ofText= 'sur'
             />
         </FuseAnimate>
     );

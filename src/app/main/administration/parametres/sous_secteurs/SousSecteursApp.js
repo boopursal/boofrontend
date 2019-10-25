@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {FusePageSimple} from '@fuse';
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import SousSecteursList from './SousSecteursList';
 import SousSecteursHeader from './SousSecteursHeader';
@@ -14,10 +14,11 @@ function SousSecteursApp(props)
     const dispatch = useDispatch();
 
     const pageLayout = useRef(null);
+    const parametres = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.parametres);
 
     useEffect(() => {
-        dispatch(Actions.getSousSecteurs());
-    }, [dispatch]);
+        dispatch(Actions.getSousSecteurs(parametres));
+    }, [dispatch,parametres]);
 
     return (
         <React.Fragment>

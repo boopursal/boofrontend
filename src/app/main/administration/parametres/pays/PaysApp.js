@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {FusePageSimple} from '@fuse';
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import PaysList from './PaysList';
 import PaysHeader from './PaysHeader';
@@ -12,10 +12,11 @@ function PaysApp(props)
 {
     const dispatch = useDispatch();
     const pageLayout = useRef(null);
+    const parametres = useSelector(({paysApp}) => paysApp.pays.parametres);
 
     useEffect(() => {
-        dispatch(Actions.getPays());
-    }, [dispatch]);
+        dispatch(Actions.getPays(parametres));
+    }, [dispatch,parametres]);
 
     return (
         <React.Fragment>

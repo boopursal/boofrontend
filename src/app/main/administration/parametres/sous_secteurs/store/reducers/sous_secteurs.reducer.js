@@ -6,6 +6,14 @@ const initialState = {
     entities          : null,
     pageCount : null,
     searchText        : '',
+    parametres:{
+        page : 1,
+        name :'',
+        filter: {
+            id : 'id',
+            direction : 'asc'
+        }
+    },
     selectedSousSecteursIds: [],
     routeParams       : {},
     sous_secteursDialog     : {
@@ -51,6 +59,24 @@ const sous_secteursReducer = function (state = initialState, action) {
             return {
                 ...state,
                 searchText: action.searchText
+            };
+        }
+
+        case Actions.SET_CURRENT_PAGE:
+        case Actions.SET_FILTER_DATA:
+        case Actions.SET_SORTED_DATA:
+        {
+            return {
+                ...state,
+                parametres:{
+                    page : action.parametres.page,
+                    name :action.parametres.name,
+                    filter: {
+                        id : action.parametres.filter.id,
+                        direction : action.parametres.filter.direction
+                    }
+                }
+                
             };
         }
         
