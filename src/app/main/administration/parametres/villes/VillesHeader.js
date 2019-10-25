@@ -8,8 +8,9 @@ import * as Actions from './store/actions';
 function VillesHeader(props)
 {
     const dispatch = useDispatch();
-    const searchText = useSelector(({villesApp}) => villesApp.villes.searchText);
+    //const searchText = useSelector(({villesApp}) => villesApp.villes.searchText);
     const mainTheme = useSelector(({fuse}) => fuse.settings.mainTheme);
+    const parametres = useSelector(({villesApp}) => villesApp.villes.parametres);
 
     return (
          <div className="flex flex-1 items-center justify-between p-8 sm:p-24">
@@ -36,11 +37,15 @@ function VillesHeader(props)
                                     className="flex flex-1"
                                     disableUnderline
                                     fullWidth
-                                    value={searchText}
+                                    value={parametres.name}
                                     inputProps={{
                                         'aria-label': 'Search'
                                     }}
-                                    onChange={ev => dispatch(Actions.setSearchText(ev))}
+                                    onChange={ev => {
+                                        parametres.page = 1;
+                                        parametres.name=ev.target.value
+                                        dispatch(Actions.setParametresData(parametres))
+                                    }}
                                 />
                             </Paper>
                         </FuseAnimate>

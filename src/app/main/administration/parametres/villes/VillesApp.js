@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {FusePageSimple} from '@fuse';
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import VillesList from './VillesList';
 import VillesHeader from './VillesHeader';
@@ -12,12 +12,13 @@ import reducer from './store/reducers';
 function VillesApp(props)
 {
     const dispatch = useDispatch();
+    const parametres = useSelector(({villesApp}) => villesApp.villes.parametres);
 
     const pageLayout = useRef(null);
 
     useEffect(() => {
-        dispatch(Actions.getVilles());
-    }, [dispatch]);
+        dispatch(Actions.getVilles(parametres));
+    }, [dispatch,parametres]);
 
     return (
         <React.Fragment>

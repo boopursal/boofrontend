@@ -4,6 +4,7 @@ import {showMessage} from 'app/store/actions/fuse';
 import _ from '@lodash';
 export const GET_PAYS = '[PAYS APP] GET PAYS';
 export const GET_VILLES = '[VILLES APP] GET VILLES';
+export const REQUEST_VILLES = '[VILLES APP] REQUEST VILLES';
 export const SET_SEARCH_TEXT = '[VILLES APP] SET SEARCH TEXT';
 export const TOGGLE_IN_SELECTED_VILLES = '[VILLES APP] TOGGLE IN SELECTED VILLES';
 export const SELECT_ALL_VILLES = '[VILLES APP] SELECT ALL VILLES';
@@ -16,6 +17,7 @@ export const ADD_VILLE = '[VILLES APP] ADD VILLE';
 export const SAVE_ERROR = '[VILLES APP] SAVE ERROR';
 export const UPDATE_VILLE = '[VILLES APP] UPDATE VILLE';
 export const REMOVE_VILLE = '[VILLES APP] REMOVE VILLE';
+export const SET_PARAMETRES_DATA = '[SOUS_SECTEURS APP] SET PARAMETRES DATA';
 
 export function getPays()
 {
@@ -32,17 +34,24 @@ export function getPays()
 }
 
 
-export function getVilles()
+export function getVilles(parametres)
 {
-    const request = agent.get('/api/villes');
 
-    return (dispatch) =>
-        request.then((response) =>{
+    var name = parametres.name?`=${parametres.name}`:'';
+    const request = agent.get(`/api/villes?page=${parametres.page}&name${name}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+
+    return (dispatch) =>{
+        dispatch({
+            type   : REQUEST_VILLES,
+        });
+        return request.then((response) =>{
             dispatch({
                 type   : GET_VILLES,
-                payload: response.data['hydra:member']
+                payload: response.data
             })
         });
+    }
+        
 }
 
 export function setSearchText(event)
@@ -83,7 +92,7 @@ export function closeEditVillesDialog()
     }
 }
 
-export function addVille(newVille)
+export function addVille(newVille,parametres)
 {
     newVille.pays = newVille.pays.value;
     return (dispatch, getState) => {
@@ -101,7 +110,7 @@ export function addVille(newVille)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getVilles()))
+            ]).then(() => dispatch(getVilles(parametres)))
         ).catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
@@ -122,7 +131,7 @@ export function addVille(newVille)
     };
 }
 
-export function updateVille(Ville)
+export function updateVille(Ville,parametres)
 {
     Ville.pays = Ville.pays.value;
     return (dispatch, getState) => {
@@ -140,7 +149,7 @@ export function updateVille(Ville)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getVilles()))
+            ]).then(() => dispatch(getVilles(parametres)))
         )
         .catch((error)=>{
             dispatch({
@@ -162,7 +171,7 @@ export function updateVille(Ville)
     };
 }
 
-export function removeVille(Ville)
+export function removeVille(Ville,parametres)
 {
     Ville.del=true;
     delete Ville.pays;
@@ -182,9 +191,17 @@ export function removeVille(Ville)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getVilles()))
+            ]).then(() => dispatch(getVilles(parametres)))
         );
     };
+}
+
+export function setParametresData(parametres)
+{
+    return {
+        type      : SET_PARAMETRES_DATA,
+        parametres
+    }
 }
 
 

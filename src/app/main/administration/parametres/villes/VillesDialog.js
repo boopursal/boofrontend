@@ -224,16 +224,34 @@ function VillesDialog(props)
                                         <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
-                                            Voulez vous vraiment supprimer cet enregistrement ?
+                                            {
+                                                        (Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0  && Object.keys(_.pullAllBy(form.commercials, [{ 'del': true }], 'del')).length === 0 ) ? 
+                                                        'Voulez vous vraiment supprimer cet enregistrement ?'
+                                                        :
+                                                        'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
+                                                    }
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
                                             <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
                                                 Non
                                             </Button>
-                                            <Button onClick={handleRemove} color="primary" autoFocus>
-                                                Oui
-                                            </Button>
+                                            {
+                                                (
+                                                    Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 
+                                                    && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0 
+                                                    && Object.keys(_.pullAllBy(form.commercials, [{ 'del': true }], 'del')).length === 0 
+                                                ) 
+                                                ? 
+                                                <Button onClick={handleRemove} color="primary" autoFocus>
+                                                    Oui
+                                                </Button>
+                                                :
+                                                <Button disabled  color="primary" autoFocus>
+                                                    Oui
+                                                </Button>
+                                            }
+                                           
                                         </DialogActions>
                                     </React.Fragment>
                                      )
