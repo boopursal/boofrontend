@@ -1,0 +1,89 @@
+import agent from "agent";
+import FuseUtils from '@fuse/FuseUtils';
+import {showMessage} from 'app/store/actions/fuse';
+import _ from '@lodash';
+
+export const GET_PAYS = '[STEP APP] GET PAYS';
+export const GET_VILLES = '[STEP APP] GET VILLES';
+export const REQUEST_PAYS = '[STEP APP] REQUEST PAYS';
+export const REQUEST_VILLES = '[STEP APP] REQUEST VILLES';
+export const REQUEST_UPDATE_FOURNISSEUR = '[STEP APP] REQUEST UPDATE FOURNISSEUR';
+export const UPDATE_FOURNISSEUR = '[STEP APP] UPDATE FOURNISSEUR';
+export const SAVE_ERROR = '[STEP APP] SAVE ERROR';
+
+export function getPays()
+{
+    const request = agent.get('/api/pays_p');
+
+    return (dispatch) =>{
+        dispatch({
+            type   : REQUEST_PAYS,
+        });
+       return request.then((response) =>{
+            
+            dispatch({
+                type   : GET_PAYS,
+                payload: response.data
+            })
+        });
+
+    }
+        
+}
+
+export function getVilles(pays_id)
+{
+    const request = agent.get(`/api/pays_p/${pays_id}/villes`);
+
+    return (dispatch) =>{
+        dispatch({
+            type   : REQUEST_VILLES,
+        });
+       return request.then((response) =>{
+            
+            dispatch({
+                type   : GET_VILLES,
+                payload: response.data
+            })
+        });
+
+    }
+        
+}
+
+
+export function setStep2(data,fournisseur_id)
+{
+  
+    
+    data.pays = '/api/pays/'+data.pays.value;
+    data.ville = '/api/villes/'+data.ville.value;
+    data.redirect = '/register/step3';
+    
+    console.log(data)
+    return (dispatch, getState) => {
+
+        const request = agent.put(`/api/fournisseurs/${fournisseur_id}`,data);
+        dispatch({
+            type   : REQUEST_UPDATE_FOURNISSEUR,
+        });
+        return request.then((response) =>
+        
+            Promise.all([
+                console.log(response),
+                dispatch({
+                    type: UPDATE_FOURNISSEUR,
+                    payload : response.data
+                })
+            ])
+        )
+        .catch((error)=>{
+            dispatch({
+                type: SAVE_ERROR,
+                payload: FuseUtils.parseApiErrors(error)
+            });
+        });
+    };
+        
+}
+

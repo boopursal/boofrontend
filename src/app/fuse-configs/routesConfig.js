@@ -7,6 +7,7 @@ import {authRoles} from 'app/auth';
 import { LoginConfig } from '../main/login/LoginConfig';
 import {pagesConfigs} from 'app/main/pages/pagesConfigs';
 import { administrateurConfigs } from '../main/administration/administrateurConfigs';
+import { RegisterPageConfig } from '../main/inscription/RegisterPageConfig';
 function setAdminAuth(configs)
 {
     return configs.map(config => _.merge({}, config, {auth: authRoles.admin}))
@@ -14,16 +15,20 @@ function setAdminAuth(configs)
 const routeConfigs = [
     ...setAdminAuth([
         ...administrateurConfigs,
-        ExampleConfig,
-        
     ]),
+    ExampleConfig,
     ...pagesConfigs,
-    LoginConfig
+    ...RegisterPageConfig,
+    LoginConfig,
 ];
 
 const routes = [
     ...FuseUtils.generateRoutesFromConfigs(routeConfigs),
-    
+    {
+        path     : '/',
+        exact    : true,
+        component: () => <Redirect to="/login"/>
+    },
     {
         component: () => <Redirect to="/pages/errors/error-404"/>
     }

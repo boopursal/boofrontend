@@ -217,7 +217,7 @@ function SelectReactFormsy(props) {
 
 
     const options = _.map(props.options, options => ({
-        value: options['@id'] ? options['@id'] :options.id,
+        value: '/api/sous_secteurs/'+options.id,
         label: options.name,
     }));
 

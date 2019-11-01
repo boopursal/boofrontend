@@ -26,6 +26,28 @@ export function submitLogin({email, password})
             });
 }
 
+export function submitLoginWithConfirmToken(confirmationToken)
+{
+    
+    return (dispatch) =>
+
+        jwtService.signInWithConfirmToken(confirmationToken)
+            .then((user) => {
+                    dispatch(setUserData(user));
+
+                    return dispatch({
+                        type: LOGIN_SUCCESS
+                    });
+                }
+            )
+            .catch(error => {
+                return dispatch({
+                    type   : LOGIN_ERROR,
+                    payload: error
+                });
+            });
+}
+
 export function submitLoginWithFireBase({username, password})
 {
     return (dispatch) =>

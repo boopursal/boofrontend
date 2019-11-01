@@ -1,82 +1,59 @@
-import firebaseService from 'app/services/firebaseService';
-import * as UserActions from './user.actions';
-import * as Actions from 'app/store/actions';
-import jwtService from 'app/services/jwtService';
+import agent from "agent";
+import FuseUtils from '@fuse/FuseUtils';
 
+export const REQUEST_REGISTER = 'REQUEST_REGISTER';
 export const REGISTER_ERROR = 'REGISTER_ERROR';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 
-export function submitRegister({displayName, password, email})
-{
-    return (dispatch) =>
-        jwtService.createUser({
-            displayName,
-            password,
-            email
-        })
-            .then((user) => {
-                    dispatch(UserActions.setUserData(user));
-                    return dispatch({
-                        type: REGISTER_SUCCESS
-                    });
-                }
-            )
-            .catch(error => {
-                return dispatch({
-                    type   : REGISTER_ERROR,
-                    payload: error
-                });
-            });
-}
+export function submitRegisterFournisseur(newFournisseur) {
+    return (dispatch, getState) => {
 
-export function registerWithFirebase(model)
-{
-    const {email, password, displayName} = model;
-    return (dispatch) =>
-        firebaseService.auth && firebaseService.auth.createUserWithEmailAndPassword(email, password)
-            .then(response => {
+        const request = agent.post('/api/fournisseurs', newFournisseur);
 
-                dispatch(UserActions.createUserSettingsFirebase({
-                    ...response.user,
-                    displayName,
-                    email
-                }));
-
-                return dispatch({
+        dispatch({
+            type: REQUEST_REGISTER,
+        });
+        
+        return request.then((response) =>
+            Promise.all([
+                dispatch({
                     type: REGISTER_SUCCESS
-                });
-            })
-            .catch(error => {
-                const usernameErrorCodes = [
-                    'auth/operation-not-allowed',
-                    'auth/user-not-found',
-                    'auth/user-disabled'
-                ];
+                }),
+            ])
+        ).catch((error) => {
+            dispatch({
+                type: REGISTER_ERROR,
+                payload: FuseUtils.parseApiErrors(error)
 
-                const emailErrorCodes = [
-                    'auth/email-already-in-use',
-                    'auth/invalid-email'
-                ];
-
-                const passwordErrorCodes = [
-                    'auth/weak-password',
-                    'auth/wrong-password'
-                ];
-
-                const response = {
-                    email      : emailErrorCodes.includes(error.code) ? error.message : null,
-                    displayName: usernameErrorCodes.includes(error.code) ? error.message : null,
-                    password   : passwordErrorCodes.includes(error.code) ? error.message : null
-                };
-
-                if ( error.code === 'auth/invalid-api-key' )
-                {
-                    dispatch(Actions.showMessage({message: error.message}));
-                }
-
-                return dispatch({
-                    type   : REGISTER_ERROR,
-                    payload: response
-                });
             });
+        });
+    };
+
 }
+
+export function submitRegisterAcheteur(newAcheteur) {
+
+    return (dispatch, getState) => {
+
+        const request = agent.post('/api/acheteurs', newAcheteur);
+
+        dispatch({
+            type: REQUEST_REGISTER,
+        });
+        return request.then((response) =>
+            Promise.all([
+                dispatch({
+                    type: REGISTER_SUCCESS
+                })
+            ])
+        ).catch((error) => {
+            dispatch({
+                type: REGISTER_ERROR,
+                payload: FuseUtils.parseApiErrors(error)
+
+            });
+        });
+    };
+
+}
+

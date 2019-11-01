@@ -1,6 +1,7 @@
 import * as Actions from '../actions';
 
 const initialState = {
+    loading : false,
     success: false,
     error  : {
         username: null,
@@ -11,18 +12,28 @@ const initialState = {
 const register = function (state = initialState, action) {
     switch ( action.type )
     {
+        case Actions.REQUEST_REGISTER:
+        {
+            return {
+                ...initialState,
+                loading : true
+            };
+        }
         case Actions.REGISTER_SUCCESS:
         {
             return {
                 ...initialState,
-                success: true
+                success: true,
+                loading : false
+                
             };
         }
         case Actions.REGISTER_ERROR:
         {
             return {
                 success: false,
-                error  : action.payload
+                error  : action.payload,
+                loading : false
             };
         }
         default:

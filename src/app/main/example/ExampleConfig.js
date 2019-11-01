@@ -1,10 +1,13 @@
 import Example from './Example';
+import {authRoles} from 'app/auth';
+
 export const ExampleConfig = {
     settings: {
         layout: {
             config: {}
         }
     },
+    auth    : authRoles.registe,
     routes  : [
         {
             path     : '/example',

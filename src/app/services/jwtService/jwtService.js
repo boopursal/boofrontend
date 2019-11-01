@@ -107,7 +107,32 @@ class jwtService extends FuseUtils.EventEmitter {
                     {
                         reject(response.data.error);
                     }
-                });
+                }).catch((e) => {
+                    const error = {
+                        message   : e.response.data.message
+                    };
+                    reject(error);
+                 });
+        });
+    };
+    signInWithConfirmToken = (confirmationToken) => {
+        return new Promise((resolve, reject) => {
+            agent.post('api/users/confirm',confirmationToken)
+                .then(response => {
+                  
+                    if ( response.data.user )
+                    {
+                        this.setSession(response.data.token);
+                        resolve(response.data.user);
+                    }
+                    else
+                    {
+                        reject(response.data.error);
+                    }
+                }).catch((e) => {
+                    const error = FuseUtils.parseApiErrors(e);
+                    reject(error);
+                 }); ;
         });
     };
 
