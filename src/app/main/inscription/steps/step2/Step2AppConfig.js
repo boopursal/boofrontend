@@ -25,10 +25,10 @@ export const Step2AppConfig =
             }
         }
     },
-    auth    : authRoles.registe,
+    auth    : authRoles.fournisseur_pre,
     routes  : [
         {
-            path     : '/register/step2',
+            path     : '/register/fournisseur',
             component: React.lazy(() => import('./Step2App'))
         }
     ]

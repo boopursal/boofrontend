@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => ({
     card: {
         minWidth: 675,
         maxWidth: 675,
+
     },
     root: {
         background: 'radial-gradient(' + darken(theme.palette.primary.dark, 0.5) + ' 0%, ' + theme.palette.primary.dark + ' 80%)',
@@ -39,17 +40,18 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(1),
     },
     buttonProgress: {
-      color: green[500],
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      marginTop: -12,
-      marginLeft: -12,
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
     },
 }));
 const defaultFormState = {
-    step2: '',
+    step4: '',
     ville: '',
+    secteur: '',
     adresse1: '',
     adresse2: '',
     website: '',
@@ -133,48 +135,50 @@ ColorlibStepIcon.propTypes = {
 };
 
 function getSteps() {
-    return ['Registrement', 'Information de la société', 'Secteurs d\'activités'];
+    return ['Registrement', 'Information de la société'];
 }
 
-function Step2App(props) {
+function Step4App(props) {
 
     const dispatch = useDispatch();
     const classes = useStyles();
     const steps = getSteps();
-    const user = useSelector(({auth}) => auth.user);
+    const user = useSelector(({ auth }) => auth.user);
 
     const [isFormValid, setIsFormValid] = useState(false);
     const [showIce, setShowIce] = useState(false);
     const formRef = useRef(null);
 
-    const Pays = useSelector(({ step2App }) => step2App.step2.pays);
-    const Villes = useSelector(({ step2App }) => step2App.step2.villes);
-    const step2 = useSelector(({ step2App }) => step2App.step2);
+    const Pays = useSelector(({ step4App }) => step4App.step4.pays);
+    const Villes = useSelector(({ step4App }) => step4App.step4.villes);
+    const step4 = useSelector(({ step4App }) => step4App.step4);
 
     const { form, handleChange, setForm } = useForm(defaultFormState);
 
     useEffect(() => {
         dispatch(Actions.getPays());
+        dispatch(Actions.getSecteurs());
     }, [dispatch]);
 
     useEffect(() => {
-        if (step2.error && (step2.error.pays || step2.error.ville || step2.error.adresse1 || step2.error.adresse2 || step2.error.website || step2.error.fix || step2.error.ice || step2.error.description)) {
-        {
-            formRef.current.updateInputsWithError({
-                ...step2.error
-            });
+        if (step4.error && (step4.error.pays || step4.error.ville || step4.error.adresse1 || step4.error.adresse2 || step4.error.website || step4.error.fix || step4.error.ice || step4.error.description)) {
+            {
+                formRef.current.updateInputsWithError({
+                    ...step4.error
+                });
+            }
+            disableButton();
         }
-        disableButton();
-        }
-    }, [step2.error]);
+    }, [step4.error]);
 
     useEffect(() => {
-        if (step2.success) {
-           if(step2.redirect_success){
-                props.history.push(step2.redirect_success);
-           }
+        if (step4.success) {
+            if (step4.redirect_success) {
+                console.log(step4.redirect_success)
+                props.history.push(step4.redirect_success);
+            }
         }
-    }, [step2.success]);
+    }, [step4.success]);
 
     function disableButton() {
         setIsFormValid(false);
@@ -185,14 +189,14 @@ function Step2App(props) {
     }
 
     function handleSubmit(model) {
-         dispatch(Actions.setStep2(model,user.id));
+        dispatch(Actions.setStep4(model, user.id));
     }
 
 
 
     function handleChipChange(value, name) {
 
-        if (name === 'ville') {
+        if (name === 'ville' || name === 'secteur') {
             setForm(_.set({ ...form }, name, value));
         }
         else {
@@ -247,6 +251,25 @@ function Step2App(props) {
                                             className="flex flex-col justify-center w-full"
                                         >
 
+                                            <SelectReactFormsy
+                                                id="secteur"
+                                                name="secteur"
+                                                value={
+                                                    form.secteur
+                                                }
+                                                placeholder="Selectionner votre secteur d'activité"
+                                                textFieldProps={{
+                                                    label: 'Secteur d\'activité',
+                                                    InputLabelProps: {
+                                                        shrink: true
+                                                    },
+                                                    variant: 'outlined'
+                                                }}
+                                                className="mb-16"
+                                                options={step4.secteurs}
+                                                onChange={(value) => handleChipChange(value, 'secteur')}
+                                                required
+                                            />
                                             <Grid container spacing={3} className=" min-w-450 max-w-450">
 
 
@@ -422,6 +445,7 @@ function Step2App(props) {
                                                     ''
                                             }
 
+
                                             <TextFieldFormsy
                                                 className="mb-16  w-full"
                                                 type="text"
@@ -450,12 +474,12 @@ function Step2App(props) {
                                                 color="primary"
                                                 className="w-full mx-auto mt-16 normal-case"
                                                 aria-label="Suivant"
-                                                disabled={!isFormValid || step2.loading}
+                                                disabled={!isFormValid || step4.loading}
                                                 value="legacy"
                                             >
                                                 Suivant
-                                                {step2.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                                
+                                                {step4.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+
                                             </Button>
 
                                         </Formsy>
@@ -474,4 +498,4 @@ function Step2App(props) {
     );
 }
 
-export default withReducer('step2App', reducer)(Step2App);
+export default withReducer('step4App', reducer)(Step4App);

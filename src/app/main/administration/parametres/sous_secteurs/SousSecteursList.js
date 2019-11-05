@@ -149,7 +149,7 @@ function SousSecteursList(props)
                             </div>
                         )
                     },  
-                    {
+                   /* {
                         Header    : "Nbr Acheteurs",
                         sortable: false,
                         className : "font-bold",
@@ -180,7 +180,8 @@ function SousSecteursList(props)
                                
                             </div>
                         )
-                    },     
+                    },
+                    */  
                     {
                         Header    : "Nbr Fournisseurs",
                         sortable: false,
@@ -230,7 +231,7 @@ function SousSecteursList(props)
                                                 <DialogContent>
                                                     <DialogContentText id="alert-dialog-description">
                                                     {
-                                                        (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 ) ? 
+                                                        (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 /*&& Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 */) ? 
                                                         'Voulez vous vraiment supprimer cet enregistrement ?'
                                                         :
                                                         'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
@@ -242,7 +243,7 @@ function SousSecteursList(props)
                                                         Non
                                                     </Button>
                                                     {
-                                                        (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 ) ? 
+                                                        (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0/* && Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 */ ) ? 
                                                         <Button 
                                                         onClick={(ev) => {
                                                                     dispatch(Actions.removeSousSecteur(row.original,parametres));

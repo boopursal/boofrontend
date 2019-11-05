@@ -2,7 +2,7 @@ import React from 'react';
 import {authRoles} from 'app/auth';
 
 
-export const Step3AppConfig = 
+export const Step4AppConfig = 
 {
     settings: {
         layout: {
@@ -25,11 +25,11 @@ export const Step3AppConfig =
             }
         }
     },
-    auth    : authRoles.fournisseur_pre,
+    auth    : authRoles.acheteur_pre,
     routes  : [
         {
-            path     : '/register/fournisseur2',
-            component: React.lazy(() => import('./Step3App'))
+            path     : '/register/ac2',
+            component: React.lazy(() => import('./Step4App'))
         }
     ]
 };

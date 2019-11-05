@@ -69,7 +69,6 @@ function AcheteurTab(props) {
                 }));
         }
 
-        console.log(register.error)
     }, [register.error]);
 
     useEffect(() => {

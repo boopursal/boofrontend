@@ -1,6 +1,8 @@
 import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
 import _ from '@lodash';
+import jwtService from 'app/services/jwtService';
+import { setUserData } from "app/auth/store/actions";
 
 export const REQUEST_SOUS_SECTEUR = '[STEP APP] REQUEST SOUS_SECTEUR';
 export const GET_SOUS_SECTEUR = '[STEP APP] GET SOUS SECTEUR';
@@ -36,6 +38,8 @@ export function setStep3(data,fournisseur_id)
   
     
     data.redirect = '/dashboard';
+    data.roles = ['ROLE_FOURNISSEUR'];
+    
    
     return (dispatch, getState) => {
 
@@ -46,10 +50,14 @@ export function setStep3(data,fournisseur_id)
         return request.then((response) =>
         
             Promise.all([
-                console.log(response),
                 dispatch({
                     type: UPDATE_FOURNISSEUR,
                     payload : response.data
+                }),
+                jwtService.signInWithToken()
+                .then(user => {
+                    dispatch(setUserData(user));
+
                 })
             ])
         )

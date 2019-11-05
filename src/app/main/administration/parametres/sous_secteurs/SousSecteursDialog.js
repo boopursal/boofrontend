@@ -225,7 +225,7 @@ function SousSecteursDialog(props)
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
                                                     {
-                                                        (Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0 ) ? 
+                                                        (Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 /*&& Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0 */) ? 
                                                         'Voulez vous vraiment supprimer cet enregistrement ?'
                                                         :
                                                         'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
@@ -237,7 +237,7 @@ function SousSecteursDialog(props)
                                                 Non
                                             </Button>
                                             {
-                                                (Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0 ) ?                                                 
+                                                (Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 /*&& Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0*/ ) ?                                                 
                                                 <Button 
                                                 onClick={handleRemove} color="primary" autoFocus>
                                                     Oui

@@ -15,15 +15,6 @@ class Auth extends Component {
          */
         this.jwtCheck();
 
-        /**
-         * Comment the line if you do not use Auth0
-         */
-        //this.auth0Check();
-
-        /**
-         * Comment the line if you do not use Firebase
-         */
-        //this.firebaseCheck();
     }
 
     jwtCheck = () => {
@@ -75,8 +66,6 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
             logout             : userActions.logoutUser,
             setUserData        : userActions.setUserData,
-            setUserDataAuth0   : userActions.setUserDataAuth0,
-            setUserDataFirebase: userActions.setUserDataFirebase,
             showMessage        : Actions.showMessage,
             hideMessage        : Actions.hideMessage
         },
