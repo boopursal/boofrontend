@@ -1,7 +1,5 @@
 import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
-import {showMessage} from 'app/store/actions/fuse';
-import _ from '@lodash';
 
 export const GET_PAYS = '[STEP APP] GET PAYS';
 export const GET_VILLES = '[STEP APP] GET VILLES';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { StepsPageConfig } from './steps/StepsPageConfig';
 import { InscriptionConfig } from './InscriptionConfig';
 

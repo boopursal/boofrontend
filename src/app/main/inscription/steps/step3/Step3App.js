@@ -2,19 +2,16 @@ import React, { useRef, useEffect, useState } from 'react';
 import withReducer from 'app/store/withReducer';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
-import { FusePageSimple } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { Card, Grid, MenuItem, CardContent, InputAdornment, Icon, TextField, Typography, Stepper, Step, StepLabel, Button } from '@material-ui/core';
+import { Card, CardContent, Stepper, Step, StepLabel, Button } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import { FuseAnimate } from '@fuse';
 import Formsy from 'formsy-react';
-import { TextFieldFormsy, SelectFormsy } from '@fuse';
 import StepConnector from '@material-ui/core/StepConnector';
 import PropTypes from 'prop-types';
 import CheckIcon from '@material-ui/icons/Check';
-import DomainIcon from '@material-ui/icons/Domain';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { useForm } from '@fuse/hooks';
 import _ from '@lodash';
@@ -145,7 +142,7 @@ function Step3App(props) {
 
     const step3 = useSelector(({ step3App }) => step3App.step3);
 
-    const { form, handleChange, setForm } = useForm(defaultFormState);
+    const { form,  setForm } = useForm(defaultFormState);
 
     useEffect(() => {
         dispatch(Actions.getSousSecteurs());

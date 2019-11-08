@@ -2,15 +2,14 @@ import React, { useRef, useEffect, useState } from 'react';
 import withReducer from 'app/store/withReducer';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
-import { FusePageSimple } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { Card, Grid, MenuItem, CardContent, InputAdornment, Icon, TextField, Typography, Stepper, Step, StepLabel, Button } from '@material-ui/core';
+import { Card, Grid, CardContent, InputAdornment, Icon, Stepper, Step, StepLabel, Button } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import { FuseAnimate } from '@fuse';
 import Formsy from 'formsy-react';
-import { TextFieldFormsy, SelectFormsy } from '@fuse';
+import { TextFieldFormsy } from '@fuse';
 import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
 import StepConnector from '@material-ui/core/StepConnector';
 import PropTypes from 'prop-types';
@@ -400,10 +399,7 @@ function Step2App(props) {
                                                         onChange={handleChange}
                                                         label="ICE"
                                                         autoComplete="ice"
-                                                        validations="isNumeric "
-                                                        validationErrors={{
-                                                            isNumeric: 'Cette valeur doit être numérique. ',
-                                                        }}
+                                                        
                                                         validations={{
                                                             minLength: 15,
                                                             maxLength: 15,

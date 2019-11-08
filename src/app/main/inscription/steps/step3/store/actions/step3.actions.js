@@ -1,6 +1,5 @@
 import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
-import _ from '@lodash';
 import jwtService from 'app/services/jwtService';
 import { setUserData } from "app/auth/store/actions";
 

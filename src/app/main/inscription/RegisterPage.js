@@ -7,13 +7,14 @@ import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import FournisseurTab from './tabs/FournisseurTab';
 import AcheteurTab from './tabs/AcheteurTab';
-import { Route , withRouter} from 'react-router-dom';
+import { withRouter} from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
     root: {
         background: 'radial-gradient(' + darken(theme.palette.primary.dark, 0.5) + ' 0%, ' + theme.palette.primary.dark + ' 80%)',
         color: theme.palette.primary.contrastText
     }
 }));
+
 
 function RegisterPage(props) {
 

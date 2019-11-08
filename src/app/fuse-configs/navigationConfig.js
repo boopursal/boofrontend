@@ -101,6 +101,16 @@ const navigationConfig = [
             
         ]
     },
+    /** ACHETEUR Navigations */
+    {
+        'id'      : 'demandes_ha',
+        'title'   : 'Mes demandes',
+        'auth' : authRoles.acheteur,        
+        'type'    : 'item',
+        'icon'    : 'inbox',
+        'url'  : '/demandes'
+    },
+    /** FIN ACHETEUR Navigations */
     
 ];
 

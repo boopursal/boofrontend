@@ -1,6 +1,5 @@
 import * as Actions from '../actions';
 import _ from '@lodash';
-import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     pays          : null,

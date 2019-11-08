@@ -3,21 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as authActions from 'app/auth/store/actions';
 import * as Actions from 'app/store/actions';
 import {  FuseSplashScreen } from '@fuse';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
-import { Card, CardContent, Typography } from '@material-ui/core';
-import { darken } from '@material-ui/core/styles/colorManipulator';
 import _ from '@lodash';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        background: 'radial-gradient(' + darken(theme.palette.primary.dark, 0.5) + ' 0%, ' + theme.palette.primary.dark + ' 80%)',
-        color: theme.palette.primary.contrastText
-    }
-}));
 
 function ConfirmPage(props) {
-    const classes = useStyles();
     const dispatch = useDispatch();
     const login = useSelector(({ auth }) => auth.login);
     const user = useSelector(({auth}) => auth.user);
