@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs, TextField, InputAdornment, Icon, Typography, LinearProgress, MenuItem, Grid, CircularProgress, IconButton, Tooltip, SnackbarContent } from '@material-ui/core';
+import { Button, Tab, Tabs, TextField, InputAdornment, Icon, Typography, LinearProgress, MenuItem, Grid, CircularProgress, IconButton, Tooltip, FormControlLabel, Radio } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy, SelectFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy, SelectFormsy, RadioGroupFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -14,9 +14,7 @@ import reducer from '../store/reducers';
 import Formsy from 'formsy-react';
 import moment from 'moment';
 import green from '@material-ui/core/colors/green';
-import ErrorIcon from '@material-ui/icons/Error';
 import ReactTable from "react-table";
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -68,25 +66,6 @@ const useStyles = makeStyles(theme => ({
                 opacity: 1
             }
         }
-    },
-
-    error: {
-        backgroundColor: theme.palette.error.dark,
-    },
-
-    icon: {
-        fontSize: 20,
-    },
-    iconVariant: {
-        opacity: 0.9,
-        marginRight: theme.spacing(1),
-    },
-    message: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    margin: {
-        margin: theme.spacing(1),
     }
 }));
 moment.defaultFormat = "DD/MM/YYYY HH:mm";
@@ -120,7 +99,7 @@ function Demande(props) {
     }, [dispatch]);
 
     useEffect(() => {
-        if (demande.error && (demande.error.reference || demande.error.description || demande.error.descriptionEn || demande.error.descriptionEs || demande.error.dateExpiration || demande.error.isPublic || demande.error.isAnonyme || demande.error.sousSecteurs || demande.error.langueP)) {
+        if (demande.error && (demande.error.reference || demande.error.statut || demande.error.motifRejet || demande.error.description || demande.error.descriptionEn || demande.error.descriptionEs || demande.error.dateExpiration || demande.error.isPublic || demande.error.isAnonyme || demande.error.sousSecteurs || demande.error.budget)) {
             {
                 formRef.current.updateInputsWithError({
                     ...demande.error
@@ -138,7 +117,7 @@ function Demande(props) {
             demande.data = null;
             demande.error = null;
             demande.attachement_deleted = null;
-            props.history.push('/demandes');
+            props.history.push('/demandes_admin');
         }
     }, [demande.success]);
 
@@ -215,6 +194,12 @@ function Demande(props) {
         }
     }
 
+    function handleRadioChange(e) {
+
+        setForm(_.set({ ...form }, 'statut', parseInt(e.target.value)));
+        console.log(e.target.value)
+    }
+
     function disableButton() {
         setIsFormValid(false);
     }
@@ -224,23 +209,16 @@ function Demande(props) {
     }
 
     function handleSubmit(model) {
-        //event.preventDefault();
+
         model.sousSecteurs = _.map(model.sousSecteurs, function (value, key) {
             return value.value;
         });
         model.attachements = _.map(form.attachements, function (value, key) {
             return value['@id'];
         });
-        const params = props.match.params;
-        const { demandeId } = params;
 
-        if (demandeId === 'new') {
-            dispatch(Actions.saveDemande(model));
-        }
-        else {
+        dispatch(Actions.putDemande(model, form['@id']));
 
-            dispatch(Actions.putDemande(model, form['@id']));
-        }
     }
 
     return (
@@ -259,7 +237,7 @@ function Demande(props) {
                             <div className="flex flex-col items-start max-w-full">
 
                                 <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                    <Typography className="normal-case flex items-center sm:mb-12" component={Link} role="button" to="/demandes" color="inherit">
+                                    <Typography className="normal-case flex items-center sm:mb-12" component={Link} role="button" to="/demandes_admin" color="inherit">
                                         <Icon className="mr-4 text-20">arrow_back</Icon>
                                         Retour
                                 </Typography>
@@ -306,7 +284,6 @@ function Demande(props) {
                                 form && form.attachements.length > 0
                                     ? "Pièce(s) jointe(s) (" + form.attachements.length + ")"
                                     : "Pièce(s) jointe(s)"}
-
                         />
                         {form && form.diffusionsdemandes.length > 0 ?
                             <Tab className="h-64 normal-case" label={"Diffuser (" + form.diffusionsdemandes.length + " fois)"} />
@@ -327,25 +304,8 @@ function Demande(props) {
                                         onValid={enableButton}
                                         onInvalid={disableButton}
                                         ref={formRef}
-                                        className="flex flex-col ">
-
-                                        {
-                                            form.statut && (form.statut === 2)
-                                                ?
-                                                <SnackbarContent
-                                                    className={clsx(classes.margin, classes.error)}
-                                                    aria-describedby="client-snackbar"
-                                                    message={
-                                                        <span id="client-snackbar" className={classes.message}>
-                                                            <ErrorIcon className={clsx(classes.icon, classes.iconVariant)} />
-                                                            Motif de rejet: {form.motifRejet}
-                                                        </span>
-                                                    }
-
-                                                /> : ''
-                                        }
-                                        <div className="flex pt-10 ">
-
+                                        className="flex pt-10 flex-col ">
+                                        <div className="flex">
 
                                             <TextFieldFormsy
                                                 className="mb-24"
@@ -425,6 +385,7 @@ function Demande(props) {
                                             variant="outlined"
                                             multiline
                                             rows="4"
+                                            required
 
                                         />
 
@@ -450,24 +411,81 @@ function Demande(props) {
                                         />
                                         <Grid container spacing={3} >
 
-                                            <Grid item xs={12} sm={4}>
+                                            <Grid item xs={12} sm={3}>
+
+                                                <RadioGroupFormsy
+                                                    className="mb-10 inline"
+                                                    name="statut"
+                                                    value={form.statut}
+                                                    onChange={handleRadioChange}
+                                                >
+                                                    <FormControlLabel value="1" checked={form.statut === 1} control={<Radio />} label="Valider" />
+                                                    <FormControlLabel value="2" checked={form.statut === 2} control={<Radio />} label="Rejeter" />
+
+                                                </RadioGroupFormsy>
+                                            </Grid>
+                                            <Grid item xs={12} sm={3}>
+                                                <CheckboxFormsy
+                                                    className="mb-10"
+                                                    name="sendEmail"
+                                                    onChange={handleChange}
+                                                    label="Alerter Fournisseurs"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={3}>
                                                 <CheckboxFormsy
                                                     className="mb-10"
                                                     name="isPublic"
                                                     value={form.isPublic}
-                                                    label="Mettre en ligne après validation"
+                                                    onChange={handleChange}
+                                                    label="Mettre en ligne"
                                                 />
                                             </Grid>
 
-                                            <Grid item xs={12} sm={4}>
+                                            <Grid item xs={12} sm={3}>
                                                 <CheckboxFormsy
                                                     className="mb-10"
                                                     name="isAnonyme"
                                                     value={form.isAnonyme}
+                                                    onChange={handleChange}
                                                     label="Mettre la demande anonyme"
                                                 />
                                             </Grid>
                                         </Grid>
+                                        
+                                        <Grid container spacing={3} >
+
+
+
+                                            <Grid item xs={12} sm={4}>
+
+                                            </Grid>
+                                        </Grid>
+
+                                        {(form.statut === 2 || form.motifRejet)
+                                            ?
+                                            <TextFieldFormsy
+                                                className="mb-16  w-full"
+                                                type="text"
+                                                name="motifRejet"
+                                                value={form.motifRejet}
+                                                onChange={handleChange}
+                                                label="Motif Rejet"
+                                                validations={{
+                                                    minLength: 10,
+                                                }}
+                                                validationErrors={{
+                                                    minLength: 'La longueur minimale de caractère est 10',
+                                                }}
+
+                                                variant="outlined"
+                                                multiline
+                                                rows="4"
+                                                required
+
+                                            />
+                                            :
+                                            ''}
 
                                         <Button
                                             type="submit"
@@ -563,7 +581,7 @@ function Demande(props) {
                                                     accessor: "id",
                                                 },
                                                 {
-                                                    Header: "Fournisseurs",
+                                                    Header: "Fournisseur",
                                                     id: "fournisseur",
                                                     accessor: f => f.fournisseur.societe + ' ' + f.fournisseur.firstName + ' ' + f.fournisseur.lastName + ' ' + f.fournisseur.phone,
                                                 },
@@ -586,7 +604,6 @@ function Demande(props) {
 
                                 </div>
                             )}
-
 
                         </div>
                     )

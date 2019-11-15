@@ -78,9 +78,6 @@ function DemandesTable(props) {
 
 
 
-    function handleClick(item) {
-        props.history.push('/demandes/' + item.id);
-    }
 
     return (
         <div className="w-full flex flex-col">
@@ -96,7 +93,7 @@ function DemandesTable(props) {
                             className: "h-64 cursor-pointer",
                             onClick: (e, handleOriginal) => {
                                 if (rowInfo) {
-                                    props.history.push('/demandes/' + rowInfo.original.id);
+                                    props.history.push('/demandes_admin/' + rowInfo.original.id);
                                 }
                             }
                         }
@@ -104,10 +101,10 @@ function DemandesTable(props) {
                     getTheadProps={(state, rowInfo, column) => {
                         return {
                             className: "h-64",
-                            
+
                         }
                     }}
-                  
+
                     data={filteredData}
                     columns={[
 
@@ -146,7 +143,7 @@ function DemandesTable(props) {
                         },
                         {
                             Header: "Date",
-                            width:130,
+                            width: 130,
                             accessor: "created",
                             filterable: false,
                             Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
@@ -165,12 +162,12 @@ function DemandesTable(props) {
                                     }
 
                                     {
-                                         row.original.dateExpiration >= moment()
+                                        row.original.dateExpiration >= moment()
                                             ?
 
-                                            <Chip className={classes.chip2} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours')+' h' :row.original.dateExpiration.diff(moment(), 'days')+' j'} />
+                                            <Chip className={classes.chip2} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
                                             :
-                                            <Chip className={classes.chip} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours')+' h' :row.original.dateExpiration.diff(moment(), 'days')+' j'} />
+                                            <Chip className={classes.chip} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
 
                                     }
 
@@ -181,7 +178,7 @@ function DemandesTable(props) {
                         {
                             Header: "Statut",
                             sortable: false,
-                            
+
                             width: 100,
                             filterable: false,
                             Cell: row => (
@@ -219,7 +216,7 @@ function DemandesTable(props) {
                                         <Tooltip title="Public">
                                             <IconButton className="text-green text-20" onClick={(ev) => {
                                                 ev.stopPropagation();
-                                                dispatch(Actions.PublishDemande(row.original, false,parametres))
+                                                dispatch(Actions.PublishDemande(row.original, false, parametres))
 
                                             }}>
                                                 <Icon>check_circle</Icon>
@@ -230,7 +227,7 @@ function DemandesTable(props) {
                                         <Tooltip title="Privé">
                                             <IconButton className="text-red text-20" onClick={(ev) => {
                                                 ev.stopPropagation();
-                                                dispatch(Actions.PublishDemande(row.original, true,parametres))
+                                                dispatch(Actions.PublishDemande(row.original, true, parametres))
 
                                             }} >
                                                 <Icon>remove_circle</Icon>
@@ -252,18 +249,17 @@ function DemandesTable(props) {
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeDemande(row.original,parametres));
+                                                        dispatch(Actions.removeDemande(row.original, parametres));
                                                     }}
                                                 >
                                                     <Icon>delete</Icon>
                                                 </IconButton>
                                             </Tooltip>
                                             : <Tooltip title="Interdit!" >
-                                                <IconButton  className="text-20 cursor-not-allowed disable"
+                                                <IconButton className="text-20 cursor-not-allowed disable"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
                                                     }}
-
                                                 >
                                                     <Icon>delete</Icon>
                                                 </IconButton>

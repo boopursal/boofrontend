@@ -51,7 +51,6 @@ function FuseNavigation(props)
         <List className={clsx("navigation whitespace-no-wrap flex p-0", className)}>
             {
                 navigation.map((item) => (
-
                     <React.Fragment key={item.id}>
 
                         {item.type === 'group' && (

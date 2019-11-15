@@ -20,7 +20,7 @@ function DemandesHeader(props)
                     <Icon className="text-32 mr-0 sm:mr-12">inbox</Icon>
                 </FuseAnimate>
                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                    <Typography className="hidden sm:flex" variant="h6">Mes demandes d'achats</Typography>
+                    <Typography className="hidden sm:flex" variant="h6">Gestion des demandes d'achats</Typography>
                 </FuseAnimate>
             </div>
 
@@ -52,12 +52,7 @@ function DemandesHeader(props)
                 </ThemeProvider>
 
             </div>
-            <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                <Button component={Link} to="/demandes/new" className="whitespace-no-wrap" variant="contained">
-                    <span className="hidden sm:flex">Ajouter nouvelle demande</span>
-                    <span className="flex sm:hidden">New</span>
-                </Button>
-            </FuseAnimate>
+           
         </div>
     );
 }

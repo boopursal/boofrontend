@@ -3,6 +3,8 @@ import { FuseUtils } from '@fuse';
 import { showMessage } from 'app/store/actions/fuse';
 import agent from 'agent';
 import _ from '@lodash';
+import * as Actions from '@fuse/components/FuseNavigation/store/actions';
+
 
 export const REQUEST_DEMANDE = '[DEMANDE APP] REQUEST DEMANDE';
 export const GET_DEMANDE = '[DEMANDE APP] GET DEMANDE';
@@ -70,31 +72,7 @@ export function getDemande(params) {
 
 }
 
-export function saveDemande(data) {
-    const request = agent.post('/api/demande_achats', data);
 
-    return (dispatch) => {
-        dispatch({
-            type: REQUEST_SAVE,
-        });
-        return request.then((response) => {
-
-            dispatch(showMessage({ message: 'Demande Saved' }));
-
-            return dispatch({
-                type: SAVE_DEMANDE,
-                payload: response.data
-            })
-        }
-        ).catch((error)=>{
-            dispatch({
-                type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error)
-            });
-        });
-    }
-
-}
 
 export function putDemande(data,url) {
     const request = agent.put(url, data);
@@ -106,7 +84,7 @@ export function putDemande(data,url) {
         return request.then((response) => {
 
             dispatch(showMessage({ message: 'Demande Modifié' }));
-
+            dispatch(Actions.getCountForBadge('demandes-admin'));
             return dispatch({
                 type: SAVE_DEMANDE,
                 payload: response.data

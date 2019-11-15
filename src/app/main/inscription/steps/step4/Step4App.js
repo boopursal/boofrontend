@@ -173,7 +173,6 @@ function Step4App(props) {
     useEffect(() => {
         if (step4.success) {
             if (step4.redirect_success) {
-                console.log(step4.redirect_success)
                 props.history.push(step4.redirect_success);
             }
         }

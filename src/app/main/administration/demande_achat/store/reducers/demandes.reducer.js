@@ -11,8 +11,8 @@ const initialState = {
         page : 1,
         description :'',
         filter: {
-            id : 'dateExpiration',
-            direction : 'desc'
+            id : 'statut',
+            direction : 'asc'
         }
     },
 };

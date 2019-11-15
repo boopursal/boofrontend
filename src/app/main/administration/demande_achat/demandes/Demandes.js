@@ -17,7 +17,7 @@ function Demandes()
     
     useEffect(() => {
         if(user)
-        dispatch(Actions.getDemandes(user.id,parametres));
+        dispatch(Actions.getDemandes(parametres));
     }, [dispatch,parametres]);
 
     return (

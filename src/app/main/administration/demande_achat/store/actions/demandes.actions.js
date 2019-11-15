@@ -7,13 +7,13 @@ export const STATUT_DEMANDE = '[DEMANDES APP] STATUT DEMANDES';
 export const SET_PARAMETRES_DATA = '[DEMANDES APP] SET PARAMETRES DATA';
 
 
-export const GET_DEMANDES = '[USERS APP] GET DEMANDES';
-export const SET_DEMANDES_SEARCH_TEXT = '[USERS APP] SET DEMANDES SEARCH TEXT';
+export const GET_DEMANDES = '[DEMANDES APP] GET DEMANDES';
+export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES APP] SET DEMANDES SEARCH TEXT';
 
-export function getDemandes(id_acheteur,parametres)
+export function getDemandes(parametres)
 {
     var description = parametres.description?`=${parametres.description}`:'';
-    const request = agent.get(`/api/acheteurs/${id_acheteur}/demandes?page=${parametres.page}&description${description}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    const request = agent.get(`/api/demande_achats?page=${parametres.page}&description${description}&order[${parametres.filter.id}]=${parametres.filter.direction}&order[dateExpiration]=${parametres.filter.id=== 'dateExpiration' ? parametres.filter.direction : 'DESC'}`);
 
     return (dispatch) =>{
         dispatch({
@@ -47,7 +47,7 @@ export function removeDemande(demande,parametres)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getDemandes(demande.acheteur.id,parametres)))
+            ]).then(() => dispatch(getDemandes(parametres)))
         );
     };
 }
@@ -66,12 +66,12 @@ export function PublishDemande(demande,active,parametres)
                 dispatch({
                     type: STATUT_DEMANDE
                 }),
-                dispatch(showMessage({message:  active ? 'Votre demande est publiée aux publics':'Votre demande est privée',anchorOrigin: {
+                dispatch(showMessage({message:  active ? 'La demande est partagée aux publics':'La demande est privée',anchorOrigin: {
                     vertical  : 'top',//top bottom
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getDemandes(demande.acheteur.id,parametres)))
+            ]).then(() => dispatch(getDemandes(parametres)))
         );
     };
 }

@@ -31,8 +31,7 @@ function DatePickerFormsy(props) {
         if (props.onChange) {
             props.onChange(moment(event).format('YYYY-MM-DDTHH:mm:ssZ'));
         }
-        console.log(moment(event).format('YYYY-MM-DDTHH:mm:ssZ'))
-        console.log(moment(props.getValue()) )
+      
     }
 
     return (

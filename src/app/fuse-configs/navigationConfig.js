@@ -1,5 +1,7 @@
 import {authRoles} from 'app/auth';
 const navigationConfig = [
+
+    /** Admin Navigation */
     {
         'id'      : 'administration',
         'title'   : 'Administration',
@@ -12,8 +14,28 @@ const navigationConfig = [
                 'type' : 'item',
                 'icon' : 'whatshot',
                 'url'  : '/example',
+                'badge': {
+                    'title': 'example-component',
+                    'bg'   : 'rgb(255, 111, 0)',
+                    'fg'   : '#FFFFFF',
+                    'count':0
+                }
             }
         ]
+    },
+    {
+        'id'      : 'demandes-admin',
+        'title'   : 'Gestion des RFQs',
+        'auth' : authRoles.admin,        
+        'type'    : 'item',
+        'icon'    : 'inbox',
+        'url'  : '/demandes_admin',
+        'badge': {
+            'title': 'demandes-admin',
+            'bg'   : 'rgb(255, 111, 0)',
+            'fg'   : '#FFFFFF',
+            'count':0
+        }
     },
     {
         'id'      : 'utilisateurs',
@@ -55,6 +77,7 @@ const navigationConfig = [
             
         ]
     },
+    
     {
         'id'      : 'configurer',
         'title'   : 'Configurer',
@@ -101,6 +124,8 @@ const navigationConfig = [
             
         ]
     },
+    
+    /** Fin Admin Navigation */
     /** ACHETEUR Navigations */
     {
         'id'      : 'demandes_ha',

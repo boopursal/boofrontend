@@ -99,7 +99,6 @@ export function setStep4(data,acheteur_id)
         return request.then((response) =>
         
             Promise.all([
-                console.log(response),
                 dispatch({
                     type: UPDATE_ACHETEUR,
                     payload : response.data

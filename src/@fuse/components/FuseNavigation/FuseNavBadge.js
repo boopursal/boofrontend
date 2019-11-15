@@ -1,7 +1,11 @@
-import React from 'react';
+import React, {  useEffect }from 'react';
 import {makeStyles} from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import withReducer from 'app/store/withReducer';
+import reducer from './store/reducers';
+import { useDispatch } from 'react-redux';
+import * as Actions from './store/actions';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,10 +24,18 @@ const useStyles = makeStyles(theme => ({
 
 function FuseNavBadge(props)
 {
+    const dispatch = useDispatch();
     const classes = useStyles(props);
     const {className, badge} = props;
+    
 
+    useEffect(() => {
+        dispatch(Actions.getCountForBadge(badge.title));
+    }, [badge.title,dispatch]);
+
+   
     return (
+        badge.count && badge.count !== '0' ?
         <div
             className={clsx(classes.root, className, "item-badge")}
             style={{
@@ -31,8 +43,9 @@ function FuseNavBadge(props)
                 color          : badge.fg
             }}
         >
-            {badge.title}
+            {badge.count}
         </div>
+        : ''
     )
 }
 
@@ -46,4 +59,4 @@ FuseNavBadge.propTypes = {
 };
 FuseNavBadge.defaultProps = {};
 
-export default React.memo(FuseNavBadge);
+export default withReducer('fuseNavBadge', reducer)(React.memo(FuseNavBadge));

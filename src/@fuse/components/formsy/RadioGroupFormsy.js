@@ -29,11 +29,12 @@ function RadioGroupFormsy(props)
 
     return (
         <FormControl error={Boolean(errorMessage)} className={props.className}>
-            <FormControl component="fieldset" required={props.required} error={Boolean(errorMessage)}>
+            <FormControl component="fieldset" className={props.className} required={props.required} error={Boolean(errorMessage)}>
                 {props.label && (
                     <FormLabel component="legend">{props.label}</FormLabel>
                 )}
                 <RadioGroup
+                className={props.className}
                     {...importedProps}
                     value={value}
                     onChange={changeValue}
