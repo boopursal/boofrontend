@@ -18,7 +18,7 @@ function Demandes()
     useEffect(() => {
         if(user)
         dispatch(Actions.getDemandes(user.id,parametres));
-    }, [dispatch,parametres]);
+    }, [dispatch,parametres,user]);
 
     return (
         <FusePageCarded

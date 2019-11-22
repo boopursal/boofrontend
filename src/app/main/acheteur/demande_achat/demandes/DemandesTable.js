@@ -103,11 +103,11 @@ function DemandesTable(props) {
                     }}
                     getTheadProps={(state, rowInfo, column) => {
                         return {
-                            className: "h-64",
-                            
+                            className: "h-64 font-bold",
+
                         }
                     }}
-                  
+
                     data={filteredData}
                     columns={[
 
@@ -117,71 +117,10 @@ function DemandesTable(props) {
                             accessor: "reference",
                             filterable: false,
                         },
-
-                        {
-                            Header: "Description",
-                            width: 240,
-                            accessor: "description",
-                            filterable: false,
-                            Cell: row => (
-                                <div className="flex items-center">
-                                    {_.capitalize(_.truncate(row.original.description, {
-                                        'length': 38,
-                                        'separator': ' '
-                                    }))}
-                                </div>
-                            )
-                        },
-                        {
-                            Header: "Secteurs",
-                            width: 210,
-                            accessor: "sousSecteurs.name",
-                            filterable: false,
-                            Cell: row =>
-                                _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
-                                    'length': 36,
-                                    'separator': ' '
-                                })
-
-                        },
-                        {
-                            Header: "Date",
-                            width:130,
-                            accessor: "created",
-                            filterable: false,
-                            Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
-                        },
-                        {
-                            Header: "Échéance",
-                            accessor: "dateExpiration",
-                            width: 175,
-                            filterable: false,
-                            Cell: row => (
-                                row.original.dateExpiration = moment(row.original.dateExpiration),
-                                <div className="flex items-center">
-                                    {
-                                        moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
-
-                                    }
-
-                                    {
-                                         row.original.dateExpiration >= moment()
-                                            ?
-
-                                            <Chip className={classes.chip2} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours')+' h' :row.original.dateExpiration.diff(moment(), 'days')+' j'} />
-                                            :
-                                            <Chip className={classes.chip} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours')+' h' :row.original.dateExpiration.diff(moment(), 'days')+' j'} />
-
-                                    }
-
-                                </div>
-                            )
-
-                        },
                         {
                             Header: "Statut",
                             sortable: false,
-                            
+
                             width: 100,
                             filterable: false,
                             Cell: row => (
@@ -219,7 +158,7 @@ function DemandesTable(props) {
                                         <Tooltip title="Public">
                                             <IconButton className="text-green text-20" onClick={(ev) => {
                                                 ev.stopPropagation();
-                                                dispatch(Actions.PublishDemande(row.original, false,parametres))
+                                                dispatch(Actions.PublishDemande(row.original, false, parametres))
 
                                             }}>
                                                 <Icon>check_circle</Icon>
@@ -230,7 +169,7 @@ function DemandesTable(props) {
                                         <Tooltip title="Privé">
                                             <IconButton className="text-red text-20" onClick={(ev) => {
                                                 ev.stopPropagation();
-                                                dispatch(Actions.PublishDemande(row.original, true,parametres))
+                                                dispatch(Actions.PublishDemande(row.original, true, parametres))
 
                                             }} >
                                                 <Icon>remove_circle</Icon>
@@ -240,6 +179,68 @@ function DemandesTable(props) {
 
 
                         },
+                        {
+                            Header: "Description",
+                            width: 180,
+                            accessor: "description",
+                            filterable: false,
+                            Cell: row => (
+                                <div className="flex items-center">
+                                    {_.capitalize(_.truncate(row.original.description, {
+                                        'length': 15,
+                                        'separator': ' '
+                                    }))}
+                                </div>
+                            )
+                        },
+                        {
+                            Header: "Secteurs",
+                            width: 180,
+                            accessor: "sousSecteurs.name",
+                            filterable: false,
+                            Cell: row =>
+                                _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
+                                    'length': 15,
+                                    'separator': ' '
+                                })
+
+                        },
+                        {
+                            Header: "Échéance",
+                            accessor: "dateExpiration",
+                            width: 180,
+                            filterable: false,
+                            Cell: row => (
+                                row.original.dateExpiration = moment(row.original.dateExpiration),
+                                <div className="flex items-center">
+                                    {
+                                        moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
+
+                                    }
+
+                                    {
+                                        row.original.dateExpiration >= moment()
+                                            ?
+
+                                            <Chip className={classes.chip2} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
+                                            :
+                                            <Chip className={classes.chip} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
+
+                                    }
+
+                                </div>
+                            )
+
+                        },
+                        {
+                            Header: "Date de création",
+                            width: 130,
+                            accessor: "created",
+                            filterable: false,
+                            Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                        },
+                       
+
 
                         {
                             Header: "",
@@ -252,14 +253,14 @@ function DemandesTable(props) {
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeDemande(row.original,parametres));
+                                                        dispatch(Actions.removeDemande(row.original, parametres));
                                                     }}
                                                 >
                                                     <Icon>delete</Icon>
                                                 </IconButton>
                                             </Tooltip>
                                             : <Tooltip title="Interdit!" >
-                                                <IconButton  className="text-20 cursor-not-allowed disable"
+                                                <IconButton className="text-20 cursor-not-allowed disable"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
                                                     }}

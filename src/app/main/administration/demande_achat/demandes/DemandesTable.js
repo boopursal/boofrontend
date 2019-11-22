@@ -112,14 +112,18 @@ function DemandesTable(props) {
                             Header: "Ref",
                             width: 100,
                             accessor: "reference",
-                            filterable: false,
+                            filterable: true,
+                            filterMethod: (filter, row) => {
+                                console.log(filter)
+                              
+                              },
                         },
 
                         {
                             Header: "Description",
                             width: 240,
                             accessor: "description",
-                            filterable: false,
+                            filterable: true,
                             Cell: row => (
                                 <div className="flex items-center">
                                     {_.capitalize(_.truncate(row.original.description, {

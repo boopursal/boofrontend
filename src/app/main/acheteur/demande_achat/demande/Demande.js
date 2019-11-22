@@ -536,10 +536,14 @@ function Demande(props) {
                                                         <Icon>delete</Icon>
                                                     </IconButton>
                                                 </Tooltip>
+                                                {_.split(media.type, '/', 1)[0] === 'image' ?
+                                                    <img className="max-w-none w-auto h-full"
+                                                        src={FuseUtils.getUrl() + media.url}
+                                                        alt="demande" />
+                                                    :
+                                                    <Icon color="secondary" style={{ fontSize: 80 }}>insert_drive_file</Icon>
+                                                }
 
-                                                <img className="max-w-none w-auto h-full"
-                                                    src={_.split(media.type, '/', 1)[0] === 'image' ? FuseUtils.getUrl() + media.url : 'assets/images/file.png'}
-                                                    alt="demande" />
                                             </div>
                                         ))}
                                     </div>
@@ -560,10 +564,14 @@ function Demande(props) {
 
                                                 {
                                                     Header: "#",
-                                                    accessor: "id",
+                                                    accessor  : "id",
+                                                    Cell: row => row.index+1
+                                                        
+                                                    
                                                 },
                                                 {
                                                     Header: "Fournisseurs",
+                                                    className: "font-bold",
                                                     id: "fournisseur",
                                                     accessor: f => f.fournisseur.societe + ' ' + f.fournisseur.firstName + ' ' + f.fournisseur.lastName + ' ' + f.fournisseur.phone,
                                                 },

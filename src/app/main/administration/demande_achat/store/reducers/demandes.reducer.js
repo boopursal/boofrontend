@@ -15,6 +15,11 @@ const initialState = {
             direction : 'asc'
         }
     },
+    demandesDialog     : {
+        props: {
+            open: false
+        }
+    }
 };
 
 const demandesReducer = function (state = initialState, action) {

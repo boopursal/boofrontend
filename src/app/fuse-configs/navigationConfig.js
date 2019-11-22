@@ -128,12 +128,36 @@ const navigationConfig = [
     /** Fin Admin Navigation */
     /** ACHETEUR Navigations */
     {
+        'id'      : 'dashboard_ac',
+        'title'   : 'Tableaux de bord',
+        'auth' : authRoles.acheteur,        
+        'type'    : 'item',
+        'icon'    : 'dashboard',
+        'url'  : '/dashboard_ac'
+    },
+    {
         'id'      : 'demandes_ha',
         'title'   : 'Mes demandes',
         'auth' : authRoles.acheteur,        
         'type'    : 'item',
         'icon'    : 'inbox',
         'url'  : '/demandes'
+    },
+    {
+        'id'      : 'black_listes_ha',
+        'title'   : 'Ma blackListes',
+        'auth' : authRoles.acheteur,        
+        'type'    : 'item',
+        'icon'    : 'work_off',
+        'url'  : '/blacklistes'
+    },
+    {
+        'id'      : 'mon_profil',
+        'title'   : 'Mon profil',
+        'auth' : authRoles.acheteur,        
+        'type'    : 'item',
+        'icon'    : 'person',
+        'url'  : '/ac/profile'
     },
     /** FIN ACHETEUR Navigations */
     
