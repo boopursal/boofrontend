@@ -4,7 +4,6 @@ import * as Actions from 'app/store/actions';
 export const GET_COUNT_BADGE = '[NAVIGATION APP] GET COUNT BADGE';
 
 export function getCountForBadge(url) {
-    console.log(url)
     const request = agent.get('/api/' + url);
 
     return (dispatch) =>

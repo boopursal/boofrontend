@@ -10,7 +10,6 @@ import ReactTable from "react-table";
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import red from '@material-ui/core/colors/red';
-
 import _ from '@lodash';
 
 const useStyles = makeStyles(theme => ({
@@ -78,29 +77,23 @@ function DemandesTable(props) {
 
 
 
-
     return (
-        <div className="w-full flex flex-col">
-
-
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
-
                 <ReactTable
-
                     className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
                     getTrProps={(state, rowInfo, column) => {
                         return {
                             className: "h-64 cursor-pointer",
                             onClick: (e, handleOriginal) => {
                                 if (rowInfo) {
-                                    props.history.push('/demandes_admin/' + rowInfo.original.id);
+                                    props.history.push('/demandes_prix/' + rowInfo.original.id);
                                 }
                             }
                         }
                     }}
                     getTheadProps={(state, rowInfo, column) => {
                         return {
-                            className: "h-64",
+                            className: "h-64 font-bold",
 
                         }
                     }}
@@ -110,79 +103,12 @@ function DemandesTable(props) {
 
                         {
                             Header: "Ref",
-                            width: 100,
                             accessor: "reference",
-                            filterable: true,
-                            filterMethod: (filter, row) => {
-                              
-                              },
-                        },
-
-                        {
-                            Header: "Description",
-                            width: 240,
-                            accessor: "description",
-                            filterable: true,
-                            Cell: row => (
-                                <div className="flex items-center">
-                                    {_.capitalize(_.truncate(row.original.description, {
-                                        'length': 38,
-                                        'separator': ' '
-                                    }))}
-                                </div>
-                            )
-                        },
-                        {
-                            Header: "Secteurs",
-                            width: 210,
-                            accessor: "sousSecteurs.name",
                             filterable: false,
-                            Cell: row =>
-                                _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
-                                    'length': 36,
-                                    'separator': ' '
-                                })
-
-                        },
-                        {
-                            Header: "Date",
-                            width: 130,
-                            accessor: "created",
-                            filterable: false,
-                            Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
-                        },
-                        {
-                            Header: "Échéance",
-                            accessor: "dateExpiration",
-                            width: 175,
-                            filterable: false,
-                            Cell: row => (
-                                row.original.dateExpiration = moment(row.original.dateExpiration),
-                                <div className="flex items-center">
-                                    {
-                                        moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
-
-                                    }
-
-                                    {
-                                        row.original.dateExpiration >= moment()
-                                            ?
-
-                                            <Chip className={classes.chip2} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
-                                            :
-                                            <Chip className={classes.chip} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
-
-                                    }
-
-                                </div>
-                            )
-
                         },
                         {
                             Header: "Statut",
                             sortable: false,
-
-                            width: 100,
                             filterable: false,
                             Cell: row => (
                                 row.original.dateExpiration = moment(row.original.dateExpiration),
@@ -208,42 +134,67 @@ function DemandesTable(props) {
                             )
 
                         },
-
                         {
-                            Header: "Public",
-                            accessor: "isPublic",
-                            width: 64,
+                            Header: "Description",
+                            accessor: "description",
+                            filterable: false,
+                            Cell: row => (
+                                <div className="flex items-center">
+                                    {_.capitalize(_.truncate(row.original.description, {
+                                        'length': 15,
+                                        'separator': ' '
+                                    }))}
+                                </div>
+                            )
+                        },
+                        {
+                            Header: "Secteurs",
+                            accessor: "sousSecteurs.name",
+                            filterable: false,
                             Cell: row =>
-                                row.original.isPublic ?
-                                    (
-                                        <Tooltip title="Public">
-                                            <IconButton className="text-green text-20" onClick={(ev) => {
-                                                ev.stopPropagation();
-                                                dispatch(Actions.PublishDemande(row.original, false, parametres))
-
-                                            }}>
-                                                <Icon>check_circle</Icon>
-                                            </IconButton>
-                                        </Tooltip>
-                                    ) :
-                                    (
-                                        <Tooltip title="Privé">
-                                            <IconButton className="text-red text-20" onClick={(ev) => {
-                                                ev.stopPropagation();
-                                                dispatch(Actions.PublishDemande(row.original, true, parametres))
-
-                                            }} >
-                                                <Icon>remove_circle</Icon>
-                                            </IconButton>
-                                        </Tooltip>
-                                    )
-
+                                _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
+                                    'length': 15,
+                                    'separator': ' '
+                                })
 
                         },
+                        {
+                            Header: "Échéance",
+                            accessor: "dateExpiration",
+                            filterable: false,
+                            Cell: row => (
+                                row.original.dateExpiration = moment(row.original.dateExpiration),
+                                <div className="flex items-center">
+                                    {
+                                        moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
+
+                                    }
+
+                                    {
+                                        row.original.dateExpiration >= moment()
+                                            ?
+
+                                            <Chip className={classes.chip2} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
+                                            :
+                                            <Chip className={classes.chip} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
+
+                                    }
+
+                                </div>
+                            )
+
+                        },
+                        {
+                            Header: "Date de création",
+                            accessor: "created",
+                            filterable: false,
+                            Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                        },
+                       
+
 
                         {
                             Header: "",
-                            width: 64,
                             Cell: row => (
                                 <div className="flex items-center">
                                     {
@@ -252,7 +203,7 @@ function DemandesTable(props) {
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeDemande(row.original, parametres));
+                                                        //dispatch(Actions.removeDemande(row.original, parametres));
                                                     }}
                                                 >
                                                     <Icon>delete</Icon>
@@ -263,6 +214,7 @@ function DemandesTable(props) {
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
                                                     }}
+
                                                 >
                                                     <Icon>delete</Icon>
                                                 </IconButton>
@@ -298,11 +250,6 @@ function DemandesTable(props) {
                     ofText='sur'
                 />
             </FuseAnimate>
-
-
-
-
-        </div>
     );
 }
 

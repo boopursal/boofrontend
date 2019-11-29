@@ -13,7 +13,7 @@ function Widget3(props)
             </div>
             <div className="text-center pt-12 pb-28">
                 <Typography
-                    className="text-72 leading-none text-orange">10</Typography>
+                    className="text-72 leading-none text-orange">{props.widget}</Typography>
                 <Typography className="text-16" color="textSecondary">Demandes</Typography>
             </div>
             {/*

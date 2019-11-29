@@ -10,7 +10,6 @@ import ReactTable from "react-table";
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import red from '@material-ui/core/colors/red';
-
 import _ from '@lodash';
 
 const useStyles = makeStyles(theme => ({
@@ -83,13 +82,8 @@ function DemandesTable(props) {
     }
 
     return (
-        <div className="w-full flex flex-col">
-
-
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
-
                 <ReactTable
-
                     className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
                     getTrProps={(state, rowInfo, column) => {
                         return {
@@ -113,15 +107,12 @@ function DemandesTable(props) {
 
                         {
                             Header: "Ref",
-                            width: 100,
                             accessor: "reference",
                             filterable: false,
                         },
                         {
                             Header: "Statut",
                             sortable: false,
-
-                            width: 100,
                             filterable: false,
                             Cell: row => (
                                 row.original.dateExpiration = moment(row.original.dateExpiration),
@@ -151,7 +142,6 @@ function DemandesTable(props) {
                         {
                             Header: "Public",
                             accessor: "isPublic",
-                            width: 64,
                             Cell: row =>
                                 row.original.isPublic ?
                                     (
@@ -181,7 +171,6 @@ function DemandesTable(props) {
                         },
                         {
                             Header: "Description",
-                            width: 180,
                             accessor: "description",
                             filterable: false,
                             Cell: row => (
@@ -195,7 +184,6 @@ function DemandesTable(props) {
                         },
                         {
                             Header: "Secteurs",
-                            width: 180,
                             accessor: "sousSecteurs.name",
                             filterable: false,
                             Cell: row =>
@@ -208,7 +196,6 @@ function DemandesTable(props) {
                         {
                             Header: "Échéance",
                             accessor: "dateExpiration",
-                            width: 180,
                             filterable: false,
                             Cell: row => (
                                 row.original.dateExpiration = moment(row.original.dateExpiration),
@@ -234,7 +221,6 @@ function DemandesTable(props) {
                         },
                         {
                             Header: "Date de création",
-                            width: 130,
                             accessor: "created",
                             filterable: false,
                             Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
@@ -244,7 +230,6 @@ function DemandesTable(props) {
 
                         {
                             Header: "",
-                            width: 64,
                             Cell: row => (
                                 <div className="flex items-center">
                                     {
@@ -300,11 +285,6 @@ function DemandesTable(props) {
                     ofText='sur'
                 />
             </FuseAnimate>
-
-
-
-
-        </div>
     );
 }
 

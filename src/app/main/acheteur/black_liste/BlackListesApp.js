@@ -17,7 +17,6 @@ function BlackListesApp(props) {
 
     useEffect(() => {
 
-        console.log(user)
         if (user)
             dispatch(Actions.getBlackListes(user.id));
     }, [dispatch]);

@@ -421,7 +421,7 @@ function Demande(props) {
                                             validationErrors={{
                                                 minLength: 'La longueur minimale de caractère est 10',
                                             }}
-
+                                            required
                                             variant="outlined"
                                             multiline
                                             rows="4"

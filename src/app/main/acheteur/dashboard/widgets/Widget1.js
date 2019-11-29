@@ -21,7 +21,9 @@ function Widget1(props)
             </div>
             <div className="text-center pt-12 pb-28">
                 <Typography
-                    className="text-72 leading-none text-green">{/*props.widget.data.count[currentRange]*/}5</Typography>
+                    className="text-72 leading-none text-green">{/*props.widget.data.count[currentRange]*/}
+                    {props.widget}
+                    </Typography>
                 <Typography className="text-16" color="textSecondary">
                 {/*props.widget.data.label*/}Demandes
                 </Typography>

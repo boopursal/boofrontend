@@ -197,7 +197,6 @@ function Demande(props) {
     function handleRadioChange(e) {
 
         setForm(_.set({ ...form }, 'statut', parseInt(e.target.value)));
-        console.log(e.target.value)
     }
 
     function disableButton() {

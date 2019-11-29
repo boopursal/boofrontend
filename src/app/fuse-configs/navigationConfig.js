@@ -13,13 +13,7 @@ const navigationConfig = [
                 'title': 'Example',
                 'type' : 'item',
                 'icon' : 'whatshot',
-                'url'  : '/example',
-                'badge': {
-                    'title': 'example-component',
-                    'bg'   : 'rgb(255, 111, 0)',
-                    'fg'   : '#FFFFFF',
-                    'count':0
-                }
+                'url'  : '/example'
             }
         ]
     },
@@ -160,6 +154,27 @@ const navigationConfig = [
         'url'  : '/ac/profile'
     },
     /** FIN ACHETEUR Navigations */
+
+
+
+     /** FOURNISSEUR Navigations */
+    
+    {
+        'id'      : 'demandes_prix',
+        'title'   : 'Demande de prix',
+        'auth' : authRoles.fournisseur,        
+        'type'    : 'item',
+        'icon'    : 'inbox',
+        'url'  : '/demandes_prix',
+        'badge': {
+            'title': 'demandes_prix',
+            'bg'   : 'rgb(9, 210, 97)',
+            'fg'   : '#FFFFFF',
+            'count':0
+        }
+    },
+   
+    /** FIN FOURNISSEUR Navigations */
     
 ];
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Menu, MenuItem, Hidden, Icon, IconButton, Tab, Tabs, Typography } from '@material-ui/core';
-import { FuseAnimateGroup, FusePageSimple } from '@fuse';
+import { FuseAnimateGroup, FusePageSimple, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import * as Actions from './store/actions'
@@ -13,14 +13,8 @@ import Widget3 from './widgets/Widget3';
 import Widget4 from './widgets/Widget4';
 import Widget5 from './widgets/Widget5';
 import Widget6 from './widgets/Widget6';
-import Widget7 from './widgets/Widget7';
-import Widget8 from './widgets/Widget8';
-import Widget9 from './widgets/Widget9';
-import Widget10 from './widgets/Widget10';
-import Widget11 from './widgets/Widget11';
-import WidgetNow from './widgets/WidgetNow';
-import WidgetWeather from './widgets/WidgetWeather';
 import { makeStyles } from '@material-ui/styles';
+import ContentLoader from 'react-content-loader'
 
 const useStyles = makeStyles(theme => ({
     content: {
@@ -44,21 +38,16 @@ const useStyles = makeStyles(theme => ({
 function DashboardApp(props) {
     const dispatch = useDispatch();
     const widgets = useSelector(({ dashboardApp }) => dashboardApp.widgets);
-    const projects = useSelector(({ dashboardApp }) => dashboardApp.projects);
     const user = useSelector(({ auth }) => auth.user);
 
     const classes = useStyles(props);
     const pageLayout = useRef(null);
     const [tabValue, setTabValue] = useState(0);
-    const [selectedProject, setSelectedProject] = useState({
-        id: 1,
-        menuEl: null
-    });
+
 
 
     useEffect(() => {
         dispatch(Actions.getWidgets());
-        dispatch(Actions.getProjects());
     }, [dispatch]);
 
     /*
@@ -68,56 +57,71 @@ function DashboardApp(props) {
     }
 */
     return (
-        <FusePageSimple
-            classes={{
-                header: "min-h-160 h-160",
-                toolbar: "min-h-48 h-48",
-                rightSidebar: "w-288",
-                content: classes.content,
-            }}
-            header={
-                <div className="flex flex-col justify-between flex-1 px-24 pt-24">
-                    <div className="flex justify-between items-start">
-                        <Typography className="py-0 sm:py-24" variant="h4">Bienvenue à nouveau, {user.data ? user.data.displayName : ''}</Typography>
+        <div className="w-full">
+
+            <Widget5 />
+            {widgets.loading === false ?
+                <FuseAnimate animation="transition.slideUpIn" delay={200}>
+
+                    <div className="flex flex-col md:flex-row sm:p-8 container">
+
+                        <div className="flex flex-1 flex-col min-w-0">
+
+                            <FuseAnimate delay={600}>
+                                <Typography className="p-16 pb-8 text-18 font-300">
+                                  Le suivi de vos demandes
+                                </Typography>
+                            </FuseAnimate>
+
+
+                            <div className="flex flex-col sm:flex sm:flex-row ">
+
+                                <div className="widget flex w-full sm:w-1/4 p-16">
+                                    <Widget3 widget={widgets.data.widget3} />
+                                </div>
+                                <div className="widget flex w-full sm:w-1/4 p-16">
+                                    <Widget1 widget={widgets.data.widget1} />
+                                </div>
+                                <div className="widget flex w-full sm:w-1/4 p-16">
+                                    <Widget2 widget={widgets.data.widget2} />
+                                </div>
+                                <div className="widget w-full sm:w-1/4 p-16">
+                                    <Widget4 widget={widgets.data.widget4} />
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                    </div>
+                </FuseAnimate>
+                :
+                <ContentLoader
+                    height={100}
+                    width={650}
+                    speed={2}
+                    primaryColor="#d9d9d9"
+                    secondaryColor="#ecebeb"
+                >
+                    <circle cx="90" cy="50" r="30" />
+                    <rect x="20" y="90" rx="0" ry="0" width="140" height="25" />
+                    <circle cx="250" cy="50" r="30" />
+                    <rect x="180" y="90" rx="0" ry="0" width="140" height="25" />
+                    <circle cx="400" cy="50" r="30" />
+                    <rect x="340" y="90" rx="0" ry="0" width="140" height="25" />
+                    <circle cx="570" cy="50" r="30" />
+                    <rect x="500" y="90" rx="0" ry="0" width="140" height="25" />
+                </ContentLoader>}
+            <div className="flex flex-col md:flex-row sm:p-8 container">
+                <div className="flex flex-1 flex-col min-w-0">
+                    <div className="widget w-full sm:w-1/2 p-16">
+                        <Widget6 />
                     </div>
                 </div>
-            }
-
-            content={
-                <div className="p-12">
-
-                    <FuseAnimateGroup
-                        className="flex flex-wrap"
-                        enter={{
-                            animation: "transition.slideUpBigIn"
-                        }}
-                    >
-                        <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-                            <Widget3 />
-                        </div>
-                        <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-                            <Widget1 />
-                        </div>
-                        <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-                            <Widget2 />
-                        </div>
-
-                        <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-                            <Widget4 />
-                        </div>
-
-                        <div className="widget flex w-full p-12">
-                            <Widget5 />
-                        </div>
-
-                    </FuseAnimateGroup>
-
-
-                </div>
-            }
-
-            ref={pageLayout}
-        />
+            </div>
+        </div>
     );
 }
 

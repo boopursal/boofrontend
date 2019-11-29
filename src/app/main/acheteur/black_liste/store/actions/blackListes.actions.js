@@ -39,7 +39,6 @@ export function getBlackListes(id_acheteur)
 
     return (dispatch) =>
         request.then((response) =>{
-            console.log(response)
             dispatch({
                 type   : GET_BLACK_LISTES,
                 payload: response.data['hydra:member']
@@ -89,7 +88,6 @@ export function addBlackListe(newBlackListe,id_acheteur)
 {
     
     newBlackListe.acheteur=`/api/acheteurs/${id_acheteur}`;
-    console.log(newBlackListe)
     return (dispatch, getState) => {
 
        

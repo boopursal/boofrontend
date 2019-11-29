@@ -11,14 +11,12 @@ function Demandes()
 {
     
     const dispatch = useDispatch();
-    const user = useSelector(({auth}) => auth.user);
     const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
     
     
     useEffect(() => {
-        if(user)
-        dispatch(Actions.getDemandes(user.id,parametres));
-    }, [dispatch,parametres,user]);
+        dispatch(Actions.getDemandes(parametres));
+    }, [dispatch,parametres]);
 
     return (
         <FusePageCarded

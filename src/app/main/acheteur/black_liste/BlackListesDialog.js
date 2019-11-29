@@ -54,7 +54,6 @@ const useStyles = makeStyles(theme => ({
 function renderSuggestion(suggestion, { query, isHighlighted }) {
     const matches = match(suggestion.societe, query);
     const parts = parse(suggestion.societe, matches);
-    console.log(parts)
     return (
         <MenuItem selected={isHighlighted} component="div">
             <div>
@@ -152,9 +151,7 @@ function BlackListesDialog(props) {
 
 
 
-        console.log(fournisseur)
-        console.log(form)
-
+      
         if (BlackListesDialog.type === 'new') {
             dispatch(Actions.addBlackListe(form, user.id));
             setFournisseur({ societe: '' });

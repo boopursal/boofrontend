@@ -9,6 +9,8 @@ import {pagesConfigs} from 'app/main/pages/pagesConfigs';
 import { administrateurConfigs } from '../main/administration/administrateurConfigs';
 import { RegisterPageConfig } from '../main/inscription/RegisterPageConfig';
 import { acheteurConfigs } from '../main/acheteur/acheteurConfigs';
+import { fournisseurConfigs } from '../main/fournisseur/fournisseurConfigs';
+
 function setAdminAuth(configs)
 {
     return configs.map(config => _.merge({}, config, {auth: authRoles.admin}))
@@ -18,6 +20,7 @@ const routeConfigs = [
         ...administrateurConfigs,
     ]),
     ...acheteurConfigs,
+    ...fournisseurConfigs,
     ExampleConfig,
     ...pagesConfigs,
     ...RegisterPageConfig,
