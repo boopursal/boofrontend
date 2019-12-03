@@ -13,7 +13,6 @@ import parse from 'autosuggest-highlight/parse';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import Popper from '@material-ui/core/Popper';
 import { makeStyles } from '@material-ui/core/styles';
 
 const defaultFormState = {
@@ -112,7 +111,7 @@ function BlackListesDialog(props) {
             if (BlackListesDialog.type === 'edit' && BlackListesDialog.data) {
                 setForm({ ...BlackListesDialog.data });
                 setFournisseur(BlackListesDialog.data.fournisseur);
-                setForm(_.set({...BlackListesDialog.data}, 'fournisseur', BlackListesDialog.data.fournisseur['@id']));
+                setForm(_.set({ ...BlackListesDialog.data }, 'fournisseur', BlackListesDialog.data.fournisseur['@id']));
             }
 
             /**
@@ -151,7 +150,7 @@ function BlackListesDialog(props) {
 
 
 
-      
+
         if (BlackListesDialog.type === 'new') {
             dispatch(Actions.addBlackListe(form, user.id));
             setFournisseur({ societe: '' });
@@ -165,7 +164,7 @@ function BlackListesDialog(props) {
 
     function handleRemove() {
 
-        dispatch(Actions.removeBlackListe(form,user.id));
+        dispatch(Actions.removeBlackListe(form, user.id));
         dispatch(Actions.closeDialog())
         closeComposeDialog();
     }
@@ -179,10 +178,6 @@ function BlackListesDialog(props) {
         setIsFormValid(true);
     }
 
-    function handleAutoSuggesstChange(value, name) {
-        //setForm(_.set({...form}, name, value.map(item => item.value)));
-        setForm(_.set({ ...form }, name, value));
-    }
 
     return (
         <Dialog

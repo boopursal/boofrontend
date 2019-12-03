@@ -1,39 +1,23 @@
 
-import { FuseUtils } from '@fuse';
-import { showMessage } from 'app/store/actions/fuse';
 import agent from 'agent';
-import _ from '@lodash';
+
+export const REQUEST_VISITE_DEMANDE = '[DEMANDE APP] REQUEST_VISITE_DEMANDE';
+export const GET_VISITE_DEMANDE = '[DEMANDE APP] GET_VISITE_DEMANDE';
 
 export const REQUEST_DEMANDE = '[DEMANDE APP] REQUEST DEMANDE';
 export const GET_DEMANDE = '[DEMANDE APP] GET DEMANDE';
-export const REDIRECT_SUCCESS = '[DEMANDE APP] REDIRECT SUCCESS';
 
 export const SAVE_ERROR = '[DEMANDE APP] SAVE ERROR';
 
-
-export const REQUEST_SOUS_SECTEUR = '[DEMANDE APP] REQUEST SOUS_SECTEUR';
-export const GET_SOUS_SECTEUR = '[DEMANDE APP] GET SOUS SECTEUR';
+export const CLEAN_UP = '[DEMANDE APP] CLEAN_UP';
 
 
 
+export function cleanUp() {
 
-
-export function getSousSecteurs() {
-    const request = agent.get('/api/sous_secteur_p');
-
-    return (dispatch) => {
-        dispatch({
-            type: REQUEST_SOUS_SECTEUR,
-        });
-        return request.then((response) => {
-            dispatch({
-                type: GET_SOUS_SECTEUR,
-                payload: response.data
-            })
-        });
-
-    }
-
+    return (dispatch) => dispatch({
+        type: CLEAN_UP,
+    });
 }
 
 export function getDemande(params) {
@@ -43,20 +27,35 @@ export function getDemande(params) {
         dispatch({
             type: REQUEST_DEMANDE,
         });
-        return request.then((response) =>{
+        return request.then((response) => {
             dispatch({
                 type: GET_DEMANDE,
                 payload: response.data
             })
         }
-            
-        ).catch((error) => {
-            dispatch({
-                type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error),
 
-            })
+        );
+    }
+
+}
+
+
+export function getVisiteDemande(fournisseur_id, demande_id) {
+    const request = agent.get(`/api/detail_visites?fournisseur=${fournisseur_id}&demande=${demande_id}`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_VISITE_DEMANDE,
         });
+        return request.then((response) => {
+            console.log(response.data['hydra:member'][0])
+            dispatch({
+                type: GET_VISITE_DEMANDE,
+                payload: response.data['hydra:member'][0]
+            })
+        }
+
+        );
     }
 
 }

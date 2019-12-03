@@ -1,16 +1,10 @@
-import React, {useState} from 'react';
-import {Icon, Typography, Select, Paper, IconButton} from '@material-ui/core';
+import React from 'react';
+import {Icon, Typography,  Paper, IconButton} from '@material-ui/core';
 
 function Widget1(props)
 {
     //const [currentRange, setCurrentRange] = useState(props.widget.currentRange);
-    const [currentRange, setCurrentRange] = useState(5);
-
-    function handleChangeRange(ev)
-    {
-        setCurrentRange(ev.target.value)
-    }
-
+ 
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
             <div className="flex items-center justify-between pr-4 pl-16 pt-4">

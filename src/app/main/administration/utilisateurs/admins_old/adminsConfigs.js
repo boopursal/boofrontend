@@ -5,13 +5,13 @@ export const adminsConfigs = {
     settings: {
         layout: {}
     },
-    routes  : [
+    routes: [
         {
-            path     : '/users/admins/:adminId/:adminHandle?',
+            path: '/users/admins/:adminId/:adminHandle?',
             component: React.lazy(() => import('./admin/Admin'))
         },
         {
-            path     : '/users/admins',
+            path: '/users/admins',
             component: React.lazy(() => import('./listes/Admins'))
         }
     ]

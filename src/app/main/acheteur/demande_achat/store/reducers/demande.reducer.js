@@ -1,5 +1,4 @@
 import * as Actions from '../actions';
-import _ from '@lodash';
 
 const initialState = {
     data: null,
@@ -56,7 +55,7 @@ const demandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     deleteReqInProgress: false,
-                    attachement_deleted:action.id,
+                    attachement_deleted: action.id,
 
                 };
             }

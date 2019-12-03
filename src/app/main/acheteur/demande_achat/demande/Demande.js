@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs, TextField, InputAdornment, Icon, Typography, LinearProgress, MenuItem, Grid, CircularProgress, IconButton, Tooltip, SnackbarContent } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip, SnackbarContent } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy, SelectFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -113,7 +113,7 @@ function Demande(props) {
             demande.attachement = null;
         }
 
-    }, [demande.attachement]);
+    }, [form, setForm, demande.attachement]);
 
     useEffect(() => {
         dispatch(Actions.getSousSecteurs());
@@ -239,7 +239,7 @@ function Demande(props) {
         }
         else {
 
-            dispatch(Actions.putDemande(model, form['@id']));
+            dispatch(Actions.putDemande(model, form.id));
         }
     }
 
@@ -564,10 +564,10 @@ function Demande(props) {
 
                                                 {
                                                     Header: "#",
-                                                    accessor  : "id",
-                                                    Cell: row => row.index+1
-                                                        
-                                                    
+                                                    accessor: "id",
+                                                    Cell: row => row.index + 1
+
+
                                                 },
                                                 {
                                                     Header: "Fournisseurs",

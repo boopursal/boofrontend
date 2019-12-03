@@ -19,7 +19,7 @@ function BlackListesApp(props) {
 
         if (user)
             dispatch(Actions.getBlackListes(user.id));
-    }, [dispatch]);
+    }, [dispatch, user]);
 
     return (
         <React.Fragment>

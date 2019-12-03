@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Select, Paper } from '@material-ui/core';
-import { Doughnut } from 'react-chartjs-2';
-import _ from 'lodash';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions'
@@ -10,7 +8,6 @@ import ContentLoader from 'react-content-loader'
 function Widget6(props) {
 
     const dispatch = useDispatch();
-    const [widget, setWidget] = useState(null);
     const widgets = useSelector(({ dashboardApp }) => dashboardApp.widgets);
     const [currentRange, setCurrentRange] = useState(
         moment().format('Y')
@@ -19,18 +16,12 @@ function Widget6(props) {
 
     useEffect(() => {
         dispatch(Actions.getBudgets(currentRange));
-    }, [currentRange]);
+    }, [dispatch, currentRange]);
 
     function handleChangeRange(ev) {
         setCurrentRange(ev.target.value);
     }
-    function currencyFormat(num) {
-        return num.toLocaleString(
-            undefined, // leave undefined to use the browser's locale,
-            // or use a string like 'en-US' to override it.
-            { minimumFractionDigits: 2 }
-        )
-    }
+
 
     return (
 

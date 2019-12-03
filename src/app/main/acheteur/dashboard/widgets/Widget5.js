@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Paper, Button } from '@material-ui/core';
-import { Bar, Line } from 'react-chartjs-2';
+import { Typography, Button } from '@material-ui/core';
+import { Line } from 'react-chartjs-2';
 import { makeStyles, useTheme, ThemeProvider } from '@material-ui/styles';
 import _ from 'lodash';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions'
-import ContentLoader, { Facebook } from 'react-content-loader'
 import reducer from '../store/reducers';
 import withReducer from 'app/store/withReducer';
 import { FuseAnimate } from '@fuse';
@@ -165,9 +164,9 @@ function Widget5(props) {
                                             gridLines: {
                                                 tickMarkLength: 16
                                             },
-                                            ticks  : {
-                                                min     : 0,
-                                                max     : 5,
+                                            ticks: {
+                                                min: 0,
+                                                max: 5,
                                                 stepSize: 0.5
                                             }
                                         }
@@ -183,7 +182,7 @@ function Widget5(props) {
 
                                     }
                                 },
-                               
+
                             }
                         }
                     />

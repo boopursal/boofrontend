@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
         transitionDuration: theme.transitions.duration.short,
         transitionTimingFunction: theme.transitions.easing.easeInOut,
     },
-    
+
     profileImageItem: {
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
@@ -770,25 +770,25 @@ function Profile(props) {
 
                                         }
                                     </label>
-                                    
+
                                     <div
                                         className={
                                             clsx(
                                                 classes.profileImageItem,
                                                 "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
                                         }
-                                        onClick={form.avatar ? () => window.open(FuseUtils.getUrl() + form.avatar.url, "_blank"):console.log('')}
+                                        onClick={form.avatar ? () => window.open(FuseUtils.getUrl() + form.avatar.url, "_blank") : console.log('')}
                                     >
-                                    {form.avatar ? 
-                                        <img className="max-w-none w-auto h-full"
-                                            src={FuseUtils.getUrl() + form.avatar.url}
-                                            alt={form.societe} />
-                                            : 
+                                        {form.avatar ?
                                             <img className="max-w-none w-auto h-full"
-                                            src="assets/images/avatars/profile.jpg"
-                                            alt={form.societe} />}
+                                                src={FuseUtils.getUrl() + form.avatar.url}
+                                                alt={form.societe} />
+                                            :
+                                            <img className="max-w-none w-auto h-full"
+                                                src="assets/images/avatars/profile.jpg"
+                                                alt={form.societe} />}
                                     </div>
-                                    
+
 
                                 </div>
 

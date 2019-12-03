@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -8,9 +8,6 @@ import moment from 'moment';
 import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
 import { makeStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import red from '@material-ui/core/colors/red';
-
 import _ from '@lodash';
 
 const useStyles = makeStyles(theme => ({
@@ -110,19 +107,17 @@ function DemandesTable(props) {
 
                         {
                             Header: "Ref",
-                            width: 100,
                             accessor: "reference",
-                            filterable: true,
+                            filterable: false,
                             filterMethod: (filter, row) => {
-                              
-                              },
+
+                            },
                         },
 
                         {
                             Header: "Description",
-                            width: 240,
                             accessor: "description",
-                            filterable: true,
+                            filterable: false,
                             Cell: row => (
                                 <div className="flex items-center">
                                     {_.capitalize(_.truncate(row.original.description, {
@@ -134,7 +129,6 @@ function DemandesTable(props) {
                         },
                         {
                             Header: "Secteurs",
-                            width: 210,
                             accessor: "sousSecteurs.name",
                             filterable: false,
                             Cell: row =>
@@ -146,7 +140,6 @@ function DemandesTable(props) {
                         },
                         {
                             Header: "Date",
-                            width: 130,
                             accessor: "created",
                             filterable: false,
                             Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
@@ -154,10 +147,8 @@ function DemandesTable(props) {
                         {
                             Header: "Échéance",
                             accessor: "dateExpiration",
-                            width: 175,
                             filterable: false,
                             Cell: row => (
-                                row.original.dateExpiration = moment(row.original.dateExpiration),
                                 <div className="flex items-center">
                                     {
                                         moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
@@ -165,12 +156,12 @@ function DemandesTable(props) {
                                     }
 
                                     {
-                                        row.original.dateExpiration >= moment()
+                                        moment(row.original.dateExpiration) >= moment()
                                             ?
 
-                                            <Chip className={classes.chip2} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
+                                            <Chip className={classes.chip2} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
                                             :
-                                            <Chip className={classes.chip} label={row.original.dateExpiration.diff(moment(), 'days') === 0 ? row.original.dateExpiration.diff(moment(), 'hours') + ' h' : row.original.dateExpiration.diff(moment(), 'days') + ' j'} />
+                                            <Chip className={classes.chip} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
 
                                     }
 
@@ -181,15 +172,12 @@ function DemandesTable(props) {
                         {
                             Header: "Statut",
                             sortable: false,
-
-                            width: 100,
                             filterable: false,
                             Cell: row => (
-                                row.original.dateExpiration = moment(row.original.dateExpiration),
                                 <div className="flex items-center">
 
                                     {
-                                        row.original.dateExpiration >= moment()
+                                        moment(row.original.dateExpiration) >= moment()
                                             ?
                                             row.original.statut === 0
                                                 ?
@@ -212,7 +200,6 @@ function DemandesTable(props) {
                         {
                             Header: "Public",
                             accessor: "isPublic",
-                            width: 64,
                             Cell: row =>
                                 row.original.isPublic ?
                                     (
@@ -243,7 +230,6 @@ function DemandesTable(props) {
 
                         {
                             Header: "",
-                            width: 64,
                             Cell: row => (
                                 <div className="flex items-center">
                                     {
@@ -277,7 +263,6 @@ function DemandesTable(props) {
                     manual
 
                     defaultSortDesc={true}
-                    pages={parametres.page}
                     pages={pageCount}
                     defaultPageSize={10}
                     loading={loading}

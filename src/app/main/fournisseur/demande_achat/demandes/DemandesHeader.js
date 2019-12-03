@@ -1,16 +1,13 @@
 import React from 'react';
-import {Paper, Button, Input, Icon, Typography} from '@material-ui/core';
-import {ThemeProvider} from '@material-ui/styles';
-import {FuseAnimate} from '@fuse';
-import {useDispatch, useSelector} from 'react-redux';
-import {Link} from 'react-router-dom';
+import { Paper, Input, Icon, Typography } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
+import { FuseAnimate } from '@fuse';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 
-function DemandesHeader(props)
-{
+function DemandesHeader(props) {
     const dispatch = useDispatch();
-    const searchText = useSelector(({demandesApp}) => demandesApp.demandes.searchText);
-    const mainTheme = useSelector(({fuse}) => fuse.settings.mainTheme);
+    const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
     const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
     return (
         <div className="flex flex-1 w-full items-center justify-between">
@@ -43,7 +40,7 @@ function DemandesHeader(props)
                                 }}
                                 onChange={ev => {
                                     parametres.page = 1;
-                                    parametres.description=ev.target.value
+                                    parametres.description = ev.target.value
                                     dispatch(Actions.setParametresData(parametres))
                                 }}
                             />
@@ -52,7 +49,7 @@ function DemandesHeader(props)
                 </ThemeProvider>
 
             </div>
-           
+
         </div>
     );
 }

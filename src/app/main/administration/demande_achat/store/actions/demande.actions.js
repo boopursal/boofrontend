@@ -54,13 +54,13 @@ export function getDemande(params) {
         dispatch({
             type: REQUEST_DEMANDE,
         });
-        return request.then((response) =>{
+        return request.then((response) => {
             dispatch({
                 type: GET_DEMANDE,
                 payload: response.data
             })
         }
-            
+
         ).catch((error) => {
             dispatch({
                 type: SAVE_ERROR,
@@ -74,8 +74,8 @@ export function getDemande(params) {
 
 
 
-export function putDemande(data,url) {
-    const request = agent.put(url, data);
+export function putDemande(data, id) {
+    const request = agent.put(`/api/demande_achats/${id}`, data);
 
     return (dispatch) => {
         dispatch({
@@ -90,7 +90,7 @@ export function putDemande(data,url) {
                 payload: response.data
             })
         }
-        ).catch((error)=>{
+        ).catch((error) => {
             dispatch({
                 type: SAVE_ERROR,
                 payload: FuseUtils.parseApiErrors(error)
@@ -116,7 +116,7 @@ export function deleteMedia(media) {
                 id: media.id
             })
         }
-        ).catch((error)=>{
+        ).catch((error) => {
             dispatch({
                 type: ERROR_DELETE,
                 payload: FuseUtils.parseApiErrors(error)
@@ -128,9 +128,8 @@ export function deleteMedia(media) {
 
 
 
-export function uploadAttachement(file)
-{
-    
+export function uploadAttachement(file) {
+
     return (dispatch, getState) => {
 
         const formData = new FormData();
@@ -138,14 +137,14 @@ export function uploadAttachement(file)
 
         const request = agent.post('/api/attachements', formData, {
             headers: {
-              'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data'
             }
         });
         dispatch({
             type: UPLOAD_REQUEST
         });
         return request.then((response) =>
-        
+
             Promise.all([
                 (response),
                 dispatch({
@@ -153,24 +152,26 @@ export function uploadAttachement(file)
                     payload: response.data
 
                 }),
-                dispatch(showMessage({message: 'Document uploaded!',anchorOrigin: {
-                    vertical  : 'top',//top bottom
-                    horizontal: 'right'//left center right
-                },
-                variant: 'success'}))
+                dispatch(showMessage({
+                    message: 'Document uploaded!', anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'success'
+                }))
             ])
-        ).catch((error)=>{
+        ).catch((error) => {
             dispatch({
                 type: UPLOAD_ERROR,
             });
             dispatch(
                 showMessage({
-                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
+                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                        return key + ': ' + value;
+                    }),//text or html
                     autoHideDuration: 6000,//ms
                     anchorOrigin: {
-                        vertical  : 'top',//top bottom
+                        vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },
                     variant: 'error'//success error info warning null
@@ -193,14 +194,13 @@ export function newDemande() {
         dateExpiration: null,
         isPublic: false,
         isAnonyme: false,
-        attachements: null,
         sousSecteurs: null,
         budget: null,
         motifRejet: '',
         langueP: 'fr',
         statut: null,
-        attachements : [],
-        diffusionsdemandes :[]
+        attachements: [],
+        diffusionsdemandes: []
     };
 
     return {

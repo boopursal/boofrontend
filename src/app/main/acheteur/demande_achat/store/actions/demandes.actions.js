@@ -35,7 +35,7 @@ export function removeDemande(demande,parametres)
     return (dispatch, getState) => {
 
         
-        const request = agent.put(demande['@id'],Updatedemande);
+        const request = agent.put(`/api/demande_achats/${demande.id}`,Updatedemande);
 
         return request.then((response) =>
             Promise.all([
@@ -59,7 +59,7 @@ export function PublishDemande(demande,active,parametres)
     return (dispatch, getState) => {
 
         
-        const request = agent.put(demande['@id'],Updatedemande);
+        const request = agent.put(`/api/demande_achats/${demande.id}`,Updatedemande);
 
         return request.then((response) =>
             Promise.all([

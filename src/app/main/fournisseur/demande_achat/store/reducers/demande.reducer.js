@@ -1,19 +1,18 @@
 import * as Actions from '../actions';
-import _ from '@lodash';
 
 const initialState = {
     data: null,
     error: null,
-    sousSecteurs: null,
     loading: false,
     attachement: null,
+    visit: null
 };
 
 const demandeReducer = function (state = initialState, action) {
     switch (action.type) {
 
-        case Actions.REQUEST_SOUS_SECTEUR:
         case Actions.REQUEST_DEMANDE:
+        case Actions.REQUEST_VISITE_DEMANDE:
             {
                 return {
                     ...state,
@@ -21,11 +20,16 @@ const demandeReducer = function (state = initialState, action) {
 
                 }
             }
-        case Actions.GET_SOUS_SECTEUR:
+        case Actions.CLEAN_UP:
             {
                 return {
                     ...state,
-                    sousSecteurs: action.payload,
+                    data: null,
+                    visit: null,
+                    loading: false,
+                    attachement: null,
+                    error: null,
+
 
                 };
             }
@@ -38,7 +42,16 @@ const demandeReducer = function (state = initialState, action) {
 
                 };
             }
-       
+        case Actions.GET_VISITE_DEMANDE:
+            {
+                return {
+                    ...state,
+                    visit: action.payload,
+                    loading: false,
+
+                };
+            }
+
         case Actions.SAVE_ERROR:
             {
                 return {

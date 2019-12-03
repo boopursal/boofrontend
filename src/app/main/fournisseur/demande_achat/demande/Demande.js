@@ -1,9 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs, TextField, InputAdornment, Icon, Typography, LinearProgress, MenuItem, Grid, CircularProgress, IconButton, Tooltip, SnackbarContent, Chip } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, Tooltip, Divider } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy, SelectFormsy } from '@fuse';
-import { useForm } from '@fuse/hooks';
+import { makeStyles, withStyles } from '@material-ui/styles';
+import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import _ from '@lodash';
@@ -13,19 +12,25 @@ import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import Formsy from 'formsy-react';
 import moment from 'moment';
-import green from '@material-ui/core/colors/green';
-import ErrorIcon from '@material-ui/icons/Error';
-import ReactTable from "react-table";
+import Chip from '@material-ui/core/Chip';
 
+const LightTooltip = withStyles(theme => ({
+    tooltip: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}))(Tooltip);
 
 const useStyles = makeStyles(theme => ({
+
     root: {
         width: '100%',
         '& > * + *': {
             marginTop: theme.spacing(2),
         },
     },
-
 
     demandeImageFeaturedStar: {
         position: 'absolute',
@@ -34,6 +39,7 @@ const useStyles = makeStyles(theme => ({
         color: red[400],
         opacity: 0
     },
+
     demandeImageUpload: {
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
@@ -94,7 +100,15 @@ const useStyles = makeStyles(theme => ({
         color: 'white',
         fontWeight: 'bold',
         fontSize: '11px'
-    }
+    },
+    chip3: {
+        margin: theme.spacing(1),
+        background: 'green',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px'
+
+    },
 }));
 moment.defaultFormat = "DD/MM/YYYY HH:mm";
 function Demande(props) {
@@ -102,67 +116,29 @@ function Demande(props) {
     const dispatch = useDispatch();
     const demande = useSelector(({ demandesApp }) => demandesApp.demande);
 
-
-    const [isFormValid, setIsFormValid] = useState(false);
-    const formRef = useRef(null);
-    const { form, handleChange, setForm } = useForm(null);
+    const user = useSelector(({ auth }) => auth.user);
 
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
 
-    useEffect(() => {
 
-        if (demande.attachement) {
-            setForm(_.set({ ...form }, 'attachements', [
-                demande.attachement,
-                ...form.attachements
-            ]));
-            demande.attachement = null;
+    useEffect(() => {
+        const params = props.match.params;
+        const { demandeId } = params;
+        dispatch(Actions.getDemande(demandeId));
+        dispatch(Actions.getVisiteDemande(user.id, demandeId));
+       
+        return ()=>{
+            dispatch(Actions.cleanUp())
         }
 
-    }, [demande.attachement]);
-
-    useEffect(() => {
-        dispatch(Actions.getSousSecteurs());
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (demande.error && (demande.error.reference || demande.error.description || demande.error.descriptionEn || demande.error.descriptionEs || demande.error.dateExpiration || demande.error.isPublic || demande.error.isAnonyme || demande.error.sousSecteurs || demande.error.langueP)) {
-            {
-                formRef.current.updateInputsWithError({
-                    ...demande.error
-                });
-            }
-            demande.error = null;
-        }
-    }, [demande.error]);
+    }, [dispatch, props.match.params, user.id]);
 
 
-
-    useEffect(() => {
-        function updateDemandeState() {
-            const params = props.match.params;
-            const { demandeId } = params;
-            dispatch(Actions.getDemande(demandeId));
-        }
-
-        updateDemandeState();
-    }, [dispatch, props.match.params]);
-
-    useEffect(() => {
-        if (
-            (demande.data && !form) ||
-            (demande.data && form && demande.data.id !== form.id)
-        ) {
-            setForm({ ...demande.data });
-        }
-    }, [form, demande.data, setForm]);
 
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
     }
-
-
 
     return (
         <FusePageCarded
@@ -174,7 +150,7 @@ function Demande(props) {
                 !demande.loading
                     ?
 
-                    form && (
+                    demande.data && (
                         <div className="flex flex-1 w-full items-center justify-between">
 
                             <div className="flex flex-col items-start max-w-full">
@@ -190,16 +166,16 @@ function Demande(props) {
 
                                     <div className="flex flex-col min-w-0">
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                            <Typography className="text-16 sm:text-20 truncate">
-                                                {form.reference ? 'RFQ-' + form.reference : 'Nouvelle Demande'}
+                                            <div className="text-16 sm:text-20 truncate">
+                                                {demande.data.reference ? 'RFQ-' + demande.data.reference : 'Nouvelle Demande'}
                                                 {
-                                                    moment(form.dateExpiration) >= moment()
+                                                    moment(demande.data.dateExpiration) >= moment()
                                                         ?
-                                                        form.statut === 0
+                                                        demande.data.statut === 0
                                                             ?
                                                             <Chip className={classes.chipOrange} label="En attente" />
                                                             :
-                                                            (form.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                                            (demande.data.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
                                                                 :
                                                                 <Chip className={classes.chip} label="Refusé" />
                                                             )
@@ -208,20 +184,54 @@ function Demande(props) {
 
                                                 }
                                                 {
-                                                    moment(form.dateExpiration) >= moment()
+                                                    moment(demande.data.dateExpiration) >= moment()
                                                         ?
 
-                                                        <Chip className={classes.chip2} label={moment(form.dateExpiration).diff(moment(), 'days') === 0 ? '+ ' + moment(form.dateExpiration).diff(moment(), 'hours') + ' h' : '+ ' + moment(form.dateExpiration).diff(moment(), 'days') + ' j'} />
+                                                        <Chip className={classes.chip2} label={moment(demande.data.dateExpiration).diff(moment(), 'days') === 0 ? moment(demande.data.dateExpiration).diff(moment(), 'hours') + ' h' : moment(demande.data.dateExpiration).diff(moment(), 'days') + ' j'} />
                                                         :
-                                                        <Chip className={classes.chip} label={moment(form.dateExpiration).diff(moment(), 'days') === 0 ? '- ' + moment(form.dateExpiration).diff(moment(), 'hours') + ' h' : '- ' + moment(form.dateExpiration).diff(moment(), 'days') + ' j'} />
+                                                        <Chip className={classes.chip} label={moment(demande.data.dateExpiration).diff(moment(), 'days') === 0 ? moment(demande.data.dateExpiration).diff(moment(), 'hours') + ' h' : moment(demande.data.dateExpiration).diff(moment(), 'days') + ' j'} />
 
                                                 }
-                                            </Typography>
+                                            </div>
                                         </FuseAnimate>
-                                       
+
                                     </div>
                                 </div>
                             </div>
+                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                <div>
+                                    {
+                                        demande.data.isAnonyme
+                                            ?
+                                            <Typography className="text-20" color="textPrimary">
+                                                Demande anonyme
+                                                <LightTooltip placement="top" title="Cette demande est anonyme, vous pouvez participer a cette demande sans perdre aucun jeton" aria-label="jeton">
+                                                    <Icon className="ml-4 text-20">help_outline</Icon>
+                                                </LightTooltip>
+
+                                            </Typography>
+                                            :
+                                            (
+                                                demande.visit && demande.visit
+                                                    ?
+                                                    <Chip className={classes.chip3} label="Déjà visité" />
+                                                    :
+                                                    (
+                                                        moment(demande.data.dateExpiration) >= moment()
+                                                            ?
+                                                            <Button
+                                                                className="whitespace-no-wrap bg-orange"
+                                                                variant="contained"
+                                                            >
+                                                                Voir le profil de l'acheteur
+                                                            </Button>
+                                                            :
+                                                            ''
+                                                    )
+                                            )}
+
+                                </div>
+                            </FuseAnimate>
 
                         </div>
                     )
@@ -246,11 +256,16 @@ function Demande(props) {
                         <Tab className="h-64 normal-case" label="Basic Info" />
                         <Tab className="h-64 normal-case"
                             label={
-                                form && form.attachements.length > 0
-                                    ? "Pièce(s) jointe(s) (" + form.attachements.length + ")"
+                                demande.data && demande.data.attachements.length > 0
+                                    ? "Pièce(s) jointe(s) (" + demande.data.attachements.length + ")"
                                     : "Pièce(s) jointe(s)"}
 
                         />
+
+                        {demande.data && (demande.visit || demande.data.isAnonyme) ?
+                            <Tab className="h-64 normal-case text-orange font-bold" label="Profil Acheteur" />
+                            :
+                            ''}
 
 
                     </Tabs>
@@ -259,7 +274,7 @@ function Demande(props) {
             content={
                 !demande.loading ?
 
-                    form && (
+                    demande.data && (
                         <div className="p-10  sm:p-24 max-w-2xl">
                             {tabValue === 0 &&
                                 (
@@ -274,7 +289,7 @@ function Demande(props) {
                                                     label="Référence"
                                                     id="reference"
                                                     name="reference"
-                                                    value={form.reference}
+                                                    value={demande.data.reference}
                                                     InputProps={{
                                                         readOnly: true,
                                                         startAdornment: <InputAdornment position="start">RFQ-</InputAdornment>,
@@ -291,7 +306,7 @@ function Demande(props) {
                                                     id="dateExpiration"
                                                     name="dateExpiration"
                                                     value={
-                                                        moment(form.dateExpiration).format('DD/MM/YYYY HH:mm')
+                                                        moment(demande.data.dateExpiration).format('DD/MM/YYYY HH:mm')
                                                     }
                                                     InputProps={{
                                                         readOnly: true,
@@ -307,7 +322,7 @@ function Demande(props) {
                                                     label="Date de création"
                                                     id="dateCreated"
                                                     name="dateCreated"
-                                                    value={moment(form.created).format('DD/MM/YYYY HH:mm')}
+                                                    value={moment(demande.data.created).format('DD/MM/YYYY HH:mm')}
                                                     InputProps={{
                                                         readOnly: true,
                                                     }}
@@ -325,7 +340,7 @@ function Demande(props) {
                                                     label="Sous-Secteurs"
                                                     id="sousSecteurs"
                                                     name="sousSecteurs"
-                                                    value={_.join(_.map(form.sousSecteurs, 'name'), ', ')}
+                                                    value={_.join(_.map(demande.data.sousSecteurs, 'name'), ', ')}
                                                     InputProps={{
                                                         readOnly: true,
                                                     }}
@@ -341,12 +356,12 @@ function Demande(props) {
                                                     id="budget"
                                                     name="budget"
                                                     value={
-                                                        parseFloat(form.budget).toLocaleString(
+                                                        parseFloat(demande.data.budget).toLocaleString(
                                                             undefined, // leave undefined to use the browser's locale,
                                                             // or use a string like 'en-US' to override it.
                                                             { minimumFractionDigits: 2 }
-                                                        )+ ' Dhs ' 
-                                                        }
+                                                        ) + ' Dhs '
+                                                    }
                                                     InputProps={{
                                                         readOnly: true,
                                                     }}
@@ -363,7 +378,7 @@ function Demande(props) {
                                             className="mb-16  w-full"
                                             type="text"
                                             name="description"
-                                            value={form.description}
+                                            value={demande.data.description}
                                             label="Description"
                                             multiline
                                             rows="4"
@@ -382,7 +397,8 @@ function Demande(props) {
 
 
 
-                                        {form.attachements.map(media => (
+                                        {demande.data.attachements.length>0 ?
+                                        demande.data.attachements.map(media => (
                                             <div
                                                 className={
                                                     clsx(
@@ -402,11 +418,558 @@ function Demande(props) {
                                                 }
 
                                             </div>
-                                        ))}
+                                        ))
+                                    :'Aucune pièce jointe attaché a cette demande'
+                                    }
                                     </div>
 
                                 </div>
                             )}
+                            {tabValue === 2 && (
+                                (demande.visit && !demande.data.isAnonyme) ? (
+
+                                    <Formsy
+
+                                        className="flex flex-col">
+
+                                        <Grid container spacing={3} className="mb-5">
+
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className=""
+                                                        type="text"
+                                                        name="fullname"
+                                                        value={demande.visit.demande.acheteur.civilite + ' ' + demande.visit.demande.acheteur.firstName + ' ' + demande.visit.demande.acheteur.lastName}
+                                                        label="Nom complet"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                        fullWidth
+
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className=""
+                                                        name="email"
+                                                        value={demande.visit.demande.acheteur.email}
+                                                        label="Email"
+                                                        fullWidth
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
+
+                                                        }}
+
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <TextFieldFormsy
+                                                    className=""
+                                                    type="text"
+                                                    name="phonep"
+                                                    id="phonep"
+                                                    value={demande.visit.demande.acheteur.phone}
+                                                    label="Téléphone"
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
+                                                    }}
+                                                    fullWidth
+                                                />
+
+                                            </Grid>
+
+                                        </Grid>
+                                        <Divider />
+                                        <Grid container spacing={3} className="mb-5">
+
+                                            <Grid item xs={12} sm={8}>
+                                                <div className="flex">
+
+                                                    <TextFieldFormsy
+                                                        className="mt-20"
+                                                        label="Raison sociale"
+                                                        id="societe"
+                                                        name="societe"
+                                                        value={demande.visit.demande.acheteur.societe}
+                                                        fullWidth
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                    />
+                                                </div>
+
+
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className="mt-20"
+                                                        name="fix"
+                                                        value={demande.visit.demande.acheteur.fix}
+                                                        label="Fix"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
+                                                        }}
+                                                        fullWidth
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={8}>
+
+
+                                                <TextFieldFormsy
+                                                    id="secteur"
+                                                    className=""
+                                                    name="secteur"
+                                                    label="Secteur"
+                                                    value={demande.visit.demande.acheteur.secteur ? demande.visit.demande.acheteur.secteur.name : ''}
+                                                    fullWidth
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                />
+
+
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        id="website"
+                                                        className=""
+                                                        type="text"
+                                                        name="website"
+                                                        value={demande.visit.demande.acheteur.website}
+                                                        label="Site Web"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">language</Icon></InputAdornment>
+                                                        }}
+                                                        fullWidth
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={8}>
+                                                <div className="flex">
+                                                    {
+                                                        demande.visit.demande.acheteur.ice ?
+                                                            <TextFieldFormsy
+                                                                className=""
+                                                                type="text"
+                                                                name="ice"
+                                                                id="ice"
+                                                                value={demande.visit.demande.acheteur.ice}
+                                                                label="ICE"
+                                                                fullWidth
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                }}
+                                                            />
+                                                            :
+                                                            ''
+                                                    }
+
+                                                </div>
+
+                                            </Grid>
+
+
+                                        </Grid>
+                                        <Divider />
+
+
+                                        <Grid container spacing={3} className="mb-5">
+
+                                            <Grid item xs={12} sm={8}>
+                                                <div className="flex">
+
+                                                    <TextFieldFormsy
+                                                        className="mt-20"
+                                                        type="text"
+                                                        name="adresse1"
+                                                        id="adresse1"
+                                                        value={demande.visit.demande.acheteur.adresse1}
+                                                        label="Adresse 1"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">location_on</Icon></InputAdornment>
+                                                        }}
+                                                        fullWidth
+
+                                                    />
+                                                </div>
+
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <TextFieldFormsy
+                                                    className="mt-20"
+                                                    type="text"
+                                                    name="pays"
+                                                    id="pays"
+                                                    value={demande.visit.demande.acheteur.pays ? demande.visit.demande.acheteur.pays.name : ''}
+                                                    label="Pays"
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                    fullWidth
+                                                />
+
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className=""
+                                                        type="text"
+                                                        name="adresse2"
+                                                        value={demande.visit.demande.acheteur.adresse2}
+                                                        label="Adresse 2"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">location_on</Icon></InputAdornment>
+                                                        }}
+                                                        fullWidth
+
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className=""
+                                                        name="codepostal"
+                                                        value={String(demande.visit.demande.acheteur.codepostal)}
+                                                        label="Code Postal"
+                                                        fullWidth
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <TextFieldFormsy
+                                                    className=""
+                                                    type="text"
+                                                    name="ville"
+                                                    id="ville"
+                                                    value={demande.visit.demande.acheteur.ville ? demande.visit.demande.acheteur.ville.name : ''}
+                                                    label="Ville"
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                    fullWidth
+                                                />
+
+                                            </Grid>
+
+                                        </Grid>
+                                        <Divider />
+
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12} sm={12}>
+
+                                                <TextFieldFormsy
+                                                    className="mb-5 mt-20  w-full"
+                                                    type="text"
+                                                    name="description"
+                                                    value={demande.visit.demande.acheteur.description}
+                                                    label="Présentation"
+                                                    multiline
+                                                    rows="2"
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+
+                                                />
+
+                                            </Grid>
+
+                                        </Grid>
+
+
+
+
+                                    </Formsy>
+                                )
+                                    : (
+                                        demande.data.isAnonyme ?
+                                            <Formsy
+
+                                                className="flex flex-col">
+
+                                                <Grid container spacing={3} className="mb-5">
+
+                                                    <Grid item xs={12} sm={4}>
+                                                        <div className="flex">
+                                                            <TextFieldFormsy
+                                                                className=""
+                                                                type="text"
+                                                                name="fullname"
+                                                                value="M. Younes HALOUI"
+                                                                label="Nom complet"
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                }}
+                                                                fullWidth
+
+                                                            />
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={4}>
+                                                        <div className="flex">
+                                                            <TextFieldFormsy
+                                                                className=""
+                                                                name="email"
+                                                                value="achat@lesachatsindustriels.com"
+                                                                label="Email"
+                                                                fullWidth
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                    endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
+
+                                                                }}
+
+                                                            />
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={4}>
+                                                        <TextFieldFormsy
+                                                            className=""
+                                                            type="text"
+                                                            name="phonep"
+                                                            id="phonep"
+                                                            value="0666221144"
+                                                            label="Téléphone"
+                                                            InputProps={{
+                                                                readOnly: true,
+                                                                endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
+                                                            }}
+                                                            fullWidth
+                                                        />
+
+                                                    </Grid>
+
+                                                </Grid>
+                                                <Divider />
+                                                <Grid container spacing={3} className="mb-5">
+
+                                                    <Grid item xs={12} sm={8}>
+                                                        <div className="flex">
+
+                                                            <TextFieldFormsy
+                                                                className="mt-20"
+                                                                label="Raison sociale"
+                                                                id="societe"
+                                                                name="societe"
+                                                                value="Les Achats Industriels"
+                                                                fullWidth
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                }}
+                                                            />
+                                                        </div>
+
+
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={4}>
+                                                        <div className="flex">
+                                                            <TextFieldFormsy
+                                                                className="mt-20"
+                                                                name="fix"
+                                                                value="+212-522.36.57.97"
+                                                                label="Fix"
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                    endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
+                                                                }}
+                                                                fullWidth
+                                                            />
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={8}>
+
+
+                                                        <TextFieldFormsy
+                                                            id="secteur"
+                                                            className=""
+                                                            name="secteur"
+                                                            label="Secteur"
+                                                            value="E-sourcing"
+                                                            fullWidth
+                                                            InputProps={{
+                                                                readOnly: true,
+                                                            }}
+                                                        />
+
+
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={4}>
+                                                        <div className="flex">
+                                                            <TextFieldFormsy
+                                                                id="website"
+                                                                className=""
+                                                                type="text"
+                                                                name="website"
+                                                                value="lesachatsindustriels.com"
+                                                                label="Site Web"
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                    endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">language</Icon></InputAdornment>
+                                                                }}
+                                                                fullWidth
+                                                            />
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={8}>
+                                                        <div className="flex">
+                                                            {
+                                                                <TextFieldFormsy
+                                                                    className=""
+                                                                    type="text"
+                                                                    name="ice"
+                                                                    id="ice"
+                                                                    value="ice"
+                                                                    label="ICE"
+                                                                    fullWidth
+                                                                    InputProps={{
+                                                                        readOnly: true,
+                                                                    }}
+                                                                />
+
+                                                            }
+
+                                                        </div>
+
+                                                    </Grid>
+
+
+                                                </Grid>
+                                                <Divider />
+
+                                                <Grid container spacing={3} className="mb-5">
+
+                                                    <Grid item xs={12} sm={8}>
+                                                        <div className="flex">
+
+                                                            <TextFieldFormsy
+                                                                className="mt-20"
+                                                                type="text"
+                                                                name="adresse1"
+                                                                id="adresse1"
+                                                                value="36, Rue Imam Al BOUKHARI, 20370 Maarif Extension"
+                                                                label="Adresse 1"
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                    endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">location_on</Icon></InputAdornment>
+                                                                }}
+                                                                fullWidth
+
+                                                            />
+                                                        </div>
+
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={4}>
+                                                        <TextFieldFormsy
+                                                            className="mt-20"
+                                                            type="text"
+                                                            name="pays"
+                                                            id="pays"
+                                                            value="Maroc"
+                                                            label="Pays"
+                                                            InputProps={{
+                                                                readOnly: true,
+                                                            }}
+                                                            fullWidth
+                                                        />
+
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={4}>
+                                                        <div className="flex">
+                                                            <TextFieldFormsy
+                                                                className=""
+                                                                type="text"
+                                                                name="adresse2"
+                                                                value=""
+                                                                label="Adresse 2"
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                    endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">location_on</Icon></InputAdornment>
+                                                                }}
+                                                                fullWidth
+
+                                                            />
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={4}>
+                                                        <div className="flex">
+                                                            <TextFieldFormsy
+                                                                className=""
+                                                                name="codepostal"
+                                                                value="20370"
+                                                                label="Code Postal"
+                                                                fullWidth
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                }}
+
+                                                            />
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={4}>
+                                                        <TextFieldFormsy
+                                                            className=""
+                                                            type="text"
+                                                            name="ville"
+                                                            id="ville"
+                                                            value="Casablanca"
+                                                            label="Ville"
+                                                            InputProps={{
+                                                                readOnly: true,
+                                                            }}
+                                                            fullWidth
+                                                        />
+
+                                                    </Grid>
+
+                                                </Grid>
+                                                <Divider />
+
+                                                <Grid container spacing={3}>
+                                                    <Grid item xs={12} sm={12}>
+
+                                                        <TextFieldFormsy
+                                                            className="mb-5 mt-20  w-full"
+                                                            type="text"
+                                                            name="description"
+                                                            value=" "
+                                                            label="Présentation"
+                                                            multiline
+                                                            rows="2"
+                                                            InputProps={{
+                                                                readOnly: true,
+                                                            }}
+
+                                                        />
+
+                                                    </Grid>
+
+                                                </Grid>
+
+
+
+
+                                            </Formsy>
+                                            :
+                                            ''
+                                    ))
+                            }
 
 
 

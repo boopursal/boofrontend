@@ -9,7 +9,6 @@ import * as Actions from '../store/actions';
 function DemandesHeader(props)
 {
     const dispatch = useDispatch();
-    const searchText = useSelector(({demandesApp}) => demandesApp.demandes.searchText);
     const mainTheme = useSelector(({fuse}) => fuse.settings.mainTheme);
     const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
     return (
