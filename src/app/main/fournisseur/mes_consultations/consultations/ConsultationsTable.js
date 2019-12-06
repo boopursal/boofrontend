@@ -40,16 +40,16 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px'
     },
 }));
-function DemandesTable(props) {
+function ConsultationsTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const demandes = useSelector(({ demandesApp }) => demandesApp.demandes.data);
-    const loading = useSelector(({ demandesApp }) => demandesApp.demandes.loading);
-    const pageCount = useSelector(({ demandesApp }) => demandesApp.demandes.pageCount);
-    const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const consultations = useSelector(({ consultationsApp }) => consultationsApp.consultations.data);
+    const loading = useSelector(({ consultationsApp }) => consultationsApp.consultations.loading);
+    const pageCount = useSelector(({ consultationsApp }) => consultationsApp.consultations.pageCount);
+    const parametres = useSelector(({ consultationsApp }) => consultationsApp.consultations.parametres);
 
-    const searchText = useSelector(({ demandesApp }) => demandesApp.demandes.searchText);
+    const searchText = useSelector(({ consultationsApp }) => consultationsApp.consultations.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 
@@ -62,10 +62,10 @@ function DemandesTable(props) {
             return FuseUtils.filterArrayByString(arr, searchText);
         }
 
-        if (demandes) {
-            setFilteredData(getFilteredArray(demandes, searchText));
+        if (consultations) {
+            setFilteredData(getFilteredArray(consultations, searchText));
         }
-    }, [demandes, searchText]);
+    }, [consultations, searchText]);
 
 
 
@@ -84,7 +84,7 @@ function DemandesTable(props) {
                         className: "h-64 cursor-pointer",
                         onClick: (e, handleOriginal) => {
                             if (rowInfo) {
-                                props.history.push('/demandes_prix/' + rowInfo.original.id);
+                                props.history.push('/consultations/' + rowInfo.original.id);
                             }
                         }
                     }
@@ -100,10 +100,17 @@ function DemandesTable(props) {
                 columns={[
 
                     {
-                        Header: "Ref",
-                        accessor: "reference",
+                        Header: "#",
+                        accessor: "id",
                         filterable: false,
                     },
+                    {
+                        Header: "Ref",
+                        className: "font-bold",
+                        id: "reference",
+                        accessor: p => p.demande.reference,
+                    },
+
                     {
                         Header: "Statut",
                         sortable: false,
@@ -112,13 +119,13 @@ function DemandesTable(props) {
                             <div className="flex items-center">
 
                                 {
-                                    moment(row.original.dateExpiration) >= moment()
+                                    moment(row.original.demande.dateExpiration) >= moment()
                                         ?
-                                        row.original.statut === 0
+                                        row.original.demande.statut === 0
                                             ?
                                             <Chip className={classes.chipOrange} label="En attente" />
                                             :
-                                            (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                            (row.original.demande.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
                                                 :
                                                 <Chip className={classes.chip} label="Refusé" />
                                             )
@@ -132,47 +139,50 @@ function DemandesTable(props) {
 
                     },
                     {
+                        Header: "Societé",
+                        className: "font-bold",
+                        id: "acheteur",
+                        accessor: p =>
+                            (
+                                <div className="flex items-center">
+                                    {p.demande.acheteur.societe}
+                                    <Tooltip title={p.demande.acheteur.firstName + ' ' + p.demande.acheteur.lastName} >
+                                        <Icon>account_circle</Icon>
+                                    </Tooltip>
+                                </div>
+                            ),
+                    },
+                    {
                         Header: "Description",
                         accessor: "description",
                         filterable: false,
                         Cell: row => (
                             <div className="flex items-center">
-                                {_.capitalize(_.truncate(row.original.description, {
+                                {_.capitalize(_.truncate(row.original.demande.description, {
                                     'length': 15,
                                     'separator': ' '
                                 }))}
                             </div>
                         )
                     },
-                    {
-                        Header: "Secteurs",
-                        accessor: "sousSecteurs.name",
-                        filterable: false,
-                        Cell: row =>
-                            _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
-                                'length': 15,
-                                'separator': ' '
-                            })
 
-                    },
                     {
-                        Header: "Échéance",
-                        accessor: "dateExpiration",
+                        Header: "Date d'éxpiration",
                         filterable: false,
                         Cell: row => (
                             <div className="flex items-center">
                                 {
-                                    moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
+                                    moment(row.original.demande.dateExpiration).format('DD/MM/YYYY HH:mm')
 
                                 }
 
                                 {
-                                    moment(row.original.dateExpiration) >= moment()
+                                    moment(row.original.demande.dateExpiration) >= moment()
                                         ?
 
-                                        <Chip className={classes.chip2} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
+                                        <Chip className={classes.chip2} label={moment(row.original.demande.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.demande.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.demande.dateExpiration).diff(moment(), 'days') + ' j'} />
                                         :
-                                        <Chip className={classes.chip} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
+                                        <Chip className={classes.chip} label={moment(row.original.demande.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.demande.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.demande.dateExpiration).diff(moment(), 'days') + ' j'} />
 
                                 }
 
@@ -181,7 +191,7 @@ function DemandesTable(props) {
 
                     },
                     {
-                        Header: "Date de création",
+                        Header: "Date de consultation",
                         accessor: "created",
                         filterable: false,
                         Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
@@ -222,7 +232,7 @@ function DemandesTable(props) {
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
                 }}
-                noDataText="No Demande found"
+                noDataText="No Consultation found"
                 loadingText='Chargement...'
                 ofText='sur'
             />
@@ -230,4 +240,4 @@ function DemandesTable(props) {
     );
 }
 
-export default withRouter(DemandesTable);
+export default withRouter(ConsultationsTable);

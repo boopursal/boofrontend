@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Chip, Tooltip } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -40,16 +40,16 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px'
     },
 }));
-function DemandesTable(props) {
+function ProduitsTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const demandes = useSelector(({ demandesApp }) => demandesApp.demandes.data);
-    const loading = useSelector(({ demandesApp }) => demandesApp.demandes.loading);
-    const pageCount = useSelector(({ demandesApp }) => demandesApp.demandes.pageCount);
-    const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const produits = useSelector(({ produitsApp }) => produitsApp.produits.data);
+    const loading = useSelector(({ produitsApp }) => produitsApp.produits.loading);
+    const pageCount = useSelector(({ produitsApp }) => produitsApp.produits.pageCount);
+    const parametres = useSelector(({ produitsApp }) => produitsApp.produits.parametres);
 
-    const searchText = useSelector(({ demandesApp }) => demandesApp.demandes.searchText);
+    const searchText = useSelector(({ produitsApp }) => produitsApp.produits.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 
@@ -62,17 +62,16 @@ function DemandesTable(props) {
             return FuseUtils.filterArrayByString(arr, searchText);
         }
 
-        if (demandes) {
-            setFilteredData(getFilteredArray(demandes, searchText));
+        if (produits) {
+            setFilteredData(getFilteredArray(produits, searchText));
         }
-    }, [demandes, searchText]);
+    }, [produits, searchText]);
 
 
 
     if (!filteredData) {
         return null;
     }
-
 
 
     return (
@@ -84,7 +83,7 @@ function DemandesTable(props) {
                         className: "h-64 cursor-pointer",
                         onClick: (e, handleOriginal) => {
                             if (rowInfo) {
-                                props.history.push('/demandes_prix/' + rowInfo.original.id);
+                                props.history.push('/produits/' + rowInfo.original.id);
                             }
                         }
                     }
@@ -104,6 +103,7 @@ function DemandesTable(props) {
                         accessor: "reference",
                         filterable: false,
                     },
+
                     {
                         Header: "Statut",
                         sortable: false,
@@ -112,21 +112,20 @@ function DemandesTable(props) {
                             <div className="flex items-center">
 
                                 {
-                                    moment(row.original.dateExpiration) >= moment()
+
+                                    !row.original.isValid
                                         ?
-                                        row.original.statut === 0
-                                            ?
-                                            <Chip className={classes.chipOrange} label="En attente" />
-                                            :
-                                            (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
-                                                :
-                                                <Chip className={classes.chip} label="Refusé" />
-                                            )
+                                        <Chip className={classes.chipOrange} label="En attente" />
                                         :
-                                        <Chip className={classes.chip} label="Expiré" />
+                                        <Chip className={classes.chip2} label="Publié" />
+
 
                                 }
-
+                                {
+                                    row.original.isSelect ?
+                                        <Chip className={classes.chip2} label="Produit de la semaine" />
+                                        : ''
+                                }
                             </div>
                         )
 
@@ -145,40 +144,33 @@ function DemandesTable(props) {
                         )
                     },
                     {
-                        Header: "Secteurs",
-                        accessor: "sousSecteurs.name",
-                        filterable: false,
-                        Cell: row =>
-                            _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
-                                'length': 15,
-                                'separator': ' '
-                            })
-
+                        Header: "PU",
+                        className: "font-bold",
+                        id: "pu",
+                        accessor: p => p.pu.toLocaleString(
+                            undefined, // leave undefined to use the browser's locale,
+                            // or use a string like 'en-US' to override it.
+                            { minimumFractionDigits: 2 }
+                        ) + ' Dhs ',
                     },
                     {
-                        Header: "Échéance",
-                        accessor: "dateExpiration",
-                        filterable: false,
-                        Cell: row => (
-                            <div className="flex items-center">
-                                {
-                                    moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
+                        Header: "Secteur",
+                        className: "font-bold",
+                        id: "secteur",
+                        accessor: p => p.secteur.name,
+                    },
+                    {
+                        Header: "Sous-secteur",
+                        className: "font-bold",
+                        id: "sousSecteurs",
+                        accessor: p => p.sousSecteurs.name,
+                    },
 
-                                }
-
-                                {
-                                    moment(row.original.dateExpiration) >= moment()
-                                        ?
-
-                                        <Chip className={classes.chip2} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
-                                        :
-                                        <Chip className={classes.chip} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
-
-                                }
-
-                            </div>
-                        )
-
+                    {
+                        Header: "Catégorie",
+                        className: "font-bold",
+                        id: "categorie",
+                        accessor: p => p.categorie ? p.categorie.name : p.sousSecteurs.name,
                     },
                     {
                         Header: "Date de création",
@@ -192,15 +184,7 @@ function DemandesTable(props) {
                     {
                         Header: "",
                         Cell: row => (
-                            <div className="flex items-center">
-                                {
-                                    <Tooltip title="Détails" >
-                                        <IconButton className="text-teal text-20">
-                                            <Icon>remove_red_eye</Icon>
-                                        </IconButton>
-                                    </Tooltip>
-                                }
-                            </div>
+                            ""
                         )
                     }
                 ]}
@@ -222,7 +206,7 @@ function DemandesTable(props) {
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
                 }}
-                noDataText="No Demande found"
+                noDataText="No Produit found"
                 loadingText='Chargement...'
                 ofText='sur'
             />
@@ -230,4 +214,4 @@ function DemandesTable(props) {
     );
 }
 
-export default withRouter(DemandesTable);
+export default withRouter(ProduitsTable);

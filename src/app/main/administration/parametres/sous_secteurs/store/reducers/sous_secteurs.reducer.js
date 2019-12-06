@@ -1,5 +1,4 @@
 import * as Actions from '../actions';
-import _ from '@lodash';
 import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
@@ -11,7 +10,7 @@ const initialState = {
         name :'',
         filter: {
             id : 'id',
-            direction : 'asc'
+            direction : 'desc'
         }
     },
     selectedSousSecteursIds: [],
@@ -24,7 +23,8 @@ const initialState = {
         data : null
     },
     secteur : null,
-    loading : false
+    loading : false,
+    parents : null
 };
 
 const sous_secteursReducer = function (state = initialState, action) {
@@ -34,7 +34,14 @@ const sous_secteursReducer = function (state = initialState, action) {
         {
             return {
                 ...state,
-                secteur   : _.keyBy(action.payload, 'id')
+                secteur   : action.payload
+            };
+        }
+        case Actions.GET_PARENTS:
+        {
+            return {
+                ...state,
+                parents   : action.payload
             };
         }
         case Actions.REQUEST_SOUS_SECTEURS:
@@ -49,7 +56,7 @@ const sous_secteursReducer = function (state = initialState, action) {
         {
             return {
                 ...state,
-                entities   : _.keyBy(action.payload['hydra:member'], 'id'),
+                entities   : action.payload['hydra:member'],
                 pageCount: FuseUtils.hydraPageCount(action.payload),
                 loading : false
             };

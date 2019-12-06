@@ -16,6 +16,7 @@ function SousSecteursDialog(props)
     const dispatch = useDispatch();
     const SousSecteursDialog = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.sous_secteursDialog);
     const Secteur = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.secteur);
+    const parents = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.parents);
     const parametres = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.parametres);
    
     const {form, handleChange, setForm} = useForm(defaultFormState);
@@ -35,6 +36,11 @@ function SousSecteursDialog(props)
                let secteur={
                     value: SousSecteursDialog.data.secteur['@id'],
                     label: SousSecteursDialog.data.secteur.name,
+                };
+                if(SousSecteursDialog.data.parent)
+                SousSecteursDialog.data.parent={
+                    value: SousSecteursDialog.data.parent['@id'],
+                    label: SousSecteursDialog.data.parent.name,
                 };
                 setForm({...SousSecteursDialog.data});
                 setForm(_.set({...SousSecteursDialog.data}, 'secteur', secteur));
@@ -99,6 +105,13 @@ function SousSecteursDialog(props)
     {
         //setForm(_.set({...form}, name, value.map(item => item.value)));
         setForm(_.set({...form}, name, value));
+        if(name=== 'secteur'){
+            if (value.value) {
+                dispatch(Actions.getParents(value.value));
+            }
+        }
+        
+        console.log(value)
     }
 
     function disableButton()
@@ -190,6 +203,33 @@ function SousSecteursDialog(props)
                             options={Secteur}
                             fullWidth
                             required
+                        />
+                    </div>
+
+                     <div className="flex">
+                        <div className="min-w-48 pt-20">
+                            <Icon color="action">work</Icon>
+                        </div>
+
+                        <SelectReactFormsy
+                            
+                            id="parent"
+                            name="parent"
+                            className="MuiFormControl-fullWidth MuiTextField-root mb-24"
+                            value={
+                                    form.parent
+                            }
+                            onChange={(value) => handleChipChange(value, 'parent')}
+                            placeholder="Parent optionnel"
+                            textFieldProps={{
+                                label          : 'Parent',
+                                InputLabelProps: {
+                                    shrink: true
+                                },
+                                variant        : 'outlined'
+                            }}
+                            options={parents}
+                            fullWidth
                         />
                     </div>
 

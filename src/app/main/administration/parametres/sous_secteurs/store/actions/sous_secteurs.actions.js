@@ -4,6 +4,7 @@ import {showMessage} from 'app/store/actions/fuse';
 import _ from '@lodash';
 
 export const GET_SECTEURS = '[SECTEURS APP] GET SECTEURS';
+export const GET_PARENTS = '[SECTEURS APP] GET_PARENTS';
 export const GET_SOUS_SECTEURS = '[SOUS_SECTEURS APP] GET SOUS_SECTEURS';
 export const REQUEST_SOUS_SECTEURS = '[SOUS_SECTEURS APP] REQUEST SOUS_SECTEURS';
 export const SET_SEARCH_TEXT = '[SOUS_SECTEURS APP] SET SEARCH TEXT';
@@ -31,6 +32,20 @@ export function getSecteurs()
             
             dispatch({
                 type   : GET_SECTEURS,
+                payload: response.data['hydra:member']
+            })
+        });
+}
+
+export function getParents(url)
+{
+    const request = agent.get(`${url}/sous_secteurs?parent[exists]=false&pagination=false&properties[]=id&properties[]=name`);
+
+    return (dispatch) =>
+        request.then((response) =>{
+            
+            dispatch({
+                type   : GET_PARENTS,
                 payload: response.data['hydra:member']
             })
         });
@@ -125,6 +140,8 @@ export function closeEditSousSecteursDialog()
 export function addSousSecteur(newSousSecteur,parametres)
 {
     newSousSecteur.secteur = newSousSecteur.secteur.value;
+    if(newSousSecteur.parent )
+    newSousSecteur.parent = newSousSecteur.parent.value;
     return (dispatch, getState) => {
 
        
@@ -164,6 +181,8 @@ export function addSousSecteur(newSousSecteur,parametres)
 export function updateSousSecteur(SousSecteur,parametres)
 {
     SousSecteur.secteur = SousSecteur.secteur.value;
+    if(SousSecteur.parent )
+    SousSecteur.parent = SousSecteur.parent.value;
     return (dispatch, getState) => {
 
      

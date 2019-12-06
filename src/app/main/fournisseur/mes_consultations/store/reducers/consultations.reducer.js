@@ -10,23 +10,15 @@ const initialState = {
         page: 1,
         description: '',
         filter: {
-            id: 'dateExpiration',
+            id: 'created',
             direction: 'desc'
         }
     },
 };
 
-const demandesReducer = function (state = initialState, action) {
+const consultationsReducer = function (state = initialState, action) {
     switch (action.type) {
-        case Actions.CLEAN_UP:
-            {
-                return {
-                    ...state,
-                    data :[]
-                    
-                };
-            }
-        case Actions.REQUEST_DEMANDES:
+        case Actions.REQUEST_CONSULTATIONS:
             {
                 return {
                     ...state,
@@ -34,7 +26,7 @@ const demandesReducer = function (state = initialState, action) {
 
                 };
             }
-        case Actions.GET_DEMANDES:
+        case Actions.GET_CONSULTATIONS:
             {
                 return {
                     ...state,
@@ -43,7 +35,7 @@ const demandesReducer = function (state = initialState, action) {
                     loading: false
                 };
             }
-        case Actions.SET_DEMANDES_SEARCH_TEXT:
+        case Actions.SET_CONSULTATIONS_SEARCH_TEXT:
             {
                 return {
                     ...state,
@@ -72,4 +64,4 @@ const demandesReducer = function (state = initialState, action) {
     }
 };
 
-export default demandesReducer;
+export default consultationsReducer;

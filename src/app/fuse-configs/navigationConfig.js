@@ -71,7 +71,6 @@ const navigationConfig = [
             
         ]
     },
-    
     {
         'id'      : 'configurer',
         'title'   : 'Configurer',
@@ -120,6 +119,7 @@ const navigationConfig = [
     },
     
     /** Fin Admin Navigation */
+
     /** ACHETEUR Navigations */
     {
         'id'      : 'dashboard_ac',
@@ -172,6 +172,32 @@ const navigationConfig = [
             'fg'   : '#FFFFFF',
             'count':0
         }
+    },
+    {
+        'id'      : 'mes_consultations',
+        'title'   : 'Mes consultations',
+        'auth' : authRoles.fournisseur,        
+        'type'    : 'item',
+        'icon'    : 'move_to_inbox',
+        'url'  : '/consultations',
+        
+    },
+    {
+        'id'      : 'mes_produits',
+        'title'   : 'Mes Produits',
+        'auth' : authRoles.fournisseur,        
+        'type'    : 'item',
+        'icon'    : 'shopping_cart',
+        'url'  : '/produits',
+        
+    },
+    {
+        'id'      : 'fr_profil',
+        'title'   : 'Mon profil',
+        'auth' : authRoles.fournisseur,        
+        'type'    : 'item',
+        'icon'    : 'person',
+        'url'  : '/user/profile'
     },
    
     /** FIN FOURNISSEUR Navigations */

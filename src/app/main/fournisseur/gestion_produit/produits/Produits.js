@@ -1,28 +1,27 @@
 import React,{useEffect} from 'react';
 import {FusePageCarded} from '@fuse';
 import withReducer from 'app/store/withReducer';
-import DemandesTable from './DemandesTable';
-import DemandesHeader from './DemandesHeader';
+import ProduitsTable from './ProduitsTable';
+import ProduitsHeader from './ProduitsHeader';
 import reducer from '../store/reducers';
 import { useDispatch,useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 
-function Demandes()
+function Produits()
 {
     
     const dispatch = useDispatch();
     const user = useSelector(({auth}) => auth.user);
-    const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const parametres = useSelector(({ produitsApp }) => produitsApp.produits.parametres);
     
     
     useEffect(() => {
         if(user)
-        dispatch(Actions.getDemandes(user.id,parametres));
+        dispatch(Actions.getProduits(user.id,parametres));
 
         return ()=>{
             dispatch(Actions.cleanUp())
         }
-        
     }, [dispatch,parametres,user]);
 
     return (
@@ -32,14 +31,14 @@ function Demandes()
                 header : "min-h-72 h-72 sm:h-136 sm:min-h-136"
             }}
             header={
-                <DemandesHeader/>
+                <ProduitsHeader/>
             }
             content={
-                <DemandesTable/>
+                <ProduitsTable/>
             }
             innerScroll
         />
     );
 }
 
-export default withReducer('demandesApp', reducer)(Demandes);
+export default withReducer('produitsApp', reducer)(Produits);

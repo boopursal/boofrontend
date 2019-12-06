@@ -6,9 +6,17 @@ export const REMOVE_DEMANDE = '[DEMANDES APP] REMOVE DEMANDES';
 export const STATUT_DEMANDE = '[DEMANDES APP] STATUT DEMANDES';
 export const SET_PARAMETRES_DATA = '[DEMANDES APP] SET PARAMETRES DATA';
 
-
+export const CLEAN_UP = '[DEMANDES APP] CLEAN_UP';
 export const GET_DEMANDES = '[USERS APP] GET DEMANDES';
 export const SET_DEMANDES_SEARCH_TEXT = '[USERS APP] SET DEMANDES SEARCH TEXT';
+
+export function cleanUp() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP,
+    });
+}
+
 
 export function getDemandes(id_acheteur,parametres)
 {
