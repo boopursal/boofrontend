@@ -1,15 +1,17 @@
-import React, {useState} from 'react';
-import {Avatar, Button, Icon, ListItemIcon, ListItemText, Popover, MenuItem, Typography} from '@material-ui/core';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { useState } from 'react';
+import { Avatar, Button, Icon, ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
 import * as authActions from 'app/auth/store/actions';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FuseUtils } from '@fuse';
+import clsx from 'clsx';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-function UserMenu(props)
-{
+
+
+function UserMenu(props) {
     const dispatch = useDispatch();
-    const user = useSelector(({auth}) => auth.user);
-
+    const user = useSelector(({ auth }) => auth.user);
     const [userMenu, setUserMenu] = useState(null);
 
     const userMenuClick = event => {
@@ -22,11 +24,30 @@ function UserMenu(props)
 
     return (
         <React.Fragment>
+            {/* ============= TOKENS FOURNISSEURS ============*/}
+            {user.role === 'ROLE_FOURNISSEUR' ?
+                (
+                    !user.requestJeton ?
+                        <div
+                            className={clsx("flex items-center px-8 py-4 mr-8 rounded-sm", !user.jetons ? "bg-red text-white" : "bg-green text-white")}>
+                            <Icon className="text-20 mr-4">monetization_on</Icon>
+                            <Hidden only={['xs']}> <span>Vous avez</span></Hidden>&ensp;
+                             <b className="text-20">{user.jetons}</b> &ensp;
+                             <Hidden only={['xs']}> <span>Jeton(s) restant(s)</span></Hidden>
+                        </div>
+                        :
+                        <div className="flex  items-center px-8 py-4 mr-8 ">
+                            <CircularProgress color="secondary" />
+                        </div>
+                )
+                : ''
+            }
+            {/* ============= FIN TOKENS FOURNISSEURS ============*/}
 
             <Button className="h-64" onClick={userMenuClick}>
                 {user.data.photoURL ?
                     (
-                        <Avatar className="" alt="user photo" src={FuseUtils.getUrl()+user.data.photoURL}/>
+                        <Avatar className="" alt="user photo" src={FuseUtils.getUrl() + user.data.photoURL} />
                     )
                     :
                     (
@@ -53,11 +74,11 @@ function UserMenu(props)
                 anchorEl={userMenu}
                 onClose={userMenuClose}
                 anchorOrigin={{
-                    vertical  : 'bottom',
+                    vertical: 'bottom',
                     horizontal: 'center'
                 }}
                 transformOrigin={{
-                    vertical  : 'top',
+                    vertical: 'top',
                     horizontal: 'center'
                 }}
                 classes={{
@@ -70,18 +91,18 @@ function UserMenu(props)
                             <ListItemIcon className="min-w-40">
                                 <Icon>lock</Icon>
                             </ListItemIcon>
-                            <ListItemText className="pl-0" primary="Login"/>
+                            <ListItemText className="pl-0" primary="Login" />
                         </MenuItem>
                         <MenuItem component={Link} to="/register">
                             <ListItemIcon className="min-w-40">
                                 <Icon>person_add</Icon>
                             </ListItemIcon>
-                            <ListItemText className="pl-0" primary="Register"/>
+                            <ListItemText className="pl-0" primary="Register" />
                         </MenuItem>
                     </React.Fragment>
                 ) : (
-                    <React.Fragment>
-                    {/*
+                        <React.Fragment>
+                            {/*
                         <MenuItem component={Link} to="/pages/profile" onClick={userMenuClose}>
                             <ListItemIcon className="min-w-40">
                                 <Icon>account_circle</Icon>
@@ -95,19 +116,19 @@ function UserMenu(props)
                             <ListItemText className="pl-0" primary="Inbox"/>
                         </MenuItem>
                         */}
-                        <MenuItem
-                            onClick={() => {
-                                dispatch(authActions.logoutUser());
-                                userMenuClose();
-                            }}
-                        >
-                            <ListItemIcon className="min-w-40">
-                                <Icon>exit_to_app</Icon>
-                            </ListItemIcon>
-                            <ListItemText className="pl-0" primary="Logout"/>
-                        </MenuItem>
-                    </React.Fragment>
-                )}
+                            <MenuItem
+                                onClick={() => {
+                                    dispatch(authActions.logoutUser());
+                                    userMenuClose();
+                                }}
+                            >
+                                <ListItemIcon className="min-w-40">
+                                    <Icon>exit_to_app</Icon>
+                                </ListItemIcon>
+                                <ListItemText className="pl-0" primary="Logout" />
+                            </MenuItem>
+                        </React.Fragment>
+                    )}
             </Popover>
         </React.Fragment>
     );

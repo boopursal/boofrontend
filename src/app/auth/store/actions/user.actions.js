@@ -7,8 +7,11 @@ import firebase from 'firebase/app';
 import firebaseService from 'app/services/firebaseService';
 import auth0Service from 'app/services/auth0Service';
 import jwtService from 'app/services/jwtService';
+import agent from 'agent';
 
 export const SET_USER_DATA = '[USER] SET DATA';
+export const GET_FOURNISSEUR_JETONS = '[USER] GET_FOURNISSEUR_JETONS';
+export const REQUEST_FOURNISSEUR_JETONS = '[USER] REQUEST_FOURNISSEUR_JETONS';
 export const REMOVE_USER_DATA = '[USER] REMOVE DATA';
 export const USER_LOGGED_OUT = '[USER] LOGGED OUT';
 
@@ -85,6 +88,28 @@ export function createUserSettingsFirebase(authUser)
     }
 }
 
+
+/**
+ * Set User Data
+ */
+export function getTokenFournisseur()
+{
+    const request = agent.get('/api/jetons/founrisseur');
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_FOURNISSEUR_JETONS,
+        })
+        return request.then((response) =>
+            dispatch({
+                type: GET_FOURNISSEUR_JETONS,
+                payload: response.data
+            })
+        );
+
+    }
+ 
+}
 /**
  * Set User Data
  */

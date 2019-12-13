@@ -1,26 +1,27 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import * as userActions from 'app/auth/store/actions';
-import {bindActionCreators} from 'redux';
+import { bindActionCreators } from 'redux';
 import * as Actions from 'app/store/actions';
 import jwtService from 'app/services/jwtService';
 
 class Auth extends Component {
     /*eslint-disable-next-line no-useless-constructor*/
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         /**
          * Comment the line if you do not use JWt
          */
         this.jwtCheck();
 
+        console.log('ici')
+
     }
 
     jwtCheck = () => {
         jwtService.on('onAutoLogin', () => {
-           
-            this.props.showMessage({message: 'Logging in with JWT'});
+
+            this.props.showMessage({ message: 'Logging in with JWT' });
 
             /**
              * Sign in and retrieve user data from Api
@@ -28,18 +29,20 @@ class Auth extends Component {
             jwtService.signInWithToken()
                 .then(user => {
                     this.props.setUserData(user);
-
-                    this.props.showMessage({message: 'Logged in with JWT'});
+                    {/* ============= TOKENS FOURNISSEURS ============*/}
+                    if (user.role === 'ROLE_FOURNISSEUR') {
+                        this.props.getTokenFournisseur();
+                    }
+                    this.props.showMessage({ message: 'Logged in with JWT' });
                 })
                 .catch(error => {
-                    this.props.showMessage({message: error});
+                    this.props.showMessage({ message: error });
                 })
         });
 
         jwtService.on('onAutoLogout', (message) => {
-            if ( message )
-            {
-                this.props.showMessage({message});
+            if (message) {
+                this.props.showMessage({ message });
             }
             this.props.logout();
         });
@@ -47,11 +50,10 @@ class Auth extends Component {
         jwtService.init();
     };
 
-  
 
-    render()
-    {
-        const {children} = this.props;
+
+    render() {
+        const { children } = this.props;
 
         return (
             <React.Fragment>
@@ -61,14 +63,14 @@ class Auth extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch)
-{
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-            logout             : userActions.logoutUser,
-            setUserData        : userActions.setUserData,
-            showMessage        : Actions.showMessage,
-            hideMessage        : Actions.hideMessage
-        },
+        logout: userActions.logoutUser,
+        setUserData: userActions.setUserData,
+        getTokenFournisseur: userActions.getTokenFournisseur,
+        showMessage: Actions.showMessage,
+        hideMessage: Actions.hideMessage
+    },
         dispatch);
 }
 

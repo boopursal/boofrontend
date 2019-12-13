@@ -18,6 +18,9 @@ export const SAVE_ERROR = '[DEMANDE APP] SAVE ERROR';
 export const REQUEST_SOUS_SECTEUR = '[DEMANDE APP] REQUEST SOUS_SECTEUR';
 export const GET_SOUS_SECTEUR = '[DEMANDE APP] GET SOUS SECTEUR';
 
+export const REQUEST_MOTIF = '[DEMANDE APP] REQUEST REQUEST_MOTIF';
+export const GET_MOTIF = '[DEMANDE APP] GET GET_MOTIF';
+
 export const UPLOAD_ATTACHEMENT = '[DEMANDE APP] UPLOAD ATTACHEMENT';
 export const UPLOAD_REQUEST = '[DEMANDE APP] UPLOAD REQUEST';
 export const UPLOAD_ERROR = '[DEMANDE APP] UPLOAD ERROR';
@@ -28,6 +31,22 @@ export const DELETE_SUCCESS = '[DEMANDE APP] DELETE SUCCESS';
 export const ERROR_DELETE = '[DEMANDE APP] ERROR DELETE';
 
 
+export function getMotifs() {
+    const request = agent.get('/api/motifs');
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_MOTIF,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_MOTIF,
+                payload: response.data['hydra:member']
+            })
+        });
+    }
+    
+}
 
 export function getSousSecteurs() {
     const request = agent.get('/api/sous_secteur_p');
@@ -42,7 +61,6 @@ export function getSousSecteurs() {
                 payload: response.data
             })
         });
-
     }
 
 }
@@ -75,6 +93,24 @@ export function getDemande(params) {
 
 
 export function putDemande(data, id) {
+
+    data.sousSecteurs = _.map(data.sousSecteurs, function (value, key) {
+        return value.value;
+    });
+    data.attachements = _.map(data.attachements, function (value, key) {
+        return value['@id'];
+    });
+
+    if (data.budget) {
+        data.budget = parseFloat(data.budget);
+    }
+    if(data.motifRejet){
+        data.motifRejet = data.motifRejet.value;
+    }else{
+        data.motifRejet =null;
+    }
+
+    console.log(data)
     const request = agent.put(`/api/demande_achats/${id}`, data);
 
     return (dispatch) => {

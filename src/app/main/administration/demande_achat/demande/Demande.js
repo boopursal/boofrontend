@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip, FormControlLabel, Radio } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy, RadioGroupFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy, RadioGroupFormsy, SelectReactFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -69,11 +69,11 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 moment.defaultFormat = "DD/MM/YYYY HH:mm";
+
 function Demande(props) {
 
     const dispatch = useDispatch();
     const demande = useSelector(({ demandesApp }) => demandesApp.demande);
-
 
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
@@ -96,6 +96,7 @@ function Demande(props) {
 
     useEffect(() => {
         dispatch(Actions.getSousSecteurs());
+        dispatch(Actions.getMotifs());
     }, [dispatch]);
 
     useEffect(() => {
@@ -150,13 +151,18 @@ function Demande(props) {
             (demande.data && !form) ||
             (demande.data && form && demande.data.id !== form.id)
         ) {
-            setForm({ ...demande.data });
 
             if (demande.data.sousSecteurs) {
                 let sousSecteurs = demande.data.sousSecteurs.map(item => ({
                     value: item['@id'],
                     label: item.name
                 }));
+                if(demande.data.motifRejet)
+                demande.data.motifRejet={
+                    value: demande.data.motifRejet['@id'],
+                    label: demande.data.motifRejet.name,
+                };
+                setForm({ ...demande.data });
                 setForm(_.set({ ...demande.data }, 'sousSecteurs', sousSecteurs));
 
             }
@@ -194,9 +200,17 @@ function Demande(props) {
         }
     }
 
+    function handleChipChange2(value, name) {
+       setForm(_.set({ ...form }, name, value));
+    }
+
     function handleRadioChange(e) {
 
         setForm(_.set({ ...form }, 'statut', parseInt(e.target.value)));
+    }
+    function handleCheckBoxChange(e,name) {
+
+        setForm(_.set({ ...form }, name, e.target.checked));
     }
 
     function disableButton() {
@@ -207,16 +221,11 @@ function Demande(props) {
         setIsFormValid(true);
     }
 
-    function handleSubmit(model) {
+    function handleSubmit() {
 
-        model.sousSecteurs = _.map(model.sousSecteurs, function (value, key) {
-            return value.value;
-        });
-        model.attachements = _.map(form.attachements, function (value, key) {
-            return value['@id'];
-        });
 
-        dispatch(Actions.putDemande(model, form.id));
+        
+        dispatch(Actions.putDemande(form, form.id));
 
     }
 
@@ -256,6 +265,18 @@ function Demande(props) {
                                     </div>
                                 </div>
                             </div>
+                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                <Button
+                                    className="whitespace-no-wrap"
+                                    variant="contained"
+                                    type="submit"
+                                    disabled={!isFormValid || demande.loading}
+                                    onClick={() => handleSubmit()}
+                                >
+                                    Sauvegarder
+                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                            </Button>
+                            </FuseAnimate>
 
                         </div>
                     )
@@ -312,7 +333,7 @@ function Demande(props) {
                                                 autoFocus
                                                 id="reference"
                                                 name="reference"
-                                                value={form.reference}
+                                                value={form.reference?form.reference:'En attente'}
                                                 onChange={handleChange}
                                                 variant="outlined"
                                                 validations={{
@@ -324,8 +345,8 @@ function Demande(props) {
                                                 InputProps={{
                                                     startAdornment: <InputAdornment position="start">RFQ-</InputAdornment>,
                                                 }}
-                                                required
                                                 fullWidth
+                                                disabled
                                             />
                                         </div>
                                         <div className="flex">
@@ -415,7 +436,6 @@ function Demande(props) {
                                                 <RadioGroupFormsy
                                                     className="mb-10 inline"
                                                     name="statut"
-                                                    value={form.statut}
                                                     onChange={handleRadioChange}
                                                 >
                                                     <FormControlLabel value="1" checked={form.statut === 1} control={<Radio />} label="Valider" />
@@ -427,7 +447,8 @@ function Demande(props) {
                                                 <CheckboxFormsy
                                                     className="mb-10"
                                                     name="sendEmail"
-                                                    onChange={handleChange}
+                                                    disabled={form.statut !== 1}
+                                                    onChange={(e) => handleCheckBoxChange(e, 'sendEmail')}
                                                     label="Alerter Fournisseurs"
                                                 />
                                             </Grid>
@@ -436,7 +457,7 @@ function Demande(props) {
                                                     className="mb-10"
                                                     name="isPublic"
                                                     value={form.isPublic}
-                                                    onChange={handleChange}
+                                                    onChange={(e) => handleCheckBoxChange(e, 'isPublic')}
                                                     label="Mettre en ligne"
                                                 />
                                             </Grid>
@@ -444,9 +465,10 @@ function Demande(props) {
                                             <Grid item xs={12} sm={3}>
                                                 <CheckboxFormsy
                                                     className="mb-10"
+                                                    disabled={form.statut !== 1}
                                                     name="isAnonyme"
                                                     value={form.isAnonyme}
-                                                    onChange={handleChange}
+                                                    onChange={(e) => handleCheckBoxChange(e, 'isAnonyme')}
                                                     label="Mettre la demande anonyme"
                                                 />
                                             </Grid>
@@ -463,25 +485,29 @@ function Demande(props) {
 
                                         {(form.statut === 2 || form.motifRejet)
                                             ?
-                                            <TextFieldFormsy
-                                                className="mb-16  w-full"
-                                                type="text"
+                                            <SelectReactFormsy
+
+                                                id="motifRejet"
                                                 name="motifRejet"
-                                                value={form.motifRejet}
-                                                onChange={handleChange}
-                                                label="Motif Rejet"
-                                                validations={{
-                                                    minLength: 10,
-                                                }}
-                                                validationErrors={{
-                                                    minLength: 'La longueur minimale de caractère est 10',
-                                                }}
+                                                className="MuiFormControl-fullWidth MuiTextField-root mb-24"
+                                                value={
 
-                                                variant="outlined"
-                                                multiline
-                                                rows="4"
+                                                    form.motifRejet
+
+
+                                                }
+                                                onChange={(value) => handleChipChange2(value, 'motifRejet')}
+                                                placeholder="Selectionner le motif du rejet"
+                                                textFieldProps={{
+                                                    label: 'Motif du rejet',
+                                                    InputLabelProps: {
+                                                        shrink: true
+                                                    },
+                                                    variant: 'outlined'
+                                                }}
+                                                options={demande.motifs}
+                                                fullWidth
                                                 required
-
                                             />
                                             :
                                             ''}

@@ -127,10 +127,13 @@ function AcheteurTab(props) {
                             name="lastName"
                             label="Nom"
                             validations={{
-                                minLength: 4
+                                minLength: 4,
+                                maxLength: 100,
+                                
                             }}
                             validationErrors={{
-                                minLength: 'La longueur minimale de caractère est 4'
+                                maxLength: 'La longueur maximale de caractère est 100',
+                                minLength: 'La longueur minimale de caractère est 4',
                             }}
                             InputProps={{
                                 endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -146,10 +149,12 @@ function AcheteurTab(props) {
                             name="firstName"
                             label="Prénom"
                             validations={{
-                                minLength: 4
+                                minLength: 4,
+                                maxLength: 100
                             }}
                             validationErrors={{
-                                minLength: 'La longueur minimale de caractère est 4'
+                                minLength: 'La longueur minimale de caractère est 4',
+                                maxLength: 'La longueur maximale de caractère est 100',
                             }}
                             InputProps={{
                                 endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -166,10 +171,15 @@ function AcheteurTab(props) {
                     name="societe"
                     label="Raison sociale"
                     validations={{
-                        minLength: 3,
+                        matchRegexp  :/^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
+                        minLength: 4,
+                        maxLength: 20
+                        
                     }}
                     validationErrors={{
-                        minLength: 'La longueur minimale de caractère est 3',
+                        minLength: 'Raison sociale doit dépasser 4 caractères alphanumériques',
+                        maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
+                        matchRegexp  :'Raison sociale doit contenir des caractères alphanumériques'
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">work_outline</Icon></InputAdornment>
@@ -185,7 +195,7 @@ function AcheteurTab(props) {
                     label="Email"
                     validations="isEmail"
                     validationErrors={{
-                        isEmail: 'Please enter a valid email'
+                        isEmail: 'Veuillez saisir un e-mail valide'
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
@@ -218,7 +228,7 @@ function AcheteurTab(props) {
                     className="mb-16"
                     type="password"
                     name="password"
-                    label="Password"
+                    label="Mot de passe"
                     validations={{
                         minLength: 6
                     }}
@@ -236,10 +246,10 @@ function AcheteurTab(props) {
                     className="mb-16"
                     type="password"
                     name="confirmpassword"
-                    label="Confirm Password"
+                    label="Confirmer le mot de passe"
                     validations="equalsField:password"
                     validationErrors={{
-                        equalsField: 'Passwords do not match'
+                        equalsField: 'les mots de passe saisis ne sont pas identiques'
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>

@@ -330,9 +330,11 @@ function Step4App(props) {
                                                         label="Adresse 1"
                                                         validations={{
                                                             minLength: 10,
+                                                            maxLength: 150,
                                                         }}
                                                         validationErrors={{
                                                             minLength: 'La longueur minimale de caractère est 10',
+                                                            maxLength: 'La longueur maximale de caractère est 150',
                                                         }}
                                                         InputProps={{
                                                             endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">location_on</Icon></InputAdornment>
@@ -353,8 +355,11 @@ function Step4App(props) {
                                                         label="Adresse 2"
                                                         validations={{
                                                             minLength: 10,
+                                                            maxLength: 150,
+                                                            
                                                         }}
                                                         validationErrors={{
+                                                            maxLength: 'La longueur maximale de caractère est 150',
                                                             minLength: 'La longueur minimale de caractère est 10',
                                                         }}
                                                         InputProps={{
@@ -426,11 +431,15 @@ function Step4App(props) {
                                                             minLength: 15,
                                                             maxLength: 15,
                                                             isNumeric: "isNumeric",
+                                                            matchRegexp  :/^(?!.*?(\w)\1{5}).*$/,
+                                                        
                                                         }}
                                                         validationErrors={{
                                                             minLength: 'La longueur minimale de caractère est 15',
                                                             maxLength: 'La longueur maximale de caractère est 15',
                                                             isNumeric: 'Cette valeur doit être numérique. ',
+                                                            matchRegexp: 'ICE non valid. ',
+
                                                         }}
 
                                                         variant="outlined"

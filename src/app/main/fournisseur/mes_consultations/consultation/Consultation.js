@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, Tooltip, Divider } from '@material-ui/core';
+import {  Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid,  Divider } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { makeStyles, withStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -14,14 +14,6 @@ import Formsy from 'formsy-react';
 import moment from 'moment';
 import Chip from '@material-ui/core/Chip';
 
-const LightTooltip = withStyles(theme => ({
-    tooltip: {
-        backgroundColor: theme.palette.common.white,
-        color: 'rgba(0, 0, 0, 0.87)',
-        boxShadow: theme.shadows[1],
-        fontSize: 11,
-    },
-}))(Tooltip);
 
 const useStyles = makeStyles(theme => ({
 
@@ -116,7 +108,6 @@ function Consultation(props) {
     const dispatch = useDispatch();
     const consultation = useSelector(({ consultationsApp }) => consultationsApp.consultation);
 
-    const user = useSelector(({ auth }) => auth.user);
 
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);

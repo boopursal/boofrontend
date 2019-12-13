@@ -100,11 +100,11 @@ function DemandesTable(props) {
 
                 data={filteredData}
                 columns={[
-
                     {
-                        Header: "Ref",
-                        accessor: "reference",
-                        filterable: false,
+                        Header: "Référence",
+                        className: "font-bold",
+                        id: "reference",
+                        accessor: f => f.reference ? 'RFQ-'+f.reference : 'En attente',
                     },
                     {
                         Header: "Statut",
@@ -133,14 +133,23 @@ function DemandesTable(props) {
                         )
 
                     },
-
                     {
-                        Header: "Public",
+                        Header: "Budget",
+                        className: "font-bold",
+                        id: "budget",
+                        accessor: f =>  parseFloat(f.budget).toLocaleString(
+                            'fr', // leave undefined to use the browser's locale,
+                            // or use a string like 'en-US' to override it.
+                            { minimumFractionDigits: 2 }
+                        ) + ' Dhs '
+                    },
+                    {
+                        Header: "Publier",
                         accessor: "isPublic",
                         Cell: row =>
                             row.original.isPublic ?
                                 (
-                                    <Tooltip title="Public">
+                                    <Tooltip title="Publié">
                                         <IconButton className="text-green text-20" onClick={(ev) => {
                                             ev.stopPropagation();
                                             dispatch(Actions.PublishDemande(row.original, false, parametres))
@@ -219,9 +228,6 @@ function DemandesTable(props) {
                         filterable: false,
                         Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
                     },
-
-
-
                     {
                         Header: "",
                         Cell: row => (
@@ -249,6 +255,11 @@ function DemandesTable(props) {
                                             </IconButton>
                                         </Tooltip>
                                 }
+                                <Tooltip title="Détails" >
+                                    <IconButton className="text-teal text-20">
+                                        <Icon>remove_red_eye</Icon>
+                                    </IconButton>
+                                </Tooltip>
 
 
                             </div>

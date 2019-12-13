@@ -99,20 +99,16 @@ function ConsultationsTable(props) {
                 data={filteredData}
                 columns={[
 
-                    {
-                        Header: "#",
-                        accessor: "id",
-                        filterable: false,
-                    },
+                   
                     {
                         Header: "Ref",
                         className: "font-bold",
                         id: "reference",
-                        accessor: p => p.demande.reference,
+                        accessor: p => p.demande.reference?'RFQ-'+p.demande.reference : ''
                     },
 
                     {
-                        Header: "Statut",
+                        Header: "État",
                         sortable: false,
                         filterable: false,
                         Cell: row => (

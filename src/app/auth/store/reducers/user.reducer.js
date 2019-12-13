@@ -12,7 +12,9 @@ const initialState = {
             'contacts',
             'todo'
         ]
-    }
+    },
+    jetons : 0,
+    requestJeton : false,
 };
 
 const user = function (state = initialState, action) {
@@ -23,6 +25,21 @@ const user = function (state = initialState, action) {
             return {
                 ...initialState,
                 ...action.payload
+            };
+        }
+        case Actions.REQUEST_FOURNISSEUR_JETONS:
+        {
+            return {
+                ...state,
+                requestJeton : true
+            };
+        }
+        case Actions.GET_FOURNISSEUR_JETONS:
+        {
+            return {
+                ...state,
+                jetons : action.payload,
+                requestJeton : false
             };
         }
         case Actions.REMOVE_USER_DATA:

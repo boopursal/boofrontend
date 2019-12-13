@@ -1,5 +1,4 @@
 import * as Actions from '../actions';
-import _ from '@lodash';
 
 const initialState = {
     entities          : null,
@@ -24,7 +23,7 @@ const blackListesReducer = function (state = initialState, action) {
         {
             return {
                 ...state,
-                entities   : _.keyBy(action.payload, 'id')
+                entities   : action.payload
             };
         }
         case Actions.SET_SEARCH_TEXT:

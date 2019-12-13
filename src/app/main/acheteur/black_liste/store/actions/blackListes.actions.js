@@ -88,6 +88,7 @@ export function addBlackListe(newBlackListe,id_acheteur)
 {
     
     newBlackListe.acheteur=`/api/acheteurs/${id_acheteur}`;
+    console.log(newBlackListe)
     return (dispatch, getState) => {
 
        
@@ -129,6 +130,7 @@ export function updateBlackListe(BlackListe,id_acheteur)
     return (dispatch, getState) => {
 
      
+        console.log(BlackListe);
         const request = agent.put(BlackListe['@id'],BlackListe);
 
         return request.then((response) =>
@@ -164,19 +166,20 @@ export function updateBlackListe(BlackListe,id_acheteur)
     };
 }
 
-export function removeBlackListe(BlackListe,id_acheteur)
+export function removeBlackListe(BlackListe,state,id_acheteur)
 {
+    let Update = { etat: state }
     return (dispatch, getState) => {
 
         
-        const request = agent.delete(BlackListe['@id']);
+        const request = agent.put(BlackListe['@id'],Update);
 
         return request.then((response) =>
             Promise.all([
                 dispatch({
                     type: REMOVE_BLACK_LISTE
                 }),
-                dispatch(showMessage({message: 'Fournisseur bien retiré!',anchorOrigin: {
+                dispatch(showMessage({message: state?'Bien blacklisté':'Bien déblacklisté' ,anchorOrigin: {
                     vertical  : 'top',//top bottom
                     horizontal: 'right'//left center right
                 },

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Chip, Tooltip } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';

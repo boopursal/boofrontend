@@ -4,6 +4,7 @@ const initialState = {
     data: null,
     error: null,
     sousSecteurs: null,
+    motifs: null,
     loading: false,
     success: false,
     attachementReqInProgress: false,
@@ -72,6 +73,14 @@ const demandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     sousSecteurs: action.payload,
+
+                };
+            }
+        case Actions.GET_MOTIF:
+            {
+                return {
+                    ...state,
+                    motifs: action.payload,
 
                 };
             }

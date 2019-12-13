@@ -231,6 +231,9 @@ function Demande(props) {
         model.attachements = _.map(form.attachements, function (value, key) {
             return value['@id'];
         });
+        if (model.budget) {
+            model.budget = parseFloat(model.budget);
+        }
         const params = props.match.params;
         const { demandeId } = params;
 
@@ -338,7 +341,7 @@ function Demande(props) {
                                                     message={
                                                         <span id="client-snackbar" className={classes.message}>
                                                             <ErrorIcon className={clsx(classes.icon, classes.iconVariant)} />
-                                                            Motif de rejet: {form.motifRejet}
+                                                            Motif du rejet: {form.motifRejet?form.motifRejet.name : ''}
                                                         </span>
                                                     }
 
@@ -353,8 +356,8 @@ function Demande(props) {
                                                 autoFocus
                                                 id="reference"
                                                 name="reference"
-                                                value={form.reference}
-                                                onChange={handleChange}
+                                                value={ form.reference ? form.reference : 'En attente' }
+                                                onChange={ handleChange }
                                                 variant="outlined"
                                                 validations={{
                                                     minLength: 4
@@ -366,6 +369,7 @@ function Demande(props) {
                                                     startAdornment: <InputAdornment position="start">RFQ-</InputAdornment>,
                                                 }}
                                                 required
+                                                disabled
                                                 fullWidth
                                             />
                                         </div>
@@ -445,6 +449,7 @@ function Demande(props) {
                                                 isNumeric: 'Numeric value required',
 
                                             }}
+                                            step='any'
                                             required
                                             fullWidth
                                         />

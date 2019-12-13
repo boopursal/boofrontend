@@ -299,10 +299,15 @@ function Profile(props) {
                                                     onChange={handleChange}
                                                     variant="outlined"
                                                     validations={{
-                                                        minLength: 4
+                                                        matchRegexp  :/^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
+                                                        minLength: 4,
+                                                        maxLength: 20
+                                                        
                                                     }}
                                                     validationErrors={{
-                                                        minLength: 'Min character length is 4'
+                                                        minLength: 'Raison sociale doit dépasser 4 caractères alphanumériques',
+                                                        maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
+                                                        matchRegexp  :'Raison sociale doit contenir des caractères alphanumériques'
                                                     }}
                                                     required
                                                     fullWidth
@@ -402,11 +407,14 @@ function Profile(props) {
                                                                 minLength: 15,
                                                                 maxLength: 15,
                                                                 isNumeric: "isNumeric",
+                                                                matchRegexp  :/^(?!.*?(\w)\1{3}).*$/,
+                                                                
                                                             }}
                                                             validationErrors={{
                                                                 minLength: 'La longueur minimale de caractère est 15',
                                                                 maxLength: 'La longueur maximale de caractère est 15',
                                                                 isNumeric: 'Cette valeur doit être numérique. ',
+                                                                matchRegexp: 'ICE non valid',
                                                             }}
 
                                                             variant="outlined"

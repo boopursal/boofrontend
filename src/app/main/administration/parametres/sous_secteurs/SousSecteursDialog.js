@@ -111,7 +111,6 @@ function SousSecteursDialog(props)
             }
         }
         
-        console.log(value)
     }
 
     function disableButton()

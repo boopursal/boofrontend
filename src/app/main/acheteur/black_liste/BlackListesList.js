@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Icon, IconButton, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button} from '@material-ui/core';
+import { Icon, IconButton, Typography,  Tooltip} from '@material-ui/core';
 import {FuseUtils, FuseAnimate} from '@fuse';
 import {useDispatch, useSelector} from 'react-redux';
 import ReactTable from "react-table";
@@ -120,8 +120,11 @@ function BlackListesList(props)
                         )
                     },*/
                     {
-                        Header    : "Id",
-                        accessor  : "id",
+                        Header: "Fournisseur",
+                        className : "font-bold",
+                        filterable:true,
+                        id: "fournisseur",
+                        accessor: f => f.fournisseur.societe,
                     },
                     {
                         Header    : "Raison",
@@ -130,63 +133,47 @@ function BlackListesList(props)
                         className : "font-bold"
                     }, 
                     {
-                        Header: "Fournisseur",
-                        className : "font-bold",
-                        filterable:true,
-                        id: "fournisseur",
-                        accessor: f => f.fournisseur.societe,
-                    },
-                    {
                         Header: "Date de blackListe",
                         id: "created",
                         accessor: d => moment(d.created).format('DD/MM/YYYY HH:mm'),
-                    },      
-                            
+                    },   
                     {
-                        Header: "",
-                        width : 64,
-                        Cell  : row => (
-                            <div className="flex items-center">
-                               
-                                <IconButton className="text-red text-20"
-                                    onClick={(ev)=>{
-                                        ev.stopPropagation();
-                                        dispatch(Actions.openDialog({
-                                        children: (
-                                            <React.Fragment>
-                                                <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
-                                                <DialogContent>
-                                                    <DialogContentText id="alert-dialog-description">
-                                                    
-                                                    Voulez vous vraiment supprimer cet enregistrement ?
-                                                    
-                                                    </DialogContentText>
-                                                </DialogContent>
-                                                <DialogActions>
-                                                    <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
-                                                        Non
-                                                    </Button>
-                                                   <Button 
-                                                        onClick={(ev) => {
-                                                                    dispatch(Actions.removeBlackListe(row.original,user.id));
-                                                                    dispatch(Actions.closeDialog())
-                                                                }} 
-                                                        color="primary" 
-                                                        autoFocus>
-                                                        Oui
-                                                    </Button>
-                                                        
-                                                    
-                                                </DialogActions>
-                                            </React.Fragment>
-                                             )
-                                         }))}}
-                                >
-                                    <Icon>delete</Icon>
-                                </IconButton>
-                            </div>
-                        )
-                    }
+                        Header: "Date de déblackListe",
+                        id: "deblacklister",
+                        accessor: d => moment(d.deblacklister).format('DD/MM/YYYY HH:mm'),
+                    },  
+                    {
+                        Header: "Etat",
+                        accessor: "etat",
+                        Cell: row =>
+                            row.original.etat ?
+                                (
+                                    <Tooltip title="Blacklister">
+                                        <IconButton className="text-red text-20" onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            dispatch(Actions.removeBlackListe(row.original, false, user.id))
+
+                                        }}>
+                                            <Icon>remove_circle</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                ) :
+                                (
+                                    <Tooltip title="Déblacklister">
+                                        <IconButton className="text-green text-20" onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            dispatch(Actions.removeBlackListe(row.original, true, user.id))
+
+                                        }} >
+                                            <Icon>check_circle</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                )
+
+
+                    },    
+                            
+                    
                 ]}
                 defaultPageSize={10}
                

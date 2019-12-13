@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typogra
 import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { TextFieldFormsy } from '@fuse';
+import { TextFieldFormsy, CheckboxFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import _ from '@lodash';
 import Autosuggest from 'react-autosuggest';
@@ -144,10 +144,12 @@ function BlackListesDialog(props) {
     }
 
 
+    function handleCheckBoxChange(e,name) {
 
+        setForm(_.set({ ...form }, name, e.target.checked));
+    }
     function handleSubmit(event) {
         //event.preventDefault();
-
 
 
 
@@ -207,32 +209,6 @@ function BlackListesDialog(props) {
                 <DialogContent classes={{ root: "p-24 overflow-visible" }}>
                     <div className="flex">
                         <div className="min-w-48 pt-20">
-                            <Icon color="action">chat</Icon>
-                        </div>
-
-                        <TextFieldFormsy
-                            className="mb-24"
-                            label="Raison"
-                            autoFocus
-                            id="raison"
-                            name="raison"
-                            value={form.raison}
-                            onChange={handleChange}
-                            variant="outlined"
-                            validations={{
-                                minLength: 6
-                            }}
-                            validationErrors={{
-                                minLength: 'Min character length is 6'
-                            }}
-                            required
-                            multiline
-                            rows="4"
-                            fullWidth
-                        />
-                    </div>
-                    <div className="flex">
-                        <div className="min-w-48 pt-20">
                             <Icon color="action">work</Icon>
                         </div>
                         <Autosuggest
@@ -246,7 +222,7 @@ function BlackListesDialog(props) {
                                 }
                                 try {
                                     const response = await agent.get(
-                                        `/api/fournisseurs?societe=${value}&props[]=id&props[]=societe`
+                                        `/api/fournisseurs?societe=${value}&del=false&isactif=true&props[]=id&props[]=societe`
                                     );
 
                                     setSuggestions(
@@ -280,9 +256,7 @@ function BlackListesDialog(props) {
                                 variant: "outlined",
                                 name: "fournisseur",
                                 onChange: (_event, { newValue }) => {
-                                    console.log(newValue);
                                     setFournisseur({ societe: newValue });
-
                                 },
                                 InputLabelProps: {
                                     shrink: true,
@@ -303,6 +277,50 @@ function BlackListesDialog(props) {
                         />
 
                     </div>
+
+                    <div className="flex">
+                        <div className="min-w-48 pt-20">
+                            <Icon color="action">chat</Icon>
+                        </div>
+
+                        <TextFieldFormsy
+                            className="mb-24 mt-24"
+                            label="Raison"
+                            autoFocus
+                            id="raison"
+                            name="raison"
+                            value={form.raison}
+                            onChange={handleChange}
+                            variant="outlined"
+                            validations={{
+                                minLength: 6
+                            }}
+                            validationErrors={{
+                                minLength: 'Min character length is 6'
+                            }}
+                            required
+                            multiline
+                            rows="4"
+                            fullWidth
+                        />
+                    </div>
+                    {
+                        BlackListesDialog.type === 'edit' ?
+                            <div className="flex">
+                                <div className="min-w-48 ">
+                                </div>
+                                <CheckboxFormsy
+                                    className="mb-24 "
+                                    name="etat"
+                                    value={form.etat}
+                                    label="Blacklister"
+                                    onChange={(e) => handleCheckBoxChange(e, 'etat')}
+                                    fullWidth
+                                />
+                            </div>
+                            : ''
+                    }
+
 
                 </DialogContent>
 

@@ -100,9 +100,10 @@ function DemandesTable(props) {
                 columns={[
 
                     {
-                        Header: "Ref",
-                        accessor: "reference",
-                        filterable: false,
+                        Header: "Référence",
+                        className: "font-bold",
+                        id: "reference",
+                        accessor: f => f.reference ? 'RFQ-'+f.reference : 'En attente',
                     },
                     {
                         Header: "Statut",
@@ -143,6 +144,16 @@ function DemandesTable(props) {
                                 }))}
                             </div>
                         )
+                    },
+                    {
+                        Header: "Budget",
+                        className: "font-bold",
+                        id: "budget",
+                        accessor: f =>  parseFloat(f.budget).toLocaleString(
+                            'fr', // leave undefined to use the browser's locale,
+                            // or use a string like 'en-US' to override it.
+                            { minimumFractionDigits: 2 }
+                        ) + ' Dhs '
                     },
                     {
                         Header: "Secteurs",
@@ -193,13 +204,11 @@ function DemandesTable(props) {
                         Header: "",
                         Cell: row => (
                             <div className="flex items-center">
-                                {
                                     <Tooltip title="Détails" >
                                         <IconButton className="text-teal text-20">
                                             <Icon>remove_red_eye</Icon>
                                         </IconButton>
                                     </Tooltip>
-                                }
                             </div>
                         )
                     }
