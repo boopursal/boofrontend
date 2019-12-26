@@ -5,7 +5,7 @@ import reducer from './store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { Card, Grid, CardContent, InputAdornment, Icon,Stepper, Step, StepLabel, Button } from '@material-ui/core';
+import { Card, Grid, CardContent, InputAdornment, Icon, Stepper, Step, StepLabel, Button } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import { FuseAnimate } from '@fuse';
 import Formsy from 'formsy-react';
@@ -20,6 +20,7 @@ import { useForm } from '@fuse/hooks';
 import _ from '@lodash';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
+/**=============== ACHETEUR INFO SOCIETE ======================= */
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -150,6 +151,7 @@ function Step4App(props) {
 
     const Pays = useSelector(({ step4App }) => step4App.step4.pays);
     const Villes = useSelector(({ step4App }) => step4App.step4.villes);
+    const Currencies = useSelector(({ step4App }) => step4App.step4.currencies);
     const step4 = useSelector(({ step4App }) => step4App.step4);
 
     const { form, handleChange, setForm } = useForm(defaultFormState);
@@ -157,6 +159,7 @@ function Step4App(props) {
     useEffect(() => {
         dispatch(Actions.getPays());
         dispatch(Actions.getSecteurs());
+        dispatch(Actions.getCurrency());
     }, [dispatch]);
 
     useEffect(() => {
@@ -249,25 +252,55 @@ function Step4App(props) {
                                             className="flex flex-col justify-center w-full"
                                         >
 
-                                            <SelectReactFormsy
-                                                id="secteur"
-                                                name="secteur"
-                                                value={
-                                                    form.secteur
-                                                }
-                                                placeholder="Selectionner votre secteur d'activité"
-                                                textFieldProps={{
-                                                    label: 'Secteur d\'activité',
-                                                    InputLabelProps: {
-                                                        shrink: true
-                                                    },
-                                                    variant: 'outlined'
-                                                }}
-                                                className="mb-16"
-                                                options={step4.secteurs}
-                                                onChange={(value) => handleChipChange(value, 'secteur')}
-                                                required
-                                            />
+                                            <Grid container spacing={3} className=" min-w-450 max-w-450">
+
+
+                                                <Grid item xs={12} sm={6}>
+                                                    <SelectReactFormsy
+                                                        id="secteur"
+                                                        name="secteur"
+                                                        value={
+                                                            form.secteur
+                                                        }
+                                                        placeholder="Selectionner votre secteur d'activité"
+                                                        textFieldProps={{
+                                                            label: 'Secteur d\'activité',
+                                                            InputLabelProps: {
+                                                                shrink: true
+                                                            },
+                                                            variant: 'outlined'
+                                                        }}
+                                                        className="mb-16"
+                                                        options={step4.secteurs}
+                                                        onChange={(value) => handleChipChange(value, 'secteur')}
+                                                        required
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                    <SelectReactFormsy
+                                                        id="currency"
+                                                        name="currency"
+                                                        value={
+                                                            form.currency
+                                                        }
+                                                        placeholder="Sélectionner votre devise locale"
+                                                        textFieldProps={{
+                                                            label: 'Devise',
+                                                            InputLabelProps: {
+                                                                shrink: true
+                                                            },
+                                                            variant: 'outlined'
+                                                        }}
+                                                        className="mb-16"
+                                                        options={Currencies}
+                                                        onChange={(value) => handleChipChange(value, 'currency')}
+                                                        required
+                                                    />
+                                                </Grid>
+
+
+                                            </Grid>
+
                                             <Grid container spacing={3} className=" min-w-450 max-w-450">
 
 
@@ -356,7 +389,7 @@ function Step4App(props) {
                                                         validations={{
                                                             minLength: 10,
                                                             maxLength: 150,
-                                                            
+
                                                         }}
                                                         validationErrors={{
                                                             maxLength: 'La longueur maximale de caractère est 150',
@@ -426,13 +459,13 @@ function Step4App(props) {
                                                         onChange={handleChange}
                                                         label="ICE"
                                                         autoComplete="ice"
-                                                        
+
                                                         validations={{
                                                             minLength: 15,
                                                             maxLength: 15,
                                                             isNumeric: "isNumeric",
-                                                            matchRegexp  :/^(?!.*?(\w)\1{5}).*$/,
-                                                        
+                                                            matchRegexp: /^(?!.*?(\w)\1{5}).*$/,
+
                                                         }}
                                                         validationErrors={{
                                                             minLength: 'La longueur minimale de caractère est 15',

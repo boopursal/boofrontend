@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, Tooltip, Divider } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, Tooltip, Divider, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
@@ -127,8 +127,8 @@ function Demande(props) {
         const { demandeId } = params;
         dispatch(Actions.getDemande(demandeId));
         dispatch(Actions.getVisiteDemande(user.id, demandeId));
-       
-        return ()=>{
+
+        return () => {
             dispatch(Actions.cleanUp())
         }
 
@@ -219,14 +219,55 @@ function Demande(props) {
                                                     (
                                                         moment(demande.data.dateExpiration) >= moment()
                                                             ?
-                                                            <Button
-                                                                className="whitespace-no-wrap bg-orange"
-                                                                variant="contained"
-                                                            >
-                                                                Voir le profil de l'acheteur
+                                                            (
+
+                                                                <Button
+                                                                    className="whitespace-no-wrap bg-orange"
+                                                                    variant="contained"
+                                                                    onClick={(ev) => {
+                                                                        dispatch(Actions.openDialog({
+                                                                            children: (
+                                                                                <React.Fragment>
+                                                                                    <DialogTitle id="alert-dialog-title">Confirmation</DialogTitle>
+                                                                                    <DialogContent>
+                                                                                        <DialogContentText id="alert-dialog-description">
+                                                                                            {
+                                                                                                user.jetons > 0
+                                                                                                    ? 'Attention vous allez être débité d´un jeton !'
+                                                                                                    : 'Vous n\'avez plus de jetons, vous pouvez toujours commander des jetons.'
+                                                                                            }
+                                                                                        </DialogContentText>
+                                                                                    </DialogContent>
+                                                                                    <DialogActions>
+                                                                                        <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                                            Non
+                                                                                </Button>
+
+                                                                                        <Button onClick={(ev) => {
+                                                                                            user.jetons > 0
+                                                                                                ?
+                                                                                                dispatch(Actions.addVisiteDemande(user.id, demande.data))
+                                                                                                :
+                                                                                                props.history.push('/abonnement/commandes')
+                                                                                            dispatch(Actions.closeDialog())
+                                                                                        }} color="primary" autoFocus>
+                                                                                            {user.jetons ? 'Ok' : 'Commander maintenant'}
+                                                                                        </Button>
+
+
+                                                                                    </DialogActions>
+                                                                                </React.Fragment>
+                                                                            )
+                                                                        }))
+                                                                    }}
+                                                                >
+                                                                    Voir le profil de l'acheteur
                                                             </Button>
+
+                                                            )
                                                             :
                                                             ''
+
                                                     )
                                             )}
 
@@ -352,7 +393,7 @@ function Demande(props) {
 
                                                 <TextFieldFormsy
                                                     className="mb-24"
-                                                    label="Budget"
+                                                    label={demande.data.currency ? "Budget en " +demande.data.currency.name:'Budget' }
                                                     id="budget"
                                                     name="budget"
                                                     value={
@@ -360,7 +401,7 @@ function Demande(props) {
                                                             undefined, // leave undefined to use the browser's locale,
                                                             // or use a string like 'en-US' to override it.
                                                             { minimumFractionDigits: 2 }
-                                                        ) + ' Dhs '
+                                                        ) 
                                                     }
                                                     InputProps={{
                                                         readOnly: true,
@@ -397,30 +438,30 @@ function Demande(props) {
 
 
 
-                                        {demande.data.attachements.length>0 ?
-                                        demande.data.attachements.map(media => (
-                                            <div
-                                                className={
-                                                    clsx(
-                                                        classes.demandeImageItem,
-                                                        "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
-                                                }
-                                                key={media.id}
-                                                onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
-                                            >
+                                        {demande.data.attachements.length > 0 ?
+                                            demande.data.attachements.map(media => (
+                                                <div
+                                                    className={
+                                                        clsx(
+                                                            classes.demandeImageItem,
+                                                            "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
+                                                    }
+                                                    key={media.id}
+                                                    onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
+                                                >
 
-                                                {_.split(media.type, '/', 1)[0] === 'image' ?
-                                                    <img className="max-w-none w-auto h-full"
-                                                        src={FuseUtils.getUrl() + media.url}
-                                                        alt="demande" />
-                                                    :
-                                                    <Icon color="secondary" style={{ fontSize: 80 }}>insert_drive_file</Icon>
-                                                }
+                                                    {_.split(media.type, '/', 1)[0] === 'image' ?
+                                                        <img className="max-w-none w-auto h-full"
+                                                            src={FuseUtils.getUrl() + media.url}
+                                                            alt="demande" />
+                                                        :
+                                                        <Icon color="secondary" style={{ fontSize: 80 }}>insert_drive_file</Icon>
+                                                    }
 
-                                            </div>
-                                        ))
-                                    :'Aucune pièce jointe attaché a cette demande'
-                                    }
+                                                </div>
+                                            ))
+                                            : 'Aucune pièce jointe attaché a cette demande'
+                                        }
                                     </div>
 
                                 </div>

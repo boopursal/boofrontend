@@ -48,7 +48,7 @@ function DemandesTable(props) {
     const loading = useSelector(({ demandesApp }) => demandesApp.demandes.loading);
     const pageCount = useSelector(({ demandesApp }) => demandesApp.demandes.pageCount);
     const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
-
+    const user = useSelector(({auth}) => auth.user);
     const searchText = useSelector(({ demandesApp }) => demandesApp.demandes.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
@@ -103,7 +103,95 @@ function DemandesTable(props) {
                         Header: "Référence",
                         className: "font-bold",
                         id: "reference",
-                        accessor: f => f.reference ? 'RFQ-'+f.reference : 'En attente',
+                        accessor: f => f.reference ? 'RFQ-' + f.reference : 'En attente',
+                    },
+                    {
+                        Header: "",
+                        accessor: "historiques",
+                        width:64,
+                        filterable: false,
+                        Cell: row =>
+                         row.original.historiques.length > 0 && _.findKey(row.original.historiques, function(o) { return o.fournisseur.id === user.id; })
+                         ?<strong className="text-green">Lu</strong> 
+                         : 
+                         <strong className="text-orange">Non lu</strong>
+
+                    },
+                    {
+                        Header: "Description",
+                        accessor: "description",
+                        filterable: false,
+                        Cell: row => (
+                            <div className="flex items-center">
+                                {_.capitalize(_.truncate(row.original.description, {
+                                    'length': 25,
+                                    'separator': ' '
+                                }))}
+                            </div>
+                        )
+                    },
+                    {
+                        Header: "Budget",
+                        accessor: "budget",
+                        Cell: row =>
+                            (
+                                <>
+                                    {
+                                        parseFloat(row.original.budget).toLocaleString(
+                                            'fr', // leave undefined to use the browser's locale,
+                                            // or use a string like 'en-US' to override it.
+                                            { minimumFractionDigits: 2 }
+                                        )
+                                    }
+                                    &ensp;
+                                    {
+                                        row.original.currency ? row.original.currency.name : ''
+                                    }
+                                </>
+                            )
+                    },
+                    {
+                        Header: "Secteurs",
+                        accessor: "sousSecteurs.name",
+                        filterable: false,
+                        Cell: row =>
+                            _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
+                                'length': 25,
+                                'separator': ' '
+                            })
+
+                    },
+                    {
+                        Header: "Date de création",
+                        accessor: "created",
+                        filterable: false,
+                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                    },
+
+                    {
+                        Header: "Échéance",
+                        accessor: "dateExpiration",
+                        filterable: false,
+                        Cell: row => (
+                            <div className="flex items-center">
+                                {
+                                    moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
+
+                                }
+
+                                {
+                                    moment(row.original.dateExpiration) >= moment()
+                                        ?
+
+                                        <Chip className={classes.chip2} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
+                                        :
+                                        <Chip className={classes.chip} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
+
+                                }
+
+                            </div>
+                        )
+
                     },
                     {
                         Header: "Statut",
@@ -132,83 +220,17 @@ function DemandesTable(props) {
                         )
 
                     },
-                    {
-                        Header: "Description",
-                        accessor: "description",
-                        filterable: false,
-                        Cell: row => (
-                            <div className="flex items-center">
-                                {_.capitalize(_.truncate(row.original.description, {
-                                    'length': 15,
-                                    'separator': ' '
-                                }))}
-                            </div>
-                        )
-                    },
-                    {
-                        Header: "Budget",
-                        className: "font-bold",
-                        id: "budget",
-                        accessor: f =>  parseFloat(f.budget).toLocaleString(
-                            'fr', // leave undefined to use the browser's locale,
-                            // or use a string like 'en-US' to override it.
-                            { minimumFractionDigits: 2 }
-                        ) + ' Dhs '
-                    },
-                    {
-                        Header: "Secteurs",
-                        accessor: "sousSecteurs.name",
-                        filterable: false,
-                        Cell: row =>
-                            _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
-                                'length': 15,
-                                'separator': ' '
-                            })
-
-                    },
-                    {
-                        Header: "Échéance",
-                        accessor: "dateExpiration",
-                        filterable: false,
-                        Cell: row => (
-                            <div className="flex items-center">
-                                {
-                                    moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
-
-                                }
-
-                                {
-                                    moment(row.original.dateExpiration) >= moment()
-                                        ?
-
-                                        <Chip className={classes.chip2} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
-                                        :
-                                        <Chip className={classes.chip} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
-
-                                }
-
-                            </div>
-                        )
-
-                    },
-                    {
-                        Header: "Date de création",
-                        accessor: "created",
-                        filterable: false,
-                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
-                    },
-
-
+                   
 
                     {
                         Header: "",
                         Cell: row => (
                             <div className="flex items-center">
-                                    <Tooltip title="Détails" >
-                                        <IconButton className="text-teal text-20">
-                                            <Icon>remove_red_eye</Icon>
-                                        </IconButton>
-                                    </Tooltip>
+                                <Tooltip title="Détails" >
+                                    <IconButton className="text-teal text-20">
+                                        <Icon>remove_red_eye</Icon>
+                                    </IconButton>
+                                </Tooltip>
                             </div>
                         )
                     }

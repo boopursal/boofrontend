@@ -68,6 +68,9 @@ function Profile(props) {
 
     const formRef = useRef(null);
     const [showIce, setShowIce] = useState(false);
+    const [ville, setVille] = useState(false);
+    const [pays, setPays] = useState(false);
+    const [secteur, setSecteur] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
 
     const [tabValue, setTabValue] = useState(0);
@@ -117,28 +120,24 @@ function Profile(props) {
             (profile.data && !form) ||
             (profile.data && form && profile.data.id !== form.id)
         ) {
-
-            if (profile.data.secteur)
-                profile.data.secteur = {
-                    value: profile.data.secteur.id,
-                    label: profile.data.secteur.name
-                };
-            if (profile.data.ville)
-                profile.data.ville = {
-                    value: profile.data.ville.id,
-                    label: profile.data.ville.name
-                };
             if (profile.data.pays) {
                 if (profile.data.pays.name === 'Maroc') {
                     setShowIce(true);
                 }
-                profile.data.pays = {
-                    value: profile.data.pays.id,
-                    label: profile.data.pays.name
-                };
-
             }
             setForm({ ...profile.data });
+            setSecteur({
+                value: profile.data.secteur.id,
+                label: profile.data.secteur.name
+            });
+            setVille({
+                value: profile.data.ville.id,
+                label: profile.data.ville.name,
+            });
+            setPays({
+                value: profile.data.pays.id,
+                label: profile.data.pays.name,
+            });
         }
 
     }, [form, profile.data, setForm]);
@@ -158,11 +157,18 @@ function Profile(props) {
 
     function handleChipChange(value, name) {
 
-        if (name === 'ville' || name === 'secteur') {
+        if (name === 'ville' ) {
             setForm(_.set({ ...form }, name, value));
+            setVille(value);
+        }
+        else if ( name === 'secteur'){
+            setForm(_.set({ ...form }, name, value));
+            setSecteur(value);
+            
         }
         else {
             form.ville = '';
+            setPays(value);
             setForm(_.set({ ...form }, name, value));
             if (value.value) {
                 dispatch(Actions.getVilles(value.value));
@@ -273,7 +279,7 @@ function Profile(props) {
                     </div>
             }
             content={
-                form && (
+                !profile.requestAcheteur ? form && (
                     <div className=" sm:p-10 max-w-2xl">
                         {tabValue === 0 &&
                             (
@@ -350,7 +356,7 @@ function Profile(props) {
 
                                                 name="secteur"
                                                 value={
-                                                    form.secteur
+                                                    secteur
                                                 }
                                                 placeholder="Selectionner votre secteur d'activité"
                                                 textFieldProps={{
@@ -467,7 +473,7 @@ function Profile(props) {
                                                 id="pays"
                                                 name="pays"
                                                 value={
-                                                    form.pays
+                                                    pays
                                                 }
                                                 placeholder="Selectionner une Pays"
                                                 textFieldProps={{
@@ -539,7 +545,7 @@ function Profile(props) {
                                                 id="ville"
                                                 name="ville"
                                                 value={
-                                                    form.ville
+                                                    ville
                                                 }
                                                 placeholder="Selectionner une ville"
                                                 textFieldProps={{
@@ -785,7 +791,7 @@ function Profile(props) {
                                                 classes.profileImageItem,
                                                 "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
                                         }
-                                        onClick={form.avatar ? () => window.open(FuseUtils.getUrl() + form.avatar.url, "_blank") : console.log('')}
+                                        onClick={form.avatar ? () => window.open(FuseUtils.getUrl() + form.avatar.url, "_blank") : ''}
                                     >
                                         {form.avatar ?
                                             <img className="max-w-none w-auto h-full"
@@ -881,6 +887,7 @@ function Profile(props) {
 
                     </div>
                 )
+                : ""
             }
             innerScroll
         />

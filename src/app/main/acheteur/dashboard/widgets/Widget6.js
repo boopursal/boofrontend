@@ -12,7 +12,6 @@ function Widget6(props) {
     const [currentRange, setCurrentRange] = useState(
         moment().format('Y')
     );
-    console.log(widgets)
 
     useEffect(() => {
         dispatch(Actions.getBudgets(currentRange));

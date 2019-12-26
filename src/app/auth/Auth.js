@@ -14,7 +14,6 @@ class Auth extends Component {
          */
         this.jwtCheck();
 
-        console.log('ici')
 
     }
 

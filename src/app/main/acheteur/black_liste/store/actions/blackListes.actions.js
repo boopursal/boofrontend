@@ -88,7 +88,6 @@ export function addBlackListe(newBlackListe,id_acheteur)
 {
     
     newBlackListe.acheteur=`/api/acheteurs/${id_acheteur}`;
-    console.log(newBlackListe)
     return (dispatch, getState) => {
 
        
@@ -130,7 +129,6 @@ export function updateBlackListe(BlackListe,id_acheteur)
     return (dispatch, getState) => {
 
      
-        console.log(BlackListe);
         const request = agent.put(BlackListe['@id'],BlackListe);
 
         return request.then((response) =>

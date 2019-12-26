@@ -10,7 +10,7 @@ const initialState = {
         page: 1,
         description: '',
         filter: {
-            id: 'dateExpiration',
+            id: 'created',
             direction: 'desc'
         }
     },

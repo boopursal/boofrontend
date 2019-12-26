@@ -77,10 +77,12 @@ function Demande(props) {
 
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
-    const { form, handleChange, setForm } = useForm(null);
+    const { form, handleChange, setForm } = useForm();
 
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
+    const [sousSecteurs, setSousSecteurs] = useState(null);
+    const [motif, setMotif] = useState(null);
 
     useEffect(() => {
 
@@ -153,17 +155,17 @@ function Demande(props) {
         ) {
 
             if (demande.data.sousSecteurs) {
-                let sousSecteurs = demande.data.sousSecteurs.map(item => ({
+                
+                setSousSecteurs(demande.data.sousSecteurs.map(item => ({
                     value: item['@id'],
                     label: item.name
-                }));
+                })));
                 if(demande.data.motifRejet)
-                demande.data.motifRejet={
+                setMotif({
                     value: demande.data.motifRejet['@id'],
                     label: demande.data.motifRejet.name,
-                };
+                });
                 setForm({ ...demande.data });
-                setForm(_.set({ ...demande.data }, 'sousSecteurs', sousSecteurs));
 
             }
 
@@ -194,14 +196,17 @@ function Demande(props) {
 
         if (!_.some(value, 'value')) {
             setForm(_.set({ ...form }, name, ''));
+            setSousSecteurs('')
         }
         else {
             setForm(_.set({ ...form }, name, value));
+            setSousSecteurs(value);
         }
     }
 
     function handleChipChange2(value, name) {
        setForm(_.set({ ...form }, name, value));
+       setMotif(value)
     }
 
     function handleRadioChange(e) {
@@ -224,8 +229,7 @@ function Demande(props) {
     function handleSubmit() {
 
 
-        
-        dispatch(Actions.putDemande(form, form.id));
+        dispatch(Actions.putDemande(form,sousSecteurs,motif, form.id));
 
     }
 
@@ -368,7 +372,7 @@ function Demande(props) {
                                             id="sousSecteurs"
                                             name="sousSecteurs"
                                             value={
-                                                form.sousSecteurs
+                                                sousSecteurs
                                             }
                                             onChange={(value) => handleChipChange(value, 'sousSecteurs')}
                                             placeholder="Selectionner multiple Sous-secteurs"
@@ -411,7 +415,7 @@ function Demande(props) {
 
                                         <TextFieldFormsy
                                             className="mb-24"
-                                            label="Budget en Dhs"
+                                            label="Budget"
                                             id="budget"
                                             type="number"
                                             name="budget"
@@ -426,6 +430,7 @@ function Demande(props) {
                                                 isNumeric: 'Numeric value required',
 
                                             }}
+                                            step='any'
                                             required
                                             fullWidth
                                         />
@@ -439,7 +444,7 @@ function Demande(props) {
                                                     onChange={handleRadioChange}
                                                 >
                                                     <FormControlLabel value="1" checked={form.statut === 1} control={<Radio />} label="Valider" />
-                                                    <FormControlLabel value="2" checked={form.statut === 2} control={<Radio />} label="Rejeter" />
+                                                    <FormControlLabel disabled={form.reference !== null} value="2" checked={form.statut === 2} control={<Radio />} label="Rejeter" />
 
                                                 </RadioGroupFormsy>
                                             </Grid>
@@ -450,6 +455,7 @@ function Demande(props) {
                                                     disabled={form.statut !== 1}
                                                     onChange={(e) => handleCheckBoxChange(e, 'sendEmail')}
                                                     label="Alerter Fournisseurs"
+                                                    value={form.sendEmail}
                                                 />
                                             </Grid>
                                             <Grid item xs={12} sm={3}>
@@ -492,7 +498,7 @@ function Demande(props) {
                                                 className="MuiFormControl-fullWidth MuiTextField-root mb-24"
                                                 value={
 
-                                                    form.motifRejet
+                                                    motif
 
 
                                                 }

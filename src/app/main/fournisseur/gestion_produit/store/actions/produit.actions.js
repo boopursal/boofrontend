@@ -148,6 +148,31 @@ export function saveProduit(data) {
 }
 
 export function putProduit(data, url) {
+
+    data.sousSecteurs = data.sousSecteurs.value;
+    data.secteur = data.secteur.value;
+
+    if (data.categorie) {
+        data.categorie = data.categorie.value;
+    }
+    else {
+        data.categorie = data.secteur.value
+    }
+
+    if (data.pu) {
+        data.pu = parseFloat(data.pu);
+    }
+    data.images = _.map(data.images, function (value, key) {
+        return value['@id'];
+    });
+
+    if (data.ficheTechnique) {
+        data.ficheTechnique = data.ficheTechnique["@id"];
+    }
+
+    if (data.featuredImageId) {
+        data.featuredImageId = data.featuredImageId["@id"];
+    }
     const request = agent.put(`/api/produits/${url}`, data);
 
     return (dispatch) => {

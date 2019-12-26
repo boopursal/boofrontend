@@ -152,7 +152,6 @@ function JetonsDialog(props) {
     function handleSubmit() {
         //event.preventDefault();
 
-        console.log(form);
         if (JetonsDialog.type === 'edit') {
             dispatch(Actions.UpdateJeton(form, parametres));
             setFournisseur({ societe: '' });

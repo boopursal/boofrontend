@@ -6,15 +6,15 @@ function Widget4(props)
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
             <div className="flex items-center justify-between pr-4 pl-16 pt-4">
-                <Typography className="text-16">Demandes rejetées</Typography>
+                <Typography className="text-16 font-bold">Produit(s) publié(s)</Typography>
                 <IconButton aria-label="more">
                     <Icon>more_vert</Icon>
                 </IconButton>
             </div>
             <div className="text-center pt-12 pb-28">
                 <Typography
-                    className="text-72 leading-none text-red">{props.widget}</Typography>
-                <Typography className="text-16" color="textSecondary">Demandes</Typography>
+                    className="text-72 leading-none text-green">{props.widget}</Typography>
+                <Typography className="text-16" color="textSecondary">Produit(s)</Typography>
             </div>
             {/*
             <div className="flex items-center px-16 h-52 border-t-1">

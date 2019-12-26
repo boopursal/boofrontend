@@ -20,6 +20,7 @@ import { useForm } from '@fuse/hooks';
 import _ from '@lodash';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
+/**=============== FOUNRISSEUR INFO SOCIETE ======================= */
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -149,11 +150,13 @@ function Step2App(props) {
     const Pays = useSelector(({ step2App }) => step2App.step2.pays);
     const Villes = useSelector(({ step2App }) => step2App.step2.villes);
     const step2 = useSelector(({ step2App }) => step2App.step2);
+    const Currencies = useSelector(({ step2App }) => step2App.step2.currencies);
 
     const { form, handleChange, setForm } = useForm(defaultFormState);
 
     useEffect(() => {
         dispatch(Actions.getPays());
+        dispatch(Actions.getCurrency());
     }, [dispatch]);
 
     useEffect(() => {
@@ -191,7 +194,7 @@ function Step2App(props) {
 
     function handleChipChange(value, name) {
 
-        if (name === 'ville') {
+        if (name === 'ville' || name === 'currency') {
             setForm(_.set({ ...form }, name, value));
         }
         else {
@@ -297,7 +300,7 @@ function Step2App(props) {
                                             </Grid>
 
                                             <Grid container spacing={3} >
-                                                <Grid item xs={12} sm={6}>
+                                                <Grid item xs={12} sm={12}>
                                                     <TextFieldFormsy
                                                         className="mb-16  w-full"
                                                         type="text"
@@ -321,7 +324,9 @@ function Step2App(props) {
                                                         required
                                                     />
                                                 </Grid>
-
+                                            </Grid>
+                                            <Grid container spacing={3} >
+                                               
                                                 <Grid item xs={12} sm={6}>
                                                     <TextFieldFormsy
                                                         className="mb-16  w-full"
@@ -345,6 +350,28 @@ function Step2App(props) {
                                                         variant="outlined"
                                                     />
                                                 </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                    <SelectReactFormsy
+                                                        id="currency"
+                                                        name="currency"
+                                                        value={
+                                                            form.currency
+                                                        }
+                                                        placeholder="Sélectionner votre devise locale"
+                                                        textFieldProps={{
+                                                            label: 'Devise',
+                                                            InputLabelProps: {
+                                                                shrink: true
+                                                            },
+                                                            variant: 'outlined'
+                                                        }}
+                                                        className="mb-16"
+                                                        options={Currencies}
+                                                        onChange={(value) => handleChipChange(value, 'currency')}
+                                                        required
+                                                    />
+                                                </Grid>
+
                                             </Grid>
 
                                             <Grid container spacing={3} >

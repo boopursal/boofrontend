@@ -105,7 +105,6 @@ export function updateSocieteInfo(data, id_fournisseur) {
     }
     data.pays = '/api/pays/' + data.pays.value;
     data.ville = '/api/villes/' + data.ville.value;
-    data.secteur = '/api/secteurs/' + data.secteur.value;
 
     if (data.codepostal === null) {
         delete data.codepostal;
@@ -152,7 +151,6 @@ export function updateSocieteSousSecteurs(data, id_fournisseur) {
     if (data.sousSecteurs)
     data.sousSecteurs = data.sousSecteurs.map((item => {return item.value}));
   
-    console.log(data)
     return (dispatch, getState) => {
 
         const request = agent.put(`/api/fournisseurs/${id_fournisseur}`, data);

@@ -7,8 +7,7 @@ import {TextFieldFormsy} from '@fuse';
 import Formsy from 'formsy-react';
 
 const defaultFormState = {
-    firstName    : '',
-    lastName    : '',
+    name    : '',
     phone: '',
     email: '',
 };
@@ -133,11 +132,11 @@ function PersonnelsDialog(props)
                         
                         <TextFieldFormsy
                             className="mb-24"
-                            label="Nom"
+                            label="Nom et Prénom"
                             autoFocus
-                            id="lastName"
-                            name="lastName"
-                            value={form.lastName}
+                            id="name"
+                            name="name"
+                            value={form.name}
                             onChange={handleChange}
                             variant="outlined"
                             validations={{
@@ -151,27 +150,7 @@ function PersonnelsDialog(props)
                         />
                     </div>
 
-                    <div className="flex">
-                        
-                        <TextFieldFormsy
-                            className="mb-24"
-                            label="Prénom"
-                            id="firstName"
-                            name="firstName"
-                            value={form.firstName}
-                            onChange={handleChange}
-                            variant="outlined"
-                            validations={{
-                                minLength: 6
-                            }}
-                            validationErrors={{
-                                minLength: 'Min character length is 4'
-                            }}
-                            required
-                            fullWidth
-                        />
-                    </div>
-
+                   
                     <div className="flex">
                         
                         <TextFieldFormsy

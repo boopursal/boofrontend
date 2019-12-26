@@ -97,13 +97,28 @@ function ProduitsTable(props) {
 
                 data={filteredData}
                 columns={[
-
+                    {
+                        Header   :'',
+                        accessor : "featuredImageId",
+                        Cell     : row => (
+                             row.original.featuredImageId ? (
+                                <img className="w-full block rounded" src={FuseUtils.getUrl() + row.original.featuredImageId.url} alt={row.original.reference}/>
+                            ) : (
+                                <img className="w-full block rounded" src="assets/images/ecommerce/product-image-placeholder.png" alt={row.original.reference}/>
+                            )
+                            
+                        ),
+                        className: "justify-center",
+                        width    : 64,
+                        sortable : false,
+                        filterable: false,
+                        
+                    },
                     {
                         Header: "Ref",
                         accessor: "reference",
                         filterable: false,
                     },
-
                     {
                         Header: "Statut",
                         sortable: false,

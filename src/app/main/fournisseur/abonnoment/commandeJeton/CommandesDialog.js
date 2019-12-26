@@ -68,7 +68,6 @@ function CommandesDialog(props) {
     function handleSubmit(event) {
         //event.preventDefault();
 
-        console.log(event);
         if (CommandesDialog.type === 'new') {
             dispatch(Actions.addCommande(form, user.id));
         }

@@ -19,6 +19,7 @@ export const REQUEST_VILLES = '[STEP APP] REQUEST VILLES';
 export const REQUEST_UPDATE_ACHETEUR = '[STEP APP] REQUEST UPDATE ACHETEUR';
 export const UPDATE_ACHETEUR = '[STEP APP] UPDATE ACHETEUR';
 export const SAVE_ERROR = '[STEP APP] SAVE ERROR';
+export const GET_CURRENCY = '[STEP APP]GET_CURRENCY';
 
 
 export function getPays()
@@ -59,6 +60,23 @@ export function getSecteurs()
         
 }
 
+export function getCurrency()
+{
+    const request = agent.get('/api/currencies');
+
+    return (dispatch) =>{
+       
+       return request.then((response) =>{
+            
+            dispatch({
+                type   : GET_CURRENCY,
+                payload: response.data['hydra:member']
+            })
+        });
+
+    }
+        
+}
 export function getVilles(pays_id)
 {
     const request = agent.get(`/api/pays_p/${pays_id}/villes`);
@@ -87,7 +105,8 @@ export function setStep4(data,acheteur_id)
     data.pays = '/api/pays/'+data.pays.value;
     data.ville = '/api/villes/'+data.ville.value;
     data.secteur = '/api/secteurs/'+data.secteur.value;
-    data.redirect = '/dashboard';
+    data.currency = data.currency.value;
+    data.redirect = '/dashboard_ac';
     data.roles = ['ROLE_ACHETEUR'];
     
     return (dispatch, getState) => {

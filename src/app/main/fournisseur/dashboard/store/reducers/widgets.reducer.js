@@ -2,11 +2,17 @@ import * as Actions from '../actions';
 
 const initialState = {
     data: [],
-    charts: [],
-    budgets: [],
+    dataDDP: [],
+    doughnut: [],
+    potentiels: [],
+    personnelPotentiels: [],
+    topBudget: null,
     loading: false,
-    loadingCharts: false,
-    loadingBudgets: false,
+    loadingDDP: false,
+    loadingDoughnut: false,
+    loadingTopBudget: false,
+    loadingPotentiels: false,
+    loadingPersonnelPotentiels: false,
 };
 
 const widgetsReducer = function (state = initialState, action) {
@@ -23,29 +29,66 @@ const widgetsReducer = function (state = initialState, action) {
                 data: action.payload,
                 loading: false
             };
-        case Actions.REQUEST_CHARTS:
+        case Actions.REQUEST_WIDGET5:
             return {
                 ...state,
-                charts: [],
-                loadingCharts: true
+                dataDDP: [],
+                loadingDDP: true
             };
-        case Actions.GET_CHARTS:
+        case Actions.GET_WIDGET5:
             return {
                 ...state,
-                charts: action.payload,
-                loadingCharts: false
+                dataDDP: action.payload,
+                loadingDDP: false
             };
-        case Actions.REQUEST_BUDGETS:
+        case Actions.REQUEST_WIDGET6:
             return {
                 ...state,
-                budgets: [],
-                loadingBudgets: true
+                doughnut: [],
+                loadingDoughnut: true
             };
-        case Actions.GET_BUDGETS:
+        case Actions.GET_WIDGET6:
             return {
                 ...state,
-                budgets: action.payload,
-                loadingBudgets: false
+                doughnut: action.payload,
+                loadingDoughnut: false
+            };
+        case Actions.REQUEST_TOP_BUDGET:
+            return {
+                ...state,
+                topBudget: null,
+                loadingTopBudget: true
+            };
+        case Actions.GET_TOP_BUDGET:
+            return {
+                ...state,
+                topBudget: action.payload,
+                loadingTopBudget: false
+            };
+
+        case Actions.REQUEST_POTENTIEL:
+            return {
+                ...state,
+                potentiels: [],
+                loadingPotentiels: true
+            };
+        case Actions.GET_POTENTIEL:
+            return {
+                ...state,
+                potentiels: action.payload,
+                loadingPotentiels: false
+            };
+        case Actions.REQUEST_PERSONNEL_POTENTIEL:
+            return {
+                ...state,
+                personnelPotentiels: [],
+                loadingPersonnelPotentiels: true
+            };
+        case Actions.GET_PERSONNEL_POTENTIEL:
+            return {
+                ...state,
+                personnelPotentiels: action.payload,
+                loadingPersonnelPotentiels: false
             };
         default:
             return state;

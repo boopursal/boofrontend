@@ -74,15 +74,11 @@ function PersonnelsList(props)
                    
                    
                     {
-                        Header    : "Nom",
-                        accessor  : "lastName",
+                        Header    : "NOM & Prénom",
+                        accessor  : "name",
                         filterable: true,
                     },       
-                    {
-                        Header    : "Prénom",
-                        accessor  : "firstName",
-                        filterable: true,
-                    }, 
+                    
                     {
                         Header    : "Email",
                         accessor  : "email",

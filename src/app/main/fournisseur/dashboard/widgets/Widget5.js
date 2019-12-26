@@ -1,197 +1,90 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button } from '@material-ui/core';
-import { Line } from 'react-chartjs-2';
-import { makeStyles, useTheme, ThemeProvider } from '@material-ui/styles';
-import _ from 'lodash';
+import { Typography, Select, Paper } from '@material-ui/core';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions'
-import reducer from '../store/reducers';
-import withReducer from 'app/store/withReducer';
-import { FuseAnimate } from '@fuse';
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        background: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
-    }
-}));
+import ContentLoader from 'react-content-loader'
+import { Doughnut } from 'react-chartjs-2';
 
 function Widget5(props) {
 
-
-    const mainThemeDark = useSelector(({ fuse }) => fuse.settings.mainThemeDark);
     const dispatch = useDispatch();
-    const [currentRange, setCurrentRange] = useState({
-        startDate: moment().startOf('isoWeek').format('YYYY-MM-DD'),
-        endDate: moment().endOf('isoWeek').format('YYYY-MM-DD')
-    });
-
-    const classes = useStyles(props);
-    const theme = useTheme();
-
-    const [range, setRange] = useState('0');
-    const [widget, setWidget] = useState(null);
     const widgets = useSelector(({ dashboardApp }) => dashboardApp.widgets);
 
-    //startDate:moment().subtract(1, 'weeks').startOf('isoWeek').format('YYYY-MM-DD'),
-    //endDate:moment().subtract(1, 'weeks').endOf('isoWeek').format('YYYY-MM-DD')
     useEffect(() => {
-        dispatch(Actions.getCharts(currentRange));
-    }, [dispatch, currentRange]);
-
-    useEffect(() => {
-        setWidget(_.merge({}, widgets.charts))
-    }, [widgets.charts]);
-
-    function handleChangeRange(range) {
-        setRange(range);
-        if (range === '1') {
-            setCurrentRange({
-                startDate: moment().subtract(1, 'weeks').startOf('isoWeek').format('YYYY-MM-DD'),
-                endDate: moment().subtract(1, 'weeks').endOf('isoWeek').format('YYYY-MM-DD')
-            })
-        } else if (range === '2') {
-            setCurrentRange({
-                startDate: moment().subtract(2, 'weeks').startOf('isoWeek').format('YYYY-MM-DD'),
-                endDate: moment().subtract(2, 'weeks').endOf('isoWeek').format('YYYY-MM-DD')
-            })
-        } else {
-            setCurrentRange({
-                startDate: moment().startOf('isoWeek').format('YYYY-MM-DD'),
-                endDate: moment().endOf('isoWeek').format('YYYY-MM-DD')
-            })
-        }
-    }
+        dispatch(Actions.getDemandeDevisByProduct());
+    }, [dispatch]);
 
     return (
 
-        <ThemeProvider theme={mainThemeDark}>
-            <div className={classes.root}>
-                <div className="container relative p-16 sm:p-24 flex flex-row justify-between items-center">
+        <>
+            {widgets.loadingDDP === false
 
-                    <FuseAnimate delay={100}>
-                        <div className="flex-col">
-                            <Typography className="h2" color="textPrimary">{widget && widget.title}</Typography>
-                        </div>
-                    </FuseAnimate>
+                ?
+                <Paper className="w-full rounded-8 shadow-none border-1">
+                    <div className="flex items-center justify-between px-16 h-64 border-b-1">
+                        <Typography className="text-16 font-bold">Demandes devis par produits </Typography>
 
-                    <div className="flex flex-row items-center">
-                        {Object.entries({
-                            '0': 'Cette semaine',
-                            '1': 'La semaine dernière',
-                            '2': 'Il y a 2 semaines'
-                        }).map(([key, n]) => {
-                            return (
-                                <Button
-                                    key={key}
-                                    className="normal-case shadow-none px-16"
-                                    onClick={() => handleChangeRange(key)}
-                                    color={range === key ? "secondary" : "default"}
-                                    variant={range === key ? "contained" : "text"}
-                                >
-                                    {n}
-                                </Button>
-                            )
-                        })}
+                       
                     </div>
+                    <div className="h-400 w-full p-32">
+                        <Doughnut
+                            data={{
+                                labels: widgets.dataDDP.labels,
+                                datasets: widgets.dataDDP.datasets
+                            }}
+                            options={{
+                                cutoutPercentage   : 0,
+                                spanGaps           : false,
+                                legend             : {
+                                    display : true,
+                                    position: 'bottom',
+                                    labels  : {
+                                        padding      : 16,
+                                        usePointStyle: true
+                                    }
+                                },
+                                maintainAspectRatio: false
+                            }}
+                        />
+                    </div>
+                    {/*
+            <div className="flex items-center p-8 border-t-1">
+                <div className="flex flex-1 flex-col items-center justify-center p-16 border-r-1">
+                    <Typography className="text-32 leading-none">
+                        {widget.footerLeft.count[currentRange]}
+                    </Typography>
+                    <Typography className="text-15" color="textSecondary">
+                        {widget.footerLeft.title}
+                    </Typography>
                 </div>
-                <div className="container relative h-200 sm:h-256 pb-16">
-                    <Line
-                        data={{
-
-                            labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
-                            datasets: widget && widget.mainChart
-                                ?
-                                widget.mainChart.datasets.map(obj => ({
-                                    ...obj,
-                                    borderColor: theme.palette.secondary.main,
-                                    backgroundColor: theme.palette.secondary.main,
-                                    pointBackgroundColor: theme.palette.secondary.dark,
-                                    pointHoverBackgroundColor: theme.palette.secondary.main,
-                                    pointBorderColor: theme.palette.secondary.contrastText,
-                                    pointHoverBorderColor: theme.palette.secondary.contrastText
-                                }))
-                                :
-                                []
-
-                        }}
-                        options={
-                            {
-                                spanGaps: false,
-                                legend: {
-                                    display: false
-                                },
-                                maintainAspectRatio: false,
-                                tooltips: {
-                                    position: 'nearest',
-                                    mode: 'index',
-                                    intersect: false
-                                },
-                                layout: {
-                                    padding: {
-                                        top: 32,
-                                        left: 32,
-                                        right: 32
-                                    }
-                                },
-                                elements: {
-                                    point: {
-                                        radius: 4,
-                                        borderWidth: 2,
-                                        hoverRadius: 4,
-                                        hoverBorderWidth: 2
-                                    },
-                                    line: {
-                                        tension: 0
-                                    }
-                                },
-                                scales: {
-                                    xAxes: [
-                                        {
-                                            gridLines: {
-                                                display: false,
-                                                drawBorder: false,
-                                                tickMarkLength: 18
-                                            },
-                                            ticks: {
-                                                fontColor: '#ffffff'
-                                            }
-                                        }
-                                    ],
-                                    yAxes: [
-                                        {
-                                            display: false,
-                                            gridLines: {
-                                                tickMarkLength: 16
-                                            },
-                                            ticks: {
-                                                min: 0,
-                                                max: 5,
-                                                stepSize: 0.5
-                                            }
-                                        }
-                                    ]
-                                },
-                                plugins: {
-                                    filler: {
-                                        propagate: false
-                                    },
-                                    xLabelsOnTop: {
-                                        active: true,
-                                        render: 'k'
-
-                                    }
-                                },
-
-                            }
-                        }
-                    />
+                <div className="flex flex-1 flex-col items-center justify-center p-16">
+                    <Typography className="text-32 leading-none">
+                        {widget.footerRight.count[currentRange]}
+                    </Typography>
+                    <Typography className="text-15" color="textSecondary">
+                        {widget.footerRight.title}
+                    </Typography>
                 </div>
             </div>
-        </ThemeProvider>
+            */}
+                </Paper>
+                :
+                <ContentLoader
+                    height={280}
+                    width={500}
+                    speed={3}
+                    primaryColor="#f3f3f3"
+                    secondaryColor="#ecebeb"
+                >
+                    <rect x="3" y="3" rx="10" ry="10" width="300" height="180" />
+                    <rect x="6" y="190" rx="0" ry="0" width="292" height="20" />
+                    <rect x="4" y="215" rx="0" ry="0" width="239" height="20" />
+                    <rect x="4" y="242" rx="0" ry="0" width="274" height="20" />
+                </ContentLoader>}
 
-
+        </>
     );
 }
 
-export default withReducer('dashboardApp', reducer)(Widget5);
+export default React.memo(Widget5);

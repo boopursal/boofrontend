@@ -222,7 +222,6 @@ function SelectReactFormsy(props) {
     }));
 
 
-
     // An error message is returned only if the component is invalid
     const errorMessage = props.getErrorMessage();
 

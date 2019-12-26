@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs,  Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { Button, Tab, Tabs, Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip } from '@material-ui/core';
+import { red, orange } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
@@ -32,11 +32,18 @@ const useStyles = makeStyles(theme => ({
         marginTop: -12,
         marginLeft: -12,
     },
-    produitImageFeaturedStar: {
+    produitImageFeaturedStar2: {
         position: 'absolute',
         top: 0,
         right: 0,
         color: red[400],
+        opacity: 0
+    },
+    produitImageFeaturedStar: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        color: orange[400],
         opacity: 0
     },
     produitImageUpload: {
@@ -53,6 +60,9 @@ const useStyles = makeStyles(theme => ({
         transitionTimingFunction: theme.transitions.easing.easeInOut,
         '&:hover': {
             '& $produitImageFeaturedStar': {
+                opacity: .8
+            },
+            '& $produitImageFeaturedStar2': {
                 opacity: .8
             }
         },
@@ -105,7 +115,6 @@ function Produit(props) {
     useEffect(() => {
 
         if (produit.fiche) {
-            console.log(produit.fiche)
             setForm(_.set({ ...form }, "ficheTechnique", produit.fiche));
 
         }
@@ -113,7 +122,7 @@ function Produit(props) {
             dispatch(Actions.cleanImage())
         }
 
-    }, [form, setForm, produit.fiche,dispatch]);
+    }, [form, setForm, produit.fiche, dispatch]);
 
     // Effect upload images
     useEffect(() => {
@@ -128,7 +137,7 @@ function Produit(props) {
             dispatch(Actions.cleanImage())
         }
 
-    }, [form, setForm, produit.image,dispatch]);
+    }, [form, setForm, produit.image, dispatch]);
 
 
     // Effect Get Secteurs
@@ -150,7 +159,7 @@ function Produit(props) {
             dispatch(Actions.cleanError())
         }
 
-    }, [produit.error,dispatch]);
+    }, [produit.error, dispatch]);
 
     // Effect redirection and clean state
     useEffect(() => {
@@ -163,12 +172,11 @@ function Produit(props) {
             dispatch(Actions.cleanDeleteImage())
             props.history.push('/produits');
         }
-    }, [produit.success,dispatch]);
+    }, [produit.success, dispatch]);
 
     // Effect delete image & fiche technique
     useEffect(() => {
         if (produit.image_deleted) {
-            console.log(produit.image_deleted)
             if (produit.image_deleted['@type'] === "ImageProduit") {
                 setForm(_.set({ ...form }, 'images', _.pullAllBy(form.images, [{ 'id': produit.image_deleted.id }], 'id')));
             }
@@ -210,11 +218,11 @@ function Produit(props) {
             (produit.data && form && produit.data.id !== form.id)
         ) {
 
-          
+
             if (produit.data.secteur) {
 
                 dispatch(Actions.getSousSecteurs(produit.data.secteur['@id']));
-                produit.data.secteur ={
+                produit.data.secteur = {
                     value: produit.data.secteur['@id'],
                     label: produit.data.secteur.name
                 }
@@ -238,7 +246,7 @@ function Produit(props) {
             }
 
             setForm({ ...produit.data });
-            
+
 
 
         }
@@ -271,21 +279,24 @@ function Produit(props) {
         if (name === 'secteur') {
             if (value.value) {
                 dispatch(Actions.getSousSecteurs(value.value));
-                form.categorie=null;
-                form.sousSecteurs=null;
+                form.categorie = null;
+                form.sousSecteurs = null;
             }
         }
         if (name === 'sousSecteurs') {
             if (value.value) {
                 dispatch(Actions.getCategories(value.value));
-                form.categorie=null;
-                
+                form.categorie = null;
+
             }
         }
         setForm(_.set({ ...form }, name, value));
-        
+
     }
 
+    function setFeaturedImage(id) {
+        setForm(_.set({ ...form }, 'featuredImageId', id));
+    }
 
     function disableButton() {
         setIsFormValid(false);
@@ -297,26 +308,7 @@ function Produit(props) {
 
     function handleSubmit(form) {
         //event.preventDefault();
-        form.sousSecteurs = form.sousSecteurs.value;
-        form.secteur = form.secteur.value;
-
-        if (form.categorie) {
-            form.categorie = form.categorie.value;
-        }
-        else {
-            form.categorie = form.secteur.value
-        }
-
-        if (form.pu) {
-            form.pu = parseFloat(form.pu);
-        }
-        form.images = _.map(form.images, function (value, key) {
-            return value['@id'];
-        });
-
-        if (form.ficheTechnique) {
-            form.ficheTechnique = form.ficheTechnique["@id"];
-        }
+       
 
         const params = props.match.params;
         const { produitId } = params;
@@ -354,6 +346,15 @@ function Produit(props) {
 
                                 <div className="flex items-center max-w-full">
 
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        {form.images.length > 0 && form.featuredImageId ?
+                                            (
+                                                <img className="w-32 sm:w-48 mr-8 sm:mr-16 rounded" src={FuseUtils.getUrl() + form.featuredImageId.url} alt={form.reference} />
+                                            ) :
+                                            (
+                                                <img className="w-32 sm:w-48 mr-8 sm:mr-16 rounded" src="assets/images/ecommerce/product-image-placeholder.png" alt={form.reference} />
+                                            )}
+                                    </FuseAnimate>
                                     <div className="flex flex-col min-w-0">
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                             <Typography className="text-16 sm:text-20 truncate">
@@ -375,7 +376,7 @@ function Produit(props) {
                                 >
                                     Sauvegarder
                                     {produit.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                            </Button>
+                                </Button>
                             </FuseAnimate>
                         </div>
                     )
@@ -409,7 +410,7 @@ function Produit(props) {
                                 form && form.ficheTechnique
                                     ? "Fiche technique (1)"
                                     : "Fiche technique"}
-                            
+
                         />
 
 
@@ -602,18 +603,28 @@ function Produit(props) {
 
 
                                         {form.images.map(media => (
-                                            console.log(media),
                                             <div
                                                 className={
                                                     clsx(
                                                         classes.produitImageItem,
-                                                        "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
+                                                        "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5",
+                                                        (media.id === (form.featuredImageId ? form.featuredImageId.id : null)) && 'featured')
                                                 }
                                                 key={media.id}
                                                 onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
                                             >
-                                                <Tooltip title="Supprimer" >
+                                                <Tooltip title="Image en vedette" >
                                                     <IconButton className={classes.produitImageFeaturedStar}
+                                                        onClick={(ev) => {
+                                                            ev.stopPropagation();
+                                                            setFeaturedImage(media);
+                                                        }}
+                                                    >
+                                                        <Icon>star</Icon>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Supprimer" >
+                                                    <IconButton className={classes.produitImageFeaturedStar2}
                                                         onClick={(ev) => {
                                                             ev.stopPropagation();
                                                             dispatch(Actions.deleteMedia(media));

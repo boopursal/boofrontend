@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import {  Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid,  Divider } from '@material-ui/core';
+import React, { useRef, useEffect, useState } from 'react';
+import { Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, Divider, CircularProgress, Button, Radio, FormControlLabel } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFormsy, RadioGroupFormsy, CheckboxFormsy } from '@fuse';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import _ from '@lodash';
@@ -13,7 +13,7 @@ import reducer from '../store/reducers';
 import Formsy from 'formsy-react';
 import moment from 'moment';
 import Chip from '@material-ui/core/Chip';
-
+import { useForm } from '@fuse/hooks';
 
 const useStyles = makeStyles(theme => ({
 
@@ -102,32 +102,95 @@ const useStyles = makeStyles(theme => ({
 
     },
 }));
-moment.defaultFormat = "DD/MM/YYYY HH:mm";
 function Consultation(props) {
 
+    const [personnel, setPersonnel] = useState(false);
+    const [isFormValid, setIsFormValid] = useState(false);
+    const formRef = useRef(null);
+    const { form, handleChange, setForm } = useForm(null);
     const dispatch = useDispatch();
     const consultation = useSelector(({ consultationsApp }) => consultationsApp.consultation);
-
+    const user = useSelector(({ auth }) => auth.user);
 
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
+    const [taux, setTaux] = useState(1);
+
+    /** GET PERSONNELS */
+    useEffect(() => {
+        dispatch(Actions.getPersonnels(user.id));
+    }, [dispatch, user.id]);
 
 
+
+    /** GET VISITE DETAILS */
     useEffect(() => {
         const params = props.match.params;
         const { consultationId } = params;
         dispatch(Actions.getConsultation(consultationId));
-        return ()=>{
+        return () => {
             dispatch(Actions.cleanUp())
         }
 
     }, [dispatch, props.match.params]);
 
 
+    useEffect(() => {
+        if (
+            (consultation.data && !form) ||
+            (consultation.data && form && consultation.data.id !== form.id)
+        ) {
+            setForm({ ...consultation.data });
+            if (consultation.data.personnel)
+                setPersonnel({
+                    value: consultation.data.personnel['@id'],
+                    label: consultation.data.personnel.name,
+                })
+        }
+    }, [form, consultation.data, setForm]);
 
+    function handleChipChange(value, name) {
+        setForm(_.set({ ...form }, name, value));
+        setPersonnel(value);
+    }
+    function handleTauxChange(value) {
+
+        console.log(consultation.data.demande.budget)
+        console.log(value.target.value)
+        console.log(consultation.data.demande.budget * value.target.value)
+        var budget = consultation.data.demande.budget * value.target.value;
+        setForm(_.set({ ...form }, 'budget', budget));
+        setTaux(value.target.value);
+    }
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
     }
+
+    function disableButton() {
+        setIsFormValid(false);
+    }
+
+    function enableButton() {
+        setIsFormValid(true);
+    }
+
+    function handleRadioChange(e) {
+
+        setForm(_.set({ ...form }, 'statut', parseInt(e.target.value)));
+    }
+
+    function handleCheckBoxChange(e, name) {
+
+        setForm(_.set({ ...form }, name, e.target.checked));
+    }
+
+    function handleSubmit(model) {
+
+
+        dispatch(Actions.putConsultation(form));
+
+    }
+
 
     return (
         <FusePageCarded
@@ -187,7 +250,7 @@ function Consultation(props) {
                                     </div>
                                 </div>
                             </div>
-                     
+
                         </div>
                     )
                     :
@@ -219,9 +282,9 @@ function Consultation(props) {
 
                         {
                             consultation.data ?
-                            <Tab className="h-64 normal-case text-orange font-bold" label="Profil Acheteur" />
-                            :
-                            ''
+                                <Tab className="h-64 normal-case text-orange font-bold" label="Profil Acheteur" />
+                                :
+                                ''
                         }
 
 
@@ -231,12 +294,16 @@ function Consultation(props) {
             content={
                 !consultation.loading ?
 
-                    consultation.data && (
+                    form && (
                         <div className="p-10  sm:p-24 max-w-2xl">
                             {tabValue === 0 &&
                                 (
 
                                     <Formsy
+                                        onValidSubmit={handleSubmit}
+                                        onValid={enableButton}
+                                        onInvalid={disableButton}
+                                        ref={formRef}
                                         className="flex flex-col ">
                                         <Grid container spacing={3} >
 
@@ -291,7 +358,7 @@ function Consultation(props) {
 
                                         <Grid container spacing={3} >
 
-                                            <Grid item xs={12} sm={8}>
+                                            <Grid item xs={12} sm={12}>
                                                 <TextFieldFormsy
                                                     className="mb-24"
                                                     label="Sous-Secteurs"
@@ -305,27 +372,115 @@ function Consultation(props) {
                                                 />
                                             </Grid>
 
-                                            <Grid item xs={12} sm={4}>
 
-                                                <TextFieldFormsy
-                                                    className="mb-24"
-                                                    label="Budget"
-                                                    id="budget"
-                                                    name="budget"
-                                                    value={
-                                                        parseFloat(consultation.data.demande.budget).toLocaleString(
-                                                            undefined, // leave undefined to use the browser's locale,
-                                                            // or use a string like 'en-US' to override it.
-                                                            { minimumFractionDigits: 2 }
-                                                        ) + ' Dhs '
-                                                    }
-                                                    InputProps={{
-                                                        readOnly: true,
-                                                    }}
-                                                    fullWidth
-                                                />
 
-                                            </Grid>
+                                        </Grid>
+
+                                        <Grid container spacing={3} >
+
+                                            {
+                                                user.data && user.data.currency === consultation.data.demande.currency.name ?
+                                                    <Grid item xs={12} sm={12}>
+                                                        <TextFieldFormsy
+                                                            className="mb-24"
+                                                            label={"Entrer le budget facturé en " + consultation.data.demande.currency.name}
+                                                            id="budget"
+                                                            type="number"
+                                                            name="budget"
+                                                            onChange={handleChange}
+                                                            value={form.budget}
+                                                            validations={{
+                                                                isNumeric: true,
+
+                                                            }}
+                                                            validationErrors={{
+                                                                isNumeric: 'Numeric value required',
+
+                                                            }}
+                                                            step='any'
+                                                            InputProps={{
+                                                                min: 1,
+                                                            }}
+                                                            required
+                                                            fullWidth
+                                                        />
+
+
+                                                    </Grid> :
+                                                    <>
+                                                        <Grid item xs={12} sm={4}>
+                                                            <TextFieldFormsy
+                                                                className="mb-24"
+                                                                type="text"
+                                                                name="description"
+                                                                value={consultation.data.demande.budget}
+                                                                label={"Le budget de la demande en " + consultation.data.demande.currency.name}
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                }}
+                                                                fullWidth
+                                                            />
+
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={4}>
+                                                            <TextFieldFormsy
+                                                                className="mb-24"
+                                                                label={"Taux de change : " + consultation.data.demande.currency.name + " => " + user.data.currency}
+                                                                id="taux"
+                                                                type="number"
+                                                                name="taux"
+                                                                onChange={handleChange}
+                                                                value={_.toString(taux)}
+                                                                validations={{
+                                                                    isNumeric: true,
+
+                                                                }}
+                                                                validationErrors={{
+                                                                    isNumeric: 'Numeric value required',
+
+                                                                }}
+                                                                step='any'
+                                                                InputProps={{
+                                                                    min: 1,
+                                                                    step: 'any'
+                                                                }}
+                                                                onChange={(value) => handleTauxChange(value)}
+                                                                fullWidth
+                                                            />
+
+
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={4}>
+                                                            <TextFieldFormsy
+                                                                className="mb-24"
+                                                                label={"Le budget avec monnaie locale (" + user.data.currency + ")"}
+                                                                id="budget"
+                                                                type="number"
+                                                                name="budget"
+                                                                onChange={handleChange}
+                                                                value={_.toString(form.budget)}
+                                                                validations={{
+                                                                    isNumeric: true,
+
+                                                                }}
+                                                                validationErrors={{
+                                                                    isNumeric: 'Numeric value required',
+
+                                                                }}
+
+                                                                InputProps={{
+                                                                    min: 1,
+                                                                    step:'any'
+                                                                }}
+                                                                required
+                                                                fullWidth
+                                                            />
+
+
+                                                        </Grid>
+                                                    </>
+                                            }
+
 
                                         </Grid>
 
@@ -344,6 +499,68 @@ function Consultation(props) {
                                             }}
 
                                         />
+                                        <Grid container spacing={3} >
+
+                                            <Grid item xs={12} sm={4}>
+                                                <RadioGroupFormsy
+                                                    className="mt-20 inline"
+                                                    name="statut"
+                                                    label='Statut'
+                                                    onChange={handleRadioChange}
+                                                >
+                                                    <FormControlLabel value="0" checked={form.statut === 0} control={<Radio />} label="En cours" />
+                                                    <FormControlLabel value="1" checked={form.statut === 1} control={<Radio />} label="Gagner" />
+                                                    <FormControlLabel value="2" checked={form.statut === 2} control={<Radio />} label="Perdue" />
+
+                                                </RadioGroupFormsy>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={4}>
+                                                <SelectReactFormsy
+                                                    id="personnel"
+                                                    name="personnel"
+                                                    value={
+                                                        personnel
+                                                    }
+                                                    placeholder="Selectionner..."
+                                                    textFieldProps={{
+                                                        label: 'Affceter à',
+                                                        InputLabelProps: {
+                                                            shrink: true
+                                                        },
+                                                        variant: 'outlined'
+                                                    }}
+                                                    className="mt-20"
+                                                    options={consultation.personnels}
+                                                    onChange={(value) => handleChipChange(value, 'personnel')}
+                                                    required
+                                                />
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={4}>
+                                                <CheckboxFormsy
+                                                    className="mt-20"
+                                                    name="sendEmail"
+                                                    disabled={form.statut !== 0 || !form.personnel}
+                                                    onChange={(e) => handleCheckBoxChange(e, 'sendEmail')}
+                                                    label="Alerter par email"
+                                                />
+                                            </Grid>
+
+                                        </Grid>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                            className="w-200 pr-auto mt-16 normal-case"
+                                            aria-label="Suivant"
+                                            disabled={!isFormValid || consultation.request}
+                                            value="legacy"
+                                        >
+                                            Sauvegarder
+                                                {consultation.request && <CircularProgress size={24} className={classes.buttonProgress} />}
+
+                                        </Button>
 
                                     </Formsy>
                                 )}
@@ -354,30 +571,30 @@ function Consultation(props) {
 
 
 
-                                        {consultation.data.demande.attachements.length>0 ?
-                                        consultation.data.demande.attachements.map(media => (
-                                            <div
-                                                className={
-                                                    clsx(
-                                                        classes.consultationImageItem,
-                                                        "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
-                                                }
-                                                key={media.id}
-                                                onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
-                                            >
+                                        {consultation.data.demande.attachements.length > 0 ?
+                                            consultation.data.demande.attachements.map(media => (
+                                                <div
+                                                    className={
+                                                        clsx(
+                                                            classes.consultationImageItem,
+                                                            "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
+                                                    }
+                                                    key={media.id}
+                                                    onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
+                                                >
 
-                                                {_.split(media.type, '/', 1)[0] === 'image' ?
-                                                    <img className="max-w-none w-auto h-full"
-                                                        src={FuseUtils.getUrl() + media.url}
-                                                        alt="consultation" />
-                                                    :
-                                                    <Icon color="secondary" style={{ fontSize: 80 }}>insert_drive_file</Icon>
-                                                }
+                                                    {_.split(media.type, '/', 1)[0] === 'image' ?
+                                                        <img className="max-w-none w-auto h-full"
+                                                            src={FuseUtils.getUrl() + media.url}
+                                                            alt="consultation" />
+                                                        :
+                                                        <Icon color="secondary" style={{ fontSize: 80 }}>insert_drive_file</Icon>
+                                                    }
 
-                                            </div>
-                                        ))
-                                    :'Aucune pièce jointe attaché a cette consultation'
-                                    }
+                                                </div>
+                                            ))
+                                            : 'Aucune pièce jointe attaché a cette consultation'
+                                        }
                                     </div>
 
                                 </div>

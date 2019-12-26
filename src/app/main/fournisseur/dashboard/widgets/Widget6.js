@@ -4,18 +4,17 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions'
 import ContentLoader from 'react-content-loader'
+import { Doughnut } from 'react-chartjs-2';
 
 function Widget6(props) {
-
     const dispatch = useDispatch();
     const widgets = useSelector(({ dashboardApp }) => dashboardApp.widgets);
     const [currentRange, setCurrentRange] = useState(
         moment().format('Y')
     );
-    console.log(widgets)
 
     useEffect(() => {
-        dispatch(Actions.getBudgets(currentRange));
+        dispatch(Actions.getDoughnut(currentRange));
     }, [dispatch, currentRange]);
 
     function handleChangeRange(ev) {
@@ -26,12 +25,12 @@ function Widget6(props) {
     return (
 
         <>
-            {widgets.loadingBudgets === false
+            {widgets.loadingDoughnut === false
 
                 ?
                 <Paper className="w-full rounded-8 shadow-none border-1">
                     <div className="flex items-center justify-between px-16 h-64 border-b-1">
-                        <Typography className="text-16">Budget de l'année {currentRange} jusqu'à maintenant</Typography>
+                        <Typography className="text-16 font-bold">Demandes consultées </Typography>
 
                         <Select
                             native
@@ -53,24 +52,47 @@ function Widget6(props) {
                             })}
                         </Select>
                     </div>
-                    <div className="text-center px-24 py-32">
-
-                        <Typography className="text-24 leading-tight" color="textSecondary">
-                            {currentRange}
-                        </Typography>
-                        <Typography className="text-72 leading-tight text-green" >
-                            {widgets.budgets && parseFloat(widgets.budgets).toLocaleString(
-                                undefined, // leave undefined to use the browser's locale,
-                                // or use a string like 'en-US' to override it.
-                                { minimumFractionDigits: 2 }
-                            )}
-                            &ensp;Dhs
-                        </Typography>
-                        <Typography className="text-24 leading-tight" color="textSecondary">
-                            HT
-                            </Typography>
+                    <div className="h-400 w-full p-32">
+                        <Doughnut
+                            data={{
+                                labels: widgets.doughnut.labels,
+                                datasets: widgets.doughnut.datasets
+                            }}
+                            options={{
+                                cutoutPercentage: 66,
+                                spanGaps: false,
+                                legend: {
+                                    display: true,
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 16,
+                                        usePointStyle: true
+                                    }
+                                },
+                                maintainAspectRatio: false
+                            }}
+                        />
                     </div>
-
+                    {/*
+            <div className="flex items-center p-8 border-t-1">
+                <div className="flex flex-1 flex-col items-center justify-center p-16 border-r-1">
+                    <Typography className="text-32 leading-none">
+                        {widget.footerLeft.count[currentRange]}
+                    </Typography>
+                    <Typography className="text-15" color="textSecondary">
+                        {widget.footerLeft.title}
+                    </Typography>
+                </div>
+                <div className="flex flex-1 flex-col items-center justify-center p-16">
+                    <Typography className="text-32 leading-none">
+                        {widget.footerRight.count[currentRange]}
+                    </Typography>
+                    <Typography className="text-15" color="textSecondary">
+                        {widget.footerRight.title}
+                    </Typography>
+                </div>
+            </div>
+            */}
                 </Paper>
                 :
                 <ContentLoader

@@ -52,6 +52,7 @@ function ConsultationsTable(props) {
     const searchText = useSelector(({ consultationsApp }) => consultationsApp.consultations.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
+    const user = useSelector(({ auth }) => auth.user);
 
     useEffect(() => {
         function getFilteredArray(entities, searchText) {
@@ -99,12 +100,12 @@ function ConsultationsTable(props) {
                 data={filteredData}
                 columns={[
 
-                   
+
                     {
                         Header: "Ref",
                         className: "font-bold",
                         id: "reference",
-                        accessor: p => p.demande.reference?'RFQ-'+p.demande.reference : ''
+                        accessor: p => p.demande.reference ? 'RFQ-' + p.demande.reference : ''
                     },
 
                     {
@@ -119,14 +120,15 @@ function ConsultationsTable(props) {
                                         ?
                                         row.original.demande.statut === 0
                                             ?
-                                            <Chip className={classes.chipOrange} label="En attente" />
+                                            <strong className="text-orange">En attente</strong> 
                                             :
-                                            (row.original.demande.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                            (row.original.demande.statut === 1 ? 
+                                                <strong className="text-green">En cours</strong>
                                                 :
                                                 <Chip className={classes.chip} label="Refusé" />
                                             )
                                         :
-                                        <Chip className={classes.chip} label="Expiré" />
+                                        <strong className="text-red">Expiré</strong>
 
                                 }
 
@@ -134,6 +136,32 @@ function ConsultationsTable(props) {
                         )
 
                     },
+                    {
+                        Header: "Affecté à",
+                        className: "font-bold",
+                        id: "personnel",
+                        accessor: p => p.personnel?  p.personnel.name : ''
+                    },
+                    {
+                        Header: "Budget",
+                        className: "font-bold",
+                        sortable: false,
+                        filterable: false,
+                        Cell: row => (
+                            <div className="flex items-center">
+
+                                {
+                                   row.original.budget
+                                }
+                                &ensp;
+                                {
+                                   user.data && user.data.currency ? user.data.currency :''
+                                }
+                            </div>
+                        )
+
+                    },
+                   
                     {
                         Header: "Societé",
                         className: "font-bold",
@@ -187,14 +215,26 @@ function ConsultationsTable(props) {
 
                     },
                     {
-                        Header: "Date de consultation",
-                        accessor: "created",
+                        Header: "Statut",
+                        sortable: false,
                         filterable: false,
-                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                        Cell: row => (
+                            <div className="flex items-center">
+
+                                {
+                                    row.original.statut === 0 ?
+                                        <Chip className={classes.chipOrange} label="En cours" />
+                                        : row.original.statut === 1 ?
+                                            <Chip className={classes.chip2} label="Gagner" />
+                                            :
+                                            <Chip className={classes.chip} label="Perdue" />
+
+                                }
+
+                            </div>
+                        )
+
                     },
-
-
-
                     {
                         Header: "",
                         Cell: row => (

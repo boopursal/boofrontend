@@ -135,13 +135,24 @@ function DemandesTable(props) {
                     },
                     {
                         Header: "Budget",
-                        className: "font-bold",
-                        id: "budget",
-                        accessor: f =>  parseFloat(f.budget).toLocaleString(
-                            'fr', // leave undefined to use the browser's locale,
-                            // or use a string like 'en-US' to override it.
-                            { minimumFractionDigits: 2 }
-                        ) + ' Dhs '
+                        accessor: "budget",
+                        Cell: row =>
+                            (
+                                <>
+                                {
+                                    parseFloat(row.original.budget).toLocaleString(
+                                    'fr', // leave undefined to use the browser's locale,
+                                    // or use a string like 'en-US' to override it.
+                                    { minimumFractionDigits: 2 }
+                                ) 
+                                }
+                                &ensp;
+                                {
+                                     row.original.currency ? row.original.currency.name :''
+                                }
+                                </>
+                            )
+                       
                     },
                     {
                         Header: "Publier",

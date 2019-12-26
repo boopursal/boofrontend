@@ -434,7 +434,7 @@ function Demande(props) {
 
                                         <TextFieldFormsy
                                             className="mb-24"
-                                            label="Budget en Dhs"
+                                            label="Budget"
                                             id="budget"
                                             type="number"
                                             name="budget"

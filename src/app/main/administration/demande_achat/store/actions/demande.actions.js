@@ -92,9 +92,9 @@ export function getDemande(params) {
 
 
 
-export function putDemande(data, id) {
+export function putDemande(data,sousSecteurs,motif, id) {
 
-    data.sousSecteurs = _.map(data.sousSecteurs, function (value, key) {
+    data.sousSecteurs = _.map(sousSecteurs, function (value, key) {
         return value.value;
     });
     data.attachements = _.map(data.attachements, function (value, key) {
@@ -105,12 +105,12 @@ export function putDemande(data, id) {
         data.budget = parseFloat(data.budget);
     }
     if(data.motifRejet){
-        data.motifRejet = data.motifRejet.value;
+        data.motifRejet = motif.value;
     }else{
         data.motifRejet =null;
     }
 
-    console.log(data)
+
     const request = agent.put(`/api/demande_achats/${id}`, data);
 
     return (dispatch) => {

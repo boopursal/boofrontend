@@ -62,7 +62,7 @@ class FuseAuthorization extends Component {
 
         } else if (userRole === 'ROLE_FOURNISSEUR') {
             
-            redirectPath = 'dashboard_fr';
+            redirectPath = 'mydashboard';
 
         }
         else {

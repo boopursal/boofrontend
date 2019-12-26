@@ -4,6 +4,8 @@ const initialState = {
     data: null,
     error: null,
     loading: false,
+    personnels: null,
+    request: false
 };
 
 const demandeReducer = function (state = initialState, action) {
@@ -14,6 +16,14 @@ const demandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: true,
+
+                }
+            }
+        case Actions.REQUEST_SAVE:
+            {
+                return {
+                    ...state,
+                    request: true,
 
                 }
             }
@@ -38,7 +48,21 @@ const demandeReducer = function (state = initialState, action) {
 
                 };
             }
-      
+        case Actions.GET_PERSONNELS:
+            {
+                return {
+                    ...state,
+                    personnels: action.payload,
+
+                };
+            }
+        case Actions.SAVE_CONSULTANTION:
+            {
+                return {
+                    ...state,
+                    request: false,
+                }
+            }
         case Actions.SAVE_ERROR:
             {
                 return {
@@ -48,7 +72,7 @@ const demandeReducer = function (state = initialState, action) {
 
                 };
             }
-            
+
         default:
             {
                 return state;

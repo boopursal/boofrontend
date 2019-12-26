@@ -70,7 +70,6 @@ function CommandesDialog(props) {
     function handleSubmit() {
         //event.preventDefault();
 
-        console.log(form);
         if (CommandesDialog.type === 'edit') {
             dispatch(Actions.addCommande(form,parametres));
         }

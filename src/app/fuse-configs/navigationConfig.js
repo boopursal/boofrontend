@@ -197,7 +197,14 @@ const navigationConfig = [
 
 
     /** FOURNISSEUR Navigations */
-
+    {
+        'id': 'dashboard_fr',
+        'title': 'Tableaux de bord',
+        'auth': authRoles.fournisseur,
+        'type': 'item',
+        'icon': 'dashboard',
+        'url': '/mydashboard'
+    },
     {
         'id': 'demandes_prix',
         'title': 'Demande de prix',
