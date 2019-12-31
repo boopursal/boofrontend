@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Table, TableHead, TableCell, TableRow, Typography, Paper, TableBody, Select } from '@material-ui/core';
+import {  Table, TableHead, TableCell, TableRow, Typography, Paper, TableBody, Select } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions'
 import ContentLoader from 'react-content-loader'
 import moment from 'moment';
+import { FuseAnimate } from '@fuse';
 const TableRowContentLoader = props => {
     const random = Math.random() * (1 - 0.7) + 0.7
     return (
@@ -30,19 +31,27 @@ const TableRowContentLoader = props => {
 function Widget9(props) {
 
     const dispatch = useDispatch();
-
+    const currentMonth = moment().format('M');
     const widgets = useSelector(({ dashboardApp }) => dashboardApp.widgets);
     const user = useSelector(({ auth }) => auth.user);
     const [currentRange, setCurrentRange] = useState(
         moment().format('Y')
     );
-
+    const [expanded, setExpanded] = useState(null);
     useEffect(() => {
         dispatch(Actions.getPersonnelPotentiels(currentRange));
     }, [dispatch, currentRange]);
 
     function handleChangeRange(ev) {
         setCurrentRange(ev.target.value);
+    }
+    function handlChangeCollapse(e) {
+        if (expanded === e) {
+            setExpanded(null);
+        }
+        else {
+            setExpanded(e);
+        }
     }
 
     return (
@@ -85,7 +94,7 @@ function Widget9(props) {
                         </div>
 
                         <div className="table-responsive">
-                            <Table className="w-full min-w-full" size="small">
+                            <Table className="w-full min-w-full " size="small" >
                                 <TableHead>
                                     <TableRow>
                                         <TableCell
@@ -138,62 +147,149 @@ function Widget9(props) {
                                 </TableHead>
                                 <TableBody>
                                     {widgets.personnelPotentiels.map(row => (
-                                        <TableRow key={row.personnel.id}>
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                                className="truncate font-600 font-bold"
-                                            >
-                                                {row.personnel.name}
-                                            </TableCell>
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                                className="truncate"
-                                            >
-                                                {row.demandeAffecte.count ? row.demandeAffecte.count : 0}
-                                            </TableCell>
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                                className="truncate"
-                                            >
-                                                {row.demandeGagner.count ? row.demandeGagner.count : 0}
-                                            </TableCell>
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                                className="truncate"
-                                            >
-                                                {row.demandePerdue.count ? row.demandePerdue.count : 0}
-                                            </TableCell>
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                                className="truncate text-green"
-                                            >
-                                                {row.demandeGagner.budget ? row.demandeGagner.budget : 0}
-                                                &ensp;{user.data.currency}
-                                            </TableCell>
+                                        <React.Fragment key={row.personnel.id} >
+                                            <TableRow onClick={() => handlChangeCollapse(row.personnel.id)} className="cursor-pointer hover:bg-blue-lightest">
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                    className="truncate font-600 font-bold"
+                                                >
+                                                    {row.personnel.name}
+                                                </TableCell>
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                    className="truncate"
+                                                >
+                                                    {row.demandeAffecte.count ? row.demandeAffecte.count : 0}
+                                                </TableCell>
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                    className="truncate"
+                                                >
+                                                    {row.demandeGagner.count ? row.demandeGagner.count : 0}
+                                                </TableCell>
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                    className="truncate"
+                                                >
+                                                    {row.demandePerdue.count ? row.demandePerdue.count : 0}
+                                                </TableCell>
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                    className="truncate text-green"
+                                                >
+                                                    {row.demandeGagner.budget ? row.demandeGagner.budget : 0}
+                                                    &ensp;{user.data.currency}
+                                                </TableCell>
 
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                                className="truncate text-red"
-                                            >
-                                                {row.demandePerdue.budget ? row.demandePerdue.budget : 0}
-                                                &ensp;{user.data.currency}
-                                            </TableCell>
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                                className="truncate font-bold text-blue"
-                                            >
-                                                {row.demandeAffecte.budget ? row.demandeAffecte.budget : 0}
-                                                &ensp;{user.data.currency}
-                                            </TableCell>
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                    className="truncate text-red"
+                                                >
+                                                    {row.demandePerdue.budget ? row.demandePerdue.budget : 0}
+                                                    &ensp;{user.data.currency}
+                                                </TableCell>
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                    className="truncate font-bold text-blue"
+                                                >
+                                                    {row.demandeAffecte.budget ? row.demandeAffecte.budget : 0}
+                                                    &ensp;{user.data.currency}
+                                                </TableCell>
 
-                                        </TableRow>
+                                            </TableRow>
+                                            {
+                                                expanded === row.personnel.id ?
+                                                    <FuseAnimate
+                                                        animation="transition.fadeIn"
+                                                        duration={400}
+                                                        delay={200}
+                                                    >
+                                                        <TableRow>
+                                                            <TableCell
+                                                                component="th"
+                                                                scope="row"
+                                                                colSpan={7}
+                                                                className="truncate font-bold text-blue"
+                                                            >
+                                                                <Table className="w-full min-w-full striped hovered">
+                                                                    <TableHead className="bg-gray-200">
+                                                                        <TableRow>
+                                                                            {['#', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'].map((id, index) => (
+                                                                                <TableCell
+                                                                                    key={id}
+                                                                                    className={parseInt(currentMonth) === index ? 'bg-orange font-bold text-white' : ''}
+                                                                                >
+                                                                                    {id}
+                                                                                </TableCell>
+                                                                            ))}
+
+                                                                        </TableRow>
+                                                                    </TableHead>
+                                                                    <TableBody>
+                                                                        <TableRow >
+                                                                            <TableCell
+                                                                                component="th"
+                                                                                scope="row"
+                                                                                className="truncate text-green font-bold"
+                                                                            >
+                                                                                Budget gagner
+                                                                        </TableCell>
+                                                                            {row.gagnerParMois.map((r, index) => (
+                                                                                <TableCell
+                                                                                    key={index + 1}
+                                                                                    component="th"
+                                                                                    scope="row"
+                                                                                    className={parseInt(currentMonth) === index + 1 ? 'bg-orange truncate font-bold text-white' : 'truncate text-green'}
+                                                                                >
+                                                                                    {
+                                                                                        parseInt(currentMonth) < index + 1 ?
+                                                                                            '' :
+                                                                                            r + ' ' + user.data.currency
+                                                                                    }
+
+                                                                                </TableCell>
+                                                                            ))}
+                                                                        </TableRow>
+                                                                        <TableRow >
+                                                                            <TableCell
+                                                                                component="th"
+                                                                                scope="row"
+                                                                                className="truncate text-blue font-bold"
+                                                                            >
+                                                                                Potentiel
+                                                                        </TableCell>
+                                                                            {row.potentielParMois.map((r, index) => (
+                                                                                <TableCell
+                                                                                    key={index + 2}
+                                                                                    component="th"
+                                                                                    scope="row"
+                                                                                    className={parseInt(currentMonth) === index + 1 ? 'bg-orange truncate font-bold text-white' : 'truncate text-blue'}
+                                                                                >
+                                                                                    {
+                                                                                        parseInt(currentMonth) < index + 1 ?
+                                                                                            '' :
+                                                                                            r + ' ' + user.data.currency
+                                                                                    }
+
+                                                                                </TableCell>
+                                                                            ))}
+                                                                        </TableRow>
+                                                                    </TableBody>
+                                                                </Table>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    </FuseAnimate>
+                                                    : null
+                                            }
+
+                                        </React.Fragment>
                                     ))}
                                 </TableBody>
                             </Table>
@@ -205,7 +301,7 @@ function Widget9(props) {
                         .map((e, i) => (
                             <TableRowContentLoader key={i} style={{ opacity: Number(2 / i).toFixed(1) }} />
                         ))
-                    }
+            }
 
         </>
     );

@@ -83,7 +83,7 @@ function ProduitsTable(props) {
                         className: "h-64 cursor-pointer",
                         onClick: (e, handleOriginal) => {
                             if (rowInfo) {
-                                props.history.push('/produits/' + rowInfo.original.id);
+                                props.history.push('/products/' + rowInfo.original.id);
                             }
                         }
                     }
@@ -171,7 +171,7 @@ function ProduitsTable(props) {
                             undefined, // leave undefined to use the browser's locale,
                             // or use a string like 'en-US' to override it.
                             { minimumFractionDigits: 2 }
-                        ) + ' '+user.data.currency,
+                        ) + ' ',
                     },
                     {
                         Header: "Secteur",

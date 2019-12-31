@@ -156,6 +156,30 @@ const navigationConfig = [
 
         ]
     },
+    {
+        'id': 'demandes-devis',
+        'title': 'Demande de devis',
+        'auth': authRoles.admin,
+        'type': 'item',
+        'icon': 'inbox',
+        'url': '/demandes_devis',
+        'badge': {
+            'title': 'demandes-devis',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        }
+    },
+    {
+        'id': 'validation_produits',
+        'title': 'Validation des Produits',
+        'auth': authRoles.admin,
+        'type': 'item',
+        'icon': 'shopping_cart',
+        'url': '/products',
+
+    },
+    
 
     /** Fin Admin Navigation */
 
@@ -236,6 +260,20 @@ const navigationConfig = [
         'icon': 'shopping_cart',
         'url': '/produits',
 
+    },
+    {
+        'id': 'product-devis',
+        'title': 'Demandes de devis',
+        'auth': authRoles.fournisseur,
+        'type': 'item',
+        'icon': 'inbox',
+        'url': '/product_devis',
+        'badge': {
+            'title': 'product-devis',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        }
     },
     {
         'id': 'fr_profil',

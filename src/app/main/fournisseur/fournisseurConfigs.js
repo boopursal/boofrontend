@@ -5,10 +5,12 @@ import { consultationConfigs } from "./mes_consultations/consultationConfigs";
 import { PersonnelsAppConfig } from "./personnel/PersonnelsAppConfig";
 import { AbonnementsConfigs } from "./abonnoment/AbonnementsConfigs";
 import { DashboardAppConfig } from "./dashboard/DashboardAppConfig";
+import { demandeDevisConfigs } from "./demandeDevis/demandeDevisConfigs";
 
 
 export const fournisseurConfigs = [
     demandeConfigs,
+    demandeDevisConfigs,
     produitConfigs,
     ProfileConfigs,
     consultationConfigs,

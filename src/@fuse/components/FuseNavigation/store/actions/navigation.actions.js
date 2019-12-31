@@ -9,15 +9,14 @@ export function getCountForBadge(url) {
     return (dispatch) =>
 
         request.then((response) => {
-           
+
             dispatch(Actions.updateNavigationItem(url,
                 {
                     'badge': {
                         'count': response.data,
                     }
-                }))
+                }
+            ))
+
         });
-
-
-
 }

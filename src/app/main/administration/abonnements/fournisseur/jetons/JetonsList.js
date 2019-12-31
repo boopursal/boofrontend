@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Chip } from '@material-ui/core';
+import { Icon, IconButton, Typography, Chip } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
@@ -8,7 +8,6 @@ import ReactTable from "react-table";
 import * as Actions from './store/actions';
 import { makeStyles } from '@material-ui/core/styles';
 //import JetonsMultiSelectMenu from './JetonsMultiSelectMenu';
-import _ from '@lodash';
 import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({

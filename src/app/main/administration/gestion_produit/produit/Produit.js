@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Button, Tab, Tabs, Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip } from '@material-ui/core';
 import { red, orange } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy,CheckboxFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -173,7 +173,7 @@ function Produit(props) {
             dispatch(Actions.cleanError())
             dispatch(Actions.cleanImage())
             dispatch(Actions.cleanDeleteImage())
-            props.history.push('/produits');
+            props.history.push('/products');
         }
     }, [produit.success, dispatch]);
 
@@ -200,14 +200,10 @@ function Produit(props) {
             const params = props.match.params;
             const { produitId } = params;
 
-            if (produitId === 'new') {
-                dispatch(Actions.newProduit());
-            }
-            else {
 
-                dispatch(Actions.getProduit(produitId));
+            dispatch(Actions.getProduit(produitId));
 
-            }
+
         }
 
         updateProduitState();
@@ -225,7 +221,7 @@ function Produit(props) {
             if (produit.data.secteur) {
 
                 dispatch(Actions.getSousSecteurs(produit.data.secteur['@id']));
-                setSecteur( {
+                setSecteur({
                     value: produit.data.secteur['@id'],
                     label: produit.data.secteur.name
                 })
@@ -258,6 +254,12 @@ function Produit(props) {
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
     }
+
+    function handleCheckBoxChange(e, name) {
+
+        setForm(_.set({ ...form }, name, e.target.checked));
+    }
+
 
     function handleUploadChange(e) {
         const file = e.target.files[0];
@@ -292,12 +294,12 @@ function Produit(props) {
                 dispatch(Actions.getCategories(value.value));
                 setCategorie(null)
                 setSousSecteur(value)
-                
+
             }
         }
-        if(name === 'categorie'){
+        if (name === 'categorie') {
             setCategorie(value)
-            
+
         }
 
     }
@@ -316,17 +318,17 @@ function Produit(props) {
 
     function handleSubmit(form) {
         //event.preventDefault();
-       
+
 
         const params = props.match.params;
         const { produitId } = params;
 
         if (produitId === 'new') {
-            dispatch(Actions.saveProduit(form,secteur,sousSecteur,categorie));
+            dispatch(Actions.saveProduit(form, secteur, sousSecteur, categorie));
         }
         else {
 
-            dispatch(Actions.putProduit(form, form.id,secteur,sousSecteur,categorie));
+            dispatch(Actions.putProduit(form, form.id, secteur, sousSecteur, categorie));
         }
 
     }
@@ -346,7 +348,7 @@ function Produit(props) {
                             <div className="flex flex-col items-start max-w-full">
 
                                 <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                    <Typography className="normal-case flex items-center sm:mb-12" component={Link} role="button" to="/produits" color="inherit">
+                                    <Typography className="normal-case flex items-center sm:mb-12" component={Link} role="button" to="/products" color="inherit">
                                         <Icon className="mr-4 text-20">arrow_back</Icon>
                                         Retour
                                 </Typography>
@@ -595,6 +597,23 @@ function Produit(props) {
                                             rows="4"
 
                                         />
+
+                                        <Grid container spacing={3} >
+
+
+                                            <Grid item xs={12} sm={6}>
+                                                <CheckboxFormsy
+                                                    className="mb-10"
+                                                    name="isValid"
+                                                    onChange={(e) => handleCheckBoxChange(e, 'isValid')}
+                                                    label="Valider"
+                                                    value={form.isValid}
+                                                />
+                                            </Grid>
+
+
+
+                                        </Grid>
 
                                     </Formsy>
                                 )}
