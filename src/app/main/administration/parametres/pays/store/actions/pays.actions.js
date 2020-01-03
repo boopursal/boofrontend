@@ -199,7 +199,23 @@ export function removePays(Pays,parametres)
                 },
                 variant: 'success'}))
             ]).then(() => dispatch(getPays(parametres)))
-        );
+        ).catch((error)=>{
+            dispatch({
+                type: SAVE_ERROR,
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return value;
+                      }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
+        });
     };
 }
 

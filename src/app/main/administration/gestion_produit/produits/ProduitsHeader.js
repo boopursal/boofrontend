@@ -32,17 +32,17 @@ function ProduitsHeader(props)
                             <Icon className="mr-8" color="action">search</Icon>
 
                             <Input
-                                placeholder="Rechercher dans la description"
+                                placeholder="Rechercher dans les références"
                                 className="flex flex-1"
                                 disableUnderline
                                 fullWidth
-                                value={parametres.description}
+                                value={parametres.reference}
                                 inputProps={{
                                     'aria-label': 'Rechercher'
                                 }}
                                 onChange={ev => {
                                     parametres.page = 1;
-                                    parametres.description=ev.target.value
+                                    parametres.reference=ev.target.value
                                     dispatch(Actions.setParametresData(parametres))
                                 }}
                             />

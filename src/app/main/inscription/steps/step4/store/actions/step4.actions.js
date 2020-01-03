@@ -2,13 +2,6 @@ import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
 import jwtService from 'app/services/jwtService';
 import { setUserData } from "app/auth/store/actions";
-/**
- * 
- *    TO KNOW :  '/api/*_p' ==> p = api personnalisé
- * 
- */
-
-
 
 
 export const GET_PAYS = '[STEP APP] GET PAYS';
@@ -24,27 +17,28 @@ export const GET_CURRENCY = '[STEP APP]GET_CURRENCY';
 
 export function getPays()
 {
-    const request = agent.get('/api/pays_p');
+    const request = agent.get('/api/pays?pagination=false&properties[]=id&properties[]=name');
 
-    return (dispatch) =>{
+    return (dispatch) => {
         dispatch({
-            type   : REQUEST_PAYS,
+            type: REQUEST_PAYS,
         });
-       return request.then((response) =>{
-            
+        return request.then((response) => {
+
             dispatch({
-                type   : GET_PAYS,
-                payload: response.data
+                type: GET_PAYS,
+                payload: response.data['hydra:member']
             })
         });
 
     }
+   
         
 }
 
 export function getSecteurs()
 {
-    const request = agent.get('/api/secteurs_p');
+    const request = agent.get('/api/secteurs?pagination=false&properties[]=id&properties[]=name');
 
     return (dispatch) =>{
        
@@ -52,7 +46,7 @@ export function getSecteurs()
             
             dispatch({
                 type   : GET_SECTEURS,
-                payload: response.data
+                payload: response.data['hydra:member']
             })
         });
 

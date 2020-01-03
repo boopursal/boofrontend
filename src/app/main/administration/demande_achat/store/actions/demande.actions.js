@@ -49,7 +49,7 @@ export function getMotifs() {
 }
 
 export function getSousSecteurs() {
-    const request = agent.get('/api/sous_secteur_p');
+    const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&properties[]=id&properties[]=name');
 
     return (dispatch) => {
         dispatch({
@@ -58,10 +58,12 @@ export function getSousSecteurs() {
         return request.then((response) => {
             dispatch({
                 type: GET_SOUS_SECTEUR,
-                payload: response.data
+                payload: response.data['hydra:member']
             })
         });
+
     }
+   
 
 }
 

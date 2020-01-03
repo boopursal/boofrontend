@@ -3,6 +3,7 @@ import { FuseUtils } from '@fuse';
 import { showMessage } from 'app/store/actions/fuse';
 import agent from 'agent';
 import _ from '@lodash';
+import * as Actions from '@fuse/components/FuseNavigation/store/actions';
 
 export const REQUEST_PRODUIT = '[PRODUIT APP] REQUEST PRODUIT';
 export const GET_PRODUIT = '[PRODUIT APP] GET PRODUIT';
@@ -205,7 +206,7 @@ export function putProduit(data, url,secteur,sousSecteur,categorie) {
         return request.then((response) => {
 
             dispatch(showMessage({ message: 'Produit Modifié' }));
-
+            dispatch(Actions.getCountForBadge('validation_produits'));
             return dispatch({
                 type: SAVE_PRODUIT,
                 payload: response.data

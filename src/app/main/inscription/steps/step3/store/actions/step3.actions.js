@@ -14,20 +14,21 @@ export const SAVE_ERROR = '[STEP APP] SAVE ERROR';
 
 export function getSousSecteurs()
 {
-    const request = agent.get('/api/sous_secteur_p');
+    const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&properties[]=id&properties[]=name');
 
-    return (dispatch) =>{
+    return (dispatch) => {
         dispatch({
-            type   : REQUEST_SOUS_SECTEUR,
+            type: REQUEST_SOUS_SECTEUR,
         });
-       return request.then((response) =>{
+        return request.then((response) => {
             dispatch({
-                type   : GET_SOUS_SECTEUR,
-                payload: response.data
+                type: GET_SOUS_SECTEUR,
+                payload: response.data['hydra:member']
             })
         });
 
     }
+  
         
 }
 

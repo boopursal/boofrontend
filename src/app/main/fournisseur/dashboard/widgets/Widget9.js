@@ -37,6 +37,7 @@ function Widget9(props) {
     const [currentRange, setCurrentRange] = useState(
         moment().format('Y')
     );
+    const currentYear = moment().format('Y');
     const [expanded, setExpanded] = useState(null);
     useEffect(() => {
         dispatch(Actions.getPersonnelPotentiels(currentRange));
@@ -249,7 +250,7 @@ function Widget9(props) {
                                                                                     className={parseInt(currentMonth) === index + 1 ? 'bg-orange truncate font-bold text-white' : 'truncate text-green'}
                                                                                 >
                                                                                     {
-                                                                                        parseInt(currentMonth) < index + 1 ?
+                                                                                        parseInt(currentMonth) < index + 1 && currentYear === currentRange ?
                                                                                             '' :
                                                                                             r + ' ' + user.data.currency
                                                                                     }
@@ -273,7 +274,7 @@ function Widget9(props) {
                                                                                     className={parseInt(currentMonth) === index + 1 ? 'bg-orange truncate font-bold text-white' : 'truncate text-blue'}
                                                                                 >
                                                                                     {
-                                                                                        parseInt(currentMonth) < index + 1 ?
+                                                                                        parseInt(currentMonth) < index + 1  && currentYear === currentRange ?
                                                                                             '' :
                                                                                             r + ' ' + user.data.currency
                                                                                     }

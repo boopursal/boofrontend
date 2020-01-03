@@ -20,8 +20,8 @@ export function cleanUp() {
 
 export function getProduits(parametres)
 {
-    var description = parametres.description?`=${parametres.description}`:'';
-    const request = agent.get(`/api/produits?page=${parametres.page}&description${description}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var reference = parametres.reference?`=${parametres.reference}`:'';
+    const request = agent.get(`/api/produits?page=${parametres.page}&reference${reference}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) =>{
         dispatch({
@@ -39,7 +39,7 @@ export function getProduits(parametres)
 export function removeProduit(produit,parametres)
 {
     
-    let Updateproduit = {del :true,reference : produit.reference+'_deleted-'+produit.id}
+    let Updateproduit = {del :true}
     return (dispatch, getState) => {
 
         

@@ -88,7 +88,7 @@ function Widget8(props) {
                                 </Typography>
                                 <div className="flex items-center">
 
-                                    <Typography className="text-32 truncate ">
+                                    <Typography className={id === 'gagner'? "text-32 truncate text-green":"text-32 truncate "}>
                                         {
                                         parseFloat(widgets.potentiels[id].somme).toLocaleString(
                                             undefined, // leave undefined to use the browser's locale,

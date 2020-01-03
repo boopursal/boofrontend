@@ -37,7 +37,7 @@ export function getProfile(id_acheteur) {
 
 }
 export function getPays() {
-    const request = agent.get('/api/pays_p');
+    const request = agent.get('/api/pays?pagination=false&properties[]=id&properties[]=name');
 
     return (dispatch) => {
         dispatch({
@@ -47,7 +47,7 @@ export function getPays() {
 
             dispatch({
                 type: GET_PAYS,
-                payload: response.data
+                payload: response.data['hydra:member']
             })
         });
 
@@ -75,7 +75,7 @@ export function getVilles(pays_id) {
 }
 
 export function getSecteurs() {
-    const request = agent.get('/api/secteurs_p');
+    const request = agent.get('/api/secteurs?pagination=false&properties[]=id&properties[]=name');
 
     return (dispatch) => {
 
@@ -83,7 +83,7 @@ export function getSecteurs() {
 
             dispatch({
                 type: GET_SECTEURS,
-                payload: response.data
+                payload: response.data['hydra:member']
             })
         });
 

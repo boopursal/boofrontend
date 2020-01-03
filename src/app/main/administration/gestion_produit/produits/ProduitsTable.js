@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Chip } from '@material-ui/core';
+import { Chip, Tooltip, IconButton, Icon } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -48,7 +48,7 @@ function ProduitsTable(props) {
     const loading = useSelector(({ produitsApp }) => produitsApp.produits.loading);
     const pageCount = useSelector(({ produitsApp }) => produitsApp.produits.pageCount);
     const parametres = useSelector(({ produitsApp }) => produitsApp.produits.parametres);
-    const user = useSelector(({auth}) => auth.user);
+    const user = useSelector(({ auth }) => auth.user);
     const searchText = useSelector(({ produitsApp }) => produitsApp.produits.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
@@ -98,21 +98,21 @@ function ProduitsTable(props) {
                 data={filteredData}
                 columns={[
                     {
-                        Header   :'',
-                        accessor : "featuredImageId",
-                        Cell     : row => (
-                             row.original.featuredImageId ? (
-                                <img className="w-full block rounded" src={FuseUtils.getUrl() + row.original.featuredImageId.url} alt={row.original.reference}/>
+                        Header: '',
+                        accessor: "featuredImageId",
+                        Cell: row => (
+                            row.original.featuredImageId ? (
+                                <img className="w-full block rounded" src={FuseUtils.getUrl() + row.original.featuredImageId.url} alt={row.original.reference} />
                             ) : (
-                                <img className="w-full block rounded" src="assets/images/ecommerce/product-image-placeholder.png" alt={row.original.reference}/>
-                            )
-                            
+                                    <img className="w-full block rounded" src="assets/images/ecommerce/product-image-placeholder.png" alt={row.original.reference} />
+                                )
+
                         ),
                         className: "justify-center",
-                        width    : 64,
-                        sortable : false,
+                        width: 64,
+                        sortable: false,
                         filterable: false,
-                        
+
                     },
                     {
                         Header: "Ref",
@@ -166,12 +166,18 @@ function ProduitsTable(props) {
                     {
                         Header: "PU",
                         className: "font-bold",
-                        id: "pu",
-                        accessor: p => p.pu.toLocaleString(
-                            undefined, // leave undefined to use the browser's locale,
-                            // or use a string like 'en-US' to override it.
-                            { minimumFractionDigits: 2 }
-                        ) + ' ',
+                        accessor: "pu",
+                        filterable: false,
+                        Cell: row => (
+                            <div className="flex items-center">
+                                {row.original.pu.toLocaleString(
+                                    undefined, // leave undefined to use the browser's locale,
+                                    // or use a string like 'en-US' to override it.
+                                    { minimumFractionDigits: 2 }
+                                ) + (row.original.currency ? ' ' + row.original.currency.name : '')}
+                            </div>
+                        )
+
                     },
                     {
                         Header: "Secteur",
@@ -204,32 +210,52 @@ function ProduitsTable(props) {
                     {
                         Header: "",
                         Cell: row => (
-                            ""
+                            <div className="flex items-center">
+
+                                <Tooltip title="Supprimer" >
+                                    <IconButton className="text-red text-20"
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            dispatch(Actions.removeProduit(row.original, parametres));
+                                        }}
+                                    >
+                                        <Icon>delete</Icon>
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Modifier" >
+                                    <IconButton className="text-orange text-20">
+                                        <Icon>edit</Icon>
+                                    </IconButton>
+                                </Tooltip>
+
+
+                            </div>
                         )
-                    }
-                ]}
-                manual
+                        
+            }
+        ]}
+        manual
 
                 defaultSortDesc={true}
-                pages={pageCount}
-                defaultPageSize={10}
-                loading={loading}
-                showPageSizeOptions={false}
-                onPageChange={(pageIndex) => {
-                    parametres.page = pageIndex + 1;
-                    dispatch(Actions.setParametresData(parametres))
-                }}
+            pages={pageCount}
+            defaultPageSize={10}
+            loading={loading}
+            showPageSizeOptions={false}
+            onPageChange={(pageIndex) => {
+                parametres.page = pageIndex + 1;
+                dispatch(Actions.setParametresData(parametres))
+            }}
 
-                onSortedChange={(newSorted, column, shiftKey) => {
-                    parametres.page = 1;
-                    parametres.filter.id = newSorted[0].id;
-                    parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
-                    dispatch(Actions.setParametresData(parametres))
-                }}
-                noDataText="No Produit found"
-                loadingText='Chargement...'
-                ofText='sur'
-            />
+            onSortedChange={(newSorted, column, shiftKey) => {
+                parametres.page = 1;
+                parametres.filter.id = newSorted[0].id;
+                parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
+                dispatch(Actions.setParametresData(parametres))
+            }}
+            noDataText="No Produit found"
+            loadingText='Chargement...'
+            ofText='sur'
+        />
         </FuseAnimate>
     );
 }

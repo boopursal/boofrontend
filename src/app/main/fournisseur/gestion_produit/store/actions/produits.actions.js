@@ -36,10 +36,10 @@ export function getProduits(id_fournisseur,parametres)
     }
        
 }
-export function removeProduit(produit,parametres)
+export function removeProduit(produit,parametres,id_fournisseur)
 {
     
-    let Updateproduit = {del :true,reference : produit.reference+'_deleted-'+produit.id}
+    let Updateproduit = {del :true}
     return (dispatch, getState) => {
 
         
@@ -55,7 +55,7 @@ export function removeProduit(produit,parametres)
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
-            ]).then(() => dispatch(getProduits(produit.fournisseur.id,parametres)))
+            ]).then(() => dispatch(getProduits(id_fournisseur,parametres)))
         );
     };
 }

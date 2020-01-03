@@ -12,17 +12,17 @@ export const GET_CURRENCY = '[STEP APP]GET_CURRENCY';
 
 export function getPays()
 {
-    const request = agent.get('/api/pays_p');
+    const request = agent.get('/api/pays?pagination=false&properties[]=id&properties[]=name');
 
-    return (dispatch) =>{
+    return (dispatch) => {
         dispatch({
-            type   : REQUEST_PAYS,
+            type: REQUEST_PAYS,
         });
-       return request.then((response) =>{
-            
+        return request.then((response) => {
+
             dispatch({
-                type   : GET_PAYS,
-                payload: response.data
+                type: GET_PAYS,
+                payload: response.data['hydra:member']
             })
         });
 

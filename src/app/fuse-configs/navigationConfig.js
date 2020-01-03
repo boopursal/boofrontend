@@ -177,6 +177,12 @@ const navigationConfig = [
         'type': 'item',
         'icon': 'shopping_cart',
         'url': '/products',
+        'badge': {
+            'title': 'validation_produits',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        }
 
     },
     

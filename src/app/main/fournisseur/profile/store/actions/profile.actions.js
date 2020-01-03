@@ -39,7 +39,7 @@ export function getProfile(id_fournisseur) {
 
 }
 export function getPays() {
-    const request = agent.get('/api/pays_p');
+    const request = agent.get('/api/pays?pagination=false&properties[]=id&properties[]=name');
 
     return (dispatch) => {
         dispatch({
@@ -49,11 +49,12 @@ export function getPays() {
 
             dispatch({
                 type: GET_PAYS,
-                payload: response.data
+                payload: response.data['hydra:member']
             })
         });
 
     }
+    
 
 }
 
