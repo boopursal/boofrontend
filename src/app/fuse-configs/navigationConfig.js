@@ -77,6 +77,14 @@ const navigationConfig = [
                 },
                 'children': [
                     {
+                        'id': 'commandes-abonnements',
+                        'title': 'Commandes abonnement',
+                        'type': 'item',
+                        'icon': 'control_point_duplicate',
+                        'url': '/admin/offres/commande',
+                       
+                    },
+                    {
                         'id': 'commandes-jetons',
                         'title': 'Commandes jetons',
                         'type': 'item',
@@ -305,9 +313,17 @@ const navigationConfig = [
         'auth': authRoles.fournisseur,
         'icon': 'cloud',
         'children': [
+          
+            {
+                'id': 'offre-commandes',
+                'title': 'Commande offres',
+                'type': 'item',
+                'icon': 'all_inclusive',
+                'url': '/offres/commande',
+            },
             {
                 'id': 'fr-commandes',
-                'title': 'Mes commandes',
+                'title': 'Jetons',
                 'type': 'item',
                 'icon': 'control_point_duplicate',
                 'url': '/abonnement/commandes',

@@ -423,12 +423,10 @@ function Demande(props) {
                                             onChange={handleChange}
                                             variant="outlined"
                                             validations={{
-
                                                 isNumeric: true,
                                             }}
                                             validationErrors={{
                                                 isNumeric: 'Numeric value required',
-
                                             }}
                                             step='any'
                                             required

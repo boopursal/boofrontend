@@ -191,7 +191,7 @@ function Produit(props) {
         return () => {
             dispatch(Actions.cleanDeleteImage())
         }
-    }, [produit.image_deleted]);
+    }, [produit.image_deleted,dispatch]);
 
 
 
@@ -249,7 +249,7 @@ function Produit(props) {
 
 
         }
-    }, [form, produit.data, setForm]);
+    }, [form, produit.data, setForm,dispatch]);
 
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
