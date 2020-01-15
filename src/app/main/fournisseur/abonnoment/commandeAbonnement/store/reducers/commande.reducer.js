@@ -70,15 +70,7 @@ const commandeReducer = function (state = initialState, action) {
         case Actions.CLEAN_UP:
             {
                 return {
-                    ...state,
-                    data: null,
-                    loading: false,
-                    success: false,
-                    error: null,
-                    offres: null,
-                    fournisseur: null,
-                    sousSecteurs: null,
-
+                    initialState,
 
                 };
             }

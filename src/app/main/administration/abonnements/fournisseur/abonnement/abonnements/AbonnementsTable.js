@@ -9,6 +9,7 @@ import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
 import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
+import { isNull } from 'util';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -138,7 +139,9 @@ function AbonnementsTable(props) {
                         Header: "Date d'expiration",
                         accessor: "created",
                         filterable: false,
-                        Cell: row => moment(row.original.expired).format('DD/MM/YYYY HH:mm')
+                        Cell: row => 
+                            row.original.expired ? moment(row.original.expired).format('DD/MM/YYYY HH:mm') : ''
+                        
                     },
                     {
                         Header: "Statut",
@@ -149,16 +152,30 @@ function AbonnementsTable(props) {
 
                                 {
 
-                                    row.original.statut === 0
+                                    row.original.statut === false
                                         ?
-                                        <Chip className={classes.chipOrange} label="En attente" />
+                                        (
+                                                !row.original.expired || row.original.expired === undefined
+                                                ?
+                                                <Chip className={classes.chipOrange} label="En attente" />
+                                                :
+                                                (
+                                                    moment(row.original.expired) >= moment()
+                                                    ?
+                                                    <Chip className={classes.chip} label="Annulée" />
+                                                    :
+                                                    <Chip className={classes.chip} label="Expirée" />
+                                                )
+                                                
+                                        )
+                                       
                                         :
                                         (
                                             moment(row.original.expired) >= moment()
                                                 ?
                                                 <Chip className={classes.chip2} label="En cours" />
                                                 :
-                                                <Chip className={classes.chip} label="Expiré" />
+                                                <Chip className={classes.chip} label="Expirée" />
                                         )
 
                                 }

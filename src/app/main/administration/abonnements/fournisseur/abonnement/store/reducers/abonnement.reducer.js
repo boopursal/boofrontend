@@ -77,18 +77,11 @@ const abonnementReducer = function (state = initialState, action) {
         case Actions.CLEAN_UP:
             {
                 return {
-                    ...state,
-                    data: null,
-                    loading: false,
-                    success: false,
-                    error: null,
-                    offres: null,
-                    sousSecteurs: null,
-                    fournisseur: null,
+                    ...initialState,
 
                 };
             }
-            case Actions.CLEAN_UP:
+        case Actions.CLEAN_UP_FRS:
             {
                 return {
                     ...state,

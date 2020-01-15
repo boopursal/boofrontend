@@ -29,7 +29,7 @@ export const GET_FOURNISSEUR = '[ABONNEMENT APP] GET_FOURNISSEUR';
 
 
 
-export function cleanUp() {
+export function cleanUp2() {
 
     return (dispatch) => dispatch({
         type: CLEAN_UP,
@@ -134,8 +134,10 @@ export function updateAbonnement(data,sousSecteurs,offre,mode,duree, remise,paie
     });
     data.mode=mode;
     data.duree=duree['@id'];
-    data.paiement=paiement;
+    data.statut=paiement;
     data.remise=remise;
+
+    
 
     const request = agent.put(data['@id'], data);
 
@@ -236,6 +238,7 @@ export function getAbonnement(params) {
 export function newAbonnement() {
     const data = {
         offre: null,
+        commentaire:'',
         sousSecteurs: []
     };
 

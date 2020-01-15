@@ -119,7 +119,7 @@ function Abonnement(props) {
     const [duree, setDuree] = useState(null);
     const [mode, setMode] = useState(null);
     const [tabValue, setTabValue] = useState(0);
-    const { form, setForm } = useForm(null);
+    const { form, handleChange, setForm } = useForm(null);
     const [paiement, setPaiement] = useState(false);
     const [open, setOpen] = useState(false);
     const classes = useStyles(props);
@@ -130,17 +130,7 @@ function Abonnement(props) {
     const [prixTTC, setPrixTTC] = useState(0);
 
 
-    useEffect(() => {
-        const params = props.match.params;
-        const { abonnementId } = params;
-        if (abonnementId === 'new') {
-            dispatch(Actions.getFournisseurs());
-        }
-        dispatch(Actions.getOffres());
-        dispatch(Actions.getPaiements());
-        dispatch(Actions.getDurees());
-    }, [dispatch]);
-
+    
     // Effect redirection and clean state
     useEffect(() => {
         if (abonnement.success) {
@@ -157,11 +147,15 @@ function Abonnement(props) {
             const { abonnementId } = params;
             if (abonnementId === 'new') {
                 dispatch(Actions.newAbonnement());
+                dispatch(Actions.getFournisseurs());
             }
             else {
                 dispatch(Actions.getAbonnement(abonnementId));
 
             }
+            dispatch(Actions.getOffres());
+            dispatch(Actions.getPaiements());
+            dispatch(Actions.getDurees());
         }
         updateAbonnementState();
         return () => {
@@ -391,7 +385,6 @@ function Abonnement(props) {
         ) {
             setDuree(abonnement.durees[0]);
             if (offre) {
-
                 let ht = offre.prixMad * abonnement.durees[0].name;
                 setPrixht(ht)
 
@@ -861,13 +854,13 @@ function Abonnement(props) {
                         classes={{ root: "w-full h-64" }}
                     >
                         <Tab className="h-64 normal-case" label="Détail de la abonnement" />
-                       
-                       {
-                           fournisseur ? 
-                           <Tab className="h-64 normal-case" label="Info. de la société" />
-                           :
-                           ''
-                       } 
+
+                        {
+                            fournisseur ?
+                                <Tab className="h-64 normal-case" label="Info. de la société" />
+                                :
+                                ''
+                        }
 
 
                     </Tabs>
@@ -1373,7 +1366,31 @@ function Abonnement(props) {
                                             }
                                         </Grid>
                                     </Grid>
+                                    <Divider />
+                                    <Grid container spacing={3} className="mt-6 mb-16">
+                                        <Grid item xs={12} sm={12}>
+                                            <TextFieldFormsy
+                                                className="w-full"
+                                                type="text"
+                                                name="commentaire"
+                                                value={form.commentaire}
+                                                onChange={handleChange}
+                                                label="Commentaire"
+                                                autoComplete="commentaire"
+                                                validations={{
+                                                    minLength: 6,
+                                                }}
+                                                validationErrors={{
+                                                    minLength: 'La longueur minimale de caractère est 6',
+                                                }}
 
+                                                variant="outlined"
+                                                multiline
+                                                rows="4"
+
+                                            />
+                                        </Grid>
+                                    </Grid>
                                 </Formsy>
                             )}
                             {tabValue === 1 && (
