@@ -10,12 +10,15 @@ const initialState = {
     success: false,
     paiements: null,
     durees: null,
+    loadingFournisseurs: false,
+    fournisseurs: null,
+    fournisseur: null,
 };
 
-const commandeReducer = function (state = initialState, action) {
+const abonnementReducer = function (state = initialState, action) {
     switch (action.type) {
 
-        case Actions.REQUEST_COMMANDE:
+        case Actions.REQUEST_ABONNEMENT:
         case Actions.REQUEST_OFFRES:
         case Actions.REQUEST_SAVE:
             {
@@ -24,6 +27,30 @@ const commandeReducer = function (state = initialState, action) {
                     loading: true,
                     loadingSS: true,
                 }
+            }
+        case Actions.REQUEST_FOURNISSEURS:
+        case Actions.REQUEST_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    loadingFournisseurs: true,
+                }
+            }
+        case Actions.GET_FOURNISSEURS:
+            {
+                return {
+                    ...state,
+                    fournisseurs: action.payload,
+                    loadingFournisseurs: false,
+                };
+            }
+        case Actions.GET_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    fournisseur: action.payload,
+                    loadingFournisseurs: false,
+                };
             }
         case Actions.GET_PAIEMENT:
             {
@@ -39,7 +66,7 @@ const commandeReducer = function (state = initialState, action) {
                     durees: action.payload
                 };
             }
-        case Actions.SAVE_COMMANDE:
+        case Actions.SAVE_ABONNEMENT:
             {
                 return {
                     ...state,
@@ -57,11 +84,20 @@ const commandeReducer = function (state = initialState, action) {
                     error: null,
                     offres: null,
                     sousSecteurs: null,
+                    fournisseur: null,
+
+                };
+            }
+            case Actions.CLEAN_UP:
+            {
+                return {
+                    ...state,
+                    fournisseur: null,
 
 
                 };
             }
-        case Actions.GET_COMMANDE:
+        case Actions.GET_ABONNEMENT:
             {
                 return {
                     ...state,
@@ -105,4 +141,4 @@ const commandeReducer = function (state = initialState, action) {
     }
 };
 
-export default commandeReducer;
+export default abonnementReducer;

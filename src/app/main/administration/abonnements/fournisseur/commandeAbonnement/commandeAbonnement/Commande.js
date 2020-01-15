@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, Typography, LinearProgress, Grid, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Divider, Chip, Avatar, Radio, Table, TableHead, TableRow, TableCell, TableBody, Tab, Tabs, InputAdornment } from '@material-ui/core';
+import { Button, Icon, Typography, LinearProgress, Grid, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Divider, Chip, Avatar, Radio, Table, TableHead, TableRow, TableCell, TableBody, Tab, Tabs, InputAdornment, Checkbox } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles, withStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, SelectReactFormsyS_S, RadioGroupFormsy, TextFieldFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, SelectReactFormsyS_S, RadioGroupFormsy, TextFieldFormsy, CheckboxFormsy } from '@fuse';
 import { Link } from 'react-router-dom';
 import Link2 from '@material-ui/core/Link';
 import _ from '@lodash';
@@ -14,7 +14,7 @@ import Formsy from 'formsy-react';
 import { useForm } from '@fuse/hooks';
 import Switch from '@material-ui/core/Switch';
 import FormGroup from '@material-ui/core/FormGroup';
-
+import ContentLoader from 'react-content-loader'
 
 const useStyles = makeStyles(theme => ({
 
@@ -114,17 +114,25 @@ function Commande(props) {
     const [sousSecteurs, setSousSecteurs] = useState([]);
     const [offre, setOffre] = useState(null);
     const [discount, setDiscount] = useState(0);
-    
+    const [duree, setDuree] = useState(null);
     const [mode, setMode] = useState(null);
     const [tabValue, setTabValue] = useState(0);
     const { form, setForm } = useForm(null);
-
+    const [paiement, setPaiement] = useState(false);
+    const [open, setOpen] = useState(false);
     const classes = useStyles(props);
+    const [prixht, setPrixht] = useState(0);
+    const [tva, setTva] = useState(0);
+    const [remise, setRemise] = useState(0);
+    const [prixhtNet, setPrixhtNet] = useState(0);
+    const [prixTTC, setPrixTTC] = useState(0);
+
 
     useEffect(() => {
         dispatch(Actions.getOffres());
         dispatch(Actions.getSousSecteurs());
         dispatch(Actions.getPaiements());
+        dispatch(Actions.getDurees());
     }, [dispatch]);
 
     // Effect redirection and clean state
@@ -164,10 +172,61 @@ function Commande(props) {
                     label: item.name
                 })));
             }
-            if (commande.data.offre)
+            if (commande.data.offre) {
+
                 setOffre(commande.data.offre)
+
+            }
             if (commande.data.mode)
                 setMode(commande.data.mode['@id'])
+            if (commande.data.duree) {
+                setDuree(commande.data.duree)
+
+                if (commande.data.offre) {
+                    if (commande.data.fournisseur.currency.name === 'DHS') {
+                        let ht = commande.data.offre.prixMad * commande.data.duree.name;
+                        setPrixht(ht)
+
+                        if (commande.data.duree.remise) {
+                            let remis = ht * commande.data.duree.remise / 100;
+                            let netHt = ht - remis;
+                            let tva = netHt * 0.2;
+                            setRemise(remis)
+                            setPrixhtNet(netHt)
+                            setTva(tva)
+                            setPrixTTC(netHt + tva)
+
+                        } else {
+                            let tva = ht * 0.2;
+                            setTva(tva)
+                            setPrixTTC(ht + tva)
+                        }
+
+                    }
+                    else {
+                        let ht = commande.data.offre.prixEur * commande.data.duree.name;
+                        setPrixht(ht)
+
+                        if (commande.data.duree.remise) {
+                            let remis = ht * commande.data.duree.remise / 100;
+                            let netHt = ht - remis;
+                            let tva = netHt * 0.2;
+
+                            setRemise(remis)
+                            setPrixhtNet(netHt)
+                            setTva(tva)
+                            setPrixTTC(netHt + tva)
+
+                        } else {
+                            let tva = ht * 0.2;
+                            setTva(tva)
+                            setPrixTTC(ht + tva)
+                        }
+
+                    }
+
+                }
+            }
         }
     }, [form, commande.data, setForm]);
 
@@ -189,18 +248,212 @@ function Commande(props) {
         }
     }, [mode, commande.paiements, setMode]);
 
+    useEffect(() => {
+        if (
+            (commande.durees && !duree)
+        ) {
+            setDuree(commande.durees[0]);
+
+        }
+    }, [duree, commande.durees, setDuree]);
+
+
 
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
     }
 
+    function handleCheckBoxChange(e) {
+        setPaiement(e.target.checked)
+    }
 
+    function handleChangeDuree(item) {
+        setDuree(item);
+        if (commande.data.fournisseur.currency.name === 'DHS') {
+            let ht = offre.prixMad * item.name;
+            setPrixht(ht)
+
+            if (item.remise) {
+                let remis = ht * item.remise / 100;
+                let netHt = ht - remis;
+                if(discount && discount>0){
+                    netHt = (ht - remis)-discount;
+                }
+                let tva = netHt * 0.2;
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+                let netHt = ht;
+                if(discount && discount>0){
+                    netHt = ht-discount;
+                }
+                let tva = netHt * 0.2;
+                setTva(tva)
+                setPrixhtNet(netHt)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
+        else {
+            let ht = offre.prixEur * item.name;
+            setPrixht(ht)
+
+            if (item.remise) {
+                let remis = ht * item.remise / 100;
+                let netHt = ht - remis;
+                if(discount && discount>0){
+                    netHt = (ht - remis)-discount;
+                }
+                let tva = netHt * 0.2;
+
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+                let netHt = ht;
+                if(discount && discount>0){
+                    netHt = ht-discount;
+                }
+                let tva = netHt * 0.2;
+                setTva(tva)
+                setPrixhtNet(netHt)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
+    }
+    function handleChangeDiscount(value) { 
+        setDiscount(value);
+        
+        if (commande.data.fournisseur.currency.name === 'DHS') {
+            let ht = offre.prixMad * duree.name;
+            setPrixht(ht)
+
+            if (duree.remise) {
+                let remis = ht * duree.remise / 100;
+                let netHt = ht - remis;
+                if(value && value>0){
+                    netHt = (ht - remis)-value;
+                }
+                
+                let tva = netHt * 0.2;
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+                let netHt = ht;
+                if(value && value>0){
+                    netHt = ht-value;
+                }
+                let tva = netHt * 0.2;
+                setTva(tva)
+                setPrixhtNet(netHt)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
+        else {
+            let ht = offre.prixEur * duree.name;
+            setPrixht(ht)
+
+            if (duree.remise) {
+                let remis = ht * duree.remise / 100;
+                let netHt = ht - remis;
+                if(value && value>0){
+                    netHt = (ht - remis)-value;
+                }
+                
+                let tva = netHt * 0.2;
+
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+
+                let netHt = ht;
+                if(value && value>0){
+                    netHt = ht-value;
+                }
+
+                let tva = netHt * 0.2;
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
+    }
     function handleChangeOffre(item) {
         setOffre(item);
         if (sousSecteurs.length > 0) {
             setSousSecteurs(_.slice(sousSecteurs, 0, item.nbActivite));
         }
+        if (commande.data.fournisseur.currency.name === 'DHS') {
+            let ht = item.prixMad * duree.name;
+            setPrixht(ht)
 
+            if (duree.remise) {
+                let remis = ht * duree.remise / 100;
+                let netHt = ht - remis;
+                if(discount && discount>0){
+                    netHt = (ht - remis)-discount;
+                }
+                let tva = netHt * 0.2;
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+                let netHt = ht;
+                if(discount && discount>0){
+                    netHt = ht-discount;
+                }
+                let tva = netHt * 0.2;
+                setTva(tva)
+                setPrixhtNet(netHt)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
+        else {
+            let ht = item.prixEur * duree.name;
+            setPrixht(ht)
+
+            if (duree.remise) {
+                let remis = ht * duree.remise / 100;
+                let netHt = ht - remis;
+                if(discount && discount>0){
+                    netHt = (ht - remis)-discount;
+                }
+                let tva = netHt * 0.2;
+
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+                let netHt = ht;
+                if(discount && discount>0){
+                    netHt = ht-discount;
+                }
+                let tva = netHt * 0.2;
+                setTva(tva)
+                setPrixhtNet(netHt)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
     }
 
     function handleChipChange(value, name) {
@@ -218,6 +471,13 @@ function Commande(props) {
         }
     }
 
+    function handleClickOpen() {
+        setOpen(true);
+    }
+
+    function handleClose() {
+        setOpen(false);
+    }
 
     function handleSubmit(form) {
         //event.preventDefault();
@@ -225,7 +485,7 @@ function Commande(props) {
         const params = props.match.params;
         const { commandeId } = params;
 
-        dispatch(Actions.updateCommande(form, sousSecteurs, offre, mode));
+        dispatch(Actions.updateCommande(form, sousSecteurs, offre, mode, duree, discount, paiement));
 
     }
 
@@ -263,26 +523,66 @@ function Commande(props) {
                                         </FuseAnimate>
 
                                     </div>
+
+
                                 </div>
                             </div>
-                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                <Button
-                                    className="whitespace-no-wrap"
-                                    variant="contained"
-                                    disabled={sousSecteurs.length === 0}
-                                    onClick={() => handleSubmit(form, sousSecteurs)}
-                                >
-                                    Valider la commande
+                            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                                <DialogTitle id="form-dialog-title">Confirmation </DialogTitle>
+                                <DialogContent className="mb-12">
+                                    {!paiement ? 'Voullez-vous vraiment valider la commande sans confirmation du paiment?' : 'Vous êtes sur le point d\'affecter une nouvelle abonnement'}
+                                </DialogContent>
+                                <Divider />
+                                <DialogActions>
+                                    <Button
+                                        onClick={handleClose}
+                                        variant="outlined"
+                                        color="secondary"
+                                    >
+                                        Annnuler
+                                    </Button>
+                                    <Button onClick={() => handleSubmit(form, sousSecteurs)}
+                                        variant="contained" color="secondary" disabled={commande.loading}
+                                    >
+                                        Sauvegarder
+                                        {commande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                            <div className="flex items-end max-w-full">
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={paiement}
+                                            onChange={(e) => handleCheckBoxChange(e)}
+                                            value={paiement}
+                                        />
+                                    }
+                                    label="Confirmer le paiement de cette entreprise"
+                                />
+
+                                <FuseAnimate animation="transition.slideRightIn" delay={300}>
+
+
+                                    <Button
+                                        className="whitespace-no-wrap"
+                                        variant="contained"
+                                        disabled={commande.loading || sousSecteurs.length === 0}
+                                        onClick={handleClickOpen}
+
+                                    >
+                                        Valider la commande
                                     {commande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                </Button>
-                            </FuseAnimate>
+                                    </Button>
+                                </FuseAnimate>
+                            </div>
                         </div>
                     )
                     :
                     ''
             }
             contentToolbar={
-                commande.loading || !form || !commande.offres || !commande.paiements ?
+                commande.loading || !form ?
 
                     (<div className={classes.root}>
                         <LinearProgress color="secondary" />
@@ -298,7 +598,7 @@ function Commande(props) {
                         classes={{ root: "w-full h-64" }}
                     >
                         <Tab className="h-64 normal-case" label="Détail de la commande" />
-                        <Tab className="h-64 normal-case" label="Info. Fournisseur" />
+                        <Tab className="h-64 normal-case" label="Info. de la société" />
 
 
                     </Tabs>
@@ -307,7 +607,7 @@ function Commande(props) {
             content={
                 !commande.loading ?
 
-                    form && commande.offres && commande.paiements && (
+                    form && (
                         <div className="p-10  sm:p-24 max-w-2xl">
                             {tabValue === 0 && (
                                 <Formsy
@@ -327,228 +627,341 @@ function Commande(props) {
                                     <Grid container spacing={3} className="mt-16 mb-16">
                                         <Grid item xs={12} sm={6}>
                                             {
+                                                commande.offres && offre ?
+                                                    commande.offres.map((item, index) => (
+                                                        <Grid container key={index} spacing={3} >
+                                                            <Grid item xs={6} sm={6}>
+                                                                <strong className="p-1" >
+                                                                    {item.name}
+                                                                </strong> <br />
+                                                                <span className="p-1" >
+                                                                    {item.description}
+                                                                </span>
+                                                            </Grid>
+                                                            <Grid item xs={6} sm={6}>
+                                                                <FormGroup row>
+                                                                    <FormControlLabel
+                                                                        control={
+                                                                            <Switch
+                                                                                checked={offre.id === item.id}
+                                                                                onChange={() => {
+                                                                                    handleChangeOffre(item);
+                                                                                }}
+                                                                                value={item['@id']}
+                                                                            />
+                                                                        }
+                                                                        label={
+                                                                            commande.data.fournisseur.currency.name === 'DHS' ?
+                                                                                parseFloat(item.prixMad).toLocaleString(
+                                                                                    'fr', // leave undefined to use the browser's locale,
+                                                                                    // or use a string like 'en-US' to override it.
+                                                                                    { minimumFractionDigits: 2 }
+                                                                                ) + ' DHS HT / mois' :
+                                                                                parseFloat(item.prixEur).toLocaleString(
+                                                                                    'fr', // leave undefined to use the browser's locale,
+                                                                                    // or use a string like 'en-US' to override it.
+                                                                                    { minimumFractionDigits: 2 }
+                                                                                ) + ' € HT / mois'
+                                                                        }
+                                                                    />
+                                                                </FormGroup>
+                                                            </Grid>
 
-                                                commande.offres.map((item, index) => (
-                                                    <Grid container key={index} spacing={3} >
-                                                        <Grid item xs={6} sm={6}>
-                                                            <strong className="p-1" >
-                                                                {item.name}
-                                                            </strong> <br />
-                                                            <span className="p-1" >
-                                                                {item.description}
-                                                            </span>
                                                         </Grid>
-                                                        <Grid item xs={6} sm={6}>
-                                                            <FormGroup row>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Switch
-                                                                            checked={offre.id === item.id}
-                                                                            onChange={() => handleChangeOffre(item)}
-                                                                            value={item['@id']}
-                                                                        />
-                                                                    }
-                                                                    label={
-                                                                        form.fournisseur.currency.name === 'DHS' ?
-                                                                            parseFloat(item.prixMad).toLocaleString(
-                                                                                'fr', // leave undefined to use the browser's locale,
-                                                                                // or use a string like 'en-US' to override it.
-                                                                                { minimumFractionDigits: 2 }
-                                                                            ) + ' DHS HT / mois' :
-                                                                            parseFloat(item.prixEur).toLocaleString(
-                                                                                'fr', // leave undefined to use the browser's locale,
-                                                                                // or use a string like 'en-US' to override it.
-                                                                                { minimumFractionDigits: 2 }
-                                                                            ) + ' € HT / mois'
-                                                                    }
-                                                                />
-                                                            </FormGroup>
-                                                        </Grid>
 
-                                                    </Grid>
+                                                    ))
 
-                                                ))
-
-
+                                                    :
+                                                    <ContentLoader
+                                                        height={160}
+                                                        width={400}
+                                                        speed={2}
+                                                        primaryColor="#f3f3f3"
+                                                        secondaryColor="#ecebeb"
+                                                    >
+                                                        <circle cx="10" cy="20" r="8" />
+                                                        <rect x="25" y="15" rx="5" ry="5" width="220" height="10" />
+                                                        <circle cx="10" cy="50" r="8" />
+                                                        <rect x="25" y="45" rx="5" ry="5" width="220" height="10" />
+                                                        <circle cx="10" cy="80" r="8" />
+                                                        <rect x="25" y="75" rx="5" ry="5" width="220" height="10" />
+                                                    </ContentLoader>
                                             }
-                                            <SelectReactFormsyS_S
-                                                className="mt-16 z-9999"
-                                                id="sousSecteurs"
-                                                name="sousSecteurs"
-                                                value={
-                                                    sousSecteurs
-                                                }
-                                                onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                                placeholder={"Sélectionner vos activités"}
-                                                textFieldProps={{
-                                                    label: 'Activités',
-                                                    InputLabelProps: {
-                                                        shrink: true
-                                                    },
-                                                    variant: 'outlined'
-                                                }}
-                                                options={commande.sousSecteurs}
-                                                fullWidth
-                                                isMulti
-                                                required
-                                            />
+                                            <Divider className="mt-8" />
+                                            {
+                                                commande.sousSecteurs ?
+                                                    <>
+                                                        <SelectReactFormsyS_S
+                                                            className="mt-16 z-9999"
+                                                            id="sousSecteurs"
+                                                            name="sousSecteurs"
+                                                            value={
+                                                                sousSecteurs
+                                                            }
+                                                            onChange={(value) => handleChipChange(value, 'sousSecteurs')}
+                                                            placeholder={"Sélectionner vos activités"}
+                                                            textFieldProps={{
+                                                                label: 'Activités',
+                                                                InputLabelProps: {
+                                                                    shrink: true
+                                                                },
+                                                                variant: 'outlined'
+                                                            }}
+                                                            options={commande.sousSecteurs}
+                                                            fullWidth
+                                                            isMulti
+                                                            required
+                                                        />
+
+                                                    </>
+                                                    :
+                                                    <ContentLoader
+                                                        height={70}
+                                                        width={400}
+                                                        speed={2}
+                                                        primaryColor="#f3f3f3"
+                                                        secondaryColor="#ecebeb"
+                                                    >
+                                                        <rect x="1" y="13" rx="5" ry="5" width="220" height="24" />
+                                                    </ContentLoader>
+                                            }
+
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
+                                            {
+                                                commande.offres && offre && duree ?
+                                                    <Table className="w-full -striped">
+                                                        <TableHead className="bg-gray-200">
+                                                            <TableRow>
+                                                                <TableCell
 
-                                            <Table className="w-full -striped">
-                                                <TableHead className="bg-gray-200">
-                                                    <TableRow>
-                                                        <TableCell
+                                                                    className="font-bold  text-black"
+                                                                >
+                                                                    Offre
+                                                        </TableCell>
+                                                                <TableCell
+                                                                    className="font-bold text-black text-right"
+                                                                >
+                                                                    Total HT
+                                                        </TableCell>
 
-                                                            className="font-bold  text-black"
-                                                        >
-                                                            Offre
+                                                            </TableRow>
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            <TableRow >
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="truncate text-11"
+                                                                >
+                                                                    <strong>{offre ? offre.name : ''}</strong>
+                                                                    <br />
+                                                                    {
+
+                                                                        commande.data.fournisseur.currency.name === 'DHS' ?
+                                                                            parseFloat(offre.prixMad).toLocaleString(
+                                                                                'fr', // leave undefined to use the browser's locale,
+                                                                                // or use a string like 'en-US' to override it.
+                                                                                { minimumFractionDigits: 2 }
+                                                                            ) :
+                                                                            parseFloat(offre.prixEur).toLocaleString(
+                                                                                'fr', // leave undefined to use the browser's locale,
+                                                                                // or use a string like 'en-US' to override it.
+                                                                                { minimumFractionDigits: 2 }
+                                                                            )
+                                                                    }
+                                                                    * {duree.name + ' mois'}
+                                                                </TableCell>
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="truncate text-11 text-right"
+                                                                >
+                                                                    {
+                                                                        parseFloat(prixht).toLocaleString(
+                                                                            'fr', // leave undefined to use the browser's locale,
+                                                                            // or use a string like 'en-US' to override it.
+                                                                            { minimumFractionDigits: 2 }
+                                                                        )
+                                                                    }
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow className="bg-gray-200" >
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="truncate text-11 text-right"
+                                                                >
+                                                                    Total HT
+                                                        </TableCell>
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="truncate text-11 text-right"
+                                                                >
+                                                                    {
+                                                                        parseFloat(prixht).toLocaleString(
+                                                                            'fr', // leave undefined to use the browser's locale,
+                                                                            // or use a string like 'en-US' to override it.
+                                                                            { minimumFractionDigits: 2 }
+                                                                        )
+                                                                    }
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            {
+                                                                duree.remise ?
+                                                                    <TableRow className="" >
+                                                                        <TableCell
+                                                                            component="th"
+                                                                            scope="row"
+                                                                            className="truncate text-11 text-right"
+                                                                        >
+                                                                            Remise ({duree.remise}%)
+                                                                    </TableCell>
+                                                                        <TableCell
+                                                                            component="th"
+                                                                            scope="row"
+                                                                            className="truncate text-11 text-right"
+                                                                        >
+                                                                            {
+                                                                                parseFloat(remise).toLocaleString(
+                                                                                    'fr', // leave undefined to use the browser's locale,
+                                                                                    // or use a string like 'en-US' to override it.
+                                                                                    { minimumFractionDigits: 2 }
+                                                                                )
+                                                                            }
+
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                    :
+                                                                    null
+
+                                                            }
+                                                            <TableRow className="" >
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="text-11 text-right"
+                                                                >
+                                                                    Remise
                                                             </TableCell>
-                                                        <TableCell
-                                                            className="font-bold text-black text-right"
-                                                        >
-                                                            Total HT
-                                                            </TableCell>
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="truncate text-11 text-right"
+                                                                >
+                                                                    <TextFieldFormsy
+                                                                        type="number"
+                                                                        step="any"
+                                                                        name="discount"
+                                                                        id="discount"
+                                                                        onChange={(ev) => { handleChangeDiscount(ev.target.value) }}
+                                                                        value={discount}
 
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    <TableRow >
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="truncate text-11"
-                                                        >
-                                                            <strong>{offre ? offre.name : ''}</strong>
-                                                            <br />
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
                                                             {
-                                                                parseFloat(offre.prixMad).toLocaleString(
-                                                                    'fr', // leave undefined to use the browser's locale,
-                                                                    // or use a string like 'en-US' to override it.
-                                                                    { minimumFractionDigits: 2 }
-                                                                )
-                                                            }
-                                                            * 12 mois
-                                                    </TableCell>
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="truncate text-11 text-right"
-                                                        >
-                                                            {
-                                                                parseFloat(offre.prixMad * 12).toLocaleString(
-                                                                    'fr', // leave undefined to use the browser's locale,
-                                                                    // or use a string like 'en-US' to override it.
-                                                                    { minimumFractionDigits: 2 }
-                                                                )
-                                                            }
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    <TableRow className="bg-gray-200" >
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="truncate text-11 text-right"
-                                                        >
-                                                            Total HT
-                                                    </TableCell>
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="truncate text-11 text-right"
-                                                        >
-                                                            {
-                                                                parseFloat(offre.prixMad * 12).toLocaleString(
-                                                                    'fr', // leave undefined to use the browser's locale,
-                                                                    // or use a string like 'en-US' to override it.
-                                                                    { minimumFractionDigits: 2 }
-                                                                )
-                                                            }
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    <TableRow className="" >
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="truncate text-11 text-right"
-                                                        >
-                                                            TVA (20%)
-                                                    </TableCell>
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="truncate text-11 text-right"
-                                                        >
-                                                            {
-                                                                parseFloat((offre.prixMad * 12) * 0.2).toLocaleString(
-                                                                    'fr', // leave undefined to use the browser's locale,
-                                                                    // or use a string like 'en-US' to override it.
-                                                                    { minimumFractionDigits: 2 }
-                                                                )
-                                                            }
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    <TableRow className="bg-gray-200" >
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="text-11 text-right"
-                                                        >
-                                                            Remise
-                                                    </TableCell>
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="truncate text-11 text-right"
-                                                        >
-                                                            <TextFieldFormsy
-                                                                type="number"
-                                                                step="any"
-                                                                name="discount"
-                                                                id="discount"
-                                                                onChange={(ev)=> {console.log(ev.target.value);setDiscount(ev.target.value)}}
-                                                                value={discount}
-                                                                
-                                                            />
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    <TableRow className="bg-green-200" >
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="font-bold text-11 text-right"
-                                                        >
-                                                            Montant TTC
-                                                    </TableCell>
-                                                        <TableCell
-                                                            component="th"
-                                                            scope="row"
-                                                            className="truncate font-bold text-13 text-right"
-                                                        >
-                                                            {
-                                                                discount > 0 && discount ?
-                                                                parseFloat(((offre.prixMad * 12) + ((offre.prixMad * 12) * 0.2))-parseFloat(discount)).toLocaleString(
-                                                                    'fr', // leave undefined to use the browser's locale,
-                                                                    // or use a string like 'en-US' to override it.
-                                                                    { minimumFractionDigits: 2 }
-                                                                ):
-                                                                parseFloat(((offre.prixMad * 12) + ((offre.prixMad * 12) * 0.2))).toLocaleString(
-                                                                    'fr', // leave undefined to use the browser's locale,
-                                                                    // or use a string like 'en-US' to override it.
-                                                                    { minimumFractionDigits: 2 }
-                                                                )
-                                                            }
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </TableBody>
+                                                                prixhtNet > 0 && prixhtNet!==prixht?
+                                                                    <TableRow className="bg-gray-200" >
+                                                                        <TableCell
+                                                                            component="th"
+                                                                            scope="row"
+                                                                            className="truncate text-11 text-right"
+                                                                        >
+                                                                            Montant NET HT
+                                                                    </TableCell>
+                                                                        <TableCell
+                                                                            component="th"
+                                                                            scope="row"
+                                                                            className="truncate text-11 text-right"
+                                                                        >
+                                                                            {
+                                                                                parseFloat(prixhtNet).toLocaleString(
+                                                                                    'fr', // leave undefined to use the browser's locale,
+                                                                                    // or use a string like 'en-US' to override it.
+                                                                                    { minimumFractionDigits: 2 }
+                                                                                )
+                                                                            }
 
-                                            </Table>
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                    :
+                                                                    null
+
+                                                            }
+                                                            <TableRow className="" >
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="truncate text-11 text-right"
+                                                                >
+                                                                    TVA (20%)
+                                                        </TableCell>
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="truncate text-11 text-right"
+                                                                >
+                                                                    {
+                                                                        parseFloat(tva).toLocaleString(
+                                                                            'fr', // leave undefined to use the browser's locale,
+                                                                            // or use a string like 'en-US' to override it.
+                                                                            { minimumFractionDigits: 2 }
+                                                                        )
+                                                                    }
+                                                                </TableCell>
+                                                            </TableRow>
+
+
+                                                            <TableRow className="bg-gray-200" >
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="truncate font-bold text-11 text-right"
+                                                                >
+                                                                    Montant TTC
+                                                        </TableCell>
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row"
+                                                                    className="truncate font-bold text-13 text-right"
+                                                                >
+                                                                    {
+                                                                        parseFloat(prixTTC).toLocaleString(
+                                                                            'fr', // leave undefined to use the browser's locale,
+                                                                            // or use a string like 'en-US' to override it.
+                                                                            { minimumFractionDigits: 2 }
+                                                                        )
+                                                                    }
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        </TableBody>
+
+                                                    </Table>
+                                                    :
+                                                    <ContentLoader
+                                                        height={160}
+                                                        width={400}
+                                                        speed={2}
+                                                        primaryColor="#f3f3f3"
+                                                        secondaryColor="#ecebeb"
+                                                    >
+                                                        <circle cx="10" cy="20" r="8" />
+                                                        <rect x="25" y="15" rx="5" ry="5" width="220" height="10" />
+                                                        <circle cx="10" cy="50" r="8" />
+                                                        <rect x="25" y="45" rx="5" ry="5" width="220" height="10" />
+                                                        <circle cx="10" cy="80" r="8" />
+                                                        <rect x="25" y="75" rx="5" ry="5" width="220" height="10" />
+                                                    </ContentLoader>
+                                            }
+
 
                                         </Grid>
                                     </Grid>
                                     <Grid container spacing={3} className="">
                                         <Grid item xs={12} sm={6}>
-                                            <Typography className="mb-16" variant="h6">2-  Mode de paiement</Typography>
+                                            <Typography className="mb-16" variant="h6">2- Mode de paiement </Typography>
 
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
@@ -561,31 +974,65 @@ function Commande(props) {
                                     <Grid container spacing={3} className="mt-6 mb-16">
                                         <Grid item xs={12} sm={6}>
                                             {
-
-                                                commande.paiements.map((item, index) => (
-                                                    <FormControlLabel onChange={() => setMode(item['@id'])} key={index} value={item['@id']} checked={mode === item['@id']} control={<Radio />} label={item.name} />
-                                                ))
+                                                commande.paiements ?
+                                                    commande.paiements.map((item, index) => (
+                                                        <FormControlLabel onChange={() => setMode(item['@id'])} key={index} value={item['@id']} checked={mode === item['@id']} control={<Radio />} label={item.name} />
+                                                    ))
+                                                    :
+                                                    <ContentLoader
+                                                        height={70}
+                                                        width={400}
+                                                        speed={2}
+                                                        primaryColor="#f3f3f3"
+                                                        secondaryColor="#ecebeb"
+                                                    >
+                                                        <circle cx="15" cy="17" r="6" />
+                                                        <rect x="25" y="11" rx="5" ry="5" width="100" height="12" />
+                                                        <circle cx="145" cy="17" r="6" />
+                                                        <rect x="155" y="11" rx="5" ry="5" width="100" height="12" />
+                                                    </ContentLoader>
                                             }
 
 
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
-                                            <Chip
-                                                avatar={
-                                                    <Avatar>
-                                                        12
-                                                </Avatar>
-                                                }
-                                                color="secondary"
-                                                label="Mois"
-                                                variant="outlined"
-                                            />
+                                            {
+                                                commande.durees && duree ?
+                                                    commande.durees.map((item, index) => (
+                                                        <div className="inline" key={index} >
+                                                            <FormControlLabel onChange={() => handleChangeDuree(item)}
+                                                                value={item['@id']}
+                                                                checked={duree.id === item.id}
+                                                                control={<Radio />}
+                                                                label={item.name + ' mois'} />
+
+                                                            {
+                                                                item.remise ?
+                                                                    <span className="text-12 text-red">(Soit {item.remise}% de remise )</span>
+                                                                    : ''
+                                                            }
+
+                                                        </div >
+                                                    ))
+                                                    :
+                                                    <ContentLoader
+                                                        height={70}
+                                                        width={400}
+                                                        speed={2}
+                                                        primaryColor="#f3f3f3"
+                                                        secondaryColor="#ecebeb"
+                                                    >
+                                                        <circle cx="15" cy="17" r="6" />
+                                                        <rect x="25" y="11" rx="5" ry="5" width="100" height="12" />
+                                                        <circle cx="145" cy="17" r="6" />
+                                                        <rect x="155" y="11" rx="5" ry="5" width="100" height="12" />
+                                                    </ContentLoader>
+                                            }
                                         </Grid>
                                     </Grid>
 
                                 </Formsy>
                             )}
-
                             {tabValue === 1 && (
                                 <Formsy
 
@@ -860,12 +1307,14 @@ function Commande(props) {
                                 </Formsy>
                             )}
 
+
                         </div>
                     )
                     : ''
             }
             innerScroll
         />
+
     )
 }
 

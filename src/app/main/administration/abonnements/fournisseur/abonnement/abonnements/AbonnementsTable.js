@@ -40,15 +40,15 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px'
     },
 }));
-function CommandesTable(props) {
+function AbonnementsTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const commandes = useSelector(({ commandeOffreAdminApp }) => commandeOffreAdminApp.commandes.data);
-    const loading = useSelector(({ commandeOffreAdminApp }) => commandeOffreAdminApp.commandes.loading);
-    const pageCount = useSelector(({ commandeOffreAdminApp }) => commandeOffreAdminApp.commandes.pageCount);
-    const parametres = useSelector(({ commandeOffreAdminApp }) => commandeOffreAdminApp.commandes.parametres);
-    const searchText = useSelector(({ commandeOffreAdminApp }) => commandeOffreAdminApp.commandes.searchText);
+    const abonnements = useSelector(({ abonnementOffreApp }) => abonnementOffreApp.abonnements.data);
+    const loading = useSelector(({ abonnementOffreApp }) => abonnementOffreApp.abonnements.loading);
+    const pageCount = useSelector(({ abonnementOffreApp }) => abonnementOffreApp.abonnements.pageCount);
+    const parametres = useSelector(({ abonnementOffreApp }) => abonnementOffreApp.abonnements.parametres);
+    const searchText = useSelector(({ abonnementOffreApp }) => abonnementOffreApp.abonnements.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 
@@ -61,10 +61,10 @@ function CommandesTable(props) {
             return FuseUtils.filterArrayByString(arr, searchText);
         }
 
-        if (commandes) {
-            setFilteredData(getFilteredArray(commandes, searchText));
+        if (abonnements) {
+            setFilteredData(getFilteredArray(abonnements, searchText));
         }
-    }, [commandes, searchText]);
+    }, [abonnements, searchText]);
 
 
 
@@ -135,6 +135,12 @@ function CommandesTable(props) {
                         Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
                     },
                     {
+                        Header: "Date d'expiration",
+                        accessor: "created",
+                        filterable: false,
+                        Cell: row => moment(row.original.expired).format('DD/MM/YYYY HH:mm')
+                    },
+                    {
                         Header: "Statut",
                         sortable: false,
                         filterable: false,
@@ -143,12 +149,17 @@ function CommandesTable(props) {
 
                                 {
 
-                                    row.original.statut === false
-                                    ?
+                                    row.original.statut === 0
+                                        ?
                                         <Chip className={classes.chipOrange} label="En attente" />
-                                    :
-                                    <Chip className={classes.chip2} label="Traitée" />
-
+                                        :
+                                        (
+                                            moment(row.original.expired) >= moment()
+                                                ?
+                                                <Chip className={classes.chip2} label="En cours" />
+                                                :
+                                                <Chip className={classes.chip} label="Expiré" />
+                                        )
 
                                 }
 
@@ -157,30 +168,22 @@ function CommandesTable(props) {
 
                     },
 
-
-
                     {
                         Header: "",
                         Cell: row => (
                             <div className="flex items-center">
-                                {row.original.statut === false
-                                    ?
-                                    <Tooltip title="Traiter" >
-                                        <IconButton className="text-blue text-20"
-                                            onClick={() =>
-                                                props.history.push('/admin/offres/commande/' + row.original.id)
-                                            }
-                                        >
-                                            <Icon>send</Icon>
-                                        </IconButton>
-                                    </Tooltip>
-                                    :
-                                    <Tooltip title="Déjà traitée" >
-                                        <IconButton className="text-grey text-20">
-                                            <Icon>send</Icon>
-                                        </IconButton>
-                                    </Tooltip>
-                                }
+
+                                <Tooltip title="Editer" >
+                                    <IconButton className="text-orange text-20"
+                                        onClick={() =>
+                                            props.history.push('/admin/offres/abonnement/' + row.original.id)
+                                        }
+                                    >
+                                        <Icon>edit</Icon>
+                                    </IconButton>
+                                </Tooltip>
+
+
 
                             </div>
                         )
@@ -204,7 +207,7 @@ function CommandesTable(props) {
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
                 }}
-                noDataText="No Commande found"
+                noDataText="No Abonnement found"
                 loadingText='Chargement...'
                 ofText='sur'
             />
@@ -212,4 +215,4 @@ function CommandesTable(props) {
     );
 }
 
-export default withRouter(CommandesTable);
+export default withRouter(AbonnementsTable);

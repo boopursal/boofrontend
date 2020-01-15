@@ -123,9 +123,12 @@ function Commande(props) {
     const [duree, setDuree] = useState(null);
     const [open, setOpen] = useState(false);
     const [formActive, setFormActive] = useState(1);
-
     const { form, setForm } = useForm(null);
-
+    const [prixht, setPrixht] = useState(0);
+    const [tva, setTva] = useState(0);
+    const [remise, setRemise] = useState(0);
+    const [prixhtNet, setPrixhtNet] = useState(0);
+    const [prixTTC, setPrixTTC] = useState(0);
     const classes = useStyles(props);
 
     useEffect(() => {
@@ -189,8 +192,55 @@ function Commande(props) {
                 setOffre(commande.data.offre)
             if (commande.data.mode)
                 setMode(commande.data.mode['@id'])
-            if (commande.data.duree)
-                setDuree(commande.data.duree)
+            if (commande.data.duree) {
+
+                setDuree(commande.data.duree);
+
+                if (commande.data.offre) {
+                    if (commande.data.fournisseur.currency.name === 'DHS') {
+                        let ht = commande.data.offre.prixMad * commande.data.duree.name;
+                        setPrixht(ht)
+
+                        if (commande.data.duree.remise) {
+                            let remis = ht * commande.data.duree.remise / 100;
+                            let netHt = ht - remis;
+                            let tva = netHt * 0.2;
+                            setRemise(remis)
+                            setPrixhtNet(netHt)
+                            setTva(tva)
+                            setPrixTTC(netHt + tva)
+
+                        } else {
+                            let tva = ht * 0.2;
+                            setTva(ht * 0.2)
+                            setPrixTTC(ht + tva)
+                        }
+
+                    }
+                    else {
+                        let ht = commande.data.offre.prixEur * commande.data.duree.name;
+                        setPrixht(ht)
+
+                        if (commande.data.duree.remise) {
+                            let remis = ht * commande.data.duree.remise / 100;
+                            let netHt = ht - remis;
+                            let tva = netHt * 0.2;
+
+                            setRemise(remis)
+                            setPrixhtNet(netHt)
+                            setTva(tva)
+                            setPrixTTC(netHt + tva)
+
+                        } else {
+                            let tva = ht * 0.2;
+                            setTva(ht * 0.2)
+                            setPrixTTC(ht + tva)
+                        }
+
+                    }
+
+                }
+            }
         }
     }, [form, commande.data, setForm]);
 
@@ -217,6 +267,50 @@ function Commande(props) {
             (commande.durees && !duree)
         ) {
             setDuree(commande.durees[0]);
+            if (offre) {
+                if (user.data.currency === 'DHS') {
+                    let ht = offre.prixMad * commande.durees[0].name;
+                    setPrixht(ht)
+
+                    if (commande.durees[0].remise) {
+                        let remis = ht * commande.durees[0].remise / 100;
+                        let netHt = ht - remis;
+                        let tva = netHt * 0.2;
+                        setRemise(remis)
+                        setPrixhtNet(netHt)
+                        setTva(tva)
+                        setPrixTTC(netHt + tva)
+
+                    } else {
+                        let tva = ht * 0.2;
+                        setTva(ht * 0.2)
+                        setPrixTTC(ht + tva)
+                    }
+
+                }
+                else {
+                    let ht = offre.prixEur * commande.durees[0].name;
+                    setPrixht(ht)
+
+                    if (commande.durees[0].remise) {
+                        let remis = ht * commande.durees[0].remise / 100;
+                        let netHt = ht - remis;
+                        let tva = netHt * 0.2;
+
+                        setRemise(remis)
+                        setPrixhtNet(netHt)
+                        setTva(tva)
+                        setPrixTTC(netHt + tva)
+
+                    } else {
+                        let tva = ht * 0.2;
+                        setTva(ht * 0.2)
+                        setPrixTTC(ht + tva)
+                    }
+
+                }
+
+            }
 
         }
     }, [duree, commande.durees, setDuree]);
@@ -245,12 +339,106 @@ function Commande(props) {
         setFormActive(form);
     }
 
+    function handleChangeDuree(item) {
+        setDuree(item);
+        if (user.data.currency === 'DHS') {
+            let ht = offre.prixMad * item.name;
+            setPrixht(ht)
+
+            if (item.remise) {
+                let remis = ht * item.remise / 100;
+                let netHt = ht - remis;
+                let tva = netHt * 0.2;
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+                let netHt = ht;
+                let tva = netHt * 0.2;
+                setTva(tva)
+                setPrixhtNet(netHt)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
+        else {
+            let ht = offre.prixEur * item.name;
+            setPrixht(ht)
+
+            if (item.remise) {
+                let remis = ht * item.remise / 100;
+                let netHt = ht - remis;
+                let tva = netHt * 0.2;
+
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+                let netHt = ht;
+                let tva = netHt * 0.2;
+                setTva(tva)
+                setPrixhtNet(netHt)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
+    }
+
     function handleChangeOffre(item) {
         setOffre(item);
         if (sousSecteurs.length > 0) {
             setSousSecteurs(_.slice(sousSecteurs, 0, item.nbActivite));
         }
 
+        if (user.data.currency === 'DHS') {
+            let ht = item.prixMad * duree.name;
+            setPrixht(ht)
+
+            if (duree.remise) {
+                let remis = ht * duree.remise / 100;
+                let netHt = ht - remis;
+                let tva = netHt * 0.2;
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+                let netHt = ht;
+                let tva = netHt * 0.2;
+                setTva(tva)
+                setPrixhtNet(netHt)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
+        else {
+            let ht = item.prixEur * duree.name;
+            setPrixht(ht)
+
+            if (duree.remise) {
+                let remis = ht * duree.remise / 100;
+                let netHt = ht - remis;
+                let tva = netHt * 0.2;
+
+                setRemise(remis)
+                setPrixhtNet(netHt)
+                setTva(tva)
+                setPrixTTC(netHt + tva)
+
+            } else {
+                let netHt = ht;
+                let tva = netHt * 0.2;
+                setTva(tva)
+                setPrixhtNet(netHt)
+                setPrixTTC(netHt + tva)
+            }
+
+        }
     }
 
     function handleChipChange(value, name) {
@@ -644,7 +832,7 @@ function Commande(props) {
                                                                 className="truncate text-11 text-right"
                                                             >
                                                                 {
-                                                                    parseFloat(offre.prixMad * duree.name).toLocaleString(
+                                                                    parseFloat(prixht).toLocaleString(
                                                                         'fr', // leave undefined to use the browser's locale,
                                                                         // or use a string like 'en-US' to override it.
                                                                         { minimumFractionDigits: 2 }
@@ -666,29 +854,7 @@ function Commande(props) {
                                                                 className="truncate text-11 text-right"
                                                             >
                                                                 {
-                                                                    parseFloat(offre.prixMad * duree.name).toLocaleString(
-                                                                        'fr', // leave undefined to use the browser's locale,
-                                                                        // or use a string like 'en-US' to override it.
-                                                                        { minimumFractionDigits: 2 }
-                                                                    )
-                                                                }
-                                                            </TableCell>
-                                                        </TableRow>
-                                                        <TableRow className="" >
-                                                            <TableCell
-                                                                component="th"
-                                                                scope="row"
-                                                                className="truncate text-11 text-right"
-                                                            >
-                                                                TVA (20%)
-                                                            </TableCell>
-                                                            <TableCell
-                                                                component="th"
-                                                                scope="row"
-                                                                className="truncate text-11 text-right"
-                                                            >
-                                                                {
-                                                                    parseFloat((offre.prixMad * duree.name) * 0.2).toLocaleString(
+                                                                    parseFloat(prixht).toLocaleString(
                                                                         'fr', // leave undefined to use the browser's locale,
                                                                         // or use a string like 'en-US' to override it.
                                                                         { minimumFractionDigits: 2 }
@@ -712,7 +878,7 @@ function Commande(props) {
                                                                         className="truncate text-11 text-right"
                                                                     >
                                                                         {
-                                                                            parseFloat((offre.prixMad * duree.name) * (duree.remise / 100)).toLocaleString(
+                                                                            parseFloat(remise).toLocaleString(
                                                                                 'fr', // leave undefined to use the browser's locale,
                                                                                 // or use a string like 'en-US' to override it.
                                                                                 { minimumFractionDigits: 2 }
@@ -724,6 +890,58 @@ function Commande(props) {
                                                                 null
 
                                                         }
+                                                        {
+                                                            prixhtNet > 0 && prixhtNet !== prixht ?
+                                                                <TableRow className="bg-gray-200" >
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate text-11 text-right"
+                                                                    >
+                                                                        Montant NET HT
+                                                                    </TableCell>
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate text-11 text-right"
+                                                                    >
+                                                                        {
+                                                                            parseFloat(prixhtNet).toLocaleString(
+                                                                                'fr', // leave undefined to use the browser's locale,
+                                                                                // or use a string like 'en-US' to override it.
+                                                                                { minimumFractionDigits: 2 }
+                                                                            )
+                                                                        }
+
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                :
+                                                                null
+
+                                                        }
+                                                        <TableRow className="" >
+                                                            <TableCell
+                                                                component="th"
+                                                                scope="row"
+                                                                className="truncate text-11 text-right"
+                                                            >
+                                                                TVA (20%)
+                                                            </TableCell>
+                                                            <TableCell
+                                                                component="th"
+                                                                scope="row"
+                                                                className="truncate text-11 text-right"
+                                                            >
+                                                                {
+                                                                    parseFloat(tva).toLocaleString(
+                                                                        'fr', // leave undefined to use the browser's locale,
+                                                                        // or use a string like 'en-US' to override it.
+                                                                        { minimumFractionDigits: 2 }
+                                                                    )
+                                                                }
+                                                            </TableCell>
+                                                        </TableRow>
+
                                                         <TableRow className="bg-gray-200" >
                                                             <TableCell
                                                                 component="th"
@@ -738,18 +956,11 @@ function Commande(props) {
                                                                 className="truncate font-bold text-13 text-right"
                                                             >
                                                                 {
-                                                                    duree.remise ?
-                                                                        parseFloat(((offre.prixMad * duree.name) + ((offre.prixMad * duree.name) * 0.2)) - ((offre.prixMad * duree.name) * (duree.remise / 100))).toLocaleString(
-                                                                            'fr', // leave undefined to use the browser's locale,
-                                                                            // or use a string like 'en-US' to override it.
-                                                                            { minimumFractionDigits: 2 }
-                                                                        )
-                                                                        :
-                                                                        parseFloat((offre.prixMad * duree.name) + ((offre.prixMad * duree.name) * 0.2)).toLocaleString(
-                                                                            'fr', // leave undefined to use the browser's locale,
-                                                                            // or use a string like 'en-US' to override it.
-                                                                            { minimumFractionDigits: 2 }
-                                                                        )
+                                                                    parseFloat(prixTTC).toLocaleString(
+                                                                        'fr', // leave undefined to use the browser's locale,
+                                                                        // or use a string like 'en-US' to override it.
+                                                                        { minimumFractionDigits: 2 }
+                                                                    )
 
                                                                 }
                                                             </TableCell>
@@ -818,13 +1029,13 @@ function Commande(props) {
                                             commande.durees && duree ?
                                                 commande.durees.map((item, index) => (
                                                     <>
-                                                        <FormControlLabel onChange={() => setDuree(item)} key={index} value={item['@id']} checked={duree.id === item.id} control={<Radio />} label={item.name + ' mois'} />
-                                                      
-                                                      {
-                                                          item.remise? 
-                                                          <span className="text-12 text-red">(Soit {item.remise}% de remise )</span>
-                                                           : ''
-                                                      }  
+                                                        <FormControlLabel onChange={() => handleChangeDuree(item)} key={index} value={item['@id']} checked={duree.id === item.id} control={<Radio />} label={item.name + ' mois'} />
+
+                                                        {
+                                                            item.remise ?
+                                                                <span className="text-12 text-red">(Soit {item.remise}% de remise )</span>
+                                                                : ''
+                                                        }
 
                                                     </>
                                                 ))

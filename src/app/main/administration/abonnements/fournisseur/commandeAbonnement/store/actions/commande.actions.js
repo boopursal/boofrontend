@@ -3,7 +3,7 @@ import agent from 'agent';
 import FuseUtils from '@fuse/FuseUtils';
 import { showMessage } from 'app/store/actions/fuse';
 import _ from '@lodash';
-
+import * as Actions from '@fuse/components/FuseNavigation/store/actions';
 
 export const REQUEST_COMMANDE = '[COMMANDE APP] REQUEST COMMANDE';
 export const GET_COMMANDE = '[COMMANDE APP] GET COMMANDE';
@@ -19,6 +19,7 @@ export const SAVE_COMMANDE = '[COMMANDE APP] SAVE COMMANDE';
 export const SAVE_ERROR = '[COMMANDE APP] SAVE ERROR';
 export const GET_PAIEMENT = '[COMMANDE APP] GET_PAIEMENT';
 export const CLEAN_UP = '[COMMANDE APP] CLEAN_UP';
+export const GET_DUREE = '[COMMANDE APP] GET_DUREE';
 
 
 
@@ -29,13 +30,32 @@ export function cleanUp() {
     });
 }
 
-export function updateCommande(data,sousSecteurs,offre,mode) {
+export function getDurees() {
+    const request = agent.get(`/api/durees`);
+
+    return (dispatch) => {
+
+        return request.then((response) => {
+            dispatch({
+                type: GET_DUREE,
+                payload: response.data['hydra:member']
+            })
+        });
+    }
+
+}
+
+export function updateCommande(data,sousSecteurs,offre,mode,duree, remise,paiement) {
     
     data.offre =offre['@id'];
     data.sousSecteurs = _.map(sousSecteurs, function (value, key) {
         return value.value;
     });
     data.mode=mode;
+    data.duree=duree['@id'];
+    data.paiement=paiement;
+    data.remise=remise;
+
     const request = agent.put(data['@id'], data);
 
     return (dispatch) => {
@@ -45,7 +65,8 @@ export function updateCommande(data,sousSecteurs,offre,mode) {
         return request.then((response) => {
 
             dispatch(showMessage({ message: 'Commande modifiée avec succès' }));
-
+            dispatch(Actions.getCountForBadge('commandes-abonnements'));
+            dispatch(Actions.getCountForBadge('abonnement-fournisseur'));
             return dispatch({
                 type: SAVE_COMMANDE,
                 payload: response.data

@@ -80,8 +80,22 @@ const navigationConfig = [
                         'id': 'commandes-abonnements',
                         'title': 'Commandes abonnement',
                         'type': 'item',
-                        'icon': 'control_point_duplicate',
+                        'icon': 'inbox',
                         'url': '/admin/offres/commande',
+                        'badge': {
+                            'title': 'commandes-abonnements',
+                            'bg': 'rgb(255, 111, 0)',
+                            'fg': '#FFFFFF',
+                            'count': 0
+                        }
+                       
+                    },
+                    {
+                        'id': 'gestion-abonnements',
+                        'title': 'Abonnements',
+                        'type': 'item',
+                        'icon': 'cloud',
+                        'url': '/admin/offres/abonnement',
                        
                     },
                     {
@@ -193,8 +207,6 @@ const navigationConfig = [
         }
 
     },
-    
-
     /** Fin Admin Navigation */
 
     /** ACHETEUR Navigations */
