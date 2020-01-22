@@ -121,11 +121,9 @@ function Demande(props) {
 
     useEffect(() => {
         if (demande.error && (demande.error.reference || demande.error.description || demande.error.descriptionEn || demande.error.descriptionEs || demande.error.dateExpiration || demande.error.isPublic || demande.error.isAnonyme || demande.error.sousSecteurs || demande.error.langueP)) {
-            {
                 formRef.current.updateInputsWithError({
                     ...demande.error
                 });
-            }
             disableButton();
             demande.error = null;
         }

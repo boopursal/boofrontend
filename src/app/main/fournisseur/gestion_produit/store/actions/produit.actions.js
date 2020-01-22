@@ -41,42 +41,33 @@ export const CLEAN_ERROR = '[PRODUIT APP] CLEAN_ERROR';
 export const CLEAN_IMAGE = '[PRODUIT APP] CLEAN_IMAGE';
 export const CLEAN_DELETE_IMAGE = '[PRODUIT APP] CLEAN_DELETE_IMAGE';
 
+export const REQUEST_FOURNISSEUR = '[PRODUIT APP] REQUEST_FOURNISSEUR';
+export const GET_FOURNISSEUR = '[PRODUIT APP] GET_FOURNISSEUR';
 
-export function getSecteurs() {
-    const request = agent.get('/api/secteurs?properties[]=id&properties[]=name');
+export const REQUEST_SUGGESTION = '[PRODUIT APP] REQUEST_SUGGESTION';
+export const SAVE_SUGGESTION = '[PRODUIT APP] SAVE_SUGGESTION';
+export const SAVE_ERROR_SUGGESTION = '[PRODUIT APP] SAVE_ERROR_SUGGESTION';
+
+
+export function getActivitesAbonnementByFournisseur(params) {
+    const request = agent.get(`/api/fournisseurs/${params}/abonnements?exists[expired]=true&order[expired]=desc`);
 
     return (dispatch) => {
         dispatch({
-            type: REQUEST_SECTEUR,
+            type: REQUEST_FOURNISSEUR,
         });
         return request.then((response) => {
-            dispatch({
-                type: GET_SECTEUR,
-                payload: response.data
+            return dispatch({
+                type: GET_FOURNISSEUR,
+                payload: response.data['hydra:member'][0]
             })
-        });
+        }
 
+        );
     }
 
 }
 
-export function getSousSecteurs(url) {
-    const request = agent.get(`${url}/sous_secteurs?parent[exists]=false&pagination=false&properties[]=id&properties[]=name`);
-
-    return (dispatch) => {
-        dispatch({
-            type: REQUEST_SOUS_SECTEUR,
-        });
-        return request.then((response) => {
-            dispatch({
-                type: GET_SOUS_SECTEUR,
-                payload: response.data
-            })
-        });
-
-    }
-
-}
 
 export function getCategories(url) {
     const request = agent.get(`/api/sous_secteurs?parent=${url}&pagination=false&properties[]=id&properties[]=name`);
@@ -126,8 +117,10 @@ export function saveProduit(data,secteur,sousSecteur,categorie) {
         data.pu = parseFloat(data.pu);
     }
     data.sousSecteurs =sousSecteur.value;
-    data.secteur = secteur.value;
 
+    if (secteur) {
+        data.secteur = secteur[0].secteur['@id'];
+    }
     if (categorie) {
         data.categorie = categorie.value;
     }
@@ -177,8 +170,9 @@ export function putProduit(data, url,secteur,sousSecteur,categorie) {
         data.pu = parseFloat(data.pu);
     }
     data.sousSecteurs =sousSecteur.value;
-    data.secteur = secteur.value;
-
+    if (secteur) {
+        data.secteur = secteur[0].secteur['@id'];
+    }
     if (categorie) {
         data.categorie = categorie.value;
     }
@@ -360,7 +354,57 @@ export function uploadFiche(file) {
     };
 }
 
+export function AddSuggestionSecteur(secteur,sousSecteur,categorie,id_user) {
+    return (dispatch, getState) => {
 
+        let data={};
+        
+        if (sousSecteur && categorie){
+            data.sousSecteur = sousSecteur.label;
+            data.secteur = secteur[0].secteur.name;
+            data.categorie = categorie;
+            
+            data.pageSuggestion = "Ajout produit par fournisseur";
+            data.user = `/api/fournisseurs/${id_user}`
+        }
+        
+        else{
+            dispatch({
+                type: SAVE_ERROR_SUGGESTION
+            });
+            dispatch(showMessage({
+                message: 'Tout d\'abord, vous devez choisir une activité!', anchorOrigin: {
+                    vertical: 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'error'
+            }))
+            return;
+        }
+    
+
+        const request = agent.post(`/api/suggestion_secteurs`, data);
+        dispatch({
+            type: REQUEST_SUGGESTION,
+        });
+        return request.then((response) =>
+
+            Promise.all([
+                dispatch({
+                    type: SAVE_SUGGESTION
+                }),
+                dispatch(showMessage({
+                    message: 'Votre suggestion a bien été enregistré, un mail vous sera envoyé dès la validation de votre suggestion, nous vous remercions pour votre confiance!', anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'success'
+                }))
+            ])
+        );
+    };
+
+}
 
 export function newProduit() {
     const data = {

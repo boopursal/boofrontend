@@ -104,12 +104,9 @@ function Profile(props) {
     //SET ERRORS IN INPUTS AFTER ERROR API
     useEffect(() => {
         if (profile.error && (profile.error.societe || profile.error.newPassword || profile.error.newConfirmpassword || profile.error.oldPassword || profile.error.phone || profile.error.firstName || profile.error.lastName || profile.error.pays || profile.error.ville || profile.error.adresse1 || profile.error.adresse2 || profile.error.website || profile.error.fix || profile.error.ice || profile.error.description)) {
-            {
-                formRef.current.updateInputsWithError({
-                    ...profile.error
-                });
-
-            }
+            formRef.current.updateInputsWithError({
+                ...profile.error
+            });
             disableButton();
         }
     }, [profile.error]);
@@ -157,14 +154,14 @@ function Profile(props) {
 
     function handleChipChange(value, name) {
 
-        if (name === 'ville' ) {
+        if (name === 'ville') {
             setForm(_.set({ ...form }, name, value));
             setVille(value);
         }
-        else if ( name === 'secteur'){
+        else if (name === 'secteur') {
             setForm(_.set({ ...form }, name, value));
             setSecteur(value);
-            
+
         }
         else {
             form.ville = '';
@@ -270,7 +267,7 @@ function Profile(props) {
                         >
                             <Tab className="h-64 normal-case" label="Info société" />
                             <Tab className="h-64 normal-case" label="Info utilisateur" />
-                            <Tab className="h-64 normal-case" label="Ma photo" />
+                            <Tab className="h-64 normal-case" label="Photo" />
                             <Tab className="h-64 normal-case" label="Mot de passe" />
                         </Tabs>)
                     :
@@ -305,15 +302,15 @@ function Profile(props) {
                                                     onChange={handleChange}
                                                     variant="outlined"
                                                     validations={{
-                                                        matchRegexp  :/^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
+                                                        matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
                                                         minLength: 4,
                                                         maxLength: 20
-                                                        
+
                                                     }}
                                                     validationErrors={{
                                                         minLength: 'Raison sociale doit dépasser 4 caractères alphanumériques',
                                                         maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
-                                                        matchRegexp  :'Raison sociale doit contenir des caractères alphanumériques'
+                                                        matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
                                                     }}
                                                     required
                                                     fullWidth
@@ -413,8 +410,8 @@ function Profile(props) {
                                                                 minLength: 15,
                                                                 maxLength: 15,
                                                                 isNumeric: "isNumeric",
-                                                                matchRegexp  :/^(?!.*?(\w)\1{3}).*$/,
-                                                                
+                                                                matchRegexp: /^(?!.*?(\w)\1{3}).*$/,
+
                                                             }}
                                                             validationErrors={{
                                                                 minLength: 'La longueur minimale de caractère est 15',
@@ -887,7 +884,7 @@ function Profile(props) {
 
                     </div>
                 )
-                : ""
+                    : ""
             }
             innerScroll
         />

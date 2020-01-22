@@ -17,8 +17,6 @@ function PersonnelsDialog(props)
     const dispatch = useDispatch();
     const personnelsDialog = useSelector(({personnelsApp}) => personnelsApp.personnels.personnelsDialog);
     const user = useSelector(({auth}) => auth.user);
-    const imageReqInProgress = useSelector(({personnelsApp}) => personnelsApp.personnels.imageReqInProgress);
-    const avatar = useSelector(({personnelsApp}) => personnelsApp.personnels.avatar);
 
     const {form, handleChange, setForm} = useForm(defaultFormState);
 

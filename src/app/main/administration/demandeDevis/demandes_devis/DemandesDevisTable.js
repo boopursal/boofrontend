@@ -118,7 +118,7 @@ function DemandesDevisTable(props) {
                             accessor: f => f.produit ? f.produit.reference : '',
                         },
                         {
-                            Header: "Quantité souhaitée",
+                            Header: "Quantité",
                             id: "quantity",
                             accessor: f => f.quantity ? f.quantity : '',
                         },

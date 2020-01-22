@@ -6,6 +6,7 @@ const initialState = {
     pageCount: null,
     loading: false,
     searchText: '',
+    abonnement:null,
     parametres: {
         page: 1,
         description: '',
@@ -30,6 +31,13 @@ const produitsReducer = function (state = initialState, action) {
                     ...state,
                     loading: true
 
+                };
+            }
+        case Actions.GET_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    abonnement: action.payload,
                 };
             }
         case Actions.GET_PRODUITS:

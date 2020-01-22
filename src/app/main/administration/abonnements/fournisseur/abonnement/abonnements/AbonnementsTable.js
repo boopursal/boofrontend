@@ -9,7 +9,6 @@ import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
 import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
-import { isNull } from 'util';
 
 const useStyles = makeStyles(theme => ({
     root: {

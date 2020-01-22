@@ -82,11 +82,9 @@ function DemandeDevis(props) {
 
     useEffect(() => {
         if (demandeDevis.error && (demandeDevis.error.reference || demandeDevis.error.statut || demandeDevis.error.motifRejet || demandeDevis.error.description || demandeDevis.error.descriptionEn || demandeDevis.error.descriptionEs || demandeDevis.error.dateExpiration || demandeDevis.error.isPublic || demandeDevis.error.isAnonyme || demandeDevis.error.sousSecteurs || demandeDevis.error.budget)) {
-            {
                 formRef.current.updateInputsWithError({
                     ...demandeDevis.error
                 });
-            }
             disableButton();
             demandeDevis.error = null;
         }
@@ -107,7 +105,6 @@ function DemandeDevis(props) {
         function updateDemandeState() {
             const params = props.match.params;
             const { demandeId } = params;
-            console.log()
             dispatch(Actions.getDemande(demandeId));
         }
 

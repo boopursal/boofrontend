@@ -151,11 +151,9 @@ function Produit(props) {
     // Effect handle errors
     useEffect(() => {
         if (produit.error && (produit.error.reference || produit.error.titre || produit.error.description || produit.error.pu || produit.error.secteur || produit.error.sousSecteurs)) {
-            {
                 formRef.current.updateInputsWithError({
                     ...produit.error
                 });
-            }
             disableButton();
         }
         return () => {

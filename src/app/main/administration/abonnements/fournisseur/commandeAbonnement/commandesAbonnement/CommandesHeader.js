@@ -1,6 +1,5 @@
 import React from 'react';
-import { Paper, Input, Icon, Typography, Button } from '@material-ui/core';
-import {Link} from 'react-router-dom';
+import { Paper, Input, Icon, Typography } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';

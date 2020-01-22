@@ -12,7 +12,6 @@ function Commandes()
     
     const dispatch = useDispatch();
     const parametres = useSelector(({ commandeOffreAdminApp }) => commandeOffreAdminApp.commandes.parametres);
-    const user = useSelector(({auth}) => auth.user);
     
     useEffect(() => {
         dispatch(Actions.getCommandesAb(parametres));

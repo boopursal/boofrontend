@@ -10,11 +10,12 @@ const initialState = {
     image: null,
     image_deleted: null,
     sousSecteurs: [],
-    secteurs: [],
     categories: [],
     fiche: null,
     ficheReqInProgress: false,
-
+    loadingSuggestion: false,
+    successActivite: false,
+    errorActivite: false,
 
 };
 
@@ -116,22 +117,11 @@ const produitReducer = function (state = initialState, action) {
 
                 };
             }
-        case Actions.GET_SECTEUR:
+        case Actions.GET_FOURNISSEUR:
             {
                 return {
                     ...state,
-                    secteurs: action.payload['hydra:member'],
-
-
-                };
-            }
-        case Actions.GET_SOUS_SECTEUR:
-            {
-                return {
-                    ...state,
-                    sousSecteurs: action.payload['hydra:member'],
-
-
+                    sousSecteurs: action.payload.sousSecteurs,
                 };
             }
         case Actions.GET_CATEGORIE:
@@ -190,6 +180,29 @@ const produitReducer = function (state = initialState, action) {
                     loading: false,
                     success: false
 
+                };
+            }
+        case Actions.REQUEST_SUGGESTION:
+            {
+                return {
+                    ...state,
+                    loadingSuggestion: true,
+                }
+            }
+        case Actions.SAVE_SUGGESTION:
+            {
+                return {
+                    ...state,
+                    successActivite: true,
+                    loadingSuggestion: false,
+                };
+            }
+        case Actions.SAVE_ERROR_SUGGESTION:
+            {
+                return {
+                    ...state,
+                    errorActivite: true,
+                    loadingSuggestion: false,
                 };
             }
         default:

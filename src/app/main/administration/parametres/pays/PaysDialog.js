@@ -5,7 +5,6 @@ import * as Actions from './store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextFieldFormsy } from '@fuse';
 import Formsy from 'formsy-react';
-import _ from '@lodash';
 
 const defaultFormState = {
     name: '',

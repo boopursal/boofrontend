@@ -11,7 +11,7 @@ import Widget3 from './widgets/Widget3';
 import Widget4 from './widgets/Widget4';
 import Widget5 from './widgets/Widget5';
 import Widget6 from './widgets/Widget6';
-import ContentLoader from 'react-content-loader'
+import ContentLoader from 'react-content-loader';
 
 
 

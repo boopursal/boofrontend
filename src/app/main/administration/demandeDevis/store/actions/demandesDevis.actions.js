@@ -12,7 +12,7 @@ export const GET_DEMANDES = '[DEMANDES APP] GET DEMANDES';
 export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES APP] SET DEMANDES SEARCH TEXT';
 
 export function getDemandes(parametres) {
-    var description = parametres.description ? `=${parametres.description}` : '';
+  //  var description = parametres.description ? `=${parametres.description}` : '';
     const request = agent.get(`/api/demande_devis?page=${parametres.page}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {

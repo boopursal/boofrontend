@@ -12,7 +12,6 @@ function Abonnements()
     
     const dispatch = useDispatch();
     const parametres = useSelector(({ abonnementOffreApp }) => abonnementOffreApp.abonnements.parametres);
-    const user = useSelector(({auth}) => auth.user);
     
     useEffect(() => {
         dispatch(Actions.getAbonnements(parametres));

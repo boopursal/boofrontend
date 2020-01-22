@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Icon, IconButton, Typography, Chip } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip'
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
 import { makeStyles } from '@material-ui/core/styles';
@@ -37,16 +35,7 @@ function JetonsList(props) {
     const loading = useSelector(({ jetonsApp }) => jetonsApp.jetons.loading);
     const pageCount = useSelector(({ jetonsApp }) => jetonsApp.jetons.pageCount);
 
-    const HtmlTooltip = withStyles(theme => ({
-        tooltip: {
-            maxWidth: 220,
-            fontSize: theme.typography.pxToRem(12),
-            border: '1px solid #dadde9',
-            '& b': {
-                fontWeight: theme.typography.fontWeightMedium,
-            },
-        },
-    }))(Tooltip);
+  
     const [filteredData, setFilteredData] = useState(null);
 
     useEffect(() => {

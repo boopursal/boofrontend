@@ -17,7 +17,7 @@ function ConsultationsHeader(props) {
                     <Icon className="text-32 mr-0 sm:mr-12">move_to_inbox</Icon>
                 </FuseAnimate>
                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                    <Typography className="hidden sm:flex" variant="h6">Mes consultations</Typography>
+                    <Typography className="hidden sm:flex" variant="h6">Vos consultations</Typography>
                 </FuseAnimate>
             </div>
 

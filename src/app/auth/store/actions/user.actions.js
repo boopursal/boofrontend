@@ -14,6 +14,8 @@ export const GET_FOURNISSEUR_JETONS = '[USER] GET_FOURNISSEUR_JETONS';
 export const REQUEST_FOURNISSEUR_JETONS = '[USER] REQUEST_FOURNISSEUR_JETONS';
 export const REMOVE_USER_DATA = '[USER] REMOVE DATA';
 export const USER_LOGGED_OUT = '[USER] LOGGED OUT';
+export const REQUEST_FOURNISSEUR_ABONNEMENT = '[USER] REQUEST_FOURNISSEUR_ABONNEMENT';
+export const GET_FOURNISSEUR_ABONNEMENT = '[USER] GET_FOURNISSEUR_ABONNEMENT';
 
 /**
  * Set user data from Auth0 token data
@@ -110,6 +112,26 @@ export function getTokenFournisseur()
     }
  
 }
+
+export function getAbonnementFournisseur(params) {
+    const request = agent.get(`/api/fournisseurs/${params}/abonnements?exists[expired]=true&order[expired]=desc`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_FOURNISSEUR_ABONNEMENT,
+        });
+        return request.then((response) => {
+            return dispatch({
+                type: GET_FOURNISSEUR_ABONNEMENT,
+                payload: response.data['hydra:member'][0]
+            })
+        }
+
+        );
+    }
+
+}
+
 /**
  * Set User Data
  */

@@ -220,7 +220,7 @@ const navigationConfig = [
     },
     {
         'id': 'demandes_ha',
-        'title': 'Mes demandes',
+        'title': 'Vos demandes',
         'auth': authRoles.acheteur,
         'type': 'item',
         'icon': 'inbox',
@@ -228,7 +228,7 @@ const navigationConfig = [
     },
     {
         'id': 'black_listes_ha',
-        'title': 'Ma blackListes',
+        'title': 'BlackListes',
         'auth': authRoles.acheteur,
         'type': 'item',
         'icon': 'work_off',
@@ -236,7 +236,7 @@ const navigationConfig = [
     },
     {
         'id': 'mon_profil',
-        'title': 'Mon profil',
+        'title': 'Profil',
         'auth': authRoles.acheteur,
         'type': 'item',
         'icon': 'person',
@@ -271,7 +271,7 @@ const navigationConfig = [
     },
     {
         'id': 'mes_consultations',
-        'title': 'Mes consultations',
+        'title': 'Vos consultations',
         'auth': authRoles.fournisseur,
         'type': 'item',
         'icon': 'move_to_inbox',
@@ -280,7 +280,7 @@ const navigationConfig = [
     },
     {
         'id': 'mes_produits',
-        'title': 'Mes Produits',
+        'title': 'Vos Produits',
         'auth': authRoles.fournisseur,
         'type': 'item',
         'icon': 'shopping_cart',
@@ -303,7 +303,7 @@ const navigationConfig = [
     },
     {
         'id': 'fr_profil',
-        'title': 'Mon profil',
+        'title': 'Profil',
         'auth': authRoles.fournisseur,
         'type': 'item',
         'icon': 'person',
@@ -325,12 +325,19 @@ const navigationConfig = [
         'auth': authRoles.fournisseur,
         'icon': 'cloud',
         'children': [
-          
+            {
+                'id': 'offre-abonnement',
+                'title': 'Abonnement',
+                'type': 'item',
+                'icon': 'cloud',
+                exact    : true,
+                'url': '/abonnement',
+            },
             {
                 'id': 'offre-commandes',
-                'title': 'Commande offres',
+                'title': 'Vos commandes',
                 'type': 'item',
-                'icon': 'all_inclusive',
+                'icon': 'format_list_bulleted',
                 'url': '/offres/commande',
             },
             {
@@ -338,6 +345,7 @@ const navigationConfig = [
                 'title': 'Jetons',
                 'type': 'item',
                 'icon': 'control_point_duplicate',
+                exact    : true,
                 'url': '/abonnement/commandes',
             },
 

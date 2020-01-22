@@ -155,9 +155,6 @@ function Consultation(props) {
     }
     function handleTauxChange(value) {
 
-        console.log(consultation.data.demande.budget)
-        console.log(value.target.value)
-        console.log(consultation.data.demande.budget * value.target.value)
         var budget = consultation.data.demande.budget * value.target.value;
         setForm(_.set({ ...form }, 'budget', budget));
         setTaux(value.target.value);
@@ -429,7 +426,6 @@ function Consultation(props) {
                                                                 id="taux"
                                                                 type="number"
                                                                 name="taux"
-                                                                onChange={handleChange}
                                                                 value={_.toString(taux)}
                                                                 validations={{
                                                                     isNumeric: true,

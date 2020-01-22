@@ -2,12 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Icon, IconButton, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip'
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
 //import PaysMultiSelectMenu from './PaysMultiSelectMenu';
-import _ from '@lodash';
 function PaysList(props) {
     const dispatch = useDispatch();
     const pays = useSelector(({ paysApp }) => paysApp.pays.entities);
@@ -17,16 +14,7 @@ function PaysList(props) {
 
     // const selectedPaysIds = useSelector(({paysApp}) => paysApp.pays.selectedPaysIds);
     const searchText = useSelector(({ paysApp }) => paysApp.pays.searchText);
-    const HtmlTooltip = withStyles(theme => ({
-        tooltip: {
-            maxWidth: 220,
-            fontSize: theme.typography.pxToRem(12),
-            border: '1px solid #dadde9',
-            '& b': {
-                fontWeight: theme.typography.fontWeightMedium,
-            },
-        },
-    }))(Tooltip);
+    
     const [filteredData, setFilteredData] = useState(null);
 
     useEffect(() => {

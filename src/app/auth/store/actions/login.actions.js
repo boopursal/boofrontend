@@ -1,6 +1,7 @@
 import jwtService from 'app/services/jwtService';
 import {setUserData} from './user.actions';
 import {getTokenFournisseur} from './user.actions';
+import {getAbonnementFournisseur} from './user.actions';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -12,9 +13,10 @@ export function submitLogin({email, password})
             .then((user) => {
                     dispatch(setUserData(user));
 
-                    {/* ============= TOKENS FOURNISSEURS ============*/}
+                    /* ============= TOKENS FOURNISSEURS ============*/
                     if(user.role === 'ROLE_FOURNISSEUR'){
                         dispatch(getTokenFournisseur());
+                        dispatch(getAbonnementFournisseur(user.id));
                     }
                     return dispatch({
                         type: LOGIN_SUCCESS

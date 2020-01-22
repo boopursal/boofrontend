@@ -48,7 +48,6 @@ function CommandesTable(props) {
     const loading = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.loading);
     const pageCount = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.pageCount);
     const parametres = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.parametres);
-    const user = useSelector(({ auth }) => auth.user);
     const searchText = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
@@ -142,7 +141,7 @@ function CommandesTable(props) {
                                         ?
                                         <Chip className={classes.chipOrange} label="En attente" />
                                         :
-                                        <Chip className={classes.chip2} label="Validée" />
+                                        <Chip className={classes.chip2} label="Traitée" />
 
 
                                 }

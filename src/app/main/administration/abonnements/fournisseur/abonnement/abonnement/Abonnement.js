@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, Typography, LinearProgress, Grid, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Divider, Chip, Avatar, Radio, Table, TableHead, TableRow, TableCell, TableBody, Tab, Tabs, InputAdornment, Checkbox } from '@material-ui/core';
+import { Button, Icon, Typography, LinearProgress, Grid, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent,  DialogActions, Divider,  Radio, Table, TableHead, TableRow, TableCell, TableBody, Tab, Tabs, InputAdornment, Checkbox } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { makeStyles, withStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, SelectReactFormsyS_S, RadioGroupFormsy, TextFieldFormsy, CheckboxFormsy, SelectReactFormsy } from '@fuse';
+import { makeStyles } from '@material-ui/styles';
+import { FuseAnimate, FusePageCarded, SelectReactFormsyS_S,  TextFieldFormsy,  SelectReactFormsy } from '@fuse';
 import { Link } from 'react-router-dom';
-import Link2 from '@material-ui/core/Link';
 import _ from '@lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';

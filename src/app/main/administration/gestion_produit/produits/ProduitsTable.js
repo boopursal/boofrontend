@@ -48,7 +48,6 @@ function ProduitsTable(props) {
     const loading = useSelector(({ produitsApp }) => produitsApp.produits.loading);
     const pageCount = useSelector(({ produitsApp }) => produitsApp.produits.pageCount);
     const parametres = useSelector(({ produitsApp }) => produitsApp.produits.parametres);
-    const user = useSelector(({ auth }) => auth.user);
     const searchText = useSelector(({ produitsApp }) => produitsApp.produits.searchText);
 
     const [filteredData, setFilteredData] = useState(null);

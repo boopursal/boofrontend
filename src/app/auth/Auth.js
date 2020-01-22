@@ -28,9 +28,10 @@ class Auth extends Component {
             jwtService.signInWithToken()
                 .then(user => {
                     this.props.setUserData(user);
-                    {/* ============= TOKENS FOURNISSEURS ============*/}
+                    /* ============= TOKENS & Abonnement FOURNISSEURS ============*/
                     if (user.role === 'ROLE_FOURNISSEUR') {
                         this.props.getTokenFournisseur();
+                        this.props.getAbonnementFournisseur(user.id);
                     }
                     this.props.showMessage({ message: 'Logged in with JWT' });
                 })
@@ -67,6 +68,7 @@ function mapDispatchToProps(dispatch) {
         logout: userActions.logoutUser,
         setUserData: userActions.setUserData,
         getTokenFournisseur: userActions.getTokenFournisseur,
+        getAbonnementFournisseur: userActions.getAbonnementFournisseur,
         showMessage: Actions.showMessage,
         hideMessage: Actions.hideMessage
     },

@@ -8,7 +8,7 @@ export const GET_CONSULTATIONS = '[USERS APP] GET CONSULTATIONS';
 export const SET_CONSULTATIONS_SEARCH_TEXT = '[USERS APP] SET CONSULTATIONS SEARCH TEXT';
 
 export function getConsultations(parametres, id) {
-    var description = parametres.description ? `=${parametres.description}` : '';
+    //var description = parametres.description ? `=${parametres.description}` : '';
     const request = agent.get(`/api/detail_visites?page=${parametres.page}&fournisseur=${id}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {

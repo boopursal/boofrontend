@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs, Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip } from '@material-ui/core';
+import { Card, CardContent, Grow,Button, Tab, Tabs, Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Divider, TextField } from '@material-ui/core';
 import { red, orange } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
@@ -15,6 +15,9 @@ import Formsy from 'formsy-react';
 import moment from 'moment';
 import green from '@material-ui/core/colors/green';
 import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
+import Link2 from '@material-ui/core/Link';
+import { darken } from '@material-ui/core/styles/colorManipulator';
+import YouTube from 'react-youtube';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,7 +26,10 @@ const useStyles = makeStyles(theme => ({
             marginTop: theme.spacing(2),
         },
     },
-
+    root2: {
+        background: 'radial-gradient(' + darken(theme.palette.primary.dark, 0.5) + ' 0%, ' + theme.palette.primary.dark + ' 80%)',
+        color: theme.palette.primary.contrastText
+    },
     buttonProgress: {
         color: green[500],
         position: 'absolute',
@@ -98,22 +104,56 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 moment.defaultFormat = "DD/MM/YYYY HH:mm";
+
 function Produit(props) {
 
     const dispatch = useDispatch();
     const produit = useSelector(({ produitsApp }) => produitsApp.produit);
-
-
+    const user = useSelector(({ auth }) => auth.user);
+    const abonnement = useSelector(({ auth }) => auth.user.abonnement);
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
     const { form, handleChange, setForm } = useForm(null);
+    const [open, setOpen] = useState(false);
+    const [abonnee, setAbonnee] = useState(false);
+    const [enable, setEnable] = useState(true);
+    const [expired, setExpired] = useState(false);
+    const [days, setDays] = useState(0);
 
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
-    const [secteur, setSecteur] = useState(null);
     const [sousSecteur, setSousSecteur] = useState(null);
     const [categorie, setCategorie] = useState(null);
+    const [categorieSuggester, setCategorieSuggester] = useState('');
+    const opts = {
+        width: '400',
+        playerVars: { // https://developers.google.com/youtube/player_parameters
+          showinfo: 0,          
+          fs: 0,
+          modestbranding: 1,
+          rel: 0,
+        }
+      };
+      
+    useEffect(() => {
 
+        if (abonnement) {
+            if (!abonnement.statut) {
+                setEnable(false)
+            }
+            let days = moment(abonnement.expired).diff(moment(), 'days');
+            if (days <= 0) {
+                setDays(days);
+                setExpired(true);
+            }
+            if (abonnement.statut && days > 0) {
+                setAbonnee(true);
+            }
+
+            //setFilteredData(getFilteredArray(produits, searchText));
+        }
+    }, [abonnement]);
+    
     // Effect upload fiche technique
     useEffect(() => {
 
@@ -126,6 +166,31 @@ function Produit(props) {
         }
 
     }, [form, setForm, produit.fiche, dispatch]);
+
+    // Effect redirection and clean state
+    useEffect(() => {
+        if (produit.successActivite) {
+            setOpen(false);
+            produit.successActivite=false;
+        }
+    }, [produit.successActivite, setOpen]);
+
+    // Effect redirection and clean state
+    useEffect(() => {
+        if (produit.errorActivite) {
+            setOpen(false);
+            produit.errorActivite=false;
+        }
+    }, [produit.errorActivite, setOpen]);
+    
+    function handleClickOpen() {
+        setOpen(true);
+    }
+
+    function handleClose() {
+        setOpen(false);
+    }
+
 
     // Effect upload images
     useEffect(() => {
@@ -143,19 +208,13 @@ function Produit(props) {
     }, [form, setForm, produit.image, dispatch]);
 
 
-    // Effect Get Secteurs
-    useEffect(() => {
-        dispatch(Actions.getSecteurs());
-    }, [dispatch]);
 
     // Effect handle errors
     useEffect(() => {
         if (produit.error && (produit.error.reference || produit.error.titre || produit.error.description || produit.error.pu || produit.error.secteur || produit.error.sousSecteurs)) {
-            {
                 formRef.current.updateInputsWithError({
                     ...produit.error
                 });
-            }
             disableButton();
         }
         return () => {
@@ -222,15 +281,7 @@ function Produit(props) {
         ) {
 
 
-            if (produit.data.secteur) {
 
-                dispatch(Actions.getSousSecteurs(produit.data.secteur['@id']));
-                setSecteur( {
-                    value: produit.data.secteur['@id'],
-                    label: produit.data.secteur.name
-                })
-
-            }
             if (produit.data.sousSecteurs) {
                 dispatch(Actions.getCategories(produit.data.sousSecteurs['@id']));
                 setSousSecteur({
@@ -279,25 +330,18 @@ function Produit(props) {
 
     function handleChipChange(value, name) {
         //setForm(_.set({...form}, name, value.map(item => item.value)));
-        if (name === 'secteur') {
-            if (value.value) {
-                dispatch(Actions.getSousSecteurs(value.value));
-                setCategorie(null)
-                setSousSecteur(null)
-                setSecteur(value)
-            }
-        }
+
         if (name === 'sousSecteurs') {
             if (value.value) {
                 dispatch(Actions.getCategories(value.value));
                 setCategorie(null)
                 setSousSecteur(value)
-                
+
             }
         }
-        if(name === 'categorie'){
+        if (name === 'categorie') {
             setCategorie(value)
-            
+
         }
 
     }
@@ -316,19 +360,96 @@ function Produit(props) {
 
     function handleSubmit(form) {
         //event.preventDefault();
-       
+
 
         const params = props.match.params;
         const { produitId } = params;
+        let secteur=null;
+        if(sousSecteur)
+        secteur = _.filter(produit.sousSecteurs, { 'name': sousSecteur.label });
 
         if (produitId === 'new') {
-            dispatch(Actions.saveProduit(form,secteur,sousSecteur,categorie));
+            dispatch(Actions.saveProduit(form,secteur, sousSecteur, categorie));
         }
         else {
 
-            dispatch(Actions.putProduit(form, form.id,secteur,sousSecteur,categorie));
+            dispatch(Actions.putProduit(form, form.id,secteur, sousSecteur, categorie));
         }
 
+    }
+
+    function handleSubmitActivites() {
+       
+            let secteur='';
+            if(sousSecteur)
+            secteur = _.filter(produit.sousSecteurs, { 'name': sousSecteur.label });
+            dispatch(Actions.AddSuggestionSecteur(secteur,sousSecteur,categorieSuggester, user.id));
+        
+    }
+
+
+    if (!abonnee) {
+        if (!enable) {
+            return (
+                <div className={clsx(classes.root2, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
+
+                    <div className="flex flex-col items-center justify-center w-full">
+
+                        <Grow in={true}>
+                            <Card className="w-full max-w-384">
+
+                                <CardContent className="flex flex-col items-center justify-center text-center p-48">
+
+                                    <img className="w-128 m-32" src="assets/images/logos/fuse.svg" alt="logo" />
+
+                                    <Typography variant="subtitle1" className="mb-16">
+                                        Desactivé
+                                    </Typography>
+
+                                    <Typography color="textSecondary" className="mb-40">
+                                        We're sorry for the inconvenience. <br /> Please check back later.
+                                    </Typography>
+
+                                </CardContent>
+                            </Card>
+                        </Grow>
+                    </div>
+                </div>
+            )
+        }
+        if (expired) {
+            return (
+                <div className={clsx(classes.root2, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
+
+                    <div className="flex flex-col items-center justify-center w-full">
+
+                        <Grow in={true}>
+                            <Card className="w-full ">
+
+                                <CardContent className="flex flex-col items-center justify-center text-center p-48">
+
+
+                                    <Typography variant="h4" className="mb-16 text-red">
+                                        Votre abonnement a expirée depuis {days * -1} jours
+                                    </Typography>
+
+                                    <Typography color="textSecondary" className="mb-40">
+                                        Pour la renouveler, vous pouvez ajouter une commande en cliquant sur le bouton suivant
+
+
+                                    </Typography>
+                                    <Button component={Link} to="/offres/commande/new" className="whitespace-no-wrap" color="secondary" variant="contained">
+                                        <span className="">Commander abonnement</span>
+                                    </Button>
+
+                                </CardContent>
+                            </Card>
+                        </Grow>
+                    </div>
+                </div>
+            )
+        }
+        return null;
     }
 
     return (
@@ -420,7 +541,10 @@ function Produit(props) {
                                     : "Fiche technique"}
 
                         />
+                        <Tab className="h-64 normal-case"
+                            label="Vidéo"
 
+                        />
 
                     </Tabs>
 
@@ -441,49 +565,27 @@ function Produit(props) {
 
                                         <Grid container spacing={3} >
 
-                                            <Grid item xs={12} sm={4}>
-                                                <SelectReactFormsy
 
-                                                    id="secteur"
-                                                    name="secteur"
-                                                    className="MuiFormControl-fullWidth MuiTextField-root mb-24"
-                                                    value={
-                                                        secteur
-                                                    }
-                                                    onChange={(value) => handleChipChange(value, 'secteur')}
-                                                    placeholder="Selectionner un secteur"
-                                                    textFieldProps={{
-                                                        label: 'Secteur',
-                                                        InputLabelProps: {
-                                                            shrink: true
-                                                        },
-                                                        variant: 'outlined'
-                                                    }}
-                                                    options={produit.secteurs}
-                                                    fullWidth
-                                                    required
-                                                />
-                                            </Grid>
 
                                             <Grid item xs={12} sm={4}>
                                                 <SelectReactFormsy
 
                                                     id="sousSecteurs"
                                                     name="sousSecteurs"
-                                                    className="MuiFormControl-fullWidth MuiTextField-root"
+                                                    className="mb-24 MuiFormControl-fullWidth MuiTextField-root"
                                                     value={
                                                         sousSecteur
                                                     }
                                                     onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                                    placeholder="Selectionner un sous-secteur"
+                                                    placeholder="Selectionner une avtivité"
                                                     textFieldProps={{
-                                                        label: 'Secteur',
+                                                        label: 'Activités',
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },
                                                         variant: 'outlined'
                                                     }}
-                                                    options={produit.sousSecteurs}
+                                                    options={abonnement.sousSecteurs}
                                                     fullWidth
                                                     required
                                                 />
@@ -499,9 +601,9 @@ function Produit(props) {
                                                         categorie
                                                     }
                                                     onChange={(value) => handleChipChange(value, 'categorie')}
-                                                    placeholder="Selectionner un categorie"
+                                                    placeholder="Selectionner un catégorie"
                                                     textFieldProps={{
-                                                        label: 'Catégorie',
+                                                        label: 'Catégories',
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },
@@ -510,6 +612,64 @@ function Produit(props) {
                                                     options={produit.categories}
                                                     fullWidth
                                                 />
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={4}>
+                                                <Typography className="mt-4" variant="caption">{"Si vous n'avez pas trouvé le catégorie correspond a votre prodruit, veuillez cliquer sur le lien ci-dessous pour l'ajouter."}</Typography>
+                                                <div className="mt-4">
+
+                                                    <Link2
+                                                        component="button"
+                                                        variant="body2"
+                                                        color="secondary"
+                                                        onClick={handleClickOpen}
+                                                    >
+                                                        Ajouter autres activités
+                                                    </Link2>
+                                                    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                                                            <DialogTitle id="form-dialog-title">Vos activités</DialogTitle>
+                                                            <DialogContent>
+                                                               
+                                                                    <Grid container spacing={3} >
+                                                                        <Grid item xs={12} sm={12}>
+                                                                            <DialogContentText>
+                                                                                Pour retourner a la liste de vos activité cliquer
+                                                                      
+                                                                            </DialogContentText>
+                                                                        </Grid>
+                                                                        <Grid item xs={12}>
+                                                                            <TextField
+                                                                                className="mt-8 mb-16"
+                                                                                error={categorieSuggester.length <= 2}
+                                                                                required
+                                                                                label="Catégorie"
+                                                                                autoFocus
+                                                                                value={categorieSuggester}
+                                                                                id="categorieSuggester"
+                                                                                name="categorieSuggester"
+                                                                                onChange={(event) => setCategorieSuggester(event.target.value)}
+                                                                                variant="outlined"
+                                                                                fullWidth
+                                                                                helperText={categorieSuggester.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
+                                                                            />
+                                                                        </Grid>
+                                                                     
+                                                                    </Grid>
+                                                            </DialogContent>
+                                                            <Divider />
+                                                            <DialogActions>
+                                                                <Button onClick={handleClose} variant="outlined" color="primary">
+                                                                    Annnuler
+                                                                </Button>
+                                                                <Button onClick={handleSubmitActivites} variant="contained" color="secondary"
+                                                                    disabled={produit.loadingSuggestion || categorieSuggester.length < 2  }
+                                                                >
+                                                                    Sauvegarder
+                                                                    {produit.loadingSuggestion && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                                </Button>
+                                                            </DialogActions>
+                                                        </Dialog>
+                                                </div>
                                             </Grid>
                                         </Grid>
 
@@ -754,6 +914,40 @@ function Produit(props) {
 
                                 </div>
                             )}
+                            {tabValue === 3 && (
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={8}>
+                                            
+                                                    <TextField
+                                                        label="Id vidéo"
+                                                        id="video"
+                                                        name="video"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                    />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                            <Button
+                                                className="whitespace-no-wrap"
+                                                variant="contained"
+                                            >
+                                                Ajouter
+                                            </Button>
+                                                   
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <YouTube
+                                            videoId="2g811Eo7K8U"
+                                            opts={opts}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            )}
+
 
 
                         </div>

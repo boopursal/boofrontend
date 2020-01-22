@@ -1,6 +1,5 @@
 
 import agent from 'agent';
-import FuseUtils from '@fuse/FuseUtils';
 import { showMessage } from 'app/store/actions/fuse';
 import _ from '@lodash';
 import * as Actions from '@fuse/components/FuseNavigation/store/actions';

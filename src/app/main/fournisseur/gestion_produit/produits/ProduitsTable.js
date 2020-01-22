@@ -180,7 +180,7 @@ function ProduitsTable(props) {
                         accessor: p => p.secteur.name,
                     },
                     {
-                        Header: "Sous-secteur",
+                        Header: "Activité",
                         className: "font-bold",
                         id: "sousSecteurs",
                         accessor: p => p.sousSecteurs.name,

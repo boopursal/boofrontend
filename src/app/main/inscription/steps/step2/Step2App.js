@@ -161,11 +161,9 @@ function Step2App(props) {
 
     useEffect(() => {
         if (step2.error && (step2.error.pays || step2.error.ville || step2.error.adresse1 || step2.error.adresse2 || step2.error.website || step2.error.fix || step2.error.ice || step2.error.description)) {
-        {
             formRef.current.updateInputsWithError({
                 ...step2.error
             });
-        }
         disableButton();
         }
     }, [step2.error]);

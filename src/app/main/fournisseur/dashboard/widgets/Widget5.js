@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Typography, Select, Paper } from '@material-ui/core';
-import moment from 'moment';
+import React, { useEffect } from 'react';
+import { Typography, Paper } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions'
 import ContentLoader from 'react-content-loader'
@@ -25,7 +24,7 @@ function Widget5(props) {
                     <div className="flex items-center justify-between px-16 h-64 border-b-1">
                         <Typography className="text-16 font-bold">Demandes devis par produits </Typography>
 
-                       
+
                     </div>
                     <div className="h-400 w-full p-32">
                         <Doughnut
@@ -34,13 +33,13 @@ function Widget5(props) {
                                 datasets: widgets.dataDDP.datasets
                             }}
                             options={{
-                                cutoutPercentage   : 0,
-                                spanGaps           : false,
-                                legend             : {
-                                    display : true,
+                                cutoutPercentage: 0,
+                                spanGaps: false,
+                                legend: {
+                                    display: true,
                                     position: 'bottom',
-                                    labels  : {
-                                        padding      : 16,
+                                    labels: {
+                                        padding: 16,
                                         usePointStyle: true
                                     }
                                 },
