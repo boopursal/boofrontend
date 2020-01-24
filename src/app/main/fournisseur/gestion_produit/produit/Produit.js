@@ -18,7 +18,7 @@ import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
 import Link2 from '@material-ui/core/Link';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import YouTube from 'react-youtube';
-
+import ContentLoader from 'react-content-loader';
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -119,6 +119,8 @@ function Produit(props) {
     const [enable, setEnable] = useState(true);
     const [expired, setExpired] = useState(false);
     const [days, setDays] = useState(0);
+    const [videoId, setVideoId] = useState('');
+    const [showErrorVideo, setShowErrorVideo] = useState(false);
 
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
@@ -126,7 +128,7 @@ function Produit(props) {
     const [categorie, setCategorie] = useState(null);
     const [categorieSuggester, setCategorieSuggester] = useState('');
     const opts = {
-        width: '400',
+        width: '460',
         playerVars: { // https://developers.google.com/youtube/player_parameters
           showinfo: 0,          
           fs: 0,
@@ -154,6 +156,22 @@ function Produit(props) {
         }
     }, [abonnement]);
     
+    // Effect Video 
+    useEffect(() => {
+
+        if (produit.videoExist === 1) {
+            setForm(_.set({ ...form }, "videos", videoId));
+            setShowErrorVideo(false);
+
+        }else if (produit.videoExist === 2) {
+            setForm(_.set({ ...form }, "videos", null));
+            setShowErrorVideo(true);
+
+        }
+        produit.videoExist=0;
+
+    }, [form, setForm, produit.videoExist]);
+
     // Effect upload fiche technique
     useEffect(() => {
 
@@ -366,7 +384,7 @@ function Produit(props) {
         const { produitId } = params;
         let secteur=null;
         if(sousSecteur)
-        secteur = _.filter(produit.sousSecteurs, { 'name': sousSecteur.label });
+        secteur = _.filter(abonnement.sousSecteurs, { 'name': sousSecteur.label });
 
         if (produitId === 'new') {
             dispatch(Actions.saveProduit(form,secteur, sousSecteur, categorie));
@@ -382,7 +400,7 @@ function Produit(props) {
        
             let secteur='';
             if(sousSecteur)
-            secteur = _.filter(produit.sousSecteurs, { 'name': sousSecteur.label });
+            secteur = _.filter(abonnement.sousSecteurs, { 'name': sousSecteur.label });
             dispatch(Actions.AddSuggestionSecteur(secteur,sousSecteur,categorieSuggester, user.id));
         
     }
@@ -624,19 +642,14 @@ function Produit(props) {
                                                         color="secondary"
                                                         onClick={handleClickOpen}
                                                     >
-                                                        Ajouter autres activités
+                                                        Ajouter autres catégories
                                                     </Link2>
                                                     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                                                            <DialogTitle id="form-dialog-title">Vos activités</DialogTitle>
+                                                            <DialogTitle id="form-dialog-title">Suggestion d'une nouvelle catégorie</DialogTitle>
                                                             <DialogContent>
                                                                
                                                                     <Grid container spacing={3} >
-                                                                        <Grid item xs={12} sm={12}>
-                                                                            <DialogContentText>
-                                                                                Pour retourner a la liste de vos activité cliquer
-                                                                      
-                                                                            </DialogContentText>
-                                                                        </Grid>
+                                                                        
                                                                         <Grid item xs={12}>
                                                                             <TextField
                                                                                 className="mt-8 mb-16"
@@ -917,33 +930,84 @@ function Produit(props) {
                             {tabValue === 3 && (
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={8}>
-                                            
-                                                    <TextField
-                                                        label="Id vidéo"
-                                                        id="video"
-                                                        name="video"
-                                                        variant="outlined"
-                                                        fullWidth
-                                                    />
-                                            </Grid>
-                                            <Grid item xs={12} sm={4}>
-                                            <Button
-                                                className="whitespace-no-wrap"
-                                                variant="contained"
-                                            >
-                                                Ajouter
-                                            </Button>
-                                                   
-                                            </Grid>
-                                        </Grid>
+                                        
+                                        <TextField
+                                            label="ID vidéo Youtube"
+                                            id="video"
+                                            name="video"
+                                            variant="outlined"
+                                            onChange={(e)=>{setVideoId(e.target.value)}}
+                                            fullWidth
+                                        />
+                                        <Button
+                                            className="whitespace-no-wrap mt-10 mb-10"
+                                            variant="contained"
+                                            fullWidth
+                                            size="large"
+                                            color="secondary"
+                                            disabled={produit.loadingRechercheVideo || !videoId}
+                                            onClick={()=>{
+                                                dispatch(Actions.getVideoYoutubeById(videoId))
+                                            }}
+                                        >
+                                            Rechercher
+                                            {produit.loadingRechercheVideo && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                        </Button>
+
+                                        <Typography variant="h6" className="mb-10"><Icon color="secondary">info</Icon> COMMENT OBTENIR L'ID DE LA VIDÉO YOUTUBE? </Typography>
+                                        <Typography className="mb-10">
+                                        Il n'est pas difficile d'obtenir l'ID vidéo Youtube dans le navigateur ou via l'application. Suivez ces étapes:
+                                        </Typography >
+                                        <Typography variant="h6" className="mb-10">TROUVEZ L'ID DE LA VIDÉO YOUTUBE VIA LE NAVIGATEUR</Typography>
+                                        <Typography className="mb-10">
+                                            <ol>
+                                                <li>Accédez à votre vidéo Youtube préférée</li>
+                                                <li>Vérifiez l'URL dans le navigateur Web, par exemple. https://www.youtube.com/watch?v=JGwWNGJdvx8</li>
+                                                <li>L'ID vidéo est la partie entre "? V =" et "&", dans ce cas "JGwWNGJdvx8"</li>
+                                                <li>Parfois, l'URL de la vidéo YouTube ressemble à "https://youtube.be/JGwWNGJdvx"</li>
+                                                <li>Dans ce cas, l'url de la vidéo fait partie de la dernière barre oblique "/" et "&"</li>
+                                           </ol>
+                                        </Typography>
+
+                                        <Typography className="mb-10" variant="h6">TROUVER UN ID VIDEO YOUTUBE DANS L'APPLICATION YOUTUBE</Typography>
+                                        <Typography className="mb-10">
+                                            <ol>
+                                                <li>Ouvrez l'application Youtube</li>
+                                                <li>Ouvrez la vidéo dont vous souhaitez l'ID vidéo</li>
+                                                <li>Cliquez sur le bouton Partager et choisissez le lien</li>
+                                                <li>Le lien est copié dans votre presse-papiers et vous pouvez le coller n'importe où</li>
+                                                <li>Le lien ressemble à https://youtube.be/JGwWNGJdvx8</li>
+                                                <li>La vidéo est la partie entre la dernière barre oblique "/" et "&", dans ce cas "JGwWNGJdvx8".</li>
+                                           </ol>
+                                        </Typography>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
+                                    {
+                                        !produit.loadingRechercheVideo ?
+                                        (form.videos ?
+                                        <>
                                         <YouTube
-                                            videoId="2g811Eo7K8U"
-                                            opts={opts}
+                                        videoId={form.videos}
+                                        opts={opts}
                                         />
+                                        <Link2
+                                            component="button"
+                                            variant="body2"
+                                            className="text-red"
+                                            onClick={()=>setForm(_.set({ ...form }, "videos", null))}
+                                        >
+                                        X Supprimer cette vidéo
+                                        </Link2>
+                                        </> 
+                                        : 
+                                        (showErrorVideo ? 'ID vidéo n\'existe pas dans la base de données YouTube' : '')
+                                        ) 
+                                        :
+                                        <ContentLoader height={250} width={320} speed={2}>
+                                            <rect x="0" y="0" rx="3" ry="3" width="320" height="250" />
+                                        </ContentLoader>
+                                    }
+                                      
                                     </Grid>
                                 </Grid>
                             )}

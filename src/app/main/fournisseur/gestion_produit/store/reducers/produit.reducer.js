@@ -16,6 +16,8 @@ const initialState = {
     loadingSuggestion: false,
     successActivite: false,
     errorActivite: false,
+    loadingRechercheVideo: false,
+    videoExist: 0,
 
 };
 
@@ -29,6 +31,23 @@ const produitReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: true,
+
+                }
+            }
+        case Actions.REQUEST_VIDEO:
+            {
+                return {
+                    ...state,
+                    loadingRechercheVideo: true,
+
+                }
+            }
+        case Actions.GET_VIDEO:
+            {
+                return {
+                    ...state,
+                    videoExist: action.payload,
+                    loadingRechercheVideo: false
 
                 }
             }

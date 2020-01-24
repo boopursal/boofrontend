@@ -2,6 +2,7 @@
 import { FuseUtils } from '@fuse';
 import { showMessage } from 'app/store/actions/fuse';
 import agent from 'agent';
+import axios from 'axios';
 import _ from '@lodash';
 
 export const REQUEST_PRODUIT = '[PRODUIT APP] REQUEST PRODUIT';
@@ -44,6 +45,10 @@ export const CLEAN_DELETE_IMAGE = '[PRODUIT APP] CLEAN_DELETE_IMAGE';
 export const REQUEST_FOURNISSEUR = '[PRODUIT APP] REQUEST_FOURNISSEUR';
 export const GET_FOURNISSEUR = '[PRODUIT APP] GET_FOURNISSEUR';
 
+export const REQUEST_VIDEO = '[PRODUIT APP] REQUEST_VIDEO';
+export const GET_VIDEO = '[PRODUIT APP] GET_VIDEO';
+
+
 export const REQUEST_SUGGESTION = '[PRODUIT APP] REQUEST_SUGGESTION';
 export const SAVE_SUGGESTION = '[PRODUIT APP] SAVE_SUGGESTION';
 export const SAVE_ERROR_SUGGESTION = '[PRODUIT APP] SAVE_ERROR_SUGGESTION';
@@ -68,6 +73,24 @@ export function getActivitesAbonnementByFournisseur(params) {
 
 }
 
+export function getVideoYoutubeById(idVideo) {
+    const request = axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${idVideo}&key=AIzaSyBvpeIK_1hzKDwawG1uRVmbHdE6n7tcRr4`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_VIDEO,
+        });
+        return request.then((response) => {
+            return dispatch({
+                type: GET_VIDEO,
+                payload: response.data ? (response.data.items.length > 0 ? 1 : 2) : 2
+            })
+        }
+
+        );
+    }
+
+}
 
 export function getCategories(url) {
     const request = agent.get(`/api/sous_secteurs?parent=${url}&pagination=false&properties[]=id&properties[]=name`);

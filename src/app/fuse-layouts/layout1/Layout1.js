@@ -126,7 +126,9 @@ function Layout1(props)
                                         <FuseDialog/>
 
                                         <FuseSuspense>
-                                            {renderRoutes(routes)}
+                                            {
+                                                renderRoutes(routes)
+                                            }
                                         </FuseSuspense>
 
                                         {props.children}

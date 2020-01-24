@@ -180,7 +180,7 @@ const navigationConfig = [
     },
     {
         'id': 'demandes-devis',
-        'title': 'Demande de devis',
+        'title': 'Demandes de devis',
         'auth': authRoles.admin,
         'type': 'item',
         'icon': 'inbox',
@@ -220,7 +220,7 @@ const navigationConfig = [
     },
     {
         'id': 'demandes_ha',
-        'title': 'Vos demandes',
+        'title': 'Demandes de devis',
         'auth': authRoles.acheteur,
         'type': 'item',
         'icon': 'inbox',
@@ -271,7 +271,7 @@ const navigationConfig = [
     },
     {
         'id': 'mes_consultations',
-        'title': 'Vos consultations',
+        'title': 'Consultations',
         'auth': authRoles.fournisseur,
         'type': 'item',
         'icon': 'move_to_inbox',
@@ -280,10 +280,10 @@ const navigationConfig = [
     },
     {
         'id': 'mes_produits',
-        'title': 'Vos Produits',
+        'title': 'Produits',
         'auth': authRoles.fournisseur,
         'type': 'item',
-        'icon': 'shopping_cart',
+        'icon': 'local_offer',
         'url': '/produits',
 
     },
@@ -311,7 +311,7 @@ const navigationConfig = [
     },
     {
         'id': 'personnels-component',
-        'title': 'Gestion des Personnels',
+        'title': 'Personnels',
         'auth': authRoles.fournisseur,
         'type': 'item',
         'icon': 'group',
