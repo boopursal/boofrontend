@@ -10,6 +10,7 @@ import { administrateurConfigs } from '../main/administration/administrateurConf
 import { RegisterPageConfig } from '../main/inscription/RegisterPageConfig';
 import { acheteurConfigs } from '../main/acheteur/acheteurConfigs';
 import { fournisseurConfigs } from '../main/fournisseur/fournisseurConfigs';
+import { PortailConfig } from '../main/portail/PortailConfig';
 
 function setAdminAuth(configs)
 {
@@ -25,15 +26,16 @@ const routeConfigs = [
     ...pagesConfigs,
     ...RegisterPageConfig,
     LoginConfig,
+    ...PortailConfig
 ];
 
 const routes = [
     ...FuseUtils.generateRoutesFromConfigs(routeConfigs),
-    {
+    /*{
         path     : '/',
         exact    : true,
         component: () => <Redirect to="/login"/>
-    },
+    },*/
     {
         component: () => <Redirect to="/pages/errors/error-404"/>
     }

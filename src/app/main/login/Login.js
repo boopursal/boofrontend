@@ -56,9 +56,9 @@ function Login()
                         
 
                         <div className="flex flex-col items-center justify-center pt-32">
-                            <span className="font-medium">Don't have an account?</span>
-                            <Link className="font-medium" to="/register">Create an account</Link>
-                            <Link className="font-medium mt-8" to="/">Back to Dashboard</Link>
+                            <span className="font-medium">Vous n'avez pas de compte?</span>
+                            <Link className="font-medium" to="/register">Créez un compte</Link>
+                            <Link className="font-medium mt-8" to="/">Retour à l'accueil</Link>
                         </div>
 
                     </CardContent>
