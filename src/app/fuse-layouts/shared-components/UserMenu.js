@@ -52,7 +52,7 @@ function UserMenu(props) {
                     :
                     (
                         <Avatar className="">
-                            {user.data.displayName[0]}
+                            <Icon >account_circle</Icon>
                         </Avatar>
                     )
                 }

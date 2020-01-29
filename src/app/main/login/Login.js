@@ -50,7 +50,6 @@ function Login()
 
                         <Typography variant="h6" className="text-center md:w-full mb-48">CONNECTEZ-VOUS À VOTRE COMPTE</Typography>
 
-                       
 
                         <JWTLoginTab/>
                         
