@@ -51,6 +51,12 @@ h6, .h6 {
     z-index: 99;
 }
 
+.slick-slider-m {
+    display: grid!important;
+}
+.slick-slide-p{
+    padding: 0 10px!important;
+}
 a[role=button] {
     text-decoration: none;
 }

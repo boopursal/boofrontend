@@ -124,9 +124,11 @@ function Index(props) {
         infinite: true,
         speed: 500,
         slidesToScroll: 4,
-        className: "p-10",
+        className: "slick-slide-p",
         slidesToShow: 4,
         dots: false,
+        autoplay: true,
+        autoplaySpeed: 5000,
         responsive: [
             {
                 breakpoint: 1024,
@@ -142,14 +144,21 @@ function Index(props) {
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 2,
-                    initialSlide: 2
+                    infinite: true,
+                    dots: true,
+                    arrows:false,
+                    
                 }
             },
             {
                 breakpoint: 480,
                 settings: {
                     slidesToShow: 1,
-                    slidesToScroll: 1
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true,
+                    className: "slick-slider-m mb-16",
+                    arrows:false,
                 }
             }
         ]
@@ -181,7 +190,7 @@ function Index(props) {
                 <div className={classes.overlay} />
                 <div className={clsx(classes.mainHeader, "items-center md:w-xl xs:w-auto z-999 px-8 py-20 rounded-lg")} >
                     <FuseAnimate duration={400} delay={600}>
-                        <Typography variant="h1" component="h1" className="sm:text-20 text-13 font-bold mb-16  mx-auto max-w-xl">
+                        <Typography variant="h1" component="h1" className="sm:text-20 uppercase text-13 font-bold mb-16  mx-auto max-w-xl">
                             Les Achats Industriels, c'est une communauté de 1000 sociétés, Acheteurs et Fournisseurs
                         </Typography>
                     </FuseAnimate>
@@ -214,7 +223,7 @@ function Index(props) {
             {/** 
              ===================CATEGORIES & RFQs=================
             **/}                     
-            <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 py-24">
+            <Grid container spacing={2} className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
                 <Grid item sm={4} xs={12}>
 
                     <div className={classes.demo}>
@@ -272,6 +281,10 @@ function Index(props) {
                     </div>
                 </Grid>
             </Grid>
+
+            {/** 
+             ===================PORDUCTS=================
+            **/} 
             <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 py-24">
                 <Grid item sm={12}>
                     <div>
