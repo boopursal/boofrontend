@@ -92,7 +92,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.primary.main,
     },
     card: {
-        //  margin: 10,
+          margin: 5,
     },
     media: {
         height: 140,
@@ -124,7 +124,6 @@ function Index(props) {
         infinite: true,
         speed: 500,
         slidesToScroll: 4,
-        className: "slick-slide-p",
         slidesToShow: 4,
         dots: false,
         autoplay: true,
