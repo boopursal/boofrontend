@@ -44,13 +44,15 @@ const themesConfig = {
             primary  : {
                 light: '#6cabd4',
                 main : '#387ca3',
-                dark : '#005074'
+                dark : '#005074',
+                rgba : '#387ca399',
             },
             secondary: {
                 light       : '#89f6cf',
                 main        : '#55c39e',
                 dark        : '#159270',
-                contrastText: '#fff'
+                contrastText: '#fff',
+                rgba        : '#159270',
             },
             error    : red
         },
