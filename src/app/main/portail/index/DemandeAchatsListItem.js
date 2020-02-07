@@ -6,8 +6,6 @@ import amber from '@material-ui/core/colors/amber';
 import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import _ from '@lodash';
-//import * as Actions from './store/actions';
-import DaChip from './DaChip';
 import moment from 'moment';
 import 'moment/locale/fr';
 const useStyles = makeStyles({
@@ -32,7 +30,7 @@ function DemandeAchatsListItem(props) {
                 ev.preventDefault();
                 // dispatch(Actions.openEditTodoDialog(props.todo));
             }}
-            dense
+            dense={true}
             button
         >
 
@@ -45,20 +43,20 @@ function DemandeAchatsListItem(props) {
                     className="todo-title truncate"
                     color={"inherit"}
                 >
-                    RFQ-20-2020
+                    RFQ-{props.demande.reference}
                 </Typography>
 
                 <Typography
                     color="textSecondary"
                     className="todo-notes truncate"
                 >
-                    Petite discription ici
+                 {_.truncate(props.demande.description.replace(/<(?:.|\n)*?>/gm, ''), {'length': 180})}
                 </Typography>
 
                 <div className={clsx(classes.labels, "flex mt-8")}>
                     <Chip
                         icon={<Icon className="text-16 mr-0">location_on</Icon>}
-                        label="Casablanca, Maroc"
+                        label={props.demande.pays+', '+props.demande.ville}
                         classes={{
                             root: clsx("h-24", props.className),
                             label: "pl-4 pr-6 py-4 text-11",
@@ -71,7 +69,7 @@ function DemandeAchatsListItem(props) {
                     />
                     <Chip
                         icon={<Icon className="text-16 mr-0">access_time</Icon>}
-                        label={moment("2019-11-30 23:03:00").fromNow()}
+                        label={moment(props.demande.created).fromNow()}
                         classes={{
                             root: clsx("h-24", props.className),
                             label: "pl-4 pr-6 py-4 text-11",
@@ -79,6 +77,21 @@ function DemandeAchatsListItem(props) {
                             ...props.classes
                         }}
                         variant="outlined"
+                        className="mr-4"
+                        onDelete={props.onDelete}
+                    />
+                    
+                    <Chip
+                        icon={<Icon className="text-16 mr-0">access_time</Icon>}
+                        label={'Clôture le '+moment(props.demande.dateExpiration).format("DD-MM-YYYY à HH:mm")}
+                        classes={{
+                            root: clsx("h-24", props.className),
+                            label: "pl-4 pr-6 py-4 text-11",
+                            deleteIcon: "w-16 ml-0",
+                            ...props.classes
+                        }}
+                        variant="outlined"
+                        className="mr-4"
                         onDelete={props.onDelete}
                     />
 

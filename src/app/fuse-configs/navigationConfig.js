@@ -18,6 +18,35 @@ const navigationConfig = [
         }
     },
     {
+        'id': 'demandes-devis',
+        'title': 'Demandes de devis',
+        'auth': authRoles.admin,
+        'type': 'item',
+        'icon': 'inbox',
+        'url': '/demandes_devis',
+        'badge': {
+            'title': 'demandes-devis',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        }
+    },
+    {
+        'id': 'validation_produits',
+        'title': 'Validation des Produits',
+        'auth': authRoles.admin,
+        'type': 'item',
+        'icon': 'shopping_cart',
+        'url': '/products',
+        'badge': {
+            'title': 'validation_produits',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        }
+
+    },
+    {
         'id': 'utilisateurs',
         'title': 'Utilisateur',
         'auth': authRoles.admin,
@@ -33,6 +62,7 @@ const navigationConfig = [
                     {
                         'id': 'admins-component',
                         'title': 'Gestion des Admins',
+                        'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'verified_user',
                         'url': '/users/admin',
@@ -40,6 +70,7 @@ const navigationConfig = [
                     {
                         'id': 'zones-component',
                         'title': 'Gestion des Admins Comm.',
+                        'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'group',
                         'url': '/users/zones',
@@ -47,6 +78,7 @@ const navigationConfig = [
                     {
                         'id': 'commercial-component',
                         'title': 'Gestion des Comm.',
+                        'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'group',
                         'url': '/users/commercials',
@@ -80,6 +112,7 @@ const navigationConfig = [
                         'id': 'commandes-abonnements',
                         'title': 'Commandes abonnement',
                         'type': 'item',
+                        'auth': authRoles.admin,
                         'icon': 'inbox',
                         'url': '/admin/offres/commande',
                         'badge': {
@@ -88,19 +121,21 @@ const navigationConfig = [
                             'fg': '#FFFFFF',
                             'count': 0
                         }
-                       
+
                     },
                     {
                         'id': 'gestion-abonnements',
                         'title': 'Abonnements',
+                        'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'cloud',
                         'url': '/admin/offres/abonnement',
-                       
+
                     },
                     {
                         'id': 'commandes-jetons',
                         'title': 'Commandes jetons',
+                        'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'control_point_duplicate',
                         'url': '/admin/abonnement/commandes',
@@ -114,13 +149,14 @@ const navigationConfig = [
                     {
                         'id': 'fournisseur-jetons',
                         'title': 'Gestion des jetons',
+                        'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'monetization_on',
                         'url': '/admin/abonnement/jetons',
                     },
-        
+
                 ]
-        
+
             },
 
         ]
@@ -133,6 +169,30 @@ const navigationConfig = [
         'icon': 'build',
         'children': [
             {
+                'id': 'portail',
+                'title': 'Gestion du contenu',
+                'type': 'collapse',
+                'icon': 'apps',
+                'children': [
+                    {
+                        'id': 'actualites-admin',
+                        'title': 'Actualités',
+                        'type': 'item',
+                        'icon': 'ballot',
+                        'auth': authRoles.admin,
+                        'url': '/admin/actualites',
+                    },
+                    {
+                        'id': 'produits-admin',
+                        'title': 'Focus produits',
+                        'type': 'item',
+                        'icon': 'ballot',
+                        'auth': authRoles.admin,
+                        'url': '/admin/focus-produits',
+                    },
+                ]
+            },
+            {
                 'id': 'parametre',
                 'title': 'Paramètres',
                 'type': 'collapse',
@@ -141,6 +201,7 @@ const navigationConfig = [
                     {
                         'id': 'pays-component',
                         'title': 'Pays',
+                        'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'public',
                         'url': '/parametres/pays',
@@ -148,6 +209,7 @@ const navigationConfig = [
                     {
                         'id': 'villes-component',
                         'title': 'Villes',
+                        'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'location_city',
                         'url': '/parametres/villes',
@@ -155,6 +217,7 @@ const navigationConfig = [
                     {
                         'id': 'secturs-component',
                         'title': 'Secteurs',
+                        'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'work',
                         'url': '/parametres/secteurs',
@@ -163,6 +226,7 @@ const navigationConfig = [
                         'id': 'sous_secturs-component',
                         'title': 'Sous-Secteurs',
                         'type': 'item',
+                        'auth': authRoles.admin,
                         'icon': 'ballot',
                         'url': '/parametres/sous_secteurs',
                     },
@@ -170,6 +234,7 @@ const navigationConfig = [
                         'id': 'motifs-component',
                         'title': 'Motifs du rejet',
                         'type': 'item',
+                        'auth': authRoles.admin,
                         'icon': 'remove_circle_outline',
                         'url': '/parametres/motifs',
                     }
@@ -178,35 +243,8 @@ const navigationConfig = [
 
         ]
     },
-    {
-        'id': 'demandes-devis',
-        'title': 'Demandes de devis',
-        'auth': authRoles.admin,
-        'type': 'item',
-        'icon': 'inbox',
-        'url': '/demandes_devis',
-        'badge': {
-            'title': 'demandes-devis',
-            'bg': 'rgb(255, 111, 0)',
-            'fg': '#FFFFFF',
-            'count': 0
-        }
-    },
-    {
-        'id': 'validation_produits',
-        'title': 'Validation des Produits',
-        'auth': authRoles.admin,
-        'type': 'item',
-        'icon': 'shopping_cart',
-        'url': '/products',
-        'badge': {
-            'title': 'validation_produits',
-            'bg': 'rgb(255, 111, 0)',
-            'fg': '#FFFFFF',
-            'count': 0
-        }
 
-    },
+
     /** Fin Admin Navigation */
 
     /** ACHETEUR Navigations */
@@ -330,13 +368,17 @@ const navigationConfig = [
                 'title': 'Abonnement',
                 'type': 'item',
                 'icon': 'cloud',
-                exact    : true,
+                'auth': authRoles.fournisseur,
+
+                exact: true,
                 'url': '/abonnement',
             },
             {
                 'id': 'offre-commandes',
                 'title': 'Vos commandes',
                 'type': 'item',
+                'auth': authRoles.fournisseur,
+
                 'icon': 'format_list_bulleted',
                 'url': '/offres/commande',
             },
@@ -344,8 +386,10 @@ const navigationConfig = [
                 'id': 'fr-commandes',
                 'title': 'Jetons',
                 'type': 'item',
+                'auth': authRoles.fournisseur,
+
                 'icon': 'control_point_duplicate',
-                exact    : true,
+                exact: true,
                 'url': '/abonnement/commandes',
             },
 

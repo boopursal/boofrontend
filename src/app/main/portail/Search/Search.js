@@ -67,6 +67,7 @@ function renderSuggestion(suggestion, {query, isHighlighted})
 {
     const matches = match(suggestion.title, query);
     const parts = parse(suggestion.title, matches);
+
     return (
         <MenuItem selected={isHighlighted} component="div">
             <ListItemIcon className="min-w-40">
@@ -229,7 +230,7 @@ function reducer(state, action)
     }
 }
 
-function FuseSearch(props)
+function Search(props)
 {
     const userRole = useSelector(({auth}) => auth.user.role);
     const navigation = useSelector(({fuse}) => fuse.navigation);
@@ -460,10 +461,10 @@ function FuseSearch(props)
     }
 }
 
-FuseSearch.propTypes = {};
-FuseSearch.defaultProps = {
+Search.propTypes = {};
+Search.defaultProps = {
     trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>),
     variant: 'full'// basic, full
 };
 
-export default withRouter(React.memo(FuseSearch));
+export default withRouter(React.memo(Search));

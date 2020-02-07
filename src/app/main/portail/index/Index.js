@@ -24,17 +24,23 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FuseAnimateGroup } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
-//import withReducer from 'app/store/withReducer';
+import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 //import _ from '@lodash';
 import { Link } from 'react-router-dom';
 import DemandeAchatsListItem from './DemandeAchatsListItem';
 import Categories from './Categories';
+import Newsletter from './Newsletter';
 import BioFournisseur from './BioFournisseur';
+import News from './News';
+import Produit from './Produit';
 import Slider from "react-slick";
-//import * as Actions from '../store/actions';
-//import reducer from '../store/reducers';
+import * as Actions from './store/actions';
+import reducer from './store/reducers';
 import YouTube from 'react-youtube';
+import ContentLoader from "react-content-loader"
+import moment from 'moment';
+import GlobalSearch from '../Search/GlobalSearch';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -92,11 +98,12 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.primary.main,
     },
     card: {
-          margin: 5,
+        margin: 5,
     },
     media: {
         height: 140,
     },
+
 }));
 function generate(element) {
     return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(value =>
@@ -112,6 +119,13 @@ function generate2(element) {
         }),
     );
 }
+function generate3(element) {
+    return [0, 1, 2].map(value =>
+        React.cloneElement(element, {
+            key: value,
+        }),
+    );
+}
 
 function Index(props) {
 
@@ -119,6 +133,8 @@ function Index(props) {
     const classes = useStyles(props);
     const title = 'Les Achats Industriels | Place de marché B2B';
     const [dense, setDense] = React.useState(false);
+    const portail = useSelector(({ IndexApp }) => IndexApp.poratilIndex);
+
     const settings = {
         dots: true,
         infinite: true,
@@ -145,8 +161,8 @@ function Index(props) {
                     slidesToScroll: 2,
                     infinite: true,
                     dots: true,
-                    arrows:false,
-                    
+                    arrows: false,
+
                 }
             },
             {
@@ -157,7 +173,7 @@ function Index(props) {
                     infinite: true,
                     dots: true,
                     className: "slick-slider-m mb-16",
-                    arrows:false,
+                    arrows: false,
                 }
             }
         ]
@@ -166,12 +182,21 @@ function Index(props) {
         width: '100%',
         height: '200px',
         playerVars: { // https://developers.google.com/youtube/player_parameters
-          showinfo: 0,          
-          fs: 0,
-          modestbranding: 1,
-          rel: 0,
+            showinfo: 0,
+            fs: 0,
+            modestbranding: 1,
+            rel: 0,
         }
-      };
+    };
+
+    useEffect(() => {
+        dispatch(Actions.getdemandeDevis());
+        dispatch(Actions.getFocusProduct());
+        dispatch(Actions.getNews());
+        return () => {
+            dispatch(Actions.cleanUp())
+        }
+    }, [dispatch]);
 
     useEffect(() => {
         // Mettre à jour le titre du document en utilisant l'API du navigateur
@@ -185,43 +210,23 @@ function Index(props) {
              ===================HEADER=================
             **/}
             <div
-                className={clsx(classes.header, "relative overflow-hidden flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24 h-256 sm:h-288")}>
+                className={clsx(classes.header, "relative flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24 h-256 sm:h-288")}>
                 <div className={classes.overlay} />
                 <div className={clsx(classes.mainHeader, "items-center md:w-xl xs:w-auto z-999 px-8 py-20 rounded-lg")} >
                     <FuseAnimate duration={400} delay={600}>
-                        <Typography variant="h1" component="h1" className="sm:text-20 uppercase text-13 font-bold mb-16  mx-auto max-w-xl">
+                        <Typography variant="h1" component="h1" className="sm:text-18 uppercase text-13 font-bold mb-16  mx-auto max-w-xl">
                             Les Achats Industriels, c'est une communauté de 1000 sociétés, Acheteurs et Fournisseurs
                         </Typography>
                     </FuseAnimate>
-                    <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
-                        <Paper className="flex p-4 items-center mx-auto w-full max-w-640 " elevation={1}>
-
-                            <Icon className="mr-8" color="action">search</Icon>
-
-                            <Input
-                                placeholder="Rechercher un produit, une activité, un fournisseur"
-                                className="flex flex-1 h-48"
-                                disableUnderline
-                                fullWidth
-                                autoFocus
-                                inputProps={{
-                                    'aria-label': 'Search'
-                                }}
-                            />
-                        </Paper>
-                    </FuseAnimate>
-
-
-
+                    <GlobalSearch />
                 </div>
-
                 <Icon className={classes.headerIcon}>school</Icon>
             </div>
 
 
             {/** 
              ===================CATEGORIES & RFQs=================
-            **/}                     
+            **/}
             <Grid container spacing={2} className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
                 <Grid item sm={4} xs={12}>
 
@@ -267,23 +272,49 @@ function Index(props) {
                         </ListItem>
 
                         <List className="p-0 w-full" >
-                            <FuseAnimateGroup
-                                enter={{
-                                    animation: "transition.slideUpBigIn"
-                                }}
-                            >
-                                {generate2(
-                                    <DemandeAchatsListItem />,
-                                )}
-                            </FuseAnimateGroup>
+
+
+                            {
+                                portail.loading ?
+                                    generate3(
+                                        <ContentLoader
+                                            speed={2}
+                                            width={400}
+                                            height={60}
+                                            viewBox="0 0 400 100"
+                                            backgroundColor="#c0c0c0"
+                                            foregroundColor="#ecebeb"
+                                        >
+                                            <rect x="1" y="2" rx="3" ry="3" width="54" height="6" />
+                                            <rect x="1" y="20" rx="3" ry="3" width="200" height="6" />
+                                            <rect x="1" y="35" rx="9" ry="9" width="79" height="15" />
+                                            <rect x="88" y="35" rx="9" ry="9" width="79" height="15" />
+                                            <circle cx="373" cy="21" r="11" />
+                                            <rect x="1" y="57" rx="0" ry="0" width="390" height="2" />
+                                        </ContentLoader>
+                                    )
+                                    :
+                                    <FuseAnimateGroup
+                                        enter={{
+                                            animation: "transition.slideUpBigIn"
+                                        }}
+                                    >
+                                        {portail.data &&
+                                            portail.data.map((item, index) => (
+                                                <DemandeAchatsListItem demande={item} key={index} />
+                                            )
+                                            )}
+                                    </FuseAnimateGroup>
+                            }
+
                         </List>
                     </div>
                 </Grid>
             </Grid>
 
             {/** 
-             ===================PORDUCTS=================
-            **/} 
+             ===================FOCUS PORDUCTS=================
+            **/}
             <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 py-24">
                 <Grid item sm={12}>
                     <div>
@@ -304,43 +335,51 @@ function Index(props) {
                         </ListItem>
 
                         <Slider {...settings}>
-                            {generate(
-                                <Card className={classes.card}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            className={classes.media}
-                                            image="https://source.unsplash.com/collection/9457511"
-                                            title="Contemplative Reptile"
-                                        />
-                                        <CardContent>
-                                            <Typography gutterBottom variant="h5" component="h2">
-                                                Lizard
-                                            </Typography>
-                                            <Typography variant="body2" color="textSecondary" component="p">
-                                                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                                across all continents except Antarctica
-                                            </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                    <CardActions>
-                                        <Button size="small" color="primary">
-                                            Share
-                                        </Button>
-                                        <Button size="small" color="primary">
-                                            Learn More
-                                        </Button>
-                                    </CardActions>
-                                </Card>,
-                            )}
+                            {
+                                portail.loadingProduits ?
+                                    <ContentLoader
+                                        viewBox="0 0 1360 900"
+                                        height={900}
+                                        width={1360}
+                                        speed={2}
+                                        {...props}
+                                    >
+                                        <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
+                                        <rect x="30" y="250" rx="0" ry="0" width="200" height="18" />
+                                        <rect x="30" y="275" rx="0" ry="0" width="120" height="20" />
+                                        <rect x="250" y="20" rx="8" ry="8" width="200" height="200" />
+                                        <rect x="250" y="250" rx="0" ry="0" width="200" height="18" />
+                                        <rect x="250" y="275" rx="0" ry="0" width="120" height="20" />
+                                        <rect x="470" y="20" rx="8" ry="8" width="200" height="200" />
+                                        <rect x="470" y="250" rx="0" ry="0" width="200" height="18" />
+                                        <rect x="470" y="275" rx="0" ry="0" width="120" height="20" />
+                                        <rect x="690" y="20" rx="8" ry="8" width="200" height="200" />
+                                        <rect x="690" y="250" rx="0" ry="0" width="200" height="18" />
+                                        <rect x="690" y="275" rx="0" ry="0" width="120" height="20" />
+                                        <rect x="910" y="20" rx="8" ry="8" width="200" height="200" />
+                                        <rect x="910" y="250" rx="0" ry="0" width="200" height="18" />
+                                        <rect x="910" y="275" rx="0" ry="0" width="120" height="20" />
+                                        <rect x="1130" y="20" rx="8" ry="8" width="200" height="200" />
+                                        <rect x="1130" y="250" rx="0" ry="0" width="200" height="18" />
+                                        <rect x="1130" y="275" rx="0" ry="0" width="120" height="20" />
+
+                                    </ContentLoader>
+                                    :
+                                    (
+                                        portail.produits && portail.produits.map((item, index) => (
+                                            <Produit produit={item.produit} index={index} />
+                                        ))
+                                    )
+                            }
 
                         </Slider>
                     </div>
                 </Grid>
             </Grid>
 
-             {/** 
+            {/** 
              ===================DECOUVREZ LES SHA=================
-            **/}
+           
             <div
                 className={clsx(classes.middle, "relative overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-512 sm:h-288 ")}>
                 <div className={classes.overlay} />
@@ -363,8 +402,8 @@ function Index(props) {
 
                 <Icon className={classes.headerIcon}>school</Icon>
             </div>
-
-             {/** 
+ **/}
+            {/** 
              ===================INSCRIPTION FOURNISSEUR=================
             **/}
             <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 py-24">
@@ -373,8 +412,98 @@ function Index(props) {
                 </Grid>
             </Grid>
 
-        </div>
+            {/** 
+             ===================NEWS=================
+            **/}
+            <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 py-24">
+                <Grid item sm={12}>
+                    <div>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar className={classes.mainAvatar}>
+                                    <Icon >local_library</Icon>
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={
+                                    <Typography variant="h2" component="h2" className="text-20 font-bold uppercase xs:text-11 mb-1">
+                                        LES DERNIERS ARTICLE DE NEWS
+                                    </Typography>
+                                }
+                            />
+                        </ListItem>
+                        <Grid container spacing={2}>
+
+
+                            {
+                                portail.loadingNews ?
+                                    generate3(
+                                        <Grid item sm={4}>
+                                            <ContentLoader
+                                                speed={2}
+                                                width={119}
+                                                height={172}
+                                                viewBox="0 0 119 172"
+                                                backgroundColor="#c0c0c0"
+                                                foregroundColor="#ecebeb"
+                                            >
+                                                <rect x="4" y="148" rx="9" ry="9" width="67" height="20" />
+                                                <rect x="4" y="7" rx="0" ry="0" width="125" height="77" />
+                                                <rect x="7" y="95" rx="3" ry="3" width="85" height="7" />
+                                                <rect x="5" y="111" rx="5" ry="5" width="114" height="22" />
+                                            </ContentLoader>
+                                        </Grid>
+                                    )
+                                    :
+                                    portail.news &&
+                                    portail.news.map((item, index) => (
+                                        <Grid item sm={4}>
+                                            <News new={item} key={index} />
+                                        </Grid>
+                                    )
+                                    )
+                            }
+                        </Grid>
+                        <Grid container spacing={2} className="justify-center mt-24 mb-24" >
+
+                            <Button component={Link} to="/produits/new" className="whitespace-no-wrap" color="secondary" variant="contained">
+                                Toute l'actualité
+                                </Button>
+
+                        </Grid>
+
+                    </div>
+                </Grid>
+
+            </Grid>
+
+            {/** 
+             ===================NEWSLETTER=================
+            **/}
+            <div
+                className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-300 sm:h-96 ")}>
+                <div className={classes.overlay} />
+                <Grid container spacing={2} className="max-w-2xl mx-auto px-8  sm:px-16 items-center z-9999">
+                    <Grid item sm={7} xs={12}>
+                        <Typography variant="h2" component="h2" className='text-white text-24 uppercase mb-2' >
+                            Newsletters <span className="font-extrabold"> Les Achats Industriels</span>
+                        </Typography>
+                        <Typography className="text-white opacity-75">
+                            Inscrivez-vous pour recevoir les newsletters dans votre boîte mail.
+                        </Typography>
+                    </Grid>
+                    <Grid item sm={5} xs={12}>
+                        <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
+                            <Newsletter />
+                        </FuseAnimate>
+                    </Grid>
+                </Grid>
+
+
+                <Icon className={classes.headerIcon}>school</Icon>
+            </div>
+
+        </div >
     );
 }
-
-export default Index;
+export default withReducer('IndexApp', reducer)(Index);
