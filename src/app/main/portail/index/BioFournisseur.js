@@ -8,6 +8,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Hidden from '@material-ui/core/Hidden';
+import { NavLinkAdapter} from '@fuse';
 import { ListItem, ListItemAvatar, Avatar, List, ListItemText, Icon } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -42,7 +43,8 @@ export default function BioFournisseur(props) {
     const { post } = props;
 
     return (
-        <CardActionArea component="a" href="/register">
+        <CardActionArea component={NavLinkAdapter}
+        to={'/register'} >
             <Card className={classes.card}>
                 <div className={classes.cardDetails}>
                     <CardContent>

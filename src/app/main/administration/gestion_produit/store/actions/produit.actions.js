@@ -44,7 +44,7 @@ export const CLEAN_DELETE_IMAGE = '[PRODUIT APP] CLEAN_DELETE_IMAGE';
 
 
 export function getSecteurs() {
-    const request = agent.get('/api/secteurs?properties[]=id&properties[]=name');
+    const request = agent.get('/api/secteurs?props[]=id&props[]=name');
 
     return (dispatch) => {
         dispatch({
@@ -62,7 +62,7 @@ export function getSecteurs() {
 }
 
 export function getSousSecteurs(url) {
-    const request = agent.get(`${url}/sous_secteurs?parent[exists]=false&pagination=false&properties[]=id&properties[]=name`);
+    const request = agent.get(`${url}/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
         dispatch({
@@ -80,7 +80,7 @@ export function getSousSecteurs(url) {
 }
 
 export function getCategories(url) {
-    const request = agent.get(`/api/sous_secteurs?parent=${url}&pagination=false&properties[]=id&properties[]=name`);
+    const request = agent.get(`/api/sous_secteurs?parent=${url}&pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
         dispatch({

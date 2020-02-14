@@ -7,6 +7,9 @@ const initialState = {
     fournisseurs: [],
     activites: [],
     loading: false,
+    loadingFournisseurs: false,
+    loadingActivites: false,
+    loadingProduits: false,
     opened: false
 
 };
@@ -16,14 +19,33 @@ const globalSearchReducer = function (state = initialState, action) {
         case Actions.CLEAN_UP:
             {
                 return {
-                    ...initialState,
+                    ...state,
+                    produits: [],
+                    fournisseurs: [],
+                    activites: [],
                 };
             }
         case Actions.GS_REQUEST_PRODUITS:
             {
                 return {
                     ...state,
-                    loading: true
+                    loadingProduits: true
+
+                };
+            }
+        case Actions.GS_REQUEST_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    loadingFournisseurs: true
+
+                };
+            }
+        case Actions.GS_REQUEST_ACTIVITES:
+            {
+                return {
+                    ...state,
+                    loadingActivites: true
 
                 };
             }
@@ -31,8 +53,24 @@ const globalSearchReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    loading: false,
+                    loadingProduits: false,
                     produits: action.payload,
+                };
+            }
+        case Actions.GS_GET_ACTIVITES:
+            {
+                return {
+                    ...state,
+                    loadingActivites: false,
+                    activites: action.payload,
+                };
+            }
+        case Actions.GS_GET_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    loadingFournisseurs: false,
+                    fournisseurs: action.payload,
                 };
             }
         case Actions.GS_SET_SEARCH_TEXT:
@@ -46,7 +84,7 @@ const globalSearchReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    opened: true
+                    opened: true,
                 };
             }
         case Actions.GS_CLOSE:

@@ -139,8 +139,8 @@ function Index(props) {
         dots: true,
         infinite: true,
         speed: 500,
-        slidesToScroll: 4,
-        slidesToShow: 4,
+        slidesToScroll: portail.produits && portail.produits.length < 4 ? portail.produits.length : 4,
+        slidesToShow: portail.produits && portail.produits.length < 4 ? portail.produits.length : 4,
         dots: false,
         autoplay: true,
         autoplaySpeed: 5000,
@@ -333,60 +333,63 @@ function Index(props) {
                                 secondary='Un extrait des catalogues B2B des fournisseurs et fabricants présents sur Les Achats Industriels.'
                             />
                         </ListItem>
+                        {
+                            portail.loadingProduits ?
+                                <ContentLoader
+                                    viewBox="0 0 1360 400"
+                                    height={400}
+                                    width={1360}
+                                    speed={2}
+                                    {...props}
+                                >
+                                    <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
+                                    <rect x="30" y="250" rx="0" ry="0" width="200" height="18" />
+                                    <rect x="30" y="275" rx="0" ry="0" width="120" height="20" />
+                                    <rect x="250" y="20" rx="8" ry="8" width="200" height="200" />
+                                    <rect x="250" y="250" rx="0" ry="0" width="200" height="18" />
+                                    <rect x="250" y="275" rx="0" ry="0" width="120" height="20" />
+                                    <rect x="470" y="20" rx="8" ry="8" width="200" height="200" />
+                                    <rect x="470" y="250" rx="0" ry="0" width="200" height="18" />
+                                    <rect x="470" y="275" rx="0" ry="0" width="120" height="20" />
+                                    <rect x="690" y="20" rx="8" ry="8" width="200" height="200" />
+                                    <rect x="690" y="250" rx="0" ry="0" width="200" height="18" />
+                                    <rect x="690" y="275" rx="0" ry="0" width="120" height="20" />
+                                    <rect x="910" y="20" rx="8" ry="8" width="200" height="200" />
+                                    <rect x="910" y="250" rx="0" ry="0" width="200" height="18" />
+                                    <rect x="910" y="275" rx="0" ry="0" width="120" height="20" />
+                                    <rect x="1130" y="20" rx="8" ry="8" width="200" height="200" />
+                                    <rect x="1130" y="250" rx="0" ry="0" width="200" height="18" />
+                                    <rect x="1130" y="275" rx="0" ry="0" width="120" height="20" />
 
-                        <Slider {...settings}>
-                            {
-                                portail.loadingProduits ?
-                                    <ContentLoader
-                                        viewBox="0 0 1360 900"
-                                        height={900}
-                                        width={1360}
-                                        speed={2}
-                                        {...props}
-                                    >
-                                        <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
-                                        <rect x="30" y="250" rx="0" ry="0" width="200" height="18" />
-                                        <rect x="30" y="275" rx="0" ry="0" width="120" height="20" />
-                                        <rect x="250" y="20" rx="8" ry="8" width="200" height="200" />
-                                        <rect x="250" y="250" rx="0" ry="0" width="200" height="18" />
-                                        <rect x="250" y="275" rx="0" ry="0" width="120" height="20" />
-                                        <rect x="470" y="20" rx="8" ry="8" width="200" height="200" />
-                                        <rect x="470" y="250" rx="0" ry="0" width="200" height="18" />
-                                        <rect x="470" y="275" rx="0" ry="0" width="120" height="20" />
-                                        <rect x="690" y="20" rx="8" ry="8" width="200" height="200" />
-                                        <rect x="690" y="250" rx="0" ry="0" width="200" height="18" />
-                                        <rect x="690" y="275" rx="0" ry="0" width="120" height="20" />
-                                        <rect x="910" y="20" rx="8" ry="8" width="200" height="200" />
-                                        <rect x="910" y="250" rx="0" ry="0" width="200" height="18" />
-                                        <rect x="910" y="275" rx="0" ry="0" width="120" height="20" />
-                                        <rect x="1130" y="20" rx="8" ry="8" width="200" height="200" />
-                                        <rect x="1130" y="250" rx="0" ry="0" width="200" height="18" />
-                                        <rect x="1130" y="275" rx="0" ry="0" width="120" height="20" />
+                                </ContentLoader>
+                                :
+                                <Slider {...settings}>
+                                    {
 
-                                    </ContentLoader>
-                                    :
-                                    (
-                                        portail.produits && portail.produits.map((item, index) => (
-                                            <Produit produit={item.produit} index={index} />
-                                        ))
-                                    )
-                            }
+                                        (
+                                            portail.produits && portail.produits.map((item, index) => (
+                                                <Produit produit={item.produit} key={index} />
+                                            ))
+                                        )
+                                    }
 
-                        </Slider>
+                                </Slider>
+                        }
+
                     </div>
                 </Grid>
             </Grid>
 
-            {/** 
+            {/* 
              ===================DECOUVREZ LES SHA=================
-           
+            **/}
             <div
                 className={clsx(classes.middle, "relative overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-512 sm:h-288 ")}>
                 <div className={classes.overlay} />
                 <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 items-center py-24 z-9999">
                     <Grid item sm={7} xs={12}>
                         <Typography variant="h2" component="h2" className='text-white text-24 uppercase mb-16' >
-                            Découvrez le service Les Achats Industriels
+                            Découvrez le service <span className="font-extrabold">Les Achats Industriels</span>
                         </Typography>
                         <Typography className="text-white opacity-75">
                             La place de marché N°1 au Maroc, qui permet aux Acheteurs et aux Fournisseurs de se rencontrer dans une même plate-forme (électronique).
@@ -402,7 +405,7 @@ function Index(props) {
 
                 <Icon className={classes.headerIcon}>school</Icon>
             </div>
- **/}
+
             {/** 
              ===================INSCRIPTION FOURNISSEUR=================
             **/}

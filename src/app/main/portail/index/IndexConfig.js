@@ -1,4 +1,4 @@
-import Index from './Index';
+import React from 'react';
 
 export const IndexConfig = {
     settings: {
@@ -32,7 +32,8 @@ export const IndexConfig = {
     routes  : [
         {
             path     : '/',
-            component: Index
+            exact : true,
+            component: React.lazy(() => import('./Index')) 
         }
     ]
 };

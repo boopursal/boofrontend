@@ -7,6 +7,7 @@ import ReactHtmlParser from 'react-html-parser';
 import _ from '@lodash';
 import {FuseUtils} from '@fuse';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     mediaProduit: {
@@ -19,7 +20,7 @@ export default function Produit(props) {
     const { produit } = props;
     return (
         <Card className={classes.card}>
-            <CardActionArea>
+            <CardActionArea component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.slug}`}>
                 <CardMedia
                     className={classes.mediaProduit}
                     image={produit.featuredImageId ?
@@ -94,11 +95,7 @@ export default function Produit(props) {
 
                 </CardContent>
             </CardActionArea>
-            <CardActions className="flex justify-between">
-                <Button size="small" color="primary" >
-                    Lire la suite
-                </Button>
-            </CardActions>
+            
         </Card>
     );
 }

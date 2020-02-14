@@ -37,7 +37,7 @@ export function getProfile(id_acheteur) {
 
 }
 export function getPays() {
-    const request = agent.get('/api/pays?pagination=false&properties[]=id&properties[]=name');
+    const request = agent.get('/api/pays?pagination=false&props[]=id&props[]=name');
 
     return (dispatch) => {
         dispatch({
@@ -75,7 +75,7 @@ export function getVilles(pays_id) {
 }
 
 export function getSecteurs() {
-    const request = agent.get('/api/secteurs?pagination=false&properties[]=id&properties[]=name');
+    const request = agent.get('/api/secteurs?pagination=false&props[]=id&props[]=name');
 
     return (dispatch) => {
 

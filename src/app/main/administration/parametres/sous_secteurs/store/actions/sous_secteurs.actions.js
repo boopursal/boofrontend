@@ -39,7 +39,7 @@ export function getSecteurs()
 
 export function getParents(url)
 {
-    const request = agent.get(`${url}/sous_secteurs?parent[exists]=false&pagination=false&properties[]=id&properties[]=name`);
+    const request = agent.get(`${url}/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) =>
         request.then((response) =>{

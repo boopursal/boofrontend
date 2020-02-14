@@ -78,7 +78,7 @@ export function updateCommande(data,sousSecteurs,offre,mode,duree, remise,paieme
 
 
 export function getSousSecteurs() {
-    const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&properties[]=id&properties[]=name');
+    const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name');
 
     return (dispatch) => {
         dispatch({

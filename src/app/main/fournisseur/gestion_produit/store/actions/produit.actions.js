@@ -93,7 +93,7 @@ export function getVideoYoutubeById(idVideo) {
 }
 
 export function getCategories(url) {
-    const request = agent.get(`/api/sous_secteurs?parent=${url}&pagination=false&properties[]=id&properties[]=name`);
+    const request = agent.get(`/api/sous_secteurs?parent=${url}&pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
         dispatch({

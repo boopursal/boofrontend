@@ -195,7 +195,7 @@ function Step4App(props) {
 
     function handleChipChange(value, name) {
 
-        if (name === 'ville' || name === 'secteur') {
+        if (name === 'ville' || name === 'secteur' || name === 'currency') {
             setForm(_.set({ ...form }, name, value));
         }
         else {

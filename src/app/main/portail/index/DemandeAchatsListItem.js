@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import _ from '@lodash';
 import moment from 'moment';
 import 'moment/locale/fr';
+import { NavLinkAdapter} from '@fuse';
 const useStyles = makeStyles({
     todoItem: {
         '&.completed': {
@@ -26,11 +27,9 @@ function DemandeAchatsListItem(props) {
     return (
         <ListItem
             className={clsx(classes.todoItem, "border-solid border-b-1 py-16  px-0 sm:px-8")}
-            onClick={(ev) => {
-                ev.preventDefault();
-                // dispatch(Actions.openEditTodoDialog(props.todo));
-            }}
             dense={true}
+            component={NavLinkAdapter}
+            to={'/apps/todo/'}
             button
         >
 

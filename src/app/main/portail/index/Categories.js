@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLinkAdapter} from '@fuse';
 import {
     ListItem, ListItemIcon, Icon, ListItemText, ListItemSecondaryAction, IconButton,
 } from '@material-ui/core';
@@ -7,7 +8,12 @@ function Categories(props) {
     const [secondary, setSecondary] = React.useState(false);
 
     return (
-        <ListItem>
+        <ListItem
+            dense={true}
+            component={NavLinkAdapter}
+            to={'/apps/todo/'}
+            button
+        >
             <ListItemIcon>
                 <Icon>folder</Icon>
             </ListItemIcon>

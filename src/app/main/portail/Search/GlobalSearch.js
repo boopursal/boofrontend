@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { FuseAnimate, FuseAnimateGroup, FuseUtils } from '@fuse';
-import { ClickAwayListener, Paper, Icon, Input, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider, Typography, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import { ClickAwayListener, Paper, Icon, Input, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider, Typography, ListItemSecondaryAction, IconButton, CardActions } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import reducer from './store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import * as Actions from './store/actions';
 import withReducer from 'app/store/withReducer';
 import _ from '@lodash';
 import Highlighter from "react-highlight-words";
+import ContentLoader from 'react-content-loader';
 
 const useStyles = makeStyles(theme => ({
 
@@ -17,7 +18,7 @@ const useStyles = makeStyles(theme => ({
         overflow: 'auto',
         height: 200,
         border: '1px solid #ccc',
-        padding:0
+        padding: 0
     },
     cat: {
         width: '100%',
@@ -43,7 +44,23 @@ function GlobalSearch(props) {
     useEffect(() => {
         if (globalSearch.searchText.length > 1) {
             dispatch(Actions.showSearch());
-            dispatch(Actions.getResults(globalSearch.searchText));
+            dispatch({
+                type: Actions.GS_REQUEST_PRODUITS,
+            });
+            dispatch({
+                type: Actions.GS_REQUEST_ACTIVITES,
+            });
+            dispatch({
+                type: Actions.GS_REQUEST_FOURNISSEUR,
+            });
+            const timer = setTimeout(() => {
+                dispatch(Actions.getResults(globalSearch.searchText));
+            }, 500);
+            return () => {
+                clearTimeout(timer);
+                dispatch(Actions.cleanUp())
+            };
+
         }
         else {
             dispatch(Actions.hideSearch());
@@ -57,17 +74,17 @@ function GlobalSearch(props) {
             !ResultsNode.current.contains(event.target)
         ) && dispatch(Actions.hideSearch());
     }
-    
+
     return (
         <div ref={ResultsNode} className="mx-auto w-full max-w-640 ">
             <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
-                <Paper className="flex p-4 items-center w-full" elevation={1}>
+                <Paper className="flex p-4 items-center w-full bg-gray focus:outline-none focus:bg-white focus:shadow-outline focus:border-gray-300" elevation={1}>
 
-                    <Icon className="mr-8" color="action">search</Icon>
+                    <Icon className="mr-8 ml-8" color="action">search</Icon>
 
                     <Input
                         placeholder="Rechercher un produit, une activité, un fournisseur"
-                        className="flex flex-1 h-48"
+                        className="flex flex-1 h-48 focus:bg-gray"
                         disableUnderline
                         fullWidth
                         onChange={(event) => { dispatch(Actions.setGlobalSearchText(event)) }}
@@ -77,6 +94,7 @@ function GlobalSearch(props) {
                             'aria-label': 'Search'
                         }}
                     />
+                    <Icon className="mr-8" color="action">search</Icon>
                 </Paper>
             </FuseAnimate>
             {globalSearch.opened && (
@@ -85,195 +103,268 @@ function GlobalSearch(props) {
                         <div className="mx-auto w-full  z-999">
                             <Paper className="absolute shadow w-full z-9999" elevation={1}>
                                 {
-                                    !globalSearch.loading
-                                        ?
-                                        (
-                                            globalSearch.produits.length === 0 && globalSearch.fournisseurs.length === 0 && globalSearch.activites.length === 0 ? (
-                                                <div className="p-10 font-bold">
-                                                    No resultats found
-                                                </div>
-                                            ) :
-                                                <>
-                                                    {
-                                                        globalSearch.produits.length > 0 ?
-                                                            <Grid container spacing={2}>
-                                                                <Grid item xs={2} style={{
-                                                                    paddingRight: '0',
-                                                                    paddingBottom: '0',
-                                                                }}>
-                                                                    <div className={classes.cat}>
-                                                                        Produits
-                                                            </div>
-                                                                </Grid>
-                                                                <Grid item xs={10} style={{
-                                                                    paddingLeft: '0',
-                                                                    paddingBottom: '0',
-                                                                }}>
-                                                                    <List className={classes.root} dense={true}>
-                                                                        <FuseAnimateGroup
-                                                                            enter={{
-                                                                                animation: "transition.slideUpBigIn"
-                                                                            }}
-                                                                        >
-                                                                            {
-                                                                                globalSearch.produits.map((produit, index) => (
-                                                                                    
-                                                                                    <React.Fragment key={index}>
-                                                                                    
-                                                                                        <ListItem
-                                                                                         onClick={(ev) => {
+
+                                    <>
+                                        {
+
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={2} style={{
+                                                    paddingRight: '0',
+                                                    paddingBottom: '0',
+                                                }}>
+                                                    <div className={classes.cat}>
+                                                        Produits
+                                                    </div>
+                                                </Grid>
+                                                <Grid item xs={10} style={{
+                                                    paddingLeft: '0',
+                                                    paddingBottom: '0',
+                                                }}>
+                                                    <List className={classes.root} dense={true}>
+                                                        {
+                                                            globalSearch.loadingProduits
+                                                                ?
+                                                                <ContentLoader
+                                                                    viewBox="0 0 400 100"
+                                                                    height={100}
+                                                                    width={400}
+                                                                    speed={2}
+                                                                    backgroundColor="transparent"
+                                                                >
+                                                                    <circle cx="150" cy="86" r="8" />
+                                                                    <circle cx="194" cy="86" r="8" />
+                                                                    <circle cx="238" cy="86" r="8" />
+                                                                </ContentLoader>
+                                                                :
+                                                                <FuseAnimateGroup
+                                                                    enter={{
+                                                                        animation: "transition.slideUpBigIn"
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        globalSearch.produits.length > 0 ?
+                                                                            globalSearch.produits.map((produit, index) => (
+
+                                                                                <React.Fragment key={index}>
+
+                                                                                    <ListItem
+                                                                                        onClick={(ev) => {
                                                                                             ev.preventDefault();
                                                                                             // dispatch(Actions.openEditTodoDialog(props.todo));
                                                                                         }}
                                                                                         dense={true}
                                                                                         button alignItems="flex-start">
-                                                                                            <ListItemAvatar>
-                                                                                                {
-                                                                                                    produit.featuredImageId ?
-                                                                                                        <Avatar alt={produit.titre} src={FuseUtils.getUrl() + produit.featuredImageId.url} />
-                                                                                                        :
-                                                                                                        <Avatar alt={produit.titre} src="assets/images/ecommerce/product-placeholder.jpg" />
-                                                                                                }
-                                                                                            </ListItemAvatar>
-                                                                                            <ListItemText primary={
-                                                                                                <Highlighter
+                                                                                        <ListItemAvatar>
+                                                                                            {
+                                                                                                produit.featuredImageId ?
+                                                                                                    <Avatar alt={produit.titre} src={FuseUtils.getUrl() + produit.featuredImageId.url} />
+                                                                                                    :
+                                                                                                    <Avatar alt={produit.titre} src="assets/images/ecommerce/product-placeholder.jpg" />
+                                                                                            }
+                                                                                        </ListItemAvatar>
+                                                                                        <ListItemText primary={
+                                                                                            <Highlighter
                                                                                                 highlightClassName="YourHighlightClass"
                                                                                                 searchWords={[globalSearch.searchText]}
                                                                                                 autoEscape={true}
                                                                                                 textToHighlight={produit.titre}
-                                                                                              />} 
-                                                                                              secondary={
+                                                                                            />}
+                                                                                            secondary={
                                                                                                 _.capitalize(_.truncate(produit.description, {
                                                                                                     'length': 50
                                                                                                 }))
                                                                                             } />
-                                                                                            <ListItemSecondaryAction>
-                                                                                                
-                                                                                                    {
-                                                                                                        produit.pu
-                                                                                                            ? 
-                                                                                                           <span className="text-green">{ produit.pu + ' ' + (produit.currency?produit.currency.name:'') + ' HT' }</span>
-                                                                                                            : ''
-                                                                                                            }
-                                                                                               
-                                                                                            </ListItemSecondaryAction>
-                                                                                        </ListItem>
-                                                                                        <Divider variant="inset" component="li" />
-                                                                                    </React.Fragment>
-                                                                                ))
-                                                                            }
+                                                                                        <ListItemSecondaryAction>
 
-                                                                        </FuseAnimateGroup>
-                                                                    </List>
-                                                                </Grid>
+                                                                                            {
+                                                                                                produit.pu
+                                                                                                    ?
+                                                                                                    <span className="text-green">{produit.pu + ' ' + (produit.currency ? produit.currency.name : '') + ' HT'}</span>
+                                                                                                    : ''
+                                                                                            }
 
-                                                            </Grid>
-                                                            :
-                                                            ''
-                                                    }
+                                                                                        </ListItemSecondaryAction>
+                                                                                    </ListItem>
+                                                                                    <Divider variant="inset" component="li" />
+                                                                                </React.Fragment>
+                                                                            ))
+                                                                            :
+                                                                            <ListItem
+                                                                                dense={true}
+                                                                                alignItems="flex-start">
+                                                                                <ListItemText primary={"Aucun résultat trouvré pour « " + globalSearch.searchText + " » par nom produit"}
+                                                                                />
 
-                                                    <Grid container spacing={2}>
-                                                        <Grid item xs={2} style={{
-                                                            paddingRight: '0',
-                                                            paddingBottom: '0',
-                                                        }}>
-                                                            <div className={classes.cat} style={{
-                                                                borderTop: '0',
+                                                                            </ListItem>
+                                                                    }
 
-                                                            }}>
-                                                                Catégories
-                                                </div>
-                                                        </Grid>
-                                                        <Grid item xs={10} style={{
-                                                            paddingLeft: '0',
-                                                            paddingBottom: '0',
-                                                        }}>
-                                                            <List className={classes.root} style={{
-                                                                borderTop: '0',
+                                                                </FuseAnimateGroup>
+                                                        }
 
-                                                            }} dense={true}>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                            </List>
-                                                        </Grid>
+                                                    </List>
+                                                </Grid>
 
-                                                    </Grid>
-                                                    <Grid container spacing={2}>
-                                                        <Grid item xs={2} style={{
-                                                            paddingRight: '0',
-                                                            paddingBottom: '0',
-                                                        }}>
-                                                            <div className={classes.cat} style={{
-                                                                borderTop: '0',
+                                            </Grid>
 
-                                                            }}>
-                                                                Fournisseurs
-                                                </div>
-                                                        </Grid>
-                                                        <Grid item xs={10} style={{
-                                                            paddingLeft: '0',
-                                                            paddingBottom: '0',
-                                                        }}>
-                                                            <List className={classes.root} style={{
-                                                                borderTop: '0',
+                                        }
+                                        {
 
-                                                            }} dense={true}>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    <ListItemText
-                                                                        primary="Single-line item"
-                                                                    />
-                                                                </ListItem>
-                                                            </List>
-                                                        </Grid>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={2} style={{
+                                                    paddingRight: '0',
+                                                    paddingBottom: '0',
+                                                }}>
+                                                    <div className={classes.cat} style={{
+                                                        borderTop: '0',
 
-                                                    </Grid>
-                                                </>
-                                        )
-                                        :
-                                        'Loading ...'
+                                                    }}>
+                                                        Activités
+                                                                    </div>
+                                                </Grid>
+                                                <Grid item xs={10} style={{
+                                                    paddingLeft: '0',
+                                                    paddingBottom: '0',
+                                                }}>
+                                                    <List className={classes.root} style={{
+                                                        borderTop: '0',
+
+                                                    }} dense={true}>
+                                                        {!globalSearch.loadingActivites ?
+                                                            <FuseAnimateGroup
+                                                                enter={{
+                                                                    animation: "transition.slideUpBigIn"
+                                                                }}
+                                                            >
+                                                                {
+
+                                                                    globalSearch.activites.length > 0 ?
+                                                                        globalSearch.activites.map((activite, index) => (
+
+                                                                            <React.Fragment key={index}>
+                                                                                <ListItem
+                                                                                    onClick={(ev) => {
+                                                                                        ev.preventDefault();
+                                                                                        // dispatch(Actions.openEditTodoDialog(props.todo));
+                                                                                    }}
+                                                                                    dense={true}
+                                                                                    button>
+                                                                                    <ListItemText
+                                                                                        primary={<Highlighter
+                                                                                            highlightClassName="YourHighlightClass"
+                                                                                            searchWords={[globalSearch.searchText]}
+                                                                                            autoEscape={true}
+                                                                                            textToHighlight={activite.name}
+                                                                                        />}
+                                                                                    />
+                                                                                </ListItem>
+                                                                            </React.Fragment>
+                                                                        ))
+                                                                        :
+                                                                        <ListItem
+                                                                            dense={true}
+                                                                            alignItems="flex-start">
+
+                                                                            <ListItemText primary={"Aucun résultat trouvré pour « " + globalSearch.searchText + " » par nom d'activité"}
+                                                                            />
+
+                                                                        </ListItem>
+                                                                }
+                                                            </FuseAnimateGroup>
+                                                            : <ContentLoader
+                                                                viewBox="0 0 400 100"
+                                                                height={100}
+                                                                width={400}
+                                                                speed={2}
+                                                                backgroundColor="transparent"
+                                                            >
+                                                                <circle cx="150" cy="86" r="8" />
+                                                                <circle cx="194" cy="86" r="8" />
+                                                                <circle cx="238" cy="86" r="8" />
+                                                            </ContentLoader>}
+                                                    </List>
+                                                </Grid>
+
+                                            </Grid>
+
+                                        }
+
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={2} style={{
+                                                paddingRight: '0',
+                                                paddingBottom: '0',
+                                            }}>
+                                                <div className={classes.cat} style={{
+                                                    borderTop: '0',
+
+                                                }}>
+                                                    Fournisseurs
+                                                            </div>
+                                            </Grid>
+                                            <Grid item xs={10} style={{
+                                                paddingLeft: '0',
+                                                paddingBottom: '0',
+                                            }}>
+                                                <List className={classes.root} style={{
+                                                    borderTop: '0',
+
+                                                }} dense={true}>
+                                                    {!globalSearch.loadingFournisseurs ?
+                                                        <FuseAnimateGroup
+                                                            enter={{
+                                                                animation: "transition.slideUpBigIn"
+                                                            }}
+                                                        >
+                                                            {
+
+                                                                globalSearch.fournisseurs.length > 0 ?
+                                                                    globalSearch.fournisseurs.map((fournisseur, index) => (
+
+                                                                        <React.Fragment key={index}>
+                                                                            <ListItem
+                                                                                onClick={(ev) => {
+                                                                                    ev.preventDefault();
+                                                                                    // dispatch(Actions.openEditTodoDialog(props.todo));
+                                                                                }}
+                                                                                dense={true}
+                                                                                button>
+                                                                                <ListItemText
+                                                                                    primary={<Highlighter
+                                                                                        highlightClassName="YourHighlightClass"
+                                                                                        searchWords={[globalSearch.searchText]}
+                                                                                        autoEscape={true}
+                                                                                        textToHighlight={fournisseur.societe}
+                                                                                    />}
+                                                                                />
+                                                                            </ListItem>
+                                                                        </React.Fragment>
+                                                                    ))
+                                                                    :
+                                                                    <ListItem
+                                                                        dense={true}
+                                                                        alignItems="flex-start">
+                                                                        <ListItemText primary={"Aucun résultat trouvré pour « " + globalSearch.searchText + " » par nom fournisseur"}
+                                                                        />
+
+                                                                    </ListItem>
+                                                            }
+                                                        </FuseAnimateGroup>
+                                                        : <ContentLoader
+                                                            viewBox="0 0 400 100"
+                                                            height={100}
+                                                            width={400}
+                                                            speed={2}
+                                                            backgroundColor="transparent"
+                                                        >
+                                                            <circle cx="150" cy="86" r="8" />
+                                                            <circle cx="194" cy="86" r="8" />
+                                                            <circle cx="238" cy="86" r="8" />
+                                                        </ContentLoader>}
+                                                </List>
+                                            </Grid>
+
+                                        </Grid>
+                                    </>
+
 
                                 }
 

@@ -14,7 +14,7 @@ export const SAVE_ERROR = '[STEP APP] SAVE ERROR';
 
 export function getSousSecteurs()
 {
-    const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&properties[]=id&properties[]=name');
+    const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name');
 
     return (dispatch) => {
         dispatch({
