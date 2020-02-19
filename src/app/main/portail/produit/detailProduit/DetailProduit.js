@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, CardContent, Typography, Icon, Avatar, Button, AppBar, Chip, Divider, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { Grid, Card,CircularProgress, CardContent, Typography, Icon, Avatar, Button, AppBar, Chip, Divider, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from "react-slick";
 import { Link } from 'react-router-dom';
@@ -12,6 +12,7 @@ import YouTube from 'react-youtube';
 import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
 import Produit from '../../index/Produit';
+import * as Actions from '../store/actions';
 
 function arrowGenerator(color) {
     return {
@@ -128,6 +129,9 @@ const useStyles = makeStyles(theme => ({
         minWidth: 275,
 
     },
+    progress: {
+        margin: theme.spacing(2),
+      },
     title: {
         fontSize: 30,
         textTransform: 'capitalize'
@@ -202,6 +206,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function DetailProduit(props) {
+    const dispatch = useDispatch();
     const classes = useStyles();
     const produit = useSelector(({ detailProduitApp }) => detailProduitApp.detailProduit);
     const opts = {
@@ -294,8 +299,9 @@ function DetailProduit(props) {
 
     function hadnleDownload(fiche) {
 
+        dispatch(Actions.getFile(fiche))
 
-        window.open(FuseUtils.getUrl() + fiche.url);
+        // window.open(FuseUtils.getUrl() + fiche.url);
 
     }
 
@@ -512,18 +518,37 @@ function DetailProduit(props) {
                                                         </Grid>
                                                     </BootstrapTooltip>
                                                     <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                                        <Button size="large" className="whitespace-no-wrap upercase mb-8 mt-2 w-full" color="primary" variant="contained">
+                                                        <Button size="large" onClick={ev => dispatch(Actions.openNewDemandeDevisDialog())} className="whitespace-no-wrap upercase mb-8 mt-2 w-full" color="primary" variant="contained">
                                                             Demandez un devis
                                                     </Button>
                                                     </FuseAnimate>
-                                                    <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                                        <Button
-                                                            size="large"
-                                                            // onClick={ev => dispatch(Actions.openNewVillesDialog())} 
-                                                            className="whitespace-no-wrap upercase w-full" variant="outlined">
-                                                            Affichez le téléphone
-                                                    </Button>
-                                                    </FuseAnimate>
+                                                    {
+                                                        produit.loadingsPhone ?
+                                                            <Typography variant="h6" color="textPrimary" className="uppercase font-bold w-full items-center flex justify-center" >
+                                                                <CircularProgress className={classes.progress} />
+                                                            </Typography>
+                                                            :
+                                                            (
+                                                                produit.showPhone ?
+                                                                    <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                                        <Typography variant="h6" color="textPrimary" className="uppercase font-bold w-full items-center flex justify-center" >
+                                                                            <Icon>phone</Icon> <span>{produit.phone}</span>
+                                                                        </Typography>
+                                                                    </FuseAnimate>
+                                                                    :
+                                                                    <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                                        <Button
+                                                                            size="large"
+                                                                            onClick={ev => dispatch(Actions.updateVuPhoneProduit(produit.data.id))}
+                                                                            // onClick={ev => dispatch(Actions.openNewVillesDialog())} 
+                                                                            className="whitespace-no-wrap upercase w-full" variant="outlined">
+                                                                            Affichez le téléphone
+                                                                        </Button>
+                                                                    </FuseAnimate>
+                                                            )
+
+                                                    }
+
                                                 </CardContent>
 
                                             </Card>
@@ -551,7 +576,7 @@ function DetailProduit(props) {
                             <ListItemText
                                 primary={
                                     <Typography variant="h2" component="h2" className="text-20 uppercase font-bold xs:text-11 mb-1">
-                                        Produits similaires 
+                                        Produits similaires
                                     </Typography>
                                 }
                             />
@@ -591,7 +616,7 @@ function DetailProduit(props) {
 
                                         (
                                             produit.produitsSimilaires && produit.produitsSimilaires.map((item, index) => (
-                                                item['@id'] !== produit.data['@id'] && 
+                                                item['@id'] !== produit.data['@id'] &&
                                                 <Produit produit={item} index={index} />
                                             ))
                                         )

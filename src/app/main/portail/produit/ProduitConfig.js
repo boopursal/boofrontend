@@ -31,7 +31,7 @@ export const ProduitConfig = {
 
     routes: [
         {
-            path: '/detail-produit/:activite/:categorie/:slug',
+            path: '/detail-produit/:activite/:categorie/:id-:slug',
             exact: true,
             component: React.lazy(() => import('./detailProduit/DetailProduitApp'))
         }

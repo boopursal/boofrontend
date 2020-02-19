@@ -20,7 +20,7 @@ export default function Produit(props) {
     const { produit } = props;
     return (
         <Card className={classes.card}>
-            <CardActionArea component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.slug}`}>
+            <CardActionArea component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`}>
                 <CardMedia
                     className={classes.mediaProduit}
                     image={produit.featuredImageId ?
