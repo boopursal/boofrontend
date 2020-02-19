@@ -4,9 +4,7 @@ import { FusePageSimple, DemoContent, FuseAnimate } from '@fuse';
 import { Typography, Grid } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import HomeIcon from '@material-ui/icons/Home';
-import { Link, useHistory,
-    useLocation,
-    useParams  } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import DetailProduit from './DetailProduit';
 import HeaderDetailProduit from './HeaderDetailProduit';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,11 +32,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function DetailProduitApp(props) {
-    let history = useHistory();
-    let {id,slug} = useParams();
-    console.log(history)
-    console.log(id)
-    console.log(slug)
     const classes = useStyles();
     const dispatch = useDispatch();
     const produit = useSelector(({ detailProduitApp }) => detailProduitApp.detailProduit);

@@ -37,7 +37,11 @@ const detailProduitReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    loading: true
+                    loading: true,
+                    showPhone: false,
+                    error: null,
+                    phone: null,
+
 
                 };
             }

@@ -90,6 +90,13 @@ a[role=button] {
 form label {
     z-index: 99;
 }
+.slick-initialized .slick-slide {
+    padding: 15px!important;
+}
+
+.slick-prev:before, .slick-next:before {
+    color: black!important;
+}
 
 @import 'print.css';
 
