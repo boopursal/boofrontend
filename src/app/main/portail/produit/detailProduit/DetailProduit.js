@@ -617,7 +617,7 @@ function DetailProduit(props) {
                                         (
                                             produit.produitsSimilaires && produit.produitsSimilaires.map((item, index) => (
                                                 item['@id'] !== produit.data['@id'] &&
-                                                <Produit produit={item} index={index} />
+                                                <Produit produit={item} key={index} />
                                             ))
                                         )
                                     }

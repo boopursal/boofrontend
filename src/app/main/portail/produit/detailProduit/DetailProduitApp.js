@@ -42,6 +42,7 @@ function DetailProduitApp(props) {
             const params = props.match.params;
             const { id } = params;
             dispatch(Actions.getProduit(id));
+            
         }
 
         updateProduitState();
