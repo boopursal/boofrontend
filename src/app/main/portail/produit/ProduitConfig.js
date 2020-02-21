@@ -34,6 +34,11 @@ export const ProduitConfig = {
             path: '/detail-produit/:activite/:categorie/:id-:slug',
             exact: true,
             component: React.lazy(() => import('./detailProduit/DetailProduitApp'))
+        },
+        {
+            path: '/vents-produits/:secteur?/:activite?/:categorie?',
+            exact: true,
+            component: React.lazy(() => import('./produits/ProduitsApp'))
         }
     ]
 };

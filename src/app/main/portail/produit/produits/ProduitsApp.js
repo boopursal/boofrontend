@@ -2,17 +2,14 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { FusePageSimple, DemoContent, FuseAnimate } from '@fuse';
 import { Typography, Grid } from '@material-ui/core';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import HomeIcon from '@material-ui/icons/Home';
 import { Link } from 'react-router-dom';
-import DetailProduit from './DetailProduit';
-import HeaderDetailProduit from './HeaderDetailProduit';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
-import DemandeDevisDialog from './DemandeDevisDialog';
+import SideBareSearch from './SideBareSearch';
+import ContentList from './ContentList';
 
 const useStyles = makeStyles(theme => ({
     middle: {
@@ -31,24 +28,37 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-function DetailProduitApp(props) {
+function useQuery(location) {
+    return new URLSearchParams(location.search);
+}
+
+function ProduitsApp(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const produit = useSelector(({ detailProduitApp }) => detailProduitApp.detailProduit);
+    const query = useQuery(props.location);
+    const params = props.match.params;
+    const { secteur, activite, categorie } = params;
+    const pays = query.get("pays");
 
     useEffect(() => {
 
         function updateProduitState() {
-            const params = props.match.params;
-           
-            const { id } = params;
-            dispatch(Actions.getProduit(id));
-            
+            dispatch(Actions.getProduits(params));
         }
 
         updateProduitState();
-    }, [dispatch, props.match.params]);
+    }, [dispatch, params,pays]);
 
+    useEffect(() => {
+
+        function updateProduitState() {
+            if(!secteur && !pays){
+                dispatch(Actions.getSecteursAndPaysCounts());
+            }
+        }
+
+        updateProduitState();
+    }, [dispatch,params, pays]);
 
     return (
         <div className="flex flex-col">
@@ -57,16 +67,23 @@ function DetailProduitApp(props) {
                 <div className={classes.overlay} />
                 <Grid container spacing={2} className="max-w-2xl mx-auto px-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
-                        <HeaderDetailProduit {...props} />
+                        Header
                     </Grid>
                 </Grid>
             </div>
-            <DetailProduit {...props} />
-            <DemandeDevisDialog />
+            <Grid container spacing={2} className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
+                <Grid item sm={4} xs={12} className="sticky top-0 order-last sm:order-first">
+                    <SideBareSearch  {...props} />
+                </Grid>
+                <Grid item sm={8} xs={12}>
+                    <ContentList />
+                </Grid>
+            </Grid>
+
         </div>
 
 
     )
 }
 
-export default withReducer('detailProduitApp', reducer)(DetailProduitApp);
+export default withReducer('produitsApp', reducer)(ProduitsApp);

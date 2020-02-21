@@ -14,6 +14,7 @@ class ScrollToTop extends React.Component {
   render() {
     return null;
   }
+  
 }
 
 export default withRouter(ScrollToTop);
