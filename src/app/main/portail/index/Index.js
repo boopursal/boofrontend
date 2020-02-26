@@ -41,6 +41,7 @@ import YouTube from 'react-youtube';
 import ContentLoader from "react-content-loader"
 import moment from 'moment';
 import GlobalSearch from '../Search/GlobalSearch';
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -132,9 +133,9 @@ function Index(props) {
     const dispatch = useDispatch();
     const classes = useStyles(props);
     const title = 'Les Achats Industriels | Place de marché B2B';
+    const description = 'Les Achats Industriels Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce';
     const [dense, setDense] = React.useState(false);
     const portail = useSelector(({ IndexApp }) => IndexApp.poratilIndex);
-
     const settings = {
         dots: true,
         infinite: true,
@@ -198,14 +199,14 @@ function Index(props) {
         }
     }, [dispatch]);
 
-    useEffect(() => {
-        // Mettre à jour le titre du document en utilisant l'API du navigateur
-        document.title = title;
-    }, [title]);
+   
 
     return (
         <div className="flex flex-col flex-1 w-full">
-
+            <Helmet>
+                <title>{title}</title>
+                <meta name="description" content={description} />
+            </Helmet>
             {/** 
              ===================HEADER=================
             **/}

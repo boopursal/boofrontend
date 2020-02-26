@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FuseAnimate, FuseAnimateGroup, FuseUtils } from '@fuse';
 import { ClickAwayListener, Paper, Icon, Input, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider, Typography, ListItemSecondaryAction, IconButton, CardActions } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -9,6 +9,8 @@ import withReducer from 'app/store/withReducer';
 import _ from '@lodash';
 import Highlighter from "react-highlight-words";
 import ContentLoader from 'react-content-loader';
+import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
 
@@ -38,11 +40,12 @@ const useStyles = makeStyles(theme => ({
 function GlobalSearch(props) {
 
     const dispatch = useDispatch();
+    const [onSearch,setOnSearch] = useState(false);
     const classes = useStyles(props);
     const globalSearch = useSelector(({ globalSearchApp }) => globalSearchApp.globalSearch);
     const ResultsNode = useRef(null);
     useEffect(() => {
-        if (globalSearch.searchText.length > 1) {
+        if (globalSearch.searchText.length > 1 && onSearch) {
             dispatch(Actions.showSearch());
             dispatch({
                 type: Actions.GS_REQUEST_PRODUITS,
@@ -66,35 +69,42 @@ function GlobalSearch(props) {
             dispatch(Actions.hideSearch());
         }
 
-    }, [globalSearch.searchText, dispatch]);
+    }, [globalSearch.searchText,onSearch, dispatch]);
 
     function handleClickAway(event) {
         return (
             !ResultsNode.current ||
             !ResultsNode.current.contains(event.target)
-        ) && dispatch(Actions.hideSearch());
+        ) && (dispatch(Actions.hideSearch()),setOnSearch(false));
+    }
+
+    function hideSearch(){
+        dispatch(Actions.hideSearch())
     }
 
     return (
-        <div ref={ResultsNode} className="mx-auto w-full max-w-640 ">
+        <div ref={ResultsNode} className={clsx("mx-auto w-full max-w-640 border border-gray-600 rounded-lg", props.className)} >
             <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
-                <Paper className="flex p-4 items-center w-full bg-gray focus:outline-none focus:bg-white focus:shadow-outline focus:border-gray-300" elevation={1}>
+                <Paper className="flex p-4 items-center w-full  rounded-lg" elevation={1}>
 
                     <Icon className="mr-8 ml-8" color="action">search</Icon>
 
                     <Input
                         placeholder="Rechercher un produit, une activité, un fournisseur"
-                        className="flex flex-1 h-48 focus:bg-gray"
+                        className="flex flex-1 h-44 focus:bg-gray"
                         disableUnderline
                         fullWidth
-                        onChange={(event) => { dispatch(Actions.setGlobalSearchText(event)) }}
+                        onChange={(event) => { 
+                            dispatch(Actions.setGlobalSearchText(event));
+                            setOnSearch(true)
+                         }}
+                        onFocus={(event) => { setOnSearch(true) }}
                         autoFocus
                         value={globalSearch.searchText}
                         inputProps={{
                             'aria-label': 'Search'
                         }}
                     />
-                    <Icon className="mr-8" color="action">search</Icon>
                 </Paper>
             </FuseAnimate>
             {globalSearch.opened && (
@@ -148,11 +158,10 @@ function GlobalSearch(props) {
                                                                                 <React.Fragment key={index}>
 
                                                                                     <ListItem
-                                                                                        onClick={(ev) => {
-                                                                                            ev.preventDefault();
-                                                                                            // dispatch(Actions.openEditTodoDialog(props.todo));
-                                                                                        }}
+                                                                                        component={Link}
+                                                                                        to={`/detail-produit/${produit.secteur? produit.secteur.slug: ''}/${produit.sousSecteurs? produit.sousSecteurs.slug: ''}/${produit.id}-${produit.slug}`}
                                                                                         dense={true}
+                                                                                        onClick={()=>{hideSearch();setOnSearch(false)}}
                                                                                         button alignItems="flex-start">
                                                                                         <ListItemAvatar>
                                                                                             {
@@ -242,10 +251,9 @@ function GlobalSearch(props) {
 
                                                                             <React.Fragment key={index}>
                                                                                 <ListItem
-                                                                                    onClick={(ev) => {
-                                                                                        ev.preventDefault();
-                                                                                        // dispatch(Actions.openEditTodoDialog(props.todo));
-                                                                                    }}
+                                                                                    component={Link}
+                                                                                    to={`/vente-produits/${activite.secteur? activite.secteur.slug: ''}/${activite.slug}`}
+                                                                                    onClick={()=>{hideSearch();setOnSearch(false)}}
                                                                                     dense={true}
                                                                                     button>
                                                                                     <ListItemText
@@ -321,10 +329,7 @@ function GlobalSearch(props) {
 
                                                                         <React.Fragment key={index}>
                                                                             <ListItem
-                                                                                onClick={(ev) => {
-                                                                                    ev.preventDefault();
-                                                                                    // dispatch(Actions.openEditTodoDialog(props.todo));
-                                                                                }}
+                                                                               onClick={()=>{hideSearch();setOnSearch(false)}}
                                                                                 dense={true}
                                                                                 button>
                                                                                 <ListItemText

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card,CircularProgress, CardContent, Typography, Icon, Avatar, Button, AppBar, Chip, Divider, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { Grid, Card, CircularProgress, CardContent, Typography, Icon, Avatar, Button, AppBar, Chip, Divider, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from "react-slick";
 import { Link } from 'react-router-dom';
@@ -13,6 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
 import Produit from '../../index/Produit';
 import * as Actions from '../store/actions';
+import { Helmet } from "react-helmet";
 
 function arrowGenerator(color) {
     return {
@@ -131,7 +132,7 @@ const useStyles = makeStyles(theme => ({
     },
     progress: {
         margin: theme.spacing(2),
-      },
+    },
     title: {
         fontSize: 30,
         textTransform: 'capitalize'
@@ -307,6 +308,17 @@ function DetailProduit(props) {
 
     return (
         <>
+            {
+                produit.data ?
+                    <Helmet>
+                        <title>{produit.data.titre}</title>
+                        <meta name="description" content={produit.data.description} />
+                        <meta property="og:title" content={produit.data.titre} />
+                        <meta property="og:description" content={produit.data.description} />
+                    </Helmet>
+                    : ''
+            }
+
             <Grid container spacing={2} className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
 
                 {

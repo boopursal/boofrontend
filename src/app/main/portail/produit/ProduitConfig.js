@@ -36,7 +36,7 @@ export const ProduitConfig = {
             component: React.lazy(() => import('./detailProduit/DetailProduitApp'))
         },
         {
-            path: '/vents-produits/:secteur?/:activite?/:categorie?',
+            path: '/vente-produits/:secteur?/:activite?/:categorie?',
             exact: true,
             component: React.lazy(() => import('./produits/ProduitsApp'))
         }

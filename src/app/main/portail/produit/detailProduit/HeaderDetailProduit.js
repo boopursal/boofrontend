@@ -31,11 +31,11 @@ function HeaderDetailProduit(props) {
                     <Link color="inherit" to="/" className={classes.link}>
                         <HomeIcon className={classes.icon} />
                         Accueil
-                </Link>
-                    <Link color="inherit" to={`/vente-produits/${produit.data.sousSecteurs ? produit.data.sousSecteurs.slug : ''}`} className={classes.link}>
+                    </Link>
+                    <Link color="inherit" to={`/vente-produits/${produit.data.secteur ? produit.data.secteur.slug : ''}/${produit.data.sousSecteurs ? produit.data.sousSecteurs.slug : ''}`} className={classes.link}>
                         {produit.data.sousSecteurs ? produit.data.sousSecteurs.name : ''}
                     </Link>
-                    <Link color="inherit" to={`/vente-produits/${produit.data.sousSecteurs ? produit.data.sousSecteurs.slug : ''}/${produit.data.categorie ? produit.data.categorie.slug : ''}`} className={classes.link}>
+                    <Link color="inherit" to={`/vente-produits/${produit.data.secteur ? produit.data.secteur.slug : ''}/${produit.data.sousSecteurs ? produit.data.sousSecteurs.slug : ''}/${produit.data.categorie ? produit.data.categorie.slug : ''}`} className={classes.link}>
                         {produit.data.categorie ? produit.data.categorie.name : ''}
                     </Link>
                     <Typography color="textPrimary" className={classes.link}>

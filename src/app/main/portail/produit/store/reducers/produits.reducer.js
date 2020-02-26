@@ -1,11 +1,28 @@
 import * as Actions from '../actions';
+import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
+
     data: [],
-    loading: false,
-    loadingSecteurs: false,
     secteurs: [],
+    activites: [],
+    categories: [],
     pays: [],
+    loading: false,
+    totalItems: null,
+    pageCount: null,
+    parametres: {
+        itemsPerPage: 10,
+        page: 1,
+        filter: {
+            id: 'created-desc',
+        }
+    },
+    loadingSecteurs: false,
+    loadingPays: false,
+    loadingActivites: false,
+    loadingCategories: false,
+
 
 };
 
@@ -32,12 +49,35 @@ const produitsReducer = function (state = initialState, action) {
                     loadingSecteurs: true,
                 };
             }
+        case Actions.REQUEST_PAYS_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingPays: true,
+                };
+            }
+        case Actions.REQUEST_ACTIVITES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingActivites: true,
+                };
+            }
+        case Actions.REQUEST_CATEGORIES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingCategories: true,
+                };
+            }
         case Actions.GET_PRODUITS:
             {
                 return {
                     ...state,
                     loading: false,
-                    data: action.payload['hydra:member']
+                    data: action.payload['hydra:member'],
+                    pageCount: FuseUtils.hydraPageCount(action.payload),
+                    totalItems: action.payload['hydra:totalItems'],
 
                 };
             }
@@ -54,11 +94,44 @@ const produitsReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
+                    loadingPays: false,
                     pays: action.payload
 
                 };
             }
+        case Actions.GET_ACTIVITES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingActivites: false,
+                    activites: action.payload
 
+                };
+            }
+        case Actions.GET_CATEGORIES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingCategories: false,
+                    categories: action.payload
+
+                };
+            }
+        case Actions.SET_PARAMETRES_DATA:
+            {
+                return {
+                    ...state,
+                    parametres: {
+                        itemsPerPage: action.parametres.itemsPerPage,
+                        page: action.parametres.page,
+                        filter: {
+                            id: action.parametres.filter.id,
+                            direction: action.parametres.filter.direction
+                        }
+                    }
+
+                };
+            }
         default:
             {
                 return state;
