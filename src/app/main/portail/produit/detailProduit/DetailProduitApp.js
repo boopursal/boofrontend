@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { FusePageSimple, DemoContent, FuseAnimate } from '@fuse';
-import { Typography, Grid } from '@material-ui/core';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import HomeIcon from '@material-ui/icons/Home';
-import { Link } from 'react-router-dom';
+import {  Grid } from '@material-ui/core';
 import DetailProduit from './DetailProduit';
 import HeaderDetailProduit from './HeaderDetailProduit';
 import { useDispatch, useSelector } from 'react-redux';

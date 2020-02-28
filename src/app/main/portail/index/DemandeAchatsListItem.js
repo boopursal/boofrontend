@@ -3,7 +3,6 @@ import { IconButton, Icon, Typography, Checkbox, ListItem, Chip } from '@materia
 import { makeStyles } from '@material-ui/styles';
 import red from '@material-ui/core/colors/red';
 import amber from '@material-ui/core/colors/amber';
-import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import _ from '@lodash';
 import moment from 'moment';
@@ -21,9 +20,7 @@ const useStyles = makeStyles({
 });
 
 function DemandeAchatsListItem(props) {
-    const dispatch = useDispatch();
     const classes = useStyles(props);
-
     return (
         <ListItem
             className={clsx(classes.todoItem, "border-solid border-b-1 py-16  px-0 sm:px-8")}
