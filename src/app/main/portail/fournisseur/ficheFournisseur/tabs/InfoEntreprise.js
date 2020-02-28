@@ -1,10 +1,13 @@
 import React from 'react';
-import { FuseAnimateGroup,FuseUtils } from '@fuse';
+import { FuseAnimateGroup, FuseUtils } from '@fuse';
 import { Typography, GridList, GridListTile, GridListTileBar, IconButton, Icon } from '@material-ui/core';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Link2 from '@material-ui/core/Link';
 
-function InfoEntreprise() {
-
+function InfoEntreprise(props) {
+    const params = props.match.params;
+    const { id,slug} = params;
     const data = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.data);
     const produitsApercu = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.produitsApercu);
     const loadingProduitsApercu = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.loadingProduitsApercu);
@@ -51,8 +54,8 @@ function InfoEntreprise() {
                                         <GridListTileBar
                                             title={item.titre}
                                             actionIcon={
-                                                <IconButton>
-                                                    <Icon className="text-white opacity-75">info</Icon>
+                                                <IconButton component={Link} to={`/detail-produit/${item.sousSecteurs.slug}/${item.categorie.slug}/${item.id}-${item.slug}`}>
+                                                    <Icon className="text-white opacity-75">arrow_forward_ios</Icon>
                                                 </IconButton>
                                             }
                                         />
@@ -62,10 +65,18 @@ function InfoEntreprise() {
 
 
                     </GridList>
+                    <div className="justify-end">
+                        <Link2 component={Link} to={`/entreprise/${id}-${slug}/produits`}>
+                            Link
+                        </Link2>
+                    </div>
+
+
+
 
                     <Typography variant="h2" className="my-24 p-12 bg-gray-300 uppercase font-bold text-16">
                         Actavités
-        </Typography>
+                    </Typography>
                     <div>
                         {
                             data.sousSecteurs && data.sousSecteurs.map((item, index) => (

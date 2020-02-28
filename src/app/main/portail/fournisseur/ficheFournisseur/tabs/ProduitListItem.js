@@ -63,7 +63,7 @@ function ProduitListItem(props) {
         document.querySelector('.ps').scrollTop = 0;
     }
 
-    function handleChangeItems(ev){
+    function handleChangeItems(ev) {
         parametres.page = 1;
         parametres.itemsPerPage = ev.target.value;
         document.querySelector('.ps').scrollTop = 0;
@@ -100,10 +100,12 @@ function ProduitListItem(props) {
                                 animation: "transition.slideUpBigIn"
                             }}
                         >
+                            
                             {
                                 produits && produits.map((produit, index) => (
 
                                     <Paper className={classes.paper} key={index}>
+
                                         <Grid container spacing={2}>
                                             <Grid item>
                                                 <ButtonBase className={classes.image} component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`}>

@@ -188,7 +188,7 @@ function FicheFournisseur(props) {
 
                                     </Tabs>
                                     {value === 0 && (
-                                        <InfoEntreprise />
+                                        <InfoEntreprise {...props}/>
                                     )}
                                     {value === 1 && (
                                         <Produits />
