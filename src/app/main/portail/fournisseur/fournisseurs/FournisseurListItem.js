@@ -84,8 +84,6 @@ function FournisseurListItem(props) {
                             width={400}
                             height={100}
                             viewBox="0 0 400 100"
-                            backgroundColor="#d8d8d8"
-                            foregroundColor="#ecebeb"
                         >
                             <rect x="2" y="8" rx="0" ry="0" width="105" height="83" />
                             <rect x="120" y="10" rx="0" ry="0" width="133" height="10" />
@@ -108,10 +106,10 @@ function FournisseurListItem(props) {
                             {
                                 fournisseurs && fournisseurs.map((fournisseur, index) => (
 
-                                    <Paper className={classes.paper} key={index}>
+                                    <Paper  className={classes.paper} key={index}>
                                         <Grid container spacing={2}>
                                             <Grid item>
-                                                <ButtonBase className={clsx(classes.image, 'rounded-full')} >
+                                                <ButtonBase className={clsx(classes.image, 'rounded-full')} component={Link} to={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`}>
                                                     <img className={clsx(classes.img, 'rounded-full')} alt={fournisseur.societe} src={
                                                         fournisseur.avatar ?
                                                             FuseUtils.getUrl() + fournisseur.avatar.url
@@ -123,7 +121,8 @@ function FournisseurListItem(props) {
                                             <Grid item xs={12} sm container>
                                                 <Grid item xs container direction="column" spacing={2}>
                                                     <Grid item xs>
-                                                        <Typography gutterBottom variant="h6">
+                                                        <Typography component={Link} to={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`} variant="h6">
+
                                                             {fournisseur.societe}
                                                         </Typography>
                                                         <Typography variant="body2" gutterBottom>
@@ -158,6 +157,7 @@ function FournisseurListItem(props) {
                                                                         label: "pl-4 pr-6 py-4 text-11",
                                                                         deleteIcon: "w-16 ml-0",
                                                                     }}
+                                                                    key={index}
                                                                     variant="outlined"
                                                                     className="ml-4 h-24"
                                                                 />

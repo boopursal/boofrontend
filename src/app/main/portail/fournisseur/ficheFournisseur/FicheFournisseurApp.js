@@ -9,6 +9,7 @@ import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
+import ContactFournisseurDialog from './ContactFournisseurDialog';
 
 const useStyles = makeStyles(theme => ({
     middle: {
@@ -24,6 +25,7 @@ function FicheFournisseurApp(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const parametres = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.parametres);
+    const fournisseur = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.data);
 
     useEffect(() => {
 
@@ -31,12 +33,14 @@ function FicheFournisseurApp(props) {
             const params = props.match.params;
             const { id,tab } = params;
             if(!tab){
+                if(fournisseur.length === 0)
                 dispatch(Actions.getFournisseur(id));
                 dispatch(Actions.getFournisseurProduitsApercu(id));
             }
             
             
         }
+        
 
         updateFournisseurState();
     }, [dispatch, props.match.params]);
@@ -47,6 +51,7 @@ function FicheFournisseurApp(props) {
             const params = props.match.params;
             const { id,tab } = params;
             if(tab){
+                if(fournisseur.length === 0)
                 dispatch(Actions.getFournisseur(id));
                 dispatch(Actions.getFournisseurProduits(id, parametres));
                 
@@ -68,6 +73,7 @@ function FicheFournisseurApp(props) {
                 </Grid>
             </div>
             <FicheFournisseur {...props} />
+            <ContactFournisseurDialog />
         </div>
 
 

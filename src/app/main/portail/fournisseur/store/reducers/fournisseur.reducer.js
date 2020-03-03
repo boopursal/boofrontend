@@ -9,8 +9,10 @@ const initialState = {
     loadingProduits: false,
     loadingProduitsApercu: false,
     loadingsPhone: false,
+    loadingsContact: false,
     showPhone: false,
     phone: null,
+    error: null,
     totalItems: null,
     pageCount: null,
     parametres: {
@@ -20,6 +22,13 @@ const initialState = {
             id: 'created-desc',
         }
     },
+    contactFournisseurDialog: {
+        type: 'new',
+        props: {
+            open: false
+        },
+        data: null
+    }
 };
 
 const fournisseurReducer = function (state = initialState, action) {
@@ -28,6 +37,20 @@ const fournisseurReducer = function (state = initialState, action) {
             {
                 return {
                     ...initialState,
+                };
+            }
+        case Actions.CLEAN_ERROR:
+            {
+                return {
+                    ...state,
+                    error: null,
+                };
+            }
+        case Actions.REQUEST_SAVE:
+            {
+                return {
+                    ...state,
+                    loadingsContact: true,
                 };
             }
         case Actions.REQUEST_FOURNISSEUR:
@@ -78,6 +101,14 @@ const fournisseurReducer = function (state = initialState, action) {
 
                 };
             }
+        case Actions.SAVE_MESSAGE:
+            {
+                return {
+                    ...state,
+                    loadingsContact: false,
+
+                };
+            }
         case Actions.GET_FOURNISSEUR_PRODUITS_APERCU:
             {
                 return {
@@ -121,6 +152,40 @@ const fournisseurReducer = function (state = initialState, action) {
                         }
                     }
 
+                };
+            }
+        case Actions.OPEN_NEW_CONTACT_FOURNISSEUR_DIALOG:
+            {
+                return {
+                    ...state,
+                    contactFournisseurDialog: {
+                        type: 'new',
+                        props: {
+                            open: true
+                        },
+                        data: null
+                    }
+                };
+            }
+        case Actions.SAVE_ERROR:
+            {
+                return {
+                    ...state,
+                    error: action.payload,
+
+                };
+            }
+        case Actions.CLOSE_NEW_CONTACT_FOURNISSEUR_DIALOG:
+            {
+                return {
+                    ...state,
+                    contactFournisseurDialog: {
+                        type: 'new',
+                        props: {
+                            open: false
+                        },
+                        data: null
+                    }
                 };
             }
 

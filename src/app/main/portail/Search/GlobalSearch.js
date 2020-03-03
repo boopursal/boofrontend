@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 function GlobalSearch(props) {
 
     const dispatch = useDispatch();
-    const [onSearch,setOnSearch] = useState(false);
+    const [onSearch, setOnSearch] = useState(false);
     const classes = useStyles(props);
     const globalSearch = useSelector(({ globalSearchApp }) => globalSearchApp.globalSearch);
     const ResultsNode = useRef(null);
@@ -69,16 +69,16 @@ function GlobalSearch(props) {
             dispatch(Actions.hideSearch());
         }
 
-    }, [globalSearch.searchText,onSearch, dispatch]);
+    }, [globalSearch.searchText, onSearch, dispatch]);
 
     function handleClickAway(event) {
         return (
             !ResultsNode.current ||
             !ResultsNode.current.contains(event.target)
-        ) && (dispatch(Actions.hideSearch()),setOnSearch(false));
+        ) && (dispatch(Actions.hideSearch()), setOnSearch(false));
     }
 
-    function hideSearch(){
+    function hideSearch() {
         dispatch(Actions.hideSearch())
     }
 
@@ -94,10 +94,10 @@ function GlobalSearch(props) {
                         className="flex flex-1 h-44 focus:bg-gray"
                         disableUnderline
                         fullWidth
-                        onChange={(event) => { 
+                        onChange={(event) => {
                             dispatch(Actions.setGlobalSearchText(event));
                             setOnSearch(true)
-                         }}
+                        }}
                         onFocus={(event) => { setOnSearch(true) }}
                         autoFocus
                         value={globalSearch.searchText}
@@ -139,7 +139,6 @@ function GlobalSearch(props) {
                                                                     height={100}
                                                                     width={400}
                                                                     speed={2}
-                                                                    backgroundColor="transparent"
                                                                 >
                                                                     <circle cx="150" cy="86" r="8" />
                                                                     <circle cx="194" cy="86" r="8" />
@@ -159,9 +158,9 @@ function GlobalSearch(props) {
 
                                                                                     <ListItem
                                                                                         component={Link}
-                                                                                        to={`/detail-produit/${produit.secteur? produit.secteur.slug: ''}/${produit.sousSecteurs? produit.sousSecteurs.slug: ''}/${produit.id}-${produit.slug}`}
+                                                                                        to={`/detail-produit/${produit.secteur ? produit.secteur.slug : ''}/${produit.sousSecteurs ? produit.sousSecteurs.slug : ''}/${produit.id}-${produit.slug}`}
                                                                                         dense={true}
-                                                                                        onClick={()=>{hideSearch();setOnSearch(false)}}
+                                                                                        onClick={() => { hideSearch(); setOnSearch(false) }}
                                                                                         button alignItems="flex-start">
                                                                                         <ListItemAvatar>
                                                                                             {
@@ -252,8 +251,8 @@ function GlobalSearch(props) {
                                                                             <React.Fragment key={index}>
                                                                                 <ListItem
                                                                                     component={Link}
-                                                                                    to={`/vente-produits/${activite.secteur? activite.secteur.slug: ''}/${activite.slug}`}
-                                                                                    onClick={()=>{hideSearch();setOnSearch(false)}}
+                                                                                    to={`/vente-produits/${activite.secteur ? activite.secteur.slug : ''}/${activite.slug}`}
+                                                                                    onClick={() => { hideSearch(); setOnSearch(false) }}
                                                                                     dense={true}
                                                                                     button>
                                                                                     <ListItemText
@@ -283,7 +282,6 @@ function GlobalSearch(props) {
                                                                 height={100}
                                                                 width={400}
                                                                 speed={2}
-                                                                backgroundColor="transparent"
                                                             >
                                                                 <circle cx="150" cy="86" r="8" />
                                                                 <circle cx="194" cy="86" r="8" />
@@ -329,7 +327,8 @@ function GlobalSearch(props) {
 
                                                                         <React.Fragment key={index}>
                                                                             <ListItem
-                                                                               onClick={()=>{hideSearch();setOnSearch(false)}}
+                                                                                component={Link} to={`/entreprise/${fournisseur.id}-${fournisseur.slug}`}
+                                                                                onClick={() => { hideSearch(); setOnSearch(false) }}
                                                                                 dense={true}
                                                                                 button>
                                                                                 <ListItemText
@@ -358,7 +357,6 @@ function GlobalSearch(props) {
                                                             height={100}
                                                             width={400}
                                                             speed={2}
-                                                            backgroundColor="transparent"
                                                         >
                                                             <circle cx="150" cy="86" r="8" />
                                                             <circle cx="194" cy="86" r="8" />

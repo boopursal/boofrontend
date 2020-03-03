@@ -77,6 +77,23 @@ function Actualite(props) {
     const [description, setDescription] = useState(null);
 
     useEffect(() => {
+        function updateActualiteState() {
+            const params = props.match.params;
+            const { actualiteId } = params;
+            
+            if (actualiteId === 'new') {
+                dispatch(Actions.newActualite());
+            }
+            else {
+                dispatch(Actions.getActualite(actualiteId));
+
+            }
+        }
+
+        updateActualiteState();
+    }, [dispatch, props.match.params]);
+
+    useEffect(() => {
 
         if (actualite.image) {
             setForm(_.set({ ...form }, 'image', actualite.image));
@@ -109,25 +126,9 @@ function Actualite(props) {
 
 
 
-    useEffect(() => {
-        function updateActualiteState() {
-            const params = props.match.params;
-            const { actualiteId } = params;
-
-            if (actualiteId === 'new') {
-                dispatch(Actions.newActualite());
-            }
-            else {
-                dispatch(Actions.getActualite(actualiteId));
-
-            }
-        }
-
-        updateActualiteState();
-    }, [dispatch, props.match.params]);
+    
 
     useEffect(() => {
-        console.log(actualite.data)
         if (
             (actualite.data && !form) ||
             (actualite.data && form && actualite.data.id !== form.id)

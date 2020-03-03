@@ -40,16 +40,16 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px'
     },
 }));
-function DemandesDevisTable(props) {
+function MessageTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const demandesDevis = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.data);
-    const loading = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.loading);
-    const pageCount = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.pageCount);
-    const parametres = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.parametres);
-    const user = useSelector(({auth}) => auth.user);
-    const searchText = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.searchText);
+    const messages = useSelector(({ messagesApp }) => messagesApp.messages.data);
+    const loading = useSelector(({ messagesApp }) => messagesApp.messages.loading);
+    const pageCount = useSelector(({ messagesApp }) => messagesApp.messages.pageCount);
+    const parametres = useSelector(({ messagesApp }) => messagesApp.messages.parametres);
+    const user = useSelector(({ auth }) => auth.user);
+    const searchText = useSelector(({ messagesApp }) => messagesApp.messages.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 
@@ -62,10 +62,10 @@ function DemandesDevisTable(props) {
             return FuseUtils.filterArrayByString(arr, searchText);
         }
 
-        if (demandesDevis) {
-            setFilteredData(getFilteredArray(demandesDevis, searchText));
+        if (messages) {
+            setFilteredData(getFilteredArray(messages, searchText));
         }
-    }, [demandesDevis, searchText]);
+    }, [messages, searchText]);
 
 
 
@@ -90,7 +90,7 @@ function DemandesDevisTable(props) {
                             className: "h-64 cursor-pointer",
                             onClick: (e, handleOriginal) => {
                                 if (rowInfo) {
-                                    props.history.push('/product_devis/' + rowInfo.original.id);
+                                    props.history.push('/messages/' + rowInfo.original.id);
                                 }
                             }
                         }
@@ -105,7 +105,7 @@ function DemandesDevisTable(props) {
                     data={filteredData}
                     columns={[
 
-                       
+
                         {
                             Header: "",
                             filterable: false,
@@ -127,26 +127,11 @@ function DemandesDevisTable(props) {
                             )
 
                         },
-                        {
-                            Header: "Produit réf.",
-                            className: "font-bold",
-                            id: "reference",
-                            accessor: f => f.produit ? f.produit.reference : '',
-                        },
-                        {
-                            Header: "Quantité",
-                            id: "quantity",
-                            accessor: f => f.quantity ? f.quantity : '',
-                        },
+
                         {
                             Header: "Nom Contact",
                             id: "contact",
                             accessor: f => f.contact ? f.contact : '',
-                        },
-                        {
-                            Header: "Société",
-                            id: "societe",
-                            accessor: f => f.societe ? f.societe : '',
                         },
                         {
                             Header: "Téléphone",
@@ -157,11 +142,6 @@ function DemandesDevisTable(props) {
                             Header: "Email",
                             id: "email",
                             accessor: f => f.email ? f.email : '',
-                        },
-                        {
-                            Header: "Adresse",
-                            id: "adresse",
-                            accessor: f => f.adresse ? f.adresse : '',
                         },
                         {
                             Header: "Message",
@@ -180,7 +160,6 @@ function DemandesDevisTable(props) {
                             filterable: false,
                             Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
                         },
-
                         {
                             Header: "",
                             Cell: row => (
@@ -191,7 +170,7 @@ function DemandesDevisTable(props) {
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeDemande(row.original, parametres,user.id));
+                                                        dispatch(Actions.removeMessage(row.original, parametres, user.id));
                                                     }}
                                                 >
                                                     <Icon>delete</Icon>
@@ -235,7 +214,7 @@ function DemandesDevisTable(props) {
                         parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                         dispatch(Actions.setParametresData(parametres))
                     }}
-                    noDataText="No Demande found"
+                    noDataText="No Message found"
                     loadingText='Chargement...'
                     ofText='sur'
                 />
@@ -248,4 +227,4 @@ function DemandesDevisTable(props) {
     );
 }
 
-export default withRouter(DemandesDevisTable);
+export default withRouter(MessageTable);

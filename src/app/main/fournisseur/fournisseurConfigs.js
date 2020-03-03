@@ -6,11 +6,13 @@ import { PersonnelsAppConfig } from "./personnel/PersonnelsAppConfig";
 import { AbonnementsConfigs } from "./abonnoment/AbonnementsConfigs";
 import { DashboardAppConfig } from "./dashboard/DashboardAppConfig";
 import { demandeDevisConfigs } from "./demandeDevis/demandeDevisConfigs";
+import { messagesConfigs } from "./messages/messagesConfigs";
 
 
 export const fournisseurConfigs = [
     demandeConfigs,
     demandeDevisConfigs,
+    messagesConfigs,
     produitConfigs,
     ProfileConfigs,
     consultationConfigs,

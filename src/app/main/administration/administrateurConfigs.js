@@ -5,6 +5,7 @@ import { abonnementsConfigs } from "./abonnements/abonnementsConfigs";
 import { demandeDevisConfigs } from "./demandeDevis/demandeDevisConfigs";
 import { produitConfigs } from "./gestion_produit/produitConfigs";
 import { portailConfigs } from "./portail/portailConfigs";
+import { contactFournisseurConfigs } from "./contactFournisseur/contactFournisseurConfigs";
 
 export const administrateurConfigs = [
     ...parametresConfigs,
@@ -13,5 +14,6 @@ export const administrateurConfigs = [
     ...portailConfigs,
     demandeDevisConfigs,
     demandeConfigs,
-    produitConfigs
+    produitConfigs,
+    contactFournisseurConfigs
 ];

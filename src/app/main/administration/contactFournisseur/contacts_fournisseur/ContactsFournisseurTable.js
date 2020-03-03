@@ -40,16 +40,16 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px'
     },
 }));
-function DemandesDevisTable(props) {
+function ContactsFournisseurTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const demandesDevis = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.data);
-    const loading = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.loading);
-    const pageCount = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.pageCount);
-    const parametres = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.parametres);
-    const user = useSelector(({auth}) => auth.user);
-    const searchText = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.searchText);
+    const contactsFournisseur = useSelector(({ contactsFournisseurApp }) => contactsFournisseurApp.contactsFournisseur.data);
+    const loading = useSelector(({ contactsFournisseurApp }) => contactsFournisseurApp.contactsFournisseur.loading);
+    const pageCount = useSelector(({ contactsFournisseurApp }) => contactsFournisseurApp.contactsFournisseur.pageCount);
+    const parametres = useSelector(({ contactsFournisseurApp }) => contactsFournisseurApp.contactsFournisseur.parametres);
+
+    const searchText = useSelector(({ contactsFournisseurApp }) => contactsFournisseurApp.contactsFournisseur.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 
@@ -62,10 +62,10 @@ function DemandesDevisTable(props) {
             return FuseUtils.filterArrayByString(arr, searchText);
         }
 
-        if (demandesDevis) {
-            setFilteredData(getFilteredArray(demandesDevis, searchText));
+        if (contactsFournisseur) {
+            setFilteredData(getFilteredArray(contactsFournisseur, searchText));
         }
-    }, [demandesDevis, searchText]);
+    }, [contactsFournisseur, searchText]);
 
 
 
@@ -90,7 +90,7 @@ function DemandesDevisTable(props) {
                             className: "h-64 cursor-pointer",
                             onClick: (e, handleOriginal) => {
                                 if (rowInfo) {
-                                    props.history.push('/product_devis/' + rowInfo.original.id);
+                                    props.history.push('/contact_fournisseur/' + rowInfo.original.id);
                                 }
                             }
                         }
@@ -105,49 +105,20 @@ function DemandesDevisTable(props) {
                     data={filteredData}
                     columns={[
 
-                       
                         {
-                            Header: "",
-                            filterable: false,
-                            Cell: row => (
-                                <div className="flex items-center">
-
-                                    {
-
-                                        row.original.isRead
-                                            ?
-                                            <p className="text-green">Lu</p>
-                                            :
-                                            <p className="text-orange">No Lu</p>
-
-
-                                    }
-
-                                </div>
-                            )
-
-                        },
-                        {
-                            Header: "Produit réf.",
+                            Header: "Fournisseur",
                             className: "font-bold",
-                            id: "reference",
-                            accessor: f => f.produit ? f.produit.reference : '',
+                            id: "fournisseur",
+                            accessor: f => f.fournisseur ? f.fournisseur.societe : '',
                         },
-                        {
-                            Header: "Quantité",
-                            id: "quantity",
-                            accessor: f => f.quantity ? f.quantity : '',
-                        },
+                     
+                      
                         {
                             Header: "Nom Contact",
                             id: "contact",
                             accessor: f => f.contact ? f.contact : '',
                         },
-                        {
-                            Header: "Société",
-                            id: "societe",
-                            accessor: f => f.societe ? f.societe : '',
-                        },
+                       
                         {
                             Header: "Téléphone",
                             id: "phone",
@@ -158,11 +129,7 @@ function DemandesDevisTable(props) {
                             id: "email",
                             accessor: f => f.email ? f.email : '',
                         },
-                        {
-                            Header: "Adresse",
-                            id: "adresse",
-                            accessor: f => f.adresse ? f.adresse : '',
-                        },
+                     
                         {
                             Header: "Message",
                             accessor: "message",
@@ -182,6 +149,29 @@ function DemandesDevisTable(props) {
                         },
 
                         {
+                            Header: "Statut",
+                            filterable: false,
+                            Cell: row => (
+                                <div className="flex items-center">
+
+                                    {
+
+                                        row.original.statut === false
+                                            ?
+                                            <Chip className={classes.chipOrange} label="En attente" />
+                                            :
+                                            <Chip className={classes.chip2} label="Valider" />
+
+
+                                    }
+
+                                </div>
+                            )
+
+                        },
+
+                      
+                        {
                             Header: "",
                             Cell: row => (
                                 <div className="flex items-center">
@@ -191,7 +181,7 @@ function DemandesDevisTable(props) {
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeDemande(row.original, parametres,user.id));
+                                                        dispatch(Actions.removeMessage(row.original, parametres));
                                                     }}
                                                 >
                                                     <Icon>delete</Icon>
@@ -235,7 +225,7 @@ function DemandesDevisTable(props) {
                         parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                         dispatch(Actions.setParametresData(parametres))
                     }}
-                    noDataText="No Demande found"
+                    noDataText="No Message found"
                     loadingText='Chargement...'
                     ofText='sur'
                 />
@@ -248,4 +238,4 @@ function DemandesDevisTable(props) {
     );
 }
 
-export default withRouter(DemandesDevisTable);
+export default withRouter(ContactsFournisseurTable);

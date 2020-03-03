@@ -79,8 +79,6 @@ function ProduitListItem(props) {
                             width={400}
                             height={100}
                             viewBox="0 0 400 100"
-                            backgroundColor="#d8d8d8"
-                            foregroundColor="#ecebeb"
                         >
                             <rect x="2" y="8" rx="0" ry="0" width="105" height="83" />
                             <rect x="120" y="10" rx="0" ry="0" width="133" height="10" />

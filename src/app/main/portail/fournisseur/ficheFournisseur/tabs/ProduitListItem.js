@@ -79,8 +79,6 @@ function ProduitListItem(props) {
                             width={400}
                             height={100}
                             viewBox="0 0 400 100"
-                            backgroundColor="#d8d8d8"
-                            foregroundColor="#ecebeb"
                         >
                             <rect x="2" y="8" rx="0" ry="0" width="105" height="83" />
                             <rect x="120" y="10" rx="0" ry="0" width="133" height="10" />
@@ -100,9 +98,10 @@ function ProduitListItem(props) {
                                 animation: "transition.slideUpBigIn"
                             }}
                         >
-                            
+
                             {
-                                produits && produits.map((produit, index) => (
+
+                                produits.length > 0 ? produits.map((produit, index) => (
 
                                     <Paper className={classes.paper} key={index}>
 
@@ -196,11 +195,15 @@ function ProduitListItem(props) {
                                         </Grid>
                                     </Paper>
                                 ))
+                                    : <div className="text-center mt-16">
+                                        Aucun produit n'est ajouté par cette entreprise
+                                      </div>
+
                             }
                             {
-                                produits && (
+                                produits.length > 0 && (
                                     <Grid container spacing={2} className="justify-between mt-16">
-                                        <Grid item xs={12} xs={6}>
+                                        <Grid item xs={6}>
                                             Montrer:&ensp;
                                             <Select
                                                 className="text-13"
@@ -218,7 +221,7 @@ function ProduitListItem(props) {
                                             </Select>
                                         </Grid>
 
-                                        <Grid item xs={12} xs={6} className="text-right">
+                                        <Grid item xs={6} className="text-right">
                                             <IconButton aria-label="Previous" className={classes.margin} disabled={parametres.page === 1} onClick={handlePreviousClick}>
                                                 <Icon>arrow_back</Icon>
                                             </IconButton>

@@ -23,7 +23,7 @@ export function getResults(searchText) {
 
     const request = agent.get(`/api/produits?itemsPerPage=5&titre=${searchText}&isValid=true&props[]=titre&props[]=description&props[]=pu&props[]=currency&props[]=secteur&props[]=sousSecteurs&props[]=categorie&props[]=id&props[]=slug`);
     const request2 = agent.get(`/api/sous_secteurs?parent[exists]=false&name=${searchText}&itemsPerPage=5&props[]=name&props[]=secteur&props[]=slug`);
-    const request3 = agent.get(`/api/fournisseurs?itemsPerPage=5&isactif=true&societe=${searchText}&props[]=id&props[]=societe`);
+    const request3 = agent.get(`/api/fournisseurs?itemsPerPage=5&isactif=true&societe=${searchText}&props[]=id&props[]=societe&props[]=slug`);
     return (dispatch) => {
         axios.all([request, request2, request3]).then(axios.spread((...responses) => {
             

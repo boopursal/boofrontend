@@ -43,7 +43,6 @@ const CustomForm = ({ status, message, onValidated }) => {
                             ref={node => (email = node)}
                             type="email"
                             placeholder="Your email"
-                            fullWidth
                         />
                         
                     </Paper>

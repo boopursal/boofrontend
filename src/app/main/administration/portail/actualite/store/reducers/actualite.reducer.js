@@ -70,7 +70,7 @@ const actualiteReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    data: action.payload[0]?action.payload[0] : null,
+                    data: action.payload[0]?action.payload[0] : action.payload,
                     loading: false,
 
                 };

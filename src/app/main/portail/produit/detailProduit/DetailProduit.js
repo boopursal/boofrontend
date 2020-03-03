@@ -329,8 +329,6 @@ function DetailProduit(props) {
                                 width={480}
                                 height={400}
                                 viewBox="0 0 480 400"
-                                backgroundColor="#d8d8d8"
-                                foregroundColor="#ecebeb"
                             >
                                 <rect x="5" y="5" rx="3" ry="3" width="121" height="13" />
                                 <rect x="219" y="7" rx="3" ry="3" width="85" height="8" />
@@ -500,7 +498,7 @@ function DetailProduit(props) {
                                                 </div>
                                                 <CardContent>
                                                     <BootstrapTooltip placement="top" title="Voir la page entreprise">
-                                                        <Grid container spacing={2} component={Link} to="/admin/offres/abonnement/new" className={clsx(classes.vendeur, "items-center my-1")}>
+                                                        <Grid container spacing={2} component={Link} to={produit.data.fournisseur && `/entreprise/${produit.data.fournisseur.id}-${produit.data.fournisseur.slug}`} className={clsx(classes.vendeur, "items-center my-1")}>
                                                             <Grid item xs={4} sm={4}>
                                                                 {
                                                                     produit.data.fournisseur && produit.data.fournisseur.avatar ?
@@ -600,7 +598,6 @@ function DetailProduit(props) {
                                     height={400}
                                     width={1360}
                                     speed={2}
-                                    {...props}
                                 >
                                     <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
                                     <rect x="30" y="250" rx="0" ry="0" width="200" height="18" />

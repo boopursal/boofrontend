@@ -15,11 +15,21 @@ export const REQUEST_UPDATE_FOURNISSEUR = '[DETAIL FOURNISSEUR APP] REQUEST_UPDA
 export const GET_UPDATE_FOURNISSEUR = '[DETAIL FOURNISSEUR APP] GET_UPDATE_FOURNISSEUR';
 export const SET_PARAMETRES_DATA = '[DETAIL FOURNISSEUR APP] SET PARAMETRES DATA';
 export const CLEAN_ERROR = '[DETAIL FOURNISSEUR APP] CLEAN_ERROR';
+export const OPEN_NEW_CONTACT_FOURNISSEUR_DIALOG = '[DETAIL FOURNISSEUR APP] OPEN NEW CONTACT FOURNISSEUR DIALOG';
+export const CLOSE_NEW_CONTACT_FOURNISSEUR_DIALOG = '[DETAIL FOURNISSEUR APP] CLOSE NEW CONTACT FOURNISSEUR DIALOG';
+export const REQUEST_SAVE = '[DETAIL FOURNISSEUR APP] REQUEST SAVE';
+export const SAVE_MESSAGE = '[DETAIL FOURNISSEUR APP] SAVE MESSAGE';
 
 export function cleanUp() {
 
     return (dispatch) => dispatch({
         type: CLEAN_UP,
+    });
+}
+export function cleanError() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_ERROR,
     });
 }
 
@@ -87,8 +97,8 @@ export function getFournisseurProduits(id, parametres) {
     }
 
 }
-export function updateVuPhoneProduit(id) {
-    const request = agent.put(`/custom/update_produit/${id}`);
+export function updateVuPhoneFournisseur(id) {
+    const request = agent.put(`/custom/update_fournisseur/${id}`);
 
     return (dispatch) => {
         dispatch({
@@ -113,4 +123,50 @@ export function setParametresData(parametres) {
         type: SET_PARAMETRES_DATA,
         parametres
     }
+}
+
+export function openNewContactFournisseurDialog()
+{
+    return {
+        type: OPEN_NEW_CONTACT_FOURNISSEUR_DIALOG
+    }
+}
+
+export function closeNewContactFournisseurDialog()
+{
+    return {
+        type: CLOSE_NEW_CONTACT_FOURNISSEUR_DIALOG
+    }
+}
+export function addMessage(data,fournisseur) {
+
+    data.fournisseur=fournisseur;
+    const request = agent.post(`/api/contact_fournisseurs`, data);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SAVE,
+        });
+        return request.then((response) => {
+
+            dispatch(showMessage({
+                message: 'Message bien envoyé', anchorOrigin: {
+                    vertical: 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'
+            }));
+            dispatch({
+                type: SAVE_MESSAGE,
+            });
+            return dispatch(closeNewContactFournisseurDialog())
+        }
+        ).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR,
+                payload: FuseUtils.parseApiErrors(error)
+            });
+        });
+    }
+
 }

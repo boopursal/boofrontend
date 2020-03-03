@@ -32,6 +32,20 @@ const navigationConfig = [
         }
     },
     {
+        'id': 'message-fournisseur',
+        'title': 'Messages Fournisseur',
+        'auth': authRoles.admin,
+        'type': 'item',
+        'icon': 'email',
+        'url': '/contact_fournisseur',
+        'badge': {
+            'title': 'message-fournisseur',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        }      
+    },
+    {
         'id': 'validation_produits',
         'title': 'Validation des Produits',
         'auth': authRoles.admin,
@@ -338,6 +352,21 @@ const navigationConfig = [
             'fg': '#FFFFFF',
             'count': 0
         }
+    },
+    {
+        'id': 'messages',
+        'title': 'Messages',
+        'auth': authRoles.fournisseur,
+        'type': 'item',
+        'icon': 'email',
+        'url': '/messages',
+        'badge': {
+            'title': 'messages',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        }
+        
     },
     {
         'id': 'fr_profil',

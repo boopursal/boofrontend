@@ -283,8 +283,6 @@ function Index(props) {
                                             width={400}
                                             height={60}
                                             viewBox="0 0 400 100"
-                                            backgroundColor="#c0c0c0"
-                                            foregroundColor="#ecebeb"
                                         >
                                             <rect x="1" y="2" rx="3" ry="3" width="54" height="6" />
                                             <rect x="1" y="20" rx="3" ry="3" width="200" height="6" />
@@ -341,7 +339,6 @@ function Index(props) {
                                     height={400}
                                     width={1360}
                                     speed={2}
-                                    {...props}
                                 >
                                     <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
                                     <rect x="30" y="250" rx="0" ry="0" width="200" height="18" />
@@ -448,8 +445,6 @@ function Index(props) {
                                                 width={119}
                                                 height={172}
                                                 viewBox="0 0 119 172"
-                                                backgroundColor="#c0c0c0"
-                                                foregroundColor="#ecebeb"
                                             >
                                                 <rect x="4" y="148" rx="9" ry="9" width="67" height="20" />
                                                 <rect x="4" y="7" rx="0" ry="0" width="125" height="77" />
@@ -461,8 +456,8 @@ function Index(props) {
                                     :
                                     portail.news &&
                                     portail.news.map((item, index) => (
-                                        <Grid item sm={4}>
-                                            <News new={item} key={index} />
+                                        <Grid item sm={4}  key={index}>
+                                            <News new={item} />
                                         </Grid>
                                     )
                                     )

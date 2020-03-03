@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, Tabs, Tab, Typography, Paper, Avatar, Icon, CardContent, Button } from '@material-ui/core';
+import { Grid, Card, Tabs, Tab, Typography, Paper, Avatar, Icon, CardContent, Button, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { FuseAnimate, FuseUtils } from '@fuse';
@@ -7,7 +7,7 @@ import * as Actions from '../store/actions';
 import { Helmet } from "react-helmet";
 import InfoEntreprise from './tabs/InfoEntreprise';
 import Produits from './tabs/Produits';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import _ from '@lodash';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
         minHeight: 260,
         maxHeight: 260,
         backgroundColor: theme.palette.primary.main,
-        backgroundImage: 'url(https://source.unsplash.com/collection/9456871/1600x900)',
+        backgroundImage: 'url(https://source.unsplash.com/collection/9631824/1600x900)',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
@@ -97,8 +97,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function FicheFournisseur(props) {
+    const dispatch = useDispatch();
     const classes = useStyles();
     const [value, setValue] = useState(0);
+    const fournisseur = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur);
     const data = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.data);
     const loading = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.loading);
     const params = props.match.params;
@@ -120,7 +122,7 @@ function FicheFournisseur(props) {
         setValue(newValue);
     }
     if (loading) {
-        return <LinearProgress />;
+        return <LinearProgress color="secondary" />;
     }
     if (!data) {
         return null;
@@ -129,14 +131,14 @@ function FicheFournisseur(props) {
     return (
         <>
             {
-                // produit.data ?
+                data &&
                 <Helmet>
-                    <title>test</title>
-                    <meta name="description" content={'test'} />
-                    <meta property="og:title" content={'test'} />
-                    <meta property="og:description" content={'test'} />
+                    <title>{data.societe + ' | Les Achats Industriels'}</title>
+                    <meta name="description" content={data.description} />
+                    <meta property="og:title" content={data.societe + ' | Les Achats Industriels'} />
+                    <meta property="og:description" content={data.description} />
                 </Helmet>
-                //  : ''
+
             }
             {
                 loading ? '' :
@@ -148,7 +150,7 @@ function FicheFournisseur(props) {
                                 <Grid item xs={12} sm={2} >
                                     {
                                         data.avatar ?
-                                            <Avatar alt={clsx(data.societe, 'bg-white')} src={FuseUtils.getUrl() + data.avatar.url} className={classes.bigAvatar} />
+                                            <Avatar alt={data.societe} src={FuseUtils.getUrl() + data.avatar.url} className={clsx(classes.bigAvatar, 'bg-white')} />
                                             :
                                             <Avatar alt={data.societe} className={clsx(classes.bigAvatar, 'uppercase text-48 font-bold')} >
                                                 {data.societe ? data.societe[0] + data.societe[1] : ''}
@@ -166,7 +168,7 @@ function FicheFournisseur(props) {
                             <Icon className={classes.headerIcon}>school</Icon>
                         </Grid>
                         <Grid container spacing={2} className={clsx(classes.position, "max-w-2xl  z-999 mx-auto sm:px-16 items-start ")}>
-                            <Grid item xs={12} sm={8} >
+                            <Grid item xs={12} sm={7} md={8} >
                                 <Paper className={classes.root}>
                                     <Tabs
                                         value={value}
@@ -188,14 +190,14 @@ function FicheFournisseur(props) {
 
                                     </Tabs>
                                     {value === 0 && (
-                                        <InfoEntreprise {...props}/>
+                                        <InfoEntreprise {...props} />
                                     )}
                                     {value === 1 && (
                                         <Produits />
                                     )}
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12} sm={4} className="sticky top-0">
+                            <Grid item xs={12} sm={5} md={4} className="sticky top-0">
                                 <Card className={clsx("", classes.root)} >
                                     <div className="p-20 bg-gray-400 uppercase relative text-center font-bold text-16 ">
                                         Contactez l'entreprise
@@ -238,11 +240,37 @@ function FicheFournisseur(props) {
 
 
                                         <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                            <Button size="large" className="whitespace-no-wrap upercase mb-8 mt-2 w-full" color="primary" variant="contained">
-                                                Demandez un devis
-                                                            </Button>
+                                            <Button size="large" onClick={ev => dispatch(Actions.openNewContactFournisseurDialog())} className="whitespace-no-wrap upercase mb-8 mt-2 w-full items-center" color="primary" variant="contained">
+                                                <Icon className='mr-2'>email</Icon>Envoyez un message
+                                            </Button>
                                         </FuseAnimate>
 
+                                        {
+                                            fournisseur.loadingsPhone ?
+                                                <Typography variant="h6" color="textPrimary" className="uppercase font-bold w-full items-center flex justify-center" >
+                                                    <CircularProgress className={classes.progress} />
+                                                </Typography>
+                                                :
+                                                (
+                                                    fournisseur.showPhone ?
+                                                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                            <Typography variant="h6" color="textPrimary" className="uppercase font-bold w-full items-center flex justify-center" >
+                                                                <Icon>phone</Icon> <span>{fournisseur.phone}</span>
+                                                            </Typography>
+                                                        </FuseAnimate>
+                                                        :
+                                                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                            <Button
+                                                                size="large"
+                                                                onClick={ev => dispatch(Actions.updateVuPhoneFournisseur(data.id))}
+                                                                // onClick={ev => dispatch(Actions.openNewVillesDialog())} 
+                                                                className="whitespace-no-wrap upercase w-full" variant="outlined">
+                                                                Affichez le téléphone
+                                                                        </Button>
+                                                        </FuseAnimate>
+                                                )
+
+                                        }
 
                                     </CardContent>
 
