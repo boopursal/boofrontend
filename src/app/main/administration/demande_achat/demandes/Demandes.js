@@ -11,7 +11,7 @@ function Demandes()
 {
     
     const dispatch = useDispatch();
-    const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const parametres = useSelector(({ demandesAdminApp }) => demandesAdminApp.demandes.parametres);
     
     
     useEffect(() => {
@@ -35,4 +35,4 @@ function Demandes()
     );
 }
 
-export default withReducer('demandesApp', reducer)(Demandes);
+export default withReducer('demandesAdminApp', reducer)(Demandes);

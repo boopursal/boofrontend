@@ -6,11 +6,11 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { useDispatch, useSelector } from 'react-redux';
-import { FuseAnimateGroup } from '@fuse';
+import { FuseAnimateGroup, FuseAnimate } from '@fuse';
 import { FuseUtils } from '@fuse';
 import _ from '@lodash';
 import { Link } from 'react-router-dom';
-import { Chip, Icon, IconButton, Select } from '@material-ui/core';
+import { Chip, Icon, IconButton, Select, Button } from '@material-ui/core';
 import ContentLoader from "react-content-loader"
 import * as Actions from '../store/actions';
 
@@ -63,7 +63,7 @@ function ProduitListItem(props) {
         document.querySelector('.ps').scrollTop = 0;
     }
 
-    function handleChangeItems(ev){
+    function handleChangeItems(ev) {
         parametres.page = 1;
         parametres.itemsPerPage = ev.target.value;
         document.querySelector('.ps').scrollTop = 0;
@@ -103,7 +103,7 @@ function ProduitListItem(props) {
 
                                     <Paper className={classes.paper} key={index}>
                                         <Grid container spacing={2}>
-                                            <Grid item>
+                                            <Grid item >
                                                 <ButtonBase className={classes.image} component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`}>
                                                     <img className={classes.img} alt={produit.titre} src={
                                                         produit.featuredImageId ?
@@ -177,7 +177,7 @@ function ProduitListItem(props) {
                                                     </Grid>
 
                                                 </Grid>
-                                                <Grid item>
+                                                <Grid item className='text-right content-between '>
                                                     <Typography variant="subtitle1" color='secondary' className="font-600">
                                                         {
                                                             produit.pu ?
@@ -186,7 +186,16 @@ function ProduitListItem(props) {
                                                                     // or use a string like 'en-US' to override it.
                                                                     { minimumFractionDigits: 2 }
                                                                 ) + (produit.currency ? ' ' + produit.currency.name : '')
-                                                                : ''}</Typography>
+                                                                : 'A consulter'}
+                                                    </Typography>
+                                                    {
+                                                        produit['@id'] &&
+                                                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                            <Button size="small" onClick={ev => dispatch(Actions.openNewDemandeDevisDialog(produit['@id']))} className="mb-8 text-12 mt-2 w-full items-center" color="primary" variant="outlined">
+                                                                Demandez un devis
+                                                            </Button>
+                                                        </FuseAnimate>
+                                                    }
                                                 </Grid>
                                             </Grid>
                                         </Grid>

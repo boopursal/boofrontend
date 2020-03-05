@@ -8,10 +8,10 @@ import Link2 from '@material-ui/core/Link';
 function InfoEntreprise(props) {
     const params = props.match.params;
     const { id, slug } = params;
-    const data = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.data);
-    const produitsApercu = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.produitsApercu);
-    const loadingProduitsApercu = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.loadingProduitsApercu);
-    const loading = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.loading);
+    const data = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.data);
+    const produitsApercu = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.produitsApercu);
+    const loadingProduitsApercu = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.loadingProduitsApercu);
+    const loading = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.loading);
 
     if (!data) {
         return null;

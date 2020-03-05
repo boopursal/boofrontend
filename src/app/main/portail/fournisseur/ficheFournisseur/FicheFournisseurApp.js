@@ -13,19 +13,26 @@ import ContactFournisseurDialog from './ContactFournisseurDialog';
 
 const useStyles = makeStyles(theme => ({
     middle: {
-        backgroundColor: theme.palette.grey[300],
+        background: 'linear-gradient(to right, ' + theme.palette.secondary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
         position: 'relative',
         marginBottom: theme.spacing(4),
     },
-  
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        backgroundColor: 'rgba(0,0,0,.3)',
+    },
 
 }));
 
 function FicheFournisseurApp(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const parametres = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.parametres);
-    const fournisseur = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.data);
+    const parametres = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.parametres);
+    const fournisseur = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.data);
 
     useEffect(() => {
 
@@ -66,6 +73,7 @@ function FicheFournisseurApp(props) {
         <div className="flex flex-col min-h-xl">
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
+                <div className={classes.overlay} />
                 <Grid container spacing={2} className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <HeaderFicheFournisseur {...props} />
@@ -80,4 +88,4 @@ function FicheFournisseurApp(props) {
     )
 }
 
-export default withReducer('ficheFournisseurApp', reducer)(FicheFournisseurApp);
+export default withReducer('fournisseursApp', reducer)(FicheFournisseurApp);

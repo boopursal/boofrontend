@@ -91,10 +91,11 @@ export function updateVuPhoneProduit(id) {
 }
 
 
-export function openNewDemandeDevisDialog()
+export function openNewDemandeDevisDialog(id)
 {
     return {
-        type: OPEN_NEW_DEMANDE_DEVIS_DIALOG
+        type: OPEN_NEW_DEMANDE_DEVIS_DIALOG,
+        id
     }
 }
 
@@ -107,6 +108,9 @@ export function closeNewDemandeDevisDialog()
 
 export function addDemandeDevis(data,produit) {
 
+    if(data.quantity){
+        data.quantity = parseInt(data.quantity)
+    }
     data.produit=produit;
     const request = agent.post(`/api/demande_devis`, data);
 
@@ -123,6 +127,9 @@ export function addDemandeDevis(data,produit) {
                 },
                 variant: 'success'
             }));
+            dispatch({
+                type: SAVE_DEMANDE_DEVIS,
+            });
             return dispatch(closeNewDemandeDevisDialog())
         }
         ).catch((error) => {

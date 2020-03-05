@@ -8,7 +8,7 @@ import * as Actions from '../store/actions';
 function DemandesHeader(props) {
     const dispatch = useDispatch();
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-    const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const parametres = useSelector(({ demandesAdminApp }) => demandesAdminApp.demandes.parametres);
     return (
         <div className="flex flex-1 w-full items-center justify-between">
 

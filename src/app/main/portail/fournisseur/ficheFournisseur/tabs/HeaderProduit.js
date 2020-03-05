@@ -13,9 +13,9 @@ const useStyles = makeStyles(theme => ({
 
 function HeaderProduit(props) {
     const classes = useStyles();
-    const totalItems = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.totalItems);
-    const parametres = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.parametres);
-    const loadingProduits = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.loadingProduits);
+    const totalItems = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.totalItems);
+    const parametres = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.parametres);
+    const loadingProduits = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.loadingProduits);
     const dispatch = useDispatch();
 
     function handleChangeRange(ev) {

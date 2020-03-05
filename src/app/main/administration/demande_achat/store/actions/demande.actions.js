@@ -6,30 +6,38 @@ import _ from '@lodash';
 import * as Actions from '@fuse/components/FuseNavigation/store/actions';
 
 
-export const REQUEST_DEMANDE = '[DEMANDE APP] REQUEST DEMANDE';
-export const GET_DEMANDE = '[DEMANDE APP] GET DEMANDE';
-export const REQUEST_SAVE = '[DEMANDE APP] REQUEST SAVE';
-export const REDIRECT_SUCCESS = '[DEMANDE APP] REDIRECT SUCCESS';
+export const REQUEST_DEMANDE = '[DEMANDE ADMIN APP] REQUEST DEMANDE';
+export const GET_DEMANDE = '[DEMANDE ADMIN APP] GET DEMANDE';
+export const REQUEST_SAVE = '[DEMANDE ADMIN APP] REQUEST SAVE';
+export const REDIRECT_SUCCESS = '[DEMANDE ADMIN APP] REDIRECT SUCCESS';
 
 
-export const SAVE_DEMANDE = '[DEMANDE APP] SAVE DEMANDE';
-export const SAVE_ERROR = '[DEMANDE APP] SAVE ERROR';
+export const SAVE_DEMANDE = '[DEMANDE ADMIN APP] SAVE DEMANDE';
+export const SAVE_ERROR = '[DEMANDE ADMIN APP] SAVE ERROR';
 
-export const REQUEST_SOUS_SECTEUR = '[DEMANDE APP] REQUEST SOUS_SECTEUR';
-export const GET_SOUS_SECTEUR = '[DEMANDE APP] GET SOUS SECTEUR';
+export const REQUEST_SOUS_SECTEUR = '[DEMANDE ADMIN APP] REQUEST SOUS_SECTEUR';
+export const GET_SOUS_SECTEUR = '[DEMANDE ADMIN APP] GET SOUS SECTEUR';
 
-export const REQUEST_MOTIF = '[DEMANDE APP] REQUEST REQUEST_MOTIF';
-export const GET_MOTIF = '[DEMANDE APP] GET GET_MOTIF';
+export const REQUEST_MOTIF = '[DEMANDE ADMIN APP] REQUEST REQUEST_MOTIF';
+export const GET_MOTIF = '[DEMANDE ADMIN APP] GET GET_MOTIF';
 
-export const UPLOAD_ATTACHEMENT = '[DEMANDE APP] UPLOAD ATTACHEMENT';
-export const UPLOAD_REQUEST = '[DEMANDE APP] UPLOAD REQUEST';
-export const UPLOAD_ERROR = '[DEMANDE APP] UPLOAD ERROR';
+export const UPLOAD_ATTACHEMENT = '[DEMANDE ADMIN APP] UPLOAD ATTACHEMENT';
+export const UPLOAD_REQUEST = '[DEMANDE ADMIN APP] UPLOAD REQUEST';
+export const UPLOAD_ERROR = '[DEMANDE ADMIN APP] UPLOAD ERROR';
 
 
-export const REQUEST_DELETE = '[DEMANDE APP] REQUEST DELETE';
-export const DELETE_SUCCESS = '[DEMANDE APP] DELETE SUCCESS';
-export const ERROR_DELETE = '[DEMANDE APP] ERROR DELETE';
+export const REQUEST_DELETE = '[DEMANDE ADMIN APP] REQUEST DELETE';
+export const DELETE_SUCCESS = '[DEMANDE ADMIN APP] DELETE SUCCESS';
+export const ERROR_DELETE = '[DEMANDE ADMIN APP] ERROR DELETE';
+export const CLEAN_UP_DEMANDE = '[DEMANDE ADMIN APP] CLEAN_UP';
 
+
+export function cleanUpDemande() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_DEMANDE,
+    });
+}
 
 export function getMotifs() {
     const request = agent.get('/api/motifs');
@@ -94,7 +102,7 @@ export function getDemande(params) {
 
 
 
-export function putDemande(data,sousSecteurs,motif, id) {
+export function putDemande(data,sousSecteurs,motif, id,history) {
 
     data.sousSecteurs = _.map(sousSecteurs, function (value, key) {
         return value.value;
@@ -123,10 +131,11 @@ export function putDemande(data,sousSecteurs,motif, id) {
 
             dispatch(showMessage({ message: 'Demande Modifié' }));
             dispatch(Actions.getCountForBadge('demandes-admin'));
-            return dispatch({
+            dispatch({
                 type: SAVE_DEMANDE,
                 payload: response.data
             })
+            history.push('/demandes_admin')
         }
         ).catch((error) => {
             dispatch({

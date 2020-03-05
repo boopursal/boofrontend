@@ -6,15 +6,15 @@ import _ from '@lodash';
 import { getTokenFournisseur } from 'app/auth/store/actions/user.actions';
 import * as Actions from '@fuse/components/FuseNavigation/store/actions';
 
-export const REQUEST_VISITE_DEMANDE = '[DEMANDE APP] REQUEST_VISITE_DEMANDE';
-export const GET_VISITE_DEMANDE = '[DEMANDE APP] GET_VISITE_DEMANDE';
+export const REQUEST_VISITE_DEMANDE = '[DEMANDE FOURNISSEUR APP] REQUEST_VISITE_DEMANDE';
+export const GET_VISITE_DEMANDE = '[DEMANDE FOURNISSEUR APP] GET_VISITE_DEMANDE';
 
-export const REQUEST_DEMANDE = '[DEMANDE APP] REQUEST DEMANDE';
-export const GET_DEMANDE = '[DEMANDE APP] GET DEMANDE';
+export const REQUEST_DEMANDE = '[DEMANDE FOURNISSEUR APP] REQUEST DEMANDE';
+export const GET_DEMANDE = '[DEMANDE FOURNISSEUR APP] GET DEMANDE';
 
-export const SAVE_ERROR = '[DEMANDE APP] SAVE ERROR';
+export const SAVE_ERROR = '[DEMANDE FOURNISSEUR APP] SAVE ERROR';
 
-export const CLEAN_UP = '[DEMANDE APP] CLEAN_UP';
+export const CLEAN_UP = '[DEMANDE FOURNISSEUR APP] CLEAN_UP';
 
 
 

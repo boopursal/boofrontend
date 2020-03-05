@@ -12,7 +12,7 @@ function Demandes()
     
     const dispatch = useDispatch();
     const user = useSelector(({auth}) => auth.user);
-    const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const parametres = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.parametres);
     
     
     useEffect(() => {
@@ -42,4 +42,4 @@ function Demandes()
     );
 }
 
-export default withReducer('demandesApp', reducer)(Demandes);
+export default withReducer('demandesAcheteurApp', reducer)(Demandes);

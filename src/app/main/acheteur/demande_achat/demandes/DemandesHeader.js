@@ -10,7 +10,7 @@ function DemandesHeader(props)
 {
     const dispatch = useDispatch();
     const mainTheme = useSelector(({fuse}) => fuse.settings.mainTheme);
-    const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const parametres = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.parametres);
     return (
         <div className="flex flex-1 w-full items-center justify-between">
 

@@ -44,12 +44,12 @@ function DemandesTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const demandes = useSelector(({ demandesApp }) => demandesApp.demandes.data);
-    const loading = useSelector(({ demandesApp }) => demandesApp.demandes.loading);
-    const pageCount = useSelector(({ demandesApp }) => demandesApp.demandes.pageCount);
-    const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const demandes = useSelector(({ demandesAdminApp }) => demandesAdminApp.demandes.data);
+    const loading = useSelector(({ demandesAdminApp }) => demandesAdminApp.demandes.loading);
+    const pageCount = useSelector(({ demandesAdminApp }) => demandesAdminApp.demandes.pageCount);
+    const parametres = useSelector(({ demandesAdminApp }) => demandesAdminApp.demandes.parametres);
 
-    const searchText = useSelector(({ demandesApp }) => demandesApp.demandes.searchText);
+    const searchText = useSelector(({ demandesAdminApp }) => demandesAdminApp.demandes.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 
@@ -112,13 +112,13 @@ function DemandesTable(props) {
                             accessor: f => f.reference ? 'RFQ-' + f.reference : 'En attente',
                         },
                         {
-                            Header: "Description",
-                            accessor: "description",
+                            Header: "Titre",
+                            accessor: "titre",
                             filterable: false,
                             Cell: row => (
                                 <div className="flex items-center">
-                                    {_.capitalize(_.truncate(row.original.description, {
-                                        'length': 38,
+                                    {_.capitalize(_.truncate(row.original.titre, {
+                                        'length': 15,
                                         'separator': ' '
                                     }))}
                                 </div>

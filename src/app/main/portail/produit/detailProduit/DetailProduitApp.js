@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 function DetailProduitApp(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const produit = useSelector(({ detailProduitApp }) => detailProduitApp.detailProduit);
+    const produit = useSelector(({ produitsApp }) => produitsApp.detailProduit);
 
     useEffect(() => {
 
@@ -49,9 +49,9 @@ function DetailProduitApp(props) {
     return (
         <div className="flex flex-col">
             <div
-                className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-96 sm:h-60 ")}>
+                className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
                 <div className={classes.overlay} />
-                <Grid container spacing={2} className="max-w-2xl mx-auto px-8  sm:px-16 items-center z-9999">
+                <Grid container spacing={2} className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <HeaderDetailProduit {...props} />
                     </Grid>
@@ -65,4 +65,4 @@ function DetailProduitApp(props) {
     )
 }
 
-export default withReducer('detailProduitApp', reducer)(DetailProduitApp);
+export default withReducer('produitsApp', reducer)(DetailProduitApp);

@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet";
 
 
 function Produits(props) {
-    const data = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.data);
+    const data = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.data);
 
     return (
         <div className="flex flex-col p-20">

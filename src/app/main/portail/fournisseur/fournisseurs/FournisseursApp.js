@@ -13,6 +13,8 @@ import HomeIcon from '@material-ui/icons/Home';
 import ContentList from './ContentList';
 import _ from '@lodash';
 import { Helmet } from "react-helmet";
+import ContactFournisseurDialog from '../ficheFournisseur/ContactFournisseurDialog';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const useStyles = makeStyles(theme => ({
     middle: {
@@ -28,8 +30,12 @@ const useStyles = makeStyles(theme => ({
         left: 0,
         backgroundColor: 'rgba(0,0,0,.3)',
     },
+    breadcrumbs: {
+        fontSize: 11,
+    },
     link: {
         display: 'flex',
+        'align-items': 'center',
     },
     icon: {
         marginRight: theme.spacing(0.5),
@@ -94,13 +100,13 @@ function FournisseursApp(props) {
                 <meta name="description" content='d' />
             </Helmet>
             <div
-                className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-96 sm:h-60 ")}>
+                className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
                 <div className={classes.overlay} />
-                <Grid container spacing={2} className="max-w-2xl mx-auto px-8  sm:px-16 items-center z-9999">
+                <Grid container spacing={2} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 
-                            <Breadcrumbs aria-label="breadcrumb">
+                            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} className={classes.breadcrumbs} aria-label="breadcrumb">
                                 <Link color="inherit" to="/" className={classes.link}>
                                     <HomeIcon className={classes.icon} />
                                     Accueil
@@ -113,11 +119,11 @@ function FournisseursApp(props) {
                                         : ''
                                 }
                                 {
-                                    activite ?
-                                        <Link color="inherit" to={`/vente-fournisseurs/${secteur}/${activite}`} className={classes.link}>
-                                            {_.capitalize(activite.replace('-', ' '))}
-                                        </Link>
-                                        : ''
+                                    activite &&
+                                            <span className="text-white">
+                                                {_.capitalize(activite.replace('-', ' '))}
+                                            </span>
+                                            
                                 }
 
 
@@ -148,7 +154,7 @@ function FournisseursApp(props) {
                     <ContentList />
                 </Grid>
             </Grid>
-
+            <ContactFournisseurDialog />
         </div>
 
 

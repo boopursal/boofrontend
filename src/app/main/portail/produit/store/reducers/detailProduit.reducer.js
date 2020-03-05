@@ -4,6 +4,7 @@ const initialState = {
     data: [],
     produitsSimilaires: [],
     loadingPS: false,
+    loadingsDevis: false,
     loading: false,
     loadingsPhone: false,
     showPhone: false,
@@ -77,7 +78,7 @@ const detailProduitReducer = function (state = initialState, action) {
                     ...state,
                     loadingsPhone: false,
                     phone: action.payload,
-                    showPhone:true
+                    showPhone: true
 
                 };
             }
@@ -99,8 +100,22 @@ const detailProduitReducer = function (state = initialState, action) {
                         props: {
                             open: true
                         },
-                        data: null
+                        data: action.id
                     }
+                };
+            }
+        case Actions.REQUEST_SAVE:
+            {
+                return {
+                    ...state,
+                    loadingsDevis: true,
+                };
+            }
+        case Actions.SAVE_DEMANDE_DEVIS:
+            {
+                return {
+                    ...state,
+                    loadingsDevis: false,
                 };
             }
         case Actions.SAVE_ERROR:
@@ -108,6 +123,8 @@ const detailProduitReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     error: action.payload,
+                    loadingsDevis: false,
+                    
 
                 };
             }

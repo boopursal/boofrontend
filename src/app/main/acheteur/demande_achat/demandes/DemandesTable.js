@@ -44,12 +44,12 @@ function DemandesTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const demandes = useSelector(({ demandesApp }) => demandesApp.demandes.data);
-    const loading = useSelector(({ demandesApp }) => demandesApp.demandes.loading);
-    const pageCount = useSelector(({ demandesApp }) => demandesApp.demandes.pageCount);
-    const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const demandes = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.data);
+    const loading = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.loading);
+    const pageCount = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.pageCount);
+    const parametres = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.parametres);
 
-    const searchText = useSelector(({ demandesApp }) => demandesApp.demandes.searchText);
+    const searchText = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 
@@ -101,12 +101,6 @@ function DemandesTable(props) {
                 data={filteredData}
                 columns={[
                     {
-                        Header: "Référence",
-                        className: "font-bold",
-                        id: "reference",
-                        accessor: f => f.reference ? 'RFQ-'+f.reference : 'En attente',
-                    },
-                    {
                         Header: "Statut",
                         sortable: false,
                         filterable: false,
@@ -134,25 +128,62 @@ function DemandesTable(props) {
 
                     },
                     {
+                        Header: "Référence",
+                        className: "font-bold",
+                        id: "reference",
+                        accessor: f => f.reference ? 'RFQ-' + f.reference : 'En attente',
+                    },
+                    {
+                        Header: "Titre",
+                        className: "font-bold",
+                        id: "titre",
+                        accessor: f => f.titre,
+                    },
+                    {
+                        Header: "Description",
+                        accessor: "description",
+                        filterable: false,
+                        Cell: row => (
+                            <div className="flex items-center">
+                                {_.capitalize(_.truncate(row.original.description, {
+                                    'length': 15,
+                                    'separator': ' '
+                                }))}
+                            </div>
+                        )
+                    },
+                    {
+                        Header: "Secteurs",
+                        accessor: "sousSecteurs.name",
+                        filterable: false,
+                        Cell: row =>
+                            _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
+                                'length': 15,
+                                'separator': ' '
+                            })
+
+                    },
+
+                    {
                         Header: "Budget",
                         accessor: "budget",
                         Cell: row =>
                             (
                                 <>
+                                    {
+                                        parseFloat(row.original.budget).toLocaleString(
+                                            'fr', // leave undefined to use the browser's locale,
+                                            // or use a string like 'en-US' to override it.
+                                            { minimumFractionDigits: 2 }
+                                        )
+                                    }
+                                    &ensp;
                                 {
-                                    parseFloat(row.original.budget).toLocaleString(
-                                    'fr', // leave undefined to use the browser's locale,
-                                    // or use a string like 'en-US' to override it.
-                                    { minimumFractionDigits: 2 }
-                                ) 
-                                }
-                                &ensp;
-                                {
-                                     row.original.currency ? row.original.currency.name :''
-                                }
+                                        row.original.currency ? row.original.currency.name : ''
+                                    }
                                 </>
                             )
-                       
+
                     },
                     {
                         Header: "Publier",
@@ -184,30 +215,7 @@ function DemandesTable(props) {
 
 
                     },
-                    {
-                        Header: "Description",
-                        accessor: "description",
-                        filterable: false,
-                        Cell: row => (
-                            <div className="flex items-center">
-                                {_.capitalize(_.truncate(row.original.description, {
-                                    'length': 15,
-                                    'separator': ' '
-                                }))}
-                            </div>
-                        )
-                    },
-                    {
-                        Header: "Secteurs",
-                        accessor: "sousSecteurs.name",
-                        filterable: false,
-                        Cell: row =>
-                            _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
-                                'length': 15,
-                                'separator': ' '
-                            })
 
-                    },
                     {
                         Header: "Échéance",
                         accessor: "dateExpiration",

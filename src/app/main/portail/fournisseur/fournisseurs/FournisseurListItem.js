@@ -6,13 +6,12 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { useDispatch, useSelector } from 'react-redux';
-import { FuseAnimateGroup } from '@fuse';
+import { FuseAnimateGroup, FuseAnimate } from '@fuse';
 import { FuseUtils } from '@fuse';
 import _ from '@lodash';
 import clsx from 'clsx';
-
 import { Link } from 'react-router-dom';
-import { Chip, Icon, IconButton, Select } from '@material-ui/core';
+import { Chip, Icon, IconButton, Select, Button } from '@material-ui/core';
 import ContentLoader from "react-content-loader"
 import * as Actions from '../store/actions';
 
@@ -106,7 +105,7 @@ function FournisseurListItem(props) {
                             {
                                 fournisseurs && fournisseurs.map((fournisseur, index) => (
 
-                                    <Paper  className={classes.paper} key={index}>
+                                    <Paper className={classes.paper} key={index}>
                                         <Grid container spacing={2}>
                                             <Grid item>
                                                 <ButtonBase className={clsx(classes.image, 'rounded-full')} component={Link} to={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`}>
@@ -167,9 +166,14 @@ function FournisseurListItem(props) {
                                                     </Grid>
                                                 </Grid>
                                                 <Grid item>
-                                                    <Typography variant="subtitle1" color='secondary' className="font-600">
-                                                        FA
-                                                    </Typography>
+                                                    {
+                                                        fournisseur.id &&
+                                                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                            <Button size="small" onClick={ev => dispatch(Actions.openNewContactFournisseurDialog(fournisseur.id))} className="mb-8 text-12 mt-2 w-full items-center" color="primary" variant="outlined">
+                                                                <Icon className='mr-2'>email</Icon>Contactez cette entreprise
+                                                            </Button>
+                                                        </FuseAnimate>
+                                                    }
                                                 </Grid>
                                             </Grid>
                                         </Grid>

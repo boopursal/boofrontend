@@ -45,10 +45,10 @@ const styles = theme => ({
 function ProduitListItem(props) {
 
     const dispatch = useDispatch();
-    const pageCount = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.pageCount);
-    const produits = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.produits);
-    const loadingProduits = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.loadingProduits);
-    const parametres = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.parametres);
+    const pageCount = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.pageCount);
+    const produits = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.produits);
+    const loadingProduits = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.loadingProduits);
+    const parametres = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.parametres);
     const { classes } = props;
 
     function handlePreviousClick() {

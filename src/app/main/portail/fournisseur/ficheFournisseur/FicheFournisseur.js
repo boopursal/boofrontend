@@ -100,9 +100,9 @@ function FicheFournisseur(props) {
     const dispatch = useDispatch();
     const classes = useStyles();
     const [value, setValue] = useState(0);
-    const fournisseur = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur);
-    const data = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.data);
-    const loading = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.loading);
+    const fournisseur = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur);
+    const data = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.data);
+    const loading = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.loading);
     const params = props.match.params;
     const { id, tab, slug } = params;
 
@@ -238,12 +238,15 @@ function FicheFournisseur(props) {
 
                                         }
 
+                                        {
+                                            data.id &&
+                                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                <Button size="large" onClick={ev => dispatch(Actions.openNewContactFournisseurDialog(data.id))} className="whitespace-no-wrap upercase mb-8 mt-2 w-full items-center" color="primary" variant="contained">
+                                                    <Icon className='mr-2'>email</Icon>Envoyez un message
+                                                </Button>
+                                            </FuseAnimate>
+                                        }
 
-                                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                            <Button size="large" onClick={ev => dispatch(Actions.openNewContactFournisseurDialog())} className="whitespace-no-wrap upercase mb-8 mt-2 w-full items-center" color="primary" variant="contained">
-                                                <Icon className='mr-2'>email</Icon>Envoyez un message
-                                            </Button>
-                                        </FuseAnimate>
 
                                         {
                                             fournisseur.loadingsPhone ?

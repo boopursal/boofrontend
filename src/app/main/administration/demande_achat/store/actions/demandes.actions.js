@@ -1,14 +1,14 @@
 import { showMessage } from 'app/store/actions/fuse';
 import agent from "agent";
 
-export const REQUEST_DEMANDES = '[DEMANDES APP] REQUEST DEMANDES';
-export const REMOVE_DEMANDE = '[DEMANDES APP] REMOVE DEMANDES';
-export const STATUT_DEMANDE = '[DEMANDES APP] STATUT DEMANDES';
-export const SET_PARAMETRES_DATA = '[DEMANDES APP] SET PARAMETRES DATA';
+export const REQUEST_DEMANDES = '[DEMANDES ADMIN APP] REQUEST DEMANDES';
+export const REMOVE_DEMANDE = '[DEMANDES ADMIN APP] REMOVE DEMANDES';
+export const STATUT_DEMANDE = '[DEMANDES ADMIN APP] STATUT DEMANDES';
+export const SET_PARAMETRES_DATA = '[DEMANDES ADMIN APP] SET PARAMETRES DATA';
 
 
-export const GET_DEMANDES = '[DEMANDES APP] GET DEMANDES';
-export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES APP] SET DEMANDES SEARCH TEXT';
+export const GET_DEMANDES = '[DEMANDES ADMIN APP] GET DEMANDES';
+export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES ADMIN APP] SET DEMANDES SEARCH TEXT';
 
 export function getDemandes(parametres) {
     var description = parametres.description ? `=${parametres.description}` : '';

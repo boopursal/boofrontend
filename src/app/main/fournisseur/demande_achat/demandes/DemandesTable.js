@@ -118,12 +118,12 @@ function DemandesTable(props) {
 
                     },
                     {
-                        Header: "Description",
-                        accessor: "description",
+                        Header: "Titre",
+                        accessor: "titre",
                         filterable: false,
                         Cell: row => (
                             <div className="flex items-center">
-                                {_.capitalize(_.truncate(row.original.description, {
+                                {_.capitalize(_.truncate(row.original.titre, {
                                     'length': 25,
                                     'separator': ' '
                                 }))}

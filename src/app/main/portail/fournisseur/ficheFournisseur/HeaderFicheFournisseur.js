@@ -7,12 +7,16 @@ import HomeIcon from '@material-ui/icons/Home';
 import { Link } from 'react-router-dom';
 import {  useSelector } from 'react-redux';
 import clsx from 'clsx';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const useStyles = makeStyles(theme => ({
     layoutRoot: {},
+    breadcrumbs: {
+        fontSize: 11,
+    },
     link: {
         display: 'flex',
-        color: theme.palette.grey[600]+'!important',
+        'align-items': 'center',
     },
     icon: {
         marginRight: theme.spacing(0.5),
@@ -23,12 +27,12 @@ const useStyles = makeStyles(theme => ({
 
 function HeaderFicheFournisseur(props) {
     const classes = useStyles();
-    const data = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.data);
+    const data = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.data);
 
     return (
             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 
-                <Breadcrumbs aria-label="breadcrumb">
+                <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} className={classes.breadcrumbs}>
                     <Link color="textPrimary" to="/" className={clsx(classes.link,'underline')}>
                         <HomeIcon className={classes.icon} />
                         Accueil

@@ -209,7 +209,7 @@ const useStyles = makeStyles(theme => ({
 function DetailProduit(props) {
     const dispatch = useDispatch();
     const classes = useStyles();
-    const produit = useSelector(({ detailProduitApp }) => detailProduitApp.detailProduit);
+    const produit = useSelector(({ produitsApp }) => produitsApp.detailProduit);
     const opts = {
         width: '100%',
         playerVars: { // https://developers.google.com/youtube/player_parameters
@@ -454,7 +454,7 @@ function DetailProduit(props) {
                                                     <Chip
                                                         icon={<Icon className="text-16 mr-0">label</Icon>}
                                                         component={Link}
-                                                        to={'/vente-produits/' + (produit.data.sousSecteurs ? produit.data.sousSecteurs.slug : '')}
+                                                        to={'/vente-produits/' + (produit.data.secteur && produit.data.secteur.slug) + '/' + (produit.data.sousSecteurs && produit.data.sousSecteurs.slug)}
                                                         label={produit.data.sousSecteurs ? produit.data.sousSecteurs.name : ''}
                                                         classes={{
                                                             root: clsx("h-24", props.className),
@@ -469,7 +469,7 @@ function DetailProduit(props) {
                                                     <Chip
                                                         icon={<Icon className="text-16 mr-0">label</Icon>}
                                                         component={Link}
-                                                        to={'/vente-produits/' + (produit.data.categorie ? produit.data.categorie.slug : '')}
+                                                        to={'/vente-produits/' + (produit.data.secteur && produit.data.secteur.slug) + '/' + (produit.data.sousSecteurs && produit.data.sousSecteurs.slug) + '/' + (produit.data.categorie && produit.data.categorie.slug)}
                                                         label={produit.data.categorie ? produit.data.categorie.name : ''}
                                                         classes={{
                                                             root: clsx("h-24", props.className),
@@ -527,11 +527,14 @@ function DetailProduit(props) {
                                                             </Grid>
                                                         </Grid>
                                                     </BootstrapTooltip>
-                                                    <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                                        <Button size="large" onClick={ev => dispatch(Actions.openNewDemandeDevisDialog())} className="whitespace-no-wrap upercase mb-8 mt-2 w-full" color="primary" variant="contained">
-                                                            Demandez un devis
-                                                    </Button>
-                                                    </FuseAnimate>
+                                                    {
+                                                        produit.data['@id'] &&
+                                                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                            <Button size="large" onClick={ev => dispatch(Actions.openNewDemandeDevisDialog(produit.data['@id']))} className="whitespace-no-wrap upercase mb-8 mt-2 w-full" color="primary" variant="contained">
+                                                                Demandez un devis
+                                                            </Button>
+                                                        </FuseAnimate>
+                                                    }
                                                     {
                                                         produit.loadingsPhone ?
                                                             <Typography variant="h6" color="textPrimary" className="uppercase font-bold w-full items-center flex justify-center" >

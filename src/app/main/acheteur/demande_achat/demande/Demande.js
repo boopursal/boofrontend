@@ -93,7 +93,7 @@ moment.defaultFormat = "DD/MM/YYYY HH:mm";
 function Demande(props) {
 
     const dispatch = useDispatch();
-    const demande = useSelector(({ demandesApp }) => demandesApp.demande);
+    const demande = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demande);
 
 
     const [isFormValid, setIsFormValid] = useState(false);
@@ -102,6 +102,37 @@ function Demande(props) {
 
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
+    const params = props.match.params;
+    const { demandeId } = params;
+
+    useEffect(() => {
+        function updateDemandeState() {
+            if (demandeId === 'new') {
+                dispatch(Actions.newDemande());
+            }
+            else {
+                dispatch(Actions.getDemande(demandeId));
+            }
+            dispatch(Actions.getSousSecteurs());
+        }
+        
+        updateDemandeState();
+        return ()=>{
+            dispatch(Actions.cleanUpDemande())
+        }
+    }, [dispatch,demandeId]);
+
+   
+    useEffect(() => {
+        if (demande.error && (demande.error.titre || demande.error.description ||  demande.error.dateExpiration || demande.error.isPublic || demande.error.isAnonyme || demande.error.sousSecteurs)) {
+            formRef.current.updateInputsWithError({
+                ...demande.error
+            });
+            disableButton();
+            demande.error = null;
+        }
+    }, [demande.error]);
+
 
     useEffect(() => {
 
@@ -115,30 +146,6 @@ function Demande(props) {
 
     }, [form, setForm, demande.attachement]);
 
-    useEffect(() => {
-        dispatch(Actions.getSousSecteurs());
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (demande.error && (demande.error.reference || demande.error.description || demande.error.descriptionEn || demande.error.descriptionEs || demande.error.dateExpiration || demande.error.isPublic || demande.error.isAnonyme || demande.error.sousSecteurs || demande.error.langueP)) {
-                formRef.current.updateInputsWithError({
-                    ...demande.error
-                });
-            disableButton();
-            demande.error = null;
-        }
-    }, [demande.error]);
-
-    useEffect(() => {
-        if (demande.success) {
-
-            demande.success = false;
-            demande.data = null;
-            demande.error = null;
-            demande.attachement_deleted = null;
-            props.history.push('/demandes');
-        }
-    }, [demande.success]);
 
     useEffect(() => {
         if (demande.attachement_deleted) {
@@ -147,22 +154,7 @@ function Demande(props) {
         }
     }, [demande.attachement_deleted]);
 
-    useEffect(() => {
-        function updateDemandeState() {
-            const params = props.match.params;
-            const { demandeId } = params;
-
-            if (demandeId === 'new') {
-                dispatch(Actions.newDemande());
-            }
-            else {
-                dispatch(Actions.getDemande(demandeId));
-
-            }
-        }
-
-        updateDemandeState();
-    }, [dispatch, props.match.params]);
+   
 
     useEffect(() => {
         if (
@@ -184,6 +176,11 @@ function Demande(props) {
         }
     }, [form, demande.data, setForm]);
 
+    function handleCheckBoxChange(e,name) {
+
+        setForm(_.set({ ...form }, name, e.target.checked));
+    }
+
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
     }
@@ -200,7 +197,6 @@ function Demande(props) {
         //setForm(_.set({...form}, name, value.map(item => item.value)));
         setForm(_.set({ ...form }, name, moment(value).format('YYYY-MM-DDTHH:mm:ssZ')));
     }
-
 
 
     function handleChipChange(value, name) {
@@ -221,26 +217,17 @@ function Demande(props) {
         setIsFormValid(true);
     }
 
-    function handleSubmit(model) {
+    function handleSubmit() {
         //event.preventDefault();
-        model.sousSecteurs = _.map(model.sousSecteurs, function (value, key) {
-            return value.value;
-        });
-        model.attachements = _.map(form.attachements, function (value, key) {
-            return value['@id'];
-        });
-        if (model.budget) {
-            model.budget = parseFloat(model.budget);
-        }
+        
         const params = props.match.params;
         const { demandeId } = params;
 
         if (demandeId === 'new') {
-            dispatch(Actions.saveDemande(model));
+            dispatch(Actions.saveDemande(form,props.history));
         }
         else {
-
-            dispatch(Actions.putDemande(model, form.id));
+            dispatch(Actions.putDemande(form, form.id,props.history));
         }
     }
 
@@ -271,7 +258,7 @@ function Demande(props) {
                                     <div className="flex flex-col min-w-0">
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                             <Typography className="text-16 sm:text-20 truncate">
-                                                {form.reference ? 'RFQ-' + form.reference : 'Nouvelle Demande'}
+                                                {form.titre ?  form.titre : 'Nouvelle Demande'}
                                             </Typography>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
@@ -280,7 +267,18 @@ function Demande(props) {
                                     </div>
                                 </div>
                             </div>
-
+                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                               
+                                <Button
+                                    className="whitespace-no-wrap"
+                                    variant="contained"
+                                    disabled={!isFormValid || demande.loading}
+                                    onClick={() => handleSubmit(form)}
+                                >
+                                    Sauvegarder
+                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                </Button>
+                            </FuseAnimate>
                         </div>
                     )
                     :
@@ -339,52 +337,96 @@ function Demande(props) {
                                                     message={
                                                         <span id="client-snackbar" className={classes.message}>
                                                             <ErrorIcon className={clsx(classes.icon, classes.iconVariant)} />
-                                                            Motif du rejet: {form.motifRejet?form.motifRejet.name : ''}
+                                                            Motif du rejet: {form.motifRejet ? form.motifRejet.name : ''}
                                                         </span>
                                                     }
 
                                                 /> : ''
                                         }
-                                        <div className="flex pt-10 ">
+                                        <Grid container spacing={3} >
+                                            <Grid item xs={12} sm={8}>
+                                                <TextFieldFormsy
+                                                    className="mb-24"
+                                                    label="Titre"
+                                                    autoFocus
+                                                    id="titre"
+                                                    name="titre"
+                                                    value={form.titre}
+                                                    onChange={handleChange}
+                                                    variant="outlined"
+                                                    validations={{
+                                                        minLength: 4,
+                                                        maxLength: 255,
+                                                    }}
+                                                    validationErrors={{
+                                                        minLength: 'Min character length is 4',
+                                                        maxLength: 'Max character length is 255'
+                                                    }}
+                                                    required
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <TextFieldFormsy
+                                                    className="mb-24"
+                                                    label="Référence"
+                                                    id="reference"
+                                                    name="reference"
+                                                    value={form.reference ? form.reference : 'En attente'}
+                                                    variant="outlined"
+                                                    InputProps={{
+                                                        startAdornment: <InputAdornment position="start">RFQ-</InputAdornment>,
+                                                    }}
+                                                    disabled
+                                                    fullWidth
+                                                />
+                                            </Grid>
 
 
-                                            <TextFieldFormsy
-                                                className="mb-24"
-                                                label="Référence"
-                                                autoFocus
-                                                id="reference"
-                                                name="reference"
-                                                value={ form.reference ? form.reference : 'En attente' }
-                                                onChange={ handleChange }
-                                                variant="outlined"
-                                                validations={{
-                                                    minLength: 4
-                                                }}
-                                                validationErrors={{
-                                                    minLength: 'Min character length is 4'
-                                                }}
-                                                InputProps={{
-                                                    startAdornment: <InputAdornment position="start">RFQ-</InputAdornment>,
-                                                }}
-                                                required
-                                                disabled
-                                                fullWidth
-                                            />
-                                        </div>
-                                        <div className="flex">
+                                        </Grid>
 
-                                            <DatePickerFormsy
-                                                className="mb-24"
-                                                label="Date d'éxpiration"
-                                                id="dateExpiration"
-                                                name="dateExpiration"
-                                                value={form.dateExpiration}
-                                                onChange={(value) => handleDateChange(value, 'dateExpiration')}
-                                                variant="outlined"
-                                                required
-                                                fullWidth
-                                            />
-                                        </div>
+                                        <Grid container spacing={3} >
+
+                                            <Grid item xs={12} sm={6}>
+
+                                                <DatePickerFormsy
+                                                    className="mb-24"
+                                                    label="Date d'éxpiration"
+                                                    id="dateExpiration"
+                                                    name="dateExpiration"
+                                                    value={form.dateExpiration}
+                                                    onChange={(value) => handleDateChange(value, 'dateExpiration')}
+                                                    variant="outlined"
+                                                    required
+                                                    fullWidth
+                                                />
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                <TextFieldFormsy
+                                                    className="mb-24"
+                                                    label="Budget"
+                                                    id="budget"
+                                                    type="number"
+                                                    name="budget"
+                                                    value={_.toString(form.budget)}
+                                                    onChange={handleChange}
+                                                    variant="outlined"
+                                                    validations={{
+
+                                                        isNumeric: true,
+                                                    }}
+                                                    validationErrors={{
+                                                        isNumeric: 'Numeric value required',
+
+                                                    }}
+                                                    step='any'
+                                                    required
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                       
                                         <SelectReactFormsyS_S
                                             className="mb-24 z-9999"
                                             id="sousSecteurs"
@@ -393,9 +435,9 @@ function Demande(props) {
                                                 form.sousSecteurs
                                             }
                                             onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                            placeholder="Selectionner multiple Sous-secteurs"
+                                            placeholder="Rayonnage, Btp, Bac à Bec ..."
                                             textFieldProps={{
-                                                label: 'Sous-secteurs',
+                                                label: 'Activités',
                                                 InputLabelProps: {
                                                     shrink: true
                                                 },
@@ -430,33 +472,14 @@ function Demande(props) {
 
                                         />
 
-                                        <TextFieldFormsy
-                                            className="mb-24"
-                                            label="Budget"
-                                            id="budget"
-                                            type="number"
-                                            name="budget"
-                                            value={_.toString(form.budget)}
-                                            onChange={handleChange}
-                                            variant="outlined"
-                                            validations={{
 
-                                                isNumeric: true,
-                                            }}
-                                            validationErrors={{
-                                                isNumeric: 'Numeric value required',
-
-                                            }}
-                                            step='any'
-                                            required
-                                            fullWidth
-                                        />
                                         <Grid container spacing={3} >
 
                                             <Grid item xs={12} sm={4}>
                                                 <CheckboxFormsy
                                                     className="mb-10"
                                                     name="isPublic"
+                                                    onChange={(e) => handleCheckBoxChange(e, 'isPublic')}
                                                     value={form.isPublic}
                                                     label="Mettre en ligne après validation"
                                                 />
@@ -465,6 +488,7 @@ function Demande(props) {
                                             <Grid item xs={12} sm={4}>
                                                 <CheckboxFormsy
                                                     className="mb-10"
+                                                    onChange={(e) => handleCheckBoxChange(e, 'isAnonyme')}
                                                     name="isAnonyme"
                                                     value={form.isAnonyme}
                                                     label="Mettre la demande anonyme"
@@ -472,19 +496,7 @@ function Demande(props) {
                                             </Grid>
                                         </Grid>
 
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            color="primary"
-                                            className="w-200 pr-auto mt-16 normal-case"
-                                            aria-label="Suivant"
-                                            disabled={!isFormValid || demande.loading}
-                                            value="legacy"
-                                        >
-                                            Sauvegarder
-                                                {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
-                                        </Button>
 
                                     </Formsy>
                                 )}
@@ -608,4 +620,4 @@ function Demande(props) {
     )
 }
 
-export default withReducer('demandesApp', reducer)(Demande);
+export default withReducer('demandesAcheteurApp', reducer)(Demande);

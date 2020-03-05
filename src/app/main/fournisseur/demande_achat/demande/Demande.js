@@ -339,6 +339,46 @@ function Demande(props) {
                                                 />
                                             </Grid>
 
+                                            <Grid item xs={12} sm={8}>
+
+                                                <TextFieldFormsy
+                                                    className="mb-24"
+                                                    label="Titre"
+                                                    id="titre"
+                                                    name="titre"
+                                                    value={demande.data.titre}
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                    fullWidth
+                                                />
+
+                                            </Grid>
+                                           
+                                        </Grid>
+
+                                        <Grid container spacing={3} >
+
+                                            <Grid item xs={12} sm={4}>
+                                            <TextFieldFormsy
+                                                    className="mb-24"
+                                                    label={demande.data.currency ? "Budget en " + demande.data.currency.name : 'Budget'}
+                                                    id="budget"
+                                                    name="budget"
+                                                    value={
+                                                        parseFloat(demande.data.budget).toLocaleString(
+                                                            undefined, // leave undefined to use the browser's locale,
+                                                            // or use a string like 'en-US' to override it.
+                                                            { minimumFractionDigits: 2 }
+                                                        )
+                                                    }
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                    fullWidth
+                                                />
+                                            </Grid>
+
                                             <Grid item xs={12} sm={4}>
 
                                                 <TextFieldFormsy
@@ -375,7 +415,7 @@ function Demande(props) {
 
                                         <Grid container spacing={3} >
 
-                                            <Grid item xs={12} sm={8}>
+                                            <Grid item xs={12} sm={12}>
                                                 <TextFieldFormsy
                                                     className="mb-24"
                                                     label="Sous-Secteurs"
@@ -387,28 +427,6 @@ function Demande(props) {
                                                     }}
                                                     fullWidth
                                                 />
-                                            </Grid>
-
-                                            <Grid item xs={12} sm={4}>
-
-                                                <TextFieldFormsy
-                                                    className="mb-24"
-                                                    label={demande.data.currency ? "Budget en " +demande.data.currency.name:'Budget' }
-                                                    id="budget"
-                                                    name="budget"
-                                                    value={
-                                                        parseFloat(demande.data.budget).toLocaleString(
-                                                            undefined, // leave undefined to use the browser's locale,
-                                                            // or use a string like 'en-US' to override it.
-                                                            { minimumFractionDigits: 2 }
-                                                        ) 
-                                                    }
-                                                    InputProps={{
-                                                        readOnly: true,
-                                                    }}
-                                                    fullWidth
-                                                />
-
                                             </Grid>
 
                                         </Grid>

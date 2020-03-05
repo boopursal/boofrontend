@@ -12,8 +12,8 @@ const defaultFormState = {
 
 function ContactFournisseurDialog(props) {
     const dispatch = useDispatch();
-    const fournisseur = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur);
-    const contactFournisseurDialog = useSelector(({ ficheFournisseurApp }) => ficheFournisseurApp.fournisseur.contactFournisseurDialog);
+    const fournisseur = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur);
+    const contactFournisseurDialog = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.contactFournisseurDialog);
     const { form, handleChange, setForm } = useForm(defaultFormState);
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
@@ -70,7 +70,8 @@ function ContactFournisseurDialog(props) {
     function handleSubmit(model) {
         //event.preventDefault();
      if (contactFournisseurDialog.type === 'new') {
-             dispatch(Actions.addMessage(model,fournisseur.data['@id']));
+            console.log(contactFournisseurDialog.data)
+            dispatch(Actions.addMessage(model,contactFournisseurDialog.data));
         }
 
     }

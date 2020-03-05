@@ -125,10 +125,11 @@ export function setParametresData(parametres) {
     }
 }
 
-export function openNewContactFournisseurDialog()
+export function openNewContactFournisseurDialog(id)
 {
     return {
-        type: OPEN_NEW_CONTACT_FOURNISSEUR_DIALOG
+        type: OPEN_NEW_CONTACT_FOURNISSEUR_DIALOG,
+        id
     }
 }
 
@@ -140,7 +141,7 @@ export function closeNewContactFournisseurDialog()
 }
 export function addMessage(data,fournisseur) {
 
-    data.fournisseur=fournisseur;
+    data.fournisseur='/api/fournisseurs/'+fournisseur;
     const request = agent.post(`/api/contact_fournisseurs`, data);
 
     return (dispatch) => {

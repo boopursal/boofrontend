@@ -39,8 +39,9 @@ function DemandeAchatsListItem(props) {
                     className="todo-title truncate"
                     color={"inherit"}
                 >
-                    RFQ-{props.demande.reference}
+                [ RFQ-{props.demande.reference} ] {props.demande.titre} 
                 </Typography>
+              
 
                 <Typography
                     color="textSecondary"
@@ -52,7 +53,7 @@ function DemandeAchatsListItem(props) {
                 <div className={clsx(classes.labels, "flex mt-8")}>
                     <Chip
                         icon={<Icon className="text-16 mr-0">location_on</Icon>}
-                        label={props.demande.pays+', '+props.demande.ville}
+                        label={props.demande.ville+', '+props.demande.pays}
                         classes={{
                             root: clsx("h-24", props.className),
                             label: "pl-4 pr-6 py-4 text-11",

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment, CircularProgress } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import * as Actions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,8 +12,8 @@ const defaultFormState = {
 
 function DemandeDevisDialog(props) {
     const dispatch = useDispatch();
-    const demandeDevis = useSelector(({ detailProduitApp }) => detailProduitApp.detailProduit);
-    const demandeDevisDialog = useSelector(({ detailProduitApp }) => detailProduitApp.detailProduit.demandeDevisDialog);
+    const demandeDevis = useSelector(({ produitsApp }) => produitsApp.detailProduit);
+    const demandeDevisDialog = useSelector(({ produitsApp }) => produitsApp.detailProduit.demandeDevisDialog);
     const { form, handleChange, setForm } = useForm(defaultFormState);
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
@@ -37,10 +37,10 @@ function DemandeDevisDialog(props) {
 
     // Effect handle errors
     useEffect(() => {
-        if (demandeDevis.error && (demandeDevis.error.contact || demandeDevis.error.societe || demandeDevis.error.phone || demandeDevis.error.email || demandeDevis.error.message || demandeDevis.error.quantity|| demandeDevis.error.adresse )) {
-                formRef.current.updateInputsWithError({
-                    ...demandeDevis.error
-                });
+        if (demandeDevis.error && (demandeDevis.error.contact || demandeDevis.error.societe || demandeDevis.error.phone || demandeDevis.error.email || demandeDevis.error.message || demandeDevis.error.quantity || demandeDevis.error.adresse)) {
+            formRef.current.updateInputsWithError({
+                ...demandeDevis.error
+            });
             disableButton();
         }
         return () => {
@@ -71,7 +71,7 @@ function DemandeDevisDialog(props) {
         //event.preventDefault();
 
         if (demandeDevisDialog.type === 'new') {
-             dispatch(Actions.addDemandeDevis(model,demandeDevis.data['@id']));
+            dispatch(Actions.addDemandeDevis(model, demandeDevisDialog.data));
         }
 
     }
@@ -112,23 +112,7 @@ function DemandeDevisDialog(props) {
                 ref={formRef}
                 className="flex flex-col overflow-hidden">
                 <DialogContent classes={{ root: "p-24" }}>
-                    <div className="flex">
-                        <TextFieldFormsy
-                            className="mb-24"
-                            type="number"
-                            step="1"
-                            label="Quantité souhaitée"
-                            id="quantity"
-                            name="quantity"
-                            min="1"
-                            value={form.quantity}
-                            onChange={handleChange}
-                            variant="outlined"
-                            inputProps={{ min: "1", step: "1" }}
-                            fullWidth
-                        />
 
-                    </div>
                     <div className="flex">
                         <TextFieldFormsy
                             className="mb-24"
@@ -158,7 +142,7 @@ function DemandeDevisDialog(props) {
                             className="mb-24"
                             label="Raison sociale"
                             id="societe"
-                            autoComplete="societe"
+                            autoComplete="Raison sociale"
                             name="societe"
                             value={form.societe}
                             onChange={handleChange}
@@ -235,7 +219,7 @@ function DemandeDevisDialog(props) {
                             name="adresse"
                             value={form.adresse}
                             onChange={handleChange}
-                            autoComplete="adresse"
+                            autoComplete="Adresse"
                             label="Adresse"
                             validations={{
                                 maxLength: 100,
@@ -254,7 +238,23 @@ function DemandeDevisDialog(props) {
 
                         />
                     </div>
+                    <div className="flex">
+                        <TextFieldFormsy
+                            className="mb-24"
+                            type="number"
+                            step="1"
+                            label="Quantité souhaitée"
+                            id="quantity"
+                            name="quantity"
+                            min="1"
+                            value={form.quantity}
+                            onChange={handleChange}
+                            variant="outlined"
+                            inputProps={{ min: "1", step: "1" }}
+                            fullWidth
+                        />
 
+                    </div>
                     <div className="flex">
                         <TextFieldFormsy
                             className="mb-16  w-full"
@@ -291,10 +291,11 @@ function DemandeDevisDialog(props) {
                         variant="contained"
                         color="primary"
                         type="submit"
-                        disabled={!isFormValid}
+                        disabled={!isFormValid || demandeDevis.loadingsDevis}
                     >
                         Envoyer
-                        </Button>
+                            {demandeDevis.loadingsDevis && <CircularProgress size={24} />}
+                    </Button>
                     <p className="pr-16">* Champs obligatoires</p>
                 </DialogActions>
 

@@ -24,8 +24,15 @@ export const UPLOAD_ERROR = '[DEMANDE APP] UPLOAD ERROR';
 export const REQUEST_DELETE = '[DEMANDE APP] REQUEST DELETE';
 export const DELETE_SUCCESS = '[DEMANDE APP] DELETE SUCCESS';
 export const ERROR_DELETE = '[DEMANDE APP] ERROR DELETE';
+export const CLEAN_UP_DEMANDE = '[DEMANDE APP] CLEAN_UP';
 
 
+export function cleanUpDemande() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_DEMANDE,
+    });
+}
 
 export function getSousSecteurs() {
     const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name');
@@ -57,6 +64,7 @@ export function getDemande(params) {
                 type: GET_DEMANDE,
                 payload: response.data
             })
+            
         }
 
         ).catch((error) => {
@@ -70,7 +78,16 @@ export function getDemande(params) {
 
 }
 
-export function saveDemande(data) {
+export function saveDemande(data,history) {
+    data.sousSecteurs = _.map(data.sousSecteurs, function (value, key) {
+        return value.value;
+    });
+    data.attachements = _.map(data.attachements, function (value, key) {
+        return value['@id'];
+    });
+    if (data.budget) {
+        data.budget = parseFloat(data.budget);
+    }
     const request = agent.post('/api/demande_achats', data);
 
     return (dispatch) => {
@@ -81,10 +98,13 @@ export function saveDemande(data) {
 
             dispatch(showMessage({ message: 'Demande Saved' }));
 
-            return dispatch({
+            dispatch({
                 type: SAVE_DEMANDE,
                 payload: response.data
-            })
+            });
+
+            history.push('/demandes')
+
         }
         ).catch((error) => {
             dispatch({
@@ -96,7 +116,17 @@ export function saveDemande(data) {
 
 }
 
-export function putDemande(data, url) {
+export function putDemande(data, url,history) {
+    data.sousSecteurs = _.map(data.sousSecteurs, function (value, key) {
+        return value.value;
+    });
+    data.attachements = _.map(data.attachements, function (value, key) {
+        return value['@id'];
+    });
+    if (data.budget) {
+        data.budget = parseFloat(data.budget);
+    }
+
     const request = agent.put(`/api/demande_achats/${url}`, data);
 
     return (dispatch) => {
@@ -107,10 +137,12 @@ export function putDemande(data, url) {
 
             dispatch(showMessage({ message: 'Demande Modifié' }));
 
-            return dispatch({
+            dispatch({
                 type: SAVE_DEMANDE,
                 payload: response.data
             })
+            history.push('/demandes')
+            
         }
         ).catch((error) => {
             dispatch({
@@ -211,15 +243,12 @@ export function newDemande() {
     const data = {
         reference: '',
         description: '',
-        descriptionEn: '',
-        descriptionEs: '',
         dateExpiration: null,
         isPublic: false,
         isAnonyme: false,
         sousSecteurs: null,
         budget: null,
         motifRejet: '',
-        langueP: 'fr',
         statut: null,
         attachements: [],
         diffusionsdemandes: []

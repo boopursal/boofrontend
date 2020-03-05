@@ -6,7 +6,6 @@ const initialState = {
     sousSecteurs: null,
     motifs: null,
     loading: false,
-    success: false,
     attachementReqInProgress: false,
     deleteReqInProgress: false,
     attachement: null,
@@ -23,6 +22,13 @@ const demandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: true,
+
+                }
+            }
+        case Actions.CLEAN_UP_DEMANDE:
+            {
+                return {
+                    ...initialState,
 
                 }
             }
@@ -73,6 +79,8 @@ const demandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     sousSecteurs: action.payload,
+                    loading: false,
+                    
 
                 };
             }
@@ -98,7 +106,7 @@ const demandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: false,
-                    success: true
+                    data: null,
                 };
             }
         case Actions.SAVE_ERROR:
@@ -107,7 +115,6 @@ const demandeReducer = function (state = initialState, action) {
                     ...state,
                     error: action.payload,
                     loading: false,
-                    success: false
 
                 };
             }
