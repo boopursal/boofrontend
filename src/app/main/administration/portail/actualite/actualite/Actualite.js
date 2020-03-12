@@ -14,7 +14,7 @@ import Formsy from 'formsy-react';
 import green from '@material-ui/core/colors/green';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import '@ckeditor/ckeditor5-build-classic/build/translations/fr';
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
