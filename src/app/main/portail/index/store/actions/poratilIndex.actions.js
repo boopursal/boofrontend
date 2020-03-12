@@ -40,7 +40,7 @@ export function getFocusProduct()
 
 export function getdemandeDevis()
 {
-    const request = agent.get(`/api/demande_achats/?itemsPerPage=4&statut=1&order[created]=desc&props[]=id&props[]=reference&props[]=titre&props[]=description&props[]=pays&props[]=ville&props[]=dateExpiration&props[]=created`);
+    const request = agent.get(`/api/demande_achats/?itemsPerPage=4&statut=1&isPublic=1&order[created]=desc&props[]=id&props[]=reference&props[]=titre&props[]=description&props[]=pays&props[]=ville&props[]=dateExpiration&props[]=created&props[]=slug`);
 
     return (dispatch) =>{
         dispatch({

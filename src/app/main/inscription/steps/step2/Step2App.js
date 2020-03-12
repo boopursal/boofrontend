@@ -168,13 +168,7 @@ function Step2App(props) {
         }
     }, [step2.error]);
 
-    useEffect(() => {
-        if (step2.success) {
-           if(step2.redirect_success){
-                props.history.push(step2.redirect_success);
-           }
-        }
-    }, [step2.success]);
+    
 
     function disableButton() {
         setIsFormValid(false);
@@ -185,7 +179,7 @@ function Step2App(props) {
     }
 
     function handleSubmit(model) {
-         dispatch(Actions.setStep2(model,user.id));
+         dispatch(Actions.setStep2(model,user.id,props.history));
     }
 
 

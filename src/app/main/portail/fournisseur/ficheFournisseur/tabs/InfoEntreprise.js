@@ -28,7 +28,7 @@ function InfoEntreprise(props) {
                         animation: "transition.slideUpBigIn"
                     }}
                 >
-                    <Typography className=" text-justify leading-relaxed text-14">
+                    <Typography className=" text-justify leading-relaxed text-14 whitespace-pre-line" >
                         {data.description}
                     </Typography>
                     <Typography variant="h2" className="my-24 p-12 bg-gray-300 uppercase font-bold text-16">

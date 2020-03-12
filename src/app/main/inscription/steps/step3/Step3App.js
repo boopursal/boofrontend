@@ -172,7 +172,7 @@ function Step3App(props) {
                 return value.value;
                 })
         }
-        dispatch(Actions.setStep3(data, user.id));
+        dispatch(Actions.setStep3(data, user.id, props.history));
     }
 
     function handleChipChange(value, name) {

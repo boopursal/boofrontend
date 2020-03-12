@@ -1,8 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip, SnackbarContent } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { Button, Tab, Tabs,  Icon, Typography, LinearProgress,  CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -12,10 +11,7 @@ import withReducer from 'app/store/withReducer';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import Formsy from 'formsy-react';
-import moment from 'moment';
 import green from '@material-ui/core/colors/green';
-import ErrorIcon from '@material-ui/icons/Error';
-import ReactTable from "react-table";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -34,31 +30,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: -12,
         marginLeft: -12,
     },
-    actualiteImageUpload: {
-        transitionProperty: 'box-shadow',
-        transitionDuration: theme.transitions.duration.short,
-        transitionTimingFunction: theme.transitions.easing.easeInOut,
-    },
-    actualiteImageItem: {
-        transitionProperty: 'box-shadow',
-        transitionDuration: theme.transitions.duration.short,
-        transitionTimingFunction: theme.transitions.easing.easeInOut,
-        '&:hover': {
-            '& $actualiteImageFeaturedStar': {
-                opacity: .8
-            }
-        },
-        '&.featured': {
-            pointerEvents: 'none',
-            boxShadow: theme.shadows[3],
-            '& $actualiteImageFeaturedStar': {
-                opacity: 1
-            },
-            '&:hover $actualiteImageFeaturedStar': {
-                opacity: 1
-            }
-        }
-    },
+  
 
 
 }));
@@ -74,13 +46,12 @@ function Actualite(props) {
 
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
-    const [description, setDescription] = useState(null);
 
     useEffect(() => {
         function updateActualiteState() {
             const params = props.match.params;
             const { actualiteId } = params;
-            
+
             if (actualiteId === 'new') {
                 dispatch(Actions.newActualite());
             }
@@ -126,7 +97,7 @@ function Actualite(props) {
 
 
 
-    
+
 
     useEffect(() => {
         if (
@@ -304,16 +275,24 @@ function Actualite(props) {
                                         <CKEditor
                                             editor={ClassicEditor}
                                             data={form.description}
+                                            config={{
+                                                language: 'fr',
+                                                ckfinder: {
+                                                    // Upload the images to the server using the CKFinder QuickUpload command.
+                                                    uploadUrl: 'http://localhost/ProjectlesHA/public/ckfinder/connector?command=QuickUpload&CKEditor=editor1&type=Images&responseType=json'
+                                                }
+                                            }}
                                             onInit={editor => {
                                                 // You can store the "editor" and use when it is needed.
                                                 console.log('Editor is ready to use!', editor);
                                             }}
-                                            name='description'
                                             onChange={(event, editor) => {
                                                 const data = editor.getData();
                                                 setForm(_.set({ ...form }, 'description', data))
                                             }}
-                                            required
+                                            onBlur={editor => {
+                                                console.log('Blur.', editor);
+                                            }}
                                         />
                                         {
                                             actualite.error && actualite.error.description ? <span className='text-red'> {actualite.error.description}</span> : ''

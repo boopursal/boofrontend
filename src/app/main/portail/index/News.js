@@ -6,6 +6,7 @@ import { Card, CardActionArea, CardContent, CardActions, Button, CardMedia, Chip
 import ReactHtmlParser from 'react-html-parser';
 import _ from '@lodash';
 import moment from 'moment';
+import { NavLinkAdapter } from '@fuse';
 
 const useStyles = makeStyles(theme => ({
     mediaNews: {
@@ -19,7 +20,8 @@ export default function News(props) {
     const desc = ReactHtmlParser(props.new.description);
     return (
         <Card className={classes.card}>
-            <CardActionArea>
+            <CardActionArea component={NavLinkAdapter}
+                to={`/actualite/${props.new.id}-${props.new.slug}`}>
                 <CardMedia
                     className={classes.mediaNews}
                     image="https://source.unsplash.com/collection/9457511"
@@ -31,7 +33,7 @@ export default function News(props) {
                             'length': 35
                         }))}
                     </Typography>
-                    
+
                 </CardContent>
             </CardActionArea>
             <CardActions className="flex justify-between">

@@ -86,7 +86,7 @@ function ActualitesTable(props) {
                         className: "h-64 cursor-pointer",
                         onClick: (e, handleOriginal) => {
                             if (rowInfo) {
-                                props.history.push('/actualites/' + rowInfo.original.slug);
+                                props.history.push('/admin/actualites/' + rowInfo.original.slug);
                             }
                         }
                     }

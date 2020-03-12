@@ -309,14 +309,13 @@ function DetailProduit(props) {
     return (
         <>
             {
-                produit.data ?
+                produit.data &&
                     <Helmet>
                         <title>{produit.data.titre}</title>
                         <meta name="description" content={produit.data.description} />
                         <meta property="og:title" content={produit.data.titre} />
                         <meta property="og:description" content={produit.data.description} />
                     </Helmet>
-                    : ''
             }
 
             <Grid container spacing={2} className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
@@ -349,7 +348,7 @@ function DetailProduit(props) {
                         </Grid>
                         :
                         (
-                            produit.data ?
+                            produit.data &&
                                 (
                                     <>
                                         <Grid item xs={12} sm={8} >
@@ -362,7 +361,7 @@ function DetailProduit(props) {
                                                                 {produit.data.titre}
                                                             </Typography>
                                                             <Typography color="textSecondary" >
-                                                                {produit.data.reference ? 'Réf.' + produit.data.reference : ''}
+                                                                {produit.data.reference && 'Réf.' + produit.data.reference }
                                                             </Typography>
                                                         </div>
 
@@ -373,11 +372,12 @@ function DetailProduit(props) {
                                                                         'fr', // leave undefined to use the browser's locale,
                                                                         // or use a string like 'en-US' to override it.
                                                                         { minimumFractionDigits: 2 }
-                                                                    ) + (produit.data.currency ? ' ' + produit.data.currency.name : '')
+                                                                    ) + 
+                                                                        (produit.data.currency && ' ' + produit.data.currency.name ) +
+                                                                        ' HT'
                                                                     :
-                                                                    ''
+                                                                    <span className="uppercase">à</span> + ' consulter'
                                                             }
-                                                            <span className={classes.ht}> HT</span>
                                                         </Typography>
 
                                                     </div>
@@ -404,7 +404,7 @@ function DetailProduit(props) {
                                                         Description
                                                 </div>
 
-                                                    <Typography component="p">
+                                                    <Typography component="p" className="whitespace-pre-line">
                                                         {
                                                             produit.data.description
                                                         }
@@ -569,7 +569,6 @@ function DetailProduit(props) {
                                         </Grid>
                                     </>
                                 )
-                                : ''
                         )
                 }
 

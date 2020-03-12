@@ -5,8 +5,6 @@ const initialState = {
     sousSecteurs : null,
     loading : false,
     error : null,
-    success : false,
-    redirect_success : ''
     
 };
 
@@ -19,7 +17,6 @@ const step3Reducer = function (state = initialState, action) {
             return {
                 ...state,
                 loading : true,
-                redirect_success :null
             };
         }
         
@@ -39,8 +36,6 @@ const step3Reducer = function (state = initialState, action) {
             return {
                 ...state,
                 loading : false,
-                success : true,
-                redirect_success : action.payload.redirect ? action.payload.redirect : '/login'
             };
         }
         case Actions.SAVE_ERROR:
@@ -49,8 +44,6 @@ const step3Reducer = function (state = initialState, action) {
                 ...state,
                 loading : false,
                 error  : action.payload,
-                success: false,
-                redirect_success : ''
             };
         }
         

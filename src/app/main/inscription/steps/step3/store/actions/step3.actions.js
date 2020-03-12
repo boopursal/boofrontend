@@ -12,8 +12,7 @@ export const UPDATE_FOURNISSEUR = '[STEP APP] UPDATE FOURNISSEUR';
 
 export const SAVE_ERROR = '[STEP APP] SAVE ERROR';
 
-export function getSousSecteurs()
-{
+export function getSousSecteurs() {
     const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name');
 
     return (dispatch) => {
@@ -28,46 +27,42 @@ export function getSousSecteurs()
         });
 
     }
-  
-        
+
+
 }
 
 
-export function setStep3(data,fournisseur_id)
-{
-  
-    
+export function setStep3(data, fournisseur_id, history) {
+
+
     data.redirect = '/dashboard';
     data.roles = ['ROLE_FOURNISSEUR'];
-    
-   
+
+
     return (dispatch, getState) => {
 
-        const request = agent.put(`/api/fournisseurs/${fournisseur_id}`,data);
+        const request = agent.put(`/api/fournisseurs/${fournisseur_id}`, data);
         dispatch({
-            type   : REQUEST_UPDATE_FOURNISSEUR,
+            type: REQUEST_UPDATE_FOURNISSEUR,
         });
-        return request.then((response) =>
-        
-            Promise.all([
-                dispatch({
-                    type: UPDATE_FOURNISSEUR,
-                    payload : response.data
-                }),
-                jwtService.signInWithToken()
+        return request.then((response) => {
+            jwtService.signInWithToken()
                 .then(user => {
+                    dispatch({
+                        type: UPDATE_FOURNISSEUR,
+                    });
                     dispatch(setUserData(user));
-
+                    return history.push(user.redirect ? user.redirect : '/login')
                 })
-            ])
+        }
         )
-        .catch((error)=>{
-            dispatch({
-                type: SAVE_ERROR,
-                payload: FuseUtils.parseApiErrors(error)
+            .catch((error) => {
+                dispatch({
+                    type: SAVE_ERROR,
+                    payload: FuseUtils.parseApiErrors(error)
+                });
             });
-        });
     };
-      
+
 }
 

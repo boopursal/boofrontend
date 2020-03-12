@@ -26,7 +26,7 @@ function DemandeAchatsListItem(props) {
             className={clsx(classes.todoItem, "border-solid border-b-1 py-16  px-0 sm:px-8")}
             dense={true}
             component={NavLinkAdapter}
-            to={'/apps/todo/'}
+            to={`/demandes-achat/${props.demande.id}-${props.demande.slug}`}
             button
         >
 
@@ -96,12 +96,7 @@ function DemandeAchatsListItem(props) {
             </div>
 
             <div className="px-8">
-                <IconButton onClick={(ev) => {
-                    ev.preventDefault();
-                    ev.stopPropagation();
-                    //  dispatch(Actions.toggleImportant(props.todo))
-                }}>
-
+                <IconButton >
                     <Icon>chevron_right</Icon>
                 </IconButton>
 

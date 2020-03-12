@@ -7,8 +7,6 @@ const initialState = {
     villes: null,
     error: null,
     currencies: null,
-    success: false,
-    redirect_success: ''
 
 };
 
@@ -20,7 +18,6 @@ const step2Reducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: true,
-                    redirect_success: null
                 };
             }
         case Actions.REQUEST_VILLES:
@@ -61,8 +58,6 @@ const step2Reducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: false,
-                    success: true,
-                    redirect_success: action.payload.redirect ? action.payload.redirect : '/login'
                 };
             }
         case Actions.SAVE_ERROR:
@@ -71,8 +66,6 @@ const step2Reducer = function (state = initialState, action) {
                     ...state,
                     loading: false,
                     error: action.payload,
-                    success: false,
-                    redirect_success: ''
                 };
             }
 

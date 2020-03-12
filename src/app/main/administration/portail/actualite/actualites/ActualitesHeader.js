@@ -52,7 +52,7 @@ function ActualitesHeader(props)
 
             </div>
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                <Button component={Link} to="/actualites/new" className="whitespace-no-wrap" variant="contained">
+                <Button component={Link} to="/admin/actualites/new" className="whitespace-no-wrap" variant="contained">
                     <span className="hidden sm:flex">Ajouter nouvelle actualité</span>
                     <span className="flex sm:hidden">New</span>
                 </Button>
