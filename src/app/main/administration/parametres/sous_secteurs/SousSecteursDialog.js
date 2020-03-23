@@ -137,7 +137,7 @@ function SousSecteursDialog(props)
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {SousSecteursDialog.type === 'new' ? 'Nouvelle SousSecteur' : 'Edit SousSecteur'}
+                        {SousSecteursDialog.type === 'new' ? 'Nouvelle activité' : 'Edit activité'}
                     </Typography>
                 </Toolbar>
                 

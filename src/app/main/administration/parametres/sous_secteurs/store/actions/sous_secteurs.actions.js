@@ -25,7 +25,7 @@ export const REMOVE_SOUS_SECTEUR = '[SOUS_SECTEURS APP] REMOVE SOUS_SECTEUR';
 
 export function getSecteurs()
 {
-    const request = agent.get('/api/secteurs');
+    const request = agent.get('/api/secteurs?pagination=false&props[]=id&props[]=name');
 
     return (dispatch) =>
         request.then((response) =>{

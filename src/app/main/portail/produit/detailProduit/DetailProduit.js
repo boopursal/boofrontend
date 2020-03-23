@@ -498,7 +498,9 @@ function DetailProduit(props) {
                                                 </div>
                                                 <CardContent>
                                                     <BootstrapTooltip placement="top" title="Voir la page entreprise">
-                                                        <Grid container spacing={2} component={Link} to={produit.data.fournisseur && `/entreprise/${produit.data.fournisseur.id}-${produit.data.fournisseur.slug}`} className={clsx(classes.vendeur, "items-center my-1")}>
+                                                        <Grid container spacing={2} 
+                                                        component={Link} to={produit.data.fournisseur && `/entreprise/${produit.data.fournisseur.id}-${produit.data.fournisseur.slug}`}
+                                                         className={clsx(classes.vendeur, "items-center my-1")}>
                                                             <Grid item xs={4} sm={4}>
                                                                 {
                                                                     produit.data.fournisseur && produit.data.fournisseur.avatar ?

@@ -245,6 +245,14 @@ const navigationConfig = [
                         'url': '/parametres/sous_secteurs',
                     },
                     {
+                        'id': 'categories-component',
+                        'title': 'Catégories',
+                        'type': 'item',
+                        'auth': authRoles.admin,
+                        'icon': 'ballot',
+                        'url': '/parametres/categories',
+                    },
+                    {
                         'id': 'motifs-component',
                         'title': 'Motifs du rejet',
                         'type': 'item',

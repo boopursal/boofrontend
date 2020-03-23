@@ -2,23 +2,13 @@ import React, { useEffect, useState } from 'react';
 import {
     Icon,
     Typography,
-    Paper,
-    Input,
     List,
     Grid,
-    ListItemIcon,
     ListItemText,
-    ListItemSecondaryAction,
-    IconButton,
     ListItem,
     ListItemAvatar,
     Avatar,
-    Card,
-    CardActionArea,
-    CardActions,
     Button,
-    CardMedia,
-    CardContent,
 
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -39,9 +29,9 @@ import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import YouTube from 'react-youtube';
 import ContentLoader from "react-content-loader"
-import moment from 'moment';
 import GlobalSearch from '../Search/GlobalSearch';
 import { Helmet } from "react-helmet";
+import Navigation from '../categories/Navigation';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -113,15 +103,9 @@ function generate(element) {
         }),
     );
 }
-function generate2(element) {
-    return [0, 1, 2, 3].map(value =>
-        React.cloneElement(element, {
-            key: value,
-        }),
-    );
-}
+
 function generate3(element) {
-    return [0, 1, 2].map(value =>
+    return [0, 1, 2,3].map(value =>
         React.cloneElement(element, {
             key: value,
         }),
@@ -199,7 +183,7 @@ function Index(props) {
         }
     }, [dispatch]);
 
-   
+
 
     return (
         <div className="flex flex-col flex-1 w-full">
@@ -224,35 +208,12 @@ function Index(props) {
                 <Icon className={classes.headerIcon}>school</Icon>
             </div>
 
-
             {/** 
              ===================CATEGORIES & RFQs=================
             **/}
             <Grid container spacing={2} className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
                 <Grid item sm={4} xs={12}>
-
-                    <div className={classes.demo}>
-
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar className={classes.mainAvatar}>
-                                    <Icon >format_list_bulleted</Icon>
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={
-                                    <Typography variant="h2" component="h2" className="text-20 font-bold xs:text-11 mb-1">
-                                        CATÉGORIES
-                                    </Typography>
-                                }
-                            />
-                        </ListItem>
-                        <List dense={dense}>
-                            {generate(
-                                <Categories />,
-                            )}
-                        </List>
-                    </div>
+                    <Navigation {...props} />
                 </Grid>
                 <Grid item sm={8} xs={12}>
 
@@ -439,25 +400,23 @@ function Index(props) {
                             {
                                 portail.loadingNews ?
                                     generate3(
-                                        <Grid item sm={4}>
+                                        <Grid item sm={3}>
                                             <ContentLoader
                                                 speed={2}
                                                 width={119}
-                                                height={172}
-                                                viewBox="0 0 119 172"
+                                                height={100}
+                                                viewBox="0 0 119 100"
                                             >
-                                                <rect x="4" y="148" rx="9" ry="9" width="67" height="20" />
                                                 <rect x="4" y="7" rx="0" ry="0" width="125" height="77" />
                                                 <rect x="7" y="95" rx="3" ry="3" width="85" height="7" />
-                                                <rect x="5" y="111" rx="5" ry="5" width="114" height="22" />
                                             </ContentLoader>
                                         </Grid>
                                     )
                                     :
                                     portail.news &&
                                     portail.news.map((item, index) => (
-                                        <Grid item sm={4}  key={index}>
-                                            <News new={item} />
+                                        <Grid item sm={3} key={index}>
+                                            <News news={item} />
                                         </Grid>
                                     )
                                     )
@@ -465,7 +424,7 @@ function Index(props) {
                         </Grid>
                         <Grid container spacing={2} className="justify-center mt-24 mb-24" >
 
-                            <Button component={Link} to="/produits/new" className="whitespace-no-wrap" color="secondary" variant="contained">
+                            <Button component={Link} to="/actualites" className="whitespace-no-wrap" color="secondary" variant="contained">
                                 Toute l'actualité
                                 </Button>
 

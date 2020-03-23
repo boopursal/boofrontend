@@ -83,18 +83,14 @@ function SousSecteursList(props) {
                 data={filteredData}
                 columns={[
 
+                   
                     {
-                        Header: "Id",
-                        accessor: "id",
-                        filterable: false,
-                    },
-                    {
-                        Header: "Sous-secteur",
+                        Header: "Activité",
                         accessor: "name",
                         filterable: false,
                     },
                     {
-                        Header: "Sous-secteur parent",
+                        Header: "Activité parent",
                         className: "font-bold",
                         id: "parent",
                         accessor: p => p.parent ? p.parent.name : '',
@@ -218,7 +214,7 @@ function SousSecteursList(props) {
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setSortedData(parametres))
                 }}
-                noDataText="No Sous-Secteur found"
+                noDataText="No Activity found"
                 loadingText='Chargement...'
                 ofText='sur'
             />

@@ -35,7 +35,7 @@ function HeaderDetailProduit(props) {
     const produit = useSelector(({ produitsApp }) => produitsApp.detailProduit);
 
     return (
-        produit.data && produit.data.fournisseur && (
+        produit.data  && (
             <div className="flex items-center">
                 <Button variant="outlined" size="small" color="secondary" onClick={() => props.history.goBack()} className={clsx(classes.btn, "mr-8")}>
                     <Icon>chevron_left</Icon> <span className="transition ease-in-out duration-700 ">Retour</span>

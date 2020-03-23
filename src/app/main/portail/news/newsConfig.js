@@ -35,11 +35,11 @@ export const newsConfig = {
             exact: true,
             component: React.lazy(() => import('./detailNews/NewApp'))
         },
-        /*{
-             path: '/actualite/:secteur?/:activite?',
+        {
+             path: '/actualites/:secteur?/:activite?',
              exact: true,
-             component: React.lazy(() => import('./demandes/DemandesAchatsApp'))
-         }*/
+             component: React.lazy(() => import('./news/NewsApp'))
+        }
     ]
 };
 

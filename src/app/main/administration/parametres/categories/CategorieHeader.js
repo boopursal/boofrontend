@@ -5,12 +5,12 @@ import {FuseAnimate} from '@fuse';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Actions from './store/actions';
 
-function SousSecteursHeader(props)
+function CategorieHeader(props)
 {
     const dispatch = useDispatch();
-    //const searchText = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.searchText);
+    //const searchText = useSelector(({categoriesApp}) => categoriesApp.categories.searchText);
     const mainTheme = useSelector(({fuse}) => fuse.settings.mainTheme);
-    const parametres = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.parametres);
+    const parametres = useSelector(({categoriesApp}) => categoriesApp.categories.parametres);
 
     return (
          <div className="flex flex-1 items-center justify-between p-8 sm:p-24">
@@ -20,7 +20,7 @@ function SousSecteursHeader(props)
                         <Icon className="text-32 mr-0 sm:mr-12">ballot</Icon>
                     </FuseAnimate>
                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                        <Typography className="hidden sm:flex" variant="h6">Gestion des Activités</Typography>
+                        <Typography className="hidden sm:flex" variant="h6">Gestion des catégories</Typography>
                     </FuseAnimate>
                 </div>
 
@@ -33,7 +33,7 @@ function SousSecteursHeader(props)
                                 <Icon className="mr-8" color="action">search</Icon>
 
                                 <Input
-                                    placeholder="Nom de sous-secteur..."
+                                    placeholder="Nom de l'activité..."
                                     className="flex flex-1"
                                     disableUnderline
                                     fullWidth
@@ -55,8 +55,8 @@ function SousSecteursHeader(props)
 
                 </div>
                 <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                    <Button onClick={ev => dispatch(Actions.openNewSousSecteursDialog())} className="whitespace-no-wrap" variant="contained">
-                        <span className="hidden sm:flex">Ajouter nouvelle activité</span>
+                    <Button onClick={ev => dispatch(Actions.openNewCategoriesDialog())} className="whitespace-no-wrap" variant="contained">
+                        <span className="hidden sm:flex">Ajouter nouveau catégorie</span>
                         <span className="flex sm:hidden">New</span>
                     </Button>
                 </FuseAnimate>
@@ -66,4 +66,4 @@ function SousSecteursHeader(props)
     );
 }
 
-export default SousSecteursHeader;
+export default CategorieHeader;

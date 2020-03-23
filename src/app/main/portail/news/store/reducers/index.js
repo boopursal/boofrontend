@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
 import actualite from './actualite.reducer';
-//import demandes from './demandes.reducer';
+import news from './news.reducer';
 
 const reducer = combineReducers({
-    actualite
-   // demandes
+    actualite,
+    news
 });
 
 export default reducer;

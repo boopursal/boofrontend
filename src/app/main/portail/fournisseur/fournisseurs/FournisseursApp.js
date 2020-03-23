@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { FusePageSimple, DemoContent, FuseAnimate } from '@fuse';
+import { FuseAnimate } from '@fuse';
 import { Typography, Grid, Breadcrumbs } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
