@@ -32,6 +32,7 @@ import ContentLoader from "react-content-loader"
 import GlobalSearch from '../Search/GlobalSearch';
 import { Helmet } from "react-helmet";
 import Navigation from '../categories/Navigation';
+import Link2 from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -105,7 +106,7 @@ function generate(element) {
 }
 
 function generate3(element) {
-    return [0, 1, 2,3].map(value =>
+    return [0, 1, 2, 3].map(value =>
         React.cloneElement(element, {
             key: value,
         }),
@@ -268,6 +269,15 @@ function Index(props) {
                             }
 
                         </List>
+
+                        {
+                            portail.data &&
+                            <div className="p-16 text-right">
+                                <Link2 component={Link} to={`/demandes-achats`} className="">
+                                    Toutes les demandes de devis >
+                                </Link2>
+                            </div>
+                        }
                     </div>
                 </Grid>
             </Grid>
@@ -337,6 +347,15 @@ function Index(props) {
 
                     </div>
                 </Grid>
+
+            </Grid>
+            <Grid container spacing={2} className="justify-center mb-24" >
+
+                <Button component={Link} to="/vente-produits" className="whitespace-no-wrap" color="secondary" variant="contained">
+                    Plus de produits
+                     <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon>
+                </Button>
+
             </Grid>
 
             {/* 

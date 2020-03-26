@@ -5,12 +5,12 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './store/actions';
-import { Grid, Icon, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import { Grid, Icon, List, ListItem, ListItemText, Typography, Divider, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles(theme => ({
-    root:{
+    root: {
         padding: '0px!important'
     },
     nested: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px!important',//Insert your required size,
         color: 'red'
     },
-    item:{
+    item: {
         padding: '12px 12px 0 12px!important'
     }
 }));
@@ -69,10 +69,14 @@ function CategorieItemsLink(props) {
                                 }
                                 {
                                     sousSecteur.categories &&
-                                    <ListItem button className={classes.nested}>
+                                    <ListItem button
+                                        component="a"
+                                        href={`/annuaire-entreprises/${item.slug}/${sousSecteur.id}-${sousSecteur.slug}`}
+                                        className={classes.nested}>
                                         <Icon className="text-16 arrow-icon">keyboard_arrow_right</Icon>
                                         <ListItemText primary="Voir tout"
                                             disableTypography
+
                                             primary={<Typography type="body2" style={{ color: '#387ca3', fontSize: 11 }}>Voir tout</Typography>}
                                         />
                                     </ListItem>
@@ -81,6 +85,16 @@ function CategorieItemsLink(props) {
                         </List>
                     </Grid>
                 ))
+            }
+            {
+                item.sousSecteurs &&
+                <Grid item xs={12} className="text-right">
+                    <Button component={Link} size="small" to={`/annuaire-entreprises/${item.id}-${item.slug}`}
+                        color="primary" variant="contained">
+                        <span >{item.name}</span>
+                        <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon>
+                    </Button>
+                </Grid>
             }
         </Grid>
     );

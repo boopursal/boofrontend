@@ -22,7 +22,7 @@ function Categories(props) {
                 secondary={secondary ? 'Secondary text' : null}
             />
             <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="Delete">
+                <IconButton edge="end" aria-label="more">
                     <Icon>chevron_right</Icon>
                 </IconButton>
             </ListItemSecondaryAction>

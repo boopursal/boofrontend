@@ -121,20 +121,18 @@ function DemandeListItem(props) {
                                                                 'length': 70
                                                             }))}
                                                         </Typography>
+                                                        
                                                         <Chip
                                                             icon={<Icon className="text-16 mr-0">location_on</Icon>}
-                                                            label={(demande.ville && demande.ville) + (demande.pays && ', ' + demande.pays)}
+                                                            label={demande.ville + ', ' + demande.pays}
                                                             classes={{
-                                                                root: clsx("h-24", props.className),
+                                                                root: clsx("h-24"),
                                                                 label: "pl-4 pr-6 py-4 text-11",
                                                                 deleteIcon: "w-16 ml-0",
-                                                                ...props.classes
                                                             }}
                                                             className="mr-4"
                                                             variant="outlined"
-                                                            onDelete={props.onDelete}
                                                         />
-
 
                                                     </Grid>
                                                     <Grid item>

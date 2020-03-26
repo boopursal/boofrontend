@@ -1,8 +1,8 @@
 import * as Actions from '../actions';
 
 const initialState = {
-    secteurs: [],
-    sousSecteurs: [],
+    secteurs: null,
+    sousSecteurs: null,
     loadingSecteurs: false,
     loadingSousSecteurs: false,
 };

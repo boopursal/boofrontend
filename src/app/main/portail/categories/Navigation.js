@@ -5,6 +5,9 @@ import reducer from './store/reducers';
 import { makeStyles } from '@material-ui/styles';
 import * as Actions from './store/actions';
 import CategorieNavigation from './CategorieNavigation';
+import Link2 from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
+
 import {
     Icon,
     List,
@@ -34,7 +37,7 @@ function Navigation(props) {
     const categoriesNav = useSelector(({ navigationCategories }) => navigationCategories.categoriesNav);
 
     useEffect(() => {
-        if (categoriesNav.secteurs.length === 0) {
+        if (!categoriesNav.secteurs) {
             dispatch(Actions.getSecteurs());
         }
     }, [dispatch, categoriesNav.secteurs]);
@@ -57,15 +60,23 @@ function Navigation(props) {
             </ListItem>
             <List dense={true} disablePadding>
                 {
-                    categoriesNav.loadingSecteurs ? 'Loading...' : 
-                    (
-                        categoriesNav.secteurs && categoriesNav.secteurs.map((item,index)=>(
-                            <CategorieNavigation item={item} key={index} nestedLevel={0} dense={true} />
-                        ))
-                    )
+                    categoriesNav.loadingSecteurs ? 'Chargement...' :
+                        (
+                            categoriesNav.secteurs && categoriesNav.secteurs.map((item, index) => (
+                                <CategorieNavigation item={item} key={index} nestedLevel={0} dense={true} />
+                            ))
+                        )
                 }
-              
+
             </List>
+            {
+                categoriesNav.secteurs &&
+                <div className="p-16 text-right">
+                    <Link2 component={Link} to={`/annuaire-entreprises`} className="">
+                        Tous les secteurs d’activité >
+                    </Link2>
+                </div>
+            }
         </div>
     );
 }

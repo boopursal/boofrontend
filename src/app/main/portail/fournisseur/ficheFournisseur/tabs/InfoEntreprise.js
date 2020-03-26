@@ -81,7 +81,7 @@ function InfoEntreprise(props) {
                         <div className="text-right mt-16">
                             <Link2 component={Link} to={`/entreprise/${id}-${slug}/produits`} className="">
                                 Voir tout le catalogue de produits >
-                        </Link2>
+                            </Link2>
                         </div>
                     }
 
