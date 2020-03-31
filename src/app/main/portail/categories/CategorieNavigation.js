@@ -77,7 +77,7 @@ function CategorieNavigationCollapse(props) {
             </Reference>
             {ReactDOM.createPortal(
                 <Popper
-                    placement="right-start"
+                    placement="right"
                     eventsEnabled={opened}
                     positionFixed
                 >

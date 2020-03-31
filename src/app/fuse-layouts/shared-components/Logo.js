@@ -30,7 +30,7 @@ function Logo()
     const classes = useStyles();
 
     return (
-        <div className={clsx(classes.root, "flex items-center")}>
+        <div className={clsx(classes.root, "flex items-center w-200")}>
             <img className="" src="assets/images/logos/logo.png" alt="logo"/>
            
         </div>

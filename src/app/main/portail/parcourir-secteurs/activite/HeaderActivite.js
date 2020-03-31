@@ -6,7 +6,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import _ from '@lodash';
 import { Button, Icon } from '@material-ui/core';
 import clsx from 'clsx';
 

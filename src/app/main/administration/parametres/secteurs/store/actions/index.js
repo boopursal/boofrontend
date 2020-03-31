@@ -1,2 +1,2 @@
 export * from './secteurs.actions';
-export * from './dialog.actions';
+export * from './secteur.actions';

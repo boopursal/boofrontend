@@ -9,6 +9,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import { List, ListItem, Icon, ListItemText, Button, Divider } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import {FuseUtils} from '@fuse';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,7 +47,11 @@ export default function RecipeReviewCard(props) {
       />
       <CardMedia
         className={classes.media}
-        image="https://source.unsplash.com/collection/9456871/1600x900"
+        image={
+          secteur.url ?
+          FuseUtils.getUrl()+'/images/secteur/'+secteur.url :
+          "https://source.unsplash.com/collection/9456871/1600x900"
+        }
         title={
           secteur.name
         }

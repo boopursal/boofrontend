@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Hidden, Toolbar } from '@material-ui/core';
+import { AppBar, Hidden, Toolbar, IconButton, Icon } from '@material-ui/core';
 import { makeStyles, ThemeProvider } from '@material-ui/styles';
 import { FuseSearch } from '@fuse';
 import clsx from 'clsx';
@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 import UserMenu from 'app/fuse-layouts/shared-components/UserMenu';
 import history from '@history';
 import GlobalSearch from '../../../main/portail/Search/GlobalSearch';
+import Search from '../../../main/portail/Search/Search';
+import PSecteurs from 'app/fuse-layouts/shared-components/PSecteurs';
 const useStyles = makeStyles(theme => ({
     separator: {
         width: 1,
@@ -39,27 +41,54 @@ function ToolbarLayout3(props) {
                             <Logo />
                         </div>
                     </Hidden>
+                    <div className="flex flex-shrink items-center">
+                        <PSecteurs />
+                    </div>
+                   
 
                     <div className="flex flex-1">
                         <Hidden xsDown>
                             {
-                                history.location && history.location.pathname === '/' ? '' : 
-                                <GlobalSearch className="lg:mx-24"/>
+                                history.location && history.location.pathname === '/' ? '' :
+                                    <Search className="mx-16 lg:mx-24" variant="basic" />
                             }
 
                         </Hidden>
                     </div>
+                    {
+                        /**
+                         * <div className="flex flex-1">
+                         <Hidden xsDown>
+                             {
+                                 history.location && history.location.pathname === '/' ? '' :
+                                     <GlobalSearch className="lg:mx-24" />
+                             }
+ 
+                         </Hidden>
+                     </div>
+                         */
+                    }
 
                     <div className="flex">
-
+                        {
+                            /**
+                             <Hidden smUp>
+                                 {
+                                     history.location && history.location.pathname === '/' ? '' :
+                                         <GlobalSearch className="mx-16 lg:mx-24" variant="basic" />
+                                 }
+                                 <div className={classes.separator} />
+                             </Hidden>
+        */
+                        }
                         <Hidden smUp>
                             {
-                                history.location && history.location.pathname === '/' ? '' : 
-                                <GlobalSearch className="mx-16 lg:mx-24" variant="basic" />
+                                history.location && history.location.pathname === '/' ? '' :
+                                    <Search />
                             }
+
                             <div className={classes.separator} />
                         </Hidden>
-
                         <UserMenu />
 
 

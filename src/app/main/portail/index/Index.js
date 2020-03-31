@@ -29,7 +29,7 @@ import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import YouTube from 'react-youtube';
 import ContentLoader from "react-content-loader"
-import GlobalSearch from '../Search/GlobalSearch';
+import Search from '../Search/Search';
 import { Helmet } from "react-helmet";
 import Navigation from '../categories/Navigation';
 import Link2 from '@material-ui/core/Link';
@@ -204,7 +204,11 @@ function Index(props) {
                             Les Achats Industriels, c'est une communauté de 1000 sociétés, Acheteurs et Fournisseurs
                         </Typography>
                     </FuseAnimate>
-                    <GlobalSearch />
+                    <div className="md:w-md xs:w-auto m-auto bg-white rounded-8">
+                        <Search className="" variant="basic" />
+                    </div>
+
+                    {/*<Search />*/}
                 </div>
                 <Icon className={classes.headerIcon}>school</Icon>
             </div>

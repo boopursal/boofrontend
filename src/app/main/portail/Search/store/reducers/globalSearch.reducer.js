@@ -3,74 +3,44 @@ import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     searchText: '',
-    produits: [],
-    fournisseurs: [],
-    activites: [],
+    suggestions:[],
     loading: false,
-    loadingFournisseurs: false,
-    loadingActivites: false,
-    loadingProduits: false,
-    opened: false
+    opened: false,
+    noSuggestions: false
+
 
 };
 
 const globalSearchReducer = function (state = initialState, action) {
     switch (action.type) {
+
         case Actions.CLEAN_UP:
             {
                 return {
                     ...state,
-                    produits: [],
-                    fournisseurs: [],
-                    activites: [],
+                    suggestions: [],
+                    noSuggestions: false
                 };
             }
-        case Actions.GS_REQUEST_PRODUITS:
+        case Actions.REQUEST_DATA:
             {
                 return {
                     ...state,
-                    loadingProduits: true
+                    loading: true,
+                    suggestions: [],
+                    noSuggestions: false
 
                 };
             }
-        case Actions.GS_REQUEST_FOURNISSEUR:
+        case Actions.GET_DATA:
             {
+                const suggestions = action.payload;
+                const noSuggestions = suggestions.length === 0;
                 return {
                     ...state,
-                    loadingFournisseurs: true
-
-                };
-            }
-        case Actions.GS_REQUEST_ACTIVITES:
-            {
-                return {
-                    ...state,
-                    loadingActivites: true
-
-                };
-            }
-        case Actions.GS_GET_PRODUITS:
-            {
-                return {
-                    ...state,
-                    loadingProduits: false,
-                    produits: action.payload,
-                };
-            }
-        case Actions.GS_GET_ACTIVITES:
-            {
-                return {
-                    ...state,
-                    loadingActivites: false,
-                    activites: action.payload,
-                };
-            }
-        case Actions.GS_GET_FOURNISSEUR:
-            {
-                return {
-                    ...state,
-                    loadingFournisseurs: false,
-                    fournisseurs: action.payload,
+                    suggestions,
+                    noSuggestions,
+                    loading: false
                 };
             }
         case Actions.GS_SET_SEARCH_TEXT:
@@ -92,6 +62,7 @@ const globalSearchReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     opened: false,
+                    searchText: '',
                 };
             }
         default:

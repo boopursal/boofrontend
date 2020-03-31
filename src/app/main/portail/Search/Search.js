@@ -1,17 +1,17 @@
-import React, {useEffect, useReducer, useRef} from 'react';
-import {Popper, ClickAwayListener, MenuItem, Icon, IconButton, ListItemIcon, ListItemText, Paper, TextField, Tooltip, Typography} from '@material-ui/core';
-import {makeStyles} from '@material-ui/styles';
-import {useSelector} from 'react-redux';
-import {FuseUtils} from '@fuse';
+import React, { useRef } from 'react';
+import { Popper, ClickAwayListener, MenuItem, Icon, IconButton, ListItemIcon, ListItemText, Paper, TextField, Tooltip, Typography, ListItemAvatar, Avatar, ListItemSecondaryAction } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import match from 'autosuggest-highlight/match';
-import parse from 'autosuggest-highlight/parse';
-import {withRouter} from 'react-router-dom';
-import deburr from 'lodash/deburr';
 import Autosuggest from 'react-autosuggest';
-
-function renderInputComponent(inputProps)
-{
+import reducer from './store/reducers';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Actions from './store/actions';
+import withReducer from 'app/store/withReducer';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Highlighter from "react-highlight-words";
+import { FuseUtils } from '@fuse';
+import history from '@history';
+function renderInputComponent(inputProps) {
     const {
         variant,
         classes, inputRef = () => {
@@ -20,26 +20,26 @@ function renderInputComponent(inputProps)
     return (
         <div className="w-full relative">
             {variant === "basic" ? (
-                    // Outlined
-                    <React.Fragment>
-                        <TextField
-                            fullWidth
-                            InputProps={{
-                                inputRef: node => {
-                                    ref(node);
-                                    inputRef(node);
-                                },
-                                classes : {
-                                    input         : clsx(classes.input, "py-0 px-16 h-48 pr-48"),
-                                    notchedOutline: "rounded-8"
-                                }
-                            }}
-                            variant="outlined"
-                            {...other}
-                        />
-                        <Icon className="absolute top-0 right-0 h-48 w-48 p-12 pointer-events-none" color="action">search</Icon>
-                    </React.Fragment>
-                )
+                // Outlined
+                <React.Fragment>
+                    <TextField
+                        fullWidth
+                        InputProps={{
+                            inputRef: node => {
+                                ref(node);
+                                inputRef(node);
+                            },
+                            classes: {
+                                input: clsx(classes.input, "py-0 px-16 h-48 pr-48"),
+                                notchedOutline: "rounded-8"
+                            }
+                        }}
+                        variant="outlined"
+                        {...other}
+                    />
+                    <Icon className="absolute top-0 right-0 h-48 w-48 p-12 pointer-events-none" color="action">search</Icon>
+                </React.Fragment>
+            )
                 :
                 (
                     // Standard
@@ -47,11 +47,11 @@ function renderInputComponent(inputProps)
                         fullWidth
                         InputProps={{
                             disableUnderline: true,
-                            inputRef        : node => {
+                            inputRef: node => {
                                 ref(node);
                                 inputRef(node);
                             },
-                            classes         : {
+                            classes: {
                                 input: clsx(classes.input, "py-0 px-16 h-64")
                             }
                         }}
@@ -63,257 +63,170 @@ function renderInputComponent(inputProps)
     );
 }
 
-function renderSuggestion(suggestion, {query, isHighlighted})
-{
-    const matches = match(suggestion.title, query);
-    const parts = parse(suggestion.title, matches);
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+    // console.log('===========================Render Suggestion===============================')
+    //console.log(suggestion)
+    let result = '';
+    let img = '';
+    if (suggestion.societe) {
+        result = suggestion.societe;
+        img = <Avatar >{suggestion.societe[0]}</Avatar>
+    }
+    else if (suggestion.titre) {
+        result = suggestion.titre
+        suggestion.featuredImageId ?
+            img = <Avatar alt={suggestion.titre} src={FuseUtils.getUrl() + suggestion.featuredImageId.url} />
+            :
+            img = <Avatar alt={suggestion.titre} src="assets/images/ecommerce/product-placeholder.jpg" />
+
+    }
+    else if (suggestion.name) {
+        result = suggestion.name
+        img = <Avatar >{suggestion.name[0]}</Avatar>
+    }
+
 
     return (
-        <MenuItem selected={isHighlighted} component="div">
-            <ListItemIcon className="min-w-40">
-                {suggestion.icon ?
-                    (
-                        <Icon>{suggestion.icon}</Icon>
-                    ) :
-                    (
-                        <span className="text-20 w-24 font-bold uppercase text-center">{suggestion.title[0]}</span>
-                    )
-                }
-            </ListItemIcon>
+        <MenuItem selected={isHighlighted} component="div" dense={true}>
             <ListItemText
                 className="pl-0"
                 primary={
-                    parts.map((part, index) => {
-                        return part.highlight ? (
-                            <span key={String(index)} style={{fontWeight: 600}}>
-                                {part.text}
-                            </span>
-                        ) : (
-                            <strong key={String(index)} style={{fontWeight: 300}}>
-                                {part.text}
-                            </strong>
-                        );
-                    })
+                    <Highlighter
+                        highlightClassName="YourHighlightClass"
+                        searchWords={[query]}
+                        autoEscape={true}
+                        textToHighlight={result}
+                    />
                 }
             />
+            <ListItemSecondaryAction>
+                <IconButton edge="end" aria-label="more">
+                    <Icon className="text-16 arrow-icon">chevron_right</Icon>
+                </IconButton>
+            </ListItemSecondaryAction>
         </MenuItem>
+
     );
 }
 
-function getSuggestions(value, data)
-{
-    const inputValue = deburr(value.trim()).toLowerCase();
-    const inputLength = inputValue.length;
-    let count = 0;
-
-    return inputLength === 0
-        ? []
-        : data.filter(suggestion => {
-            const keep =
-                count < 10 &&
-                match(suggestion.title, inputValue).length > 0;
-
-            if ( keep )
-            {
-                count += 1;
-            }
-
-            return keep;
-        });
+function getSuggestionValue(suggestion) {
+    let result = '';
+    console.log("====> get value")
+    console.log(suggestion)
+    if (suggestion.societe) {
+        result = suggestion.societe
+    }
+    else if (suggestion.titre) {
+        result = suggestion.titre
+    }
+    else if (suggestion.name) {
+        result = suggestion.name
+    }
+    return result;
 }
+function getSectionSuggestions(section) {
 
-function getSuggestionValue(suggestion)
-{
-    return suggestion.title;
+    return section.suggestions;
 }
+function renderSectionTitle(section) {
 
+    if (section.suggestions.length === 0) {
+        return
+    }
+    return (
+        <Typography variant="h6" className="py-4 px-8 bg-gray-300">{section.title}</Typography>
+    );
+}
 const useStyles = makeStyles(theme => ({
-    root                    : {},
-    container               : {
+    root: {},
+    container: {
         position: 'relative'
     },
     suggestionsContainerOpen: {
-        position : 'absolute',
-        zIndex   : 1,
+        position: 'absolute',
+        zIndex: 1,
         marginTop: theme.spacing(),
-        left     : 0,
-        right    : 0
+        left: 0,
+        right: 0
     },
-    suggestion              : {
+    suggestion: {
         display: 'block'
     },
-    suggestionsList         : {
-        margin       : 0,
-        padding      : 0,
+    suggestionsList: {
+        margin: 0,
+        padding: 0,
         listStyleType: 'none'
     },
-    input                   : {
+    input: {
         transition: theme.transitions.create(['background-color'], {
-            easing  : theme.transitions.easing.easeInOut,
+            easing: theme.transitions.easing.easeInOut,
             duration: theme.transitions.duration.short
         }),
-        '&:focus' : {
+        '&:focus': {
             backgroundColor: theme.palette.background.paper
         }
     }
 }));
 
-const initialState = {
-    searchText   : '',
-    search       : false,
-    navigation   : null,
-    suggestions  : [],
-    noSuggestions: false
-};
-
-function reducer(state, action)
-{
-    switch ( action.type )
-    {
-        case 'open':
-        {
-            return {
-                ...state,
-                opened: true
-            };
-        }
-        case 'close':
-        {
-            return {
-                ...state,
-                opened    : false,
-                searchText: ''
-            };
-        }
-        case 'setSearchText':
-        {
-            return {
-                ...state,
-                searchText: action.value
-            };
-        }
-        case 'setNavigation':
-        {
-            return {
-                ...state,
-                navigation: action.value
-            };
-        }
-        case 'updateSuggestions':
-        {
-            const suggestions = getSuggestions(action.value, state.navigation);
-            const isInputBlank = action.value.trim() === '';
-            const noSuggestions = !isInputBlank && suggestions.length === 0;
-
-            return {
-                ...state,
-                suggestions,
-                noSuggestions
-            };
-        }
-        case 'clearSuggestions':
-        {
-            return {
-                ...state,
-                suggestions  : [],
-                noSuggestions: false
-            };
-        }
-        case 'decrement':
-        {
-            return {count: state.count - 1};
-        }
-        default:
-        {
-            throw new Error();
-        }
-    }
-}
-
-function Search(props)
-{
-    const userRole = useSelector(({auth}) => auth.user.role);
-    const navigation = useSelector(({fuse}) => fuse.navigation);
-
-    const [state, dispatch] = useReducer(reducer, initialState);
+function Search(props) {
+    const globalSearch = useSelector(({ globalSearchApp }) => globalSearchApp.globalSearch);
     const classes = useStyles(props);
     const suggestionsNode = useRef(null);
     const popperNode = useRef(null);
-
-    useEffect(() => {
-        function itemAuthAllowed(item)
-        {
-            return FuseUtils.hasPermission(item.auth, userRole)
-        }
-
-        function setNavigation()
-        {
-            dispatch({
-                type : "setNavigation",
-                value: FuseUtils.getFlatNavigation(navigation).filter(item => itemAuthAllowed(item))
-            });
-        }
-
-        setNavigation();
-    }, [userRole, navigation]);
-
-    function showSearch()
-    {
-        dispatch({type: "open"});
+    const dispatch = useDispatch();
+    function showSearch() {
+        dispatch(Actions.showSearch());
         document.addEventListener("keydown", escFunction, false);
     }
 
-    function hideSearch()
-    {
-        dispatch({type: "close"});
+    function hideSearch() {
+        dispatch(Actions.hideSearch());
         document.removeEventListener("keydown", escFunction, false);
     }
 
-    function escFunction(event)
-    {
-        if ( event.keyCode === 27 )
-        {
+    function escFunction(event) {
+        if (event.keyCode === 27) {
             hideSearch();
         }
     }
 
-    function handleSuggestionsFetchRequested({value})
-    {
-        dispatch({
-            type: "updateSuggestions",
-            value
-        });
+    function handleSuggestionsFetchRequested({ value }) {
+        if (value.trim().length > 1) {
+            dispatch(Actions.loadSuggestions(value));
+            // Fake an AJAX call
+        }
     }
 
-    function handleSuggestionSelected(event, {suggestion})
-    {
+
+    function handleSuggestionSelected(event, { suggestion }) {
         event.preventDefault();
         event.stopPropagation();
-        if ( !suggestion.url )
-        {
+        let url;
+        if (!suggestion) {
             return;
         }
-        props.history.push(suggestion.url);
+        if (suggestion.societe) {
+            url = `/entreprise/${suggestion.id}-${suggestion.slug}`
+        }
+        else if (suggestion.titre) {
+            url = `/detail-produit/${suggestion.sec}/${suggestion.soussec}/${suggestion.id}-${suggestion.slug}`
+        }
+        else if (suggestion.name) {
+            url = `/vente-produits/${suggestion.sect}/${suggestion.slug}`
+        }
+        history.push(url);
         hideSearch();
     }
 
-    function handleSuggestionsClearRequested()
-    {
-        dispatch({
-            type: "clearSuggestions",
-        });
+    function handleSuggestionsClearRequested() {
+        dispatch(Actions.cleanUp());
     }
 
-    function handleChange(event)
-    {
-        dispatch({
-            type : "setSearchText",
-            value: event.target.value
-        });
+    function handleChange(event) {
+        dispatch(Actions.setGlobalSearchText(event))
     }
 
-    function handleClickAway(event)
-    {
+    function handleClickAway(event) {
         return (
             !suggestionsNode.current ||
             !suggestionsNode.current.contains(event.target)
@@ -322,142 +235,154 @@ function Search(props)
 
     const autosuggestProps = {
         renderInputComponent,
-        highlightFirstSuggestion   : true,
-        suggestions                : state.suggestions,
+        highlightFirstSuggestion: true,
+        multiSection: true,
+        suggestions: globalSearch.suggestions,
         onSuggestionsFetchRequested: handleSuggestionsFetchRequested,
         onSuggestionsClearRequested: handleSuggestionsClearRequested,
-        onSuggestionSelected       : handleSuggestionSelected,
+        onSuggestionSelected: handleSuggestionSelected,
+        renderSectionTitle: renderSectionTitle,
+        getSectionSuggestions: getSectionSuggestions,
         getSuggestionValue,
         renderSuggestion
     };
 
-    switch ( props.variant )
-    {
+    switch (props.variant) {
         case 'basic':
-        {
-            return (
-                <div className={clsx("flex items-center w-full", props.className)} ref={popperNode}>
-                    <Autosuggest
-                        {...autosuggestProps}
-                        inputProps={{
-                            variant        : props.variant,
-                            classes,
-                            placeholder    : 'Search',
-                            value          : state.searchText,
-                            onChange       : handleChange,
-                            onFocus        : showSearch,
-                            InputLabelProps: {
-                                shrink: true
-                            },
-                            autoFocus      : false
-                        }}
-                        theme={{
-                            container      : "flex flex-1 w-full",
-                            suggestionsList: classes.suggestionsList,
-                            suggestion     : classes.suggestion
-                        }}
-                        renderSuggestionsContainer={options => (
-                            <Popper
-                                anchorEl={popperNode.current}
-                                open={Boolean(options.children) || state.noSuggestions}
-                                popperOptions={{positionFixed: true}}
-                                className="z-9999"
-                            >
-                                <div ref={suggestionsNode}>
-                                    <Paper
-                                        elevation={1}
-                                        square
-                                        {...options.containerProps}
-                                        style={{width: popperNode.current ? popperNode.current.clientWidth : null}}
-                                    >
-                                        {options.children}
-                                        {state.noSuggestions && (
-                                            <Typography className="px-16 py-12">
-                                                No results..
-                                            </Typography>
-                                        )}
-                                    </Paper>
-                                </div>
-                            </Popper>
-                        )}
-                    />
-                </div>
-            )
-        }
-        case 'full':
-        {
-            return (
-                <div className={clsx(classes.root, "flex", props.className)}>
-
-                    <Tooltip title="Click to search" placement="bottom">
-                        <div onClick={showSearch}>
-                            {props.trigger}
-                        </div>
-                    </Tooltip>
-
-                    {state.opened && (
-                        <ClickAwayListener onClickAway={handleClickAway}>
-                            <Paper
-                                className="absolute left-0 right-0 h-full z-9999"
-                                square={true}
-                            >
-                                <div className="flex items-center w-full" ref={popperNode}>
-                                    <Autosuggest
-                                        {...autosuggestProps}
-                                        inputProps={{
-                                            classes,
-                                            placeholder    : 'Search',
-                                            value          : state.searchText,
-                                            onChange       : handleChange,
-                                            InputLabelProps: {
-                                                shrink: true
-                                            },
-                                            autoFocus      : true
-                                        }}
-                                        theme={{
-                                            container      : "flex flex-1 w-full",
-                                            suggestionsList: classes.suggestionsList,
-                                            suggestion     : classes.suggestion
-                                        }}
-                                        renderSuggestionsContainer={options => (
-                                            <Popper
-                                                anchorEl={popperNode.current}
-                                                open={Boolean(options.children) || state.noSuggestions}
-                                                popperOptions={{positionFixed: true}}
-                                                className="z-9999"
-                                            >
-                                                <div ref={suggestionsNode}>
-                                                    <Paper
-                                                        elevation={1}
-                                                        square
-                                                        {...options.containerProps}
-                                                        style={{width: popperNode.current ? popperNode.current.clientWidth : null}}
-                                                    >
-                                                        {options.children}
-                                                        {state.noSuggestions && (
-                                                            <Typography className="px-16 py-12">
-                                                                No results..
-                                                            </Typography>
-                                                        )}
-                                                    </Paper>
+            {
+                return (
+                    <div className={clsx("flex items-center w-full", props.className)} ref={popperNode}>
+                        <Autosuggest
+                            {...autosuggestProps}
+                            inputProps={{
+                                variant: props.variant,
+                                classes,
+                                placeholder: 'Rechercher un produit, une activité, un fournisseur',
+                                value: globalSearch.searchText,
+                                onChange: handleChange,
+                                onFocus: showSearch,
+                                InputLabelProps: {
+                                    shrink: true
+                                },
+                                autoFocus: false
+                            }}
+                            theme={{
+                                container: "flex flex-1 w-full",
+                                suggestionsList: classes.suggestionsList,
+                                suggestion: classes.suggestion
+                            }}
+                            renderSuggestionsContainer={options => (
+                                <Popper
+                                    anchorEl={popperNode.current}
+                                    open={Boolean(options.children) || globalSearch.noSuggestions || globalSearch.loading}
+                                    popperOptions={{ positionFixed: true }}
+                                    className="z-9999"
+                                >
+                                    <div ref={suggestionsNode}>
+                                        <Paper
+                                            elevation={1}
+                                            square
+                                            {...options.containerProps}
+                                            style={{ width: popperNode.current ? popperNode.current.clientWidth : null }}
+                                        >
+                                            {options.children}
+                                            {globalSearch.noSuggestions && (
+                                                <Typography className="px-16 py-12">
+                                                    Aucun résultat..
+                                                </Typography>
+                                            )}
+                                            {globalSearch.loading && (
+                                                <div className="px-16 py-12 text-center">
+                                                    <CircularProgress color="secondary" /> <br /> Chargement ...
                                                 </div>
-                                            </Popper>
-                                        )}
-                                    />
-                                    <IconButton onClick={hideSearch} className="mx-8">
-                                        <Icon>close</Icon>
-                                    </IconButton>
-                                </div>
-                            </Paper>
-                        </ClickAwayListener>
-                    )}
-                </div>
-            )
-        }
-        default :
-        {
-            return null;
-        }
+                                            )}
+                                        </Paper>
+                                    </div>
+                                </Popper>
+                            )}
+                        />
+                    </div>
+                )
+            }
+        case 'full':
+            {
+                return (
+                    <div className={clsx(classes.root, "flex", props.className)}>
+
+                        <Tooltip title="Click to search" placement="bottom">
+                            <div onClick={showSearch}>
+                                {props.trigger}
+                            </div>
+                        </Tooltip>
+
+                        {globalSearch.opened && (
+                            <ClickAwayListener onClickAway={handleClickAway}>
+                                <Paper
+                                    className="absolute left-0 right-0 h-full z-9999"
+                                    square={true}
+                                >
+                                    <div className="flex items-center w-full" ref={popperNode}>
+                                        <Autosuggest
+                                            {...autosuggestProps}
+                                            inputProps={{
+                                                classes,
+                                                placeholder: 'Rechercher un produit, une activité, un fournisseur',
+                                                value: globalSearch.searchText,
+                                                onChange: handleChange,
+                                                InputLabelProps: {
+                                                    shrink: true
+                                                },
+                                                autoFocus: true
+                                            }}
+                                            theme={{
+                                                container: "flex flex-1 w-full",
+                                                suggestionsList: classes.suggestionsList,
+                                                suggestion: classes.suggestion
+                                            }}
+                                            renderSuggestionsContainer={options => (
+                                                <Popper
+                                                    anchorEl={popperNode.current}
+                                                    open={Boolean(options.children) || globalSearch.noSuggestions || globalSearch.loading}
+                                                    popperOptions={{ positionFixed: true }}
+                                                    className="z-9999"
+                                                >
+                                                    <div ref={suggestionsNode}>
+                                                        <Paper
+                                                            elevation={1}
+                                                            square
+                                                            {...options.containerProps}
+                                                            style={{ width: popperNode.current ? popperNode.current.clientWidth : null }}
+                                                        >
+                                                            {options.children}
+                                                            {globalSearch.noSuggestions && (
+                                                                <Typography className="px-16 py-12">
+                                                                    Aucun résultat..
+                                                                </Typography>
+                                                            )}
+                                                            {globalSearch.loading && (
+                                                                <div className="px-16 py-12 text-center">
+                                                                    <CircularProgress color="secondary" /> <br /> Chargement ...
+                                                                </div>
+                                                            )}
+                                                        </Paper>
+                                                    </div>
+                                                </Popper>
+                                            )}
+                                        />
+                                        <IconButton onClick={hideSearch} className="mx-8">
+                                            <Icon>close</Icon>
+                                        </IconButton>
+                                    </div>
+                                </Paper>
+                            </ClickAwayListener>
+                        )}
+                    </div>
+                )
+            }
+        default:
+            {
+                return null;
+            }
     }
 }
 
@@ -467,4 +392,4 @@ Search.defaultProps = {
     variant: 'full'// basic, full
 };
 
-export default withRouter(React.memo(Search));
+export default withReducer('globalSearchApp', reducer)(Search);

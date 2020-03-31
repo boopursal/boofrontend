@@ -43,7 +43,7 @@ const navigationConfig = [
             'bg': 'rgb(255, 111, 0)',
             'fg': '#FFFFFF',
             'count': 0
-        }      
+        }
     },
     {
         'id': 'validation_produits',
@@ -196,6 +196,7 @@ const navigationConfig = [
                         'auth': authRoles.admin,
                         'url': '/admin/actualites',
                     },
+
                     {
                         'id': 'produits-admin',
                         'title': 'Focus produits',
@@ -204,6 +205,30 @@ const navigationConfig = [
                         'auth': authRoles.admin,
                         'url': '/admin/focus-produits',
                     },
+                    {
+                        'id': 'faqs',
+                        'title': 'FAQ',
+                        'type': 'collapse',
+                        'icon': 'help_outline',
+                        'children': [
+                            {
+                                'id': 'faqsCat-admin',
+                                'title': 'Catégories',
+                                'type': 'item',
+                                'auth': authRoles.admin,
+                                'url': '/admin/faqCategories',
+                            },
+                            {
+                                'id': 'faqs-admin',
+                                'title': 'FAQ',
+                                'type': 'item',
+                                'auth': authRoles.admin,
+                                'url': '/admin/faqs',
+                            },
+                            
+                        ]
+                    },
+                    
                 ]
             },
             {
@@ -374,7 +399,7 @@ const navigationConfig = [
             'fg': '#FFFFFF',
             'count': 0
         }
-        
+
     },
     {
         'id': 'fr_profil',

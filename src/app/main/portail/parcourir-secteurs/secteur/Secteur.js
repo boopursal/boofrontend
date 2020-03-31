@@ -114,7 +114,10 @@ function Secteur(props) {
                 <Grid container spacing={4} className=" max-w-2xl mx-auto py-8  sm:px-16 ">
                     <Grid item sm={8} xs={12}>
                         <Paper variant="outlined" className={clsx(classes.paper, 'p-0 my-16')}>
-                            <div className={clsx(classes.fiche, "rounded-t-md relative max-w-2xl mx-auto")}>
+                            <div className={clsx(classes.fiche, "rounded-t-md relative max-w-2xl mx-auto")} style={{
+                                backgroundImage: activites.secteur && 
+                                activites.secteur.image && 'url('+FuseUtils.getUrl()+activites.secteur.image.url+')'
+                            }}>
                                 <div className={clsx(classes.divTitle)}>
                                     <Typography className={clsx(classes.title)} component="h1" color="primary">
                                         {

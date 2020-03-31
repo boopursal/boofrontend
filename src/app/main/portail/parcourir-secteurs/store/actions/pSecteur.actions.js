@@ -19,7 +19,7 @@ export function cleanUp() {
     });
 }
 export function getSecteur(id) {
-    const request = agent.get(`/api/secteurs/${id}?props[]=id&props[]=name&props[]=slug`);
+    const request = agent.get(`/api/secteurs/${id}?props[]=id&props[]=name&props[]=slug&props[]=image`);
     return (dispatch) => {
         dispatch({
             type: REQUEST_SECTEUR,

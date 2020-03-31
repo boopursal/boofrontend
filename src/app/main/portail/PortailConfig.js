@@ -3,6 +3,7 @@ import { ProduitConfig } from './produit/ProduitConfig';
 import { FournisseurConfig } from './fournisseur/FournisseurConfig';
 import { demandeAchatConfig } from './demande-achat/demandeAchatConfig';
 import { newsConfig } from './news/newsConfig';
+import { faqsConfig } from './faqs/faqsConfig';
 import { parcourirSecteursConfig } from './parcourir-secteurs/parcourirSecteursConfig';
 
 export const PortailConfig = [
@@ -11,5 +12,6 @@ export const PortailConfig = [
        IndexConfig,
        demandeAchatConfig,
        newsConfig,
-       parcourirSecteursConfig
+       parcourirSecteursConfig,
+       faqsConfig
 ];

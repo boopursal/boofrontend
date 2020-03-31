@@ -1,9 +1,10 @@
 import {combineReducers} from 'redux';
 import secteurs from './secteurs.reducer';
-import dialog from './dialog.reducer';
+import secteur from './secteur.reducer';
+
 const reducer = combineReducers({
     secteurs,
-    dialog
+    secteur,
 });
 
 export default reducer;

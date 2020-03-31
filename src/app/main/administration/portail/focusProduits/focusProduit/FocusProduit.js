@@ -6,7 +6,7 @@ import withReducer from 'app/store/withReducer';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import { FusePageCarded, FuseAnimate, FuseUtils, SelectReactFormsy } from '@fuse';
-import { Typography, Icon, Grid, Divider, Card, CardActionArea, CardMedia, CardContent, Button, CardActions, Chip } from '@material-ui/core';
+import { Typography, Icon, Grid, Divider, Card, CardMedia, CardContent, Button, CardActions, Chip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import green from '@material-ui/core/colors/green';
 import ContentLoader from 'react-content-loader'
@@ -37,7 +37,6 @@ function FocusProduit(props) {
 
     const dispatch = useDispatch();
     const produit = useSelector(({ focusProduitsApp }) => focusProduitsApp.focusProduit);
-    const [isFormValid, setIsFormValid] = useState(false);
     const [fournisseur, setFournisseur] = useState(null);
     const [categorie, setCategorie] = useState(null);
     const formRef = useRef(null);
@@ -70,21 +69,8 @@ function FocusProduit(props) {
                 dispatch(Actions.GetProductsByCategorieByFournisseur(produit.data.produit.fournisseur.id, produit.data.produit.categorie.id));
             }
         }
-    }, [form, produit.data, setForm]);
+    }, [dispatch,form, produit.data, setForm]);
 
-
-    function disableButton() {
-        setIsFormValid(false);
-    }
-
-    function enableButton() {
-        setIsFormValid(true);
-    }
-
-    function handleSubmit(model) {
-        //event.preventDefault();
-        dispatch(Actions.putFocusProduit(form, form.id));
-    }
 
     return (
         <FusePageCarded

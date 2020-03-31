@@ -4,14 +4,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import { useDispatch, useSelector } from 'react-redux';
-import { FuseAnimateGroup, FuseAnimate } from '@fuse';
-import { FuseUtils } from '@fuse';
+import { FuseAnimateGroup } from '@fuse';
 import _ from '@lodash';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-import { Chip, Icon, IconButton, Select, Button } from '@material-ui/core';
+import { Chip, Icon, IconButton, Select } from '@material-ui/core';
 import ContentLoader from "react-content-loader"
 import * as Actions from '../store/actions';
 
