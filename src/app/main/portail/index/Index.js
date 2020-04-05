@@ -36,7 +36,7 @@ import Link2 from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
     header: {
-        backgroundColor: 'linear-gradient(to right, ' + theme.palette.secondary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
+        backgroundColor: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
         color: theme.palette.getContrastText(theme.palette.primary.main),
         position: 'relative',
         marginBottom: theme.spacing(4),
@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
         backgroundPosition: 'center',
     },
     middle: {
-        background: 'linear-gradient(to right, ' + theme.palette.secondary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
+        background: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
         position: 'relative',
         marginBottom: theme.spacing(4),
     },

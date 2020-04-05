@@ -14,6 +14,8 @@ import PropTypes from 'prop-types';
 import Produit from '../../index/Produit';
 import * as Actions from '../store/actions';
 import { Helmet } from "react-helmet";
+import { InlineShareButtons } from 'sharethis-reactjs';
+import _ from '@lodash';
 
 function arrowGenerator(color) {
     return {
@@ -310,12 +312,15 @@ function DetailProduit(props) {
         <>
             {
                 produit.data &&
-                    <Helmet>
-                        <title>{produit.data.titre}</title>
-                        <meta name="description" content={produit.data.description} />
-                        <meta property="og:title" content={produit.data.titre} />
-                        <meta property="og:description" content={produit.data.description} />
-                    </Helmet>
+
+                <Helmet>
+                    <title>{_.truncate(produit.data.titre, { 'length': 70, 'separator': ' ' })}</title>
+                    <meta name="description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="og:title" content={_.truncate(produit.data.titre, { 'length': 70, 'separator': ' ' })} />
+                    <meta property="og:description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="twitter:title" content={_.truncate(produit.data.titre, { 'length': 70, 'separator': ' ' })} />
+                    <meta property="twitter:description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
+                </Helmet>
             }
 
             <Grid container spacing={2} className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
@@ -349,228 +354,267 @@ function DetailProduit(props) {
                         :
                         (
                             produit.data &&
-                                (
-                                    <>
-                                        <Grid item xs={12} sm={8} >
-                                            <Card className={classes.root}>
+                            (
+                                <>
+                                    <Grid item xs={12} sm={8} >
+                                        <Card className={classes.root}>
 
-                                                <CardContent>
-                                                    <div className="flex justify-between items-center">
-                                                        <div>
-                                                            <Typography className={classes.title} component="h1" color="primary">
-                                                                {produit.data.titre}
-                                                            </Typography>
-                                                            <Typography color="textSecondary" >
-                                                                {produit.data.reference && 'Réf.' + produit.data.reference }
-                                                            </Typography>
-                                                        </div>
-
-                                                        <Typography className={classes.price} color="secondary" >
-                                                            {
-                                                                produit.data.pu ?
-                                                                    parseFloat(produit.data.pu).toLocaleString(
-                                                                        'fr', // leave undefined to use the browser's locale,
-                                                                        // or use a string like 'en-US' to override it.
-                                                                        { minimumFractionDigits: 2 }
-                                                                    ) + 
-                                                                        (produit.data.currency && ' ' + produit.data.currency.name ) +
-                                                                        ' HT'
-                                                                    :
-                                                                    <span className="uppercase">à</span> + ' consulter'
-                                                            }
+                                            <CardContent>
+                                                <div className="flex justify-between items-center">
+                                                    <div>
+                                                        <Typography className={classes.title} component="h1" color="primary">
+                                                            {produit.data.titre}
                                                         </Typography>
-
+                                                        <Typography color="textSecondary" >
+                                                            {produit.data.reference && 'Réf.' + produit.data.reference}
+                                                        </Typography>
                                                     </div>
-                                                    <div className="p-28">
 
-                                                        <Slider {...settings2}>
-                                                            {
-                                                                produit.data.images && produit.data.images.length > 0 ?
-                                                                    produit.data.images.map((item, index) => (
-                                                                        <div key={index} className="flex items-center ">
-                                                                            <img src={FuseUtils.getUrl() + item.url} className="m-auto" />
-                                                                        </div>
-                                                                    ))
-                                                                    :
-                                                                    <div className="justify-center">
-                                                                        <img src="assets/images/ecommerce/product-placeholder.jpg" />
-                                                                    </div>
-
-                                                            }
-
-                                                        </Slider>
-                                                    </div>
-                                                    <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16">
-                                                        Description
-                                                </div>
-
-                                                    <Typography component="p" className="whitespace-pre-line">
+                                                    <Typography className={classes.price} color="secondary" >
                                                         {
-                                                            produit.data.description
+                                                            produit.data.pu ?
+                                                                parseFloat(produit.data.pu).toLocaleString(
+                                                                    'fr', // leave undefined to use the browser's locale,
+                                                                    // or use a string like 'en-US' to override it.
+                                                                    { minimumFractionDigits: 2 }
+                                                                ) +
+                                                                (produit.data.currency && ' ' + produit.data.currency.name) +
+                                                                ' HT'
+                                                                :
+                                                                <span className="uppercase">à</span> + ' consulter'
+                                                        }
+                                                    </Typography>
+
+                                                </div>
+                                                <div className="p-28">
+
+                                                    <Slider {...settings2}>
+                                                        {
+                                                            produit.data.images && produit.data.images.length > 0 ?
+                                                                produit.data.images.map((item, index) => (
+                                                                    <div key={index} className="flex items-center ">
+                                                                        <img src={FuseUtils.getUrl() + item.url} className="m-auto" />
+                                                                    </div>
+                                                                ))
+                                                                :
+                                                                <div className="justify-center">
+                                                                    <img src="assets/images/ecommerce/product-placeholder.jpg" />
+                                                                </div>
+
                                                         }
 
-                                                    </Typography>
-                                                    {
-                                                        produit.data.videos ?
-                                                            <>
-                                                                <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16">
-                                                                    Vidéo
-                                                            </div>
-                                                                <YouTube
-                                                                    videoId={produit.data.videos}
-                                                                    opts={opts}
-                                                                />
-                                                            </> : ''
-                                                    }
-                                                    {
-                                                        produit.data.ficheTechnique ?
-                                                            <>
-                                                                <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16 ">
-                                                                    Fiche technique
-                                                            </div>
-                                                                <Chip
-                                                                    icon={<Icon className="text-16 mr-0">save_alt</Icon>}
-                                                                    onClick={() => {
-                                                                        hadnleDownload(produit.data.ficheTechnique)
-                                                                    }}
-                                                                    label='Télécharger'
-                                                                    classes={{
-                                                                        root: clsx("h-24", props.className),
-                                                                        label: "pl-4 pr-6 py-4 text-11",
-                                                                        deleteIcon: "w-16 ml-0",
-                                                                        ...props.classes
-                                                                    }}
-                                                                    variant="outlined"
-                                                                    className="mr-4 cursor-pointer"
-                                                                />
-
-                                                            </> : ''
-                                                    }
-
-                                                    <br />
-                                                    <br />
-                                                    <br />
-                                                    <Divider className="mb-6" />
-                                                    <Chip
-                                                        icon={<Icon className="text-16 mr-0">label</Icon>}
-                                                        component={Link}
-                                                        to={'/vente-produits/' + (produit.data.secteur && produit.data.secteur.slug) + '/' + (produit.data.sousSecteurs && produit.data.sousSecteurs.slug)}
-                                                        label={produit.data.sousSecteurs ? produit.data.sousSecteurs.name : ''}
-                                                        classes={{
-                                                            root: clsx("h-24", props.className),
-                                                            label: "pl-4 pr-6 py-4 text-11",
-                                                            deleteIcon: "w-16 ml-0",
-                                                            ...props.classes
-                                                        }}
-                                                        variant="outlined"
-                                                        className="mr-4 cursor-pointer"
-                                                    />
-
-                                                    <Chip
-                                                        icon={<Icon className="text-16 mr-0">label</Icon>}
-                                                        component={Link}
-                                                        to={'/vente-produits/' + (produit.data.secteur && produit.data.secteur.slug) + '/' + (produit.data.sousSecteurs && produit.data.sousSecteurs.slug) + '/' + (produit.data.categorie && produit.data.categorie.slug)}
-                                                        label={produit.data.categorie ? produit.data.categorie.name : ''}
-                                                        classes={{
-                                                            root: clsx("h-24", props.className),
-                                                            label: "pl-4 pr-6 py-4 text-11",
-                                                            deleteIcon: "w-16 ml-0",
-                                                            ...props.classes
-                                                        }}
-                                                        variant="outlined"
-                                                        className="mr-4 cursor-pointer"
-                                                    />
-
-                                                    <Divider className="mt-6" />
-
-                                                </CardContent>
-
-                                            </Card>
-                                        </Grid>
-                                        <Grid item xs={12} sm={4} className="sticky top-0">
-
-
-                                            <Card className={clsx("", classes.root)} >
-                                                <div className="p-20 bg-gray-400 uppercase relative text-center font-bold text-16 ">
-                                                    Contactez le vendeur
-                                                <Icon className={classes.businessIcon}>business</Icon>
-                                                    <Icon className={classes.businessDownIcon}>arrow_drop_down</Icon>
+                                                    </Slider>
                                                 </div>
-                                                <CardContent>
-                                                    <BootstrapTooltip placement="top" title="Voir la page entreprise">
-                                                        <Grid container spacing={2} 
+                                                <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16">
+                                                    Description
+                                                </div>
+
+                                                <Typography component="p" className="whitespace-pre-line">
+                                                    {
+                                                        produit.data.description
+                                                    }
+
+                                                </Typography>
+                                                {
+                                                    produit.data.videos ?
+                                                        <>
+                                                            <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16">
+                                                                Vidéo
+                                                            </div>
+                                                            <YouTube
+                                                                videoId={produit.data.videos}
+                                                                opts={opts}
+                                                            />
+                                                        </> : ''
+                                                }
+                                                {
+                                                    produit.data.ficheTechnique ?
+                                                        <>
+                                                            <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16 ">
+                                                                Fiche technique
+                                                            </div>
+                                                            <Chip
+                                                                icon={<Icon className="text-16 mr-0">save_alt</Icon>}
+                                                                onClick={() => {
+                                                                    hadnleDownload(produit.data.ficheTechnique)
+                                                                }}
+                                                                label='Télécharger'
+                                                                classes={{
+                                                                    root: clsx("h-24", props.className),
+                                                                    label: "pl-4 pr-6 py-4 text-11",
+                                                                    deleteIcon: "w-16 ml-0",
+                                                                    ...props.classes
+                                                                }}
+                                                                variant="outlined"
+                                                                className="mr-4 cursor-pointer"
+                                                            />
+
+                                                        </> : ''
+                                                }
+
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <Divider className="mb-6" />
+                                                <Chip
+                                                    icon={<Icon className="text-16 mr-0">label</Icon>}
+                                                    component={Link}
+                                                    to={'/vente-produits/' + (produit.data.secteur && produit.data.secteur.slug) + '/' + (produit.data.sousSecteurs && produit.data.sousSecteurs.slug)}
+                                                    label={produit.data.sousSecteurs ? produit.data.sousSecteurs.name : ''}
+                                                    classes={{
+                                                        root: clsx("h-24", props.className),
+                                                        label: "pl-4 pr-6 py-4 text-11",
+                                                        deleteIcon: "w-16 ml-0",
+                                                        ...props.classes
+                                                    }}
+                                                    variant="outlined"
+                                                    className="mr-4 cursor-pointer"
+                                                />
+
+                                                <Chip
+                                                    icon={<Icon className="text-16 mr-0">label</Icon>}
+                                                    component={Link}
+                                                    to={'/vente-produits/' + (produit.data.secteur && produit.data.secteur.slug) + '/' + (produit.data.sousSecteurs && produit.data.sousSecteurs.slug) + '/' + (produit.data.categorie && produit.data.categorie.slug)}
+                                                    label={produit.data.categorie ? produit.data.categorie.name : ''}
+                                                    classes={{
+                                                        root: clsx("h-24", props.className),
+                                                        label: "pl-4 pr-6 py-4 text-11",
+                                                        deleteIcon: "w-16 ml-0",
+                                                        ...props.classes
+                                                    }}
+                                                    variant="outlined"
+                                                    className="mr-4 cursor-pointer"
+                                                />
+
+                                                <Divider className="mt-6" />
+
+
+                                            </CardContent>
+
+                                        </Card>
+                                        <div className="flex justify-end items-center mt-16">
+                                            <div className="mr-8 font-bold">Partager sur :</div>
+                                            <div >
+                                                <InlineShareButtons
+                                                    config={{
+                                                        alignment: 'center',  // alignment of buttons (left, center, right)
+                                                        color: 'social',      // set the color of buttons (social, white)
+                                                        enabled: true,        // show/hide buttons (true, false)
+                                                        font_size: 16,        // font size for the buttons
+                                                        labels: 'null',        // button labels (cta, counts, null)
+                                                        language: 'fr',       // which language to use (see LANGUAGES)
+                                                        networks: [           // which networks to include (see SHARING NETWORKS)
+                                                            'linkedin',
+                                                            'facebook',
+                                                            'twitter',
+                                                            'email',
+                                                            'messenger',
+                                                            'whatsapp'
+                                                        ],
+                                                        padding: 8,          // padding within buttons (INTEGER)
+                                                        radius: 4,            // the corner radius on each button (INTEGER)
+                                                        show_total: false,
+                                                        size: 30,             // the size of each button (INTEGER)
+
+                                                        // OPTIONAL PARAMETERS
+                                                        // url: 'https://www.sharethis.com', // (defaults to current url)
+                                                        // image: 'https://bit.ly/2CMhCMC',  // (defaults to og:image or twitter:image)
+                                                        //description: 'custom text',       // (defaults to og:description or twitter:description)
+                                                        //title: 'custom title',            // (defaults to og:title or twitter:title)
+                                                        //message: 'custom email text',     // (only for email sharing)
+                                                        //subject: 'custom email subject',  // (only for email sharing)
+                                                        //username: 'custom twitter handle' // (only for twitter sharing)
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} className="sticky top-0">
+
+
+                                        <Card className={clsx("", classes.root)} >
+                                            <div className="p-20 bg-gray-400 uppercase relative text-center font-bold text-16 ">
+                                                Contactez le vendeur
+                                                <Icon className={classes.businessIcon}>business</Icon>
+                                                <Icon className={classes.businessDownIcon}>arrow_drop_down</Icon>
+                                            </div>
+                                            <CardContent>
+                                                <BootstrapTooltip placement="top" title="Voir la page entreprise">
+                                                    <Grid container spacing={2}
                                                         component={Link} to={produit.data.fournisseur && `/entreprise/${produit.data.fournisseur.id}-${produit.data.fournisseur.slug}`}
-                                                         className={clsx(classes.vendeur, "items-center my-1")}>
-                                                            <Grid item xs={4} sm={4}>
-                                                                {
-                                                                    produit.data.fournisseur && produit.data.fournisseur.avatar ?
+                                                        className={clsx(classes.vendeur, "items-center my-1")}>
+                                                        <Grid item xs={4} sm={4}>
+                                                            {
+                                                                produit.data.fournisseur && produit.data.fournisseur.avatar ?
 
-                                                                        <Avatar
-                                                                            className={clsx(classes.avatar, "avatar")}
-                                                                            alt={produit.data.fournisseur.societe}
-                                                                            src={
-                                                                                FuseUtils.getUrl() + produit.data.fournisseur.avatar.url
-                                                                            }
-                                                                        /> :
-                                                                        <Avatar className={clsx(classes.avatar2, "avatar text-40 ")}>
-                                                                            <Icon >business</Icon>
-                                                                        </Avatar>
-                                                                }
+                                                                    <Avatar
+                                                                        className={clsx(classes.avatar, "avatar")}
+                                                                        alt={produit.data.fournisseur.societe}
+                                                                        src={
+                                                                            FuseUtils.getUrl() + produit.data.fournisseur.avatar.url
+                                                                        }
+                                                                    /> :
+                                                                    <Avatar className={clsx(classes.avatar2, "avatar text-40 ")}>
+                                                                        <Icon >business</Icon>
+                                                                    </Avatar>
+                                                            }
 
-                                                            </Grid>
-                                                            <Grid item xs={8} sm={8}>
-                                                                <Typography variant="h6" color="textPrimary" className="uppercase font-bold" >
-                                                                    {produit.data.fournisseur ? produit.data.fournisseur.societe : ''}
-                                                                </Typography>
-                                                                <Typography color="textSecondary" >
-                                                                    {produit.data.fournisseur && produit.data.fournisseur.ville ? produit.data.fournisseur.ville.name + ', ' : ''}
-                                                                    {produit.data.fournisseur && produit.data.fournisseur.pays ? produit.data.fournisseur.pays.name : ''}
-                                                                </Typography>
-                                                            </Grid>
                                                         </Grid>
-                                                    </BootstrapTooltip>
-                                                    {
-                                                        produit.data['@id'] &&
-                                                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                                            <Button size="large" onClick={ev => dispatch(Actions.openNewDemandeDevisDialog(produit.data['@id']))} className="whitespace-no-wrap upercase mb-8 mt-2 w-full" color="primary" variant="contained">
-                                                                Demandez un devis
-                                                            </Button>
-                                                        </FuseAnimate>
-                                                    }
-                                                    {
-                                                        produit.loadingsPhone ?
-                                                            <Typography variant="h6" color="textPrimary" className="uppercase font-bold w-full items-center flex justify-center" >
-                                                                <CircularProgress className={classes.progress} />
+                                                        <Grid item xs={8} sm={8}>
+                                                            <Typography variant="h6" color="textPrimary" className="uppercase font-bold" >
+                                                                {produit.data.fournisseur ? produit.data.fournisseur.societe : ''}
                                                             </Typography>
-                                                            :
-                                                            (
-                                                                produit.showPhone ?
-                                                                    <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                                                        <Typography variant="h6" color="textPrimary" className="uppercase font-bold w-full items-center flex justify-center" >
-                                                                            <Icon>phone</Icon> <span>{produit.phone}</span>
-                                                                        </Typography>
-                                                                    </FuseAnimate>
-                                                                    :
-                                                                    <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                                                        <Button
-                                                                            size="large"
-                                                                            onClick={ev => dispatch(Actions.updateVuPhoneProduit(produit.data.id))}
-                                                                            // onClick={ev => dispatch(Actions.openNewVillesDialog())} 
-                                                                            className="whitespace-no-wrap upercase w-full" variant="outlined">
-                                                                            Affichez le téléphone
+                                                            <Typography color="textSecondary" >
+                                                                {produit.data.fournisseur && produit.data.fournisseur.ville ? produit.data.fournisseur.ville.name + ', ' : ''}
+                                                                {produit.data.fournisseur && produit.data.fournisseur.pays ? produit.data.fournisseur.pays.name : ''}
+                                                            </Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                </BootstrapTooltip>
+                                                {
+                                                    produit.data['@id'] &&
+                                                    <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                        <Button size="large" onClick={ev => dispatch(Actions.openNewDemandeDevisDialog(produit.data['@id']))} className="whitespace-no-wrap upercase mb-8 mt-2 w-full" color="primary" variant="contained">
+                                                            Demandez un devis
+                                                            </Button>
+                                                    </FuseAnimate>
+                                                }
+                                                {
+                                                    produit.loadingsPhone ?
+                                                        <Typography variant="h6" color="textPrimary" className="uppercase font-bold w-full items-center flex justify-center" >
+                                                            <CircularProgress className={classes.progress} />
+                                                        </Typography>
+                                                        :
+                                                        (
+                                                            produit.showPhone ?
+                                                                <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                                    <Typography variant="h6" color="textPrimary" className="uppercase font-bold w-full items-center flex justify-center" >
+                                                                        <Icon>phone</Icon> <span>{produit.phone}</span>
+                                                                    </Typography>
+                                                                </FuseAnimate>
+                                                                :
+                                                                <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                                    <Button
+                                                                        size="large"
+                                                                        onClick={ev => dispatch(Actions.updateVuPhoneProduit(produit.data.id))}
+                                                                        // onClick={ev => dispatch(Actions.openNewVillesDialog())} 
+                                                                        className="whitespace-no-wrap upercase w-full" variant="outlined">
+                                                                        Affichez le téléphone
                                                                         </Button>
-                                                                    </FuseAnimate>
-                                                            )
+                                                                </FuseAnimate>
+                                                        )
 
-                                                    }
+                                                }
 
-                                                </CardContent>
+                                            </CardContent>
 
-                                            </Card>
+                                        </Card>
 
-                                        </Grid>
-                                    </>
-                                )
+                                    </Grid>
+                                </>
+                            )
                         )
                 }
 

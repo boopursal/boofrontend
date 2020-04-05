@@ -12,7 +12,7 @@ import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(theme => ({
     middle: {
-        background: 'linear-gradient(to right, ' + theme.palette.secondary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
+        background: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
         position: 'relative',
         marginBottom: theme.spacing(4),
     },
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: 'rgba(0,0,0,.3)',
     },
     header: {
-        backgroundColor: 'linear-gradient(to right, ' + theme.palette.secondary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
+        backgroundColor: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
         color: theme.palette.getContrastText(theme.palette.primary.main),
         position: 'relative',
         marginBottom: theme.spacing(4),
@@ -57,7 +57,6 @@ function FaqsApp(props) {
             </Helmet>
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                <div className={classes.overlay} />
                 <Grid container spacing={2} className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <HeaderFaq {...props} />

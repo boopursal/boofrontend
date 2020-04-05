@@ -5,6 +5,7 @@ import { demandeAchatConfig } from './demande-achat/demandeAchatConfig';
 import { newsConfig } from './news/newsConfig';
 import { faqsConfig } from './faqs/faqsConfig';
 import { parcourirSecteursConfig } from './parcourir-secteurs/parcourirSecteursConfig';
+import { ConditionsConfig } from './conditions/ConditionsConfig';
 
 export const PortailConfig = [
        ProduitConfig,    
@@ -13,5 +14,6 @@ export const PortailConfig = [
        demandeAchatConfig,
        newsConfig,
        parcourirSecteursConfig,
-       faqsConfig
+       faqsConfig,
+       ConditionsConfig
 ];

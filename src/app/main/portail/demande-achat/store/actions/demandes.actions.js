@@ -23,7 +23,7 @@ export function cleanUp() {
     });
 }
 
-export function getDemandeAchats(params, pays,ville, parametres) {
+export function getDemandeAchats(params, pays, ville, parametres) {
     const { secteur, activite } = params;
     let parametre = '';
     if (secteur) {
@@ -35,7 +35,7 @@ export function getDemandeAchats(params, pays,ville, parametres) {
         else
             parametre += `acheteur.pays.slug=${pays}`
 
-        if(ville){
+        if (ville) {
             parametre += `&acheteur.ville.slug=${ville}`
         }
     }
@@ -70,7 +70,7 @@ export function getDemandeAchats(params, pays,ville, parametres) {
 }
 
 
-export function getSecteursCounts(params, pays,ville) {
+export function getSecteursCounts(params, pays, ville) {
     const { secteur, activite } = params;
     const request = agent.get(`/count_demandes_achats_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&pays=${pays ? pays : ''}&ville=${ville ? ville : ''}`);
 
@@ -95,7 +95,7 @@ export function getSecteursCounts(params, pays,ville) {
 
 }
 
-export function getActivitesCounts(params, pays,ville) {
+export function getActivitesCounts(params, pays, ville) {
     const { secteur, activite } = params;
     const request = agent.get(`/count_demandes_achats_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&pays=${pays ? pays : ''}&ville=${ville ? ville : ''}`);
 
@@ -185,19 +185,14 @@ export function getSecteursAndPaysCounts() {
         });
 
         axios.all([request, request2]).then(axios.spread((...responses) => {
-
-            request.then((response) =>
-                dispatch({
-                    type: GET_SECTEURS_COUNT,
-                    payload: responses[0].data
-                })
-            );
-            request2.then((response2) =>
-                dispatch({
-                    type: GET_PAYS_COUNT,
-                    payload: responses[1].data
-                })
-            );
+            dispatch({
+                type: GET_SECTEURS_COUNT,
+                payload: responses[0].data
+            });
+            dispatch({
+                type: GET_PAYS_COUNT,
+                payload: responses[1].data
+            });
 
             // use/access the results 
         })).catch(errors => {

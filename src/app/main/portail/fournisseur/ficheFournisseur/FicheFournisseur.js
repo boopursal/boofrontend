@@ -10,6 +10,7 @@ import Produits from './tabs/Produits';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from '@lodash';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { InlineShareButtons } from 'sharethis-reactjs';
 
 
 const useStyles = makeStyles(theme => ({
@@ -133,12 +134,13 @@ function FicheFournisseur(props) {
             {
                 data &&
                 <Helmet>
-                    <title>{data.societe + ' | Les Achats Industriels'}</title>
-                    <meta name="description" content={data.description} />
-                    <meta property="og:title" content={data.societe + ' | Les Achats Industriels'} />
-                    <meta property="og:description" content={data.description} />
+                    <title>{_.truncate(data.societe + ' | Les Achats Industriels', { 'length': 70, 'separator': ' ' })}</title>
+                    <meta name="description" content={_.truncate(data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="og:title" content={_.truncate(data.societe + ' | Les Achats Industriels', { 'length': 70, 'separator': ' ' })} />
+                    <meta property="og:description" content={_.truncate(data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="twitter:title" content={_.truncate(data.societe + ' | Les Achats Industriels', { 'length': 70, 'separator': ' ' })} />
+                    <meta property="twitter:description" content={_.truncate(data.description, { 'length': 160, 'separator': ' ' })} />
                 </Helmet>
-
             }
             {
                 loading ? '' :
@@ -228,6 +230,7 @@ function FicheFournisseur(props) {
 
                                             </Grid>
                                         </Grid>
+                                   
                                         {
                                             data.website &&
                                             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -274,6 +277,44 @@ function FicheFournisseur(props) {
                                                 )
 
                                         }
+                                             <div className="flex justify-end items-center mt-16">
+                                            <div className="mr-8 font-bold">Partager sur :</div>
+                                            <div >
+                                                <InlineShareButtons
+                                                    config={{
+                                                        alignment: 'center',  // alignment of buttons (left, center, right)
+                                                        color: 'social',      // set the color of buttons (social, white)
+                                                        enabled: true,        // show/hide buttons (true, false)
+                                                        font_size: 16,        // font size for the buttons
+                                                        labels: 'null',        // button labels (cta, counts, null)
+                                                        language: 'fr',       // which language to use (see LANGUAGES)
+                                                        networks: [           // which networks to include (see SHARING NETWORKS)
+                                                            'linkedin',
+                                                            'facebook',
+                                                            'twitter',
+                                                            'email',
+                                                            'messenger',
+                                                            'whatsapp'
+                                                        ],
+                                                        padding: 8,          // padding within buttons (INTEGER)
+                                                        radius: 4,            // the corner radius on each button (INTEGER)
+                                                        show_total: false,
+                                                        size: 30,             // the size of each button (INTEGER)
+
+                                                        // OPTIONAL PARAMETERS
+                                                       // url: 'https://www.sharethis.com', // (defaults to current url)
+                                                        // image: 'https://bit.ly/2CMhCMC',  // (defaults to og:image or twitter:image)
+                                                        //description: 'custom text',       // (defaults to og:description or twitter:description)
+                                                        //title: 'custom title',            // (defaults to og:title or twitter:title)
+                                                        //message: 'custom email text',     // (only for email sharing)
+                                                        //subject: 'custom email subject',  // (only for email sharing)
+                                                        //username: 'custom twitter handle' // (only for twitter sharing)
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+
 
                                     </CardContent>
 

@@ -1,5 +1,5 @@
 {
-    "name": "fuse-react-app",
+    "name": "les-achats-industriels",
     "version": "3.0.0",
     "private": true,
     "dependencies": {
@@ -67,6 +67,7 @@
         "react-youtube": "^7.9.0",
         "redux": "4.0.1",
         "redux-thunk": "2.3.0",
+        "sharethis-reactjs": "^1.5.0",
         "slick-carousel": "^1.8.1",
         "typeface-muli": "0.0.71",
         "velocity-react": "1.4.3"

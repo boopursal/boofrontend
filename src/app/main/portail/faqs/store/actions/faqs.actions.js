@@ -1,5 +1,4 @@
 import agent from "agent";
-import _ from '@lodash';
 
 export const CLEAN_UP = '[FAQS PORTAIL APP] CLEAN_UP';
 export const REQUEST_FAQS = '[FAQS PORTAIL APP] REQUEST_FAQS';

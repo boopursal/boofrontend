@@ -174,6 +174,7 @@ function Search(props) {
     const suggestionsNode = useRef(null);
     const popperNode = useRef(null);
     const dispatch = useDispatch();
+
     function showSearch() {
         dispatch(Actions.showSearch());
         document.addEventListener("keydown", escFunction, false);
@@ -187,6 +188,9 @@ function Search(props) {
     function escFunction(event) {
         if (event.keyCode === 27) {
             hideSearch();
+        }
+        if (event.keyCode === 13) {
+            event.target.value &&  history.push(`/vente-produits?q=${event.target.value}`);
         }
     }
 

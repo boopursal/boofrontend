@@ -1,5 +1,4 @@
 import * as Actions from '../actions';
-import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
 

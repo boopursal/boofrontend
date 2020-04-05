@@ -1,17 +1,14 @@
 import React from 'react';
-import { Grid, Card, CircularProgress, CardContent, Typography, Icon, Avatar, Button, Chip, Divider } from '@material-ui/core';
+import { Grid, Card, CardContent, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import clsx from 'clsx';
-import { FuseAnimate, FuseUtils } from '@fuse';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ContentLoader from "react-content-loader"
-import * as Actions from '../store/actions';
 import { Helmet } from "react-helmet";
 import moment from 'moment';
-import ReactHtmlParser from 'react-html-parser';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { InlineShareButtons } from 'sharethis-reactjs';
+import _ from '@lodash';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -48,7 +45,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NewDetail(props) {
-    const dispatch = useDispatch();
     const classes = useStyles();
     const actualite = useSelector(({ newsApp }) => newsApp.actualite);
 
@@ -76,11 +72,14 @@ function NewDetail(props) {
             {
                 actualite.data &&
                 <Helmet>
-                    <title>{actualite.data.titre}</title>
-                    <meta name="description" content='' />
-                    <meta property="og:title" content={actualite.data.titre} />
-                    <meta property="og:description" content='' />
+                    <title>{_.truncate(actualite.data.titre, { 'length': 70, 'separator': ' ' })}</title>
+                    <meta name="description" content={_.truncate(actualite.data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="og:title" content={_.truncate(actualite.data.titre, { 'length': 70, 'separator': ' ' })} />
+                    <meta property="og:description" content={_.truncate(actualite.data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="twitter:title" content={_.truncate(actualite.data.titre, { 'length': 70, 'separator': ' ' })} />
+                    <meta property="twitter:description" content={_.truncate(actualite.data.description, { 'length': 160, 'separator': ' ' })} />
                 </Helmet>
+
             }
 
             <Grid container spacing={2} className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
@@ -129,26 +128,68 @@ function NewDetail(props) {
                                                             Publiée le {moment(actualite.data.created).format("DD-MM-YYYY à HH:mm")}
                                                         </Typography>
                                                     </div>
+                                                    <div className="flex justify-end items-center">
+                                                        <div className="mr-8 font-bold">Partager sur :</div>
+                                                        <div >
+                                                            <InlineShareButtons
+                                                                config={{
+                                                                    alignment: 'center',  // alignment of buttons (left, center, right)
+                                                                    color: 'social',      // set the color of buttons (social, white)
+                                                                    enabled: true,        // show/hide buttons (true, false)
+                                                                    font_size: 16,        // font size for the buttons
+                                                                    labels: 'null',        // button labels (cta, counts, null)
+                                                                    language: 'fr',       // which language to use (see LANGUAGES)
+                                                                    networks: [           // which networks to include (see SHARING NETWORKS)
+                                                                        'linkedin',
+                                                                        'facebook',
+                                                                        'twitter',
+                                                                        'email',
+                                                                        'messenger',
+                                                                        'whatsapp'
+                                                                    ],
+                                                                    padding: 8,          // padding within buttons (INTEGER)
+                                                                    radius: 4,            // the corner radius on each button (INTEGER)
+                                                                    show_total: false,
+                                                                    size: 30,             // the size of each button (INTEGER)
+
+                                                                    // OPTIONAL PARAMETERS
+                                                                    url: 'https://www.sharethis.com', // (defaults to current url)
+                                                                    // image: 'https://bit.ly/2CMhCMC',  // (defaults to og:image or twitter:image)
+                                                                    //description: 'custom text',       // (defaults to og:description or twitter:description)
+                                                                    //title: 'custom title',            // (defaults to og:title or twitter:title)
+                                                                    //message: 'custom email text',     // (only for email sharing)
+                                                                    //subject: 'custom email subject',  // (only for email sharing)
+                                                                    //username: 'custom twitter handle' // (only for twitter sharing)
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    </div>
+
+
 
                                                 </div>
 
 
-                                               
+
                                                 <CKEditor
                                                     editor={ClassicEditor}
                                                     data={actualite.data.description}
                                                     config={{
                                                         language: 'fr',
-                                                        toolbar: [  ],
-                                                      
+                                                        toolbar: [],
+
                                                     }}
                                                     onInit={editor => {
                                                         // You can store the "editor" and use when it is needed.
                                                         console.log('Editor is ready to use!', editor);
                                                     }}
-                                                    disabled ={true}
+                                                    disabled={true}
                                                     className="border-0"
                                                 />
+
+                                                <div className="mt-16">
+                                                    Source : <a href={actualite.data.source}>{actualite.data.source}</a>
+                                                </div>
 
                                             </CardContent>
 

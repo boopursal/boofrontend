@@ -1,11 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { Card, Icon, CardContent, List, ListItem, ListItemText, Typography, Chip, IconButton, ListItemSecondaryAction } from '@material-ui/core';
+import { Card, Icon, CardContent, List, ListItem, ListItemText, Typography, Chip } from '@material-ui/core';
 import { FuseAnimateGroup } from '@fuse';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import _ from '@lodash';
 
 const useStyles = makeStyles(theme => ({
     layoutRoot: {},
@@ -63,7 +63,7 @@ function jsUcfirst(string) {
 }
 
 function SideBareSearch(props) {
-    
+
     const classes = useStyles();
     const loadingSecteurs = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.loadingSecteurs);
     const secteurs = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.secteurs);
@@ -71,22 +71,43 @@ function SideBareSearch(props) {
     const activites = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.activites);
     const loadingPays = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.loadingPays);
     const payss = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.pays);
+    const fournisseurs = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.data);
+    const loadingVilles = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.loadingVilles);
+    const villes = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.villes);
 
     const query = useQuery(props.location);
     const params = props.match.params;
     const { secteur, activite } = params;
     const pays = query.get("pays");
+    const ville = query.get("ville");
+    const q = query.get("q");
 
     function handleDeletePathSecteur() {
-        props.history.replace({ pathname: '/entreprises', search: pays ? 'pays=' + pays : '' })
-        document.querySelector('.ps').scrollTop = 0;
-    }
-    function handleDeletePathActivite() {
-        props.history.replace({ pathname: '/entreprises/' + secteur, search: pays ? 'pays=' + pays : '' })
+        let searchText;
+        if (pays)
+            searchText = (q ? '&q=' + q : '')
+        else searchText = (q ? 'q=' + q : '')
+        props.history.replace({ pathname: '/entreprises', search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
         document.querySelector('.ps').scrollTop = 0;
     }
 
+    function handleDeleteQuerySearchText() {
+        let secteurParm = '';
+        let activiteParm = '';
+        if (secteur) {
+            secteurParm = '/' + secteur;
+        }
+        if (activite) {
+            activiteParm = '/' + activite;
+        }
+        const path = secteurParm + activiteParm;
+        props.history.replace({ pathname: '/entreprises' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') })
+        document.querySelector('.ps').scrollTop = 0;
+    }
+
+
     function handleDeleteQueryPays() {
+
         let secteurParm = '';
         let activiteParm = '';
         if (secteur) {
@@ -97,7 +118,7 @@ function SideBareSearch(props) {
         }
 
         const path = secteurParm + activiteParm;
-        props.history.replace({ pathname: '/entreprises' + path, search: '' })
+        props.history.replace({ pathname: '/entreprises' + path, search: q ? 'q=' + q : '' })
         document.querySelector('.ps').scrollTop = 0;
     }
 
@@ -115,19 +136,55 @@ function SideBareSearch(props) {
                     </Typography>
                     <List dense={true} className={classes.listRoot}>
                         {
-                            pays ?
-                                <ListItem>
-                                    <ListItemText
-                                        primary={
-                                            <Chip
-                                                label={jsUcfirst(pays.replace('-', ' '))}
-                                                onDelete={handleDeleteQueryPays}
-                                                className={classes.chip}
-                                                color="primary"
-                                                variant="outlined"
-                                            />}
-                                    />
-                                </ListItem> :
+                            fournisseurs.length > 0 && pays ?
+                                <>
+                                    <ListItem>
+                                        <ListItemText
+                                            primary={
+                                                <Chip
+                                                    label={_.capitalize(fournisseurs[0].pays && fournisseurs[0].pays.name)}
+                                                    onDelete={handleDeleteQueryPays}
+                                                    className={classes.chip}
+                                                    color="primary"
+                                                    variant="outlined"
+                                                />}
+                                        />
+                                    </ListItem>
+                                    <List component="div" className={classes.listRoot2}>
+                                        {
+                                            loadingVilles ?
+                                                <LinearProgress color="secondary" /> :
+                                                <FuseAnimateGroup
+                                                    enter={{
+                                                        animation: "transition.slideUpBigIn"
+                                                    }}
+                                                >
+                                                    {
+                                                        villes && villes.map((item, index) => (
+                                                            <ListItem
+                                                                key={index}
+                                                                className={classes.nested}
+                                                                selected={item.slug === ville}
+                                                                button={item.slug !== ville}
+                                                                onClick={event => {
+                                                                    const location = props.location;
+                                                                    query.set('ville', item.slug)
+                                                                    props.history.replace({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug + (q ? '&q=' + q : '') })
+                                                                    document.querySelector('.ps').scrollTop = 0;
+                                                                }}>
+                                                                <ListItemText
+                                                                    primary={item.name + ' (' + item.count + ')'}
+                                                                />
+                                                            </ListItem>
+
+                                                        ))
+                                                    }
+                                                </FuseAnimateGroup>
+                                        }
+
+                                    </List>
+                                </>
+                                :
                                 (
                                     loadingPays ? <LinearProgress color="secondary" /> :
                                         <FuseAnimateGroup
@@ -143,7 +200,7 @@ function SideBareSearch(props) {
                                                         onClick={event => {
                                                             const location = props.location;
                                                             query.set('pays', item.slug)
-                                                            props.history.replace({ pathname: location.pathname, search: 'pays=' + query.get('pays') })
+                                                            props.history.replace({ pathname: location.pathname, search: 'pays=' + query.get('pays') + (q ? '&q=' + q : '') })
                                                             document.querySelector('.ps').scrollTop = 0;
                                                         }}>
                                                         <ListItemText
@@ -171,7 +228,7 @@ function SideBareSearch(props) {
                     </Typography>
                     <List dense={true} component="nav" className={classes.listRoot}>
                         {
-                            secteur ?
+                            fournisseurs.length > 0 && secteur ?
                                 <>
                                     <ListItem>
                                         <ListItemText
@@ -203,8 +260,12 @@ function SideBareSearch(props) {
                                                                 selected={item.slug === activite}
                                                                 button={item.slug !== activite}
                                                                 onClick={event => {
-                                                                    item.slug === activite ? console.log('') :
-                                                                        (props.history.replace({ pathname: '/entreprises/' + secteur + '/' + item.slug, search: pays ? 'pays=' + pays : '' }))
+                                                                    let searchText;
+                                                                    if (pays)
+                                                                        searchText = (q ? '&q=' + q : '')
+                                                                    else searchText = (q ? 'q=' + q : '')
+                                                                    item.slug !== activite &&
+                                                                        (props.history.replace({ pathname: '/entreprises/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText }))
                                                                     document.querySelector('.ps').scrollTop = 0
 
                                                                 }}>
@@ -234,7 +295,11 @@ function SideBareSearch(props) {
                                                         key={index}
                                                         button
                                                         onClick={event => {
-                                                            props.history.replace({ pathname: '/entreprises/' + secteur.slug, search: pays ? 'pays=' + pays : '' })
+                                                            let searchText;
+                                                                        if (pays)
+                                                                            searchText = (q ? '&q=' + q : '')
+                                                                        else searchText = (q ? 'q=' + q : '')
+                                                            props.history.replace({ pathname: '/entreprises/' + secteur.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
                                                         }}>
                                                         <ListItemText
                                                             primary={secteur.name + ' (' + secteur.count + ')'}
@@ -252,6 +317,25 @@ function SideBareSearch(props) {
 
             </Card>
 
+            {
+                q &&
+                <Card className='mt-16'>
+
+                    <CardContent>
+                        <Typography color="textPrimary" className="pl-16 text-18 uppercase w-full " >
+                            par <span className='font-extrabold'>mot clé</span>
+                        </Typography>
+                        <Chip
+                            label={_.capitalize(q)}
+                            onDelete={handleDeleteQuerySearchText}
+                            className={clsx(classes.chip, 'mt-16 ml-8')}
+                            color="primary"
+                            variant="outlined"
+                        /> </CardContent>
+
+                </Card>
+
+            }
         </>
 
     )

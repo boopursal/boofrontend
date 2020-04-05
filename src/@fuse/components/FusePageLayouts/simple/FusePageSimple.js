@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     root                     : {
         display        : 'flex',
         flexDirection  : 'column',
-        minHeight      : '100%',
+       // minHeight      : '100%',
         position       : 'relative',
         flex           : '1 0 auto',
         height         : 'auto',
@@ -160,7 +160,7 @@ const FusePageSimple = React.forwardRef(function (props, ref) {
     });
 
     return (
-        <div className={clsx(classes.root, props.innerScroll && classes.innerScroll)} ref={rootRef}>
+        <div className={clsx(classes.root, props.innerScroll && classes.innerScroll,'min-h-md')} ref={rootRef}>
 
             <div className={clsx(classes.header, classes.topBg)}/>
 

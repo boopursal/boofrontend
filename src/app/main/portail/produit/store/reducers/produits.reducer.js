@@ -8,6 +8,7 @@ const initialState = {
     activites: [],
     categories: [],
     pays: [],
+    villes: [],
     loading: false,
     totalItems: null,
     pageCount: null,
@@ -22,6 +23,7 @@ const initialState = {
     loadingPays: false,
     loadingActivites: false,
     loadingCategories: false,
+    loadingVilles: false,
 
 
 };
@@ -70,6 +72,13 @@ const produitsReducer = function (state = initialState, action) {
                     loadingCategories: true,
                 };
             }
+        case Actions.REQUEST_VILLES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingVilles: true,
+                };
+            }
         case Actions.GET_PRODUITS:
             {
                 return {
@@ -96,6 +105,15 @@ const produitsReducer = function (state = initialState, action) {
                     ...state,
                     loadingPays: false,
                     pays: action.payload
+
+                };
+            }
+        case Actions.GET_VILLES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingVilles: false,
+                    villes: action.payload
 
                 };
             }

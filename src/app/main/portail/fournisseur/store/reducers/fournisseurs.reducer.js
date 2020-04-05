@@ -7,6 +7,7 @@ const initialState = {
     secteurs: [],
     activites: [],
     pays: [],
+    villes: [],
     loading: false,
     totalItems: null,
     pageCount: null,
@@ -21,6 +22,7 @@ const initialState = {
     loadingPays: false,
     loadingActivites: false,
     loadingCategories: false,
+    loadingVilles: false,
 
 
 };
@@ -55,6 +57,13 @@ const fournisseursReducer = function (state = initialState, action) {
                     loadingPays: true,
                 };
             }
+        case Actions.REQUEST_VILLES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingVilles: true,
+                };
+            }
         case Actions.REQUEST_ACTIVITES_COUNT:
             {
                 return {
@@ -62,7 +71,7 @@ const fournisseursReducer = function (state = initialState, action) {
                     loadingActivites: true,
                 };
             }
-       
+
         case Actions.GET_FOURNISSEURS:
             {
                 return {
@@ -89,6 +98,15 @@ const fournisseursReducer = function (state = initialState, action) {
                     ...state,
                     loadingPays: false,
                     pays: action.payload
+
+                };
+            }
+        case Actions.GET_VILLES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingVilles: false,
+                    villes: action.payload
 
                 };
             }

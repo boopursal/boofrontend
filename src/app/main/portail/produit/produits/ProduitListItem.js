@@ -99,7 +99,8 @@ function ProduitListItem(props) {
                             }}
                         >
                             {
-                                produits && produits.map((produit, index) => (
+                                produits.length > 0 ? 
+                                produits.map((produit, index) => (
 
                                     <Paper className={classes.paper} key={index}>
                                         <Grid container spacing={2}>
@@ -201,9 +202,11 @@ function ProduitListItem(props) {
                                         </Grid>
                                     </Paper>
                                 ))
+                                :
+                                ''
                             }
                             {
-                                produits && (
+                                produits.length > 0 && (
                                     <Grid container spacing={2} className="justify-between mt-16">
                                         <Grid item xs={12} xs={6}>
                                             Montrer:&ensp;

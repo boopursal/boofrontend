@@ -1,15 +1,14 @@
 import React from 'react';
-import { Grid, Card, CircularProgress, CardContent, Typography, Icon, Avatar, Button, Chip, Divider } from '@material-ui/core';
+import { Grid, Card, CardContent, Typography, Icon, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { FuseAnimate, FuseUtils } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ContentLoader from "react-content-loader"
 import * as Actions from '../store/actions';
 import { Helmet } from "react-helmet";
 import moment from 'moment';
-
+import _ from '@lodash';
+import { InlineShareButtons } from 'sharethis-reactjs';
 const useStyles = makeStyles(theme => ({
     root: {
         minWidth: 275,
@@ -79,10 +78,12 @@ function DemandeDetail(props) {
             {
                 demande.data &&
                 <Helmet>
-                    <title>{demande.data.titre}</title>
-                    <meta name="description" content={demande.data.description} />
-                    <meta property="og:title" content={demande.data.titre} />
-                    <meta property="og:description" content={demande.data.description} />
+                    <title>{_.truncate(demande.data.titre, { 'length': 70, 'separator': ' ' })}</title>
+                    <meta name="description" content={_.truncate(demande.data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="og:title" content={_.truncate(demande.data.titre, { 'length': 70, 'separator': ' ' })} />
+                    <meta property="og:description" content={_.truncate(demande.data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="twitter:title" content={_.truncate(demande.data.titre, { 'length': 70, 'separator': ' ' })} />
+                    <meta property="twitter:description" content={_.truncate(demande.data.description, { 'length': 160, 'separator': ' ' })} />
                 </Helmet>
             }
 
@@ -134,6 +135,43 @@ function DemandeDetail(props) {
                                                     </div>
 
                                                 </div>
+                                                <div className="flex justify-end items-center">
+                                                    <div className="mr-8 font-bold">Partager sur :</div>
+                                                    <div >
+                                                        <InlineShareButtons
+                                                            config={{
+                                                                alignment: 'center',  // alignment of buttons (left, center, right)
+                                                                color: 'social',      // set the color of buttons (social, white)
+                                                                enabled: true,        // show/hide buttons (true, false)
+                                                                font_size: 16,        // font size for the buttons
+                                                                labels: 'null',        // button labels (cta, counts, null)
+                                                                language: 'fr',       // which language to use (see LANGUAGES)
+                                                                networks: [           // which networks to include (see SHARING NETWORKS)
+                                                                    'linkedin',
+                                                                    'facebook',
+                                                                    'twitter',
+                                                                    'email',
+                                                                    'messenger',
+                                                                    'whatsapp'
+                                                                ],
+                                                                padding: 8,          // padding within buttons (INTEGER)
+                                                                radius: 4,            // the corner radius on each button (INTEGER)
+                                                                show_total: false,
+                                                                size: 30,             // the size of each button (INTEGER)
+
+                                                                // OPTIONAL PARAMETERS
+                                                                url: 'https://www.sharethis.com', // (defaults to current url)
+                                                                // image: 'https://bit.ly/2CMhCMC',  // (defaults to og:image or twitter:image)
+                                                                //description: 'custom text',       // (defaults to og:description or twitter:description)
+                                                                //title: 'custom title',            // (defaults to og:title or twitter:title)
+                                                                //message: 'custom email text',     // (only for email sharing)
+                                                                //subject: 'custom email subject',  // (only for email sharing)
+                                                                //username: 'custom twitter handle' // (only for twitter sharing)
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+
 
                                                 <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16" >
                                                     Description
@@ -141,7 +179,7 @@ function DemandeDetail(props) {
 
                                                 <Typography component="p" className="whitespace-pre-line">
                                                     {
-                                                       demande.data.description
+                                                        demande.data.description
                                                     }
 
                                                 </Typography>
@@ -185,10 +223,9 @@ function DemandeDetail(props) {
                                                                     }}
                                                                     label='Télécharger'
                                                                     classes={{
-                                                                        root: clsx("h-24", props.className),
+                                                                        root: clsx("h-24"),
                                                                         label: "pl-4 pr-6 py-4 text-11",
                                                                         deleteIcon: "w-16 ml-0",
-                                                                        ...props.classes
                                                                     }}
                                                                     variant="outlined"
                                                                     className="mr-4 cursor-pointer"
@@ -264,7 +301,7 @@ function DemandeDetail(props) {
                 }
 
 
-            </Grid>
+            </Grid >
         </>
     );
 }

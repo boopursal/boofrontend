@@ -147,9 +147,7 @@ export function saveProduit(data,secteur,sousSecteur,categorie) {
     if (categorie) {
         data.categorie = categorie.value;
     }
-    else {
-        data.categorie = sousSecteur.value
-    }
+    
     data.images = _.map(data.images, function (value, key) {
         return value['@id'];
     });

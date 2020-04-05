@@ -206,6 +206,14 @@ const navigationConfig = [
                         'url': '/admin/focus-produits',
                     },
                     {
+                        'id': 'condition-admin',
+                        'title': 'Conditions Générales',
+                        'type': 'item',
+                        'icon': 'ballot',
+                        'auth': authRoles.admin,
+                        'url': '/admin/conditions',
+                    },
+                    {
                         'id': 'faqs',
                         'title': 'FAQ',
                         'type': 'collapse',

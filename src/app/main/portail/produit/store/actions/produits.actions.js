@@ -2,19 +2,21 @@ import agent from "agent";
 import axios from "axios";
 import _ from '@lodash';
 
-export const CLEAN_UP = '[PRODUITS APP] CLEAN_UP';
-export const REQUEST_PRODUITS = '[PRODUITS APP] REQUEST_PRODUITS';
-export const REQUEST_SECTEURS_COUNT = '[PRODUITS APP] REQUEST_SECTEURS_COUNT';
-export const REQUEST_PAYS_COUNT = '[PRODUITS APP] REQUEST_PAYS_COUNT';
-export const REQUEST_ACTIVITES_COUNT = '[PRODUITS APP] REQUEST_ACTIVITES_COUNT';
-export const REQUEST_CATEGORIES_COUNT = '[PRODUITS APP] REQUEST_CATEGORIES_COUNT';
+export const CLEAN_UP = '[PRODUITS PORTAIL APP] CLEAN_UP';
+export const REQUEST_PRODUITS = '[PRODUITS PORTAIL APP] REQUEST_PRODUITS';
+export const REQUEST_SECTEURS_COUNT = '[PRODUITS PORTAIL APP] REQUEST_SECTEURS_COUNT';
+export const REQUEST_PAYS_COUNT = '[PRODUITS PORTAIL APP] REQUEST_PAYS_COUNT';
+export const REQUEST_ACTIVITES_COUNT = '[PRODUITS PORTAIL APP] REQUEST_ACTIVITES_COUNT';
+export const REQUEST_CATEGORIES_COUNT = '[PRODUITS PORTAIL APP] REQUEST_CATEGORIES_COUNT';
+export const REQUEST_VILLES_COUNT = '[PRODUITS PORTAIL APP] REQUEST_VILLES_COUNT';
 
-export const GET_ACTIVITES_COUNT = '[PRODUITS APP] GET_ACTIVITES_COUNT';
-export const GET_CATEGORIES_COUNT = '[PRODUITS APP] GET_CATEGORIES_COUNT';
-export const GET_PRODUITS = '[PRODUITS APP] GET_PRODUITS';
-export const GET_SECTEURS_COUNT = '[PRODUITS APP] GET_SECTEURS_COUNT';
-export const GET_PAYS_COUNT = '[PRODUITS APP] GET_PAYS_COUNT';
-export const SET_PARAMETRES_DATA = '[PRODUITS APP] SET PARAMETRES DATA';
+export const GET_VILLES_COUNT = '[PRODUITS PORTAIL APP] GET_VILLES_COUNT';
+export const GET_ACTIVITES_COUNT = '[PRODUITS PORTAIL APP] GET_ACTIVITES_COUNT';
+export const GET_CATEGORIES_COUNT = '[PRODUITS PORTAIL APP] GET_CATEGORIES_COUNT';
+export const GET_PRODUITS = '[PRODUITS PORTAIL APP] GET_PRODUITS';
+export const GET_SECTEURS_COUNT = '[PRODUITS PORTAIL APP] GET_SECTEURS_COUNT';
+export const GET_PAYS_COUNT = '[PRODUITS PORTAIL APP] GET_PAYS_COUNT';
+export const SET_PARAMETRES_DATA = '[PRODUITS PORTAIL APP] SET PARAMETRES DATA';
 
 export function cleanUp() {
 
@@ -23,7 +25,7 @@ export function cleanUp() {
     });
 }
 
-export function getProduits(params, pays, parametres) {
+export function getProduits(params, pays, parametres,ville,q) {
     const { secteur, activite, categorie } = params;
     let parametre = '';
     if (secteur) {
@@ -34,6 +36,13 @@ export function getProduits(params, pays, parametres) {
             parametre += `&pays.slug=${pays}`
         else
             parametre += `pays.slug=${pays}`
+    }
+    if (ville) {
+        parametre += `&ville.slug=${ville}`
+    }
+    if (q) {
+        var textSearche = q;
+        parametre += `&titreLower=${_.lowerCase(textSearche)}`
     }
     if (activite) {
         parametre += `&sousSecteurs.slug=${activite}`
@@ -68,9 +77,9 @@ export function getProduits(params, pays, parametres) {
 }
 
 
-export function getSecteursCounts(params, pays) {
+export function getSecteursCounts(params, pays,ville,q) {
     const { secteur, activite, categorie } = params;
-    const request = agent.get(`/count_produit_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}`);
+    const request = agent.get(`/count_produit_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}&ville=${ville ? ville : ''}&q=${q ? q : ''}`);
 
     return (dispatch) => {
         dispatch({
@@ -93,9 +102,9 @@ export function getSecteursCounts(params, pays) {
 
 }
 
-export function getActivitesCounts(params, pays) {
+export function getActivitesCounts(params, pays,ville,q) {
     const { secteur, activite, categorie } = params;
-    const request = agent.get(`/count_produit_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}`);
+    const request = agent.get(`/count_produit_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}&ville=${ville ? ville : ''}&q=${q ? q : ''}`);
 
     return (dispatch) => {
         dispatch({
@@ -118,9 +127,9 @@ export function getActivitesCounts(params, pays) {
 
 }
 
-export function getCategoriesCounts(params, pays) {
+export function getCategoriesCounts(params, pays,ville,q) {
     const { secteur, activite, categorie } = params;
-    const request = agent.get(`/count_produit_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}`);
+    const request = agent.get(`/count_produit_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}&ville=${ville ? ville : ''}&q=${q ? q : ''}`);
 
     return (dispatch) => {
         dispatch({
@@ -144,10 +153,33 @@ export function getCategoriesCounts(params, pays) {
 }
 
 
-
-export function getPaysCounts(params, pays) {
+export function getVilleCounts(params, pays,q) {
     const { secteur, activite, categorie } = params;
-    const request = agent.get(`/count_produit_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}`);
+    const request = agent.get(`/count_produit_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}&q=${q ? q : ''}`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_VILLES_COUNT,
+        });
+
+        return request.then((response) => {
+
+            dispatch({
+                type: GET_VILLES_COUNT,
+                payload: response.data
+            })
+
+        }
+
+
+
+        );
+    }
+
+}
+export function getPaysCounts(params, pays,q) {
+    const { secteur, activite, categorie } = params;
+    const request = agent.get(`/count_produit_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}&q=${q ? q : ''}`);
 
     return (dispatch) => {
         dispatch({
@@ -171,10 +203,10 @@ export function getPaysCounts(params, pays) {
 }
 
 
-export function getSecteursAndPaysCounts() {
-
-    const request = agent.get(`/count_produit_categorie`);
-    const request2 = agent.get(`/count_produit_pays`);
+export function getSecteursAndPaysCounts(q) {
+    console.log(q)
+    const request = agent.get(`/count_produit_categorie?q=${q?q:''}`);
+    const request2 = agent.get(`/count_produit_pays?q=${q?q:''}`);
     return (dispatch) => {
         dispatch({
             type: REQUEST_PAYS_COUNT,
@@ -184,20 +216,14 @@ export function getSecteursAndPaysCounts() {
         });
 
         axios.all([request, request2]).then(axios.spread((...responses) => {
-
-            request.then((response) =>
-                dispatch({
-                    type: GET_SECTEURS_COUNT,
-                    payload: responses[0].data
-                })
-            );
-            request2.then((response2) =>
-                dispatch({
-                    type: GET_PAYS_COUNT,
-                    payload: responses[1].data
-                })
-            );
-
+            dispatch({
+                type: GET_SECTEURS_COUNT,
+                payload: responses[0].data
+            });
+            dispatch({
+                type: GET_PAYS_COUNT,
+                payload: responses[1].data
+            })
             // use/access the results 
         })).catch(errors => {
             // react on errors.
