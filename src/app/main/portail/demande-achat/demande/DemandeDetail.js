@@ -253,7 +253,7 @@ function DemandeDetail(props) {
                                                     // or use a string like 'en-US' to override it.
                                                     { minimumFractionDigits: 2 }
                                                 ) +
-                                                (demande.data.currency && ' ' + demande.data.currency.name) + ' HT'
+                                                (demande.data.currency ? ' ' + demande.data.currency.name+ ' HT' :'') 
                                                 :
                                                 <span className="capitalize">à consulter</span>
                                             }

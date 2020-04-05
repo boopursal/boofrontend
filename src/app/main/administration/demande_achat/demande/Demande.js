@@ -462,7 +462,7 @@ function Demande(props) {
                                                 <CheckboxFormsy
                                                     className="mb-10"
                                                     name="sendEmail"
-                                                    disabled={form.statut !== 1}
+                                                    disabled={form.statut !== 1 || !form.isPublic}
                                                     onChange={(e) => handleCheckBoxChange(e, 'sendEmail')}
                                                     label="Alerter Fournisseurs"
                                                     value={form.sendEmail}
