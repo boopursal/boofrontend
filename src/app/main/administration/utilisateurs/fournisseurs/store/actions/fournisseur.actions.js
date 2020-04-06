@@ -3,32 +3,45 @@ import FuseUtils from '@fuse/FuseUtils';
 import { showMessage } from 'app/store/actions/fuse';
 import _ from '@lodash';
 
-export const REQUEST_ACHETEUR = '[PROFILE APP] REQUEST ACHETEUR';
-export const GET_ACHETEUR = '[PROFILE APP] GET ACHETEUR';
-export const GET_PAYS = '[PROFILE APP] GET PAYS';
-export const GET_VILLES = '[PROFILE APP] GET VILLES';
-export const REQUEST_PAYS = '[PROFILE APP] REQUEST PAYS';
-export const REQUEST_VILLES = '[PROFILE APP] REQUEST VILLES';
-export const SAVE_ERROR = '[PROFILE APP] SAVE ERROR';
-export const GET_SECTEURS = '[PROFILE APP] GET SECTEURS';
-export const UPDATE_ACHETEUR = '[PROFILE APP] UPDATE ACHETEUR';
-export const REQUEST_UPDATE_ACHETEUR = '[PROFILE APP] REQUEST UPDATE_ACHETEUR';
+export const REQUEST_FOURNISSEUR = '[FOURNISSEURS ADMIN APP] REQUEST FOURNISSEUR';
+export const GET_FOURNISSEUR = '[FOURNISSEURS ADMIN APP] GET FOURNISSEUR';
+export const GET_PAYS = '[FOURNISSEURS ADMIN APP] GET PAYS';
+export const GET_VILLES = '[FOURNISSEURS ADMIN APP] GET VILLES';
+export const REQUEST_PAYS = '[FOURNISSEURS ADMIN APP] REQUEST PAYS';
+export const REQUEST_VILLES = '[FOURNISSEURS ADMIN APP] REQUEST VILLES';
+export const SAVE_ERROR = '[FOURNISSEURS ADMIN APP] SAVE ERROR';
+export const UPDATE_FOURNISSEUR = '[FOURNISSEURS ADMIN APP] UPDATE FOURNISSEUR';
+export const REQUEST_UPDATE_FOURNISSEUR = '[FOURNISSEURS ADMIN APP] REQUEST UPDATE_FOURNISSEUR';
 
-export const UPLOAD_AVATAR = '[PROFILE APP] UPLOAD AVATAR';
-export const UPLOAD_REQUEST = '[PROFILE APP] UPLOAD REQUEST';
-export const UPLOAD_ERROR = '[PROFILE APP] UPLOAD ERROR';
+export const REQUEST_SOUS_SECTEUR = '[FOURNISSEURS ADMIN APP] REQUEST_SOUS_SECTEUR';
+export const GET_SOUS_SECTEUR = '[FOURNISSEURS ADMIN APP] GET_SOUS_SECTEUR';
 
-export function getProfile(id_acheteur) {
-    const request = agent.get(`/api/acheteurs/${id_acheteur}`);
+export const UPLOAD_AVATAR = '[FOURNISSEURS ADMIN APP] UPLOAD AVATAR';
+export const UPLOAD_REQUEST = '[FOURNISSEURS ADMIN APP] UPLOAD REQUEST';
+export const UPLOAD_ERROR = '[FOURNISSEURS ADMIN APP] UPLOAD ERROR';
+
+
+export const CLEAN_UP_FOURNISSEUR = '[FOURNISSEUR ADMIN APP] CLEAN_UP_FOURNISSEUR';
+
+
+export function cleanUpFournisseur() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_FOURNISSEUR,
+    });
+}
+
+export function getFournisseur(id_fournisseur) {
+    const request = agent.get(`/api/fournisseurs/${id_fournisseur}`);
 
     return (dispatch) => {
         dispatch({
-            type: REQUEST_ACHETEUR,
+            type: REQUEST_FOURNISSEUR,
         });
         return request.then((response) => {
 
             dispatch({
-                type: GET_ACHETEUR,
+                type: GET_FOURNISSEUR,
                 payload: response.data
             })
         });
@@ -53,6 +66,7 @@ export function getPays() {
 
     }
 
+
 }
 
 export function getVilles(pays_id) {
@@ -74,16 +88,18 @@ export function getVilles(pays_id) {
 
 }
 
-export function getSecteurs() {
-    const request = agent.get('/api/secteurs?pagination=false&props[]=id&props[]=name');
+
+export function getSousSecteurs(url) {
+    const request = agent.get(`/api/sous_secteurs?pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
-
+        dispatch({
+            type: REQUEST_SOUS_SECTEUR,
+        });
         return request.then((response) => {
-
             dispatch({
-                type: GET_SECTEURS,
-                payload: response.data['hydra:member']
+                type: GET_SOUS_SECTEUR,
+                payload: response.data["hydra:member"]
             })
         });
 
@@ -93,15 +109,14 @@ export function getSecteurs() {
 
 
 
-export function updateSocieteInfo(data, id_acheteur) {
+export function updateSocieteInfo(data, id_fournisseur) {
 
 
     if (data.pays.label !== 'Maroc') {
         data.ice = null;
     }
     data.pays = data.pays.value;
-    data.ville =data.ville.value;
-    data.secteur = data.secteur.value;
+    data.ville =  data.ville.value;
 
     if (data.codepostal === null) {
         delete data.codepostal;
@@ -109,19 +124,17 @@ export function updateSocieteInfo(data, id_acheteur) {
         data.codepostal = parseInt(data.codepostal);
     }
 
-
-
     return (dispatch, getState) => {
 
-        const request = agent.put(`/api/acheteurs/${id_acheteur}`, data);
+        const request = agent.put(`/api/fournisseurs/${id_fournisseur}`, data);
         dispatch({
-            type: REQUEST_UPDATE_ACHETEUR,
+            type: REQUEST_UPDATE_FOURNISSEUR,
         });
         return request.then((response) =>
 
             Promise.all([
                 dispatch({
-                    type: UPDATE_ACHETEUR,
+                    type: UPDATE_FOURNISSEUR,
                     payload: response.data
                 }),
                 dispatch(showMessage({
@@ -132,33 +145,57 @@ export function updateSocieteInfo(data, id_acheteur) {
                     variant: 'success'
                 }))
             ])
-        ).then(() => dispatch(getProfile(id_acheteur)))
-            .catch((error) => {
-                dispatch({
-                    type: SAVE_ERROR,
-                    payload: FuseUtils.parseApiErrors(error)
-                });
+        ).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR,
+                payload: FuseUtils.parseApiErrors(error)
             });
+        });
     };
 
 }
 
+export function etatFournisseur(fournisseur,active)
+{
+    
+    let Updatefournisseur = {isactif : active}
+    return (dispatch, getState) => {
+        dispatch({
+            type: REQUEST_UPDATE_FOURNISSEUR,
+        });
+        const request = agent.put(fournisseur['@id'],Updatefournisseur);
+        return request.then((response) =>
+            Promise.all([
+                dispatch({
+                    type: UPDATE_FOURNISSEUR,
+                    payload: response.data
+                }),
+                dispatch(showMessage({message: 'Statut modifié!',anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'}))
+            ])
+        );
+    };
+}
 
-export function updateUserInfo(data, id_acheteur) {
+export function updateSocieteSousSecteurs(data, id_fournisseur) {
 
-
+    if (data.sousSecteurs)
+        data.sousSecteurs = data.sousSecteurs.map((item => { return item.value }));
 
     return (dispatch, getState) => {
 
-        const request = agent.put(`/api/acheteurs/${id_acheteur}`, data);
+        const request = agent.put(`/api/fournisseurs/${id_fournisseur}`, data);
         dispatch({
-            type: REQUEST_UPDATE_ACHETEUR,
+            type: REQUEST_UPDATE_FOURNISSEUR,
         });
         return request.then((response) =>
 
             Promise.all([
                 dispatch({
-                    type: UPDATE_ACHETEUR,
+                    type: UPDATE_FOURNISSEUR,
                     payload: response.data
                 }),
                 dispatch(showMessage({
@@ -169,7 +206,7 @@ export function updateUserInfo(data, id_acheteur) {
                     variant: 'success'
                 }))
             ])
-        ).then(() => dispatch(getProfile(id_acheteur)))
+        )
             .catch((error) => {
                 dispatch({
                     type: SAVE_ERROR,
@@ -180,27 +217,21 @@ export function updateUserInfo(data, id_acheteur) {
 
 }
 
-export function updatePassword(data, id_acheteur) {
-
-
+export function updateUserInfo(data, id_fournisseur) {
 
     return (dispatch, getState) => {
 
-        const request = agent.put(`/api/users/${id_acheteur}/reset-password`, data);
+        const request = agent.put(`/api/fournisseurs/${id_fournisseur}`, data);
         dispatch({
-            type: REQUEST_UPDATE_ACHETEUR,
+            type: REQUEST_UPDATE_FOURNISSEUR,
         });
-        return request.then((response) => {
+        return request.then((response) =>
 
-            if (response.data.user) {
-                this.setSession(response.data.token);
-            }
             Promise.all([
                 dispatch({
-                    type: UPDATE_ACHETEUR,
+                    type: UPDATE_FOURNISSEUR,
                     payload: response.data
                 }),
-
                 dispatch(showMessage({
                     message: 'Bien modifié!', anchorOrigin: {
                         vertical: 'top',//top bottom
@@ -209,8 +240,7 @@ export function updatePassword(data, id_acheteur) {
                     variant: 'success'
                 }))
             ])
-        }
-        ).then(() => dispatch(getProfile(id_acheteur)))
+        )
             .catch((error) => {
                 dispatch({
                     type: SAVE_ERROR,
@@ -220,20 +250,9 @@ export function updatePassword(data, id_acheteur) {
     };
 
 }
-export function setSession(access_token) {
-    if (access_token) {
-        localStorage.setItem('jwt_access_token', access_token);
-        agent.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-
-    }
-    else {
-        localStorage.removeItem('jwt_access_token');
-        delete agent.defaults.headers.common['Authorization'];
-    }
-};
 
 
-export function uploadAvatar(file, id_acheteur) {
+export function uploadAvatar(file, id_fournisseur) {
 
     return (dispatch, getState) => {
 
@@ -257,7 +276,7 @@ export function uploadAvatar(file, id_acheteur) {
                     payload: response.data
 
                 }),
-                dispatch(updateUserAvatar({ avatar: response.data['@id'] }, id_acheteur))
+                dispatch(updateUserAvatar({ avatar: response.data['@id'] }, id_fournisseur))
             ])
         ).catch((error) => {
             dispatch({
@@ -281,21 +300,21 @@ export function uploadAvatar(file, id_acheteur) {
     };
 }
 
-export function updateUserAvatar(data, id_acheteur) {
+export function updateUserAvatar(data, id_fournisseur) {
 
 
 
     return (dispatch, getState) => {
 
-        const request = agent.put(`/api/acheteurs/${id_acheteur}`, data);
+        const request = agent.put(`/api/fournisseurs/${id_fournisseur}`, data);
         dispatch({
-            type: REQUEST_UPDATE_ACHETEUR,
+            type: REQUEST_UPDATE_FOURNISSEUR,
         });
         return request.then((response) =>
 
             Promise.all([
                 dispatch({
-                    type: UPDATE_ACHETEUR,
+                    type: UPDATE_FOURNISSEUR,
                     payload: response.data
                 }),
                 dispatch(showMessage({

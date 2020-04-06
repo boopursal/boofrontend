@@ -417,7 +417,7 @@ function Index(props) {
                                 }
                             />
                         </ListItem>
-                        <Grid container spacing={2}>
+                        <Grid container spacing={2} className="justify-center">
 
 
                             {

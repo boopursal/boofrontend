@@ -54,7 +54,8 @@ export default function News(props) {
                     onDelete={props.onDelete}
                 />
 
-                <Button size="small" color="primary" >
+                <Button size="small" color="primary" component={NavLinkAdapter}
+                to={`/actualite/${news.id}-${news.slug}`} >
                     Lire la suite
                 </Button>
             </CardActions>

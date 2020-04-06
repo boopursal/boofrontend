@@ -1,19 +1,19 @@
 import React from 'react';
-import {Card, CardContent, Icon, Typography} from '@material-ui/core';
-import {darken} from '@material-ui/core/styles/colorManipulator';
-import {makeStyles} from '@material-ui/styles';
-import {FuseAnimate} from '@fuse';
+import { Card, CardContent, Icon, Typography } from '@material-ui/core';
+import { darken } from '@material-ui/core/styles/colorManipulator';
+import { makeStyles } from '@material-ui/styles';
+import { FuseAnimate } from '@fuse';
 import clsx from 'clsx';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
         background: 'radial-gradient(' + darken(theme.palette.primary.dark, 0.5) + ' 0%, ' + theme.palette.primary.dark + ' 80%)',
-        color     : theme.palette.primary.contrastText
+        color: theme.palette.primary.contrastText
     }
 }));
 
-function MailConfirmPage()
-{
+function MailConfirmPage() {
     const classes = useStyles();
 
     return (
@@ -31,17 +31,20 @@ function MailConfirmPage()
                                 <Icon className="text-96" color="action">email</Icon>
                             </div>
 
-                            <Typography variant="h5" className="text-center mb-16">Confirm your email address!</Typography>
+                            <Typography variant="h5" className="text-center mb-16">Confirmez votre adresse email!</Typography>
 
                             <Typography className="text-center mb-16 w-full" color="textSecondary">
-                                A confirmation e-mail has been sent to your email
+                                Un e-mail de confirmation a été envoyé à votre adresse e-mail
                             </Typography>
 
                             <Typography className="text-center w-full" color="textSecondary">
-                                Check your inbox and click on the "Confirm my email" link to confirm your email address.
+                                Vérifiez votre boîte de réception et cliquez sur le lien "Confirmer mon e-mail" pour confirmer votre adresse e-mail.
                             </Typography>
 
-                           
+                            <div className="flex flex-col items-center justify-center pt-32 pb-24">
+                                <Link className="font-medium" to="/">Retour à la page d'accueil </Link>
+                            </div>
+
 
                         </CardContent>
                     </Card>

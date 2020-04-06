@@ -11,6 +11,7 @@ import { RegisterPageConfig } from '../main/inscription/RegisterPageConfig';
 import { acheteurConfigs } from '../main/acheteur/acheteurConfigs';
 import { fournisseurConfigs } from '../main/fournisseur/fournisseurConfigs';
 import { PortailConfig } from '../main/portail/PortailConfig';
+import { DashboardConfigs } from '../main/dashboard/DashboardConfigs';
 
 function setAdminAuth(configs)
 {
@@ -26,7 +27,8 @@ const routeConfigs = [
     ...pagesConfigs,
     ...RegisterPageConfig,
     LoginConfig,
-    ...PortailConfig
+    ...PortailConfig,
+    DashboardConfigs
 ];
 
 const routes = [

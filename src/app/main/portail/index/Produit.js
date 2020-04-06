@@ -36,12 +36,8 @@ export default function Produit(props) {
                             'length': 18
                         }))}
                     </Typography>
-                    <Typography variant="caption" color="textSecondary">Réf.{produit.reference}</Typography>
-                    <Typography variant="body2" color="textSecondary" component="p" className="mb-16 mt-8">
-                        {_.capitalize(_.truncate(produit.description, {
-                            'length': 150
-                        }))}
-                    </Typography>
+                    <Typography variant="caption" color="textSecondary" component="p" className="mb-16">Réf.{produit.reference}</Typography>
+                   
                     {
                         produit.images.length > 0 ?
                             <Chip

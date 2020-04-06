@@ -59,7 +59,7 @@ export function getPays() {
 }
 
 export function getVilles(pays_id) {
-    const request = agent.get(`/api/pays_p/${pays_id}/villes`);
+    const request = agent.get(`/api/pays/${pays_id}/villes?pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
         dispatch({
@@ -69,7 +69,7 @@ export function getVilles(pays_id) {
 
             dispatch({
                 type: GET_VILLES,
-                payload: response.data
+                payload: response.data['hydra:member']
             })
         });
 
@@ -104,8 +104,8 @@ export function updateSocieteInfo(data, id_fournisseur) {
     if (data.pays.label !== 'Maroc') {
         data.ice = null;
     }
-    data.pays = '/api/pays/' + data.pays.value;
-    data.ville = '/api/villes/' + data.ville.value;
+    data.pays =  data.pays.value;
+    data.ville =  data.ville.value;
 
     if (data.codepostal === null) {
         delete data.codepostal;

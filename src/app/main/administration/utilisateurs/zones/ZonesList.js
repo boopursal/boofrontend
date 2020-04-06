@@ -128,12 +128,7 @@ function ZonesList(props)
                             </div>
                         )
                     },*/
-                    {
-                        Header    : "Id",
-                        accessor  : "id",
-                        filterable: false,
-                        width    : 64,
-                    },
+                   
                     {
                         Header   : "",
                         Cell     : row => 

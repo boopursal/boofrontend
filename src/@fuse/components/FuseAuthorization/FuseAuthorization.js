@@ -52,19 +52,11 @@ class FuseAuthorization extends Component {
 
         let redirectPath = '';
 
-        if (userRole === 'ROLE_ADMIN') {
+        if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_ACHETEUR' || userRole === 'ROLE_FOURNISSEUR') {
 
             redirectPath = 'dashboard';
 
-        } else if (userRole === 'ROLE_ACHETEUR') {
-
-            redirectPath = 'dashboard_ac';
-
-        } else if (userRole === 'ROLE_FOURNISSEUR') {
-            
-            redirectPath = 'mydashboard';
-
-        }
+        } 
         else {
             redirectPath = user.data.redirect;
 

@@ -88,7 +88,7 @@ export default function BioFournisseur(props) {
                             </ListItem>
                         </List>
                         <Typography variant="subtitle1" color="primary">
-                            Continue reading...
+                            Inscrivez-vous
               </Typography>
                     </CardContent>
                 </div>

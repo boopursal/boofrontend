@@ -5,14 +5,15 @@ import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFor
 import { useForm } from '@fuse/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
-import * as Actions from './store/actions';
-import reducer from './store/reducers';
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
 import _ from '@lodash';
 import Formsy from 'formsy-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import clsx from 'clsx';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles(theme => ({
@@ -30,41 +31,40 @@ const useStyles = makeStyles(theme => ({
         marginTop: -12,
         marginLeft: -12,
     },
-    profileImageUpload: {
+    acheteurImageUpload: {
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
         transitionTimingFunction: theme.transitions.easing.easeInOut,
     },
 
-    profileImageItem: {
+    acheteurImageItem: {
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
         transitionTimingFunction: theme.transitions.easing.easeInOut,
         '&:hover': {
-            '& $profileImageFeaturedStar': {
+            '& $acheteurImageFeaturedStar': {
                 opacity: .8
             }
         },
         '&.featured': {
             pointerEvents: 'none',
             boxShadow: theme.shadows[3],
-            '& $profileImageFeaturedStar': {
+            '& $acheteurImageFeaturedStar': {
                 opacity: 1
             },
-            '&:hover $profileImageFeaturedStar': {
+            '&:hover $acheteurImageFeaturedStar': {
                 opacity: 1
             }
         }
     },
 }));
-function Profile(props) {
+function Acheteur(props) {
 
     const dispatch = useDispatch();
     const classes = useStyles();
-    const profile = useSelector(({ profileApp }) => profileApp.profile);
-    const user = useSelector(({ auth }) => auth.user);
-    const Pays = useSelector(({ profileApp }) => profileApp.profile.pays);
-    const Villes = useSelector(({ profileApp }) => profileApp.profile.villes);
+    const acheteur = useSelector(({ acheteurApp }) => acheteurApp.acheteur);
+    const Pays = useSelector(({ acheteurApp }) => acheteurApp.acheteur.pays);
+    const Villes = useSelector(({ acheteurApp }) => acheteurApp.acheteur.villes);
 
     const formRef = useRef(null);
     const [showIce, setShowIce] = useState(false);
@@ -75,78 +75,84 @@ function Profile(props) {
 
     const [tabValue, setTabValue] = useState(0);
     const { form, handleChange, setForm } = useForm(null);
+    const params = props.match.params;
+    const { acheteurId } = params;
 
 
-    //GET INFO SOCIETE
     useEffect(() => {
-        function updateProfileState() {
-            dispatch(Actions.getProfile(user.id));
+
+        function updateAcheteurState() {
+            dispatch(Actions.getAcheteur(acheteurId));
         }
-        updateProfileState();
-    }, [dispatch, user.id]);
+
+        updateAcheteurState();
+        return () => {
+            dispatch(Actions.cleanUpAcheteur())
+        }
+    }, [dispatch, acheteurId]);
 
     //GET PAYS & SECTEURS
 
     useEffect(() => {
         dispatch(Actions.getPays());
         dispatch(Actions.getSecteurs());
-    }, [dispatch, user.id]);
+    }, [dispatch]);
 
     //GET VILLE IF PAYS EXIST
     useEffect(() => {
-        if (profile.data && !form) {
-            if (profile.data.pays)
-                dispatch(Actions.getVilles(profile.data.pays.id));
+        if (acheteur.data && !form) {
+            if (acheteur.data.pays)
+                dispatch(Actions.getVilles(acheteur.data.pays.id));
         }
 
-    }, [dispatch, profile.data, form]);
+    }, [dispatch, acheteur.data, form]);
 
     //SET ERRORS IN INPUTS AFTER ERROR API
     useEffect(() => {
-        if (profile.error && (profile.error.societe || profile.error.newPassword || profile.error.newConfirmpassword || profile.error.oldPassword || profile.error.phone || profile.error.firstName || profile.error.lastName || profile.error.pays || profile.error.ville || profile.error.adresse1 || profile.error.adresse2 || profile.error.website || profile.error.fix || profile.error.ice || profile.error.description)) {
+        if (acheteur.error && (acheteur.error.societe || acheteur.error.phone || acheteur.error.firstName || acheteur.error.lastName || acheteur.error.pays || acheteur.error.ville || acheteur.error.adresse1 || acheteur.error.adresse2 || acheteur.error.website || acheteur.error.fix || acheteur.error.ice || acheteur.error.description)) {
             formRef.current.updateInputsWithError({
-                ...profile.error
+                ...acheteur.error
             });
             disableButton();
         }
-    }, [profile.error]);
+    }, [acheteur.error]);
 
     //SET FORM DATA
     useEffect(() => {
         if (
-            (profile.data && !form) ||
-            (profile.data && form && profile.data.id !== form.id)
+            (acheteur.data && !form) ||
+            (acheteur.data && form && acheteur.data.id !== form.id)
         ) {
-            if (profile.data.pays) {
-                if (profile.data.pays.name === 'Maroc') {
+            if (acheteur.data.pays) {
+                if (acheteur.data.pays.name === 'Maroc') {
                     setShowIce(true);
                 }
             }
-            setForm({ ...profile.data });
+            setForm({ ...acheteur.data });
             setSecteur({
-                value: profile.data.secteur['@id'],
-                label: profile.data.secteur.name
+                value: acheteur.data.secteur['@id'],
+                label: acheteur.data.secteur.name
             });
             setVille({
-                value: profile.data.ville['@id'],
-                label: profile.data.ville.name,
+                value: acheteur.data.ville['@id'],
+                label: acheteur.data.ville.name,
             });
             setPays({
-                value: profile.data.pays['@id'],
-                label: profile.data.pays.name,
+                value: acheteur.data.pays['@id'],
+                label: acheteur.data.pays.name,
             });
         }
 
-    }, [form, profile.data, setForm]);
+    }, [form, acheteur.data, setForm]);
 
 
     useEffect(() => {
 
-        if (profile.avatar) {
-            setForm(_.set({ ...form }, 'avatar', profile.avatar));
+        if (acheteur.avatar) {
+            setForm(_.set({ ...form }, 'avatar', acheteur.avatar));
         }
 
-    }, [form, profile.avatar, setForm]);
+    }, [form, acheteur.avatar, setForm]);
 
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
@@ -205,9 +211,7 @@ function Profile(props) {
     function handleSubmitInfoPerso(model) {
         dispatch(Actions.updateUserInfo(model, form.id));
     }
-    function handleSubmitPassword(model) {
-        dispatch(Actions.updatePassword(model, form.id));
-    }
+
 
     return (
         <FusePageCarded
@@ -216,11 +220,16 @@ function Profile(props) {
                 header: "min-h-72 h-72 sm:h-136 sm:min-h-136"
             }}
             header={
-                !profile.requestAcheteur ? form && (
+                !acheteur.requestAcheteur ? form && (
                     <div className="flex flex-1 w-full items-center justify-between">
 
                         <div className="flex flex-col items-start max-w-full">
-
+                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                <Typography className="normal-case flex items-center sm:mb-12" component={Link} role="button" to="/users/acheteurs" color="inherit">
+                                    <Icon className="mr-4 text-20">arrow_back</Icon>
+                                        Retour
+                                </Typography>
+                            </FuseAnimate>
                             <div className="flex items-center max-w-full">
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     {form.avatar ?
@@ -248,13 +257,43 @@ function Profile(props) {
                                 </div>
                             </div>
                         </div>
+                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
 
+                            {
+                                acheteur.data && acheteur.data.isactif ?
+                                    <Button
+                                        className="whitespace-no-wrap"
+                                        variant="contained"
+                                        color="secondary"
+                                        disabled={acheteur.loading}
+                                        onClick={() => dispatch(Actions.etatAcheteur(form, false))}
+                                    >
+                                        Mettre ce compte invalide
+                                        {acheteur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                    </Button> :
+                                    <Button
+                                        className="whitespace-no-wrap"
+                                        variant="contained"
+                                        color="secondary"
+
+                                        disabled={acheteur.loading}
+                                        onClick={() => dispatch(Actions.etatAcheteur(form, true))}
+                                    >
+                                        Mettre ce compte valide
+                                        {acheteur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+
+                                    </Button>
+                            }
+
+
+
+                        </FuseAnimate>
                     </div>
                 ) :
                     <LinearProgress color="secondary" />
             }
             contentToolbar={
-                !profile.requestAcheteur ?
+                !acheteur.requestAcheteur ?
                     form && (
                         <Tabs
                             value={tabValue}
@@ -268,7 +307,6 @@ function Profile(props) {
                             <Tab className="h-64 normal-case" label="Info société" />
                             <Tab className="h-64 normal-case" label="Info utilisateur" />
                             <Tab className="h-64 normal-case" label="Photo" />
-                            <Tab className="h-64 normal-case" label="Mot de passe" />
                         </Tabs>)
                     :
                     <div className={classes.root}>
@@ -276,7 +314,7 @@ function Profile(props) {
                     </div>
             }
             content={
-                !profile.requestAcheteur ? form && (
+                !acheteur.requestAcheteur ? form && (
                     <div className=" sm:p-10 max-w-2xl">
                         {tabValue === 0 &&
                             (
@@ -363,7 +401,7 @@ function Profile(props) {
                                                     },
                                                     variant: 'outlined'
                                                 }}
-                                                options={profile.secteurs}
+                                                options={acheteur.secteurs}
                                                 onChange={(value) => handleChipChange(value, 'secteur')}
                                                 required
                                                 fullWidth
@@ -598,11 +636,11 @@ function Profile(props) {
                                         color="primary"
                                         className="w-200 pr-auto mt-16 normal-case"
                                         aria-label="Sauvegarder"
-                                        disabled={!isFormValid || profile.loading}
+                                        disabled={!isFormValid || acheteur.loading}
                                         value="legacy"
                                     >
                                         Sauvegarder
-                                        {profile.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                        {acheteur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
                                     </Button>
 
@@ -742,11 +780,11 @@ function Profile(props) {
                                     color="primary"
                                     className="w-200 pr-auto mt-16 normal-case"
                                     aria-label="Sauvegarder"
-                                    disabled={!isFormValid || profile.loading}
+                                    disabled={!isFormValid || acheteur.loading}
                                     value="legacy"
                                 >
                                     Sauvegarder
-                               {profile.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                               {acheteur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
                                 </Button>
 
@@ -759,7 +797,7 @@ function Profile(props) {
                                     className="hidden"
                                     id="button-file"
                                     type="file"
-                                    disabled={profile.profileReqInProgress}
+                                    disabled={acheteur.acheteurReqInProgress}
                                     onChange={handleUploadChange}
                                 />
                                 <div className="flex justify-center sm:justify-start flex-wrap">
@@ -768,13 +806,13 @@ function Profile(props) {
 
                                         className={
                                             clsx(
-                                                classes.profileImageUpload,
+                                                classes.acheteurImageUpload,
                                                 "flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5",
 
                                             )}
                                     >
                                         {
-                                            profile.profileReqInProgress ?
+                                            acheteur.acheteurReqInProgress ?
                                                 <CircularProgress size={24} className={classes.buttonProgress} />
                                                 :
                                                 <Icon fontSize="large" color="action">cloud_upload</Icon>
@@ -785,7 +823,7 @@ function Profile(props) {
                                     <div
                                         className={
                                             clsx(
-                                                classes.profileImageItem,
+                                                classes.acheteurImageItem,
                                                 "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
                                         }
                                         onClick={form.avatar ? () => window.open(FuseUtils.getUrl() + form.avatar.url, "_blank") : ''}
@@ -796,7 +834,7 @@ function Profile(props) {
                                                 alt={form.societe} />
                                             :
                                             <img className="max-w-none w-auto h-full"
-                                                src="assets/images/avatars/profile.jpg"
+                                                src="assets/images/avatars/acheteur.jpg"
                                                 alt={form.societe} />}
                                     </div>
 
@@ -804,82 +842,6 @@ function Profile(props) {
                                 </div>
 
                             </div>
-                        )}
-                        {tabValue === 3 && (
-                            <Formsy
-                                onValidSubmit={handleSubmitPassword}
-                                onValid={enableButton}
-                                onInvalid={disableButton}
-                                ref={formRef}
-                                className="flex pt-5 flex-col ">
-
-                                <TextFieldFormsy
-                                    className="mb-16"
-                                    type="password"
-                                    name="oldPassword"
-                                    label="Mot de passe actuel"
-                                    validations={{
-                                        minLength: 6
-                                    }}
-                                    validationErrors={{
-                                        minLength: 'Min character length is 6'
-                                    }}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
-                                    }}
-                                    variant="outlined"
-                                    required
-                                />
-
-                                <TextFieldFormsy
-                                    className="mb-16"
-                                    type="password"
-                                    name="newPassword"
-                                    label="Nouveau mot de passe"
-                                    validations={{
-                                        minLength: 6
-                                    }}
-                                    validationErrors={{
-                                        minLength: 'Min character length is 6'
-                                    }}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
-                                    }}
-                                    variant="outlined"
-                                    required
-                                />
-
-                                <TextFieldFormsy
-                                    className="mb-16"
-                                    type="password"
-                                    name="newConfirmpassword"
-                                    label="Confirmer le mot de passe"
-                                    validations="equalsField:newPassword"
-                                    validationErrors={{
-                                        equalsField: 'Passwords do not match'
-                                    }}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
-                                    }}
-                                    variant="outlined"
-                                    required
-                                />
-
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    className="w-200 pr-auto mt-16 normal-case"
-                                    aria-label="Sauvegarder"
-                                    disabled={!isFormValid || profile.loading}
-                                    value="legacy"
-                                >
-                                    Sauvegarder
-                           {profile.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-
-                                </Button>
-
-                            </Formsy>
                         )}
 
                     </div>
@@ -891,4 +853,4 @@ function Profile(props) {
     )
 }
 
-export default withReducer('profileApp', reducer)(Profile);
+export default withReducer('acheteurApp', reducer)(Acheteur);

@@ -2,7 +2,14 @@ import { authRoles } from 'app/auth';
 const navigationConfig = [
 
     /** Admin Navigation */
-
+    {
+        'id': 'dashboard_aadmin',
+        'title': 'Tableaux de bord',
+        'auth': authRoles.admin,
+        'type': 'item',
+        'icon': 'dashboard',
+        'url': '/dashboard'
+    },
     {
         'id': 'demandes-admin',
         'title': 'Gestion des RFQs',
@@ -74,8 +81,24 @@ const navigationConfig = [
                 'icon': 'group',
                 'children': [
                     {
+                        'id': 'acheteur-admin',
+                        'title': 'Acheteurs',
+                        'auth': authRoles.admin,
+                        'type': 'item',
+                        'icon': 'supervisor_account',
+                        'url': '/users/acheteurs',
+                    },
+                    {
+                        'id': 'fournisseurs-admin',
+                        'title': 'Fournisseurs',
+                        'auth': authRoles.admin,
+                        'type': 'item',
+                        'icon': 'supervisor_account',
+                        'url': '/users/fournisseurs',
+                    },
+                    {
                         'id': 'admins-component',
-                        'title': 'Gestion des Admins',
+                        'title': 'Admins',
                         'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'verified_user',
@@ -83,7 +106,7 @@ const navigationConfig = [
                     },
                     {
                         'id': 'zones-component',
-                        'title': 'Gestion des Admins Comm.',
+                        'title': 'Admins Comm.',
                         'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'group',
@@ -91,7 +114,7 @@ const navigationConfig = [
                     },
                     {
                         'id': 'commercial-component',
-                        'title': 'Gestion des Comm.',
+                        'title': 'Commercials',
                         'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'group',
@@ -309,7 +332,7 @@ const navigationConfig = [
         'auth': authRoles.acheteur,
         'type': 'item',
         'icon': 'dashboard',
-        'url': '/dashboard_ac'
+        'url': '/dashboard'
     },
     {
         'id': 'demandes_ha',
@@ -346,7 +369,7 @@ const navigationConfig = [
         'auth': authRoles.fournisseur,
         'type': 'item',
         'icon': 'dashboard',
-        'url': '/mydashboard'
+        'url': '/dashboard'
     },
     {
         'id': 'demandes_prix',
