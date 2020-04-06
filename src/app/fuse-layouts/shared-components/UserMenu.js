@@ -91,13 +91,13 @@ function UserMenu(props) {
                             <ListItemIcon className="min-w-40">
                                 <Icon>lock</Icon>
                             </ListItemIcon>
-                            <ListItemText className="pl-0" primary="Login" />
+                            <ListItemText className="pl-0" primary="Connexion" />
                         </MenuItem>
                         <MenuItem component={Link} to="/register">
                             <ListItemIcon className="min-w-40">
                                 <Icon>person_add</Icon>
                             </ListItemIcon>
-                            <ListItemText className="pl-0" primary="Register" />
+                            <ListItemText className="pl-0" primary="Inscrivez-vous" />
                         </MenuItem>
                     </React.Fragment>
                 ) : (
@@ -116,6 +116,12 @@ function UserMenu(props) {
                             <ListItemText className="pl-0" primary="Inbox"/>
                         </MenuItem>
                         */}
+                            <MenuItem component={Link} to="/dashboard">
+                                <ListItemIcon className="min-w-40">
+                                    <Icon>dashboard</Icon>
+                                </ListItemIcon>
+                                <ListItemText className="pl-0" primary="Tableaux de bord" />
+                            </MenuItem>
                             <MenuItem
                                 onClick={() => {
                                     dispatch(authActions.logoutUser());
@@ -125,7 +131,7 @@ function UserMenu(props) {
                                 <ListItemIcon className="min-w-40">
                                     <Icon>exit_to_app</Icon>
                                 </ListItemIcon>
-                                <ListItemText className="pl-0" primary="Logout" />
+                                <ListItemText className="pl-0" primary="Déconnexion" />
                             </MenuItem>
                         </React.Fragment>
                     )}
