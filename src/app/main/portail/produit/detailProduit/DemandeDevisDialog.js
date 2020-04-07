@@ -5,6 +5,7 @@ import * as Actions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextFieldFormsy } from '@fuse';
 import Formsy from 'formsy-react';
+import Link from '@material-ui/core/Link';
 
 const defaultFormState = {
     contact: '',
@@ -282,6 +283,11 @@ function DemandeDevisDialog(props) {
 
                         />
                     </div>
+
+                    {/*Conditions d'utilisation Politique*/}
+
+                     En appuyant sur le bouton <span className="font-bold"> "Envoyer"</span>, vous acceptez les <Link href='/conditions' target="_blank" rel="noreferrer noopener">Conditions d'utilisation</Link> Politique de protection des données
+
 
                 </DialogContent>
 

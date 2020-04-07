@@ -8,38 +8,40 @@ import * as Actions from 'app/store/actions';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
+import ReCAPTCHA from "react-google-recaptcha";
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
     root: {
-      display: 'flex',
-      alignItems: 'center',
+        display: 'flex',
+        alignItems: 'center',
     },
     wrapper: {
-      margin: theme.spacing(1),
-      position: 'relative',
+        margin: theme.spacing(1),
+        position: 'relative',
     },
     buttonSuccess: {
-      backgroundColor: green[500],
-      '&:hover': {
-        backgroundColor: green[700],
-      },
+        backgroundColor: green[500],
+        '&:hover': {
+            backgroundColor: green[700],
+        },
     },
     fabProgress: {
-      color: green[500],
-      position: 'absolute',
-      top: -6,
-      left: -6,
-      zIndex: 1,
+        color: green[500],
+        position: 'absolute',
+        top: -6,
+        left: -6,
+        zIndex: 1,
     },
     buttonProgress: {
-      color: green[500],
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      marginTop: -12,
-      marginLeft: -12,
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
     },
-  }));
+}));
 
 function AcheteurTab(props) {
     const classes = useStyles();
@@ -47,6 +49,7 @@ function AcheteurTab(props) {
     const register = useSelector(({ auth }) => auth.register);
 
     const [isFormValid, setIsFormValid] = useState(false);
+    const [recaptcha, setRecaptcha] = useState(null);
     const formRef = useRef(null);
 
     useEffect(() => {
@@ -89,11 +92,17 @@ function AcheteurTab(props) {
         dispatch(authActions.submitRegisterAcheteur(model));
     }
 
+    function onChange(value) {
+        if (value && value.trim().length > 0)
+            setRecaptcha(value);
+        else
+            setRecaptcha(null);
+    }
     return (
-        
-       
+
+
         <div className="w-full">
-      
+
             <Formsy
                 onValidSubmit={handleSubmit}
                 onValid={enableButton}
@@ -129,7 +138,7 @@ function AcheteurTab(props) {
                             validations={{
                                 minLength: 4,
                                 maxLength: 100,
-                                
+
                             }}
                             validationErrors={{
                                 maxLength: 'La longueur maximale de caractère est 100',
@@ -171,15 +180,15 @@ function AcheteurTab(props) {
                     name="societe"
                     label="Raison sociale"
                     validations={{
-                        matchRegexp  :/^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
+                        matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
                         minLength: 4,
                         maxLength: 20
-                        
+
                     }}
                     validationErrors={{
                         minLength: 'Raison sociale doit dépasser 4 caractères alphanumériques',
                         maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
-                        matchRegexp  :'Raison sociale doit contenir des caractères alphanumériques'
+                        matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">work_outline</Icon></InputAdornment>
@@ -257,14 +266,22 @@ function AcheteurTab(props) {
                     variant="outlined"
                     required
                 />
-
+                <div className="flex justify-center">
+                    <ReCAPTCHA
+                        sitekey="6LdJmucUAAAAAPdVMcYK_a_7z4OxePNUj2HYT-pj"
+                        onChange={onChange}
+                    />
+                </div>
+                <p className="mt-16">
+                    En appuyant sur le bouton <span className="font-bold">"Enregistrer"</span>, vous acceptez les <Link href='/conditions' target="_blank" rel="noreferrer noopener">Conditions d'utilisation</Link> Politique de protection des données
+                </p>
                 <Button
                     type="submit"
                     variant="contained"
                     color="primary"
                     className="w-full mx-auto mt-16 normal-case"
                     aria-label="REGISTER"
-                    disabled={!isFormValid || register.loading }
+                    disabled={!isFormValid || !recaptcha || register.loading}
                     value="legacy"
                 >
                     Register

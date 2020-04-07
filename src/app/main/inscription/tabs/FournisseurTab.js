@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
+import ReCAPTCHA from "react-google-recaptcha";
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -45,6 +47,7 @@ function FournisseurTab(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const register = useSelector(({ auth }) => auth.register);
+    const [recaptcha, setRecaptcha] = useState(null);
 
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
@@ -75,7 +78,12 @@ function FournisseurTab(props) {
     function handleSubmit(model) {
         dispatch(authActions.submitRegisterFournisseur(model));
     }
-
+    function onChange(value) {
+        if (value && value.trim().length > 0)
+            setRecaptcha(value);
+        else
+            setRecaptcha(null);
+    }
     return (
         <div className="w-full">
             <Formsy
@@ -153,15 +161,15 @@ function FournisseurTab(props) {
                     name="societe"
                     label="Raison sociale"
                     validations={{
-                        matchRegexp  :/^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
+                        matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
                         minLength: 4,
                         maxLength: 20
-                        
+
                     }}
                     validationErrors={{
                         minLength: 'Raison sociale doit dépasser 4 caractères alphanumériques',
                         maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
-                        matchRegexp  :'Raison sociale doit contenir des caractères alphanumériques'
+                        matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">work_outline</Icon></InputAdornment>
@@ -239,7 +247,15 @@ function FournisseurTab(props) {
                     variant="outlined"
                     required
                 />
-
+                <div className="flex justify-center">
+                    <ReCAPTCHA
+                        sitekey="6LdJmucUAAAAAPdVMcYK_a_7z4OxePNUj2HYT-pj"
+                        onChange={onChange}
+                    />
+                </div>
+                <p className="mt-16">
+                    En appuyant sur le bouton <span className="font-bold">"Enregistrer"</span>, vous acceptez les <Link href='/conditions' target="_blank" rel="noreferrer noopener">Conditions d'utilisation</Link> Politique de protection des données
+                </p>
                 <Button
                     type="submit"
                     variant="contained"
@@ -249,7 +265,7 @@ function FournisseurTab(props) {
                     disabled={!isFormValid || register.loading}
                     value="legacy"
                 >
-                    Register
+                    Enregistrer
                     {register.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                 </Button>
 
