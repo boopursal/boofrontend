@@ -35,6 +35,15 @@ import Navigation from '../categories/Navigation';
 import Link2 from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        // minHeight      : '100%',
+        position: 'relative',
+        flex: '1 0 auto',
+        height: 'auto',
+        backgroundColor: theme.palette.background.default
+    },
     header: {
         backgroundColor: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
         color: theme.palette.getContrastText(theme.palette.primary.main),
@@ -97,15 +106,8 @@ const useStyles = makeStyles(theme => ({
     },
 
 }));
-function generate(element) {
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(value =>
-        React.cloneElement(element, {
-            key: value,
-        }),
-    );
-}
 
-function generate3(element) {
+function generate(element) {
     return [0, 1, 2, 3].map(value =>
         React.cloneElement(element, {
             key: value,
@@ -187,7 +189,7 @@ function Index(props) {
 
 
     return (
-        <div className="flex flex-col flex-1 w-full">
+        <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
             <Helmet>
                 <title>{title}</title>
                 <meta name="description" content={description} />
@@ -243,7 +245,7 @@ function Index(props) {
 
                             {
                                 portail.loading ?
-                                    generate3(
+                                    generate(
                                         <ContentLoader
                                             speed={2}
                                             width={400}
@@ -422,7 +424,7 @@ function Index(props) {
 
                             {
                                 portail.loadingNews ?
-                                    generate3(
+                                    generate(
                                         <Grid item sm={3}>
                                             <ContentLoader
                                                 speed={2}

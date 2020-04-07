@@ -21,7 +21,7 @@ export function cleanUp() {
 export function getActualites(parametres)
 {
     var description = parametres.description?`=${parametres.description}`:'';
-    const request = agent.get(`/api/actualites/?page=${parametres.page}&description${description}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    const request = agent.get(`/api/actualites?page=${parametres.page}&description${description}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) =>{
         dispatch({
