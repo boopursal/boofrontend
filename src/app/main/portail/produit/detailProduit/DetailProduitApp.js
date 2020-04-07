@@ -11,6 +11,15 @@ import clsx from 'clsx';
 import DemandeDevisDialog from './DemandeDevisDialog';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        // minHeight      : '100%',
+        position: 'relative',
+        flex: '1 0 auto',
+        height: 'auto',
+        backgroundColor: theme.palette.background.default
+    },
     middle: {
         background: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
         position: 'relative',
@@ -47,7 +56,7 @@ function DetailProduitApp(props) {
 
 
     return (
-        <div className="flex flex-col">
+        <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
                 <Grid container spacing={2} className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">

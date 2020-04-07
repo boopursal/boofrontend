@@ -15,7 +15,13 @@ import ContentLoader from 'react-content-loader'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        // minHeight      : '100%',
+        position: 'relative',
+        flex: '1 0 auto',
+        height: 'auto',
+        backgroundColor: theme.palette.background.default
     },
     middle: {
         background: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
@@ -91,8 +97,8 @@ function Secteur(props) {
     }, [dispatch, slug]);
 
     return (
-        <>
-         {
+            <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
+            {
                 activites.secteur &&
                 <Helmet>
                     <title>{activites.secteur.name + ' | Les Achats Industriels'}</title>
@@ -101,7 +107,6 @@ function Secteur(props) {
                     <meta property="og:description" content={activites.secteur.name + ' | Les Achats Industriels'} />
                 </Helmet>
             }
-            <div className="flex flex-col min-h-md">
                 <div
                     className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
                     <Grid container spacing={2} className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
@@ -317,7 +322,6 @@ function Secteur(props) {
                     </Grid>
                 </Grid>
             </div>
-        </>
     );
 }
 

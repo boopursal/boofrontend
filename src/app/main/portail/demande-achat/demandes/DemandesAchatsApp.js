@@ -16,6 +16,15 @@ import { Helmet } from "react-helmet";
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        // minHeight      : '100%',
+        position: 'relative',
+        flex: '1 0 auto',
+        height: 'auto',
+        backgroundColor: theme.palette.background.default
+    },
     middle: {
         background: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
         position: 'relative',
@@ -90,7 +99,7 @@ function DemandesAchatsApp(props) {
     }, [dispatch, params, pays,ville]);
 
     return (
-        <div className="flex flex-col min-h-xl">
+        <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
             <Helmet>
                 <title>Toutes les demandes d'achat {
                     activite ? _.capitalize(activite.replace('-', ' ')) :
