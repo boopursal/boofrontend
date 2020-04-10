@@ -144,7 +144,6 @@ export function putFocusProduit(produit, url) {
         return request.then((response) => {
 
             dispatch(showMessage({ message: 'Succès' }));
-            console.log(response.data)
             return dispatch({
                 type: SAVE_PRODUIT_SELECTED,
                 payload: response.data

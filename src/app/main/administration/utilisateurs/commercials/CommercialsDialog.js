@@ -9,7 +9,6 @@ import _ from '@lodash';
 import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
 
 const defaultFormState = {
-    username: '',
     firstName: '',
     lastName: '',
     adresse1: '',
@@ -23,7 +22,8 @@ const defaultFormState = {
 
 function CommercialsDialog(props) {
     const dispatch = useDispatch();
-    const CommercialsDialog = useSelector(({ commercialsApp }) => commercialsApp.commercials.commercialsDialog);
+    const commercialsDialog = useSelector(({ commercialsApp }) => commercialsApp.commercials.commercialsDialog);
+    const commercials = useSelector(({ commercialsApp }) => commercialsApp.commercials);
     const Villes = useSelector(({ commercialsApp }) => commercialsApp.commercials.villes);
     const imageReqInProgress = useSelector(({ commercialsApp }) => commercialsApp.commercials.imageReqInProgress);
     const avatar = useSelector(({ commercialsApp }) => commercialsApp.commercials.avatar);
@@ -40,27 +40,39 @@ function CommercialsDialog(props) {
             /**
              * Dialog type: 'edit'
              */
-            if (CommercialsDialog.type === 'edit' && CommercialsDialog.data) {
-                let villes = CommercialsDialog.data.villes.map(item => ({
+            if (commercialsDialog.type === 'edit' && commercialsDialog.data) {
+                let villes = commercialsDialog.data.villes.map(item => ({
                     value: item['@id'],
                     label: item.name
                 }));
-                setForm({ ...CommercialsDialog.data });
-                setForm(_.set({ ...CommercialsDialog.data }, 'villes', villes));
+                setForm({ ...commercialsDialog.data });
+                setForm(_.set({ ...commercialsDialog.data }, 'villes', villes));
             }
         },
-        [CommercialsDialog.data, CommercialsDialog.type, setForm],
+        [commercialsDialog.data, commercialsDialog.type, setForm],
     );
+
+     useEffect(() => {
+        if (commercials.error && (commercials.error.firstName || commercials.error.lastName || commercials.error.adresse1 || commercials.error.adresse2
+             || commercials.error.codepostal || commercials.error.phone || commercials.error.email || commercials.error.villes)) {
+            formRef.current.updateInputsWithError({
+                ...commercials.error
+            });
+
+            disableButton();
+            commercials.error = null;
+        }
+    }, [commercials.error]);
 
     useEffect(() => {
         /**
          * After Dialog Open
          */
-        if (CommercialsDialog.props.open) {
+        if (commercialsDialog.props.open) {
             initDialog();
         }
 
-    }, [CommercialsDialog.props.open, initDialog]);
+    }, [commercialsDialog.props.open, initDialog]);
 
     useEffect(() => {
 
@@ -74,7 +86,7 @@ function CommercialsDialog(props) {
 
 
     function closeComposeDialog() {
-        // CommercialsDialog.type === 'edit' ? dispatch(Actions.closeEditCommercialsDialog()) : '';
+        // commercialsDialog.type === 'edit' ? dispatch(Actions.closeEditcommercialsDialog()) : '';
         dispatch(Actions.closeEditCommercialsDialog())
     }
 
@@ -84,10 +96,9 @@ function CommercialsDialog(props) {
         form.codepostal = _.parseInt(form.codepostal);
 
         //event.preventDefault();
-        if (CommercialsDialog.type === 'edit') {
+        if (commercialsDialog.type === 'edit') {
             dispatch(Actions.updateCommercial(form));
         }
-        closeComposeDialog();
     }
 
     function handleRemove() {
@@ -125,7 +136,7 @@ function CommercialsDialog(props) {
             classes={{
                 paper: "m-24"
             }}
-            {...CommercialsDialog.props}
+            {...commercialsDialog.props}
             onClose={closeComposeDialog}
             fullWidth
             maxWidth="xs"
@@ -134,7 +145,7 @@ function CommercialsDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {CommercialsDialog.type === 'new' ? 'Nouvelle Commercial' : 'Edit Commercial'}
+                        {commercialsDialog.type === 'new' ? 'Nouvelle Commercial' : 'Edit Commercial'}
                     </Typography>
                 </Toolbar>
                 <div className="flex flex-col items-center justify-center pb-24">
@@ -146,7 +157,7 @@ function CommercialsDialog(props) {
                         <Avatar className="w-96 h-96" alt="contact avatar" src={form.avatar ? FuseUtils.getUrl() + form.avatar.url : "assets/images/avatars/images.png"} />
                     }
 
-                    {CommercialsDialog.type === 'edit' && (
+                    {commercialsDialog.type === 'edit' && (
 
                         <Typography variant="h6" color="inherit" className="pt-8">
                             {form.firstName}&ensp;
@@ -326,27 +337,7 @@ function CommercialsDialog(props) {
                         />
                     </div>
 
-                    <div className="flex">
-
-                        <TextFieldFormsy
-                            className="mb-24"
-                            label="Username"
-                            id="username"
-                            name="username"
-                            value={form.username}
-                            onChange={handleChange}
-                            variant="outlined"
-                            validations={{
-                                minLength: 6
-                            }}
-                            validationErrors={{
-                                minLength: 'Min character length is 6'
-                            }}
-                            required
-                            fullWidth
-                        />
-                    </div>
-                    {CommercialsDialog.type === 'new' ?
+                    {commercialsDialog.type === 'new' ?
                         (
                             <div>
                                 <div className="flex">
@@ -433,15 +424,17 @@ function CommercialsDialog(props) {
 
                 </DialogContent>
 
-                {CommercialsDialog.type === 'new' ? (
+                {commercialsDialog.type === 'new' ? (
                     <DialogActions className="justify-between pl-16">
                         <Button
                             variant="contained"
                             color="primary"
                             type="submit"
-                            disabled={!isFormValid || imageReqInProgress}
+                            disabled={!isFormValid || commercials.loading  || imageReqInProgress}
                         >
                             Ajouter
+                            {commercials.loading && <CircularProgress size={24} />}
+
                         </Button>
                     </DialogActions>
                 ) : (
@@ -450,9 +443,11 @@ function CommercialsDialog(props) {
                                 variant="contained"
                                 color="primary"
                                 type="submit"
-                                disabled={!isFormValid || imageReqInProgress}
+                                disabled={!isFormValid || commercials.loading || imageReqInProgress}
                             >
                                 Modifier
+                            {commercials.loading && <CircularProgress size={24} />}
+
                         </Button>
                             <IconButton
                                 onClick={() => dispatch(Actions.openDialog({

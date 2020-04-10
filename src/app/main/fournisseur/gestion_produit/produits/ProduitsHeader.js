@@ -65,16 +65,12 @@ function ProduitsHeader(props) {
                 </ThemeProvider>
 
             </div>
-            {abonnee ?
-                <FuseAnimate animation="transition.slideRightIn" delay={300}>
+            <FuseAnimate animation="transition.slideRightIn" delay={300}>
                     <Button component={Link} to="/produits/new" className="whitespace-no-wrap" variant="contained">
                         <span className="hidden sm:flex">Ajouter nouveau produit</span>
                         <span className="flex sm:hidden">New</span>
                     </Button>
                 </FuseAnimate>
-                :
-                ''
-            }
 
         </div>
     );

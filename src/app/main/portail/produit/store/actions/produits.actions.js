@@ -204,7 +204,6 @@ export function getPaysCounts(params, pays,q) {
 
 
 export function getSecteursAndPaysCounts(q) {
-    console.log(q)
     const request = agent.get(`/count_produit_categorie?q=${q?q:''}`);
     const request2 = agent.get(`/count_produit_pays?q=${q?q:''}`);
     return (dispatch) => {

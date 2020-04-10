@@ -21,6 +21,8 @@ export const STATUT_COMMERCIAL = '[COMMERCIALS APP] STATUT COMMERCIAL';
 export const UPLOAD_IMAGE = '[COMMERCIALS APP] UPLOAD IMAGE';
 export const UPLOAD_REQUEST = '[COMMERCIALS APP] UPLOAD REQUEST';
 export const UPLOAD_ERROR = '[COMMERCIALS APP] UPLOAD ERROR';
+export const REQUEST_SAVE = '[COMMERCIALS APP] REQUEST SAVE';
+export const REQUEST_COMMERCIALS = '[COMMERCIALS APP] REQUEST_COMMERCIALS';
 
 export function getVilles()
 {
@@ -41,13 +43,18 @@ export function getCommercials()
 {
     const request = agent.get('/api/commercials');
 
-    return (dispatch) =>
-        request.then((response) =>{
+    return (dispatch) => {
+        dispatch({
+            type   : REQUEST_COMMERCIALS,
+        })
+        return  request.then((response) =>{
             dispatch({
                 type   : GET_COMMERCIALS,
                 payload: response.data['hydra:member']
             })
         });
+    }
+       
 }
 
 export function setSearchText(event)
@@ -76,19 +83,31 @@ export function closeEditCommercialsDialog()
 }
 
 
-export function updateCommercial(Commercial)
+export function updateCommercial(commercial)
 {
-    if (Commercial.villes)
-    Commercial.villes = Commercial.villes.map((item => {return item.value}));
+   
+    let arr = null;
+    let avatar = null;
+    if (commercial.villes) {
+        arr = commercial.villes.map((item => { return item.value }));
+    }
+    if (commercial.avatar && commercial.avatar.url) {
+        avatar = commercial.avatar['@id'];
+    }
 
-    if(Commercial.avatar && Commercial.avatar.url)
-    Commercial.avatar = Commercial.avatar['@id'];
+    const data = {
+        ...commercial,
+        villes: arr,
+        avatar: avatar
+    }
 
+    return (dispatch) => {
 
-    return (dispatch, getState) => {
-
+        dispatch({
+            type: REQUEST_SAVE,
+        });
      
-        const request = agent.put(Commercial['@id'],Commercial);
+        const request = agent.put(commercial['@id'],data);
 
         return request.then((response) =>
             Promise.all([
@@ -99,38 +118,28 @@ export function updateCommercial(Commercial)
                     vertical  : 'top',//top bottom
                     horizontal: 'right'//left center right
                 },
-                variant: 'success'}))
+                variant: 'success'})),
+                dispatch(closeEditCommercialsDialog())
             ]).then(() => dispatch(getCommercials()))
         )
         .catch((error)=>{
             dispatch({
                 type: SAVE_ERROR,
+                payload: FuseUtils.parseApiErrors(error)
             });
-            dispatch(
-                showMessage({
-                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: 'error'//success error info warning null
-                }))
         });
     };
 }
 
-export function removeCommercial(Commercial)
+export function removeCommercial(commercial)
 {
     
-    let UpdateCommercial = {del :true,username : Commercial.username+'_deleted-'+Commercial.id,email : Commercial.email+'_deleted-'+Commercial.id}
+    let UpdateCommercial = {del :true,username : commercial.username+'_deleted-'+commercial.id,email : commercial.email+'_deleted-'+commercial.id}
     
     return (dispatch, getState) => {
 
         
-        const request = agent.put(Commercial['@id'],UpdateCommercial);
+        const request = agent.put(commercial['@id'],UpdateCommercial);
 
         return request.then((response) =>
             Promise.all([
@@ -147,14 +156,14 @@ export function removeCommercial(Commercial)
     };
 }
 
-export function activeAccount(Commercial,active)
+export function activeAccount(commercial,active)
 {
     
     let UpdateCommercial = {isactif : active}
     return (dispatch, getState) => {
 
         
-        const request = agent.put(Commercial['@id'],UpdateCommercial);
+        const request = agent.put(commercial['@id'],UpdateCommercial);
 
         return request.then((response) =>
             Promise.all([

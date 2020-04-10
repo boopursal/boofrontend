@@ -120,7 +120,7 @@ function FournisseurListItem(props) {
                                             <Grid item xs={12} sm container>
                                                 <Grid item xs container direction="column" spacing={2}>
                                                     <Grid item xs>
-                                                        <Typography component={Link} to={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`} variant="h6">
+                                                        <Typography component={Link} to={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`} className="uppercase" variant="h6">
 
                                                             {fournisseur.societe}
                                                         </Typography>
@@ -149,8 +149,8 @@ function FournisseurListItem(props) {
                                                         Fournisseur de :
                                                         {
                                                             fournisseur.sousSecteurs && fournisseur.sousSecteurs.map((item, index) => (
-                                                                <Chip
-                                                                    label={item.name}
+                                                                index < 3 &&  <Chip
+                                                                    label={_.capitalize(item.name)}
                                                                     classes={{
                                                                         root: "h-24",
                                                                         label: "pl-4 pr-6 py-4 text-11",
@@ -158,8 +158,9 @@ function FournisseurListItem(props) {
                                                                     }}
                                                                     key={index}
                                                                     variant="outlined"
-                                                                    className="ml-4 h-24"
-                                                                />
+                                                                    className="ml-4 mb-4 h-24"
+                                                                /> 
+                                                                
                                                             ))
 
                                                         }

@@ -120,7 +120,6 @@ export function updateSocieteInfo(data, id_acheteur) {
     } else {
         data.codepostal = parseInt(data.codepostal);
     }
-    console.log(data)
 
     return (dispatch, getState) => {
 

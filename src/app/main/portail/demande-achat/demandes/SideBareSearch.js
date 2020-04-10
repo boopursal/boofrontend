@@ -239,7 +239,7 @@ function SideBareSearch(props) {
                                                                 selected={item.slug === activite}
                                                                 button={item.slug !== activite}
                                                                 onClick={event => {
-                                                                    item.slug === activite ? console.log('') :
+                                                                    item.slug !== activite &&
                                                                         (props.history.replace({ pathname: '/demandes-achats/' + secteur + '/' + item.slug, search: pays ? 'pays=' + pays : '' }))
                                                                     document.querySelector('.ps').scrollTop = 0
 

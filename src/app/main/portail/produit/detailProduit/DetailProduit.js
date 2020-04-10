@@ -370,7 +370,7 @@ function DetailProduit(props) {
                                                         </Typography>
                                                     </div>
 
-                                                    <Typography className={classes.price} color="secondary" >
+                                                    <Typography className={classes.price} className="uppercase" color="secondary" >
                                                         {
                                                             produit.data.pu ?
                                                                 parseFloat(produit.data.pu).toLocaleString(
@@ -381,7 +381,7 @@ function DetailProduit(props) {
                                                                 (produit.data.currency && ' ' + produit.data.currency.name) +
                                                                 ' HT'
                                                                 :
-                                                                <span className="uppercase">à</span> + ' consulter'
+                                                                'à consulter'
                                                         }
                                                     </Typography>
 

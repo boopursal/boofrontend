@@ -71,7 +71,6 @@ function ContactFournisseurDialog(props) {
     function handleSubmit(model) {
         //event.preventDefault();
      if (contactFournisseurDialog.type === 'new') {
-            console.log(contactFournisseurDialog.data)
             dispatch(Actions.addMessage(model,contactFournisseurDialog.data));
         }
 

@@ -25,7 +25,6 @@ export function getFournisseurs(societe)
 
     return (dispatch) =>
         request.then((response) =>{
-            console.log(response)
             dispatch({
                 type   : GET_FOURNISSEURS,
                 payload: response.data['hydra:member']

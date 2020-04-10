@@ -1,35 +1,34 @@
-import React, {useEffect, useCallback, useRef, useState} from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment, Avatar, CircularProgress} from '@material-ui/core';
-import {useForm} from '@fuse/hooks';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment, Avatar, CircularProgress } from '@material-ui/core';
+import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {TextFieldFormsy, FuseUtils} from '@fuse';
+import { useDispatch, useSelector } from 'react-redux';
+import { TextFieldFormsy, FuseUtils } from '@fuse';
 import Formsy from 'formsy-react';
 import _ from '@lodash';
 import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
 
 const defaultFormState = {
-    username    : '',
-    firstName    : '',
-    lastName    : '',
+    firstName: '',
+    lastName: '',
     adresse1: '',
     adresse2: '',
-    codepostal:  null,
+    codepostal: null,
     phone: '',
     email: '',
-    pays : null,
-    
+    pays: null,
+
 };
 
-function ZonesDialog(props)
-{
+function ZonesDialog(props) {
     const dispatch = useDispatch();
-    const ZonesDialog = useSelector(({zonesApp}) => zonesApp.zones.zonesDialog);
-    const Pays = useSelector(({zonesApp}) => zonesApp.zones.pays);
-    const imageReqInProgress = useSelector(({zonesApp}) => zonesApp.zones.imageReqInProgress);
-    const avatar = useSelector(({zonesApp}) => zonesApp.zones.avatar);
-   
-    const {form, handleChange, setForm} = useForm(defaultFormState);
+    const zonesDialog = useSelector(({ zonesApp }) => zonesApp.zones.zonesDialog);
+    const zones = useSelector(({ zonesApp }) => zonesApp.zones);
+    const Pays = useSelector(({ zonesApp }) => zonesApp.zones.pays);
+    const imageReqInProgress = useSelector(({ zonesApp }) => zonesApp.zones.imageReqInProgress);
+    const avatar = useSelector(({ zonesApp }) => zonesApp.zones.avatar);
+
+    const { form, handleChange, setForm } = useForm(defaultFormState);
 
 
     const [isFormValid, setIsFormValid] = useState(false);
@@ -41,110 +40,109 @@ function ZonesDialog(props)
             /**
              * Dialog type: 'edit'
              */
-            if ( ZonesDialog.type === 'edit' && ZonesDialog.data )
-            {
-               let pays= ZonesDialog.data.pays.map(item => ({
-                            value: item['@id'],
-                            label: item.name
-                         }));
-                setForm({...ZonesDialog.data});
-                setForm(_.set({...ZonesDialog.data}, 'pays', pays));
+            if (zonesDialog.type === 'edit' && zonesDialog.data) {
+                let pays = zonesDialog.data.pays.map(item => ({
+                    value: item['@id'],
+                    label: item.name
+                }));
+                setForm({ ...zonesDialog.data });
+                setForm(_.set({ ...zonesDialog.data }, 'pays', pays));
             }
 
             /**
              * Dialog type: 'new'
              */
-            if ( ZonesDialog.type === 'new' )
-            {
+            if (zonesDialog.type === 'new') {
                 setForm({
                     ...defaultFormState,
-                    ...ZonesDialog.data,
+                    ...zonesDialog.data,
                 });
             }
         },
-        [ZonesDialog.data, ZonesDialog.type, setForm],
+        [zonesDialog.data, zonesDialog.type, setForm],
     );
+
+    useEffect(() => {
+        if (zones.error && (zones.error.firstName || zones.error.lastName || zones.error.adresse1 || zones.error.adresse2
+             || zones.error.codepostal || zones.error.phone || zones.error.email || zones.error.pays)) {
+            
+            formRef.current.updateInputsWithError({
+                ...zones.error
+            });
+
+            disableButton();
+            zones.error = null;
+        }
+    }, [zones.error]);
 
     useEffect(() => {
         /**
          * After Dialog Open
          */
-        if ( ZonesDialog.props.open )
-        {
+        if (zonesDialog.props.open) {
             initDialog();
         }
 
-    }, [ZonesDialog.props.open, initDialog]);
+    }, [zonesDialog.props.open, initDialog]);
 
     useEffect(() => {
-        
-        if(avatar){
-            setForm(_.set({...form}, 'avatar', avatar));
-        }else{
-            setForm(_.set({...form}, 'avatar', null));
+
+        if (avatar) {
+            setForm(_.set({ ...form }, 'avatar', avatar));
+        } else {
+            setForm(_.set({ ...form }, 'avatar', null));
         }
 
     }, [avatar]);
 
 
-    function closeComposeDialog()
-    {
-        ZonesDialog.type === 'edit' ? dispatch(Actions.closeEditZonesDialog()) : dispatch(Actions.closeNewZonesDialog());
+    function closeComposeDialog() {
+        zonesDialog.type === 'edit' ? dispatch(Actions.closeEditZonesDialog()) : dispatch(Actions.closeNewZonesDialog());
     }
 
-    
 
-    function handleSubmit(event)
-    {
-        form.codepostal=_.parseInt(form.codepostal);
-      //  console.log(form)
-           
+
+    function handleSubmit(event) {
+        form.codepostal = _.parseInt(form.codepostal);
+        //  console.log(form)
+
         //event.preventDefault();
-        if ( ZonesDialog.type === 'new' )
-        {
+        if (zonesDialog.type === 'new') {
             dispatch(Actions.addZone(form));
         }
-        else
-        {
+        else {
             dispatch(Actions.updateZone(form));
         }
-        closeComposeDialog();
     }
 
-    function handleRemove()
-    {
-        
+    function handleRemove() {
+
         dispatch(Actions.removeZone(form));
         dispatch(Actions.closeDialog())
         closeComposeDialog();
     }
-    function handleChipChange(value, name)
-    {
+    function handleChipChange(value, name) {
         //setForm(_.set({...form}, name, value.map(item => item.value)));
-        setForm(_.set({...form}, name, value));
+        setForm(_.set({ ...form }, name, value));
     }
 
-    function disableButton()
-    {
+    function disableButton() {
         setIsFormValid(false);
     }
 
-    function enableButton()
-    {
-        
+    function enableButton() {
+
         setIsFormValid(true);
     }
 
 
-    function handleUploadChange(e)
-    {
+    function handleUploadChange(e) {
         const file = e.target.files[0];
-        if ( !file )
-        {
+        if (!file) {
             return;
         }
         dispatch(Actions.uploadImage(file));
-        
+
     }
 
     return (
@@ -152,7 +150,7 @@ function ZonesDialog(props)
             classes={{
                 paper: "m-24"
             }}
-            {...ZonesDialog.props}
+            {...zonesDialog.props}
             onClose={closeComposeDialog}
             fullWidth
             maxWidth="xs"
@@ -161,19 +159,19 @@ function ZonesDialog(props)
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {ZonesDialog.type === 'new' ? 'Nouvelle Zone' : 'Edit Zone'}
+                        {zonesDialog.type === 'new' ? 'Nouvelle Zone' : 'Edit Zone'}
                     </Typography>
                 </Toolbar>
                 <div className="flex flex-col items-center justify-center pb-24">
-                    {imageReqInProgress ? 
-                    <Avatar className="">
-                        <CircularProgress size={24}  />
-                    </Avatar>
-                    :
-                    <Avatar className="w-96 h-96" alt="contact avatar" src={form.avatar? FuseUtils.getUrl()+form.avatar.url : "assets/images/avatars/images.png"}/>
+                    {imageReqInProgress ?
+                        <Avatar className="">
+                            <CircularProgress size={24} />
+                        </Avatar>
+                        :
+                        <Avatar className="w-96 h-96" alt="contact avatar" src={form.avatar ? FuseUtils.getUrl() + form.avatar.url : "assets/images/avatars/images.png"} />
                     }
-                    
-                    {ZonesDialog.type === 'edit' && (
+
+                    {zonesDialog.type === 'edit' && (
                         <Typography variant="h6" color="inherit" className="pt-8">
                             {form.firstName}&ensp;
                             {form.lastName}
@@ -181,16 +179,16 @@ function ZonesDialog(props)
                     )}
                 </div>
             </AppBar>
-            <Formsy 
-            onValidSubmit={handleSubmit}
-            onValid={enableButton}
-            onInvalid={disableButton}
-            ref={formRef}
-            className="flex flex-col overflow-hidden">
-                <DialogContent classes={{root: "p-24"}}>
-                    
-                <div className="flex">
-                        
+            <Formsy
+                onValidSubmit={handleSubmit}
+                onValid={enableButton}
+                onInvalid={disableButton}
+                ref={formRef}
+                className="flex flex-col overflow-hidden">
+                <DialogContent classes={{ root: "p-24" }}>
+
+                    <div className="flex">
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="Nom"
@@ -212,7 +210,7 @@ function ZonesDialog(props)
                     </div>
 
                     <div className="flex">
-                        
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="Prénom"
@@ -233,7 +231,7 @@ function ZonesDialog(props)
                     </div>
 
                     <div className="flex">
-                        
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="Adresse 1"
@@ -254,7 +252,7 @@ function ZonesDialog(props)
                     </div>
 
                     <div className="flex">
-                        
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="Adresse 2"
@@ -274,7 +272,7 @@ function ZonesDialog(props)
                     </div>
 
                     <div className="flex">
-                        
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="Code postal"
@@ -299,7 +297,7 @@ function ZonesDialog(props)
                     </div>
 
                     <div className="flex">
-                        
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="Téléphone"
@@ -321,7 +319,7 @@ function ZonesDialog(props)
                         />
                     </div>
                     <div className="flex">
-                        
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="E-mail"
@@ -332,101 +330,82 @@ function ZonesDialog(props)
                             variant="outlined"
                             validations="isEmail"
                             validationErrors={{
-                                isEmail:"This is not a valid email"
+                                isEmail: "This is not a valid email"
                             }}
                             required
                             fullWidth
                         />
                     </div>
 
-                    <div className="flex">
-                        
-                        <TextFieldFormsy
-                            className="mb-24"
-                            label="Username"
-                            id="username"
-                            name="username"
-                            value={form.username}
-                            onChange={handleChange}
-                            variant="outlined"
-                            validations={{
-                                minLength: 6
-                            }}
-                            validationErrors={{
-                                minLength: 'Min character length is 6'
-                            }}
-                            required
-                            fullWidth
-                        />
-                    </div>
-                    {ZonesDialog.type === 'new' ? 
-                                    (
-                                    <div>
-                                    <div className="flex">
-                                        
-                                            <TextFieldFormsy
-                                            className="mb-24"
-                                            type="password"
-                                            name="password"
-                                            label="Mot de passe"
-                                            onChange={handleChange}
-                                            validations={{
-                                                minLength: 6
-                                            }}
-                                            validationErrors={{
-                                                minLength: 'Min character length is 6'
-                                            }}
-                                            InputProps={{
-                                                endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
-                                            }}
-                                            variant="outlined"
-                                            required
-                                            fullWidth
-                                        />
-                                    </div>
-                                    <div className="flex">
-                                    
-                                        <TextFieldFormsy
-                                            className="mb-24"
-                                            id="confirmpassword"
-                                            type="password"
-                                            name="confirmpassword"
-                                            label="Confirmer mot de passe"
-                                            validations="equalsField:password"
-                                            onChange={handleChange}
-                                            validationErrors={{
-                                                equalsField: 'Passwords not identique'
-                                            }}
-                                            InputProps={{
-                                                endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
-                                            }}
-                                            variant="outlined"
-                                            fullWidth
-                                        />
-                                    </div> 
-                                    </div>) : ''
+                   
+                    {zonesDialog.type === 'new' ?
+                        (
+                            <div>
+                                <div className="flex">
+
+                                    <TextFieldFormsy
+                                        className="mb-24"
+                                        type="password"
+                                        name="password"
+                                        label="Mot de passe"
+                                        onChange={handleChange}
+                                        validations={{
+                                            minLength: 6
+                                        }}
+                                        validationErrors={{
+                                            minLength: 'Min character length is 6'
+                                        }}
+                                        InputProps={{
+                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                                        }}
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                    />
+                                </div>
+                                <div className="flex">
+
+                                    <TextFieldFormsy
+                                        className="mb-24"
+                                        id="confirmpassword"
+                                        type="password"
+                                        name="confirmpassword"
+                                        label="Confirmer mot de passe"
+                                        validations="equalsField:password"
+                                        onChange={handleChange}
+                                        validationErrors={{
+                                            equalsField: 'Passwords not identique'
+                                        }}
+                                        InputProps={{
+                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                                        }}
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                </div>
+                            </div>) : ''
                     }
                     <div className="flex">
-                       
+
                         <SelectReactFormsy
-                            
+
                             id="pays"
                             name="pays"
                             className="MuiFormControl-fullWidth MuiTextField-root mb-24"
                             value={
-                                
-                                    form.pays
-                                    
-                                
+
+                                form.pays
+
+
                             }
                             onChange={(value) => handleChipChange(value, 'pays')}
                             placeholder="Selectionner multiple pays"
                             textFieldProps={{
-                                label          : 'Pays',
+                                label: 'Pays',
                                 InputLabelProps: {
                                     shrink: true
                                 },
-                                variant        : 'outlined'
+                                variant: 'outlined'
                             }}
                             options={Pays}
                             fullWidth
@@ -435,66 +414,69 @@ function ZonesDialog(props)
                         />
                     </div>
                     <div className="flex">
-                    <input
-                        accept="image/*"
-                        id="button-file"
-                        type="file"
-                        onChange={handleUploadChange}
-                    />     
+                        <input
+                            accept="image/*"
+                            id="button-file"
+                            type="file"
+                            onChange={handleUploadChange}
+                        />
                     </div>
 
-                 
+
                 </DialogContent>
 
-                {ZonesDialog.type === 'new' ? (
+                {zonesDialog.type === 'new' ? (
                     <DialogActions className="justify-between pl-16">
                         <Button
                             variant="contained"
                             color="primary"
                             type="submit"
-                            disabled={!isFormValid || imageReqInProgress}
+                            disabled={!isFormValid || zones.loading || imageReqInProgress}
                         >
                             Ajouter
+                            {zones.loading && <CircularProgress size={24} />}
                         </Button>
                     </DialogActions>
                 ) : (
-                    <DialogActions className="justify-between pl-16">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={!isFormValid || imageReqInProgress}
-                        >
-                            Modifier
+                        <DialogActions className="justify-between pl-16">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={!isFormValid || zones.loading || imageReqInProgress}
+                            >
+                                Modifier
+                            {zones.loading && <CircularProgress size={24} />}
+
                         </Button>
-                        <IconButton
-                            onClick={()=> dispatch(Actions.openDialog({
-                                children: (
-                                    <React.Fragment>
-                                        <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                            Voulez vous vraiment supprimer cet enregistrement ?
+                            <IconButton
+                                onClick={() => dispatch(Actions.openDialog({
+                                    children: (
+                                        <React.Fragment>
+                                            <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    Voulez vous vraiment supprimer cet enregistrement ?
                                             </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
-                                                Non
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                    Non
                                             </Button>
-                                            <Button onClick={handleRemove} color="primary" autoFocus>
-                                                Oui
+                                                <Button onClick={handleRemove} color="primary" autoFocus>
+                                                    Oui
                                             </Button>
-                                        </DialogActions>
-                                    </React.Fragment>
-                                     )
-                                 }))}
-                            
-                            
-                        >
-                            <Icon>delete</Icon>
-                        </IconButton>
-                    </DialogActions>
-                )}
+                                            </DialogActions>
+                                        </React.Fragment>
+                                    )
+                                }))}
+
+
+                            >
+                                <Icon>delete</Icon>
+                            </IconButton>
+                        </DialogActions>
+                    )}
             </Formsy>
         </Dialog>
     );

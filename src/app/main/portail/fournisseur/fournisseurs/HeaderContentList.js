@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/styles';
 import { Chip, Typography, Select } from '@material-ui/core';
 import { useDispatch,useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
-import ContentLoader from "react-content-loader"
 
 const useStyles = makeStyles(theme => ({
     chip: {
@@ -50,8 +49,6 @@ function HeaderContentList(props) {
 
                     <option value='created-desc'>Plus récent</option>
                     <option value='created-asc'>Plus ancien </option>
-                    <option value='pu-asc'>Prix les plus bas en premier</option>
-                    <option value='pu-desc'>Prix les plus hauts en premier</option>
                 </Select>
             </div>
         </div>

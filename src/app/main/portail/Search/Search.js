@@ -111,8 +111,6 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
 
 function getSuggestionValue(suggestion) {
     let result = '';
-    console.log("====> get value")
-    console.log(suggestion)
     if (suggestion.societe) {
         result = suggestion.societe
     }

@@ -141,18 +141,19 @@ function Produit(props) {
 
         if (abonnement) {
             if (!abonnement.statut) {
+                //desactivé par admin
                 setEnable(false)
             }
             let days = moment(abonnement.expired).diff(moment(), 'days');
             if (days <= 0) {
+                // abonnement expiré
                 setDays(days);
                 setExpired(true);
             }
             if (abonnement.statut && days > 0) {
+                //abonnement en cours
                 setAbonnee(true);
             }
-
-            //setFilteredData(getFilteredArray(produits, searchText));
         }
     }, [abonnement]);
     
@@ -185,7 +186,6 @@ function Produit(props) {
 
     }, [form, setForm, produit.fiche, dispatch]);
 
-    // Effect redirection and clean state
     useEffect(() => {
         if (produit.successActivite) {
             setOpen(false);
@@ -193,7 +193,6 @@ function Produit(props) {
         }
     }, [produit.successActivite, setOpen]);
 
-    // Effect redirection and clean state
     useEffect(() => {
         if (produit.errorActivite) {
             setOpen(false);
@@ -467,7 +466,36 @@ function Produit(props) {
                 </div>
             )
         }
-        return null;
+        return (
+            <div className={clsx(classes.root2, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
+
+                <div className="flex flex-col items-center justify-center w-full">
+
+                    <Grow in={true}>
+                        <Card className="w-full ">
+
+                            <CardContent className="flex flex-col items-center justify-center text-center p-48">
+
+
+                                <Typography variant="h4" className="mb-16 text-red">
+                                    Réserver à nos clients
+                                </Typography>
+
+                                <Typography color="textSecondary" className="mb-40">
+                                    Pour consulter les offres et ajouter une commande cliquer sur le bouton suivant
+
+
+                                </Typography>
+                                <Button component={Link} to="/offres/commande/new" className="whitespace-no-wrap" color="secondary" variant="contained">
+                                    <span className="">Commander abonnement</span>
+                                </Button>
+
+                            </CardContent>
+                        </Card>
+                    </Grow>
+                </div>
+            </div>
+        );
     }
 
     return (
