@@ -9,6 +9,7 @@ const initialState = {
     parametres: {
         page: 1,
         reference: '',
+        search: [],
         filter: {
             id: 'created',
             direction: 'desc'
@@ -55,6 +56,7 @@ const produitsReducer = function (state = initialState, action) {
                     parametres: {
                         page: action.parametres.page,
                         reference: action.parametres.reference,
+                        search: action.parametres.search,
                         filter: {
                             id: action.parametres.filter.id,
                             direction: action.parametres.filter.direction

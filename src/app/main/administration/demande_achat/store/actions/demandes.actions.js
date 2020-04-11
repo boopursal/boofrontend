@@ -1,5 +1,6 @@
 import { showMessage } from 'app/store/actions/fuse';
 import agent from "agent";
+import moment from 'moment';
 
 export const REQUEST_DEMANDES = '[DEMANDES ADMIN APP] REQUEST DEMANDES';
 export const REMOVE_DEMANDE = '[DEMANDES ADMIN APP] REMOVE DEMANDES';
@@ -12,7 +13,34 @@ export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES ADMIN APP] SET DEMANDES SEARC
 
 export function getDemandes(parametres) {
     var description = parametres.description ? `=${parametres.description}` : '';
-    const request = agent.get(`/api/demande_achats?page=${parametres.page}&description${description}&order[${parametres.filter.id}]=${parametres.filter.direction}&order[dateExpiration]=${parametres.filter.id === 'dateExpiration' ? parametres.filter.direction : 'DESC'}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map(function (item, i) {
+            if (item.value) {
+                if (item.id === 'created' || item.id === 'dateExpiration') {
+                    search += '&' + item.id + '[after]=' + item.value
+                } else if (item.id === 'statut') {
+                    if (item.value === '0') {
+                        search += `&statut=0&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '1') {
+                        search += `&statut=1&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '2') {
+                        search += `&statut=2&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '3') {
+                        search += `&dateExpiration[strictly_before]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                }
+                else {
+                    search += '&' + item.id + '=' + item.value
+                }
+            }
+        });
+    }
+
+    const request = agent.get(`/api/demande_achats?page=${parametres.page}&description${description}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}&order[dateExpiration]=${parametres.filter.id === 'dateExpiration' ? parametres.filter.direction : 'DESC'}`);
 
     return (dispatch) => {
         dispatch({

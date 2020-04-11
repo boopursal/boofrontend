@@ -20,8 +20,14 @@ export function cleanUp() {
 
 export function getProduits(parametres)
 {
-    var reference = parametres.reference?`=${parametres.reference}`:'';
-    const request = agent.get(`/api/produits?page=${parametres.page}&reference${reference}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map((item) => (
+            item.value && (
+                item.id === 'created' ? (search += '&' + item.id + '[after]=' + item.value) :(search += '&' + item.id + '=' + item.value))
+        ));
+    }
+    const request = agent.get(`/api/produits?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) =>{
         dispatch({

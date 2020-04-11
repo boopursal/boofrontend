@@ -7,8 +7,14 @@ export const GET_FOURNISSEURS = '[FOURNISSEURS ADMIN APP] GET FOURNISSEURS';
 export const SET_FOURNISSEURS_SEARCH_TEXT = '[FOURNISSEURS ADMIN APP] SET FOURNISSEURS SEARCH TEXT';
 
 export function getFournisseurs(parametres) {
-    var societe = parametres.societe ? `=${parametres.societe}` : '';
-    const request = agent.get(`/api/fournisseurs?page=${parametres.page}&societe${societe}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map((item) => (
+            item.value && (
+                item.id === 'created' ? (search += '&' + item.id + '[after]=' + item.value) :(search += '&' + item.id + '=' + item.value))
+        ));
+    }
+    const request = agent.get(`/api/fournisseurs?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {
         dispatch({

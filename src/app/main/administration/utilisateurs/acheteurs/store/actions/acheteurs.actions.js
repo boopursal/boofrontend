@@ -7,8 +7,15 @@ export const GET_ACHETEURS = '[ACHETEURS ADMIN APP] GET ACHETEURS';
 export const SET_ACHETEURS_SEARCH_TEXT = '[ACHETEURS ADMIN APP] SET ACHETEURS SEARCH TEXT';
 
 export function getAcheteurs(parametres) {
-    var societe = parametres.societe ? `=${parametres.societe}` : '';
-    const request = agent.get(`/api/acheteurs?page=${parametres.page}&societe${societe}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map((item) => (
+            item.value && (
+                item.id === 'created' ? (search += '&' + item.id + '[after]=' + item.value) :(search += '&' + item.id + '=' + item.value))
+        ));
+    }
+    console.log(search)
+    const request = agent.get(`/api/acheteurs?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {
         dispatch({
@@ -23,22 +30,23 @@ export function getAcheteurs(parametres) {
     }
 
 }
-export function activeAccount(acheteur,active,parametres)
-{
-    
-    let Updateacheteur = {isactif : active}
+export function activeAccount(acheteur, active, parametres) {
+
+    let Updateacheteur = { isactif: active }
     return (dispatch) => {
         dispatch({
             type: REQUEST_ACHETEURS,
         });
-        const request = agent.put(acheteur['@id'],Updateacheteur);
+        const request = agent.put(acheteur['@id'], Updateacheteur);
         return request.then((response) =>
             Promise.all([
-                dispatch(showMessage({message: 'Statut modifié!',anchorOrigin: {
-                    vertical  : 'top',//top bottom
-                    horizontal: 'right'//left center right
-                },
-                variant: 'success'}))
+                dispatch(showMessage({
+                    message: 'Statut modifié!', anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'success'
+                }))
             ]).then(() => dispatch(getAcheteurs(parametres)))
         );
     };

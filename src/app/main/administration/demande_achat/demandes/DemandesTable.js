@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField, InputAdornment } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -19,25 +19,33 @@ const useStyles = makeStyles(theme => ({
     },
     chip: {
         marginLeft: theme.spacing(1),
+        padding : 2,
         background: '#ef5350',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height:20
+
 
     },
     chip2: {
         marginLeft: theme.spacing(1),
+        padding : 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height:20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding : 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height:20
+
     },
 }));
 function DemandesTable(props) {
@@ -74,7 +82,14 @@ function DemandesTable(props) {
     }
 
 
+    //dispatch from function filter
+    const run = (parametres) => (
+         dispatch(Actions.setParametresData(parametres))
+    )
 
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
 
     return (
         <div className="w-full flex flex-col">
@@ -108,13 +123,24 @@ function DemandesTable(props) {
                         {
                             Header: "Référence",
                             className: "font-bold",
-                            id: "reference",
-                            accessor: f => f.reference ? 'RFQ-' + f.reference : 'En attente',
+                            filterable: true,
+                            accessor: "reference",
+                            Cell: row => row.original.reference ? 'RFQ-' + row.original.reference : 'En attente',
+                            Filter: ({ filter, onChange }) =>
+                                <TextField
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">RFQ-</InputAdornment>,
+                                    }}
+                                />
+                            ,
                         },
                         {
                             Header: "Titre",
                             accessor: "titre",
-                            filterable: false,
+                            filterable: true,
                             Cell: row => (
                                 <div className="flex items-center">
                                     {_.capitalize(_.truncate(row.original.titre, {
@@ -127,27 +153,21 @@ function DemandesTable(props) {
                         {
                             Header: "Budget",
                             accessor: "budget",
+                            filterable: true,
                             Cell: row =>
                                 (
-                                    <>
-                                        {
-                                            parseFloat(row.original.budget).toLocaleString(
-                                                'fr', // leave undefined to use the browser's locale,
-                                                // or use a string like 'en-US' to override it.
-                                                { minimumFractionDigits: 2 }
-                                            )
-                                        }
-                                        &ensp;
-                                {
-                                            row.original.currency ? row.original.currency.name : ''
-                                        }
-                                    </>
+                                    parseFloat(row.original.budget).toLocaleString(
+                                        'fr', // leave undefined to use the browser's locale,
+                                        // or use a string like 'en-US' to override it.
+                                        { minimumFractionDigits: 2 }
+                                    ) + ' ' + (row.original.currency ? row.original.currency.name : '')
+
                                 )
                         },
                         {
                             Header: "Secteurs",
                             accessor: "sousSecteurs.name",
-                            filterable: false,
+                            filterable: true,
                             Cell: row =>
                                 _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
                                     'length': 36,
@@ -156,19 +176,29 @@ function DemandesTable(props) {
 
                         },
                         {
-                            Header: "Date",
+                            Header: "Date de création",
                             accessor: "created",
-                            filterable: false,
-                            Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                            filterable: true,
+                            Cell: row => moment(row.original.created).format('DD/MM/YYYY'),
+                            Filter: ({ filter, onChange }) =>
+                                <TextField
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />,
                         },
                         {
                             Header: "Échéance",
+                            filterable: true,
                             accessor: "dateExpiration",
-                            filterable: false,
                             Cell: row => (
                                 <div className="flex items-center">
                                     {
-                                        moment(row.original.dateExpiration).format('DD/MM/YYYY HH:mm')
+                                        moment(row.original.dateExpiration).format('DD/MM/YYYY')
 
                                     }
 
@@ -183,13 +213,24 @@ function DemandesTable(props) {
                                     }
 
                                 </div>
-                            )
+                            ),
+                            Filter: ({ filter, onChange }) =>
+                                <TextField
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />,
 
                         },
                         {
                             Header: "Statut",
+                            accessor: "statut",
+                            filterable: true,
                             sortable: false,
-                            filterable: false,
                             Cell: row => (
                                 <div className="flex items-center">
 
@@ -211,13 +252,27 @@ function DemandesTable(props) {
 
                                 </div>
                             )
+                            ,
+                            Filter: ({ filter, onChange }) =>
+                                <select
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                >
+                                    <option value="">Tous</option>
+                                    <option value="0">En attente</option>
+                                    <option value="1">En cours</option>
+                                    <option value="2">Refusé</option>
+                                    <option value="3">Expiré</option>
+                                </select>
 
                         },
 
                         {
                             Header: "Publier",
                             accessor: "isPublic",
-                            Cell: row =>
+                            filterable: true,
+                            Cell: row => (
                                 row.original.isPublic ?
                                     (
                                         <Tooltip title="Public">
@@ -241,6 +296,19 @@ function DemandesTable(props) {
                                             </IconButton>
                                         </Tooltip>
                                     )
+                            ),
+                            Filter: ({ filter, onChange }) =>
+                                <select
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                >
+                                    <option value="">Tous</option>
+                                    <option value="true">Public</option>
+                                    <option value="false">Privé</option>
+                                </select>
+
+
 
 
                         },
@@ -250,7 +318,7 @@ function DemandesTable(props) {
                             Cell: row => (
                                 <div className="flex items-center">
                                     {
-                                        row.original.statut !== 1  ?
+                                        row.original.statut !== 1 ?
                                             <Tooltip title="Supprimer" >
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
@@ -282,8 +350,6 @@ function DemandesTable(props) {
                         }
                     ]}
                     manual
-
-                    defaultSortDesc={true}
                     pages={pageCount}
                     defaultPageSize={10}
                     loading={loading}
@@ -299,7 +365,12 @@ function DemandesTable(props) {
                         parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                         dispatch(Actions.setParametresData(parametres))
                     }}
-                    noDataText="No Demande found"
+                    onFilteredChange={filtered => {
+                        parametres.page = 1;
+                        parametres.search = filtered;
+                        fn(parametres);
+                    }}
+                    noDataText="Aucune demande trouvée"
                     loadingText='Chargement...'
                     ofText='sur'
                 />

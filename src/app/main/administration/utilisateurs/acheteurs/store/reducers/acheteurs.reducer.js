@@ -9,6 +9,7 @@ const initialState = {
     parametres: {
         page: 1,
         societe: '',
+        search:[],
         filter: {
             id: 'created',
             direction: 'desc'
@@ -50,6 +51,7 @@ const acheteursReducer = function (state = initialState, action) {
                     parametres: {
                         page: action.parametres.page,
                         societe: action.parametres.societe,
+                        search:action.parametres.search,
                         filter: {
                             id: action.parametres.filter.id,
                             direction: action.parametres.filter.direction

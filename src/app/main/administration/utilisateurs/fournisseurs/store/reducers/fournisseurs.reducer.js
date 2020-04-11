@@ -8,6 +8,7 @@ const initialState = {
     searchText: '',
     parametres: {
         page: 1,
+        search:[],
         societe: '',
         filter: {
             id: 'created',
@@ -50,6 +51,7 @@ const fournisseursReducer = function (state = initialState, action) {
                     parametres: {
                         page: action.parametres.page,
                         societe: action.parametres.societe,
+                        search:action.parametres.search,
                         filter: {
                             id: action.parametres.filter.id,
                             direction: action.parametres.filter.direction

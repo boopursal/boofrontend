@@ -1,7 +1,7 @@
 import "react-table/react-table.css";
-import React, {Component} from 'react';
-import {FormControl, FormHelperText, Icon, IconButton, Input, InputAdornment, Menu, MenuItem} from '@material-ui/core';
-import {ReactTableDefaults} from 'react-table'
+import React, { Component } from 'react';
+import { FormControl, FormHelperText, Icon, IconButton, Input, InputAdornment, Menu, MenuItem } from '@material-ui/core';
+import { ReactTableDefaults } from 'react-table'
 import _ from '@lodash';
 
 const filterTypes = [
@@ -29,9 +29,10 @@ const filterTypes = [
 class FilterComponent extends Component {
 
     state = {
-        filterType  : 'contains',
-        filterValue : '',
-        filterMenuEl: null
+        // filterType  : 'contains',
+        //  filterValue : '',
+        //   filterMenuEl: null
+        value: ''
     };
     changeFilterType = (filterType) => {
         const newState = {
@@ -48,35 +49,37 @@ class FilterComponent extends Component {
     changeFilterValue = (event) => {
         const newState = {
             ...this.state,
-            filterValue: event.target.value
+           // filterValue: event.target.value
+           value: event.target.value
         };
         // Update local state
         this.setState(newState);
         // Fire the callback to alert React-Table of the new filter
-        this.props.onChange(newState);
+        //this.props.onChange(newState);
+        this.props.onChange(event.target.value);
     };
 
     handleFilterMenuClick = event => {
-        this.setState({filterMenuEl: event.currentTarget});
+        this.setState({ filterMenuEl: event.currentTarget });
     };
 
     handleFilterMenuClose = () => {
-        this.setState({filterMenuEl: null});
+        this.setState({ filterMenuEl: null });
     };
 
-    render()
-    {
-        const {filterMenuEl} = this.state;
+    render() {
+        const { filterMenuEl } = this.state;
         return (
             <div className="filter flex flex-col">
                 <FormControl className="">
                     <Input
                         type="text"
                         onChange={this.changeFilterValue}
-                        value={this.state.filterValue}
+                        //value={this.state.filterValue}
+                        value={this.state.value}
                         className="w-full"
-                        inputProps={{placeholder: 'Filter'}}
-                        endAdornment={
+                        inputProps={{ placeholder: 'Filtre' }}
+                      /*  endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
                                     aria-owns={filterMenuEl ? 'filter-menu' : null}
@@ -96,9 +99,12 @@ class FilterComponent extends Component {
                                     ))}
                                 </Menu>
                             </InputAdornment>
-                        }
+                        }*/
                     />
-                    <FormHelperText>{_.find(filterTypes, {value: this.state.filterType}).title}</FormHelperText>
+                    {/**
+                    <FormHelperText>{_.find(filterTypes, { value: this.state.filterType }).title}</FormHelperText>
+                     * 
+                     */}
                 </FormControl>
             </div>
         );
@@ -110,16 +116,14 @@ const defaultFilterMethod = (filter, row) => {
     // Pivoted rows won't contain the column.
     //  If that's the case, we set the to true (allowing us to only filter on the current column)
     const rowValue = row[id].toLowerCase();
-    if ( !rowValue )
-    {
+    if (!rowValue) {
         return true;
     }
 
     const filterValue = filter.value.filterValue.toLowerCase() || '';
     const filterType = filter.value.filterType;
 
-    switch ( filterType )
-    {
+    switch (filterType) {
         case 'contains':
             return rowValue.indexOf(filterValue) > -1;
         case 'starts-with':
@@ -146,13 +150,13 @@ Object.assign(ReactTableDefaults, {
             <Icon>chevron_left</Icon>
         </IconButton>
     ),
-    NextComponent    : (props) => (
+    NextComponent: (props) => (
         <IconButton {...props}>
             <Icon>chevron_right</Icon>
         </IconButton>
     ),
-    FilterComponent  : (props) => (
-        <FilterComponent {...props}/>
+    FilterComponent: (props) => (
+        <FilterComponent {...props} />
     ),
     defaultFilterMethod
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip,Avatar } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, Avatar, TextField } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -74,7 +74,13 @@ function FournisseursTable(props) {
     }
 
 
+    //dispatch from function filter
+    const run = (parametres) =>
+        dispatch(Actions.setParametresData(parametres))
 
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
 
     return (
         <div className="w-full flex flex-col">
@@ -120,39 +126,62 @@ function FournisseursTable(props) {
                         {
                             Header: "Société",
                             accessor: "societe",
+                            filterable: true,
+
                         },
                         {
                             Header: "Nom",
                             accessor: "lastName",
+                            filterable: true,
+
                         },
                         {
                             Header: "Prénom",
                             accessor: "firstName",
+                            filterable: true,
+
                         },
                         {
                             Header: "Email",
                             accessor: "email",
+                            filterable: true,
+
                         },
                         {
                             Header: "Téléphone",
                             accessor: "phone",
+                            filterable: true,
+
                         },
                         {
                             Header: "Date de création",
                             accessor: "created",
+                            filterable: true,
+                            Filter: ({ filter, onChange }) =>
+                                <TextField
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />,
                             Cell: row =>
                                 moment(row.original.created).format('L')
 
                         },
                         {
                             Header: "Statut",
+                            accessor: "isactif",
+                            filterable: true,
                             Cell: row =>
                                 row.original.isactif ?
                                     (
                                         <Tooltip title="Activé">
                                             <IconButton className="text-green text-20" onClick={(ev) => {
                                                 ev.stopPropagation();
-                                                dispatch(Actions.activeAccount(row.original, false,parametres))
+                                                dispatch(Actions.activeAccount(row.original, false, parametres))
 
                                             }}><Icon>check_circle</Icon>
                                             </IconButton>
@@ -162,11 +191,22 @@ function FournisseursTable(props) {
                                         <Tooltip title="Désactivé">
                                             <IconButton className="text-red text-20" onClick={(ev) => {
                                                 ev.stopPropagation();
-                                                dispatch(Actions.activeAccount(row.original, true,parametres));
+                                                dispatch(Actions.activeAccount(row.original, true, parametres));
                                             }}><Icon>remove_circle</Icon>
                                             </IconButton>
                                         </Tooltip>
                                     )
+                            ,
+                            Filter: ({ filter, onChange }) =>
+                                <select
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                >
+                                    <option value="">Tous</option>
+                                    <option value="true">Actif</option>
+                                    <option value="false">Inactif</option>
+                                </select>
 
 
                         },
@@ -187,7 +227,13 @@ function FournisseursTable(props) {
                         parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                         dispatch(Actions.setParametresData(parametres))
                     }}
-                    noDataText="No Fournisseur found"
+                    onFilteredChange={filtered => {
+                        parametres.page = 1;
+                        parametres.search = filtered;
+                       // _.debounce( dispatch(Actions.setParametresData(parametres)),3000)
+                        fn(parametres);
+                    }}
+                    noDataText="Aucun fournisseur trouvé"
                     loadingText='Chargement...'
                     ofText='sur'
                 />

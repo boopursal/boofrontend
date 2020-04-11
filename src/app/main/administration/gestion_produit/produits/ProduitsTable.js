@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Chip, Tooltip, IconButton, Icon } from '@material-ui/core';
+import { Chip, Tooltip, IconButton, Icon, TextField } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -73,6 +73,13 @@ function ProduitsTable(props) {
     }
 
 
+    const run = (parametres) =>
+        dispatch(Actions.setParametresData(parametres))
+
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
+
     return (
         <FuseAnimate animation="transition.slideUpIn" delay={300}>
             <ReactTable
@@ -116,17 +123,19 @@ function ProduitsTable(props) {
                     {
                         Header: "Ref",
                         accessor: "reference",
-                        filterable: false,
+                        filterable: true,
+
                     },
                     {
                         Header: "Titre",
                         accessor: "titre",
-                        filterable: false,
+                        filterable: true,
+
                     },
                     {
                         Header: "Statut",
-                        sortable: false,
-                        filterable: false,
+                        accessor: "isValid",
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
 
@@ -146,13 +155,24 @@ function ProduitsTable(props) {
                                         : ''
                                 }
                             </div>
-                        )
+                        ),
+                        Filter: ({ filter, onChange }) =>
+                            <select
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                            >
+                                <option value="">Tous</option>
+                                <option value="true">Publié</option>
+                                <option value="false">En attente</option>
+                            </select>
 
                     },
                     {
                         Header: "Description",
                         accessor: "description",
-                        filterable: false,
+                        filterable: true,
+
                         Cell: row => (
                             <div className="flex items-center">
                                 {_.capitalize(_.truncate(row.original.description, {
@@ -166,7 +186,7 @@ function ProduitsTable(props) {
                         Header: "PU",
                         className: "font-bold",
                         accessor: "pu",
-                        filterable: false,
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
                                 {row.original.pu.toLocaleString(
@@ -181,27 +201,40 @@ function ProduitsTable(props) {
                     {
                         Header: "Secteur",
                         className: "font-bold",
-                        id: "secteur",
-                        accessor: p => p.secteur.name,
+                        filterable: true,
+                        accessor: "secteur.name",
+                        Cell: row => row.original.secteur ? row.original.secteur.name : 'N/A'
                     },
                     {
                         Header: "Sous-secteur",
                         className: "font-bold",
-                        id: "sousSecteurs",
-                        accessor: p => p.sousSecteurs.name,
+                        filterable: true,
+                        accessor: "sousSecteurs.name",
+                        Cell: row => row.original.sousSecteurs ? row.original.sousSecteurs.name : 'N/A'
                     },
 
                     {
                         Header: "Catégorie",
                         className: "font-bold",
-                        id: "categorie",
-                        accessor: p => p.categorie ? p.categorie.name : p.sousSecteurs.name,
+                        filterable: true,
+                        accessor: "categorie.name",
+                        Cell: row => row.original.categorie ? row.original.categorie.name : 'N/A'
                     },
                     {
                         Header: "Date de création",
+                        filterable: true,
                         accessor: "created",
-                        filterable: false,
-                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm'),
+                        Filter: ({ filter, onChange }) =>
+                            <TextField
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />,
                     },
 
 
@@ -230,31 +263,35 @@ function ProduitsTable(props) {
 
                             </div>
                         )
-                        
-            }
-        ]}
-        manual
 
-                defaultSortDesc={true}
-            pages={pageCount}
-            defaultPageSize={10}
-            loading={loading}
-            showPageSizeOptions={false}
-            onPageChange={(pageIndex) => {
-                parametres.page = pageIndex + 1;
-                dispatch(Actions.setParametresData(parametres))
-            }}
+                    }
+                ]}
+                manual
+                pages={pageCount}
+                defaultPageSize={10}
+                loading={loading}
+                showPageSizeOptions={false}
+                onPageChange={(pageIndex) => {
+                    parametres.page = pageIndex + 1;
+                    dispatch(Actions.setParametresData(parametres))
+                }}
 
-            onSortedChange={(newSorted, column, shiftKey) => {
-                parametres.page = 1;
-                parametres.filter.id = newSorted[0].id;
-                parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
-                dispatch(Actions.setParametresData(parametres))
-            }}
-            noDataText="No Produit found"
-            loadingText='Chargement...'
-            ofText='sur'
-        />
+                onSortedChange={(newSorted, column, shiftKey) => {
+                    parametres.page = 1;
+                    parametres.filter.id = newSorted[0].id;
+                    parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
+                    dispatch(Actions.setParametresData(parametres))
+                }}
+                onFilteredChange={filtered => {
+                    parametres.page = 1;
+                    parametres.search = filtered;
+                   // _.debounce( dispatch(Actions.setParametresData(parametres)),3000)
+                    fn(parametres);
+                }}
+                noDataText="Aucun produit trouvé"
+                loadingText='Chargement...'
+                ofText='sur'
+            />
         </FuseAnimate>
     );
 }
