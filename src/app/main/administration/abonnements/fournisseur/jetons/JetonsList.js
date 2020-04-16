@@ -96,7 +96,6 @@ function JetonsList(props) {
                         filterable: true,
                         accessor: "nbrJeton",
                     },
-
                     {
                         Header: "Mode de paiement",
                         accessor: "paiement.name",
