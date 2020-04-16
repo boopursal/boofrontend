@@ -37,6 +37,7 @@ export function setStep3(data, fournisseur_id, history) {
 
     data.redirect = '/dashboard';
     data.roles = ['ROLE_FOURNISSEUR'];
+    data.step = 3;
 
 
     return (dispatch, getState) => {

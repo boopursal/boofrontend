@@ -18,7 +18,7 @@ function CommandesHeader(props) {
                     <Icon className="text-32 mr-0 sm:mr-12">inbox</Icon>
                 </FuseAnimate>
                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                    <Typography className="hidden sm:flex" variant="h6">Vos commandes</Typography>
+                    <Typography className="hidden sm:flex" variant="h6">Mes commandes</Typography>
                 </FuseAnimate>
             </div>
 

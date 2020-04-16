@@ -6,6 +6,7 @@ import DemandesHeader from './DemandesHeader';
 import reducer from '../store/reducers';
 import { useDispatch,useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
+import { Helmet } from "react-helmet";
 
 function Demandes()
 {
@@ -26,6 +27,12 @@ function Demandes()
     }, [dispatch,parametres,user]);
 
     return (
+        <>
+          <Helmet>
+                <title>Demandes Achats | Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+            </Helmet>
         <FusePageCarded
             classes={{
                 content: "flex flex-col h-full",
@@ -39,6 +46,7 @@ function Demandes()
             }
             innerScroll
         />
+        </>
     );
 }
 

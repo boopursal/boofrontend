@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -19,25 +19,33 @@ const useStyles = makeStyles(theme => ({
     },
     chip: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ef5350',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
 
     },
     chip2: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 function AbonnementsTable(props) {
@@ -72,7 +80,12 @@ function AbonnementsTable(props) {
         return null;
     }
 
+    const run = (parametres) =>
+        dispatch(Actions.setParametresData(parametres))
 
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
 
     return (
         <FuseAnimate animation="transition.slideUpIn" delay={300}>
@@ -97,30 +110,35 @@ function AbonnementsTable(props) {
                     {
                         Header: "Référence",
                         className: "font-bold",
-                        id: "reference",
-                        accessor: f => f.reference,
+                        accessor: "reference",
+                        filterable: true,
+                        Cell: row => row.original.reference,
                     },
                     {
                         Header: "Offre",
                         className: "font-bold",
-                        id: "offre",
-                        accessor: f => f.offre.name,
+                        accessor: "offre.name",
+                        filterable: true,
+                        Cell: row => row.original.offre ? row.original.offre.name : '',
                     },
                     {
                         Header: "Fournisseur",
                         className: "font-bold",
-                        id: "fournisseur",
-                        accessor: f => f.fournisseur.societe,
+                        accessor: "fournisseur.societe",
+                        filterable: true,
+                        Cell: row => row.original.fournisseur ? row.original.fournisseur.societe : '',
                     },
                     {
                         Header: "Mode de paiement",
-                        id: "mode",
-                        accessor: f => f.mode.name,
+                        accessor: "mode.name",
+                        filterable: true,
+                        Cell: row => row.original.mode ? row.original.mode.name : '',
                     },
+
                     {
                         Header: "Activités",
                         accessor: "sousSecteurs.name",
-                        filterable: false,
+                        filterable: true,
                         Cell: row =>
                             _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
                                 'length': 25,
@@ -131,21 +149,41 @@ function AbonnementsTable(props) {
                     {
                         Header: "Date de création",
                         accessor: "created",
-                        filterable: false,
-                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                        filterable: true,
+                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm'),
+                        Filter: ({ filter, onChange }) =>
+                            <TextField
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
                     },
                     {
                         Header: "Date d'expiration",
-                        accessor: "created",
-                        filterable: false,
-                        Cell: row => 
+                        accessor: "expired",
+                        filterable: true,
+                        Cell: row =>
                             row.original.expired ? moment(row.original.expired).format('DD/MM/YYYY HH:mm') : ''
-                        
+                        , Filter: ({ filter, onChange }) =>
+                            <TextField
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
                     },
                     {
                         Header: "Statut",
+                        accessor: "statut",
                         sortable: false,
-                        filterable: false,
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
 
@@ -154,20 +192,20 @@ function AbonnementsTable(props) {
                                     row.original.statut === false
                                         ?
                                         (
-                                                !row.original.expired || row.original.expired === undefined
+                                            !row.original.expired || row.original.expired === undefined
                                                 ?
                                                 <Chip className={classes.chipOrange} label="En attente" />
                                                 :
                                                 (
                                                     moment(row.original.expired) >= moment()
-                                                    ?
-                                                    <Chip className={classes.chip} label="Annulée" />
-                                                    :
-                                                    <Chip className={classes.chip} label="Expirée" />
+                                                        ?
+                                                        <Chip className={classes.chip} label="Annulée" />
+                                                        :
+                                                        <Chip className={classes.chip} label="Expirée" />
                                                 )
-                                                
+
                                         )
-                                       
+
                                         :
                                         (
                                             moment(row.original.expired) >= moment()
@@ -180,7 +218,19 @@ function AbonnementsTable(props) {
                                 }
 
                             </div>
-                        )
+                        ),
+                        Filter: ({ filter, onChange }) =>
+                            <select
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                            >
+                                <option value="">Tous</option>
+                                <option value="0">En attente</option>
+                                <option value="1">En cours</option>
+                                <option value="2">Annulée</option>
+                                <option value="3">Expiré</option>
+                            </select>
 
                     },
 
@@ -206,8 +256,6 @@ function AbonnementsTable(props) {
                     }
                 ]}
                 manual
-
-                defaultSortDesc={true}
                 pages={pageCount}
                 defaultPageSize={10}
                 loading={loading}
@@ -223,7 +271,12 @@ function AbonnementsTable(props) {
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
                 }}
-                noDataText="No Abonnement found"
+                onFilteredChange={filtered => {
+                    parametres.page = 1;
+                    parametres.search = filtered;
+                    fn(parametres);
+                }}
+                noDataText="Aucune abonnement trouvée"
                 loadingText='Chargement...'
                 ofText='sur'
             />

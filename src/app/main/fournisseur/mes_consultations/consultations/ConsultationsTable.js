@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField, InputAdornment } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -19,25 +19,33 @@ const useStyles = makeStyles(theme => ({
     },
     chip: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ef5350',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
 
     },
     chip2: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 function ConsultationsTable(props) {
@@ -74,6 +82,15 @@ function ConsultationsTable(props) {
         return null;
     }
 
+    //dispatch from function filter
+    const run = (parametres) => (
+        dispatch(Actions.setParametresData(parametres))
+    )
+
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
+
 
 
     return (
@@ -102,16 +119,27 @@ function ConsultationsTable(props) {
 
 
                     {
-                        Header: "Ref",
+                        Header: "Référence",
                         className: "font-bold",
-                        id: "reference",
-                        accessor: p => p.demande.reference ? 'RFQ-' + p.demande.reference : ''
+                        filterable: true,
+                        accessor: "demande.reference",
+                        Cell: row => row.original.demande.reference ? 'RFQ-' + row.original.demande.reference : 'En attente',
+                        Filter: ({ filter, onChange }) =>
+                            <TextField
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">RFQ-</InputAdornment>,
+                                }}
+                            />
+                        ,
                     },
-
                     {
                         Header: "État",
                         sortable: false,
-                        filterable: false,
+                        accessor: "demande.statut",
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
 
@@ -120,9 +148,9 @@ function ConsultationsTable(props) {
                                         ?
                                         row.original.demande.statut === 0
                                             ?
-                                            <strong className="text-orange">En attente</strong> 
+                                            <strong className="text-orange">En attente</strong>
                                             :
-                                            (row.original.demande.statut === 1 ? 
+                                            (row.original.demande.statut === 1 ?
                                                 <strong className="text-green">En cours</strong>
                                                 :
                                                 <Chip className={classes.chip} label="Refusé" />
@@ -133,53 +161,69 @@ function ConsultationsTable(props) {
                                 }
 
                             </div>
-                        )
+                        ),
+                        Filter: ({ filter, onChange }) =>
+                            <select
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                            >
+                                <option value="">Tous</option>
+                                <option value="1">En cours</option>
+                                <option value="3">Expiré</option>
+                            </select>
+
 
                     },
                     {
                         Header: "Affecté à",
                         className: "font-bold",
-                        id: "personnel",
-                        accessor: p => p.personnel?  p.personnel.name : ''
+                        filterable: true,
+                        accessor: "personnel.name",
+                        Cell: row => row.original.personnel ? row.original.personnel.name : ''
                     },
                     {
                         Header: "Budget",
                         className: "font-bold",
+                        accessor: "budget",
                         sortable: false,
-                        filterable: false,
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
 
                                 {
-                                   row.original.budget
+                                    row.original.budget
                                 }
                                 &ensp;
                                 {
-                                   user.data && user.data.currency ? user.data.currency :''
+                                    user.data && user.data.currency ? user.data.currency : ''
                                 }
                             </div>
                         )
 
                     },
-                   
+
                     {
                         Header: "Societé",
-                        className: "font-bold",
-                        id: "acheteur",
-                        accessor: p =>
-                            (
-                                <div className="flex items-center">
-                                    {p.demande.acheteur.societe}
-                                    <Tooltip title={p.demande.acheteur.firstName + ' ' + p.demande.acheteur.lastName} >
-                                        <Icon>account_circle</Icon>
-                                    </Tooltip>
-                                </div>
-                            ),
+                        accessor: "demande.acheteur.societe",
+                        sortable: false,
+                        filterable: true,
+                        Cell: row => (
+                            <div className="flex items-center">
+
+                                {row.original.demande.acheteur.societe}
+                                <Tooltip title={row.original.demande.acheteur.firstName + ' ' + row.original.demande.acheteur.lastName} >
+                                    <Icon>account_circle</Icon>
+                                </Tooltip>
+
+                            </div>
+                        )
+
                     },
                     {
                         Header: "Description",
-                        accessor: "description",
-                        filterable: false,
+                        accessor: "demande.description",
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
                                 {_.capitalize(_.truncate(row.original.demande.description, {
@@ -192,11 +236,13 @@ function ConsultationsTable(props) {
 
                     {
                         Header: "Date d'éxpiration",
-                        filterable: false,
+                        accessor: "demande.dateExpiration",
+                        minWidth: 125,
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
                                 {
-                                    moment(row.original.demande.dateExpiration).format('DD/MM/YYYY HH:mm')
+                                    moment(row.original.demande.dateExpiration).format('DD/MM/YYYY')
 
                                 }
 
@@ -211,13 +257,24 @@ function ConsultationsTable(props) {
                                 }
 
                             </div>
-                        )
+                        ),
+                        Filter: ({ filter, onChange }) =>
+                            <TextField
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
 
                     },
                     {
                         Header: "Statut",
+                        accessor: "statut",
                         sortable: false,
-                        filterable: false,
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
 
@@ -225,14 +282,25 @@ function ConsultationsTable(props) {
                                     row.original.statut === 0 ?
                                         <Chip className={classes.chipOrange} label="En cours" />
                                         : row.original.statut === 1 ?
-                                            <Chip className={classes.chip2} label="Gagner" />
+                                            <Chip className={classes.chip2} label="Gagnée" />
                                             :
                                             <Chip className={classes.chip} label="Perdue" />
 
                                 }
 
                             </div>
-                        )
+                        ),
+                        Filter: ({ filter, onChange }) =>
+                            <select
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                            >
+                                <option value="">Tous</option>
+                                <option value="0">En cours</option>
+                                <option value="1">Gagnée</option>
+                                <option value="2">Perdue</option>
+                            </select>
 
                     },
                     {
@@ -268,7 +336,12 @@ function ConsultationsTable(props) {
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
                 }}
-                noDataText="No Consultation found"
+                onFilteredChange={filtered => {
+                    parametres.page = 1;
+                    parametres.search = filtered;
+                    fn(parametres);
+                }}
+                noDataText="Aucune consultation trouvée"
                 loadingText='Chargement...'
                 ofText='sur'
             />

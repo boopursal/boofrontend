@@ -7,6 +7,7 @@ import PersonnelsHeader from './PersonnelsHeader';
 import PersonnelsDialog from './PersonnelsDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
+import { Helmet } from "react-helmet";
 
 function PersonnelsApp(props)
 {
@@ -20,6 +21,11 @@ function PersonnelsApp(props)
 
     return (
         <React.Fragment>
+            <Helmet>
+                <title>Personnels | Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+            </Helmet>
             <FusePageSimple
                 classes={{
                     contentWrapper: "p-0 sm:p-24 pb-80 sm:pb-80 h-full",

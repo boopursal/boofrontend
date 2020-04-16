@@ -21,34 +21,6 @@ function ConsultationsHeader(props) {
                 </FuseAnimate>
             </div>
 
-            <div className="flex flex-1 items-center justify-center px-12">
-
-                <ThemeProvider theme={mainTheme}>
-                    <FuseAnimate animation="transition.slideDownIn" delay={300}>
-                        <Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
-
-                            <Icon className="mr-8" color="action">search</Icon>
-
-                            <Input
-                                placeholder="Rechercher dans la description"
-                                className="flex flex-1"
-                                disableUnderline
-                                fullWidth
-                                value={parametres.description}
-                                inputProps={{
-                                    'aria-label': 'Rechercher'
-                                }}
-                                onChange={ev => {
-                                    parametres.page = 1;
-                                    parametres.description = ev.target.value
-                                    dispatch(Actions.setParametresData(parametres))
-                                }}
-                            />
-                        </Paper>
-                    </FuseAnimate>
-                </ThemeProvider>
-
-            </div>
 
         </div>
     );

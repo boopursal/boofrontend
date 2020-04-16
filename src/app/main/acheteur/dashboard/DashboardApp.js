@@ -12,6 +12,7 @@ import Widget4 from './widgets/Widget4';
 import Widget5 from './widgets/Widget5';
 import Widget6 from './widgets/Widget6';
 import ContentLoader from 'react-content-loader';
+import { Helmet } from "react-helmet";
 
 
 
@@ -34,7 +35,11 @@ function DashboardApp(props) {
 */
     return (
         <div className="w-full">
-
+            <Helmet>
+                <title>Dashboard | Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+            </Helmet>
             <Widget5 />
             {
                 widgets.loading === false ?

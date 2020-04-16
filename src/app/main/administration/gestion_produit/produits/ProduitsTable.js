@@ -19,25 +19,33 @@ const useStyles = makeStyles(theme => ({
     },
     chip: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ef5350',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
 
     },
     chip2: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 function ProduitsTable(props) {
@@ -224,7 +232,7 @@ function ProduitsTable(props) {
                         Header: "Date de création",
                         filterable: true,
                         accessor: "created",
-                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm'),
+                        Cell: row => moment(row.original.created).format('DD/MM/YYYY'),
                         Filter: ({ filter, onChange }) =>
                             <TextField
                                 onChange={event => onChange(event.target.value)}
@@ -285,7 +293,6 @@ function ProduitsTable(props) {
                 onFilteredChange={filtered => {
                     parametres.page = 1;
                     parametres.search = filtered;
-                   // _.debounce( dispatch(Actions.setParametresData(parametres)),3000)
                     fn(parametres);
                 }}
                 noDataText="Aucun produit trouvé"

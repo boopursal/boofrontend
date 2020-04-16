@@ -2,7 +2,6 @@ import * as Actions from '../actions';
 
 const initialState = {
     loading : false,
-    success: false,
     error  : {
         username: null,
         password: null
@@ -23,7 +22,6 @@ const register = function (state = initialState, action) {
         {
             return {
                 ...initialState,
-                success: true,
                 loading : false
                 
             };
@@ -31,7 +29,6 @@ const register = function (state = initialState, action) {
         case Actions.REGISTER_ERROR:
         {
             return {
-                success: false,
                 error  : action.payload,
                 loading : false
             };

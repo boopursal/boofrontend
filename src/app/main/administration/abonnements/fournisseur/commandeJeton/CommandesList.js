@@ -1,34 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Chip } from '@material-ui/core';
+import { Icon, IconButton,  DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Chip, TextField } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
 import { makeStyles } from '@material-ui/core/styles';
-//import CommandesMultiSelectMenu from './CommandesMultiSelectMenu';
 import moment from 'moment';
+import _ from '@lodash';
 
 const useStyles = makeStyles(theme => ({
 
+    chip: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#ef5350',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
+
+
+    },
     chip2: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 function CommandesList(props) {
     const dispatch = useDispatch();
     const Commandes = useSelector(({ commandesApp }) => commandesApp.commandes.entities);
-    //const selectedCommandesIds = useSelector(({commandesApp}) => commandesApp.commandes.selectedCommandesIds);
     const searchText = useSelector(({ commandesApp }) => commandesApp.commandes.searchText);
     const classes = useStyles();
     const parametres = useSelector(({ commandesApp }) => commandesApp.commandes.parametres);
@@ -56,15 +71,14 @@ function CommandesList(props) {
         return null;
     }
 
-    if (filteredData.length === 0) {
-        return (
-            <div className="flex flex-1 items-center justify-center h-full">
-                <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas de Commandes!
-                </Typography>
-            </div>
-        );
-    }
+
+
+    const run = (parametres) =>
+        dispatch(Actions.setParametresData(parametres))
+
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
 
     return (
 
@@ -91,31 +105,53 @@ function CommandesList(props) {
                 data={filteredData}
                 columns={[
 
-                    {
-                        Header: "Commande N°",
-                        accessor: "id",
-                    },
+
                     {
                         Header: "Nombre de jetons",
+                        filterable: true,
                         accessor: "nbrJeton",
                     },
                     {
                         Header: "Fournisseur",
+                        filterable: true,
                         className: "font-bold",
-                        id: "fournisseur",
-                        accessor: d => d.fournisseur.societe,
+                        accessor: "fournisseur.societe",
+                        Cell: row => row.original.fournisseur ? row.original.fournisseur.societe : '',
                     },
                     {
-                        Header: "ُEtat",
-                        id: "isUse",
-                        accessor: d => d.isUse ?
-                            <Chip className={classes.chip2} label="Traité" /> :
+                        Header: "Etat",
+                        accessor: "isUse",
+                        filterable: true,
+                        Cell: row => row.original.isUse ?
+                            <Chip className={classes.chip2} label="Traitée" /> :
                             <Chip className={classes.chipOrange} label="En attente" />,
+                        Filter: ({ filter, onChange }) =>
+                            <select
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                            >
+                                <option value="">Tous</option>
+                                <option value="true">Traitée</option>
+                                <option value="false">En attente</option>
+                            </select>
+
                     },
                     {
-                        Header: "Date de commande",
-                        id: "created",
-                        accessor: d => moment(d.created).format('DD/MM/YYYY HH:mm'),
+                        Header: "Date de création",
+                        accessor: "created",
+                        filterable: true,
+                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm'),
+                        Filter: ({ filter, onChange }) =>
+                            <TextField
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
                     },
 
                     {
@@ -194,6 +230,11 @@ function CommandesList(props) {
                     parametres.filter.id = newSorted[0].id;
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
+                }}
+                onFilteredChange={filtered => {
+                    parametres.page = 1;
+                    parametres.search = filtered;
+                    fn(parametres);
                 }}
                 noDataText="Aucune commande trouvée"
                 loadingText='Chargement...'

@@ -4,7 +4,6 @@ import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
-//import SousSecteursMultiSelectMenu from './SousSecteursMultiSelectMenu';
 import _ from '@lodash';
 import Tooltip from '@material-ui/core/Tooltip'
 import { withStyles } from '@material-ui/core/styles';
@@ -15,8 +14,6 @@ function SousSecteursList(props) {
     const pageCount = useSelector(({ sous_secteursApp }) => sous_secteursApp.sous_secteurs.pageCount);
     const loading = useSelector(({ sous_secteursApp }) => sous_secteursApp.sous_secteurs.loading);
     const parametres = useSelector(({ sous_secteursApp }) => sous_secteursApp.sous_secteurs.parametres);
-
-    //const selectedSousSecteursIds = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.selectedsous_secteursIds);
     const searchText = useSelector(({ sous_secteursApp }) => sous_secteursApp.sous_secteurs.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
@@ -54,15 +51,16 @@ function SousSecteursList(props) {
         return null;
     }
 
-    if (filteredData.length === 0) {
-        return (
-            <div className="flex flex-1 items-center justify-center h-full">
-                <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas de SousSecteurs!
-                </Typography>
-            </div>
-        );
-    }
+ 
+
+     //dispatch from function filter
+     const run = (parametres) => (
+        dispatch(Actions.setParametresData(parametres))
+    )
+
+    //call run function
+    const fn =
+        _.debounce(run, 700);
 
     return (
 
@@ -83,21 +81,23 @@ function SousSecteursList(props) {
                 data={filteredData}
                 columns={[
 
-                   
+
                     {
                         Header: "Activité",
                         accessor: "name",
-                        filterable: false,
+                        filterable: true,
                     },
                     {
                         Header: "Activité parent",
                         className: "font-bold",
-                        id: "parent",
-                        accessor: p => p.parent ? p.parent.name : '',
+                        filterable: true,
+                        accessor: "parent",
+                        Cell: row => (row.original.parent ? row.original.parent.name : '')
                     },
                     {
                         Header: "Secteur",
-                        accessor: "secteur",
+                        accessor: "secteur.name",
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
                                 {row.original.secteur ? row.original.secteur.name : ''}
@@ -153,36 +153,21 @@ function SousSecteursList(props) {
                                                     <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
                                                     <DialogContent>
                                                         <DialogContentText id="alert-dialog-description">
-                                                            {
-                                                                (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 /*&& Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 */) ?
-                                                                    'Voulez vous vraiment supprimer cet enregistrement ?'
-                                                                    :
-                                                                    'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
-                                                            }
+                                                            Voulez vous vraiment supprimer cet enregistrement ?
                                                         </DialogContentText>
                                                     </DialogContent>
                                                     <DialogActions>
                                                         <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
                                                             Non
                                                     </Button>
-                                                        {
-                                                            (Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0/* && Object.keys(_.pullAllBy(row.original.acheteurs, [{ 'del': true }], 'del')).length === 0 */) ?
-                                                                <Button
-                                                                    onClick={(ev) => {
-                                                                        dispatch(Actions.removeSousSecteur(row.original, parametres));
-                                                                        dispatch(Actions.closeDialog())
-                                                                    }} color="primary"
-                                                                    autoFocus>
-                                                                    Oui
+                                                        <Button
+                                                            onClick={(ev) => {
+                                                                dispatch(Actions.removeSousSecteur(row.original, parametres));
+                                                                dispatch(Actions.closeDialog())
+                                                            }} color="primary"
+                                                            autoFocus>
+                                                            Oui
                                                         </Button>
-                                                                :
-                                                                <Button
-                                                                    disabled
-                                                                    color="primary"
-                                                                    autoFocus>
-                                                                    Oui
-                                                        </Button>
-                                                        }
 
                                                     </DialogActions>
                                                 </React.Fragment>
@@ -197,24 +182,26 @@ function SousSecteursList(props) {
                     }
                 ]}
                 manual
-
-                defaultSortDesc={true}
                 pages={pageCount}
                 defaultPageSize={10}
                 loading={loading}
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
                     parametres.page = pageIndex + 1;
-                    dispatch(Actions.setCurrentPage(parametres))
+                    dispatch(Actions.setParametresData(parametres))
                 }}
-
                 onSortedChange={(newSorted, column, shiftKey) => {
                     parametres.page = 1;
-                    parametres.filter.id = newSorted[0].id === 'secteur' ? 'secteur.id' : newSorted[0].id;
+                    parametres.filter.id = newSorted[0].id;
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
-                    dispatch(Actions.setSortedData(parametres))
+                    dispatch(Actions.setParametresData(parametres))
                 }}
-                noDataText="No Activity found"
+                onFilteredChange={filtered => {
+                    parametres.page = 1;
+                    parametres.search = filtered;
+                    fn(parametres);
+                }}
+                noDataText="Aucune activité trouvée"
                 loadingText='Chargement...'
                 ofText='sur'
             />

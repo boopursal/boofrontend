@@ -37,15 +37,14 @@ function CategorieList(props) {
         return null;
     }
 
-    if (filteredData.length === 0) {
-        return (
-            <div className="flex flex-1 items-center justify-center h-full">
-                <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas de catégories!
-                </Typography>
-            </div>
-        );
-    }
+     //dispatch from function filter
+     const run = (parametres) => (
+        dispatch(Actions.setParametresData(parametres))
+    )
+
+    //call run function
+    const fn =
+        _.debounce(run, 700);
 
     return (
 
@@ -69,11 +68,12 @@ function CategorieList(props) {
                     {
                         Header: "Catégorie",
                         accessor: "name",
-                        filterable: false,
+                        filterable: true,
                     },
                     {
                         Header: "Activité",
-                        accessor: "sousSecteur",
+                        filterable: true,
+                        accessor: "sousSecteur.name",
                         Cell: row => (
                             <div className="flex items-center">
                                 {row.original.sousSecteur ? row.original.sousSecteur.name : ''}
@@ -126,24 +126,28 @@ function CategorieList(props) {
                     }
                 ]}
                 manual
-
-                defaultSortDesc={true}
                 pages={pageCount}
                 defaultPageSize={10}
                 loading={loading}
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
                     parametres.page = pageIndex + 1;
-                    dispatch(Actions.setCurrentPage(parametres))
+                    dispatch(Actions.setParametresData(parametres))
                 }}
 
                 onSortedChange={(newSorted, column, shiftKey) => {
                     parametres.page = 1;
                     parametres.filter.id = newSorted[0].id === 'sousSecteur' ? 'sousSecteur.id' : newSorted[0].id;
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
-                    dispatch(Actions.setSortedData(parametres))
+                    dispatch(Actions.setParametresData(parametres))
                 }}
-                noDataText="No category found"
+                onFilteredChange={filtered => {
+                    console.log(filtered)
+                    parametres.page = 1;
+                    parametres.search = filtered;
+                    fn(parametres);
+                }}
+                noDataText="Aucun catégorie trouvé"
                 loadingText='Chargement...'
                 ofText='sur'
             />

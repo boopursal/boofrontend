@@ -17,6 +17,7 @@ function VillesDialog(props)
     const dispatch = useDispatch();
     const VillesDialog = useSelector(({villesApp}) => villesApp.villes.villesDialog);
     const Pays = useSelector(({villesApp}) => villesApp.villes.pays);
+    const parametres = useSelector(({ villesApp }) => villesApp.villes.parametres);
    
     const {form, handleChange, setForm} = useForm(defaultFormState);
 
@@ -79,11 +80,11 @@ function VillesDialog(props)
         //event.preventDefault();
         if ( VillesDialog.type === 'new' )
         {
-            dispatch(Actions.addVille(form));
+            dispatch(Actions.addVille(form,parametres));
         }
         else
         {
-            dispatch(Actions.updateVille(form));
+            dispatch(Actions.updateVille(form,parametres));
         }
         closeComposeDialog();
     }

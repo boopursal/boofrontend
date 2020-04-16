@@ -21,7 +21,7 @@ export const SET_PARAMETRES_DATA = '[SOUS_SECTEURS APP] SET PARAMETRES DATA';
 
 export function getPays()
 {
-    const request = agent.get('/api/pays');
+    const request = agent.get('/api/pays?pagination=false&props[]=id&props[]=name');
 
     return (dispatch) =>
         request.then((response) =>{
@@ -37,8 +37,13 @@ export function getPays()
 export function getVilles(parametres)
 {
 
-    var name = parametres.name?`=${parametres.name}`:'';
-    const request = agent.get(`/api/villes?page=${parametres.page}&name${name}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map(function (item, i) {
+            search += '&' + item.id + '=' + item.value
+        });
+    }
+    const request = agent.get(`/api/villes?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}&props[]=id&props[]=name&props[]=pays`);
 
     return (dispatch) =>{
         dispatch({
@@ -95,8 +100,10 @@ export function closeEditVillesDialog()
 export function addVille(newVille,parametres)
 {
     newVille.pays = newVille.pays.value;
-    return (dispatch, getState) => {
-
+    return (dispatch) => {
+        dispatch({
+            type   : REQUEST_VILLES,
+        });
        
         const request = agent.post('/api/villes',newVille);
 
@@ -131,13 +138,15 @@ export function addVille(newVille,parametres)
     };
 }
 
-export function updateVille(Ville,parametres)
+export function updateVille(ville,parametres)
 {
-    Ville.pays = Ville.pays.value;
-    return (dispatch, getState) => {
-
+    ville.pays = ville.pays.value;
+    return (dispatch) => {
+        dispatch({
+            type   : REQUEST_VILLES,
+        });
      
-        const request = agent.put(Ville['@id'],Ville);
+        const request = agent.put(ville['@id'],ville);
 
         return request.then((response) =>
             Promise.all([
@@ -171,15 +180,19 @@ export function updateVille(Ville,parametres)
     };
 }
 
-export function removeVille(Ville,parametres)
+export function removeVille(ville,parametres)
 {
-    Ville.del=true;
-    delete Ville.pays;
-    Ville.name=Ville.name+'_deleted-'+Ville.id;
-    return (dispatch, getState) => {
+   
+    let data = {
+        del:true,
+        name:ville.name+'_deleted-'+ville.id
+    }
+    return (dispatch) => {
 
-        
-        const request = agent.put(Ville['@id'],Ville);
+        dispatch({
+            type   : REQUEST_VILLES,
+        });
+        const request = agent.put(ville['@id'],data);
 
         return request.then((response) =>
             Promise.all([
@@ -192,7 +205,23 @@ export function removeVille(Ville,parametres)
                 },
                 variant: 'success'}))
             ]).then(() => dispatch(getVilles(parametres)))
-        );
+        ).catch((error)=>{
+            dispatch({
+                type: SAVE_ERROR,
+            });
+            dispatch(
+                showMessage({
+                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
+                        return value;
+                      }) ,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
+        });
     };
 }
 

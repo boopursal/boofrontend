@@ -91,14 +91,19 @@ export function getVilles(pays_id) {
 export function setStep4(data, acheteur_id, history) {
 
 
-    data.pays = data.pays.value;
-    data.ville = data.ville.value;
-    data.secteur = data.secteur.value;
-    data.currency = data.currency.value;
+    if (data.pays)
+        data.pays = data.pays.value;
+    if (data.ville)
+        data.ville = data.ville.value;
+    if (data.secteur)
+        data.secteur = data.secteur.value;
+    if (data.currency)
+        data.currency = data.currency.value;
     data.redirect = '/dashboard_ac';
     data.roles = ['ROLE_ACHETEUR'];
+    data.step = 2;
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
 
         const request = agent.put(`/api/acheteurs/${acheteur_id}`, data);
         dispatch({

@@ -24,8 +24,13 @@ export const SET_PARAMETRES_DATA = '[SOUS_SECTEURS APP] SET PARAMETRES DATA';
 export function getPays(parametres)
 {
 
-    var name = parametres.name?`=${parametres.name}`:'';
-    const request = agent.get(`/api/pays?page=${parametres.page}&name${name}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map(function (item, i) {
+            search += '&' + item.id + '=' + item.value
+        });
+    }
+    const request = agent.get(`/api/pays?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) =>{
         dispatch({
@@ -139,13 +144,13 @@ export function addPays(newPays,parametres)
     };
 }
 
-export function updatePays(Pays,parametres)
+export function updatePays(pays,parametres)
 {
     
     return (dispatch, getState) => {
 
      
-        const request = agent.put(Pays['@id'],Pays);
+        const request = agent.put(pays['@id'],pays);
 
         return request.then((response) =>
             Promise.all([
@@ -179,14 +184,18 @@ export function updatePays(Pays,parametres)
     };
 }
 
-export function removePays(Pays,parametres)
+export function removePays(pays,parametres)
 {
-    Pays.del=true;
-    Pays.name=Pays.name+'_deleted-'+Pays.id;
-    return (dispatch, getState) => {
+    let data ={
+        del:true,
+        name :pays.name+'_deleted-'+pays.id
+    }
+    return (dispatch) => {
 
-        
-        const request = agent.put(Pays['@id'],Pays);
+        dispatch({
+            type   : REQUEST_PAYS,
+        });
+        const request = agent.put(`/api/pays/${pays.id}`,data);
 
         return request.then((response) =>
             Promise.all([

@@ -9,6 +9,7 @@ const initialState = {
     parametres: {
         page: 1,
         description: '',
+        search:[],
         filter: {
             id: 'created',
             direction: 'desc'
@@ -48,6 +49,7 @@ const consultationsReducer = function (state = initialState, action) {
                     ...state,
                     parametres: {
                         page: action.parametres.page,
+                        search: action.parametres.search,
                         description: action.parametres.description,
                         filter: {
                             id: action.parametres.filter.id,

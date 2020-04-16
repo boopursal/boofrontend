@@ -20,6 +20,8 @@ import { useForm } from '@fuse/hooks';
 import _ from '@lodash';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
+import { Helmet } from "react-helmet";
+
 /**=============== ACHETEUR INFO SOCIETE ======================= */
 
 const useStyles = makeStyles(theme => ({
@@ -164,14 +166,14 @@ function Step4App(props) {
 
     useEffect(() => {
         if (step4.error && (step4.error.pays || step4.error.ville || step4.error.adresse1 || step4.error.adresse2 || step4.error.website || step4.error.fix || step4.error.ice || step4.error.description)) {
-                formRef.current.updateInputsWithError({
-                    ...step4.error
-                });
+            formRef.current.updateInputsWithError({
+                ...step4.error
+            });
             disableButton();
         }
     }, [step4.error]);
 
-    
+
 
     function disableButton() {
         setIsFormValid(false);
@@ -182,7 +184,7 @@ function Step4App(props) {
     }
 
     function handleSubmit(model) {
-        dispatch(Actions.setStep4(model, user.id,props.history));
+        dispatch(Actions.setStep4(model, user.id, props.history));
     }
 
 
@@ -211,7 +213,11 @@ function Step4App(props) {
 
     return (
         <div className={clsx(classes.root, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
-
+            <Helmet>
+                <title>Inscription Acheteur | Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+            </Helmet>
             <div className="flex flex-col items-center justify-center w-full">
 
                 <img className="w-100 m-20" src="assets/images/logos/icon.png" alt="logo" />

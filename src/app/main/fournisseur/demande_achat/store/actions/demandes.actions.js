@@ -1,4 +1,5 @@
 import agent from "agent";
+import moment from 'moment';
 
 export const REQUEST_DEMANDES = '[DEMANDES FOURNISSEUR APP] REQUEST DEMANDES';
 export const SET_PARAMETRES_DATA = '[DEMANDES FOURNISSEUR APP] SET PARAMETRES DATA';
@@ -8,8 +9,27 @@ export const GET_DEMANDES = '[DEMANDES FOURNISSEUR APP] GET DEMANDES';
 export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES FOURNISSEUR APP] SET DEMANDES SEARCH TEXT';
 
 export function getDemandes(parametres) {
-    var description = parametres.description ? `=${parametres.description}` : '';
-    const request = agent.get(`/api/demande_achats/fournisseur?page=${parametres.page}&description${description}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map(function (item, i) {
+            if (item.value) {
+                if (item.id === 'created' || item.id === 'dateExpiration') {
+                    search += '&' + item.id + '[after]=' + item.value
+                } else if (item.id === 'statut') {
+                    if (item.value === '1') {
+                        search += `&statut=1&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '3') {
+                        search += `&dateExpiration[strictly_before]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                }
+                else {
+                    search += '&' + item.id + '=' + item.value
+                }
+            }
+        });
+    }
+    const request = agent.get(`/api/demande_achats/fournisseur?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {
         dispatch({

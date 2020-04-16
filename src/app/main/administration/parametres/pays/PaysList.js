@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
+import { Icon, IconButton,  DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
+import _ from '@lodash';
 import * as Actions from './store/actions';
-//import PaysMultiSelectMenu from './PaysMultiSelectMenu';
+
 function PaysList(props) {
     const dispatch = useDispatch();
     const pays = useSelector(({ paysApp }) => paysApp.pays.entities);
@@ -37,16 +38,16 @@ function PaysList(props) {
         return null;
     }
 
-    if (filteredData.length === 0) {
-        return (
-            <div className="flex flex-1 items-center justify-center h-full">
-                <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas de pays!
-                </Typography>
-            </div>
-        );
-    }
+    
 
+      //dispatch from function filter
+      const run = (parametres) => (
+        dispatch(Actions.setParametresData(parametres))
+    )
+
+    //call run function
+    const fn =
+        _.debounce(run, 700);
     return (
 
         <FuseAnimate animation="transition.slideUpIn" delay={300}>
@@ -65,16 +66,10 @@ function PaysList(props) {
                 }}
                 data={filteredData}
                 columns={[
-
-                    {
-                        Header: "#",
-                        accessor: "id",
-                        filterable: false,
-                    },
                     {
                         Header: "Pays",
                         accessor: "name",
-                        filterable: false,
+                        filterable: true,
                     },
                     /*       
                     {
@@ -252,8 +247,6 @@ function PaysList(props) {
                     }
                 ]}
                 manual
-
-                defaultSortDesc={true}
                 pages={pageCount}
                 defaultPageSize={10}
                 loading={loading}
@@ -269,7 +262,12 @@ function PaysList(props) {
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
                 }}
-                noDataText="No Pays found"
+                 onFilteredChange={filtered => {
+                    parametres.page = 1;
+                    parametres.search = filtered;
+                    fn(parametres);
+                }}
+                noDataText="Aucune pays trouvée"
                 loadingText='Chargement...'
                 ofText='sur'
             />

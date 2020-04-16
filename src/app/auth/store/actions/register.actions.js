@@ -5,7 +5,7 @@ export const REQUEST_REGISTER = 'REQUEST_REGISTER';
 export const REGISTER_ERROR = 'REGISTER_ERROR';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 
-export function submitRegisterFournisseur(newFournisseur) {
+export function submitRegisterFournisseur(newFournisseur, history) {
     return (dispatch, getState) => {
 
         const request = agent.post('/api/fournisseurs', newFournisseur);
@@ -13,12 +13,13 @@ export function submitRegisterFournisseur(newFournisseur) {
         dispatch({
             type: REQUEST_REGISTER,
         });
-        
+
         return request.then((response) =>
             Promise.all([
                 dispatch({
                     type: REGISTER_SUCCESS
                 }),
+                history.push('/mail-confirm')
             ])
         ).catch((error) => {
             dispatch({
@@ -31,7 +32,7 @@ export function submitRegisterFournisseur(newFournisseur) {
 
 }
 
-export function submitRegisterAcheteur(newAcheteur) {
+export function submitRegisterAcheteur(newAcheteur,history) {
 
     return (dispatch, getState) => {
 
@@ -44,7 +45,8 @@ export function submitRegisterAcheteur(newAcheteur) {
             Promise.all([
                 dispatch({
                     type: REGISTER_SUCCESS
-                })
+                }),
+                history.push('/mail-confirm')
             ])
         ).catch((error) => {
             dispatch({

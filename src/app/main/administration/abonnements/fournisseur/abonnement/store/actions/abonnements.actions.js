@@ -1,4 +1,5 @@
 import agent from "agent";
+import moment from 'moment';
 
 export const REQUEST_ABONNEMENTS = '[ABONNEMENTS APP] REQUEST ABONNEMENTS';
 export const SET_PARAMETRES_DATA = '[ABONNEMENTS APP] SET PARAMETRES DATA';
@@ -16,8 +17,33 @@ export function cleanUp() {
 }
 
 export function getAbonnements(parametres) {
-    var reference = parametres.reference ? `=${parametres.reference}` : '';
-    const request = agent.get(`/api/abonnements?page=${parametres.page}&reference${reference}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map(function (item, i) {
+            if (item.value) {
+                if (item.id === 'created' || item.id === 'expired') {
+                    search += '&' + item.id + '[after]=' + item.value
+                } else if (item.id === 'statut') {
+                    if (item.value === '0') {
+                        search += `&statut=false&expired[exists]=false`;
+                    }
+                    else if (item.value === '1') {
+                        search += `&statut=true&expired[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '2') {
+                        search += `&statut=false&expired[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '3') {
+                        search += `&expired[strictly_before]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                }
+                else {
+                    search += '&' + item.id + '=' + item.value
+                }
+            }
+        });
+    }
+    const request = agent.get(`/api/abonnements?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {
         dispatch({

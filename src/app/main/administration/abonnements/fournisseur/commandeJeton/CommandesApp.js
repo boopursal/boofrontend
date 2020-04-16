@@ -7,20 +7,28 @@ import CommandesHeader from './CommandesHeader';
 import CommandesDialog from './CommandesDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
+import { Helmet } from "react-helmet";
 
 
 function CommandesApp(props) {
     const dispatch = useDispatch();
     const pageLayout = useRef(null);
     const parametres = useSelector(({ commandesApp }) => commandesApp.commandes.parametres);
+    const paiements = useSelector(({ commandesApp }) => commandesApp.commandes.paiements);
 
     useEffect(() => {
         dispatch(Actions.getCommandes(parametres));
+        if(!paiements)
         dispatch(Actions.getPaiements());
     }, [dispatch, parametres]);
 
     return (
         <React.Fragment>
+             <Helmet>
+                <title>Commande jetons | Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+            </Helmet>
             <FusePageSimple
                 classes={{
                     contentWrapper: "p-0 sm:p-24 pb-80 sm:pb-80 h-full",

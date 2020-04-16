@@ -6,7 +6,7 @@ const initialState = {
     paiements: null,
     parametres: {
         page: 1,
-        id: '',
+        search: [],
         filter: {
             id: 'created',
             direction: 'desc'
@@ -35,7 +35,7 @@ const commandesReducer = function (state = initialState, action) {
                     ...state,
                     parametres: {
                         page: action.parametres.page,
-                        id: action.parametres.id,
+                        search: action.parametres.search,
                         filter: {
                             id: action.parametres.filter.id,
                             direction: action.parametres.filter.direction

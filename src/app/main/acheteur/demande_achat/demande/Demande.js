@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip, SnackbarContent } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, withStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
@@ -16,6 +16,7 @@ import moment from 'moment';
 import green from '@material-ui/core/colors/green';
 import ErrorIcon from '@material-ui/icons/Error';
 import ReactTable from "react-table";
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -115,16 +116,16 @@ function Demande(props) {
             }
             dispatch(Actions.getSousSecteurs());
         }
-        
+
         updateDemandeState();
-        return ()=>{
+        return () => {
             dispatch(Actions.cleanUpDemande())
         }
-    }, [dispatch,demandeId]);
+    }, [dispatch, demandeId]);
 
-   
+
     useEffect(() => {
-        if (demande.error && (demande.error.titre || demande.error.description ||  demande.error.dateExpiration || demande.error.isPublic || demande.error.isAnonyme || demande.error.sousSecteurs)) {
+        if (demande.error && (demande.error.titre || demande.error.description || demande.error.dateExpiration || demande.error.isPublic || demande.error.isAnonyme || demande.error.sousSecteurs)) {
             formRef.current.updateInputsWithError({
                 ...demande.error
             });
@@ -154,7 +155,7 @@ function Demande(props) {
         }
     }, [demande.attachement_deleted]);
 
-   
+
 
     useEffect(() => {
         if (
@@ -176,7 +177,7 @@ function Demande(props) {
         }
     }, [form, demande.data, setForm]);
 
-    function handleCheckBoxChange(e,name) {
+    function handleCheckBoxChange(e, name) {
 
         setForm(_.set({ ...form }, name, e.target.checked));
     }
@@ -219,15 +220,15 @@ function Demande(props) {
 
     function handleSubmit() {
         //event.preventDefault();
-        
+
         const params = props.match.params;
         const { demandeId } = params;
 
         if (demandeId === 'new') {
-            dispatch(Actions.saveDemande(form,props.history));
+            dispatch(Actions.saveDemande(form, props.history));
         }
         else {
-            dispatch(Actions.putDemande(form, form.id,props.history));
+            dispatch(Actions.putDemande(form, form.id, props.history));
         }
     }
 
@@ -258,7 +259,7 @@ function Demande(props) {
                                     <div className="flex flex-col min-w-0">
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                             <Typography className="text-16 sm:text-20 truncate">
-                                                {form.titre ?  form.titre : 'Nouvelle Demande'}
+                                                {form.titre ? form.titre : 'Nouvelle Demande'}
                                             </Typography>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
@@ -268,7 +269,7 @@ function Demande(props) {
                                 </div>
                             </div>
                             <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                               
+
                                 <Button
                                     className="whitespace-no-wrap"
                                     variant="contained"
@@ -426,7 +427,7 @@ function Demande(props) {
                                                 />
                                             </Grid>
                                         </Grid>
-                                       
+
                                         <SelectReactFormsyS_S
                                             className="mb-24 z-9999"
                                             id="sousSecteurs"
@@ -477,7 +478,6 @@ function Demande(props) {
 
                                             <Grid item xs={12} sm={4}>
                                                 <CheckboxFormsy
-                                                    className="mb-10"
                                                     name="isPublic"
                                                     onChange={(e) => handleCheckBoxChange(e, 'isPublic')}
                                                     value={form.isPublic}
@@ -485,14 +485,16 @@ function Demande(props) {
                                                 />
                                             </Grid>
 
-                                            <Grid item xs={12} sm={4}>
+                                            <Grid item xs={12} sm={4} className="flex items-center">
                                                 <CheckboxFormsy
-                                                    className="mb-10"
                                                     onChange={(e) => handleCheckBoxChange(e, 'isAnonyme')}
                                                     name="isAnonyme"
                                                     value={form.isAnonyme}
                                                     label="Mettre la demande anonyme"
                                                 />
+                                                <Tooltip placement="top" title="Si vous mettez la demande anonyme, les achats industriels prend en charge la reception des devis d'auprès les fournisseurs et elle vous choisi la meiileure offre." aria-label="anonyme">
+                                                    <Icon className="ml-4 text-20">help_outline</Icon>
+                                                </Tooltip>
                                             </Grid>
                                         </Grid>
 
@@ -561,6 +563,15 @@ function Demande(props) {
 
                                             </div>
                                         ))}
+                                        <Grid container spacing={3} >
+
+                                            <Grid item xs={12} sm={6}>
+                                                <Typography variant="caption">
+                                                    - Taille maximale par fichier : 2 Mo <br />
+                                                    - 5 fichiers à télécharger
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
                                     </div>
 
                                 </div>

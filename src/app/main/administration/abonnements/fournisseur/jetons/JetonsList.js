@@ -1,28 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography, Chip } from '@material-ui/core';
+import { Icon, IconButton, TextField, Chip } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
 import { makeStyles } from '@material-ui/core/styles';
-//import JetonsMultiSelectMenu from './JetonsMultiSelectMenu';
 import moment from 'moment';
+import _ from '@lodash';
 
 const useStyles = makeStyles(theme => ({
-
     chip2: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 function JetonsList(props) {
@@ -57,16 +61,13 @@ function JetonsList(props) {
         return null;
     }
 
-    if (filteredData.length === 0) {
-        return (
-            <div className="flex flex-1 items-center justify-center h-full">
-                <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas de Jetons!
-                </Typography>
-            </div>
-        );
-    }
+    
+    const run = (parametres) =>
+        dispatch(Actions.setParametresData(parametres))
 
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
     return (
 
         <FuseAnimate animation="transition.slideUpIn" delay={300}>
@@ -86,23 +87,27 @@ function JetonsList(props) {
                     {
                         Header: "N° commande",
                         className: "font-bold",
-                        id: "demande",
-                        accessor: d => d.demande ? d.demande.id : 'Sans commande',
+                        filterable: true,
+                        accessor: "demande.id",
+                        Cell: row => row.original.demande ? row.original.demande.id : 'Sans commande',
                     },
                     {
                         Header: "Nombre de jetons",
+                        filterable: true,
                         accessor: "nbrJeton",
                     },
 
                     {
                         Header: "Mode de paiement",
-                        id: "paiement",
-                        accessor: d => d.paiement.name,
+                        accessor: "paiement.name",
+                        filterable: true,
+                        Cell: row => row.original.paiement ? row.original.paiement.name : '',
                     },
                     {
                         Header: "Prix",
-                        id: "prix",
-                        accessor: d => parseFloat(d.prix).toLocaleString(
+                        accessor: "prix",
+                        filterable: true,
+                        Cell: row => parseFloat(row.original.prix).toLocaleString(
                             'fr', // leave undefined to use the browser's locale,
                             // or use a string like 'en-US' to override it.
                             { minimumFractionDigits: 2 }
@@ -110,22 +115,46 @@ function JetonsList(props) {
                     },
                     {
                         Header: "Fournisseur",
+                        filterable: true,
                         className: "font-bold",
-                        id: "fournisseur",
-                        accessor: d => d.fournisseur.societe,
+                        accessor: "fournisseur.societe",
+                        Cell: row => row.original.fournisseur ? row.original.fournisseur.societe : '',
                     },
-
                     {
-                        Header: "ُEtat",
-                        id: "isPayed",
-                        accessor: d => d.isPayed ?
+                        Header: "Etat",
+                        accessor: "isPayed",
+                        filterable: true,
+                        Cell: row => row.original.isPayed ?
                             <Chip className={classes.chip2} label="Payé" /> :
-                            <Chip className={classes.chipOrange} label="En attente de paiement" />,
+                            <Chip className={classes.chipOrange} label="En attente" />,
+                        Filter: ({ filter, onChange }) =>
+                            <select
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                            >
+                                <option value="">Tous</option>
+                                <option value="true">Payé</option>
+                                <option value="false">En attente</option>
+                            </select>
+
                     },
+                   
                     {
                         Header: "Date de création",
-                        id: "created",
-                        accessor: d => moment(d.created).format('DD/MM/YYYY HH:mm'),
+                        accessor: "created",
+                        filterable: true,
+                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm'),
+                        Filter: ({ filter, onChange }) =>
+                            <TextField
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
                     },
 /*
                     {
@@ -209,7 +238,6 @@ function JetonsList(props) {
 
                 ]}
                 manual
-                defaultSortDesc={true}
                 pages={pageCount}
                 defaultPageSize={10}
                 loading={loading}
@@ -224,6 +252,11 @@ function JetonsList(props) {
                     parametres.filter.id = newSorted[0].id;
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
+                }}
+                onFilteredChange={filtered => {
+                    parametres.page = 1;
+                    parametres.search = filtered;
+                    fn(parametres);
                 }}
                 noDataText="Aucun jeton trouvé"
                 loadingText='Chargement...'

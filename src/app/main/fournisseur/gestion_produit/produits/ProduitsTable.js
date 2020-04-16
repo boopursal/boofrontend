@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Chip, Tooltip, IconButton, Icon } from '@material-ui/core';
+import { Chip, Tooltip, IconButton, Icon, TextField } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -19,25 +19,33 @@ const useStyles = makeStyles(theme => ({
     },
     chip: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ef5350',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
 
     },
     chip2: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 function ProduitsTable(props) {
@@ -73,6 +81,12 @@ function ProduitsTable(props) {
         return null;
     }
 
+    const run = (parametres) =>
+        dispatch(Actions.setParametresData(parametres))
+
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
 
     return (
         <FuseAnimate animation="transition.slideUpIn" delay={300}>
@@ -111,23 +125,14 @@ function ProduitsTable(props) {
                         className: "justify-center",
                         width: 64,
                         sortable: false,
-                        filterable: false,
+                        filterable: true,
 
                     },
                     {
-                        Header: "Ref",
-                        accessor: "reference",
-                        filterable: false,
-                    },
-                    {
-                        Header: "Titre",
-                        accessor: "titre",
-                        filterable: false,
-                    },
-                    {
                         Header: "Statut",
+                        accessor: "isValid",
                         sortable: false,
-                        filterable: false,
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
 
@@ -147,13 +152,34 @@ function ProduitsTable(props) {
                                         : ''
                                 }
                             </div>
-                        )
+                        ),
+                        Filter: ({ filter, onChange }) =>
+                            <select
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                            >
+                                <option value="">Tous</option>
+                                <option value="true">Publié</option>
+                                <option value="false">En attente</option>
+                            </select>
 
                     },
                     {
+                        Header: "Ref",
+                        accessor: "reference",
+                        filterable: true,
+                    },
+                    {
+                        Header: "Titre",
+                        accessor: "titre",
+                        filterable: true,
+                    },
+
+                    {
                         Header: "Description",
                         accessor: "description",
-                        filterable: false,
+                        filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
                                 {_.capitalize(_.truncate(row.original.description, {
@@ -166,39 +192,57 @@ function ProduitsTable(props) {
                     {
                         Header: "PU",
                         className: "font-bold",
-                        id: "pu",
-                        accessor: p => p.pu.toLocaleString(
-                            undefined, // leave undefined to use the browser's locale,
-                            // or use a string like 'en-US' to override it.
-                            { minimumFractionDigits: 2 }
-                        ) + ' ' + user.data.currency,
+                        filterable: true,
+                        accessor: "pu",
+                        Cell: row => (
+                            <div className="flex items-center">
+                                {
+                                    row.original.pu.toLocaleString(
+                                        undefined, // leave undefined to use the browser's locale,
+                                        // or use a string like 'en-US' to override it.
+                                        { minimumFractionDigits: 2 }
+                                    ) + ' ' + user.data.currency}
+                            </div>
+                        )
                     },
                     {
                         Header: "Secteur",
                         className: "font-bold",
-                        id: "secteur",
-                        accessor: p => p.secteur.name,
+                        filterable: true,
+                        accessor: "secteur.name",
+                        Cell: row => row.original.secteur ? row.original.secteur.name : 'N/A',
                     },
                     {
-                        Header: "Activité",
+                        Header: "Sous-secteur",
                         className: "font-bold",
-                        id: "sousSecteurs",
-                        accessor: p => p.sousSecteurs.name,
+                        filterable: true,
+                        accessor: "sousSecteurs.name",
+                        Cell: row => row.original.sousSecteurs ? row.original.sousSecteurs.name : 'N/A'
                     },
 
                     {
                         Header: "Catégorie",
                         className: "font-bold",
-                        id: "categorie",
-                        accessor: p => p.categorie ? p.categorie.name : p.sousSecteurs.name,
+                        filterable: true,
+                        accessor: "categorie.name",
+                        Cell: row => row.original.categorie ? row.original.categorie.name : 'N/A'
                     },
                     {
                         Header: "Date de création",
+                        filterable: true,
                         accessor: "created",
-                        filterable: false,
-                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                        Cell: row => moment(row.original.created).format('DD/MM/YYYY'),
+                        Filter: ({ filter, onChange }) =>
+                            <TextField
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />,
                     },
-
 
 
                     {
@@ -210,7 +254,7 @@ function ProduitsTable(props) {
                                     <IconButton className="text-red text-20"
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            dispatch(Actions.removeProduit(row.original, parametres,user.id));
+                                            dispatch(Actions.removeProduit(row.original, parametres, user.id));
                                         }}
                                     >
                                         <Icon>delete</Icon>
@@ -245,7 +289,12 @@ function ProduitsTable(props) {
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
                 }}
-                noDataText="No Produit found"
+                onFilteredChange={filtered => {
+                    parametres.page = 1;
+                    parametres.search = filtered;
+                    fn(parametres);
+                }}
+                noDataText="Aucun produit trouvé"
                 loadingText='Chargement...'
                 ofText='sur'
             />

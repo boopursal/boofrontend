@@ -6,14 +6,7 @@ const initialState = {
     pageCount: null,
     loading: false,
     searchText: '',
-    parametres: {
-        page: 1,
-        message: '',
-        filter: {
-            id: 'created',
-            direction: 'desc'
-        }
-    }
+    
 };
 
 const messagesReducer = function (state = initialState, action) {
@@ -40,21 +33,6 @@ const messagesReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     searchText: action.searchText
-                };
-            }
-        case Actions.SET_PARAMETRES_DATA:
-            {
-                return {
-                    ...state,
-                    parametres: {
-                        page: action.parametres.page,
-                        message: action.parametres.message,
-                        filter: {
-                            id: action.parametres.filter.id,
-                            direction: action.parametres.filter.direction
-                        }
-                    }
-
                 };
             }
         default:

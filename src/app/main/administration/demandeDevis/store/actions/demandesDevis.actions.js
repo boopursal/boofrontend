@@ -12,8 +12,14 @@ export const GET_DEMANDES = '[DEMANDES APP] GET DEMANDES';
 export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES APP] SET DEMANDES SEARCH TEXT';
 
 export function getDemandes(parametres) {
-  //  var description = parametres.description ? `=${parametres.description}` : '';
-    const request = agent.get(`/api/demande_devis?page=${parametres.page}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map((item) => (
+            item.value && (
+                item.id === 'created' ? (search += '&' + item.id + '[after]=' + item.value) : (search += '&' + item.id + '=' + item.value))
+        ));
+    }
+    const request = agent.get(`/api/demande_devis?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {
         dispatch({
@@ -30,7 +36,7 @@ export function getDemandes(parametres) {
 }
 export function removeDemande(demande, parametres) {
 
-    let Updatedemande = { del: true}
+    let Updatedemande = { del: true }
     return (dispatch, getState) => {
 
 

@@ -9,6 +9,7 @@ const initialState = {
     abonnement:null,
     parametres: {
         page: 1,
+        search: [],
         description: '',
         filter: {
             id: 'created',
@@ -63,6 +64,7 @@ const produitsReducer = function (state = initialState, action) {
                     parametres: {
                         page: action.parametres.page,
                         description: action.parametres.description,
+                        search: action.parametres.search,
                         filter: {
                             id: action.parametres.filter.id,
                             direction: action.parametres.filter.direction

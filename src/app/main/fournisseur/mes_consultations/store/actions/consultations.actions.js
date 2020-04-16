@@ -1,4 +1,5 @@
 import agent from "agent";
+import moment from 'moment';
 
 export const REQUEST_CONSULTATIONS = '[CONSULTATIONS APP] REQUEST CONSULTATIONS';
 export const SET_PARAMETRES_DATA = '[CONSULTATIONS APP] SET PARAMETRES DATA';
@@ -9,7 +10,27 @@ export const SET_CONSULTATIONS_SEARCH_TEXT = '[USERS APP] SET CONSULTATIONS SEAR
 
 export function getConsultations(parametres, id) {
     //var description = parametres.description ? `=${parametres.description}` : '';
-    const request = agent.get(`/api/detail_visites?page=${parametres.page}&fournisseur=${id}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map(function (item, i) {
+            if (item.value) {
+                if (item.id === 'created' || item.id === 'dateExpiration') {
+                    search += '&' + item.id + '[after]=' + item.value
+                } else if (item.id === 'demande.statut') {
+                    if (item.value === '1') {
+                        search += `&demande.statut=1&demande.dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '3') {
+                        search += `&demande.dateExpiration[strictly_before]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                }
+                else {
+                    search += '&' + item.id + '=' + item.value
+                }
+            }
+        });
+    }
+    const request = agent.get(`/api/detail_visites?page=${parametres.page}${search}&fournisseur=${id}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {
         dispatch({

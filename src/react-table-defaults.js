@@ -29,10 +29,9 @@ const filterTypes = [
 class FilterComponent extends Component {
 
     state = {
-        // filterType  : 'contains',
-        //  filterValue : '',
-        //   filterMenuEl: null
-        value: ''
+         filterType  : 'contains',
+          filterValue : '',
+          filterMenuEl: null
     };
     changeFilterType = (filterType) => {
         const newState = {
@@ -49,8 +48,7 @@ class FilterComponent extends Component {
     changeFilterValue = (event) => {
         const newState = {
             ...this.state,
-           // filterValue: event.target.value
-           value: event.target.value
+            filterValue: event.target.value
         };
         // Update local state
         this.setState(newState);
@@ -75,8 +73,7 @@ class FilterComponent extends Component {
                     <Input
                         type="text"
                         onChange={this.changeFilterValue}
-                        //value={this.state.filterValue}
-                        value={this.state.value}
+                        value={this.state.filterValue}
                         className="w-full"
                         inputProps={{ placeholder: 'Filtre' }}
                       /*  endAdornment={
@@ -120,7 +117,8 @@ const defaultFilterMethod = (filter, row) => {
         return true;
     }
 
-    const filterValue = filter.value.filterValue.toLowerCase() || '';
+    //const filterValue = filter.value.filterValue.toLowerCase() || '';
+    const filterValue = filter.value.toLowerCase() || '';
     const filterType = filter.value.filterType;
 
     switch (filterType) {
@@ -137,7 +135,7 @@ const defaultFilterMethod = (filter, row) => {
         case 'less-than':
             return rowValue < filterValue;
         default:
-            return true;
+            return rowValue.indexOf(filterValue) > -1;
     }
 };
 

@@ -19,32 +19,32 @@ const useStyles = makeStyles(theme => ({
     },
     chip: {
         marginLeft: theme.spacing(1),
-        padding : 2,
+        padding: 2,
         background: '#ef5350',
         color: 'white',
         fontWeight: 'bold',
         fontSize: '11px',
-        height:20
+        height: 20
 
 
     },
     chip2: {
         marginLeft: theme.spacing(1),
-        padding : 2,
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
         fontSize: '11px',
-        height:20
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
-        padding : 2,
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
         fontSize: '11px',
-        height:20
+        height: 20
 
     },
 }));
@@ -84,7 +84,7 @@ function DemandesTable(props) {
 
     //dispatch from function filter
     const run = (parametres) => (
-         dispatch(Actions.setParametresData(parametres))
+        dispatch(Actions.setParametresData(parametres))
     )
 
     //call run function
@@ -193,6 +193,7 @@ function DemandesTable(props) {
                         },
                         {
                             Header: "Échéance",
+                            minWidth: 125,
                             filterable: true,
                             accessor: "dateExpiration",
                             Cell: row => (

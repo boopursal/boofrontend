@@ -7,6 +7,7 @@ import BlackListesHeader from './BlackListesHeader';
 import BlackListesDialog from './BlackListesDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
+import { Helmet } from "react-helmet";
 
 
 function BlackListesApp(props) {
@@ -23,7 +24,11 @@ function BlackListesApp(props) {
 
     return (
         <React.Fragment>
-
+            <Helmet>
+                <title>Black listes | Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+            </Helmet>
             <FusePageCarded
                 classes={{
                     content: "flex flex-col h-full",

@@ -6,7 +6,7 @@ const initialState = {
     entities          : null,
     parametres:{
         page : 1,
-        name :'',
+        search:[],
         filter: {
             id : 'id',
             direction : 'asc'
@@ -54,6 +54,14 @@ const villesReducer = function (state = initialState, action) {
                 loading : false
             };
         }
+        case Actions.SAVE_ERROR:
+        {
+            return {
+                ...state,
+                loading : false
+            };
+        }
+        
         case Actions.SET_SEARCH_TEXT:
         {
             return {
@@ -120,7 +128,7 @@ const villesReducer = function (state = initialState, action) {
                 ...state,
                 parametres:{
                     page : action.parametres.page,
-                    name :action.parametres.name,
+                    search :action.parametres.search,
                     filter: {
                         id : action.parametres.filter.id,
                         direction : action.parametres.filter.direction

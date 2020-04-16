@@ -7,7 +7,7 @@ const initialState = {
     searchText        : '',
     parametres:{
         page : 1,
-        name :'',
+        search :[],
         filter: {
             id : 'id',
             direction : 'desc'
@@ -54,6 +54,14 @@ const categoriesReducer = function (state = initialState, action) {
                 loading : false
             };
         }
+        case Actions.REMOVE_CATEGORIE:
+        {
+            return {
+                ...state,
+                loading : false
+            };
+        }
+        
         case Actions.SET_SEARCH_TEXT:
         {
             return {
@@ -62,15 +70,13 @@ const categoriesReducer = function (state = initialState, action) {
             };
         }
 
-        case Actions.SET_CURRENT_PAGE:
-        case Actions.SET_FILTER_DATA:
-        case Actions.SET_SORTED_DATA:
+        case Actions.SET_PARAMETRES_DATA:
         {
             return {
                 ...state,
                 parametres:{
                     page : action.parametres.page,
-                    name :action.parametres.name,
+                    search :action.parametres.search,
                     filter: {
                         id : action.parametres.filter.id,
                         direction : action.parametres.filter.direction

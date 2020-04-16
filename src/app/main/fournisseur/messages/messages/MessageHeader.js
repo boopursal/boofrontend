@@ -9,6 +9,8 @@ function MessageHeader(props) {
     const dispatch = useDispatch();
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
     const parametres = useSelector(({ messagesApp }) => messagesApp.messages.parametres);
+    const searchText = useSelector(({messagesApp}) => messagesApp.messages.searchText);
+
     return (
         <div className="flex flex-1 w-full items-center justify-between">
 
@@ -34,15 +36,13 @@ function MessageHeader(props) {
                                 className="flex flex-1"
                                 disableUnderline
                                 fullWidth
-                                value={parametres.message}
+                                value={searchText}
                                 inputProps={{
                                     'aria-label': 'Rechercher'
                                 }}
-                                onChange={ev => {
-                                    parametres.page = 1;
-                                    parametres.message = ev.target.value
-                                    dispatch(Actions.setParametresData(parametres))
-                                }}
+                                onChange={ev => dispatch(Actions.setMessagesSearchText(ev))}
+
+                               
                             />
                         </Paper>
                     </FuseAnimate>

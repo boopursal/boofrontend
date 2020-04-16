@@ -32,10 +32,7 @@ function JWTLoginTab(props)
     const login = useSelector(({auth}) => auth.login);
     const classes = useStyles();
     const [isFormValid, setIsFormValid] = useState(false);
-    const [loading, setLoading] = React.useState(false);
-   // const [success, setSuccess] = React.useState(false);
     const formRef = useRef(null);
-    const timer = React.useRef();
 
     useEffect(() => {
         if ( login.error && login.error.message )
@@ -53,21 +50,9 @@ function JWTLoginTab(props)
                 
         }
         enableButton();
-        return () => {
-            clearTimeout(timer.current);
-          };
     }, [dispatch,login.error]);
 
-    function handleButtonClick() {
-        if (!loading) {
-          //setSuccess(false);
-          setLoading(true);
-          timer.current = setTimeout(() => {
-           // setSuccess(true);
-            setLoading(false);
-          }, 2000);
-        }
-      }
+ 
 
     function disableButton()
     {
@@ -135,12 +120,11 @@ function JWTLoginTab(props)
                     color="primary"
                     className="w-full mx-auto mt-16 normal-case"
                     aria-label="LOG IN"
-                    disabled={!isFormValid}
+                    disabled={!isFormValid || login.loading}
                     value="legacy"
-                    onClick={handleButtonClick}
                 >
                     Login
-                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    {login.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                 </Button>
 
             </Formsy>

@@ -20,6 +20,8 @@ import { useForm } from '@fuse/hooks';
 import _ from '@lodash';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
+import { Helmet } from "react-helmet";
+
 /**=============== FOUNRISSEUR INFO SOCIETE ======================= */
 
 const useStyles = makeStyles(theme => ({
@@ -39,12 +41,12 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(1),
     },
     buttonProgress: {
-      color: green[500],
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      marginTop: -12,
-      marginLeft: -12,
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
     },
 }));
 const defaultFormState = {
@@ -141,7 +143,7 @@ function Step2App(props) {
     const dispatch = useDispatch();
     const classes = useStyles();
     const steps = getSteps();
-    const user = useSelector(({auth}) => auth.user);
+    const user = useSelector(({ auth }) => auth.user);
 
     const [isFormValid, setIsFormValid] = useState(false);
     const [showIce, setShowIce] = useState(false);
@@ -164,11 +166,11 @@ function Step2App(props) {
             formRef.current.updateInputsWithError({
                 ...step2.error
             });
-        disableButton();
+            disableButton();
         }
     }, [step2.error]);
 
-    
+
 
     function disableButton() {
         setIsFormValid(false);
@@ -179,7 +181,7 @@ function Step2App(props) {
     }
 
     function handleSubmit(model) {
-         dispatch(Actions.setStep2(model,user.id,props.history));
+        dispatch(Actions.setStep2(model, user.id, props.history));
     }
 
 
@@ -209,6 +211,11 @@ function Step2App(props) {
     return (
         <div className={clsx(classes.root, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
 
+            <Helmet>
+                <title>Inscription Fournisseur| Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+             </Helmet>
             <div className="flex flex-col items-center justify-center w-full">
 
                 <img className="w-100 m-20" src="assets/images/logos/icon.png" alt="logo" />
@@ -318,7 +325,7 @@ function Step2App(props) {
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={3} >
-                                               
+
                                                 <Grid item xs={12} sm={6}>
                                                     <TextFieldFormsy
                                                         className="mb-16  w-full"
@@ -422,13 +429,13 @@ function Step2App(props) {
                                                         onChange={handleChange}
                                                         label="ICE"
                                                         autoComplete="ice"
-                                                        
+
                                                         validations={{
                                                             minLength: 15,
                                                             maxLength: 15,
                                                             isNumeric: "isNumeric",
-                                                            matchRegexp  :/^(?!.*?(\w)\1{5}).*$/,
-                                                            
+                                                            matchRegexp: /^(?!.*?(\w)\1{5}).*$/,
+
                                                         }}
                                                         validationErrors={{
                                                             minLength: 'La longueur minimale de caractère est 15',
@@ -477,7 +484,7 @@ function Step2App(props) {
                                             >
                                                 Suivant
                                                 {step2.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                                
+
                                             </Button>
 
                                         </Formsy>

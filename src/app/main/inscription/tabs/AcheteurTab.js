@@ -74,12 +74,7 @@ function AcheteurTab(props) {
 
     }, [register.error]);
 
-    useEffect(() => {
-        if (register.success) {
-            props.history.push('/mail-confirm');
-        }
-    }, [register.success]);
-
+  
     function disableButton() {
         setIsFormValid(false);
     }
@@ -89,7 +84,7 @@ function AcheteurTab(props) {
     }
 
     function handleSubmit(model) {
-        dispatch(authActions.submitRegisterAcheteur(model));
+        dispatch(authActions.submitRegisterAcheteur(model,props.history));
     }
 
     function onChange(value) {
@@ -220,11 +215,11 @@ function AcheteurTab(props) {
                     label="Téléphone"
                     validations={{
                         minLength: 10,
-                        maxLength: 13,
+                        maxLength: 20,
                     }}
                     validationErrors={{
                         minLength: 'La longueur minimale de caractère est 10',
-                        maxLength: 'La longueur maximale de caractère est 13'
+                        maxLength: 'La longueur maximale de caractère est 20'
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">phone</Icon></InputAdornment>

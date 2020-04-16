@@ -18,6 +18,7 @@ import _ from '@lodash';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import SelectReactFormsyS_S from '@fuse/components/formsy/SelectReactFormsyS_S';
+import { Helmet } from "react-helmet";
 
 /**=============== FOUNRISSEUR SOUS-SECTEURS ======================= */
 const useStyles = makeStyles(theme => ({
@@ -143,7 +144,7 @@ function Step3App(props) {
 
     const step3 = useSelector(({ step3App }) => step3App.step3);
 
-    const { form,  setForm } = useForm(defaultFormState);
+    const { form, setForm } = useForm(defaultFormState);
 
     useEffect(() => {
         dispatch(Actions.getSousSecteurs());
@@ -151,9 +152,9 @@ function Step3App(props) {
 
     useEffect(() => {
         if (step3.success) {
-           if(step3.redirect_success){
+            if (step3.redirect_success) {
                 props.history.push(step3.redirect_success);
-           }
+            }
         }
     }, [step3.success]);
 
@@ -166,29 +167,33 @@ function Step3App(props) {
     }
 
     function handleSubmit(model) {
-        let data = 
+        let data =
         {
-            sousSecteurs : _.map(model.sousSecteurs, function(value, key) {
+            sousSecteurs: _.map(model.sousSecteurs, function (value, key) {
                 return value.value;
-                })
+            })
         }
         dispatch(Actions.setStep3(data, user.id, props.history));
     }
 
     function handleChipChange(value, name) {
-        
-        if(!_.some(value, 'value')){
-        setForm(_.set({ ...form }, name, '')); 
+
+        if (!_.some(value, 'value')) {
+            setForm(_.set({ ...form }, name, ''));
         }
-        else{
-        setForm(_.set({ ...form }, name, value));
+        else {
+            setForm(_.set({ ...form }, name, value));
         }
     }
 
 
     return (
         <div className={clsx(classes.root, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
-
+            <Helmet>
+                <title>Inscription Fournisseur| Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+            </Helmet>
             <div className="flex flex-col items-center justify-center w-full">
 
                 <img className="w-100 m-20" src="assets/images/logos/icon.png" alt="logo" />
@@ -232,9 +237,9 @@ function Step3App(props) {
 
                                                 }
                                                 onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                                placeholder="Selectionner multiple Sous-secteurs"
+                                                placeholder="Selectionner vos activités"
                                                 textFieldProps={{
-                                                    label: 'Sous-secteurs',
+                                                    label: 'Activités',
                                                     InputLabelProps: {
                                                         shrink: true
                                                     },

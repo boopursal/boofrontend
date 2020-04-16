@@ -7,6 +7,7 @@ import JetonsHeader from './JetonsHeader';
 import JetonsDialog from './JetonsDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
+import { Helmet } from "react-helmet";
 
 
 function JetonsApp(props)
@@ -14,19 +15,24 @@ function JetonsApp(props)
     const dispatch = useDispatch();
     const pageLayout = useRef(null);
     const parametres = useSelector(({jetonsApp}) => jetonsApp.jetons.parametres);
+    const paiements = useSelector(({ jetonsApp }) => jetonsApp.jetons.paiements);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            dispatch(Actions.getJetons(parametres));
-        }, 1000);
+        
+        dispatch(Actions.getJetons(parametres));
+        if(!paiements)
         dispatch(Actions.getPaiements());
-        return () => clearTimeout(timer);
         
         
     }, [dispatch,parametres]);
 
     return (
         <React.Fragment>
+            <Helmet>
+                <title>Jetons | Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+            </Helmet>
             <FusePageSimple
                 classes={{
                     contentWrapper: "p-0 sm:p-24 pb-80 sm:pb-80 h-full",

@@ -1,19 +1,14 @@
 import { showMessage } from 'app/store/actions/fuse';
 import agent from "agent";
-import * as Actions from '@fuse/components/FuseNavigation/store/actions';
 
 export const REQUEST_MESSAGES = '[MESSAGES APP] REQUEST MESSAGES';
 export const REMOVE_MESSAGE = '[MESSAGES APP] REMOVE MESSAGES';
 export const STATUT_MESSAGE = '[MESSAGES APP] STATUT MESSAGES';
-export const SET_PARAMETRES_DATA = '[MESSAGES APP] SET PARAMETRES DATA';
-
-
 export const GET_MESSAGES = '[MESSAGES APP] GET MESSAGES';
 export const SET_MESSAGES_SEARCH_TEXT = '[MESSAGES APP] SET MESSAGES SEARCH TEXT';
 
-export function getMessages(parametres,id) {
-    var message = parametres.message ? `=${parametres.message}` : '';
-    const request = agent.get(`/api/fournisseurs/${id}/messages?page=${parametres.page}&message${message}&statut=1&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+export function getMessages(id) {
+    const request = agent.get(`/api/fournisseurs/${id}/messages?statut=1`);
 
     return (dispatch) => {
         dispatch({
@@ -28,10 +23,10 @@ export function getMessages(parametres,id) {
     }
 
 }
-export function removeMessage(message, parametres,id) {
+export function removeMessage(message, id) {
 
     let Updatemessage = { del: true}
-    return (dispatch, getState) => {
+    return (dispatch) => {
 
 
         const request = agent.put(`/api/contact_fournisseurs/${message.id}`, Updatemessage);
@@ -48,19 +43,12 @@ export function removeMessage(message, parametres,id) {
                     },
                     variant: 'success'
                 }))
-            ]).then(() => dispatch(getMessages(parametres,id)))
+            ]).then(() => dispatch(getMessages(id)))
         );
     };
 }
 
 
-
-export function setParametresData(parametres) {
-    return {
-        type: SET_PARAMETRES_DATA,
-        parametres
-    }
-}
 
 export function setMessagesSearchText(event) {
     return {

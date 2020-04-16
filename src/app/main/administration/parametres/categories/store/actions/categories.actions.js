@@ -7,9 +7,6 @@ export const GET_CATEGORIES = '[CATEGORIES APP] GET CATEGORIES';
 export const GET_SOUS_SECTEURS = '[CATEGORIES APP] GET SOUS_SECTEURS';
 export const REQUEST_CATEGORIES = '[CATEGORIES APP] REQUEST CATEGORIES';
 export const SET_SEARCH_TEXT = '[CATEGORIES APP] SET SEARCH TEXT';
-export const SET_CURRENT_PAGE = '[CATEGORIES APP] SET CURRENT PAGE';
-export const SET_FILTER_DATA = '[CATEGORIES APP] SET FILTER DATA';
-export const SET_SORTED_DATA = '[CATEGORIES APP] SET SORTED DATA';
 export const TOGGLE_IN_SELECTED_CATEGORIES = '[CATEGORIES APP] TOGGLE IN SELECTED CATEGORIES';
 export const SELECT_ALL_CATEGORIES = '[CATEGORIES APP] SELECT ALL CATEGORIES';
 export const DESELECT_ALL_CATEGORIES = '[CATEGORIES APP] DESELECT ALL CATEGORIES';
@@ -21,6 +18,7 @@ export const ADD_CATEGORIE = '[CATEGORIES APP] ADD CATEGORIE';
 export const SAVE_ERROR = '[CATEGORIES APP] SAVE ERROR';
 export const UPDATE_CATEGORIE = '[CATEGORIES APP] UPDATE CATEGORIE';
 export const REMOVE_CATEGORIE = '[CATEGORIES APP] REMOVE CATEGORIE';
+export const SET_PARAMETRES_DATA = '[CATEGORIES APP] SET PARAMETRES DATA';
 
 export function getSousSecteurs()
 {
@@ -40,8 +38,13 @@ export function getSousSecteurs()
 
 export function getCategories(parametres)
 {
-    var name = parametres.name?`=${parametres.name}`:'';
-    const request = agent.get(`/api/categories?page=${parametres.page}&name${name}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map(function (item, i) {
+            search += '&' + item.id + '=' + item.value
+        });
+    }
+    const request = agent.get(`/api/categories?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}&props[]=id&props[]=name&props[]=sousSecteur`);
 
     
     return (dispatch) =>{
@@ -67,32 +70,12 @@ export function setSearchText(event)
 }
 
 
-
-export function setCurrentPage(parametres)
-{
+export function setParametresData(parametres) {
     return {
-        type      : SET_CURRENT_PAGE,
+        type: SET_PARAMETRES_DATA,
         parametres
     }
 }
-
-
-export function setFilterData(parametres)
-{
-    return {
-        type      : SET_FILTER_DATA,
-        parametres
-    }
-}
-
-export function setSortedData(parametres)
-{
-    return {
-        type      : SET_SORTED_DATA,
-        parametres
-    }
-}
-
 
 export function openNewCategoriesDialog()
 {
@@ -127,7 +110,7 @@ export function addCategorie(categorie,parametres)
 {
     categorie.sousSecteur = categorie.sousSecteur.value;
     
-    return (dispatch, getState) => {
+    return (dispatch) => {
 
        
         const request = agent.post('/api/categories',categorie);
@@ -166,10 +149,10 @@ export function addCategorie(categorie,parametres)
 export function updateCategorie(categorie,parametres)
 {
     categorie.sousSecteur = categorie.sousSecteur.value;
-    return (dispatch, getState) => {
+    return (dispatch) => {
 
      
-        const request = agent.put(categorie['@id'],categorie);
+        const request = agent.put(`/api/categories/${categorie.id}`,categorie);
 
         return request.then((response) =>
             Promise.all([
@@ -205,26 +188,42 @@ export function updateCategorie(categorie,parametres)
 
 export function removeCategorie(categorie,parametres)
 {
-    categorie.del=true;
-    delete categorie.sousSecteur;
-    categorie.name=categorie.name+'_deleted-'+categorie.id;
-    return (dispatch, getState) => {
+    
+    let data = {
+        del: true,
+        name: categorie.name + '_deleted-' + categorie.id
+    }
+    return (dispatch) => {
 
-        
-        const request = agent.put(categorie['@id'],categorie);
+        dispatch({
+            type   : REQUEST_CATEGORIES,
+        });
+        const request = agent.put(`/api/categories/${categorie.id}`,data);
 
         return request.then((response) =>
             Promise.all([
-                dispatch({
-                    type: REMOVE_CATEGORIE
-                }),
                 dispatch(showMessage({message: 'Catégorie bien supprimé!',anchorOrigin: {
                     vertical  : 'top',//top bottom
                     horizontal: 'right'//left center right
                 },
                 variant: 'success'}))
             ]).then(() => dispatch(getCategories(parametres)))
-        );
+        ).catch((error) => {
+            dispatch({
+                type: REMOVE_CATEGORIE
+            })
+            if (error.response.data && error.response.data['hydra:description']) {
+                dispatch(showMessage({
+                    message: error.response.data['hydra:description'], anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'
+                }));
+
+            }
+
+        });
     };
 }
 

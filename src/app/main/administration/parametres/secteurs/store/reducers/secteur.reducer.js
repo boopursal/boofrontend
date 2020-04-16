@@ -24,6 +24,13 @@ const secteurReducer = function (state = initialState, action) {
                     image: null,
                 };
             }
+        case Actions.REMOVE_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loading: false
+                }
+            }
         case Actions.REQUEST_SAVE_SECTEUR:
             {
                 return {
@@ -31,11 +38,11 @@ const secteurReducer = function (state = initialState, action) {
                     loading: true,
                 };
             }
-        case Actions.REQUEST_SECTEUR:
+        case Actions.REQUEST_SECTEURS:
             {
                 return {
                     ...state,
-                    requestSecteur: true,
+                    loading: true,
                 };
             }
 

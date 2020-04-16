@@ -12,8 +12,14 @@ export const GET_CONTACTS = '[CONTACTS FOURNISSEUR APP] GET CONTACTS';
 export const SET_CONTACTS_SEARCH_TEXT = '[CONTACTS FOURNISSEUR APP] SET CONTACTS SEARCH TEXT';
 
 export function getMessages(parametres) {
-  //  var description = parametres.description ? `=${parametres.description}` : '';
-    const request = agent.get(`/api/contact_fournisseurs?page=${parametres.page}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map((item) => (
+            item.value && (
+                item.id === 'created' ? (search += '&' + item.id + '[after]=' + item.value) : (search += '&' + item.id + '=' + item.value))
+        ));
+    }
+    const request = agent.get(`/api/contact_fournisseurs?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {
         dispatch({
@@ -30,7 +36,7 @@ export function getMessages(parametres) {
 }
 export function removeMessage(demande, parametres) {
 
-    let Updatedemande = { del: true}
+    let Updatedemande = { del: true }
     return (dispatch, getState) => {
 
 

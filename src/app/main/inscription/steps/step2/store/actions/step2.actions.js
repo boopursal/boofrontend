@@ -71,10 +71,15 @@ export function getVilles(pays_id) {
 
 export function setStep2(data, fournisseur_id, history) {
 
-
+    if(data.pays)
     data.pays = data.pays.value;
+    if(data.ville)
     data.ville = data.ville.value;
+
     data.redirect = '/register/fournisseur2';
+    data.step = 2;
+
+    if(data.currency)
     data.currency = data.currency.value;
     return (dispatch, getState) => {
 

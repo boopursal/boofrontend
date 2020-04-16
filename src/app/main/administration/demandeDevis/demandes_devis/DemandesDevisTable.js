@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -19,25 +19,33 @@ const useStyles = makeStyles(theme => ({
     },
     chip: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ef5350',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
 
     },
     chip2: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 function DemandesDevisTable(props) {
@@ -52,6 +60,14 @@ function DemandesDevisTable(props) {
     const searchText = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
+
+    const run = (parametres) =>
+        dispatch(Actions.setParametresData(parametres))
+
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
+
 
     useEffect(() => {
         function getFilteredArray(entities, searchText) {
@@ -108,49 +124,60 @@ function DemandesDevisTable(props) {
                         {
                             Header: "Fournisseur",
                             className: "font-bold",
-                            id: "fournisseur",
-                            accessor: f => f.fournisseur ? f.fournisseur.societe : '',
+                            accessor: "fournisseur",
+                            filterable: true,
+                            Cell: row => row.original.fournisseur ? row.original.fournisseur.societe : '',
                         },
                         {
                             Header: "Produit réf.",
                             className: "font-bold",
-                            id: "reference",
-                            accessor: f => f.produit ? f.produit.reference : '',
+                            accessor: "produit.reference",
+                            filterable: true,
+                            Cell: row => row.original.produit ? row.original.produit.reference : '',
+
                         },
                         {
                             Header: "Quantité",
-                            id: "quantity",
-                            accessor: f => f.quantity ? f.quantity : '',
+                            accessor: "quantity",
+                            filterable: true,
+                            Cell: row => row.original.quantity ? row.original.quantity : '',
                         },
                         {
                             Header: "Nom Contact",
-                            id: "contact",
-                            accessor: f => f.contact ? f.contact : '',
+                            accessor: "contact",
+                            filterable: true,
+                            Cell: row => row.original.contact ? row.original.contact : '',
+
                         },
                         {
                             Header: "Société",
-                            id: "societe",
-                            accessor: f => f.societe ? f.societe : '',
+                            accessor: "societe",
+                            filterable: true,
+                            Cell: row => row.original.societe ? row.original.societe : '',
                         },
                         {
                             Header: "Téléphone",
-                            id: "phone",
-                            accessor: f => f.phone ? f.phone : '',
+                            accessor: "phone",
+                            filterable: true,
+                            Cell: row => row.original.phone ? row.original.phone : '',
                         },
                         {
                             Header: "Email",
-                            id: "email",
-                            accessor: f => f.email ? f.email : '',
+                            accessor: "email",
+                            filterable: true,
+                            Cell: row => row.original.email ? row.original.email : '',
+
                         },
                         {
                             Header: "Adresse",
-                            id: "adresse",
-                            accessor: f => f.adresse ? f.adresse : '',
+                            accessor: "adresse",
+                            filterable: true,
+                            Cell: row => row.original.adresse ? row.original.adresse : '',
                         },
                         {
                             Header: "Message",
                             accessor: "message",
-                            filterable: false,
+                            filterable: true,
                             Cell: row =>
                                 _.truncate(row.original.message, {
                                     'length': 36,
@@ -161,13 +188,24 @@ function DemandesDevisTable(props) {
                         {
                             Header: "Date création",
                             accessor: "created",
-                            filterable: false,
-                            Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                            filterable: true,
+                            Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm'),
+                            Filter: ({ filter, onChange }) =>
+                                <TextField
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />,
                         },
 
                         {
                             Header: "Statut",
-                            filterable: false,
+                            accessor: "statut",
+                            filterable: true,
                             Cell: row => (
                                 <div className="flex items-center">
 
@@ -177,17 +215,28 @@ function DemandesDevisTable(props) {
                                             ?
                                             <Chip className={classes.chipOrange} label="En attente" />
                                             :
-                                            <Chip className={classes.chip2} label="Valider" />
+                                            <Chip className={classes.chip2} label="Validée" />
 
 
                                     }
 
                                 </div>
-                            )
+                            ),
+                            Filter: ({ filter, onChange }) =>
+                                <select
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                >
+                                    <option value="">Tous</option>
+                                    <option value="true">Validée</option>
+                                    <option value="false">En attente</option>
+                                </select>
+
 
                         },
 
-                      
+
                         {
                             Header: "",
                             Cell: row => (
@@ -242,7 +291,12 @@ function DemandesDevisTable(props) {
                         parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                         dispatch(Actions.setParametresData(parametres))
                     }}
-                    noDataText="No Demande found"
+                    onFilteredChange={filtered => {
+                        parametres.page = 1;
+                        parametres.search = filtered;
+                        fn(parametres);
+                    }}
+                    noDataText="Aucune demande trouvée"
                     loadingText='Chargement...'
                     ofText='sur'
                 />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton,  Tooltip, Typography } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -46,8 +46,6 @@ function MessageTable(props) {
     const dispatch = useDispatch();
     const messages = useSelector(({ messagesApp }) => messagesApp.messages.data);
     const loading = useSelector(({ messagesApp }) => messagesApp.messages.loading);
-    const pageCount = useSelector(({ messagesApp }) => messagesApp.messages.pageCount);
-    const parametres = useSelector(({ messagesApp }) => messagesApp.messages.parametres);
     const user = useSelector(({ auth }) => auth.user);
     const searchText = useSelector(({ messagesApp }) => messagesApp.messages.searchText);
 
@@ -73,7 +71,15 @@ function MessageTable(props) {
         return null;
     }
 
-
+    if (filteredData.length === 0) {
+        return (
+            <div className="flex flex-1 items-center justify-center h-full">
+                <Typography color="textSecondary" variant="h5">
+                    Il n'y a pas de message!
+                </Typography>
+            </div>
+        );
+    }
 
 
     return (
@@ -108,7 +114,7 @@ function MessageTable(props) {
 
                         {
                             Header: "",
-                            filterable: false,
+                            filterable: true,
                             Cell: row => (
                                 <div className="flex items-center">
 
@@ -130,23 +136,27 @@ function MessageTable(props) {
 
                         {
                             Header: "Nom Contact",
-                            id: "contact",
-                            accessor: f => f.contact ? f.contact : '',
+                            accessor: "contact",
+                            filterable: true,
+                            Cell: row =>row.original.contact ? row.original.contact : '',
                         },
                         {
                             Header: "Téléphone",
-                            id: "phone",
-                            accessor: f => f.phone ? f.phone : '',
+                            accessor: "phone",
+                            filterable: true,
+                            Cell: row =>row.original.phone ? row.original.phone : '',
                         },
                         {
                             Header: "Email",
-                            id: "email",
-                            accessor: f => f.email ? f.email : '',
+                            accessor: "email",
+                            filterable: true,
+                            Cell: row =>row.original.email ? row.original.email : '',
+                               
                         },
                         {
                             Header: "Message",
                             accessor: "message",
-                            filterable: false,
+                            filterable: true,
                             Cell: row =>
                                 _.truncate(row.original.message, {
                                     'length': 36,
@@ -170,7 +180,7 @@ function MessageTable(props) {
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeMessage(row.original, parametres, user.id));
+                                                        dispatch(Actions.removeMessage(row.original, user.id));
                                                     }}
                                                 >
                                                     <Icon>delete</Icon>
@@ -196,25 +206,9 @@ function MessageTable(props) {
                             )
                         }
                     ]}
-                    manual
-
-                    defaultSortDesc={true}
-                    pages={pageCount}
                     defaultPageSize={10}
+                    noDataText="Aucun message trouvé"
                     loading={loading}
-                    showPageSizeOptions={false}
-                    onPageChange={(pageIndex) => {
-                        parametres.page = pageIndex + 1;
-                        dispatch(Actions.setParametresData(parametres))
-                    }}
-
-                    onSortedChange={(newSorted, column, shiftKey) => {
-                        parametres.page = 1;
-                        parametres.filter.id = newSorted[0].id;
-                        parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
-                        dispatch(Actions.setParametresData(parametres))
-                    }}
-                    noDataText="No Message found"
                     loadingText='Chargement...'
                     ofText='sur'
                 />

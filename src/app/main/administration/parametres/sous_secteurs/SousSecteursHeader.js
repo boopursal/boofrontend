@@ -1,16 +1,12 @@
 import React from 'react';
-import { Icon,  Input, Paper, Typography, Button} from '@material-ui/core';
-import {ThemeProvider} from '@material-ui/styles';
+import { Icon,  Typography, Button} from '@material-ui/core';
 import {FuseAnimate} from '@fuse';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import * as Actions from './store/actions';
 
 function SousSecteursHeader(props)
 {
     const dispatch = useDispatch();
-    //const searchText = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.searchText);
-    const mainTheme = useSelector(({fuse}) => fuse.settings.mainTheme);
-    const parametres = useSelector(({sous_secteursApp}) => sous_secteursApp.sous_secteurs.parametres);
 
     return (
          <div className="flex flex-1 items-center justify-between p-8 sm:p-24">
@@ -25,33 +21,6 @@ function SousSecteursHeader(props)
                 </div>
 
                 <div className="flex flex-1 items-center justify-center px-12">
-
-                    <ThemeProvider theme={mainTheme}>
-                        <FuseAnimate animation="transition.slideDownIn" delay={300}>
-                            <Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
-
-                                <Icon className="mr-8" color="action">search</Icon>
-
-                                <Input
-                                    placeholder="Nom de sous-secteur..."
-                                    className="flex flex-1"
-                                    disableUnderline
-                                    fullWidth
-                                    value={parametres.name}
-                                    inputProps={{
-                                        'aria-label': 'Search'
-                                    }}
-                                    onChange={ev =>
-                                         {
-                                             parametres.page = 1;
-                                             parametres.name=ev.target.value
-                                             dispatch(Actions.setFilterData(parametres))
-                                            }}
-                                />
-                            </Paper>
-                        </FuseAnimate>
-                    </ThemeProvider>
-                    
 
                 </div>
                 <FuseAnimate animation="transition.slideRightIn" delay={300}>

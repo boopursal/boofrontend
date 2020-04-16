@@ -7,6 +7,7 @@ import CommandesHeader from './CommandesHeader';
 import CommandesDialog from './CommandesDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
+import { Helmet } from "react-helmet";
 
 
 function CommandesApp(props)
@@ -26,6 +27,11 @@ function CommandesApp(props)
 
     return (
         <React.Fragment>
+              <Helmet>
+                <title>Commandes jetons | Les Achats Industriels</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="googlebot" content="noindex" />
+            </Helmet>
             <FusePageSimple
                 classes={{
                     contentWrapper: "p-0 sm:p-24 pb-80 sm:pb-80 h-full",

@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton,  Tooltip,Avatar,Typography } from '@material-ui/core';
-import {FuseUtils,FuseAnimate } from '@fuse';
+import { Icon, IconButton, Tooltip, Avatar, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions,Button } from '@material-ui/core';
+import { FuseUtils, FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import ReactTable from "react-table";
 import _ from '@lodash';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import * as Actions from '../store/actions';
 
 function SecteursTable(props) {
     const secteurs = useSelector(({ secteursApp }) => secteursApp.secteurs.entities);
     const loading = useSelector(({ secteursApp }) => secteursApp.secteurs.loading);
     const searchText = useSelector(({ secteursApp }) => secteursApp.secteurs.searchText);
+    const dispatch = useDispatch();
 
     const [filteredData, setFilteredData] = useState(null);
 
-    
+console.log(loading)
     useEffect(() => {
         function getFilteredArray(entities, searchText) {
             const arr = Object.keys(entities).map((id) => entities[id]);
@@ -34,24 +36,8 @@ function SecteursTable(props) {
     if (!filteredData) {
         return null;
     }
-    if (loading) {
-        return (
-            <div className="flex flex-1 items-center justify-center h-full">
-               <CircularProgress  color="secondary" /> &ensp;
-               Chargement ...
-            </div>
-        );
-    }
-    if (filteredData.length === 0) {
-        return (
-            <div className="flex flex-1 items-center justify-center h-full">
-                <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas d'activités!
-                </Typography>
-            </div>
-        );
-    }
-
+    
+   
     return (
         <FuseAnimate animation="transition.slideUpIn" delay={300}>
             <ReactTable
@@ -76,37 +62,74 @@ function SecteursTable(props) {
                 data={filteredData}
                 columns={[
                     {
-                        Header   : "",
-                        Cell     : row => 
+                        Header: "",
+                        Cell: row =>
 
                             row.original.image ?
-                            <Avatar className="mr-8" alt={row.original.firstName} src={FuseUtils.getUrl()+row.original.image.url}/>
-                            : 
-                            <Avatar className="mr-8" alt={row.original.firstName} src="assets/images/avatars/images.png"/>
-                        
+                                <Avatar className="mr-8" alt={row.original.firstName} src={FuseUtils.getUrl() + row.original.image.url} />
+                                :
+                                <Avatar className="mr-8" alt={row.original.firstName} src="assets/images/avatars/images.png" />
+
                         ,
                         className: "justify-center",
-                        width    : 64,
-                        sortable : false
+                        width: 64,
+                        sortable: false
                     },
 
                     {
-                        Header    : "Secteur",
+                        Header: "Secteur",
                         filterable: true,
-                        accessor  : "name",
+                        accessor: "name",
                     },
-                  
+
                     {
                         Header: "",
                         Cell: row => (
                             <div className="flex items-center">
-                                {
-                                    <Tooltip title="Editer" >
-                                        <IconButton className="text-teal text-20">
-                                            <Icon>edit</Icon>
-                                        </IconButton>
-                                    </Tooltip>
-                                }
+
+                                <Tooltip title="Editer" >
+                                    <IconButton className="text-teal text-20">
+                                        <Icon>edit</Icon>
+                                    </IconButton>
+                                </Tooltip>
+
+                                <Tooltip title="Supprimer" >
+                                    <IconButton className="text-red text-20"
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            dispatch(Actions.openDialog({
+                                                children: (
+                                                    <React.Fragment>
+                                                        <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText id="alert-dialog-description">
+                                                                Voulez vous vraiment supprimer cet enregistrement ?
+                                                            </DialogContentText>
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                Non
+                                                            </Button>
+                                                            <Button
+                                                                onClick={(ev) => {
+                                                                    dispatch(Actions.removeSecteur(row.original));
+                                                                    dispatch(Actions.closeDialog())
+                                                                }}
+                                                                color="primary"
+                                                                autoFocus>
+                                                                Oui
+                                                            </Button>
+                                                        </DialogActions>
+                                                    </React.Fragment>
+                                                )
+                                            }))
+                                        }}
+                                    >
+                                        <Icon>delete</Icon>
+                                    </IconButton>
+
+                                </Tooltip>
+
                             </div>
                         )
                     }
@@ -116,7 +139,7 @@ function SecteursTable(props) {
                 noDataText="Aucun secteur trouvé"
                 loadingText='Chargement...'
                 ofText='sur'
-                
+
             />
         </FuseAnimate>
     );

@@ -1,16 +1,11 @@
 import React from 'react';
-import {Paper, Button, Input, Icon, Typography} from '@material-ui/core';
-import {ThemeProvider} from '@material-ui/styles';
+import { Button, Icon, Typography} from '@material-ui/core';
 import {FuseAnimate} from '@fuse';
-import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import * as Actions from '../store/actions';
 
 function DemandesHeader(props)
 {
-    const dispatch = useDispatch();
-    const mainTheme = useSelector(({fuse}) => fuse.settings.mainTheme);
-    const parametres = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.parametres);
+  
     return (
         <div className="flex flex-1 w-full items-center justify-between">
 
@@ -25,31 +20,7 @@ function DemandesHeader(props)
 
             <div className="flex flex-1 items-center justify-center px-12">
 
-                <ThemeProvider theme={mainTheme}>
-                    <FuseAnimate animation="transition.slideDownIn" delay={300}>
-                        <Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
-
-                            <Icon className="mr-8" color="action">search</Icon>
-
-                            <Input
-                                placeholder="Rechercher dans la description"
-                                className="flex flex-1"
-                                disableUnderline
-                                fullWidth
-                                value={parametres.description}
-                                inputProps={{
-                                    'aria-label': 'Rechercher'
-                                }}
-                                onChange={ev => {
-                                    parametres.page = 1;
-                                    parametres.description=ev.target.value
-                                    dispatch(Actions.setParametresData(parametres))
-                                }}
-                            />
-                        </Paper>
-                    </FuseAnimate>
-                </ThemeProvider>
-
+               
             </div>
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <Button component={Link} to="/demandes/new" className="whitespace-no-wrap" variant="contained">

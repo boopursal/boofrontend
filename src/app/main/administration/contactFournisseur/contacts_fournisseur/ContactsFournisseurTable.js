@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -19,25 +19,33 @@ const useStyles = makeStyles(theme => ({
     },
     chip: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ef5350',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
 
     },
     chip2: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 function ContactsFournisseurTable(props) {
@@ -73,7 +81,12 @@ function ContactsFournisseurTable(props) {
         return null;
     }
 
+    const run = (parametres) =>
+        dispatch(Actions.setParametresData(parametres))
 
+    //call run function
+    const fn =
+        _.debounce(run, 1000);
 
 
     return (
@@ -108,32 +121,36 @@ function ContactsFournisseurTable(props) {
                         {
                             Header: "Fournisseur",
                             className: "font-bold",
-                            id: "fournisseur",
-                            accessor: f => f.fournisseur ? f.fournisseur.societe : '',
+                            accessor: "fournisseur.societe",
+                            filterable: true,
+                            Cell: row => row.original.fournisseur ? row.original.fournisseur.societe : ''
                         },
-                     
-                      
+
+
                         {
                             Header: "Nom Contact",
-                            id: "contact",
-                            accessor: f => f.contact ? f.contact : '',
+                            accessor: "contact",
+                            filterable: true,
+                            Cell: row => row.original.contact ? row.original.contact : ''
                         },
-                       
+
                         {
                             Header: "Téléphone",
-                            id: "phone",
-                            accessor: f => f.phone ? f.phone : '',
+                            accessor: "phone",
+                            filterable: true,
+                            Cell: row => row.original.phone ? row.original.phone : ''
                         },
                         {
                             Header: "Email",
-                            id: "email",
-                            accessor: f => f.email ? f.email : '',
+                            accessor: "email",
+                            filterable: true,
+                            Cell: row => row.original.email ? row.original.email : ''
                         },
-                     
+
                         {
                             Header: "Message",
                             accessor: "message",
-                            filterable: false,
+                            filterable: true,
                             Cell: row =>
                                 _.truncate(row.original.message, {
                                     'length': 36,
@@ -144,13 +161,24 @@ function ContactsFournisseurTable(props) {
                         {
                             Header: "Date création",
                             accessor: "created",
-                            filterable: false,
-                            Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                            filterable: true,
+                            Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm'),
+                            Filter: ({ filter, onChange }) =>
+                                <TextField
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
                         },
 
                         {
                             Header: "Statut",
-                            filterable: false,
+                            accessor: "statut",
+                            filterable: true,
                             Cell: row => (
                                 <div className="flex items-center">
 
@@ -160,17 +188,27 @@ function ContactsFournisseurTable(props) {
                                             ?
                                             <Chip className={classes.chipOrange} label="En attente" />
                                             :
-                                            <Chip className={classes.chip2} label="Valider" />
+                                            <Chip className={classes.chip2} label="Validé" />
 
 
                                     }
 
                                 </div>
-                            )
+                            ),
+                            Filter: ({ filter, onChange }) =>
+                                <select
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                >
+                                    <option value="">Tous</option>
+                                    <option value="true">Validé</option>
+                                    <option value="false">En attente</option>
+                                </select>
 
                         },
 
-                      
+
                         {
                             Header: "",
                             Cell: row => (
@@ -208,8 +246,6 @@ function ContactsFournisseurTable(props) {
                         }
                     ]}
                     manual
-
-                    defaultSortDesc={true}
                     pages={pageCount}
                     defaultPageSize={10}
                     loading={loading}
@@ -225,7 +261,12 @@ function ContactsFournisseurTable(props) {
                         parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                         dispatch(Actions.setParametresData(parametres))
                     }}
-                    noDataText="No Message found"
+                    onFilteredChange={filtered => {
+                        parametres.page = 1;
+                        parametres.search = filtered;
+                        fn(parametres);
+                    }}
+                    noDataText="Aucun message trouvé"
                     loadingText='Chargement...'
                     ofText='sur'
                 />
