@@ -107,6 +107,7 @@ function FicheFournisseur(props) {
     const params = props.match.params;
     const { id, tab, slug } = params;
 
+    console.log(window.location.href)
     useEffect(() => {
         if (tab === 'produits') {
             setValue(1);
@@ -302,7 +303,7 @@ function FicheFournisseur(props) {
                                                         size: 30,             // the size of each button (INTEGER)
 
                                                         // OPTIONAL PARAMETERS
-                                                        // url: 'https://www.sharethis.com', // (defaults to current url)
+                                                        url: window.location.href, // (defaults to current url)
                                                         image: data.avatar &&
                                                             FuseUtils.getUrl() + data.avatar.url,  // (defaults to og:image or twitter:image)
                                                         description: data.description,       // (defaults to og:description or twitter:description)
