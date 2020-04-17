@@ -9,6 +9,7 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { InlineShareButtons } from 'sharethis-reactjs';
 import _ from '@lodash';
+import { FuseUtils } from '@fuse';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -153,10 +154,11 @@ function NewDetail(props) {
                                                                     size: 30,             // the size of each button (INTEGER)
 
                                                                     // OPTIONAL PARAMETERS
-                                                                    url: 'https://www.sharethis.com', // (defaults to current url)
-                                                                    // image: 'https://bit.ly/2CMhCMC',  // (defaults to og:image or twitter:image)
+                                                                    //url: 'https://www.sharethis.com', // (defaults to current url)
+                                                                    image: actualite.data.image &&
+                                                                        FuseUtils.getUrl() + actualite.data.image.url,  // (defaults to og:image or twitter:image)
                                                                     //description: 'custom text',       // (defaults to og:description or twitter:description)
-                                                                    //title: 'custom title',            // (defaults to og:title or twitter:title)
+                                                                    title: actualite.data.titre,            // (defaults to og:title or twitter:title)
                                                                     //message: 'custom email text',     // (only for email sharing)
                                                                     //subject: 'custom email subject',  // (only for email sharing)
                                                                     //username: 'custom twitter handle' // (only for twitter sharing)

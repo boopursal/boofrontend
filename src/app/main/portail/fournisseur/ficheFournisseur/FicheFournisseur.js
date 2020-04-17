@@ -230,7 +230,7 @@ function FicheFournisseur(props) {
 
                                             </Grid>
                                         </Grid>
-                                   
+
                                         {
                                             data.website &&
                                             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -277,7 +277,7 @@ function FicheFournisseur(props) {
                                                 )
 
                                         }
-                                             <div className="flex justify-end items-center mt-16">
+                                        <div className="flex justify-end items-center mt-16">
                                             <div className="mr-8 font-bold">Partager sur :</div>
                                             <div >
                                                 <InlineShareButtons
@@ -302,10 +302,11 @@ function FicheFournisseur(props) {
                                                         size: 30,             // the size of each button (INTEGER)
 
                                                         // OPTIONAL PARAMETERS
-                                                       // url: 'https://www.sharethis.com', // (defaults to current url)
-                                                        // image: 'https://bit.ly/2CMhCMC',  // (defaults to og:image or twitter:image)
-                                                        //description: 'custom text',       // (defaults to og:description or twitter:description)
-                                                        //title: 'custom title',            // (defaults to og:title or twitter:title)
+                                                        // url: 'https://www.sharethis.com', // (defaults to current url)
+                                                        image: data.avatar &&
+                                                            FuseUtils.getUrl() + data.avatar.url,  // (defaults to og:image or twitter:image)
+                                                        description: data.description,       // (defaults to og:description or twitter:description)
+                                                        title: `${data.societe} | Les Achats Industriels`,            // (defaults to og:title or twitter:title)
                                                         //message: 'custom email text',     // (only for email sharing)
                                                         //subject: 'custom email subject',  // (only for email sharing)
                                                         //username: 'custom twitter handle' // (only for twitter sharing)
