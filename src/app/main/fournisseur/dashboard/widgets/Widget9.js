@@ -54,13 +54,13 @@ function Widget9(props) {
             setExpanded(e);
         }
     }
-
     return (
         <>
             {
                 widgets.loadingPersonnelPotentiels === false
-                    && widgets.personnelPotentiels.length > 0
+                   
                     ?
+                   
                     <Paper className="w-full rounded-8 shadow-none border-1">
                         <div className="flex items-center justify-between px-16 h-64 border-b-1">
                             <Typography className="text-24">Le suivi du personnel</Typography>

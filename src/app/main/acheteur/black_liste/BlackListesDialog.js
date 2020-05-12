@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, ListItemText, CircularProgress, Popper, Chip } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,17 +7,16 @@ import { TextFieldFormsy, CheckboxFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import _ from '@lodash';
 import Autosuggest from 'react-autosuggest';
-import agent from "agent";
-import match from 'autosuggest-highlight/match';
-import parse from 'autosuggest-highlight/parse';
+import green from '@material-ui/core/colors/green';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
+import Highlighter from "react-highlight-words";
 
 const defaultFormState = {
     raison: '',
-    fournisseur: "",
+    fournisseur: '',
 };
 
 const useStyles = makeStyles(theme => ({
@@ -29,14 +28,7 @@ const useStyles = makeStyles(theme => ({
         position: 'relative',
         width: '100%',
     },
-    suggestionsContainerOpen: {
-        position: 'absolute',
-        zIndex: 1,
-        marginTop: theme.spacing(1),
-        left: 0,
-        right: 0,
 
-    },
     suggestion: {
         display: 'block',
     },
@@ -48,22 +40,35 @@ const useStyles = makeStyles(theme => ({
     divider: {
         height: theme.spacing(2),
     },
+    buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
 }));
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.societe, query);
-    const parts = parse(suggestion.societe, matches);
     return (
-        <MenuItem selected={isHighlighted} component="div">
-            <div>
-                {parts.map(part => (
-                    <span key={part.text} style={{ fontWeight: part.highlight ? 500 : 400 }}>
-                        {part.text}
-                    </span>
-                ))}
-            </div>
+        <MenuItem selected={isHighlighted} component="div" className="z-999" dense={true}>
+            <ListItemText
+                className="pl-0 "
+                primary={
+                    <Highlighter
+                        highlightClassName="YourHighlightClass"
+                        searchWords={[query]}
+                        autoEscape={true}
+                        textToHighlight={suggestion.societe}
+                    />
+                }
+                secondary={suggestion.firstName + ' ' + suggestion.lastName}
+            />
         </MenuItem>
+
     );
+
 }
 function renderInputComponent(inputProps) {
     const { classes, inputRef = () => { }, ref, ...other } = inputProps;
@@ -79,8 +84,6 @@ function renderInputComponent(inputProps) {
                     input: classes.input,
                 },
             }}
-            required
-
             {...other}
         />
     );
@@ -90,18 +93,17 @@ function BlackListesDialog(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const BlackListesDialog = useSelector(({ blackListesApp }) => blackListesApp.blackListes.blackListesDialog);
-    const [fournisseur, setFournisseur] = React.useState({ societe: '' });
-    const [suggestions, setSuggestions] = React.useState([]);
+    const loading = useSelector(({ blackListesApp }) => blackListesApp.blackListes.loading);
+    const searchFournisseur = useSelector(({ blackListesApp }) => blackListesApp.searchFournisseur);
+    const [fournisseur, setFournisseur] = React.useState(null);
     const user = useSelector(({ auth }) => auth.user);
     const { form, handleChange, setForm } = useForm(defaultFormState);
-
+    const suggestionsNode = useRef(null);
+    const popperNode = useRef(null);
 
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
-    const autosuggestProps = {
-        renderInputComponent,
-        renderSuggestion,
-    };
+
 
     const initDialog = useCallback(
         () => {
@@ -144,24 +146,22 @@ function BlackListesDialog(props) {
     }
 
 
-    function handleCheckBoxChange(e,name) {
+    function handleCheckBoxChange(e, name) {
 
         setForm(_.set({ ...form }, name, e.target.checked));
     }
     function handleSubmit(event) {
         //event.preventDefault();
 
-
-
         if (BlackListesDialog.type === 'new') {
-            dispatch(Actions.addBlackListe(form, user.id));
-            setFournisseur({ societe: '' });
+           dispatch(Actions.addBlackListe(form, user.id));
+            //setFournisseur({ societe: '' });
         }
         else {
             dispatch(Actions.updateBlackListe(form, user.id));
-            setFournisseur({ societe: '' });
+            //setFournisseur({ societe: '' });
         }
-        closeComposeDialog();
+        //closeComposeDialog();
     }
 
     function handleRemove() {
@@ -180,6 +180,40 @@ function BlackListesDialog(props) {
         setIsFormValid(true);
     }
 
+    function handleChangeSearch(event) {
+        dispatch(Actions.setGlobalSearchText(event))
+    }
+    function showSearch() {
+        dispatch(Actions.showSearch());
+    }
+
+    function hideSearch() {
+        dispatch(Actions.hideSearch());
+    }
+
+
+    function handleSuggestionsFetchRequested({ value }) {
+        if (value.trim().length > 1) {
+            dispatch(Actions.loadSuggestions(value));
+            // Fake an AJAX call
+        }
+    }
+    function handleSuggestionsClearRequested() {
+        dispatch(Actions.cleanUp());
+    }
+    const autosuggestProps = {
+        renderInputComponent,
+        highlightFirstSuggestion: true,
+        suggestions: searchFournisseur.suggestions,
+        onSuggestionsFetchRequested: handleSuggestionsFetchRequested,
+        onSuggestionsClearRequested: handleSuggestionsClearRequested,
+        renderSuggestion
+    };
+
+    function handleDelete() {
+        setFournisseur(null);
+        setForm(_.set({ ...form }, 'fournisseur', null))
+    }
 
     return (
         <Dialog
@@ -211,72 +245,85 @@ function BlackListesDialog(props) {
                         <div className="min-w-48 pt-20">
                             <Icon color="action">work</Icon>
                         </div>
-                        <Autosuggest
+                        <div className="w-full" ref={popperNode}>
+                            <Autosuggest
+                                {...autosuggestProps}
+                                getSuggestionValue={suggestion => suggestion.societe}
+                                onSuggestionSelected={(event, { suggestion, method }) => {
+                                    if (method === "enter") {
+                                        event.preventDefault();
+                                    }
+                                    setFournisseur(suggestion);
+                                    setForm(_.set({ ...form }, 'fournisseur', suggestion['@id']))
+                                    hideSearch();
+                                }}
+                                required
+                                inputProps={{
+                                    classes,
+                                    label: 'Fournisseur',
+                                    placeholder: "Cherchez avec le nom de la société",
+                                    value: searchFournisseur.searchText,
+                                    variant: "outlined",
+                                    name: "fournisseur",
+                                    onChange: handleChangeSearch,
+                                    onFocus: showSearch,
+                                    InputLabelProps: {
+                                        shrink: true,
+                                    }
 
-                            suggestions={suggestions}
-                            {...autosuggestProps}
-                            onSuggestionsFetchRequested={async ({ value }) => {
-                                if (!value) {
-                                    setSuggestions([]);
-                                    return;
-                                }
-                                try {
-                                    const response = await agent.get(
-                                        `/api/fournisseurs?societe=${value}&del=false&isactif=true&props[]=id&props[]=societe`
-                                    );
+                                }}
+                                theme={{
+                                    container: classes.container,
+                                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                    suggestionsList: classes.suggestionsList,
+                                    suggestion: classes.suggestion,
+                                }}
+                                renderSuggestionsContainer={options => (
+                                    <Popper
+                                        anchorEl={popperNode.current}
+                                        open={Boolean(options.children) || searchFournisseur.noSuggestions || searchFournisseur.loading}
+                                        popperOptions={{ positionFixed: true }}
+                                        className="z-9999"
+                                    >
+                                        <div ref={suggestionsNode}>
+                                            <Paper
+                                                elevation={1}
+                                                square
+                                                {...options.containerProps}
+                                                style={{ width: popperNode.current ? popperNode.current.clientWidth : null }}
+                                            >
+                                                {options.children}
+                                                {searchFournisseur.noSuggestions && (
+                                                    <Typography className="px-16 py-12">
+                                                        Aucun résultat..
+                                                    </Typography>
+                                                )}
+                                                {searchFournisseur.loading && (
+                                                    <div className="px-16 py-12 text-center">
+                                                        <CircularProgress color="secondary" /> <br /> Chargement ...
+                                                    </div>
+                                                )}
+                                            </Paper>
+                                        </div>
+                                    </Popper>
+                                )}
+                            />
 
-                                    setSuggestions(
-                                        response.data['hydra:member']
-                                    );
-                                } catch (e) {
-                                    setSuggestions([]);
+                        </div>
 
-                                }
-                            }}
-                            onSuggestionsClearRequested={() => {
-                                setSuggestions([]);
-
-                            }}
-                            getSuggestionValue={suggestion => suggestion.societe}
-
-                            onSuggestionSelected={(event, { suggestion, method }) => {
-                                if (method === "enter") {
-                                    event.preventDefault();
-                                }
-                                setFournisseur(suggestion);
-                                setForm(_.set({ ...form }, 'fournisseur', suggestion['@id']))
-
-                            }}
-                            required
-                            inputProps={{
-                                classes,
-                                label: 'Fournisseur',
-                                placeholder: "Cherchez avec le nom du société",
-                                value: fournisseur.societe,
-                                variant: "outlined",
-                                name: "fournisseur",
-                                onChange: (_event, { newValue }) => {
-                                    setFournisseur({ societe: newValue });
-                                },
-                                InputLabelProps: {
-                                    shrink: true,
-                                }
-
-                            }}
-                            theme={{
-                                container: classes.container,
-                                suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                                suggestionsList: classes.suggestionsList,
-                                suggestion: classes.suggestion,
-                            }}
-                            renderSuggestionsContainer={options => (
-                                <Paper {...options.containerProps} square>
-                                    {options.children}
-                                </Paper>
-                            )}
-                        />
 
                     </div>
+                    {
+                        fournisseur &&
+
+                        <Chip
+                            label={fournisseur.societe}
+                            onDelete={handleDelete}
+                            className="mt-8 ml-48"
+                        />
+
+                    }
+
 
                     <div className="flex">
                         <div className="min-w-48 pt-20">
@@ -286,7 +333,6 @@ function BlackListesDialog(props) {
                         <TextFieldFormsy
                             className="mb-24 mt-24"
                             label="Raison"
-                            autoFocus
                             id="raison"
                             name="raison"
                             value={form.raison}
@@ -330,9 +376,10 @@ function BlackListesDialog(props) {
                             variant="contained"
                             color="primary"
                             type="submit"
-                            disabled={!isFormValid || !fournisseur['@id']}
+                            disabled={!isFormValid || !fournisseur || loading}
                         >
                             Ajouter
+                            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                         </Button>
                     </DialogActions>
                 ) : (
@@ -341,9 +388,10 @@ function BlackListesDialog(props) {
                                 variant="contained"
                                 color="primary"
                                 type="submit"
-                                disabled={!isFormValid || !fournisseur['@id']}
+                                disabled={!isFormValid || !fournisseur || loading}
                             >
                                 Modifier
+                                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                         </Button>
                             <IconButton
                                 onClick={() => dispatch(Actions.openDialog({

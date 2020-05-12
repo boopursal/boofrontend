@@ -1,71 +1,67 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Button, InputAdornment, Icon} from '@material-ui/core';
-import {TextFieldFormsy} from '@fuse';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, InputAdornment, Icon } from '@material-ui/core';
+import { TextFieldFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import * as authActions from 'app/auth/store/actions';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from 'app/store/actions';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         alignItems: 'center',
-      },
-      wrapper: {
+    },
+    wrapper: {
         margin: theme.spacing(1),
         position: 'relative',
-      },
-     
-      buttonProgress: {
+    },
+
+    buttonProgress: {
         position: 'absolute',
         top: '50%',
         left: '50%',
         marginTop: -12,
         marginLeft: -12,
-      },
-  }));
-function JWTLoginTab(props)
-{
+    },
+}));
+function JWTLoginTab(props) {
     const dispatch = useDispatch();
-    const login = useSelector(({auth}) => auth.login);
+    const login = useSelector(({ auth }) => auth.login);
     const classes = useStyles();
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
 
     useEffect(() => {
-        if ( login.error && login.error.message )
-        {
+        if (login.error && login.error.message) {
             dispatch(
                 Actions.showMessage({
-                    message     : login.error.message,//text or html
+                    message: login.error.message,//text or html
                     autoHideDuration: 6000,//ms
                     anchorOrigin: {
-                        vertical  : 'top',//top bottom
+                        vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },
                     variant: 'error'//success error info warning null
                 }));
-                
+
         }
         enableButton();
-    }, [dispatch,login.error]);
+    }, [dispatch, login.error]);
 
- 
 
-    function disableButton()
-    {
+
+    function disableButton() {
         setIsFormValid(false);
     }
 
-    function enableButton()
-    {
+    function enableButton() {
         setIsFormValid(true);
     }
 
-    function handleSubmit(model)
-    {
+    function handleSubmit(model) {
         dispatch(authActions.submitLogin(model));
         disableButton();
     }
@@ -86,7 +82,7 @@ function JWTLoginTab(props)
                     label="Email"
                     validations="isEmail"
                     validationErrors={{
-                        isEmail:"This is not a valid email"
+                        isEmail: "Ce n'est pas un email valide"
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
@@ -112,7 +108,7 @@ function JWTLoginTab(props)
                     variant="outlined"
                     required
                 />
-
+                <Link className="font-medium" to="/forgot-password">Mot de passe oublié ?</Link>
                 <Button
                     type="submit"
                     variant="contained"
@@ -123,13 +119,13 @@ function JWTLoginTab(props)
                     disabled={!isFormValid || login.loading}
                     value="legacy"
                 >
-                    Login
+                    Connexion
                     {login.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                 </Button>
 
             </Formsy>
 
-            
+
 
         </div>
     );

@@ -23,7 +23,6 @@ function Widget7(props) {
         setCurrentRange(ev.target.value);
     }
 
-
     return (
 
         <>
