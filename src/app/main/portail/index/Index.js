@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme => ({
 
     },
     mainHeader: {
-        backgroundColor: 'rgba(0,0,0,.5)',
+        backgroundColor: 'rgba(0,0,0,.7)',
     },
     icon: {
         color: theme.palette.secondary.dark,
@@ -85,7 +85,7 @@ const useStyles = makeStyles(theme => ({
     title: {
         padding: theme.spacing(2, 2, 0, 2),
     },
-   
+
     mainAvatar: {
         margin: theme.spacing(1.25, 1.25, 1.25, 0),
         color: '#fff',
@@ -192,20 +192,16 @@ function Index(props) {
             **/}
             <div
                 className={clsx(classes.header, "relative flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24 h-256 sm:h-288")}>
-                <div className={classes.overlay} />
                 <div className={clsx(classes.mainHeader, "items-center md:w-xl xs:w-auto z-999 px-8 py-20 rounded-lg")} >
                     <FuseAnimate duration={400} delay={600}>
-                        <Typography variant="h1" component="h1" className="sm:text-18 uppercase text-13 font-bold mb-16  mx-auto max-w-xl">
+                        <Typography variant="h1" component="h1" className="sm:text-18 uppercase text-13 font-bold mb-16 text-white mx-auto max-w-xl">
                             Les Achats Industriels, c'est une communauté de 1000 sociétés, Acheteurs et Fournisseurs
                         </Typography>
                     </FuseAnimate>
                     <div className="md:w-md xs:w-auto m-auto bg-white rounded-8">
                         <Search className="" variant="basic" />
                     </div>
-
-                    {/*<Search />*/}
                 </div>
-                <Icon className={classes.headerIcon}>school</Icon>
             </div>
 
             {/** 
