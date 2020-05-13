@@ -1,15 +1,12 @@
 import React from 'react';
-import { AppBar, Hidden, Toolbar, IconButton, Icon } from '@material-ui/core';
+import { AppBar, Hidden, Toolbar } from '@material-ui/core';
 import { makeStyles, ThemeProvider } from '@material-ui/styles';
-import { FuseSearch } from '@fuse';
 import clsx from 'clsx';
 import NavbarMobileToggleButton from 'app/fuse-layouts/shared-components/NavbarMobileToggleButton';
-import QuickPanelToggleButton from 'app/fuse-layouts/shared-components/quickPanel/QuickPanelToggleButton';
-import Logo from 'app/fuse-layouts/shared-components/Logo';
+import LogoPortail from 'app/fuse-layouts/shared-components/LogoPortail';
 import { useSelector } from 'react-redux';
 import UserMenu from 'app/fuse-layouts/shared-components/UserMenu';
 import history from '@history';
-import GlobalSearch from '../../../main/portail/Search/GlobalSearch';
 import Search from '../../../main/portail/Search/Search';
 import PSecteurs from 'app/fuse-layouts/shared-components/PSecteurs';
 const useStyles = makeStyles(theme => ({
@@ -38,7 +35,7 @@ function ToolbarLayout3(props) {
 
                     <Hidden mdDown>
                         <div className={clsx("flex flex-shrink-0 items-center")}>
-                            <Logo />
+                            <LogoPortail />
                         </div>
                     </Hidden>
                     <div className="flex flex-shrink items-center">

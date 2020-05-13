@@ -42,15 +42,15 @@ const themesConfig = {
         palette: {
             type     : 'light',
             primary  : {
-                light: '#6cabd4',
-                main : '#387ca3',
-                dark : '#005074',
+                light: '#f9c69a',
+                main : '#f48d35',
+                dark : '#f48d35',
                 rgba : '#387ca399',
             },
             secondary: {
-                light       : '#89f6cf',
-                main        : '#55c39e',
-                dark        : '#159270',
+                light       : '#3d9cb4',
+                main        : '#3e5790',
+                dark        : '#3e5790',
                 contrastText: '#fff',
                 rgba        : '#159270',
             },

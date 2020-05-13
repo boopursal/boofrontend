@@ -85,14 +85,7 @@ const useStyles = makeStyles(theme => ({
     title: {
         padding: theme.spacing(2, 2, 0, 2),
     },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        right: 0,
-        left: 0,
-        backgroundColor: 'rgba(0,0,0,.3)',
-    },
+   
     mainAvatar: {
         margin: theme.spacing(1.25, 1.25, 1.25, 0),
         color: '#fff',
