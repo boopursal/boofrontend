@@ -36,7 +36,7 @@ function ForgotPasswordPage(props) {
     useEffect(() => {
         if (forgotpassword.error && (forgotpassword.error.email || forgotpassword.error.Erreur)) {
             formRef.current.updateInputsWithError({
-                'email': forgotpassword.error.email ? forgotpassword.error.email : forgotpassword.error.Erreur
+                'email': forgotpassword.error.email ? forgotpassword.error.email : 'Adresse email incorrecte ou inexistante'
             });
 
             disableButton();
