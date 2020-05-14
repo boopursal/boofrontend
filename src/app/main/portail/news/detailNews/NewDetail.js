@@ -189,9 +189,13 @@ function NewDetail(props) {
                                                     className="border-0"
                                                 />
 
-                                                <div className="mt-16">
-                                                    Source : <a href={actualite.data.source}>{actualite.data.source}</a>
-                                                </div>
+                                                {
+                                                    actualite.data.source &&
+                                                    <div className="mt-16">
+                                                        Source : <a href={actualite.data.source}>{actualite.data.source}</a>
+                                                    </div>
+                                                }
+
 
                                             </CardContent>
 

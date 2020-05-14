@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
     Icon,
     Typography,
@@ -16,10 +16,8 @@ import { FuseAnimate, FuseAnimateGroup } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
-//import _ from '@lodash';
 import { Link } from 'react-router-dom';
 import DemandeAchatsListItem from './DemandeAchatsListItem';
-import Categories from './Categories';
 import Newsletter from './Newsletter';
 import BioFournisseur from './BioFournisseur';
 import News from './News';
@@ -114,7 +112,6 @@ function Index(props) {
     const classes = useStyles(props);
     const title = 'Les Achats Industriels | Place de marché B2B';
     const description = 'Les Achats Industriels Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce';
-    const [dense, setDense] = React.useState(false);
     const portail = useSelector(({ IndexApp }) => IndexApp.poratilIndex);
     const settings = {
         dots: true,

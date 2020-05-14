@@ -11,6 +11,8 @@ import { FuseUtils } from '@fuse';
 const useStyles = makeStyles(theme => ({
     mediaNews: {
         height: 200,
+        backgroundPosition: 'center',
+        backgroundSize: 'contain'
     },
     cardContent: {
         maxHeight: 102,

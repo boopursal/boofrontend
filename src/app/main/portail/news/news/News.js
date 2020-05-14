@@ -7,10 +7,13 @@ import _ from '@lodash';
 import moment from 'moment';
 import { NavLinkAdapter } from '@fuse';
 import { FuseUtils } from '@fuse';
+import 'moment/locale/fr';
 
 const useStyles = makeStyles(theme => ({
     mediaNews: {
         height: 200,
+        backgroundPosition: 'center',
+        backgroundSize: 'contain'
     },
     cardContent: {
         maxHeight: 102,
