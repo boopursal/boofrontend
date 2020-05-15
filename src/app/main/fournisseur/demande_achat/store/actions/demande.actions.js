@@ -91,9 +91,7 @@ export function addVisiteDemande(fournisseur_id, demande) {
             });
             dispatch(
                 showMessage({
-                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
-                        return value;
-                    }),//text or html
+                    message: 'Cette société vous a êtes blacklisté, merci de nous contacter a cette adresse mediateur@lesachatsindustriels.com pour plus de détails',//text or html
                     autoHideDuration: 6000,//ms
                     anchorOrigin: {
                         vertical: 'top',//top bottom

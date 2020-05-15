@@ -234,10 +234,12 @@ function AcheteurTab(props) {
                     name="password"
                     label="Mot de passe"
                     validations={{
-                        minLength: 6
+                        minLength: 6,
+                        matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/
                     }}
                     validationErrors={{
-                        minLength: 'Min character length is 6'
+                        minLength: 'Min character length is 6',
+                        matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
