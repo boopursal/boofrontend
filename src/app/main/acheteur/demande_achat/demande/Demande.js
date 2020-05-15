@@ -344,6 +344,16 @@ function Demande(props) {
 
                                                 /> : ''
                                         }
+                                        <Grid container spacing={3} className="mb-8">
+
+                                            <Grid item xs={12} sm={12}>
+                                                <Typography variant="caption"  >
+                                                    - Soumettez votre demande c'est gratuit et sans engagement.<br />
+                                                    - Détaillez la demande, vous recevrez de meilleures offres.<br />
+                                                    - Attention seules les demandes sérieuses (pas de projets étudiants) seront validées
+                                                 </Typography>
+                                            </Grid>
+                                        </Grid>
                                         <Grid container spacing={3} >
                                             <Grid item xs={12} sm={8}>
                                                 <TextFieldFormsy
@@ -568,7 +578,8 @@ function Demande(props) {
                                             <Grid item xs={12} sm={6}>
                                                 <Typography variant="caption">
                                                     - Taille maximale par fichier : 2 Mo <br />
-                                                    - 5 fichiers à télécharger
+                                                    - 5 fichiers à télécharger <br />
+                                                    - Extensions de fichier autorisées: .jpg, .jpeg, .png, .xls, .xlsx , .bmp , .doc , .docx , .pdf , .txt
                                                 </Typography>
                                             </Grid>
                                         </Grid>

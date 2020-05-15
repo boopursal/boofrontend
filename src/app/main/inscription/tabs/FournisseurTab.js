@@ -113,11 +113,11 @@ function FournisseurTab(props) {
                             label="Nom"
                             validations={{
                                 maxLength: 100,
-                                minLength: 4
+                                minLength: 2
                             }}
                             validationErrors={{
                                 maxLength: 'La longueur maximale de caractère est 100',
-                                minLength: 'La longueur minimale de caractère est 4'
+                                minLength: 'La longueur minimale de caractère est 2'
                             }}
                             InputProps={{
                                 endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -134,11 +134,11 @@ function FournisseurTab(props) {
                             label="Prénom"
                             validations={{
                                 maxLength: 100,
-                                minLength: 4
+                                minLength: 2
                             }}
                             validationErrors={{
                                 maxLength: 'La longueur maximale de caractère est 100',
-                                minLength: 'La longueur minimale de caractère est 4'
+                                minLength: 'La longueur minimale de caractère est 2'
                             }}
                             InputProps={{
                                 endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -156,12 +156,12 @@ function FournisseurTab(props) {
                     label="Raison sociale"
                     validations={{
                         matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
-                        minLength: 4,
+                        minLength: 2,
                         maxLength: 20
 
                     }}
                     validationErrors={{
-                        minLength: 'Raison sociale doit dépasser 4 caractères alphanumériques',
+                        minLength: 'Raison sociale doit dépasser 2 caractères alphanumériques',
                         maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
                         matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
                     }}

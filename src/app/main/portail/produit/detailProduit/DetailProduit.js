@@ -1,11 +1,10 @@
 import React from 'react';
-import { Grid, Card, CircularProgress, CardContent, Typography, Icon, Avatar, Button, AppBar, Chip, Divider, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { Grid, Card, CircularProgress, CardContent, Typography, Icon, Avatar, Button, Chip, Divider, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from "react-slick";
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { FuseAnimate, FuseUtils } from '@fuse';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import { useDispatch, useSelector } from 'react-redux';
 import ContentLoader from "react-content-loader"
 import YouTube from 'react-youtube';
@@ -669,11 +668,12 @@ function DetailProduit(props) {
 
                                 </ContentLoader>
                                 :
+                                produit.produitsSimilaires &&
                                 <Slider {...settings}>
                                     {
 
                                         (
-                                            produit.produitsSimilaires && produit.produitsSimilaires.map((item, index) => (
+                                             produit.produitsSimilaires.map((item, index) => (
                                                 item['@id'] !== produit.data['@id'] &&
                                                 <Produit produit={item} key={index} />
                                             ))
