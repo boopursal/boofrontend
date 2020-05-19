@@ -55,4 +55,4 @@ function CommandesApp(props)
     )
 }
 
-export default withReducer('commandesApp', reducer)(CommandesApp);
+export default withReducer('commandesFrsApp', reducer)(CommandesApp);

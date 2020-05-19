@@ -9,7 +9,7 @@ import * as Actions from '../store/actions';
 function CommandesHeader(props) {
     const dispatch = useDispatch();
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-    const parametres = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.parametres);
+    const parametres = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.parametres);
     return (
         <div className="flex flex-1 w-full items-center justify-between">
 

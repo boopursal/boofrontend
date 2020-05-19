@@ -44,11 +44,11 @@ function CommandesTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const commandes = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.data);
-    const loading = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.loading);
-    const pageCount = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.pageCount);
-    const parametres = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.parametres);
-    const searchText = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.searchText);
+    const commandes = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.data);
+    const loading = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.loading);
+    const pageCount = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.pageCount);
+    const parametres = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.parametres);
+    const searchText = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 

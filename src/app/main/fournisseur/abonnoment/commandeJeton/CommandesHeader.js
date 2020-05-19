@@ -8,7 +8,7 @@ import * as Actions from './store/actions';
 function CommandesHeader(props)
 {
     const dispatch = useDispatch();
-    const searchText = useSelector(({commandesApp}) => commandesApp.commandes.searchText);
+    const searchText = useSelector(({commandesFrsApp}) => commandesFrsApp.commandes.searchText);
     const mainTheme = useSelector(({fuse}) => fuse.settings.mainTheme);
 
     return (

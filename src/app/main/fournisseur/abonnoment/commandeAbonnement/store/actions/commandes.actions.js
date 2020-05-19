@@ -1,11 +1,11 @@
 import agent from "agent";
 
-export const REQUEST_COMMANDES = '[COMMANDES APP] REQUEST COMMANDES';
-export const SET_PARAMETRES_DATA = '[COMMANDES APP] SET PARAMETRES DATA';
+export const REQUEST_COMMANDES = '[COMMANDES AB FRS APP] REQUEST COMMANDES';
+export const SET_PARAMETRES_DATA = '[COMMANDES AB FRS APP] SET PARAMETRES DATA';
 
 
-export const GET_COMMANDES = '[COMMANDES APP] GET COMMANDES';
-export const SET_COMMANDES_SEARCH_TEXT = '[COMMANDES APP] SET COMMANDES SEARCH TEXT';
+export const GET_COMMANDES = '[COMMANDES AB FRS APP] GET COMMANDES';
+export const SET_COMMANDES_SEARCH_TEXT = '[COMMANDES AB FRS APP] SET COMMANDES SEARCH TEXT';
 
 export function getCommandes(parametres,id) {
     var reference = parametres.reference ? `=${parametres.reference}` : '';

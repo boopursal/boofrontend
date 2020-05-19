@@ -110,7 +110,7 @@ const useStyles = makeStyles(theme => ({
 function Commande(props) {
 
     const dispatch = useDispatch();
-    const commande = useSelector(({ commandeOffreApp }) => commandeOffreApp.commande);
+    const commande = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commande);
 
     const user = useSelector(({ auth }) => auth.user);
 
@@ -1069,4 +1069,4 @@ function Commande(props) {
     )
 }
 
-export default withReducer('commandeOffreApp', reducer)(Commande);
+export default withReducer('commandeOffreFrsApp', reducer)(Commande);

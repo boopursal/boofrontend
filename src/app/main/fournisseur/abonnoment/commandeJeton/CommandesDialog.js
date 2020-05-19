@@ -13,7 +13,7 @@ const defaultFormState = {
 
 function CommandesDialog(props) {
     const dispatch = useDispatch();
-    const CommandesDialog = useSelector(({ commandesApp }) => commandesApp.commandes.commandesDialog);
+    const CommandesDialog = useSelector(({ commandesFrsApp }) => commandesFrsApp.commandes.commandesDialog);
     const user = useSelector(({ auth }) => auth.user);
 
 

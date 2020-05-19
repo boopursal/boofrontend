@@ -11,7 +11,7 @@ import { Helmet } from "react-helmet";
 function Commandes() {
 
     const dispatch = useDispatch();
-    const parametres = useSelector(({ commandeOffreApp }) => commandeOffreApp.commandes.parametres);
+    const parametres = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.parametres);
     const user = useSelector(({ auth }) => auth.user);
 
     useEffect(() => {
@@ -42,4 +42,4 @@ function Commandes() {
     );
 }
 
-export default withReducer('commandeOffreApp', reducer)(Commandes);
+export default withReducer('commandeOffreFrsApp', reducer)(Commandes);

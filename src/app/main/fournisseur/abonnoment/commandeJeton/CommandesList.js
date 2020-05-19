@@ -27,9 +27,9 @@ const useStyles = makeStyles(theme => ({
 }));
 function CommandesList(props) {
     const dispatch = useDispatch();
-    const Commandes = useSelector(({ commandesApp }) => commandesApp.commandes.entities);
-    //const selectedCommandesIds = useSelector(({commandesApp}) => commandesApp.commandes.selectedCommandesIds);
-    const searchText = useSelector(({ commandesApp }) => commandesApp.commandes.searchText);
+    const Commandes = useSelector(({ commandesFrsApp }) => commandesFrsApp.commandes.entities);
+    //const selectedCommandesIds = useSelector(({commandesFrsApp}) => commandesFrsApp.commandes.selectedCommandesIds);
+    const searchText = useSelector(({ commandesFrsApp }) => commandesFrsApp.commandes.searchText);
     const user = useSelector(({ auth }) => auth.user);
     const classes = useStyles();
 
