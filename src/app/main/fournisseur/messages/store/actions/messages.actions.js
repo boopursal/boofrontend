@@ -1,11 +1,11 @@
 import { showMessage } from 'app/store/actions/fuse';
 import agent from "agent";
 
-export const REQUEST_MESSAGES = '[MESSAGES APP] REQUEST MESSAGES';
-export const REMOVE_MESSAGE = '[MESSAGES APP] REMOVE MESSAGES';
-export const STATUT_MESSAGE = '[MESSAGES APP] STATUT MESSAGES';
-export const GET_MESSAGES = '[MESSAGES APP] GET MESSAGES';
-export const SET_MESSAGES_SEARCH_TEXT = '[MESSAGES APP] SET MESSAGES SEARCH TEXT';
+export const REQUEST_MESSAGES = '[MESSAGES FOURNISSEUR APP] REQUEST MESSAGES';
+export const REMOVE_MESSAGE = '[MESSAGES FOURNISSEUR APP] REMOVE MESSAGES';
+export const STATUT_MESSAGE = '[MESSAGES FOURNISSEUR APP] STATUT MESSAGES';
+export const GET_MESSAGES = '[MESSAGES FOURNISSEUR APP] GET MESSAGES';
+export const SET_MESSAGES_SEARCH_TEXT = '[MESSAGES FOURNISSEUR APP] SET MESSAGES SEARCH TEXT';
 
 export function getMessages(id) {
     const request = agent.get(`/api/fournisseurs/${id}/messages?statut=1`);

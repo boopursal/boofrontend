@@ -43,4 +43,4 @@ function Message() {
     );
 }
 
-export default withReducer('messagesApp', reducer)(Message);
+export default withReducer('messagesFrsApp', reducer)(Message);

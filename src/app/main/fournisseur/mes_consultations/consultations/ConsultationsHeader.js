@@ -1,14 +1,9 @@
 import React from 'react';
-import { Paper, Input, Icon, Typography } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/styles';
+import { Icon, Typography } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
-import { useDispatch, useSelector } from 'react-redux';
-import * as Actions from '../store/actions';
 
 function ConsultationsHeader(props) {
-    const dispatch = useDispatch();
-    const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-    const parametres = useSelector(({ consultationsApp }) => consultationsApp.consultations.parametres);
+   
     return (
         <div className="flex flex-1 w-full items-center justify-between">
 

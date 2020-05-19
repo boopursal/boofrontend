@@ -1,8 +1,8 @@
 import React from 'react';
-import {Icon, Typography, Paper, IconButton} from '@material-ui/core';
+import { Icon, Typography, Paper, IconButton } from '@material-ui/core';
+import {Link} from 'react-router-dom';
 
-function Widget4(props)
-{
+function Widget4(props) {
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
             <div className="flex items-center justify-between pr-4 pl-16 pt-4">
@@ -12,8 +12,10 @@ function Widget4(props)
                 </IconButton>
             </div>
             <div className="text-center pt-12 pb-28">
-                <Typography
-                    className="text-72 leading-none text-green">{props.widget}</Typography>
+                <Link to="/produits" className="text-72 leading-none text-green">
+                    {props.widget}
+                </Link>
+                
                 <Typography className="text-16" color="textSecondary">Produit(s)</Typography>
             </div>
             {/*

@@ -68,7 +68,7 @@ const useStyles = makeStyles(theme => ({
 function Message(props) {
 
     const dispatch = useDispatch();
-    const message = useSelector(({ messagesApp }) => messagesApp.message);
+    const message = useSelector(({ messagesFrsApp }) => messagesFrsApp.message);
     const { form, setForm } = useForm();
 
     const classes = useStyles(props);
@@ -240,4 +240,4 @@ function Message(props) {
     )
 }
 
-export default withReducer('messagesApp', reducer)(Message);
+export default withReducer('messagesFrsApp', reducer)(Message);

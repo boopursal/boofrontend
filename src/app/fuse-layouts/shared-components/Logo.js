@@ -33,7 +33,7 @@ function Logo() {
         <div className={clsx(classes.root, "flex items-center w-200")}>
 
             <Link to="/">
-                <img className="" src="assets/images/logos/logo.png" alt="Les Achats Industriels LOGO" />
+                <img className="" src="assets/images/logos/logo-dashboard.png" alt="Les Achats Industriels LOGO" />
             </Link>
 
         </div>

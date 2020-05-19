@@ -108,7 +108,7 @@ function JWTLoginTab(props) {
                     variant="outlined"
                     required
                 />
-                <Link className="font-medium" to="/forgot-password">Mot de passe oublié ?</Link>
+                <Link className="font-medium text-blue" to="/forgot-password">Mot de passe oublié ?</Link>
                 <Button
                     type="submit"
                     variant="contained"

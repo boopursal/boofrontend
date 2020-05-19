@@ -104,24 +104,22 @@ export function getDemande(params) {
 
 export function putDemande(data,sousSecteurs,motif, id,history) {
 
-    data.sousSecteurs = _.map(sousSecteurs, function (value, key) {
-        return value.value;
-    });
-    data.attachements = _.map(data.attachements, function (value, key) {
-        return value['@id'];
-    });
-
-    if (data.budget) {
-        data.budget = parseFloat(data.budget);
-    }
-    if(data.motifRejet){
-        data.motifRejet = motif.value;
-    }else{
-        data.motifRejet =null;
+    
+    let postData ={
+        ...data,
+        sousSecteurs:_.map(sousSecteurs, function (value, key) {
+            return value.value;
+        }),
+        attachements:_.map(data.attachements, function (value, key) {
+            return value['@id'];
+        }),
+        budget : data.budget && parseFloat(data.budget),
+        motifRejet : data.motifRejet? motif.value : null
     }
 
 
-    const request = agent.put(`/api/demande_achats/${id}`, data);
+
+    const request = agent.put(`/api/demande_achats/${id}`, postData);
 
     return (dispatch) => {
         dispatch({

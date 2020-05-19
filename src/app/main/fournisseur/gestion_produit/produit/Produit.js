@@ -108,7 +108,7 @@ moment.defaultFormat = "DD/MM/YYYY HH:mm";
 function Produit(props) {
 
     const dispatch = useDispatch();
-    const produit = useSelector(({ produitsApp }) => produitsApp.produit);
+    const produit = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produit);
     const user = useSelector(({ auth }) => auth.user);
     const abonnement = useSelector(({ auth }) => auth.user.abonnement);
     const [isFormValid, setIsFormValid] = useState(false);
@@ -587,9 +587,12 @@ function Produit(props) {
                                     : "Fiche technique"}
 
                         />
-                        <Tab className="h-64 normal-case"
-                            label="Vidéo"
-
+                         <Tab className="h-64 normal-case"
+                            label=
+                            {
+                                form && form.videos
+                                    ? "Vidéo (1)"
+                                    : "Vidéo"}
                         />
 
                     </Tabs>
@@ -1051,4 +1054,4 @@ function Produit(props) {
     )
 }
 
-export default withReducer('produitsApp', reducer)(Produit);
+export default withReducer('produitsFournisseursApp', reducer)(Produit);

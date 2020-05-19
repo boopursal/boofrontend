@@ -2,14 +2,14 @@ import { showMessage } from 'app/store/actions/fuse';
 import agent from "agent";
 import * as Actions from '@fuse/components/FuseNavigation/store/actions';
 
-export const REQUEST_DEMANDES = '[DEMANDES APP] REQUEST DEMANDES';
-export const REMOVE_DEMANDE = '[DEMANDES APP] REMOVE DEMANDES';
-export const STATUT_DEMANDE = '[DEMANDES APP] STATUT DEMANDES';
-export const SET_PARAMETRES_DATA = '[DEMANDES APP] SET PARAMETRES DATA';
+export const REQUEST_DEMANDES = '[DEMANDES DEVIS FOURNISSEUR APP] REQUEST DEMANDES';
+export const REMOVE_DEMANDE = '[DEMANDES DEVIS FOURNISSEUR APP] REMOVE DEMANDES';
+export const STATUT_DEMANDE = '[DEMANDES DEVIS FOURNISSEUR APP] STATUT DEMANDES';
+export const SET_PARAMETRES_DATA = '[DEMANDES DEVIS FOURNISSEUR APP] SET PARAMETRES DATA';
 
 
-export const GET_DEMANDES = '[DEMANDES APP] GET DEMANDES';
-export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES APP] SET DEMANDES SEARCH TEXT';
+export const GET_DEMANDES = '[DEMANDES DEVIS FOURNISSEUR APP] GET DEMANDES';
+export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES DEVIS FOURNISSEUR APP] SET DEMANDES SEARCH TEXT';
 
 export function getDemandes(parametres,id) {
     var message = parametres.message ? `=${parametres.message}` : '';

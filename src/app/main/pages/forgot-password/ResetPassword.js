@@ -167,8 +167,8 @@ function ResetPassword(props) {
                         </Formsy>
                         <div className="flex flex-col items-center justify-center pt-32">
 
-                            <Link className="font-medium" to="/login">Revenir à la page de connexion</Link>
-                            <Link className="font-medium mt-8 flex items-end" to="/"><Icon className="mr-4">home</Icon> <span>Accueil</span></Link>
+                            <Link className="font-medium text-blue" to="/login">Revenir à la page de connexion</Link>
+                            <Link className="font-medium mt-8 flex items-end text-blue" to="/"><Icon className="mr-4">home</Icon> <span>Accueil</span></Link>
                         </div>
 
                         <div className="flex flex-col items-center justify-center pt-32 pb-24">

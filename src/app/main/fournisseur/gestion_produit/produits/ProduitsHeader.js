@@ -10,7 +10,7 @@ import moment from 'moment';
 function ProduitsHeader(props) {
     const dispatch = useDispatch();
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-    const parametres = useSelector(({ produitsApp }) => produitsApp.produits.parametres);
+    const parametres = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.parametres);
     const [abonnee, setAbonnee] = useState(false);
     const abonnement = useSelector(({ auth }) => auth.user.abonnement);
 

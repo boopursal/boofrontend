@@ -52,12 +52,12 @@ function ConsultationsTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const consultations = useSelector(({ consultationsApp }) => consultationsApp.consultations.data);
-    const loading = useSelector(({ consultationsApp }) => consultationsApp.consultations.loading);
-    const pageCount = useSelector(({ consultationsApp }) => consultationsApp.consultations.pageCount);
-    const parametres = useSelector(({ consultationsApp }) => consultationsApp.consultations.parametres);
+    const consultations = useSelector(({ consultationsFrsApp }) => consultationsFrsApp.consultations.data);
+    const loading = useSelector(({ consultationsFrsApp }) => consultationsFrsApp.consultations.loading);
+    const pageCount = useSelector(({ consultationsFrsApp }) => consultationsFrsApp.consultations.pageCount);
+    const parametres = useSelector(({ consultationsFrsApp }) => consultationsFrsApp.consultations.parametres);
 
-    const searchText = useSelector(({ consultationsApp }) => consultationsApp.consultations.searchText);
+    const searchText = useSelector(({ consultationsFrsApp }) => consultationsFrsApp.consultations.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
     const user = useSelector(({ auth }) => auth.user);

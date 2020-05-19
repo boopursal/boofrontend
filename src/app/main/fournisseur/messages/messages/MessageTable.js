@@ -44,10 +44,10 @@ function MessageTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const messages = useSelector(({ messagesApp }) => messagesApp.messages.data);
-    const loading = useSelector(({ messagesApp }) => messagesApp.messages.loading);
+    const messages = useSelector(({ messagesFrsApp }) => messagesFrsApp.messages.data);
+    const loading = useSelector(({ messagesFrsApp }) => messagesFrsApp.messages.loading);
     const user = useSelector(({ auth }) => auth.user);
-    const searchText = useSelector(({ messagesApp }) => messagesApp.messages.searchText);
+    const searchText = useSelector(({ messagesFrsApp }) => messagesFrsApp.messages.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 

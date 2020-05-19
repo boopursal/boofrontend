@@ -78,7 +78,7 @@ function DashboardApp(props) {
                 header={
                     <div className="flex flex-col justify-between flex-1 px-24 pt-24">
                         <div className="flex justify-between items-start">
-                            <Typography className="py-0 sm:py-24" variant="h4">Bienvenue à nouveau, {user.data.displayName}!</Typography>
+                            <Typography className="py-0 sm:py-24" variant="h4">Bienvenue, {user.data.displayName}!</Typography>
 
                         </div>
                     </div>

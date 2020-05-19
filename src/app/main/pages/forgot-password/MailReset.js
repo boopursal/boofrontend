@@ -42,7 +42,7 @@ function MailReset() {
                             </Typography>
 
                             <div className="flex flex-col items-center justify-center pt-32 pb-24">
-                                <Link className="font-medium" to="/">Retour à la page d'accueil </Link>
+                                <Link className="font-medium text-blue" to="/">Retour à la page d'accueil </Link>
                             </div>
 
 

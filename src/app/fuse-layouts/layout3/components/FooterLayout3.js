@@ -30,14 +30,14 @@ function FooterLayout3(props) {
                                 Acheter
                             </Typography>
                             <ul className="list-reset mb-6 p-0">
-                                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/register" className="ml-0">Inscrivez-vous comme Acheteur</Link>
+                                <li className="mt-2 inline-block mr-2 md:block md:mr-0  ">
+                                    <Link component="true" to="/register" className="ml-0 text-blue">Inscrivez-vous comme Acheteur</Link>
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/vente-produits" className="ml-0">Voir produits</Link>
+                                    <Link component="true" to="/vente-produits" className="ml-0 text-blue">Voir produits</Link>
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/login" className="ml-0">Demander des devis</Link>
+                                    <Link component="true" to="/login" className="ml-0 text-blue">Demander des devis</Link>
 
                                 </li>
 
@@ -49,10 +49,10 @@ function FooterLayout3(props) {
                             </Typography>
                             <ul className="list-reset mb-6 p-0">
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/register" className="ml-0">Inscrivez-vous comme Fournisseur</Link>
+                                    <Link component="true" to="/register" className="ml-0 text-blue">Inscrivez-vous comme Fournisseur</Link>
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/conditions" className="ml-0">Comment publier sur LesAchatsIndustriels</Link>
+                                    <Link component="true" to="/conditions" className="ml-0 text-blue">Comment publier sur LesAchatsIndustriels</Link>
 
                                 </li>
 
@@ -64,14 +64,14 @@ function FooterLayout3(props) {
                             </Typography>
                             <ul className="list-reset mb-6 p-0">
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/annuaire-entreprises" className="ml-0">Toutes les catégories</Link>
+                                    <Link component="true" to="/annuaire-entreprises" className="ml-0 text-blue">Toutes les catégories</Link>
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/vente-produits" className="ml-0">Tous les produits</Link>
+                                    <Link component="true" to="/vente-produits" className="ml-0 text-blue">Tous les produits</Link>
 
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/entreprises" className="ml-0">Tous les fournisseurs</Link>
+                                    <Link component="true" to="/entreprises" className="ml-0 text-blue">Tous les fournisseurs</Link>
 
                                 </li>
                             </ul>
@@ -83,9 +83,9 @@ function FooterLayout3(props) {
                     <Grid container spacing={2} >
                         <Grid item xs={12} sm={12} className="text-center">
                             <div className="mt-16 ">
-                                <Link component="true" to="/conditions" className="ml-0">Conditions Générales</Link>
+                                <Link component="true" to="/conditions" className="ml-0 text-blue">Conditions Générales</Link>
                                 &ensp;|&ensp;
-                                <Link component="true" to="/faqs" >FAQ</Link>
+                                <Link component="true" to="/faqs" className="text-blue">FAQ</Link>
 
                             </div>
                         </Grid>

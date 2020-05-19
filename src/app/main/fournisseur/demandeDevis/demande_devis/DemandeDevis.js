@@ -68,7 +68,7 @@ const useStyles = makeStyles(theme => ({
 function DemandeDevis(props) {
 
     const dispatch = useDispatch();
-    const demandeDevis = useSelector(({ demandeDevisApp }) => demandeDevisApp.demandeDevis);
+    const demandeDevis = useSelector(({ demandeDevisFrsApp }) => demandeDevisFrsApp.demandeDevis);
     const { form, setForm } = useForm();
 
     const classes = useStyles(props);
@@ -317,4 +317,4 @@ function DemandeDevis(props) {
     )
 }
 
-export default withReducer('demandeDevisApp', reducer)(DemandeDevis);
+export default withReducer('demandeDevisFrsApp', reducer)(DemandeDevis);

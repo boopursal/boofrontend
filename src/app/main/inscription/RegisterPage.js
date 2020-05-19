@@ -72,8 +72,8 @@ function RegisterPage(props) {
 
 
                             <div className="flex flex-col items-center justify-center pt-32 pb-24">
-                                <span className="font-medium">Vous avez déjà un compte?</span>
-                                <Link className="font-medium" to="/login">Connexion</Link>
+                                <span className="font-medium text-blue">Vous avez déjà un compte?</span>
+                                <Link className="font-medium text-blue" to="/login">Connexion</Link>
                             </div>
 
                         </CardContent>

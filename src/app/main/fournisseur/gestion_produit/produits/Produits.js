@@ -11,7 +11,7 @@ import { Helmet } from "react-helmet";
 function Produits() {
     const dispatch = useDispatch();
     const user = useSelector(({ auth }) => auth.user);
-    const parametres = useSelector(({ produitsApp }) => produitsApp.produits.parametres);
+    const parametres = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.parametres);
 
     useEffect(() => {
         if (user)
@@ -44,4 +44,4 @@ function Produits() {
     );
 }
 
-export default withReducer('produitsApp', reducer)(Produits);
+export default withReducer('produitsFournisseursApp', reducer)(Produits);

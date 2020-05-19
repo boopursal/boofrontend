@@ -109,7 +109,7 @@ function Consultation(props) {
     const formRef = useRef(null);
     const { form, handleChange, setForm } = useForm(null);
     const dispatch = useDispatch();
-    const consultation = useSelector(({ consultationsApp }) => consultationsApp.consultation);
+    const consultation = useSelector(({ consultationsFrsApp }) => consultationsFrsApp.consultation);
     const user = useSelector(({ auth }) => auth.user);
 
     const classes = useStyles(props);
@@ -882,4 +882,4 @@ function Consultation(props) {
     )
 }
 
-export default withReducer('consultationsApp', reducer)(Consultation);
+export default withReducer('consultationsFrsApp', reducer)(Consultation);

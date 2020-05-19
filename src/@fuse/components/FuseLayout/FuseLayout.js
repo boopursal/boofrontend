@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
             borderColor: theme.palette.divider
         },
         '& a:not([role=button])'          : {
-            color         : theme.palette.secondary.main,
             textDecoration: 'none',
             '&:hover'     : {
                 textDecoration: 'underline'

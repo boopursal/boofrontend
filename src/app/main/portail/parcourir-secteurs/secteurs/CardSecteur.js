@@ -68,7 +68,7 @@ export default function RecipeReviewCard(props) {
                   <Icon className="text-16 arrow-icon">keyboard_arrow_right</Icon>
                   <ListItemText
                     disableTypography
-                    primary={<Typography type="body2" style={{ fontSize: 12 }}>{sousSecteur.name}</Typography>}
+                    primary={<Typography type="body2" className="normal-case" style={{ fontSize: 12 }}>{sousSecteur.name}</Typography>}
                   />
                 </ListItem>
                 <Divider component="li" />

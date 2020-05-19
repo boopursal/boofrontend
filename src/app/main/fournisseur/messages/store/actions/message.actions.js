@@ -4,9 +4,9 @@ import agent from 'agent';
 import * as Actions from '@fuse/components/FuseNavigation/store/actions';
 
 
-export const REQUEST_MESSAGE = '[MESSAGE APP] REQUEST MESSAGE';
-export const GET_MESSAGE = '[MESSAGE APP] GET MESSAGE';
-export const SAVE_ERROR = '[MESSAGE APP] SAVE ERROR';
+export const REQUEST_MESSAGE = '[MESSAGE FOURNISSEUR APP] REQUEST MESSAGE';
+export const GET_MESSAGE = '[MESSAGE FOURNISSEUR APP] GET MESSAGE';
+export const SAVE_ERROR = '[MESSAGE FOURNISSEUR APP] SAVE ERROR';
 
 
 

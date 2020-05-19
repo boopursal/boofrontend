@@ -11,7 +11,7 @@ import { Helmet } from "react-helmet";
 function Consultations() {
 
     const dispatch = useDispatch();
-    const parametres = useSelector(({ consultationsApp }) => consultationsApp.consultations.parametres);
+    const parametres = useSelector(({ consultationsFrsApp }) => consultationsFrsApp.consultations.parametres);
     const user = useSelector(({ auth }) => auth.user);
 
     useEffect(() => {
@@ -43,4 +43,4 @@ function Consultations() {
     );
 }
 
-export default withReducer('consultationsApp', reducer)(Consultations);
+export default withReducer('consultationsFrsApp', reducer)(Consultations);

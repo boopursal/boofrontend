@@ -62,10 +62,10 @@ function Profile(props) {
 
     const dispatch = useDispatch();
     const classes = useStyles();
-    const profile = useSelector(({ profileApp }) => profileApp.profile);
+    const profile = useSelector(({ profileAcheteurApp }) => profileAcheteurApp.profile);
     const user = useSelector(({ auth }) => auth.user);
-    const Pays = useSelector(({ profileApp }) => profileApp.profile.pays);
-    const Villes = useSelector(({ profileApp }) => profileApp.profile.villes);
+    const Pays = useSelector(({ profileAcheteurApp }) => profileAcheteurApp.profile.pays);
+    const Villes = useSelector(({ profileAcheteurApp }) => profileAcheteurApp.profile.villes);
 
     const formRef = useRef(null);
     const [showIce, setShowIce] = useState(false);
@@ -899,4 +899,4 @@ function Profile(props) {
     )
 }
 
-export default withReducer('profileApp', reducer)(Profile);
+export default withReducer('profileAcheteurApp', reducer)(Profile);

@@ -14,13 +14,31 @@ const initialState = {
     categories: [],
     fiche: null,
     ficheReqInProgress: false,
-
+    loadingRechercheVideo: false,
+    videoExist: 0,
 
 };
 
 const produitReducer = function (state = initialState, action) {
     switch (action.type) {
 
+        case Actions.REQUEST_VIDEO:
+            {
+                return {
+                    ...state,
+                    loadingRechercheVideo: true,
+
+                }
+            }
+        case Actions.GET_VIDEO:
+            {
+                return {
+                    ...state,
+                    videoExist: action.payload,
+                    loadingRechercheVideo: false
+
+                }
+            }
         case Actions.REQUEST_SECTEUR:
         case Actions.REQUEST_PRODUIT:
         case Actions.REQUEST_SAVE:

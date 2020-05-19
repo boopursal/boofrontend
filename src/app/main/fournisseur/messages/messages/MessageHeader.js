@@ -8,8 +8,8 @@ import * as Actions from '../store/actions';
 function MessageHeader(props) {
     const dispatch = useDispatch();
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-    const parametres = useSelector(({ messagesApp }) => messagesApp.messages.parametres);
-    const searchText = useSelector(({messagesApp}) => messagesApp.messages.searchText);
+    const parametres = useSelector(({ messagesFrsApp }) => messagesFrsApp.messages.parametres);
+    const searchText = useSelector(({messagesFrsApp}) => messagesFrsApp.messages.searchText);
 
     return (
         <div className="flex flex-1 w-full items-center justify-between">

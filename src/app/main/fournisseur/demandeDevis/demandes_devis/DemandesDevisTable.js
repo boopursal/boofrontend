@@ -44,12 +44,12 @@ function DemandesDevisTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const demandesDevis = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.data);
-    const loading = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.loading);
-    const pageCount = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.pageCount);
-    const parametres = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.parametres);
+    const demandesDevis = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.data);
+    const loading = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.loading);
+    const pageCount = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.pageCount);
+    const parametres = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.parametres);
     const user = useSelector(({auth}) => auth.user);
-    const searchText = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.searchText);
+    const searchText = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 

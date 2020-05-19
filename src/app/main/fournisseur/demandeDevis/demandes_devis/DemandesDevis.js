@@ -11,7 +11,7 @@ import { Helmet } from "react-helmet";
 function DemandesDevis() {
 
     const dispatch = useDispatch();
-    const parametres = useSelector(({ demandesDevisApp }) => demandesDevisApp.demandesDevis.parametres);
+    const parametres = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.parametres);
     const user = useSelector(({ auth }) => auth.user);
 
     useEffect(() => {
@@ -43,4 +43,4 @@ function DemandesDevis() {
     );
 }
 
-export default withReducer('demandesDevisApp', reducer)(DemandesDevis);
+export default withReducer('demandesDevisFrsApp', reducer)(DemandesDevis);

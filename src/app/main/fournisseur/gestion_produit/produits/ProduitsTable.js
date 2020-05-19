@@ -52,12 +52,12 @@ function ProduitsTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const produits = useSelector(({ produitsApp }) => produitsApp.produits.data);
-    const loading = useSelector(({ produitsApp }) => produitsApp.produits.loading);
-    const pageCount = useSelector(({ produitsApp }) => produitsApp.produits.pageCount);
-    const parametres = useSelector(({ produitsApp }) => produitsApp.produits.parametres);
+    const produits = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.data);
+    const loading = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.loading);
+    const pageCount = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.pageCount);
+    const parametres = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.parametres);
     const user = useSelector(({ auth }) => auth.user);
-    const searchText = useSelector(({ produitsApp }) => produitsApp.produits.searchText);
+    const searchText = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 

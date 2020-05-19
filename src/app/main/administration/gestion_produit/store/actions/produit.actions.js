@@ -1,6 +1,7 @@
 
 import { FuseUtils } from '@fuse';
 import { showMessage } from 'app/store/actions/fuse';
+import axios from 'axios';
 import agent from 'agent';
 import _ from '@lodash';
 import * as Actions from '@fuse/components/FuseNavigation/store/actions';
@@ -42,6 +43,28 @@ export const CLEAN_ERROR = '[PRODUIT APP] CLEAN_ERROR';
 export const CLEAN_IMAGE = '[PRODUIT APP] CLEAN_IMAGE';
 export const CLEAN_DELETE_IMAGE = '[PRODUIT APP] CLEAN_DELETE_IMAGE';
 
+export const REQUEST_VIDEO = '[PRODUIT APP] REQUEST_VIDEO';
+export const GET_VIDEO = '[PRODUIT APP] GET_VIDEO';
+
+
+export function getVideoYoutubeById(idVideo) {
+    const request = axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${idVideo}&key=AIzaSyBvpeIK_1hzKDwawG1uRVmbHdE6n7tcRr4`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_VIDEO,
+        });
+        return request.then((response) => {
+            return dispatch({
+                type: GET_VIDEO,
+                payload: response.data ? (response.data.items.length > 0 ? 1 : 2) : 2
+            })
+        }
+
+        );
+    }
+
+}
 
 export function getSecteurs() {
     const request = agent.get('/api/secteurs?pagination=false&props[]=id&props[]=name');

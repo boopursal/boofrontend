@@ -60,8 +60,8 @@ function Login() {
                         <div className="flex flex-col items-center justify-center pt-32">
                            
                             <span className="font-medium">Vous n'avez pas de compte?</span>
-                            <Link className="font-medium" to="/register">Créez un compte</Link>
-                           <Link className="font-medium mt-8 flex items-end" to="/"><Icon className="mr-4">home</Icon>Accueil</Link>
+                            <Link className="font-medium text-blue" to="/register">Créez un compte</Link>
+                           <Link className="font-medium mt-8 flex items-end text-blue" to="/"><Icon className="mr-4">home</Icon>Accueil</Link>
 
                         </div>
 

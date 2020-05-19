@@ -4,9 +4,9 @@ import agent from 'agent';
 import * as Actions from '@fuse/components/FuseNavigation/store/actions';
 
 
-export const REQUEST_DEMANDE = '[DEMANDE APP] REQUEST DEMANDE';
-export const GET_DEMANDE = '[DEMANDE APP] GET DEMANDE';
-export const SAVE_ERROR = '[DEMANDE APP] SAVE ERROR';
+export const REQUEST_DEMANDE = '[DEMANDE DEVIS FOURNISSEUR APP] REQUEST DEMANDE';
+export const GET_DEMANDE = '[DEMANDE DEVIS FOURNISSEUR APP] GET DEMANDE';
+export const SAVE_ERROR = '[DEMANDE DEVIS FOURNISSEUR APP] SAVE ERROR';
 
 
 
