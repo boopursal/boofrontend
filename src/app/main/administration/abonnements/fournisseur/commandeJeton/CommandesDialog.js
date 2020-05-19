@@ -113,7 +113,7 @@ function CommandesDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {CommandesDialog.type === 'new' ? 'Nouveau Commande' : 'Edit Commande'}
+                        {CommandesDialog.type === 'new' ? 'Nouvelle Commande' : 'Edit Commande'}
                     </Typography>
                 </Toolbar>
 

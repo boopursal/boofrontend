@@ -15,12 +15,7 @@ function CommandesDialog(props) {
     const dispatch = useDispatch();
     const CommandesDialog = useSelector(({ commandesFrsApp }) => commandesFrsApp.commandes.commandesDialog);
     const user = useSelector(({ auth }) => auth.user);
-
-
-
     const { form, setForm } = useForm(defaultFormState);
-
-
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
 
@@ -106,7 +101,7 @@ function CommandesDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {CommandesDialog.type === 'new' ? 'Nouveau Commande' : 'Edit Commande'}
+                        {CommandesDialog.type === 'new' ? 'Nouvelle Commande' : 'Edit Commande'}
                     </Typography>
                 </Toolbar>
 
@@ -124,15 +119,18 @@ function CommandesDialog(props) {
                         </div>
 
                         <RadioGroupFormsy
-                            className=" inline"
+                            className=""
                             name="nbrJeton"
                             onChange={handleRadioChange}
                         >
-                            <FormControlLabel value="5" checked={form.nbrJeton === 5} control={<Radio />} label="5" />
-                            <FormControlLabel value="10" checked={form.nbrJeton === 10} control={<Radio />} label="10" />
-                            <FormControlLabel value="20" checked={form.nbrJeton === 20} control={<Radio />} label="20" />
+                            <FormControlLabel value="5" checked={form.nbrJeton === 5} control={<Radio />} label={!user.data.currency || user.data.currency === 'DHS'?"5 ( 500,00 Dhs )" : "5 ( 50,00 €/$   ) "  }
+                            />
+                            <FormControlLabel value="10" checked={form.nbrJeton === 10} control={<Radio />} label={!user.data.currency || user.data.currency === 'DHS'?"10 ( 1000,00 Dhs )" : "10 ( 100,00 €/$   ) "  } />
+                            <FormControlLabel value="20" checked={form.nbrJeton === 20} control={<Radio />} label={!user.data.currency || user.data.currency === 'DHS'?"20 ( 2000,00 Dhs )" : "20 ( 200,00 €/$   ) "  } />
 
                         </RadioGroupFormsy>
+
+
 
                     </div>
 
