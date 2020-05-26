@@ -302,7 +302,7 @@ const navigationConfig = [
                     },
                     {
                         'id': 'categories-component',
-                        'title': 'Catégories',
+                        'title': 'Produits',
                         'type': 'item',
                         'auth': authRoles.admin,
                         'icon': 'ballot',

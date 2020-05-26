@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, Icon,  Typography, Toolbar, AppBar } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,12 +30,16 @@ function CategoriesDialog(props) {
              * Dialog type: 'edit'
              */
             if (categorieDialog.type === 'edit' && categorieDialog.data) {
-                let sousSecteur = {
-                    value: categorieDialog.data.sousSecteur['@id'],
-                    label: categorieDialog.data.sousSecteur.name,
-                };
+                
                 setForm({ ...categorieDialog.data });
-                setForm(_.set({ ...categorieDialog.data }, 'sousSecteur', sousSecteur));
+                if(categorieDialog.data.sousSecteurs){
+                    let sousSecteurs = categorieDialog.data.sousSecteurs.map(item => ({
+                        value: item['@id'],
+                        label: item.name
+                    }));
+                    setForm(_.set({ ...categorieDialog.data }, 'sousSecteurs', sousSecteurs));
+                }
+                
             }
 
             /**
@@ -114,7 +118,7 @@ function CategoriesDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {categorieDialog.type === 'new' ? 'Nouvelle Categorie' : 'Edit Categorie'}
+                        {categorieDialog.type === 'new' ? 'Nouveau produit' : 'Edit produit'}
                     </Typography>
                 </Toolbar>
 
@@ -131,20 +135,19 @@ function CategoriesDialog(props) {
                         <div className="min-w-48 pt-20">
                             <Icon color="action">work</Icon>
                         </div>
-
                         <SelectReactFormsy
 
-                            id="sousSecteur"
-                            name="sousSecteur"
+                            id="sousSecteurs"
+                            name="sousSecteurs"
                             className="MuiFormControl-fullWidth MuiTextField-root mb-24"
                             value={
 
-                                form.sousSecteur
+                                form.sousSecteurs
 
 
                             }
-                            onChange={(value) => handleChipChange(value, 'sousSecteur')}
-                            placeholder="Selectionner une activité"
+                            onChange={(value) => handleChipChange(value, 'sousSecteurs')}
+                            placeholder="Sélectionner..."
                             textFieldProps={{
                                 label: 'Activités',
                                 InputLabelProps: {
@@ -154,6 +157,7 @@ function CategoriesDialog(props) {
                             }}
                             options={sousSecteurs}
                             fullWidth
+                            isMulti
                             required
                         />
                     </div>

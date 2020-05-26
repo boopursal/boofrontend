@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
 import _ from '@lodash';
+import { withStyles } from '@material-ui/core/styles';
 
 function CategorieList(props) {
     const dispatch = useDispatch();
@@ -16,7 +17,16 @@ function CategorieList(props) {
 
     const [filteredData, setFilteredData] = useState(null);
 
-    
+    const HtmlTooltip = withStyles(theme => ({
+        tooltip: {
+            maxWidth: 220,
+            fontSize: theme.typography.pxToRem(12),
+            border: '1px solid #dadde9',
+            '& b': {
+                fontWeight: theme.typography.fontWeightMedium,
+            },
+        },
+    }))(Tooltip);
 
     useEffect(() => {
         function getFilteredArray(entities, searchText) {
@@ -66,21 +76,43 @@ function CategorieList(props) {
                 columns={[
 
                     {
-                        Header: "Catégorie",
+                        Header: "Nom du produit",
                         accessor: "name",
                         filterable: true,
                     },
                     {
-                        Header: "Activité",
+                        Header: "Activités",
+                        className: "font-bold",
+                        accessor: "sousSecteurs.name",
                         filterable: true,
-                        accessor: "sousSecteur.name",
                         Cell: row => (
                             <div className="flex items-center">
-                                {row.original.sousSecteur ? row.original.sousSecteur.name : ''}
+                                <HtmlTooltip
+                                    title={
+                                        <React.Fragment>
+
+                                            {
+                                                Object.keys(row.original.sousSecteurs).length === 0 ? 'Il n\'y aucune activité' :
+                                                    <ul>
+                                                        {
+                                                            _.map(row.original.sousSecteurs, function (value, key) {
+                                                                return <li key={key}> {value.name} </li>;
+                                                            })
+                                                        }
+                                                    </ul>
+                                            }
+
+                                        </React.Fragment>
+                                    }
+                                >
+                                    <Button onClick={(ev) => { ev.stopPropagation(); }} >
+                                        {Object.keys(row.original.sousSecteurs).length}
+                                    </Button>
+                                </HtmlTooltip>
+
                             </div>
                         )
                     },
-
                     {
                         Header: "",
                         sortable: false,

@@ -44,7 +44,7 @@ export function getCategories(parametres)
             search += '&' + item.id + '=' + item.value
         });
     }
-    const request = agent.get(`/api/categories?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}&props[]=id&props[]=name&props[]=sousSecteur`);
+    const request = agent.get(`/api/categories?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}&props[]=id&props[]=name&props[]=sousSecteurs`);
 
     
     return (dispatch) =>{
@@ -108,12 +108,18 @@ export function closeEditCategoriesDialog()
 
 export function addCategorie(categorie,parametres)
 {
-    categorie.sousSecteur = categorie.sousSecteur.value;
-    
+    let arr = null;
+    if (categorie.sousSecteurs) {
+        arr = categorie.sousSecteurs.map((item => { return item.value }));
+    }
+    const data = {
+        ...categorie,
+        sousSecteurs: arr
+    }
     return (dispatch) => {
 
        
-        const request = agent.post('/api/categories',categorie);
+        const request = agent.post('/api/categories',data);
 
         return request.then((response) =>
             Promise.all([
@@ -148,11 +154,18 @@ export function addCategorie(categorie,parametres)
 
 export function updateCategorie(categorie,parametres)
 {
-    categorie.sousSecteur = categorie.sousSecteur.value;
+    let arr = null;
+    if (categorie.sousSecteurs) {
+        arr = categorie.sousSecteurs.map((item => { return item.value }));
+    }
+    const data = {
+        ...categorie,
+        sousSecteurs: arr
+    }
     return (dispatch) => {
 
      
-        const request = agent.put(`/api/categories/${categorie.id}`,categorie);
+        const request = agent.put(`/api/categories/${categorie.id}`,data);
 
         return request.then((response) =>
             Promise.all([

@@ -75,7 +75,7 @@ class FilterComponent extends Component {
                         onChange={this.changeFilterValue}
                         value={this.state.filterValue}
                         className="w-full"
-                        inputProps={{ placeholder: 'Filtre' }}
+                        inputProps={{ placeholder: 'Rechercher' }}
                       /*  endAdornment={
                             <InputAdornment position="end">
                                 <IconButton

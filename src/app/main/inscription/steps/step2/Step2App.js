@@ -401,7 +401,7 @@ function Step2App(props) {
                                                         name="fix"
                                                         value={form.fix}
                                                         onChange={handleChange}
-                                                        label="Fix"
+                                                        label="Fixe"
                                                         autoComplete="fix"
                                                         validations={{
                                                             minLength: 10,

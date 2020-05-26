@@ -30,7 +30,7 @@ function CategorieApp(props)
     return (
         <React.Fragment>
              <Helmet>
-                <title>Catégories | Les Achats Industriels</title>
+                <title>Produits | Les Achats Industriels</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <meta name="googlebot" content="noindex" />
             </Helmet>

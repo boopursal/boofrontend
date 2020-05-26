@@ -16,7 +16,7 @@ function CategorieHeader(props)
                         <Icon className="text-32 mr-0 sm:mr-12">ballot</Icon>
                     </FuseAnimate>
                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                        <Typography className="hidden sm:flex" variant="h6">Gestion des catégories</Typography>
+                        <Typography className="hidden sm:flex" variant="h6">Gestion des produits</Typography>
                     </FuseAnimate>
                 </div>
 
@@ -26,7 +26,7 @@ function CategorieHeader(props)
                 </div>
                 <FuseAnimate animation="transition.slideRightIn" delay={300}>
                     <Button onClick={ev => dispatch(Actions.openNewCategoriesDialog())} className="whitespace-no-wrap" variant="contained">
-                        <span className="hidden sm:flex">Ajouter nouveau catégorie</span>
+                        <span className="hidden sm:flex">Ajouter nouveau produit</span>
                         <span className="flex sm:hidden">New</span>
                     </Button>
                 </FuseAnimate>
