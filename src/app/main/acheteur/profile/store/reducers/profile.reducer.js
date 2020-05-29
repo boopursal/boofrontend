@@ -6,6 +6,7 @@ const initialState = {
     secteurs: null,
     loading: false,
     requestAcheteur: false,
+    loadingVille: false,
     villes: null,
     error: null,
     data: null,
@@ -35,7 +36,9 @@ const profileReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    villes: null
+                    villes: null,
+                    loadingVille: true,
+
 
                 };
             }
@@ -73,6 +76,7 @@ const profileReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     villes: _.keyBy(action.payload, 'id'),
+                    loadingVille: false,
                 };
             }
         case Actions.UPDATE_ACHETEUR:

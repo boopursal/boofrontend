@@ -59,7 +59,7 @@ export function getPays() {
 }
 
 export function getVilles(pays_id) {
-    const request = agent.get(`/api/pays/${pays_id}/villes?pagination=false&props[]=id&props[]=name`);
+    const request = agent.get(`${pays_id}/villes?pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
         dispatch({
@@ -147,14 +147,17 @@ export function updateSocieteInfo(data, id_fournisseur) {
 
 }
 
-export function updateSocieteSousSecteurs(data, id_fournisseur) {
+export function updateSocieteSousSecteurs(categories, id_fournisseur) {
 
-    if (data.sousSecteurs)
-    data.sousSecteurs = data.sousSecteurs.map((item => {return item.value}));
-  
+    var putData={
+        categories: _.map(categories, function (value, key) {
+            return value['@id'];
+        })
+    }
+    
     return (dispatch, getState) => {
 
-        const request = agent.put(`/api/fournisseurs/${id_fournisseur}`, data);
+        const request = agent.put(`/api/fournisseurs/${id_fournisseur}`, putData);
         dispatch({
             type: REQUEST_UPDATE_FOURNISSEUR,
         });

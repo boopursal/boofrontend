@@ -154,7 +154,7 @@ function BlackListesDialog(props) {
         //event.preventDefault();
 
         if (BlackListesDialog.type === 'new') {
-           dispatch(Actions.addBlackListe(form, user.id));
+            dispatch(Actions.addBlackListe(form, user.id));
             //setFournisseur({ societe: '' });
         }
         else {
@@ -371,7 +371,10 @@ function BlackListesDialog(props) {
                 </DialogContent>
 
                 {BlackListesDialog.type === 'new' ? (
-                    <DialogActions className="justify-between pl-16">
+                    <DialogActions className="pl-16">
+                        <Button onClick={() => dispatch(Actions.closeNewBlackListesDialog())} color="primary">
+                            Annuler
+                        </Button>
                         <Button
                             variant="contained"
                             color="primary"
@@ -384,6 +387,9 @@ function BlackListesDialog(props) {
                     </DialogActions>
                 ) : (
                         <DialogActions className="justify-between pl-16">
+                            <Button onClick={() => dispatch(Actions.closeEditBlackListesDialog())} color="primary">
+                                Annuler
+                                                    </Button>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -392,7 +398,7 @@ function BlackListesDialog(props) {
                             >
                                 Modifier
                                 {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                        </Button>
+                            </Button>
                             <IconButton
                                 onClick={() => dispatch(Actions.openDialog({
                                     children: (

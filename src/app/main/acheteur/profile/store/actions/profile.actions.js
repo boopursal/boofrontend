@@ -56,7 +56,7 @@ export function getPays() {
 }
 
 export function getVilles(pays_id) {
-    const request = agent.get(`/api/pays/${pays_id}/villes?pagination=false&props[]=id&props[]=name`);
+    const request = agent.get(`${pays_id}/villes?pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
         dispatch({

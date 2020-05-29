@@ -166,7 +166,7 @@ function Widget5(props) {
                                             },
                                             ticks: {
                                                 min: 0,
-                                                max: 5,
+                                                max: 25,
                                                 stepSize: 0.5
                                             }
                                         }

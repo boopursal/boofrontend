@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar, MenuItem } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Popper, Chip, Grid, Avatar, MenuItem, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFormsy, SelectFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
@@ -14,7 +14,10 @@ import green from '@material-ui/core/colors/green';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import clsx from 'clsx';
 import { Helmet } from "react-helmet";
-
+import Autosuggest from 'react-autosuggest';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Highlighter from "react-highlight-words";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,6 +25,22 @@ const useStyles = makeStyles(theme => ({
         '& > * + *': {
             marginTop: theme.spacing(2),
         },
+    },
+    chips: {
+        flex: 1,
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    suggestion: {
+        display: 'block',
+    },
+    suggestionsList: {
+        margin: 0,
+        padding: 0,
+        listStyleType: 'none',
+    },
+    divider: {
+        height: theme.spacing(2),
     },
     buttonProgress: {
         color: green[500],
@@ -58,7 +77,52 @@ const useStyles = makeStyles(theme => ({
         }
     },
 }));
+
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+    return (
+
+        <MenuItem selected={isHighlighted} component="div" className="z-999" dense={true}>
+            <ListItemText
+                className="pl-0 "
+                primary={
+                    <Highlighter
+                        highlightClassName="YourHighlightClass"
+                        searchWords={[query]}
+                        autoEscape={true}
+                        textToHighlight={suggestion.name}
+                    />
+                }
+            />
+        </MenuItem>
+
+    );
+
+}
+function renderInputComponent(inputProps) {
+    const { classes, inputRef = () => { }, ref, ...other } = inputProps;
+    return (
+        <TextField
+            fullWidth
+            InputProps={{
+                inputRef: node => {
+                    ref(node);
+                    inputRef(node);
+                },
+                classes: {
+                    input: classes.input,
+                },
+            }}
+            {...other}
+        />
+    );
+}
+
+
 function Profile(props) {
+    const suggestionsNode = useRef(null);
+    const popperNode = useRef(null);
+    const searchCategories = useSelector(({ profileApp }) => profileApp.searchCategories);
+    const [categories, setCategories] = React.useState([]);
 
     const dispatch = useDispatch();
     const classes = useStyles();
@@ -90,14 +154,13 @@ function Profile(props) {
 
     useEffect(() => {
         dispatch(Actions.getPays());
-        dispatch(Actions.getSousSecteurs());
-    }, [dispatch, user.id]);
+    }, [dispatch]);
 
     //GET VILLE IF PAYS EXIST
     useEffect(() => {
         if (profile.data && !form) {
             if (profile.data.pays)
-                dispatch(Actions.getVilles(profile.data.pays.id));
+                dispatch(Actions.getVilles(profile.data.pays['@id']));
         }
 
     }, [dispatch, profile.data, form]);
@@ -143,10 +206,8 @@ function Profile(props) {
 
             }
             setForm({ ...profile.data });
-            setSousSecteurs(profile.data.sousSecteurs.map(item => ({
-                value: item['@id'],
-                label: item.name
-            })));
+            setCategories(profile.data.categories.map(item => item));
+
             setVille({
                 value: profile.data.ville['@id'],
                 label: profile.data.ville.name,
@@ -176,17 +237,7 @@ function Profile(props) {
 
     function handleChipChange(value, name) {
 
-        if (name === 'sousSecteurs') {
-            if (!_.some(value, 'value')) {
-                setForm(_.set({ ...form }, name, ''));
-                setSousSecteurs(null);
-            }
-            else {
-                setForm(_.set({ ...form }, name, value));
-                setSousSecteurs(value);
-            }
-        }
-        else if (name === 'ville') {
+        if (name === 'ville') {
             setForm(_.set({ ...form }, name, value));
             setVille(value);
         }
@@ -229,8 +280,8 @@ function Profile(props) {
         dispatch(Actions.updateSocieteInfo(model, form.id));
     }
 
-    function handleSubmitSousSecteurs(model) {
-        dispatch(Actions.updateSocieteSousSecteurs(model, form.id));
+    function handleSubmitSousSecteurs() {
+        dispatch(Actions.updateSocieteSousSecteurs(categories, form.id));
     }
 
     function handleSubmitInfoPerso(model) {
@@ -238,6 +289,55 @@ function Profile(props) {
     }
     function handleSubmitPassword(model) {
         dispatch(Actions.updatePassword(model, form.id));
+    }
+
+    function handleChangeSearch(event) {
+        dispatch(Actions.setGlobalSearchText(event))
+    }
+    function showSearch() {
+        dispatch(Actions.showSearch());
+        document.addEventListener("keydown", escFunction, false);
+    }
+
+    function escFunction(event) {
+        if (event.keyCode === 27) {
+            hideSearch();
+            dispatch(Actions.cleanUp());
+        }
+
+    }
+
+    function hideSearch() {
+        dispatch(Actions.hideSearch());
+        document.removeEventListener("keydown", escFunction, false);
+
+    }
+
+
+    function handleSuggestionsFetchRequested({ value, reason }) {
+        console.log(reason)
+        if (reason === 'input-changed') {
+            value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value));
+            // Fake an AJAX call
+        }
+
+    }
+    function handleSuggestionsClearRequested() {
+        //dispatch(Actions.hideSearch());
+
+    }
+    const autosuggestProps = {
+        renderInputComponent,
+        //alwaysRenderSuggestions: true,
+        suggestions: searchCategories.suggestions,
+        focusInputOnSuggestionClick: false,
+        onSuggestionsFetchRequested: handleSuggestionsFetchRequested,
+        onSuggestionsClearRequested: handleSuggestionsClearRequested,
+        renderSuggestion
+    };
+
+    function handleDelete(id) {
+        setCategories(_.reject(categories, function (o) { return o.id == id; }))
     }
 
     return (
@@ -402,7 +502,7 @@ function Profile(props) {
                                                                         minLength: 15,
                                                                         maxLength: 15,
                                                                         isNumeric: "isNumeric",
-                                                                        matchRegexp: /^(?!.*?(\w)\1{5}).*$/,
+                                                                        matchRegexp: /^(?!.*?(\w)\1{14}).*$/,
                                                                     }}
                                                                     validationErrors={{
                                                                         minLength: 'La longueur minimale de caractère est 15',
@@ -535,12 +635,12 @@ function Profile(props) {
                                                             value={String(form.codepostal)}
                                                             onChange={handleChange}
                                                             validations={{
-                                                                minLength: 5,
-                                                                maxLength: 5,
+                                                                minLength: 3,
+                                                                maxLength: 10,
                                                             }}
                                                             validationErrors={{
-                                                                minLength: 'La longueur minimale de caractère est 5',
-                                                                maxLength: 'La longueur maximale de caractère est 5',
+                                                                minLength: 'La longueur minimale de caractère est 3',
+                                                                maxLength: 'La longueur maximale de caractère est 10',
                                                             }}
                                                             autoComplete="codepostal"
                                                             label="Code Postal"
@@ -568,6 +668,7 @@ function Profile(props) {
                                                         }}
                                                         className=""
                                                         options={Villes}
+                                                        isLoading={profile.loadingVille}
                                                         onChange={(value) => handleChipChange(value, 'ville')}
                                                         required
                                                     />
@@ -637,31 +738,87 @@ function Profile(props) {
                                         ref={formRef}
                                         className="flex pt-5 flex-col ">
 
-                                        <SelectReactFormsy
+                                        <div ref={popperNode} >
+                                            <Autosuggest
+                                                {...autosuggestProps}
+                                                getSuggestionValue={suggestion => searchCategories.searchText}
+                                                onSuggestionSelected={(event, { suggestion, method }) => {
+                                                    if (method === "enter") {
+                                                        event.preventDefault();
+                                                    }
+                                                    !_.find(categories, ['name', suggestion.name]) &&
+                                                        setCategories([suggestion, ...categories]);
+                                                    //setForm(_.set({ ...form }, 'categories', suggestion['@id']))
+                                                    //hideSearch();
+                                                    popperNode.current.focus();
+                                                }}
+                                                required
+                                                inputProps={{
+                                                    classes,
+                                                    label: 'Activités',
+                                                    placeholder: "Activité (ex: Rayonnage lourd)",
+                                                    value: searchCategories.searchText,
+                                                    variant: "outlined",
+                                                    name: "categories",
+                                                    onChange: handleChangeSearch,
+                                                    onFocus: showSearch,
+                                                    InputLabelProps: {
+                                                        shrink: true,
+                                                    }
 
-                                            id="sousSecteurs"
-                                            name="sousSecteurs"
-                                            className="MuiFormControl-fullWidth MuiTextField-root mb-24"
-                                            value={
-
-                                                sousSecteurs
+                                                }}
+                                                theme={{
+                                                    container: classes.container,
+                                                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                                    suggestionsList: classes.suggestionsList,
+                                                    suggestion: classes.suggestion,
+                                                }}
+                                                renderSuggestionsContainer={options => (
+                                                    <Popper
+                                                        anchorEl={popperNode.current}
+                                                        open={Boolean(options.children) || searchCategories.noSuggestions || searchCategories.loading}
+                                                        popperOptions={{ positionFixed: true }}
+                                                        className="z-9999 mb-8"
+                                                    >
+                                                        <div ref={suggestionsNode}>
+                                                            <Paper
+                                                                elevation={1}
+                                                                square
+                                                                {...options.containerProps}
+                                                                style={{ width: popperNode.current ? popperNode.current.clientWidth : null }}
+                                                            >
+                                                                {options.children}
+                                                                {searchCategories.noSuggestions && (
+                                                                    <Typography className="px-16 py-12">
+                                                                        Aucun résultat..
+                                                                </Typography>
+                                                                )}
+                                                                {searchCategories.loading && (
+                                                                    <div className="px-16 py-12 text-center">
+                                                                        <CircularProgress color="secondary" /> <br /> Chargement ...
+                                                                </div>
+                                                                )}
+                                                            </Paper>
+                                                        </div>
+                                                    </Popper>
+                                                )}
+                                            />
+                                        </div>
+                                        <div className={clsx(classes.chips)}>
+                                            {
+                                                categories && categories.length > 0 &&
+                                                categories.map((item, index) => (
+                                                    <Chip
+                                                        key={index}
+                                                        label={item.name}
+                                                        onDelete={() => handleDelete(item.id)}
+                                                        className="mt-8 mr-8"
+                                                    />
+                                                ))
 
 
                                             }
-                                            onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                            placeholder="Selectionner multiple secteurs d'activités"
-                                            textFieldProps={{
-                                                label: "Secteurs d'activités",
-                                                InputLabelProps: {
-                                                    shrink: true
-                                                },
-                                                variant: 'outlined'
-                                            }}
-                                            options={profile.sousSecteurs}
-                                            fullWidth
-                                            isMulti
-                                            required
-                                        />
+                                        </div>
 
 
                                         <Button
@@ -670,7 +827,7 @@ function Profile(props) {
                                             color="primary"
                                             className="w-200 pr-auto mt-16 normal-case"
                                             aria-label="Sauvegarder"
-                                            disabled={!isFormValid || profile.loading || !form.sousSecteurs}
+                                            disabled={profile.loading || !categories.length}
                                             value="legacy"
                                         >
                                             Sauvegarder
@@ -717,10 +874,10 @@ function Profile(props) {
                                                     onChange={handleChange}
                                                     label="Nom"
                                                     validations={{
-                                                        minLength: 4
+                                                        minLength: 2
                                                     }}
                                                     validationErrors={{
-                                                        minLength: 'La longueur minimale de caractère est 4'
+                                                        minLength: 'La longueur minimale de caractère est 2'
                                                     }}
                                                     InputProps={{
                                                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -739,10 +896,10 @@ function Profile(props) {
                                                     name="firstName"
                                                     label="Prénom"
                                                     validations={{
-                                                        minLength: 4
+                                                        minLength: 2
                                                     }}
                                                     validationErrors={{
-                                                        minLength: 'La longueur minimale de caractère est 4'
+                                                        minLength: 'La longueur minimale de caractère est 2'
                                                     }}
                                                     InputProps={{
                                                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -902,10 +1059,13 @@ function Profile(props) {
                                             name="newPassword"
                                             label="Nouveau mot de passe"
                                             validations={{
-                                                minLength: 6
+                                                minLength: 6,
+                                                matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/
+
                                             }}
                                             validationErrors={{
-                                                minLength: 'Min character length is 6'
+                                                minLength: 'Min character length is 6',
+                                                matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
                                             }}
                                             InputProps={{
                                                 endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>

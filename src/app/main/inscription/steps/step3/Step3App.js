@@ -213,9 +213,6 @@ function Step3App(props) {
 
     const { form, setForm } = useForm(defaultFormState);
 
-    useEffect(() => {
-        dispatch(Actions.getSousSecteurs());
-    }, [dispatch]);
 
     useEffect(() => {
         if (step3.success) {

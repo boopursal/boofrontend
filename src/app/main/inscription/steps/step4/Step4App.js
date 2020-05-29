@@ -341,6 +341,7 @@ function Step4App(props) {
                                                         }}
                                                         className="mb-16"
                                                         options={Villes}
+                                                        isLoading={step4.loadingVille}
                                                         onChange={(value) => handleChipChange(value, 'ville')}
                                                         required
                                                     />
@@ -462,7 +463,7 @@ function Step4App(props) {
                                                             minLength: 15,
                                                             maxLength: 15,
                                                             isNumeric: "isNumeric",
-                                                            matchRegexp: /^(?!.*?(\w)\1{5}).*$/,
+                                                            matchRegexp: /^(?!.*?(\w)\1{14}).*$/,
 
                                                         }}
                                                         validationErrors={{

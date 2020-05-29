@@ -290,6 +290,7 @@ function Step2App(props) {
                                                         }}
                                                         className="mb-16"
                                                         options={Villes}
+                                                        isLoading={step2.loadingVille}
                                                         onChange={(value) => handleChipChange(value, 'ville')}
                                                         required
                                                     />

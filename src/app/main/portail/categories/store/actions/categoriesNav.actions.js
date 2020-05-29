@@ -32,7 +32,7 @@ export function getSecteurs() {
 
 
 export function getSousSecteurs(iri) {
-    const request = agent.get(`${iri}/sous_secteurs?itemsPerPage=4&parent[exists]=false`);
+    const request = agent.get(`${iri}/sous_secteurs?itemsPerPage=4`);
 
     return (dispatch) => {
         dispatch({

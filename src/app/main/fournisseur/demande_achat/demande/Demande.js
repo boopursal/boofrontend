@@ -418,10 +418,10 @@ function Demande(props) {
                                             <Grid item xs={12} sm={12}>
                                                 <TextFieldFormsy
                                                     className="mb-24"
-                                                    label="Sous-Secteurs"
+                                                    label="Activités"
                                                     id="sousSecteurs"
                                                     name="sousSecteurs"
-                                                    value={_.join(_.map(demande.data.sousSecteurs, 'name'), ', ')}
+                                                    value={_.join(_.map(demande.data.categories, 'name'), ', ')}
                                                     InputProps={{
                                                         readOnly: true,
                                                     }}

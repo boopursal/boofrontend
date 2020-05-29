@@ -4,6 +4,8 @@ const initialState = {
     data: null,
     offres: null,
     fournisseur: null,
+    loadingSecteurs: false,
+    secteurs: null,
     sousSecteurs: null,
     error: null,
     loading: false,
@@ -26,71 +28,32 @@ const commandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: true,
+                }
+            }
+        //Secteurs    
+        case Actions.REQUEST_SECTEURS:
+            {
+                return {
+                    ...state,
+                    loadingSecteurs: true,
+                }
+            }
+        case Actions.GET_SECTEURS:
+            {
+                return {
+                    ...state,
+                    secteurs: action.payload,
+                    loadingSecteurs: false,
+
+                };
+            }
+        //Activités    
+        case Actions.REQUEST_SOUS_SECTEURS:
+            {
+                return {
+                    ...state,
                     loadingSS: true,
                 }
-            }
-        case Actions.GET_PAIEMENT:
-            {
-                return {
-                    ...state,
-                    paiements: action.payload
-                };
-            }
-        case Actions.GET_DUREE:
-            {
-                return {
-                    ...state,
-                    durees: action.payload
-                };
-            }
-        case Actions.REQUEST_SUGGESTION:
-            {
-                return {
-                    ...state,
-                    loadingSuggestion: true,
-                }
-            }
-        case Actions.SAVE_COMMANDE:
-            {
-                return {
-                    ...state,
-                    loading: false,
-                    success: true
-                };
-            }
-        case Actions.SAVE_SUGGESTION:
-            {
-                return {
-                    ...state,
-                    successActivite: true,
-                    loadingSuggestion: false,
-                };
-            }
-
-        case Actions.CLEAN_UP:
-            {
-                return {
-                    initialState,
-
-                };
-            }
-        case Actions.GET_COMMANDE:
-            {
-                return {
-                    ...state,
-                    data: action.payload,
-                    loading: false,
-
-                };
-            }
-        case Actions.GET_FOURNISSEUR:
-            {
-                return {
-                    ...state,
-                    fournisseur: action.payload,
-                    loading: false,
-
-                };
             }
         case Actions.GET_SOUS_SECTEURS:
             {
@@ -101,6 +64,74 @@ const commandeReducer = function (state = initialState, action) {
 
                 };
             }
+        // Mode paiement   
+        case Actions.GET_PAIEMENT:
+            {
+                return {
+                    ...state,
+                    paiements: action.payload
+                };
+            }
+        // Durée
+        case Actions.GET_DUREE:
+            {
+                return {
+                    ...state,
+                    durees: action.payload
+                };
+            }
+        // Suggestion  
+        case Actions.REQUEST_SUGGESTION:
+            {
+                return {
+                    ...state,
+                    loadingSuggestion: true,
+                }
+            }
+        case Actions.SAVE_SUGGESTION:
+            {
+                return {
+                    ...state,
+                    successActivite: true,
+                    loadingSuggestion: false,
+                };
+            }
+        // Commande    
+        case Actions.GET_COMMANDE:
+            {
+                return {
+                    ...state,
+                    data: action.payload,
+                    loading: false,
+
+                };
+            }
+        case Actions.SAVE_COMMANDE:
+            {
+                return {
+                    ...state,
+                    loading: false,
+                    success: true
+                };
+            }
+        case Actions.CLEAN_UP:
+            {
+                return {
+                    initialState,
+
+                };
+            }
+        // Fournisseur
+        case Actions.GET_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    fournisseur: action.payload,
+                    loading: false,
+
+                };
+            }
+        // Offres    
         case Actions.GET_OFFRES:
             {
                 return {
@@ -110,7 +141,7 @@ const commandeReducer = function (state = initialState, action) {
 
                 };
             }
-
+        // Erreurs    
         case Actions.SAVE_ERROR:
             {
                 return {

@@ -39,7 +39,7 @@ export function getSecteur(id) {
 
 }
 export function getPActivites(id) {
-    const request = agent.get(`/api/secteurs/${id}/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name&props[]=slug&order[name]=asc`);
+    const request = agent.get(`/api/secteurs/${id}/sous_secteurs?pagination=false&props[]=id&props[]=name&props[]=slug&order[name]=asc`);
     return (dispatch) => {
         dispatch({
             type: REQUEST_ACTIVITES,

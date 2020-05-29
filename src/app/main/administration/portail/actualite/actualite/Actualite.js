@@ -279,7 +279,7 @@ function Actualite(props) {
                                                 language: 'fr',
                                                 ckfinder: {
                                                     // Upload the images to the server using the CKFinder QuickUpload command.
-                                                    uploadUrl: 'http://localhost/ProjectlesHA/public/ckfinder/connector?command=QuickUpload&CKEditor=editor1&type=Images&responseType=json'
+                                                    uploadUrl: 'http://localhost:8080/ProjectlesHA/public/ckfinder/connector?command=QuickUpload&CKEditor=editor1&type=Images&responseType=json'
                                                 }
                                             }}
                                             onInit={editor => {

@@ -180,11 +180,11 @@ function DemandesTable(props) {
                             )
                     },
                     {
-                        Header: "Secteurs",
-                        accessor: "sousSecteurs.name",
+                        Header: "Activités",
+                        accessor: "categories.name",
                         filterable: true,
                         Cell: row =>
-                            _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
+                            _.truncate(_.join(_.map(row.original.categories, 'name'), ', '), {
                                 'length': 25,
                                 'separator': ' '
                             })

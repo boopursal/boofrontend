@@ -185,11 +185,11 @@ function DemandesTable(props) {
                         )
                     },
                     {
-                        Header: "Secteurs",
+                        Header: "Activités",
                         filterable: true,
-                        accessor: "sousSecteurs.name",
+                        accessor: "categories.name",
                         Cell: row =>
-                            _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
+                            _.truncate(_.join(_.map(row.original.categories, 'name'), ', '), {
                                 'length': 15,
                                 'separator': ' '
                             })
@@ -211,7 +211,7 @@ function DemandesTable(props) {
                                     }
                                     &ensp;
                                     {
-                                        row.original.currency ? row.original.currency.name : ''
+                                        row.original.currency && row.original.currency.name 
                                     }
                                 </>
                             )

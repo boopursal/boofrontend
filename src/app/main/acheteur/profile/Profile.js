@@ -97,7 +97,7 @@ function Profile(props) {
     useEffect(() => {
         if (profile.data && !form) {
             if (profile.data.pays)
-                dispatch(Actions.getVilles(profile.data.pays.id));
+                dispatch(Actions.getVilles(profile.data.pays['@id']));
         }
 
     }, [dispatch, profile.data, form]);
@@ -417,7 +417,7 @@ function Profile(props) {
                                                                     minLength: 15,
                                                                     maxLength: 15,
                                                                     isNumeric: "isNumeric",
-                                                                    matchRegexp: /^(?!.*?(\w)\1{3}).*$/,
+                                                                    matchRegexp: /^(?!.*?(\w)\1{14}).*$/,
 
                                                                 }}
                                                                 validationErrors={{
@@ -528,12 +528,12 @@ function Profile(props) {
                                                         value={String(form.codepostal)}
                                                         onChange={handleChange}
                                                         validations={{
-                                                            minLength: 5,
-                                                            maxLength: 5,
+                                                            minLength: 3,
+                                                            maxLength: 10,
                                                         }}
                                                         validationErrors={{
-                                                            minLength: 'La longueur minimale de caractère est 5',
-                                                            maxLength: 'La longueur maximale de caractère est 5',
+                                                            minLength: 'La longueur minimale de caractère est 3',
+                                                            maxLength: 'La longueur maximale de caractère est 10',
                                                         }}
                                                         autoComplete="codepostal"
                                                         label="Code Postal"
@@ -561,6 +561,7 @@ function Profile(props) {
                                                     }}
                                                     className=""
                                                     options={Villes}
+                                                    isLoading={profile.loadingVille}
                                                     onChange={(value) => handleChipChange(value, 'ville')}
                                                     required
                                                 />
@@ -659,10 +660,10 @@ function Profile(props) {
                                                 onChange={handleChange}
                                                 label="Nom"
                                                 validations={{
-                                                    minLength: 4
+                                                    minLength: 2
                                                 }}
                                                 validationErrors={{
-                                                    minLength: 'La longueur minimale de caractère est 4'
+                                                    minLength: 'La longueur minimale de caractère est 2'
                                                 }}
                                                 InputProps={{
                                                     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -681,10 +682,10 @@ function Profile(props) {
                                                 name="firstName"
                                                 label="Prénom"
                                                 validations={{
-                                                    minLength: 4
+                                                    minLength: 2
                                                 }}
                                                 validationErrors={{
-                                                    minLength: 'La longueur minimale de caractère est 4'
+                                                    minLength: 'La longueur minimale de caractère est 2'
                                                 }}
                                                 InputProps={{
                                                     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -741,8 +742,6 @@ function Profile(props) {
 
                                     </Grid>
 
-
-
                                     <Button
                                         type="submit"
                                         variant="contained"
@@ -753,8 +752,7 @@ function Profile(props) {
                                         value="legacy"
                                     >
                                         Sauvegarder
-                               {profile.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-
+                                        {profile.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                     </Button>
 
                                 </Formsy>
@@ -826,10 +824,12 @@ function Profile(props) {
                                         name="oldPassword"
                                         label="Mot de passe actuel"
                                         validations={{
-                                            minLength: 6
+                                            minLength: 6,
+                                            matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/
                                         }}
                                         validationErrors={{
-                                            minLength: 'Min character length is 6'
+                                            minLength: 'Min character length is 6',
+                                            matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
                                         }}
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>

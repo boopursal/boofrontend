@@ -13,7 +13,7 @@ export const UPDATE_FOURNISSEUR = '[STEP APP] UPDATE FOURNISSEUR';
 export const SAVE_ERROR = '[STEP APP] SAVE ERROR';
 
 export function getSousSecteurs() {
-    const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name');
+    const request = agent.get('/api/sous_secteurs?pagination=false&props[]=id&props[]=name');
 
     return (dispatch) => {
         dispatch({

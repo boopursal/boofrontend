@@ -6,6 +6,7 @@ const initialState = {
     secteurs: null,
     currencies: null,
     loading: false,
+    loadingVille: false,
     villes: null,
     error: null,
 
@@ -25,7 +26,8 @@ const step4Reducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    villes: null
+                    villes: null,
+                    loadingVille : true
 
                 };
             }
@@ -61,6 +63,8 @@ const step4Reducer = function (state = initialState, action) {
                 return {
                     ...state,
                     villes: _.keyBy(action.payload, 'id'),
+                    loadingVille : false
+                    
                 };
             }
         case Actions.UPDATE_ACHETEUR:

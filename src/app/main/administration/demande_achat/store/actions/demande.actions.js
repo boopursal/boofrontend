@@ -57,7 +57,7 @@ export function getMotifs() {
 }
 
 export function getSousSecteurs() {
-    const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name');
+    const request = agent.get('/api/sous_secteurs?pagination=false&props[]=id&props[]=name');
 
     return (dispatch) => {
         dispatch({
@@ -102,13 +102,13 @@ export function getDemande(params) {
 
 
 
-export function putDemande(data,sousSecteurs,motif, id,history) {
+export function putDemande(data,sousSecteurs,motif, id,history,categories) {
 
     
     let postData ={
         ...data,
-        sousSecteurs:_.map(sousSecteurs, function (value, key) {
-            return value.value;
+        categories: _.map(categories, function (value, key) {
+            return value['@id'];
         }),
         attachements:_.map(data.attachements, function (value, key) {
             return value['@id'];
@@ -116,8 +116,6 @@ export function putDemande(data,sousSecteurs,motif, id,history) {
         budget : data.budget && parseFloat(data.budget),
         motifRejet : data.motifRejet? motif.value : null
     }
-
-
 
     const request = agent.put(`/api/demande_achats/${id}`, postData);
 

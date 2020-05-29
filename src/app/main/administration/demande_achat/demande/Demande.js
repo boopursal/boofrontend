@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, IconButton, Tooltip, FormControlLabel, Radio } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Popper, Chip, Grid, CircularProgress, IconButton, Tooltip, FormControlLabel, Radio, MenuItem, ListItemText } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, SelectReactFormsyS_S, CheckboxFormsy, RadioGroupFormsy, SelectReactFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, CheckboxFormsy, RadioGroupFormsy, SelectReactFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -15,6 +15,10 @@ import Formsy from 'formsy-react';
 import moment from 'moment';
 import green from '@material-ui/core/colors/green';
 import ReactTable from "react-table";
+import Autosuggest from 'react-autosuggest';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Highlighter from "react-highlight-words";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,7 +27,22 @@ const useStyles = makeStyles(theme => ({
             marginTop: theme.spacing(2),
         },
     },
-
+    chips: {
+        flex: 1,
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    suggestion: {
+        display: 'block',
+    },
+    suggestionsList: {
+        margin: 0,
+        padding: 0,
+        listStyleType: 'none',
+    },
+    divider: {
+        height: theme.spacing(2),
+    },
     buttonProgress: {
         color: green[500],
         position: 'absolute',
@@ -69,9 +88,50 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 moment.defaultFormat = "DD/MM/YYYY HH:mm";
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+    return (
+
+        <MenuItem selected={isHighlighted} component="div" className="z-999" dense={true}>
+            <ListItemText
+                className="pl-0 "
+                primary={
+                    <Highlighter
+                        highlightClassName="YourHighlightClass"
+                        searchWords={[query]}
+                        autoEscape={true}
+                        textToHighlight={suggestion.name}
+                    />
+                }
+            />
+        </MenuItem>
+
+    );
+
+}
+function renderInputComponent(inputProps) {
+    const { classes, inputRef = () => { }, ref, ...other } = inputProps;
+    return (
+        <TextField
+            fullWidth
+            InputProps={{
+                inputRef: node => {
+                    ref(node);
+                    inputRef(node);
+                },
+                classes: {
+                    input: classes.input,
+                },
+            }}
+            {...other}
+        />
+    );
+}
 
 function Demande(props) {
-
+    const suggestionsNode = useRef(null);
+    const popperNode = useRef(null);
+    const searchCategories = useSelector(({ demandesAdminApp }) => demandesAdminApp.searchCategories);
+    const [categories, setCategories] = React.useState([]);
     const dispatch = useDispatch();
     const demande = useSelector(({ demandesAdminApp }) => demandesAdminApp.demande);
 
@@ -93,12 +153,11 @@ function Demande(props) {
             else {
                 dispatch(Actions.getDemande(demandeId));
             }
-            dispatch(Actions.getSousSecteurs());
             dispatch(Actions.getMotifs());
         }
 
         updateDemandeState();
-        return ()=>{
+        return () => {
             dispatch(Actions.cleanUpDemande())
         }
     }, [dispatch, demandeId]);
@@ -144,11 +203,8 @@ function Demande(props) {
             (demande.data && form && demande.data.id !== form.id)
         ) {
 
-            if (demande.data.sousSecteurs) {
-                setSousSecteurs(demande.data.sousSecteurs.map(item => ({
-                    value: item['@id'],
-                    label: item.name
-                })));
+            if (demande.data.categories) {
+                setCategories(demande.data.categories.map(item => item));
             }
             if (demande.data.motifRejet)
                 setMotif({
@@ -176,20 +232,6 @@ function Demande(props) {
         setForm(_.set({ ...form }, name, moment(value).format('YYYY-MM-DDTHH:mm:ssZ')));
     }
 
-
-
-    function handleChipChange(value, name) {
-
-        if (!_.some(value, 'value')) {
-            setForm(_.set({ ...form }, name, ''));
-            setSousSecteurs('')
-        }
-        else {
-            setForm(_.set({ ...form }, name, value));
-            setSousSecteurs(value);
-        }
-    }
-
     function handleChipChange2(value, name) {
         setForm(_.set({ ...form }, name, value));
         setMotif(value)
@@ -212,10 +254,61 @@ function Demande(props) {
         setIsFormValid(true);
     }
 
+
+    function handleChangeSearch(event) {
+        dispatch(Actions.setGlobalSearchText(event))
+    }
+    function showSearch() {
+        dispatch(Actions.showSearch());
+        document.addEventListener("keydown", escFunction, false);
+    }
+
+    function escFunction(event) {
+        if (event.keyCode === 27) {
+            hideSearch();
+            dispatch(Actions.cleanUp());
+        }
+
+    }
+
+    function hideSearch() {
+        dispatch(Actions.hideSearch());
+        document.removeEventListener("keydown", escFunction, false);
+
+    }
+
+
+    function handleSuggestionsFetchRequested({ value, reason }) {
+        console.log(reason)
+        if (reason === 'input-changed') {
+            value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value));
+            // Fake an AJAX call
+        }
+
+    }
+    function handleSuggestionsClearRequested() {
+        //dispatch(Actions.hideSearch());
+
+    }
+    const autosuggestProps = {
+        renderInputComponent,
+        //alwaysRenderSuggestions: true,
+        suggestions: searchCategories.suggestions,
+        focusInputOnSuggestionClick: false,
+        onSuggestionsFetchRequested: handleSuggestionsFetchRequested,
+        onSuggestionsClearRequested: handleSuggestionsClearRequested,
+        renderSuggestion
+    };
+
+    function handleDelete(id) {
+        setCategories(_.reject(categories, function (o) { return o.id == id; }))
+    }
+
+
     function handleSubmit() {
 
 
-        dispatch(Actions.putDemande(form, sousSecteurs, motif, form.id, props.history));
+        dispatch(Actions.putDemande(form, sousSecteurs, motif, form.id, props.history, categories));
 
     }
 
@@ -260,7 +353,7 @@ function Demande(props) {
                                     className="whitespace-no-wrap"
                                     variant="contained"
                                     type="submit"
-                                    disabled={!isFormValid || demande.loading}
+                                    disabled={!isFormValid || demande.loading || !categories.length}
                                     onClick={() => handleSubmit()}
                                 >
                                     Sauvegarder
@@ -397,32 +490,92 @@ function Demande(props) {
                                             </Grid>
                                         </Grid>
 
-                                        <SelectReactFormsyS_S
-                                            className="mb-24 z-9999"
-                                            id="sousSecteurs"
-                                            name="sousSecteurs"
-                                            value={
-                                                sousSecteurs
+                                        <div ref={popperNode} >
+                                            <Autosuggest
+                                                {...autosuggestProps}
+                                                getSuggestionValue={suggestion => searchCategories.searchText}
+                                                onSuggestionSelected={(event, { suggestion, method }) => {
+                                                    if (method === "enter") {
+                                                        event.preventDefault();
+                                                    }
+                                                    !_.find(categories, ['name', suggestion.name]) &&
+                                                        setCategories([suggestion, ...categories]);
+                                                    //setForm(_.set({ ...form }, 'categories', suggestion['@id']))
+                                                    //hideSearch();
+                                                    popperNode.current.focus();
+                                                }}
+                                                required
+                                                inputProps={{
+                                                    classes,
+                                                    label: 'Activités',
+                                                    placeholder: "Activité (ex: Rayonnage lourd)",
+                                                    value: searchCategories.searchText,
+                                                    variant: "outlined",
+                                                    name: "categories",
+                                                    onChange: handleChangeSearch,
+                                                    onFocus: showSearch,
+                                                    InputLabelProps: {
+                                                        shrink: true,
+                                                    }
+
+                                                }}
+                                                theme={{
+                                                    container: classes.container,
+                                                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                                    suggestionsList: classes.suggestionsList,
+                                                    suggestion: classes.suggestion,
+                                                }}
+                                                renderSuggestionsContainer={options => (
+                                                    <Popper
+                                                        anchorEl={popperNode.current}
+                                                        open={Boolean(options.children) || searchCategories.noSuggestions || searchCategories.loading}
+                                                        popperOptions={{ positionFixed: true }}
+                                                        className="z-9999 mb-8"
+                                                    >
+                                                        <div ref={suggestionsNode}>
+                                                            <Paper
+                                                                elevation={1}
+                                                                square
+                                                                {...options.containerProps}
+                                                                style={{ width: popperNode.current ? popperNode.current.clientWidth : null }}
+                                                            >
+                                                                {options.children}
+                                                                {searchCategories.noSuggestions && (
+                                                                    <Typography className="px-16 py-12">
+                                                                        Aucun résultat..
+                                                                </Typography>
+                                                                )}
+                                                                {searchCategories.loading && (
+                                                                    <div className="px-16 py-12 text-center">
+                                                                        <CircularProgress color="secondary" /> <br /> Chargement ...
+                                                                </div>
+                                                                )}
+                                                            </Paper>
+                                                        </div>
+                                                    </Popper>
+                                                )}
+                                            />
+                                        </div>
+                                        <div className={clsx(classes.chips)}>
+                                            {
+                                                categories && categories.length > 0 &&
+                                                categories.map((item, index) => (
+                                                    <Chip
+                                                        key={index}
+                                                        label={item.name}
+                                                        onDelete={() => handleDelete(item.id)}
+                                                        className="mt-8 mr-8"
+                                                    />
+                                                ))
+
+
                                             }
-                                            onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                            placeholder="Selectionner multiple Sous-secteurs"
-                                            textFieldProps={{
-                                                label: 'Sous-secteurs',
-                                                InputLabelProps: {
-                                                    shrink: true
-                                                },
-                                                variant: 'outlined'
-                                            }}
-                                            options={demande.sousSecteurs}
-                                            fullWidth
-                                            isMulti
-                                            required
-                                        />
+                                        </div>
 
 
 
                                         <TextFieldFormsy
-                                            className="mb-16  w-full"
+                                            className="mb-16 mt-16  w-full"
                                             type="text"
                                             name="description"
                                             value={form.description}

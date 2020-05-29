@@ -35,7 +35,7 @@ export function cleanUpDemande() {
 }
 
 export function getSousSecteurs() {
-    const request = agent.get('/api/sous_secteurs?parent[exists]=false&pagination=false&props[]=id&props[]=name');
+    const request = agent.get('/api/sous_secteurs?pagination=false&props[]=id&props[]=name');
 
     return (dispatch) => {
         dispatch({
@@ -78,17 +78,21 @@ export function getDemande(params) {
 
 }
 
-export function saveDemande(data,history) {
-    data.sousSecteurs = _.map(data.sousSecteurs, function (value, key) {
-        return value.value;
-    });
-    data.attachements = _.map(data.attachements, function (value, key) {
-        return value['@id'];
-    });
-    if (data.budget) {
-        data.budget = parseFloat(data.budget);
+export function saveDemande(data,history,categories) {
+
+    var postData = 
+    {
+        ...data,
+        categories: _.map(categories, function (value, key) {
+            return value['@id'];
+        }),
+        attachements :_.map(data.attachements, function (value, key) {
+            return value['@id'];
+        }),
+        budget : data.budget && parseFloat(data.budget)
     }
-    const request = agent.post('/api/demande_achats', data);
+    
+    const request = agent.post('/api/demande_achats', postData);
 
     return (dispatch) => {
         dispatch({
@@ -116,18 +120,20 @@ export function saveDemande(data,history) {
 
 }
 
-export function putDemande(data, url,history) {
-    data.sousSecteurs = _.map(data.sousSecteurs, function (value, key) {
-        return value.value;
-    });
-    data.attachements = _.map(data.attachements, function (value, key) {
-        return value['@id'];
-    });
-    if (data.budget) {
-        data.budget = parseFloat(data.budget);
+export function putDemande(data, url,history,categories) {
+    var putData = 
+    {
+        ...data,
+        categories: _.map(categories, function (value, key) {
+            return value['@id'];
+        }),
+        attachements :_.map(data.attachements, function (value, key) {
+            return value['@id'];
+        }),
+        budget : data.budget && parseFloat(data.budget)
     }
 
-    const request = agent.put(`/api/demande_achats/${url}`, data);
+    const request = agent.put(`/api/demande_achats/${url}`, putData);
 
     return (dispatch) => {
         dispatch({

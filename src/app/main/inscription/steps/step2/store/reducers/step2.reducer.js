@@ -4,6 +4,7 @@ import _ from '@lodash';
 const initialState = {
     pays: null,
     loading: false,
+    loadingVille: false,
     villes: null,
     error: null,
     currencies: null,
@@ -24,7 +25,8 @@ const step2Reducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    villes: null
+                    villes: null,
+                    loadingVille : true
 
                 };
             }
@@ -51,6 +53,8 @@ const step2Reducer = function (state = initialState, action) {
                 return {
                     ...state,
                     villes: _.keyBy(action.payload, 'id'),
+                    loadingVille : false
+                    
                 };
             }
         case Actions.UPDATE_FOURNISSEUR:
