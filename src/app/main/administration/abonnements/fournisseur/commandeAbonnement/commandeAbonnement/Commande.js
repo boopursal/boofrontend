@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, Typography, LinearProgress, Grid, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent,  DialogActions, Divider, Radio, Table, TableHead, TableRow, TableCell, TableBody, Tab, Tabs, InputAdornment, Checkbox } from '@material-ui/core';
+import { Button, Icon, Chip, Typography, LinearProgress, Grid, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Divider, Radio, Table, TableHead, TableRow, TableCell, TableBody, Tab, Tabs, InputAdornment, Checkbox } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, SelectReactFormsyS_S,  TextFieldFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, SelectReactFormsy, TextFieldFormsy } from '@fuse';
 import { Link } from 'react-router-dom';
 import _ from '@lodash';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import { useForm } from '@fuse/hooks';
 import Switch from '@material-ui/core/Switch';
 import FormGroup from '@material-ui/core/FormGroup';
 import ContentLoader from 'react-content-loader'
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
 
@@ -114,6 +115,7 @@ function Commande(props) {
     const [offre, setOffre] = useState(null);
     const [discount, setDiscount] = useState(0);
     const [duree, setDuree] = useState(null);
+    const [secteur1, setSecteur1] = useState(null);
     const [mode, setMode] = useState(null);
     const [tabValue, setTabValue] = useState(0);
     const { form, setForm } = useForm(null);
@@ -129,7 +131,8 @@ function Commande(props) {
 
     useEffect(() => {
         dispatch(Actions.getOffres());
-        dispatch(Actions.getSousSecteurs());
+        //dispatch(Actions.getSousSecteurs());
+        dispatch(Actions.getSecteurs());
         dispatch(Actions.getPaiements());
         dispatch(Actions.getDurees());
     }, [dispatch]);
@@ -141,7 +144,7 @@ function Commande(props) {
             dispatch(Actions.cleanUp())
             props.history.push('/admin/offres/commande');
         }
-    }, [commande.success, dispatch,props.history]);
+    }, [commande.success, dispatch, props.history]);
 
 
     useEffect(() => {
@@ -168,7 +171,7 @@ function Commande(props) {
             if (commande.data.sousSecteurs) {
                 setSousSecteurs(commande.data.sousSecteurs.map(item => ({
                     value: item['@id'],
-                    label: item.name
+                    label: item.secteur.name + ': '+item.name
                 })));
             }
             if (commande.data.offre) {
@@ -197,65 +200,37 @@ function Commande(props) {
 
                         } else {
                             let tva = ht * 0.2;
-                            setTva(tva)
+                            setTva(ht * 0.2)
                             setPrixTTC(ht + tva)
                         }
-
                     }
                     else {
                         let ht = commande.data.offre.prixEur * commande.data.duree.name;
                         setPrixht(ht)
-
                         if (commande.data.duree.remise) {
                             let remis = ht * commande.data.duree.remise / 100;
                             let netHt = ht - remis;
-                            let tva = netHt * 0.2;
-
+                            //let tva = netHt * 0.2;
                             setRemise(remis)
                             setPrixhtNet(netHt)
-                            setTva(tva)
-                            setPrixTTC(netHt + tva)
+                            //setTva(tva)
+                            //setPrixTTC(netHt + tva)
+                            setPrixTTC(netHt)
 
                         } else {
-                            let tva = ht * 0.2;
-                            setTva(tva)
-                            setPrixTTC(ht + tva)
+                            //let tva = ht * 0.2;
+                            //setTva(ht * 0.2)
+                            //setPrixTTC(ht + tva)
+                            setPrixTTC(ht)
                         }
 
                     }
+
 
                 }
             }
         }
     }, [form, commande.data, setForm]);
-
-    useEffect(() => {
-        if (
-            (commande.offres && !offre)
-        ) {
-            setOffre(commande.offres[0]);
-
-        }
-    }, [offre, commande.offres, setOffre]);
-
-    useEffect(() => {
-        if (
-            (commande.paiements && !mode)
-        ) {
-            setMode(commande.paiements[0]['@id']);
-
-        }
-    }, [mode, commande.paiements, setMode]);
-
-    useEffect(() => {
-        if (
-            (commande.durees && !duree)
-        ) {
-            setDuree(commande.durees[0]);
-
-        }
-    }, [duree, commande.durees, setDuree]);
-
 
 
     function handleChangeTab(event, tabValue) {
@@ -275,8 +250,8 @@ function Commande(props) {
             if (item.remise) {
                 let remis = ht * item.remise / 100;
                 let netHt = ht - remis;
-                if(discount && discount>0){
-                    netHt = (ht - remis)-discount;
+                if (discount && discount > 0) {
+                    netHt = (ht - remis) - discount;
                 }
                 let tva = netHt * 0.2;
                 setRemise(remis)
@@ -286,8 +261,8 @@ function Commande(props) {
 
             } else {
                 let netHt = ht;
-                if(discount && discount>0){
-                    netHt = ht-discount;
+                if (discount && discount > 0) {
+                    netHt = ht - discount;
                 }
                 let tva = netHt * 0.2;
                 setTva(tva)
@@ -303,32 +278,34 @@ function Commande(props) {
             if (item.remise) {
                 let remis = ht * item.remise / 100;
                 let netHt = ht - remis;
-                if(discount && discount>0){
-                    netHt = (ht - remis)-discount;
+                if (discount && discount > 0) {
+                    netHt = (ht - remis) - discount;
                 }
                 let tva = netHt * 0.2;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
-                setTva(tva)
-                setPrixTTC(netHt + tva)
+                // setTva(tva)
+                //setPrixTTC(netHt + tva)
+                setPrixTTC(netHt)
 
             } else {
                 let netHt = ht;
-                if(discount && discount>0){
-                    netHt = ht-discount;
+                if (discount && discount > 0) {
+                    netHt = ht - discount;
                 }
                 let tva = netHt * 0.2;
-                setTva(tva)
+                //setTva(tva)
                 setPrixhtNet(netHt)
-                setPrixTTC(netHt + tva)
+                //setPrixTTC(netHt + tva)
+                setPrixTTC(netHt)
             }
 
         }
     }
-    function handleChangeDiscount(value) { 
+    function handleChangeDiscount(value) {
         setDiscount(value);
-        
+
         if (commande.data.fournisseur.currency.name === 'DHS') {
             let ht = offre.prixMad * duree.name;
             setPrixht(ht)
@@ -336,10 +313,10 @@ function Commande(props) {
             if (duree.remise) {
                 let remis = ht * duree.remise / 100;
                 let netHt = ht - remis;
-                if(value && value>0){
-                    netHt = (ht - remis)-value;
+                if (value && value > 0) {
+                    netHt = (ht - remis) - value;
                 }
-                
+
                 let tva = netHt * 0.2;
                 setRemise(remis)
                 setPrixhtNet(netHt)
@@ -348,8 +325,8 @@ function Commande(props) {
 
             } else {
                 let netHt = ht;
-                if(value && value>0){
-                    netHt = ht-value;
+                if (value && value > 0) {
+                    netHt = ht - value;
                 }
                 let tva = netHt * 0.2;
                 setTva(tva)
@@ -365,28 +342,30 @@ function Commande(props) {
             if (duree.remise) {
                 let remis = ht * duree.remise / 100;
                 let netHt = ht - remis;
-                if(value && value>0){
-                    netHt = (ht - remis)-value;
+                if (value && value > 0) {
+                    netHt = (ht - remis) - value;
                 }
-                
+
                 let tva = netHt * 0.2;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
-                setTva(tva)
-                setPrixTTC(netHt + tva)
+                //setTva(tva)
+                //setPrixTTC(netHt + tva)
+                setPrixTTC(netHt)
 
             } else {
 
                 let netHt = ht;
-                if(value && value>0){
-                    netHt = ht-value;
+                if (value && value > 0) {
+                    netHt = ht - value;
                 }
 
                 let tva = netHt * 0.2;
                 setPrixhtNet(netHt)
-                setTva(tva)
-                setPrixTTC(netHt + tva)
+                //setTva(tva)
+                //setPrixTTC(netHt + tva)
+                setPrixTTC(netHt)
             }
 
         }
@@ -403,8 +382,8 @@ function Commande(props) {
             if (duree.remise) {
                 let remis = ht * duree.remise / 100;
                 let netHt = ht - remis;
-                if(discount && discount>0){
-                    netHt = (ht - remis)-discount;
+                if (discount && discount > 0) {
+                    netHt = (ht - remis) - discount;
                 }
                 let tva = netHt * 0.2;
                 setRemise(remis)
@@ -414,8 +393,8 @@ function Commande(props) {
 
             } else {
                 let netHt = ht;
-                if(discount && discount>0){
-                    netHt = ht-discount;
+                if (discount && discount > 0) {
+                    netHt = ht - discount;
                 }
                 let tva = netHt * 0.2;
                 setTva(tva)
@@ -431,44 +410,32 @@ function Commande(props) {
             if (duree.remise) {
                 let remis = ht * duree.remise / 100;
                 let netHt = ht - remis;
-                if(discount && discount>0){
-                    netHt = (ht - remis)-discount;
+                if (discount && discount > 0) {
+                    netHt = (ht - remis) - discount;
                 }
                 let tva = netHt * 0.2;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
-                setTva(tva)
-                setPrixTTC(netHt + tva)
+                //setTva(tva)
+                //setPrixTTC(netHt + tva)
+                setPrixTTC(netHt)
 
             } else {
                 let netHt = ht;
-                if(discount && discount>0){
-                    netHt = ht-discount;
+                if (discount && discount > 0) {
+                    netHt = ht - discount;
                 }
                 let tva = netHt * 0.2;
-                setTva(tva)
+                //setTva(tva)
                 setPrixhtNet(netHt)
-                setPrixTTC(netHt + tva)
+                //setPrixTTC(netHt + tva)
+                setPrixTTC(netHt)
             }
 
         }
     }
 
-    function handleChipChange(value, name) {
-
-
-        if (value.length > offre.nbActivite) {
-            return;
-        }
-        if (!_.some(value, 'value')) {
-            setSousSecteurs('');
-        }
-        else {
-
-            setSousSecteurs(value);
-        }
-    }
 
     function handleClickOpen() {
         setOpen(true);
@@ -486,6 +453,31 @@ function Commande(props) {
     }
 
 
+    function handleChipChange(value, name) {
+
+        if (name === 'activites') {
+            if (sousSecteurs.length === offre.nbActivite) {
+                return;
+            }
+            if (!_.find(sousSecteurs, ['label', value.label])) {
+                var v = value;
+                v.label = secteur1.label + ': ' + v.label;
+                setSousSecteurs([value, ...sousSecteurs])
+            }
+
+        }
+        else {
+            if (value.value) {
+                setSecteur1(value);
+                dispatch(Actions.getSousSecteurs(value.value));
+            }
+        }
+
+    }
+
+    function handleDelete(value) {
+        setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value == value; }))
+    }
 
     return (
         <FusePageCarded
@@ -594,6 +586,7 @@ function Commande(props) {
                         classes={{ root: "w-full h-64" }}
                     >
                         <Tab className="h-64 normal-case" label="Détail de la commande" />
+                        <Tab className="h-64 normal-case" label="Secteurs d'activités" />
                         <Tab className="h-64 normal-case" label="Info. de la société" />
 
 
@@ -604,707 +597,757 @@ function Commande(props) {
                 !commande.loading ?
 
                     form && (
-                        <div className="p-10  sm:p-24 max-w-2xl">
-                            {tabValue === 0 && (
-                                <Formsy
-                                    className="flex flex-col "
-                                >
-                                    <Grid container spacing={3} className="">
-                                        <Grid item xs={12} sm={6}>
-                                            <Typography className="mb-16" variant="h6">1- Offres & Activités</Typography>
+                        <Formsy
+                            className="flex flex-col "
+                        >
+                            <div className="p-10  sm:p-24 max-w-2xl">
+                                {tabValue === 0 && (
+                                    <>
+                                        <Grid container spacing={3} className="">
+                                            <Grid item xs={12} sm={6}>
+                                                <Typography className="mb-16" variant="h6">1- Offres & Activités</Typography>
 
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <Typography className="mb-16" variant="h6">Récapitulatif de votre commande</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <Typography className="mb-16" variant="h6">Récapitulatif de votre commande</Typography>
 
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                    <Divider />
-                                    <Grid container spacing={3} className="mt-16 mb-16">
-                                        <Grid item xs={12} sm={6}>
-                                            {
-                                                commande.offres && offre ?
-                                                    commande.offres.map((item, index) => (
-                                                        <Grid container key={index} spacing={3} >
-                                                            <Grid item xs={6} sm={6}>
-                                                                <strong className="p-1" >
-                                                                    {item.name}
-                                                                </strong> <br />
-                                                                <span className="p-1" >
-                                                                    {item.description}
-                                                                </span>
+                                        <Divider />
+                                        <Grid container spacing={3} className="mt-16 mb-16">
+                                            <Grid item xs={12} sm={6}>
+                                                {
+                                                    commande.offres && offre ?
+                                                        commande.offres.map((item, index) => (
+                                                            <Grid container key={index} spacing={3} >
+                                                                <Grid item xs={6} sm={6}>
+                                                                    <strong className="p-1" >
+                                                                        {item.name}
+                                                                    </strong> <br />
+                                                                    <span className="p-1" >
+                                                                        {item.description}
+                                                                    </span>
+                                                                </Grid>
+                                                                <Grid item xs={6} sm={6}>
+                                                                    <FormGroup row>
+                                                                        <FormControlLabel
+                                                                            control={
+                                                                                <Switch
+                                                                                    checked={offre.id === item.id}
+                                                                                    onChange={() => {
+                                                                                        handleChangeOffre(item);
+                                                                                    }}
+                                                                                    value={item['@id']}
+                                                                                />
+                                                                            }
+                                                                            label={
+                                                                                commande.data.fournisseur.currency.name === 'DHS' ?
+                                                                                    parseFloat(item.prixMad).toLocaleString(
+                                                                                        'fr', // leave undefined to use the browser's locale,
+                                                                                        // or use a string like 'en-US' to override it.
+                                                                                        { minimumFractionDigits: 2 }
+                                                                                    ) + ' DHS HT / mois' :
+                                                                                    parseFloat(item.prixEur).toLocaleString(
+                                                                                        'fr', // leave undefined to use the browser's locale,
+                                                                                        // or use a string like 'en-US' to override it.
+                                                                                        { minimumFractionDigits: 2 }
+                                                                                    ) + ' € HT / mois'
+                                                                            }
+                                                                        />
+                                                                    </FormGroup>
+                                                                </Grid>
+
                                                             </Grid>
-                                                            <Grid item xs={6} sm={6}>
-                                                                <FormGroup row>
-                                                                    <FormControlLabel
-                                                                        control={
-                                                                            <Switch
-                                                                                checked={offre.id === item.id}
-                                                                                onChange={() => {
-                                                                                    handleChangeOffre(item);
-                                                                                }}
-                                                                                value={item['@id']}
-                                                                            />
-                                                                        }
-                                                                        label={
+
+                                                        ))
+
+                                                        :
+                                                        <ContentLoader
+                                                            height={160}
+                                                            width={400}
+                                                            speed={2}
+                                                            primaryColor="#f3f3f3"
+                                                            secondaryColor="#ecebeb"
+                                                        >
+                                                            <circle cx="10" cy="20" r="8" />
+                                                            <rect x="25" y="15" rx="5" ry="5" width="220" height="10" />
+                                                            <circle cx="10" cy="50" r="8" />
+                                                            <rect x="25" y="45" rx="5" ry="5" width="220" height="10" />
+                                                            <circle cx="10" cy="80" r="8" />
+                                                            <rect x="25" y="75" rx="5" ry="5" width="220" height="10" />
+                                                        </ContentLoader>
+                                                }
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                {
+                                                    commande.offres && offre && duree ?
+                                                        <Table className="w-full -striped">
+                                                            <TableHead className="bg-gray-200">
+                                                                <TableRow>
+                                                                    <TableCell
+
+                                                                        className="font-bold  text-black"
+                                                                    >
+                                                                        Offre
+                                                        </TableCell>
+                                                                    <TableCell
+                                                                        className="font-bold text-black text-right"
+                                                                    >
+                                                                        Total HT
+                                                        </TableCell>
+
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                <TableRow >
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate text-11"
+                                                                    >
+                                                                        <strong>{offre ? offre.name : ''}</strong>
+                                                                        <br />
+                                                                        {
+
                                                                             commande.data.fournisseur.currency.name === 'DHS' ?
-                                                                                parseFloat(item.prixMad).toLocaleString(
+                                                                                parseFloat(offre.prixMad).toLocaleString(
                                                                                     'fr', // leave undefined to use the browser's locale,
                                                                                     // or use a string like 'en-US' to override it.
                                                                                     { minimumFractionDigits: 2 }
-                                                                                ) + ' DHS HT / mois' :
-                                                                                parseFloat(item.prixEur).toLocaleString(
+                                                                                ) :
+                                                                                parseFloat(offre.prixEur).toLocaleString(
                                                                                     'fr', // leave undefined to use the browser's locale,
                                                                                     // or use a string like 'en-US' to override it.
                                                                                     { minimumFractionDigits: 2 }
-                                                                                ) + ' € HT / mois'
+                                                                                )
                                                                         }
-                                                                    />
-                                                                </FormGroup>
-                                                            </Grid>
-
-                                                        </Grid>
-
-                                                    ))
-
-                                                    :
-                                                    <ContentLoader
-                                                        height={160}
-                                                        width={400}
-                                                        speed={2}
-                                                        primaryColor="#f3f3f3"
-                                                        secondaryColor="#ecebeb"
-                                                    >
-                                                        <circle cx="10" cy="20" r="8" />
-                                                        <rect x="25" y="15" rx="5" ry="5" width="220" height="10" />
-                                                        <circle cx="10" cy="50" r="8" />
-                                                        <rect x="25" y="45" rx="5" ry="5" width="220" height="10" />
-                                                        <circle cx="10" cy="80" r="8" />
-                                                        <rect x="25" y="75" rx="5" ry="5" width="220" height="10" />
-                                                    </ContentLoader>
-                                            }
-                                            <Divider className="mt-8" />
-                                            {
-                                                commande.sousSecteurs ?
-                                                    <>
-                                                        <SelectReactFormsyS_S
-                                                            className="mt-16 z-9999"
-                                                            id="sousSecteurs"
-                                                            name="sousSecteurs"
-                                                            value={
-                                                                sousSecteurs
-                                                            }
-                                                            onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                                            placeholder={"Sélectionner vos activités"}
-                                                            textFieldProps={{
-                                                                label: 'Activités',
-                                                                InputLabelProps: {
-                                                                    shrink: true
-                                                                },
-                                                                variant: 'outlined'
-                                                            }}
-                                                            options={commande.sousSecteurs}
-                                                            fullWidth
-                                                            isMulti
-                                                            required
-                                                        />
-
-                                                    </>
-                                                    :
-                                                    <ContentLoader
-                                                        height={70}
-                                                        width={400}
-                                                        speed={2}
-                                                        primaryColor="#f3f3f3"
-                                                        secondaryColor="#ecebeb"
-                                                    >
-                                                        <rect x="1" y="13" rx="5" ry="5" width="220" height="24" />
-                                                    </ContentLoader>
-                                            }
-
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            {
-                                                commande.offres && offre && duree ?
-                                                    <Table className="w-full -striped">
-                                                        <TableHead className="bg-gray-200">
-                                                            <TableRow>
-                                                                <TableCell
-
-                                                                    className="font-bold  text-black"
-                                                                >
-                                                                    Offre
-                                                        </TableCell>
-                                                                <TableCell
-                                                                    className="font-bold text-black text-right"
-                                                                >
-                                                                    Total HT
-                                                        </TableCell>
-
-                                                            </TableRow>
-                                                        </TableHead>
-                                                        <TableBody>
-                                                            <TableRow >
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="truncate text-11"
-                                                                >
-                                                                    <strong>{offre ? offre.name : ''}</strong>
-                                                                    <br />
-                                                                    {
-
-                                                                        commande.data.fournisseur.currency.name === 'DHS' ?
-                                                                            parseFloat(offre.prixMad).toLocaleString(
-                                                                                'fr', // leave undefined to use the browser's locale,
-                                                                                // or use a string like 'en-US' to override it.
-                                                                                { minimumFractionDigits: 2 }
-                                                                            ) :
-                                                                            parseFloat(offre.prixEur).toLocaleString(
+                                                                        * {duree.name + ' mois'}
+                                                                    </TableCell>
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate text-11 text-right"
+                                                                    >
+                                                                        {
+                                                                            parseFloat(prixht).toLocaleString(
                                                                                 'fr', // leave undefined to use the browser's locale,
                                                                                 // or use a string like 'en-US' to override it.
                                                                                 { minimumFractionDigits: 2 }
                                                                             )
-                                                                    }
-                                                                    * {duree.name + ' mois'}
-                                                                </TableCell>
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="truncate text-11 text-right"
-                                                                >
-                                                                    {
-                                                                        parseFloat(prixht).toLocaleString(
-                                                                            'fr', // leave undefined to use the browser's locale,
-                                                                            // or use a string like 'en-US' to override it.
-                                                                            { minimumFractionDigits: 2 }
-                                                                        )
-                                                                    }
-                                                                </TableCell>
-                                                            </TableRow>
-                                                            <TableRow className="bg-gray-200" >
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="truncate text-11 text-right"
-                                                                >
-                                                                    Total HT
-                                                        </TableCell>
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="truncate text-11 text-right"
-                                                                >
-                                                                    {
-                                                                        parseFloat(prixht).toLocaleString(
-                                                                            'fr', // leave undefined to use the browser's locale,
-                                                                            // or use a string like 'en-US' to override it.
-                                                                            { minimumFractionDigits: 2 }
-                                                                        )
-                                                                    }
-                                                                </TableCell>
-                                                            </TableRow>
-                                                            {
-                                                                duree.remise ?
-                                                                    <TableRow className="" >
-                                                                        <TableCell
-                                                                            component="th"
-                                                                            scope="row"
-                                                                            className="truncate text-11 text-right"
-                                                                        >
-                                                                            Remise ({duree.remise}%)
+                                                                        }
                                                                     </TableCell>
-                                                                        <TableCell
-                                                                            component="th"
-                                                                            scope="row"
-                                                                            className="truncate text-11 text-right"
-                                                                        >
-                                                                            {
-                                                                                parseFloat(remise).toLocaleString(
-                                                                                    'fr', // leave undefined to use the browser's locale,
-                                                                                    // or use a string like 'en-US' to override it.
-                                                                                    { minimumFractionDigits: 2 }
-                                                                                )
-                                                                            }
+                                                                </TableRow>
+                                                                <TableRow className="bg-gray-200" >
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate text-11 text-right"
+                                                                    >
+                                                                        Total HT
+                                                        </TableCell>
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate text-11 text-right"
+                                                                    >
+                                                                        {
+                                                                            parseFloat(prixht).toLocaleString(
+                                                                                'fr', // leave undefined to use the browser's locale,
+                                                                                // or use a string like 'en-US' to override it.
+                                                                                { minimumFractionDigits: 2 }
+                                                                            )
+                                                                        }
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                {
+                                                                    duree.remise ?
+                                                                        <TableRow className="" >
+                                                                            <TableCell
+                                                                                component="th"
+                                                                                scope="row"
+                                                                                className="truncate text-11 text-right"
+                                                                            >
+                                                                                Remise ({duree.remise}%)
+                                                                    </TableCell>
+                                                                            <TableCell
+                                                                                component="th"
+                                                                                scope="row"
+                                                                                className="truncate text-11 text-right"
+                                                                            >
+                                                                                {
+                                                                                    parseFloat(remise).toLocaleString(
+                                                                                        'fr', // leave undefined to use the browser's locale,
+                                                                                        // or use a string like 'en-US' to override it.
+                                                                                        { minimumFractionDigits: 2 }
+                                                                                    )
+                                                                                }
 
-                                                                        </TableCell>
-                                                                    </TableRow>
-                                                                    :
-                                                                    null
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                        :
+                                                                        null
 
-                                                            }
-                                                            <TableRow className="" >
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="text-11 text-right"
-                                                                >
-                                                                    Remise
+                                                                }
+                                                                <TableRow className="" >
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="text-11 text-right"
+                                                                    >
+                                                                        Remise
                                                             </TableCell>
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="truncate text-11 text-right"
-                                                                >
-                                                                    <TextFieldFormsy
-                                                                        type="number"
-                                                                        step="any"
-                                                                        name="discount"
-                                                                        id="discount"
-                                                                        onChange={(ev) => { handleChangeDiscount(ev.target.value) }}
-                                                                        value={discount}
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate text-11 text-right"
+                                                                    >
+                                                                        <TextFieldFormsy
+                                                                            type="number"
+                                                                            step="any"
+                                                                            name="discount"
+                                                                            id="discount"
+                                                                            onChange={(ev) => { handleChangeDiscount(ev.target.value) }}
+                                                                            value={discount}
 
-                                                                    />
-                                                                </TableCell>
-                                                            </TableRow>
-                                                            {
-                                                                prixhtNet > 0 && prixhtNet!==prixht?
-                                                                    <TableRow className="bg-gray-200" >
-                                                                        <TableCell
-                                                                            component="th"
-                                                                            scope="row"
-                                                                            className="truncate text-11 text-right"
-                                                                        >
-                                                                            Montant NET HT
+                                                                        />
                                                                     </TableCell>
-                                                                        <TableCell
-                                                                            component="th"
-                                                                            scope="row"
-                                                                            className="truncate text-11 text-right"
-                                                                        >
-                                                                            {
-                                                                                parseFloat(prixhtNet).toLocaleString(
-                                                                                    'fr', // leave undefined to use the browser's locale,
-                                                                                    // or use a string like 'en-US' to override it.
-                                                                                    { minimumFractionDigits: 2 }
-                                                                                )
-                                                                            }
+                                                                </TableRow>
+                                                                {
+                                                                    prixhtNet > 0 && prixhtNet !== prixht ?
+                                                                        <TableRow className="bg-gray-200" >
+                                                                            <TableCell
+                                                                                component="th"
+                                                                                scope="row"
+                                                                                className="truncate text-11 text-right"
+                                                                            >
+                                                                                Montant NET HT
+                                                                    </TableCell>
+                                                                            <TableCell
+                                                                                component="th"
+                                                                                scope="row"
+                                                                                className="truncate text-11 text-right"
+                                                                            >
+                                                                                {
+                                                                                    parseFloat(prixhtNet).toLocaleString(
+                                                                                        'fr', // leave undefined to use the browser's locale,
+                                                                                        // or use a string like 'en-US' to override it.
+                                                                                        { minimumFractionDigits: 2 }
+                                                                                    )
+                                                                                }
 
-                                                                        </TableCell>
-                                                                    </TableRow>
-                                                                    :
-                                                                    null
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                        :
+                                                                        null
 
-                                                            }
-                                                            <TableRow className="" >
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="truncate text-11 text-right"
-                                                                >
-                                                                    TVA (20%)
+                                                                }
+                                                                <TableRow className="" >
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate text-11 text-right"
+                                                                    >
+                                                                        TVA (20%)
                                                         </TableCell>
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="truncate text-11 text-right"
-                                                                >
-                                                                    {
-                                                                        parseFloat(tva).toLocaleString(
-                                                                            'fr', // leave undefined to use the browser's locale,
-                                                                            // or use a string like 'en-US' to override it.
-                                                                            { minimumFractionDigits: 2 }
-                                                                        )
-                                                                    }
-                                                                </TableCell>
-                                                            </TableRow>
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate text-11 text-right"
+                                                                    >
+                                                                        {
+                                                                            parseFloat(tva).toLocaleString(
+                                                                                'fr', // leave undefined to use the browser's locale,
+                                                                                // or use a string like 'en-US' to override it.
+                                                                                { minimumFractionDigits: 2 }
+                                                                            )
+                                                                        }
+                                                                    </TableCell>
+                                                                </TableRow>
 
 
-                                                            <TableRow className="bg-gray-200" >
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="truncate font-bold text-11 text-right"
-                                                                >
-                                                                    Montant TTC
+                                                                <TableRow className="bg-gray-200" >
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate font-bold text-11 text-right"
+                                                                    >
+                                                                        Montant TTC
                                                         </TableCell>
-                                                                <TableCell
-                                                                    component="th"
-                                                                    scope="row"
-                                                                    className="truncate font-bold text-13 text-right"
-                                                                >
-                                                                    {
-                                                                        parseFloat(prixTTC).toLocaleString(
-                                                                            'fr', // leave undefined to use the browser's locale,
-                                                                            // or use a string like 'en-US' to override it.
-                                                                            { minimumFractionDigits: 2 }
-                                                                        )
-                                                                    }
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        </TableBody>
+                                                                    <TableCell
+                                                                        component="th"
+                                                                        scope="row"
+                                                                        className="truncate font-bold text-13 text-right"
+                                                                    >
+                                                                        {
+                                                                            parseFloat(prixTTC).toLocaleString(
+                                                                                'fr', // leave undefined to use the browser's locale,
+                                                                                // or use a string like 'en-US' to override it.
+                                                                                { minimumFractionDigits: 2 }
+                                                                            )
+                                                                        }
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            </TableBody>
 
-                                                    </Table>
-                                                    :
-                                                    <ContentLoader
-                                                        height={160}
-                                                        width={400}
-                                                        speed={2}
-                                                        primaryColor="#f3f3f3"
-                                                        secondaryColor="#ecebeb"
-                                                    >
-                                                        <circle cx="10" cy="20" r="8" />
-                                                        <rect x="25" y="15" rx="5" ry="5" width="220" height="10" />
-                                                        <circle cx="10" cy="50" r="8" />
-                                                        <rect x="25" y="45" rx="5" ry="5" width="220" height="10" />
-                                                        <circle cx="10" cy="80" r="8" />
-                                                        <rect x="25" y="75" rx="5" ry="5" width="220" height="10" />
-                                                    </ContentLoader>
-                                            }
+                                                        </Table>
+                                                        :
+                                                        <ContentLoader
+                                                            height={160}
+                                                            width={400}
+                                                            speed={2}
+                                                            primaryColor="#f3f3f3"
+                                                            secondaryColor="#ecebeb"
+                                                        >
+                                                            <circle cx="10" cy="20" r="8" />
+                                                            <rect x="25" y="15" rx="5" ry="5" width="220" height="10" />
+                                                            <circle cx="10" cy="50" r="8" />
+                                                            <rect x="25" y="45" rx="5" ry="5" width="220" height="10" />
+                                                            <circle cx="10" cy="80" r="8" />
+                                                            <rect x="25" y="75" rx="5" ry="5" width="220" height="10" />
+                                                        </ContentLoader>
+                                                }
 
+
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={3} className="">
+                                            <Grid item xs={12} sm={6}>
+                                                <Typography className="mb-16" variant="h6">2- Mode de paiement </Typography>
+
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <Typography className="mb-16" variant="h6">3- Durée de votre abonnement</Typography>
+
+                                            </Grid>
+                                        </Grid>
+
+                                        <Divider />
+                                        <Grid container spacing={3} className="mt-6 mb-16">
+                                            <Grid item xs={12} sm={6}>
+                                                {
+                                                    commande.paiements ?
+                                                        commande.paiements.map((item, index) => (
+                                                            <FormControlLabel onChange={() => setMode(item['@id'])} key={index} value={item['@id']} checked={mode === item['@id']} control={<Radio />} label={item.name} />
+                                                        ))
+                                                        :
+                                                        <ContentLoader
+                                                            height={70}
+                                                            width={400}
+                                                            speed={2}
+                                                            primaryColor="#f3f3f3"
+                                                            secondaryColor="#ecebeb"
+                                                        >
+                                                            <circle cx="15" cy="17" r="6" />
+                                                            <rect x="25" y="11" rx="5" ry="5" width="100" height="12" />
+                                                            <circle cx="145" cy="17" r="6" />
+                                                            <rect x="155" y="11" rx="5" ry="5" width="100" height="12" />
+                                                        </ContentLoader>
+                                                }
+
+
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                {
+                                                    commande.durees && duree ?
+                                                        commande.durees.map((item, index) => (
+                                                            <div className="inline" key={index} >
+                                                                <FormControlLabel onChange={() => handleChangeDuree(item)}
+                                                                    value={item['@id']}
+                                                                    checked={duree.id === item.id}
+                                                                    control={<Radio />}
+                                                                    label={item.name + ' mois'} />
+
+                                                                {
+                                                                    item.remise ?
+                                                                        <span className="text-12 text-red">(Soit {item.remise}% de remise )</span>
+                                                                        : ''
+                                                                }
+
+                                                            </div >
+                                                        ))
+                                                        :
+                                                        <ContentLoader
+                                                            height={70}
+                                                            width={400}
+                                                            speed={2}
+                                                            primaryColor="#f3f3f3"
+                                                            secondaryColor="#ecebeb"
+                                                        >
+                                                            <circle cx="15" cy="17" r="6" />
+                                                            <rect x="25" y="11" rx="5" ry="5" width="100" height="12" />
+                                                            <circle cx="145" cy="17" r="6" />
+                                                            <rect x="155" y="11" rx="5" ry="5" width="100" height="12" />
+                                                        </ContentLoader>
+                                                }
+                                            </Grid>
+                                        </Grid>
+                                    </>
+
+                                )}
+                                {tabValue === 1 && (
+                                    <>
+                                        <Grid container spacing={3} className="">
+                                            <Grid item xs={12} >
+                                                <Typography className="mb-16" variant="h6">Secteurs & Activités</Typography>
+
+                                            </Grid>
 
                                         </Grid>
-                                    </Grid>
-                                    <Grid container spacing={3} className="">
-                                        <Grid item xs={12} sm={6}>
-                                            <Typography className="mb-16" variant="h6">2- Mode de paiement </Typography>
+                                        <Divider />
+                                        <Grid container spacing={3} className="mt-16 mb-16">
+                                            <Grid item xs={12} sm={6}>
+                                                <SelectReactFormsy
+                                                    id="secteurs"
+                                                    name="secteurs"
+                                                    value={secteur1}
+                                                    placeholder="Selectionner.. "
+                                                    textFieldProps={{
+                                                        label: 'Secteurs',
+                                                        InputLabelProps: {
+                                                            shrink: true
+                                                        },
+                                                        variant: 'outlined'
+                                                    }}
+
+                                                    className="mb-16"
+                                                    options={commande.secteurs}
+                                                    isLoading={commande.loadingSecteurs}
+                                                    onChange={(value) => handleChipChange(value, 'secteurs')}
+                                                    required
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <SelectReactFormsy
+                                                    id="activites"
+                                                    name="activites"
+                                                    value=""
+                                                    placeholder="Selectionner.. "
+                                                    textFieldProps={{
+                                                        label: 'Activités',
+                                                        InputLabelProps: {
+                                                            shrink: true
+                                                        },
+                                                        variant: 'outlined'
+                                                    }}
+
+                                                    className="mb-16"
+                                                    options={commande.sousSecteurs}
+                                                    isLoading={commande.loadingSS}
+                                                    onChange={(value) => handleChipChange(value, 'activites')}
+                                                    required
+                                                />
+                                                <Typography variant="caption">
+                                                    {offre && (offre.nbActivite > sousSecteurs.length ?
+                                                        `Vous pouvez encore ajouter ${offre.nbActivite - sousSecteurs.length} activités`
+                                                        : `Vous avez atteint la limite de ${offre.nbActivite} activités`)}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={3} className="">
+                                            <Grid item xs={12} sm={6}>
+                                                <Typography className="mb-16" variant="h6">Activité(s) choisie(s)</Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Divider />
+                                        <Grid container spacing={3} className="mt-4">
+                                            <Grid item xs={12} sm={12}>
+                                                <div className={clsx(classes.chips)}>
+                                                    {
+                                                        sousSecteurs && sousSecteurs.length > 0 &&
+                                                        _.sortBy(sousSecteurs, [function (o) { return o.label; }]).map((item, index) => (
+                                                            <Chip
+                                                                key={index}
+                                                                label={item.label}
+                                                                color="secondary"
+                                                                onDelete={() => handleDelete(item.value)}
+                                                                className="mt-8 mr-8"
+                                                            />
+                                                        ))
+                                                    }
+                                                </div>
+                                            </Grid>
 
                                         </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <Typography className="mb-16" variant="h6">3- Durée de votre abonnement</Typography>
+                                    </>
+                                )
+                                }
+                                {tabValue === 2 && (
+                                    <Formsy
 
-                                        </Grid>
-                                    </Grid>
+                                        className="flex flex-col">
 
-                                    <Divider />
-                                    <Grid container spacing={3} className="mt-6 mb-16">
-                                        <Grid item xs={12} sm={6}>
-                                            {
-                                                commande.paiements ?
-                                                    commande.paiements.map((item, index) => (
-                                                        <FormControlLabel onChange={() => setMode(item['@id'])} key={index} value={item['@id']} checked={mode === item['@id']} control={<Radio />} label={item.name} />
-                                                    ))
-                                                    :
-                                                    <ContentLoader
-                                                        height={70}
-                                                        width={400}
-                                                        speed={2}
-                                                        primaryColor="#f3f3f3"
-                                                        secondaryColor="#ecebeb"
-                                                    >
-                                                        <circle cx="15" cy="17" r="6" />
-                                                        <rect x="25" y="11" rx="5" ry="5" width="100" height="12" />
-                                                        <circle cx="145" cy="17" r="6" />
-                                                        <rect x="155" y="11" rx="5" ry="5" width="100" height="12" />
-                                                    </ContentLoader>
-                                            }
+                                        <Grid container spacing={3} className="mb-5">
 
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className=""
+                                                        type="text"
+                                                        name="fullname"
+                                                        value={commande.data.fournisseur.civilite + ' ' + commande.data.fournisseur.firstName + ' ' + commande.data.fournisseur.lastName}
+                                                        label="Nom complet"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                        fullWidth
 
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            {
-                                                commande.durees && duree ?
-                                                    commande.durees.map((item, index) => (
-                                                        <div className="inline" key={index} >
-                                                            <FormControlLabel onChange={() => handleChangeDuree(item)}
-                                                                value={item['@id']}
-                                                                checked={duree.id === item.id}
-                                                                control={<Radio />}
-                                                                label={item.name + ' mois'} />
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className=""
+                                                        name="email"
+                                                        value={commande.data.fournisseur.email}
+                                                        label="Email"
+                                                        fullWidth
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
 
-                                                            {
-                                                                item.remise ?
-                                                                    <span className="text-12 text-red">(Soit {item.remise}% de remise )</span>
-                                                                    : ''
-                                                            }
+                                                        }}
 
-                                                        </div >
-                                                    ))
-                                                    :
-                                                    <ContentLoader
-                                                        height={70}
-                                                        width={400}
-                                                        speed={2}
-                                                        primaryColor="#f3f3f3"
-                                                        secondaryColor="#ecebeb"
-                                                    >
-                                                        <circle cx="15" cy="17" r="6" />
-                                                        <rect x="25" y="11" rx="5" ry="5" width="100" height="12" />
-                                                        <circle cx="145" cy="17" r="6" />
-                                                        <rect x="155" y="11" rx="5" ry="5" width="100" height="12" />
-                                                    </ContentLoader>
-                                            }
-                                        </Grid>
-                                    </Grid>
-
-                                </Formsy>
-                            )}
-                            {tabValue === 1 && (
-                                <Formsy
-
-                                    className="flex flex-col">
-
-                                    <Grid container spacing={3} className="mb-5">
-
-                                        <Grid item xs={12} sm={4}>
-                                            <div className="flex">
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
                                                 <TextFieldFormsy
                                                     className=""
                                                     type="text"
-                                                    name="fullname"
-                                                    value={commande.data.fournisseur.civilite + ' ' + commande.data.fournisseur.firstName + ' ' + commande.data.fournisseur.lastName}
-                                                    label="Nom complet"
-                                                    InputProps={{
-                                                        readOnly: true,
-                                                    }}
-                                                    fullWidth
-
-                                                />
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <div className="flex">
-                                                <TextFieldFormsy
-                                                    className=""
-                                                    name="email"
-                                                    value={commande.data.fournisseur.email}
-                                                    label="Email"
-                                                    fullWidth
-                                                    InputProps={{
-                                                        readOnly: true,
-                                                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
-
-                                                    }}
-
-                                                />
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <TextFieldFormsy
-                                                className=""
-                                                type="text"
-                                                name="phonep"
-                                                id="phonep"
-                                                value={commande.data.fournisseur.phone}
-                                                label="Téléphone"
-                                                InputProps={{
-                                                    readOnly: true,
-                                                    endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
-                                                }}
-                                                fullWidth
-                                            />
-
-                                        </Grid>
-
-                                    </Grid>
-                                    <Divider />
-                                    <Grid container spacing={3} className="mb-5">
-
-                                        <Grid item xs={12} sm={8}>
-                                            <div className="flex">
-
-                                                <TextFieldFormsy
-                                                    className="mt-20"
-                                                    label="Raison sociale"
-                                                    id="societe"
-                                                    name="societe"
-                                                    value={commande.data.fournisseur.societe}
-                                                    fullWidth
-                                                    InputProps={{
-                                                        readOnly: true,
-                                                    }}
-                                                />
-                                            </div>
-
-
-                                        </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <div className="flex">
-                                                <TextFieldFormsy
-                                                    className="mt-20"
-                                                    name="fix"
-                                                    value={commande.data.fournisseur.fix}
-                                                    label="Fix"
+                                                    name="phonep"
+                                                    id="phonep"
+                                                    value={commande.data.fournisseur.phone}
+                                                    label="Téléphone"
                                                     InputProps={{
                                                         readOnly: true,
                                                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
                                                     }}
                                                     fullWidth
                                                 />
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12} sm={8}>
 
-
-                                            <TextFieldFormsy
-                                                id="secteur"
-                                                className=""
-                                                name="secteur"
-                                                label="Secteur"
-                                                value={commande.data.fournisseur.sousSecteurs ? _.join(_.map(commande.data.fournisseur.sousSecteurs, 'name'), ', ') : ''}
-                                                fullWidth
-                                                multiline
-                                                rows="3"
-                                                InputProps={{
-                                                    readOnly: true,
-                                                }}
-                                            />
-
+                                            </Grid>
 
                                         </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <div className="flex">
+                                        <Divider />
+                                        <Grid container spacing={3} className="mb-5">
+
+                                            <Grid item xs={12} sm={8}>
+                                                <div className="flex">
+
+                                                    <TextFieldFormsy
+                                                        className="mt-20"
+                                                        label="Raison sociale"
+                                                        id="societe"
+                                                        name="societe"
+                                                        value={commande.data.fournisseur.societe}
+                                                        fullWidth
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                    />
+                                                </div>
+
+
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className="mt-20"
+                                                        name="fix"
+                                                        value={commande.data.fournisseur.fix}
+                                                        label="Fix"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
+                                                        }}
+                                                        fullWidth
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={8}>
+
+
                                                 <TextFieldFormsy
-                                                    id="website"
+                                                    id="secteur"
                                                     className=""
-                                                    type="text"
-                                                    name="website"
-                                                    value={commande.data.fournisseur.website}
-                                                    label="Site Web"
+                                                    name="secteur"
+                                                    label="Activité"
+                                                    value={commande.data.fournisseur.categories ? _.join(_.map(commande.data.fournisseur.categories, 'name'), ', ') : ''}
+                                                    fullWidth
+                                                    multiline
+                                                    rows="3"
                                                     InputProps={{
                                                         readOnly: true,
-                                                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">language</Icon></InputAdornment>
                                                     }}
-                                                    fullWidth
                                                 />
-                                            </div>
+
+
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        id="website"
+                                                        className=""
+                                                        type="text"
+                                                        name="website"
+                                                        value={commande.data.fournisseur.website}
+                                                        label="Site Web"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">language</Icon></InputAdornment>
+                                                        }}
+                                                        fullWidth
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={8}>
+                                                <div className="flex">
+                                                    {
+                                                        commande.data.fournisseur.ice ?
+                                                            <TextFieldFormsy
+                                                                className=""
+                                                                type="text"
+                                                                name="ice"
+                                                                id="ice"
+                                                                value={commande.data.fournisseur.ice}
+                                                                label="ICE"
+                                                                fullWidth
+                                                                InputProps={{
+                                                                    readOnly: true,
+                                                                }}
+                                                            />
+                                                            :
+                                                            ''
+                                                    }
+
+                                                </div>
+
+                                            </Grid>
+
+
                                         </Grid>
-                                        <Grid item xs={12} sm={8}>
-                                            <div className="flex">
-                                                {
-                                                    commande.data.fournisseur.ice ?
-                                                        <TextFieldFormsy
-                                                            className=""
-                                                            type="text"
-                                                            name="ice"
-                                                            id="ice"
-                                                            value={commande.data.fournisseur.ice}
-                                                            label="ICE"
-                                                            fullWidth
-                                                            InputProps={{
-                                                                readOnly: true,
-                                                            }}
-                                                        />
-                                                        :
-                                                        ''
-                                                }
-
-                                            </div>
-
-                                        </Grid>
+                                        <Divider />
 
 
-                                    </Grid>
-                                    <Divider />
+                                        <Grid container spacing={3} className="mb-5">
 
+                                            <Grid item xs={12} sm={8}>
+                                                <div className="flex">
 
-                                    <Grid container spacing={3} className="mb-5">
+                                                    <TextFieldFormsy
+                                                        className="mt-20"
+                                                        type="text"
+                                                        name="adresse1"
+                                                        id="adresse1"
+                                                        value={commande.data.fournisseur.adresse1}
+                                                        label="Adresse 1"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">location_on</Icon></InputAdornment>
+                                                        }}
+                                                        fullWidth
 
-                                        <Grid item xs={12} sm={8}>
-                                            <div className="flex">
+                                                    />
+                                                </div>
 
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
                                                 <TextFieldFormsy
                                                     className="mt-20"
                                                     type="text"
-                                                    name="adresse1"
-                                                    id="adresse1"
-                                                    value={commande.data.fournisseur.adresse1}
-                                                    label="Adresse 1"
+                                                    name="pays"
+                                                    id="pays"
+                                                    value={commande.data.fournisseur.pays ? commande.data.fournisseur.pays.name : ''}
+                                                    label="Pays"
                                                     InputProps={{
                                                         readOnly: true,
-                                                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">location_on</Icon></InputAdornment>
                                                     }}
                                                     fullWidth
-
                                                 />
-                                            </div>
 
-                                        </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <TextFieldFormsy
-                                                className="mt-20"
-                                                type="text"
-                                                name="pays"
-                                                id="pays"
-                                                value={commande.data.fournisseur.pays ? commande.data.fournisseur.pays.name : ''}
-                                                label="Pays"
-                                                InputProps={{
-                                                    readOnly: true,
-                                                }}
-                                                fullWidth
-                                            />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className=""
+                                                        type="text"
+                                                        name="adresse2"
+                                                        value={commande.data.fournisseur.adresse2}
+                                                        label="Adresse 2"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">location_on</Icon></InputAdornment>
+                                                        }}
+                                                        fullWidth
 
-                                        </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <div className="flex">
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <div className="flex">
+                                                    <TextFieldFormsy
+                                                        className=""
+                                                        name="codepostal"
+                                                        value={String(commande.data.fournisseur.codepostal)}
+                                                        label="Code Postal"
+                                                        fullWidth
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+
+                                                    />
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={12} sm={4}>
                                                 <TextFieldFormsy
                                                     className=""
                                                     type="text"
-                                                    name="adresse2"
-                                                    value={commande.data.fournisseur.adresse2}
-                                                    label="Adresse 2"
+                                                    name="ville"
+                                                    id="ville"
+                                                    value={commande.data.fournisseur.ville ? commande.data.fournisseur.ville.name : ''}
+                                                    label="Ville"
                                                     InputProps={{
                                                         readOnly: true,
-                                                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">location_on</Icon></InputAdornment>
                                                     }}
                                                     fullWidth
-
                                                 />
-                                            </div>
+
+                                            </Grid>
+
                                         </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <div className="flex">
+                                        <Divider />
+
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12} sm={12}>
+
                                                 <TextFieldFormsy
-                                                    className=""
-                                                    name="codepostal"
-                                                    value={String(commande.data.fournisseur.codepostal)}
-                                                    label="Code Postal"
-                                                    fullWidth
+                                                    className="mb-5 mt-20  w-full"
+                                                    type="text"
+                                                    name="description"
+                                                    value={commande.data.fournisseur.description}
+                                                    label="Présentation"
+                                                    multiline
+                                                    rows="2"
                                                     InputProps={{
                                                         readOnly: true,
                                                     }}
 
                                                 />
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <TextFieldFormsy
-                                                className=""
-                                                type="text"
-                                                name="ville"
-                                                id="ville"
-                                                value={commande.data.fournisseur.ville ? commande.data.fournisseur.ville.name : ''}
-                                                label="Ville"
-                                                InputProps={{
-                                                    readOnly: true,
-                                                }}
-                                                fullWidth
-                                            />
+
+                                            </Grid>
 
                                         </Grid>
 
-                                    </Grid>
-                                    <Divider />
-
-                                    <Grid container spacing={3}>
-                                        <Grid item xs={12} sm={12}>
-
-                                            <TextFieldFormsy
-                                                className="mb-5 mt-20  w-full"
-                                                type="text"
-                                                name="description"
-                                                value={commande.data.fournisseur.description}
-                                                label="Présentation"
-                                                multiline
-                                                rows="2"
-                                                InputProps={{
-                                                    readOnly: true,
-                                                }}
-
-                                            />
-
-                                        </Grid>
-
-                                    </Grid>
 
 
 
+                                    </Formsy>
+                                )}
 
-                                </Formsy>
-                            )}
 
-
-                        </div>
+                            </div>
+                        </Formsy>
                     )
                     : ''
             }

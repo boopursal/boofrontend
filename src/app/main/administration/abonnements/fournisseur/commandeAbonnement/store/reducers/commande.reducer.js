@@ -3,6 +3,8 @@ import * as Actions from '../actions';
 const initialState = {
     data: null,
     offres: null,
+    loadingSecteurs: false,
+    secteurs: null,
     sousSecteurs: null,
     error: null,
     loading: false,
@@ -22,8 +24,41 @@ const commandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: true,
+                }
+            }
+        //Secteurs    
+        case Actions.REQUEST_SECTEURS:
+            {
+                return {
+                    ...state,
+                    loadingSecteurs: true,
+                }
+            }
+        case Actions.GET_SECTEURS:
+            {
+                return {
+                    ...state,
+                    secteurs: action.payload,
+                    loadingSecteurs: false,
+
+                };
+            }
+        //Activités    
+        case Actions.REQUEST_SOUS_SECTEURS:
+            {
+                return {
+                    ...state,
                     loadingSS: true,
                 }
+            }
+        case Actions.GET_SOUS_SECTEURS:
+            {
+                return {
+                    ...state,
+                    sousSecteurs: action.payload,
+                    loadingSS: false,
+
+                };
             }
         case Actions.GET_PAIEMENT:
             {
@@ -67,15 +102,6 @@ const commandeReducer = function (state = initialState, action) {
                     ...state,
                     data: action.payload,
                     loading: false,
-
-                };
-            }
-        case Actions.GET_SOUS_SECTEURS:
-            {
-                return {
-                    ...state,
-                    sousSecteurs: action.payload,
-                    loadingSS: false,
 
                 };
             }

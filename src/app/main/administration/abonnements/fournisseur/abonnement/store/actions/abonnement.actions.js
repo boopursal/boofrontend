@@ -9,6 +9,9 @@ export const GET_ABONNEMENT = '[ABONNEMENT APP] GET ABONNEMENT';
 export const REQUEST_SOUS_SECTEURS = '[ABONNEMENT APP] REQUEST_SOUS_SECTEURS';
 export const GET_SOUS_SECTEURS = '[ABONNEMENT APP] GET SOUS_SECTEURS';
 
+export const REQUEST_SECTEURS = '[ABONNEMENT APP] REQUEST SECTEURS';
+export const GET_SECTEURS = '[ABONNEMENT APP] GET SECTEURS';
+
 export const REQUEST_OFFRES = '[ABONNEMENT APP] REQUEST OFFRES';
 export const GET_OFFRES = '[ABONNEMENT APP] GET OFFRES';
 
@@ -92,19 +95,22 @@ export function getFournisseur(url) {
 
 }
 
-export function saveAbonnement(data,sousSecteurs,offre,mode,duree, remise,paiement) {
-    
-    data.offre =offre['@id'];
-    data.sousSecteurs = _.map(sousSecteurs, function (value, key) {
-        return value.value;
-    });
-    data.mode=mode;
-    data.duree=duree['@id'];
-    data.fournisseur = data.fournisseur.value;
-    data.statut=paiement;
-    data.remise=remise;
+export function saveAbonnement(data, sousSecteurs, offre, mode, duree, remise, paiement) {
 
-    const request = agent.post('/api/abonnements', data);
+
+    var postData = {
+        offre: offre['@id'],
+        sousSecteurs: _.map(sousSecteurs, function (value, key) {
+            return value.value;
+        }),
+        mode: mode,
+        duree: duree['@id'],
+        fournisseur: data.fournisseur.value,
+        commentaire : data.commentaire,
+        statut: paiement,
+        remise: remise ? parseFloat(remise) : 0
+    }
+    const request = agent.post('/api/abonnements', postData);
 
     return (dispatch) => {
         dispatch({
@@ -124,20 +130,23 @@ export function saveAbonnement(data,sousSecteurs,offre,mode,duree, remise,paieme
 
 }
 
-export function updateAbonnement(data,sousSecteurs,offre,mode,duree, remise,paiement) {
-    
-    data.offre =offre['@id'];
-    data.sousSecteurs = _.map(sousSecteurs, function (value, key) {
-        return value.value;
-    });
-    data.mode=mode;
-    data.duree=duree['@id'];
-    data.statut=paiement;
-    data.remise=remise;
+export function updateAbonnement(data, sousSecteurs, offre, mode, duree, remise, paiement) {
 
-    
 
-    const request = agent.put(data['@id'], data);
+    var putData = {
+        ...data,
+        offre: offre['@id'],
+        sousSecteurs: _.map(sousSecteurs, function (value, key) {
+            return value.value;
+        }),
+        mode: mode,
+        duree: duree['@id'],
+        commentaire : data.commentaire,
+        statut: paiement,
+        remise: remise ? parseFloat(remise) : 0
+    }
+
+    const request = agent.put(data['@id'], putData);
 
     return (dispatch) => {
         dispatch({
@@ -146,8 +155,8 @@ export function updateAbonnement(data,sousSecteurs,offre,mode,duree, remise,paie
         return request.then((response) => {
 
             dispatch(showMessage({ message: 'Abonnement modifiée avec succès' }));
-         //   dispatch(Actions.getCountForBadge('commandes-abonnements'));
-          //  dispatch(Actions.getCountForBadge('abonnement-fournisseur'));
+            //   dispatch(Actions.getCountForBadge('commandes-abonnements'));
+            //  dispatch(Actions.getCountForBadge('abonnement-fournisseur'));
             return dispatch({
                 type: SAVE_ABONNEMENT,
                 payload: response.data
@@ -158,9 +167,45 @@ export function updateAbonnement(data,sousSecteurs,offre,mode,duree, remise,paie
 
 }
 
+export function saveRenouvellement(data, sousSecteurs, offre, mode, duree, remise, paiement,type) {
 
-export function getSousSecteurs() {
-    const request = agent.get('/api/sous_secteurs?pagination=false&props[]=id&props[]=name');
+
+    var postData = {
+
+        offre: offre['@id'],
+        sousSecteurs: _.map(sousSecteurs, function (value, key) {
+            return value.value;
+        }),
+        mode: mode,
+        duree: duree['@id'],
+        fournisseur: data.fournisseur.value,
+        statut: paiement,
+        commentaire : data.commentaire,
+        remise: remise ? parseFloat(remise) : 0,
+        type: type == '1' ? true : false
+    }
+    const request = agent.post('/api/abonnements', postData);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SAVE,
+        });
+        return request.then((response) => {
+
+            dispatch(showMessage({ message: 'Abonnement sauvegarder' }));
+
+            return dispatch({
+                type: SAVE_ABONNEMENT,
+                payload: response.data
+            })
+        }
+        );
+    }
+
+}
+
+export function getSousSecteurs(uri) {
+    const request = agent.get(`${uri}/sous_secteurs?pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
         dispatch({
@@ -169,6 +214,24 @@ export function getSousSecteurs() {
         return request.then((response) => {
             dispatch({
                 type: GET_SOUS_SECTEURS,
+                payload: response.data['hydra:member']
+            })
+        });
+
+    }
+
+}
+
+export function getSecteurs() {
+    const request = agent.get('/api/secteurs?pagination=false&props[]=id&props[]=name&order[name]=asc');
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SECTEURS,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_SECTEURS,
                 payload: response.data['hydra:member']
             })
         });
@@ -236,7 +299,7 @@ export function getAbonnement(params) {
 export function newAbonnement() {
     const data = {
         offre: null,
-        commentaire:'',
+        commentaire: '',
         sousSecteurs: []
     };
 

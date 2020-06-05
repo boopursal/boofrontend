@@ -15,7 +15,7 @@ const initialState = {
     },
     jetons: 0,
     requestJeton: false,
-    requestAbonnement: false,
+    loadingAbonnement: false,
     abonnement: null
 };
 
@@ -47,7 +47,7 @@ const user = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    requestAbonnement: true
+                    loadingAbonnement: true
                 };
             }
         case Actions.GET_FOURNISSEUR_ABONNEMENT:
@@ -55,7 +55,7 @@ const user = function (state = initialState, action) {
                 return {
                     ...state,
                     abonnement: action.payload,
-                    requestAbonnement: false
+                    loadingAbonnement: false
                 };
             }
         case Actions.REMOVE_USER_DATA:

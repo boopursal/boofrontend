@@ -167,7 +167,7 @@ function AbonnementsTable(props) {
                         accessor: "expired",
                         filterable: true,
                         Cell: row =>
-                            row.original.expired ? moment(row.original.expired).format('DD/MM/YYYY HH:mm') : ''
+                            row.original.expired && moment(row.original.expired).format('DD/MM/YYYY HH:mm') + ' ( ' + moment(row.original.expired).diff(moment(), 'days') + ' j )'
                         , Filter: ({ filter, onChange }) =>
                             <TextField
                                 onChange={event => onChange(event.target.value)}
@@ -199,20 +199,19 @@ function AbonnementsTable(props) {
                                                 (
                                                     moment(row.original.expired) >= moment()
                                                         ?
-                                                        <Chip className={classes.chip} label="Annulée" />
+                                                        <Chip className={classes.chip} label="Annulé" />
                                                         :
-                                                        <Chip className={classes.chip} label="Expirée" />
+                                                        <Chip className={classes.chip} label="Expiré" />
                                                 )
 
                                         )
-
                                         :
                                         (
                                             moment(row.original.expired) >= moment()
                                                 ?
                                                 <Chip className={classes.chip2} label="En cours" />
                                                 :
-                                                <Chip className={classes.chip} label="Expirée" />
+                                                <Chip className={classes.chip} label="Expiré" />
                                         )
 
                                 }
@@ -228,7 +227,7 @@ function AbonnementsTable(props) {
                                 <option value="">Tous</option>
                                 <option value="0">En attente</option>
                                 <option value="1">En cours</option>
-                                <option value="2">Annulée</option>
+                                <option value="2">Annulé</option>
                                 <option value="3">Expiré</option>
                             </select>
 
@@ -238,19 +237,54 @@ function AbonnementsTable(props) {
                         Header: "",
                         Cell: row => (
                             <div className="flex items-center">
+                                {
+                                   (moment(row.original.expired) >= moment() ||!row.original.expired) &&
+                                    <Tooltip title="Editer" >
+                                        <IconButton className="text-orange text-20"
+                                            onClick={() =>
+                                                props.history.push('/admin/offres/abonnement/' + row.original.id)
+                                            }
+                                        >
+                                            <Icon>edit</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                }
 
-                                <Tooltip title="Editer" >
-                                    <IconButton className="text-orange text-20"
-                                        onClick={() =>
-                                            props.history.push('/admin/offres/abonnement/' + row.original.id)
-                                        }
-                                    >
-                                        <Icon>edit</Icon>
-                                    </IconButton>
-                                </Tooltip>
+                                {
+                                    row.original.statut === true
+                                    &&
+                                    (
+                                        (moment(row.original.expired).diff(moment(), 'month', true) <= 1 && moment(row.original.expired).diff(moment(), 'month', true) > 0)
+                                        &&
+                                        <Tooltip title="Renouveler" >
+                                            <IconButton
+                                                onClick={() => {
+                                                    props.history.push('/admin/offres/renouvellement/' + row.original.id+'/1');
+                                                }} className="text-teal text-20">
+                                                <Icon>autorenew</Icon>
+                                            </IconButton>
+                                        </Tooltip>
+                                    )
 
+                                }
 
+                                {
+                                    row.original.statut === true
+                                    &&
+                                    (
+                                        moment(row.original.expired) < moment() 
+                                        &&
+                                        <Tooltip title="Dupliquer" >
+                                            <IconButton
+                                                onClick={() => {
+                                                    props.history.push('/admin/offres/renouvellement/' + row.original.id+'/2');
+                                                }} className="text-green-700 text-20">
+                                                <Icon>file_copy</Icon>
+                                            </IconButton>
+                                        </Tooltip>
+                                    )
 
+                                }
                             </div>
                         )
                     }

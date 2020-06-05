@@ -7,9 +7,7 @@ function Widget4(props) {
         <Paper className="w-full rounded-8 shadow-none border-1">
             <div className="flex items-center justify-between pr-4 pl-16 pt-4">
                 <Typography className="text-16 font-bold">Produit(s) publié(s)</Typography>
-                <IconButton aria-label="more">
-                    <Icon>more_vert</Icon>
-                </IconButton>
+               
             </div>
             <div className="text-center pt-12 pb-28">
                 <Link to="/produits" className="text-72 leading-none text-green">

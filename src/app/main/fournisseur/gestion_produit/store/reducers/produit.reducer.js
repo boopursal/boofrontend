@@ -9,11 +9,15 @@ const initialState = {
     deleteReqInProgress: false,
     image: null,
     image_deleted: null,
+    secteurs: [],
     sousSecteurs: [],
     categories: [],
     fiche: null,
     ficheReqInProgress: false,
     loadingSuggestion: false,
+    loadingSecteurs: false,
+    loadingSousSecteurs: false,
+    loadingCategories: false,
     successActivite: false,
     errorActivite: false,
     loadingRechercheVideo: false,
@@ -24,7 +28,6 @@ const initialState = {
 const produitReducer = function (state = initialState, action) {
     switch (action.type) {
 
-        case Actions.REQUEST_SECTEUR:
         case Actions.REQUEST_PRODUIT:
         case Actions.REQUEST_SAVE:
             {
@@ -51,11 +54,21 @@ const produitReducer = function (state = initialState, action) {
 
                 }
             }
+        case Actions.REQUEST_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingSecteurs: true,
+                    sousSecteurs: [],
+                    categories: []
+
+                }
+            }
         case Actions.REQUEST_SOUS_SECTEUR:
             {
                 return {
                     ...state,
-                    sousSecteurs: [],
+                    loadingSousSecteurs: true,
                     categories: []
 
                 }
@@ -64,7 +77,7 @@ const produitReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    categories: []
+                    loadingCategories: true,
 
                 }
             }
@@ -136,28 +149,47 @@ const produitReducer = function (state = initialState, action) {
 
                 };
             }
-        case Actions.GET_FOURNISSEUR:
-            {
-                return {
-                    ...state,
-                    sousSecteurs: action.payload.sousSecteurs,
-                };
-            }
-        case Actions.GET_CATEGORIE:
-            {
-                return {
-                    ...state,
-                    categories: action.payload['hydra:member'],
 
-
-                };
-            }
         case Actions.GET_PRODUIT:
             {
                 return {
                     ...state,
                     data: action.payload,
                     loading: false,
+
+                };
+            }
+        case Actions.GET_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    sousSecteurs: action.payload.sousSecteurs,
+                    loadingSousSecteurs: false
+                };
+            }
+        case Actions.GET_SECTEUR:
+            {
+                return {
+                    ...state,
+                    secteurs: action.payload['hydra:member'],
+                    loadingSecteurs: false
+                };
+            }
+        case Actions.GET_SOUS_SECTEUR:
+            {
+                return {
+                    ...state,
+                    sousSecteurs: action.payload['hydra:member'],
+                    loadingSousSecteurs: false
+                };
+            }
+
+        case Actions.GET_CATEGORIE:
+            {
+                return {
+                    ...state,
+                    categories: action.payload['hydra:member'],
+                    loadingCategories: false
 
                 };
             }

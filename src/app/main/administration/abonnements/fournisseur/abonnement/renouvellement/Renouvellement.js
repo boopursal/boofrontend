@@ -107,10 +107,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-function Abonnement(props) {
+function Renouvellement(props) {
 
     const dispatch = useDispatch();
-    const abonnement = useSelector(({ abonnementOffreApp }) => abonnementOffreApp.abonnement);
+    const abonnement = useSelector(({ renouvellementAbonnementApp }) => renouvellementAbonnementApp.abonnement);
     const [sousSecteurs, setSousSecteurs] = useState([]);
     const [fournisseurs, setFournisseurs] = useState([]);
     const [fournisseur, setFournisseur] = useState(null);
@@ -130,12 +130,9 @@ function Abonnement(props) {
     const [prixhtNet, setPrixhtNet] = useState(0);
     const [prixTTC, setPrixTTC] = useState(0);
 
-
-
     // Effect redirection and clean state
     useEffect(() => {
         if (abonnement.success) {
-
             dispatch(Actions.cleanUp())
             props.history.push('/admin/offres/abonnement');
         }
@@ -146,14 +143,7 @@ function Abonnement(props) {
         function updateAbonnementState() {
             const params = props.match.params;
             const { abonnementId } = params;
-            if (abonnementId === 'new') {
-                dispatch(Actions.newAbonnement());
-                dispatch(Actions.getFournisseurs());
-            }
-            else {
-                dispatch(Actions.getAbonnement(abonnementId));
-
-            }
+            dispatch(Actions.getAbonnement(abonnementId));
             dispatch(Actions.getOffres());
             dispatch(Actions.getSecteurs());
             dispatch(Actions.getPaiements());
@@ -275,142 +265,6 @@ function Abonnement(props) {
 
         }
     }, [form, abonnement.data, setForm]);
-
-    useEffect(() => {
-        if (
-            (abonnement.offres && !offre)
-        ) {
-            setOffre(abonnement.offres[0]);
-
-        }
-    }, [offre, abonnement.offres, setOffre]);
-
-    useEffect(() => {
-        if (
-            (abonnement.fournisseur)
-        ) {
-            setFournisseur(abonnement.fournisseur);
-
-            if (abonnement.fournisseur.currency && abonnement.fournisseur.currency.name !== 'DHS') {
-
-                let ht = offre.prixEur * duree.name;
-                setPrixht(ht)
-
-                if (duree.remise) {
-                    let remis = ht * duree.remise / 100;
-                    let netHt = ht - remis;
-                    if (discount && discount > 0) {
-                        netHt = (ht - remis) - discount;
-                    }
-
-                    let tva = netHt * 0.2;
-
-                    setRemise(remis)
-                    setPrixhtNet(netHt)
-                    setTva(0)
-                    //setPrixTTC(netHt + tva)
-                    setPrixTTC(netHt)
-
-                } else {
-
-                    let netHt = ht;
-                    if (discount && discount > 0) {
-                        netHt = ht - discount;
-                    }
-
-                    let tva = netHt * 0.2;
-                    setPrixhtNet(netHt)
-                    setTva(0)
-                    //setPrixTTC(netHt + tva)
-                    setPrixTTC(netHt)
-                }
-
-            }
-            else {
-
-                let ht = offre.prixMad * duree.name;
-                setPrixht(ht)
-
-                if (duree.remise) {
-                    let remis = ht * duree.remise / 100;
-                    let netHt = ht - remis;
-                    if (discount && discount > 0) {
-                        netHt = (ht - remis) - discount;
-                    }
-
-                    let tva = netHt * 0.2;
-                    setRemise(remis)
-                    setPrixhtNet(netHt)
-                    setTva(tva)
-                    setPrixTTC(netHt + tva)
-
-                } else {
-                    let netHt = ht;
-                    if (discount && discount > 0) {
-                        netHt = ht - discount;
-                    }
-                    let tva = netHt * 0.2;
-                    setTva(tva)
-                    setPrixhtNet(netHt)
-                    setPrixTTC(netHt + tva)
-                }
-
-            }
-
-
-        }
-        return () => {
-            dispatch(Actions.cleanUpFrs())
-        }
-
-    }, [fournisseur, abonnement.fournisseur, setFournisseur]);
-
-    useEffect(() => {
-        if (
-            (abonnement.paiements && !mode)
-        ) {
-            setMode(abonnement.paiements[0]['@id']);
-
-        }
-    }, [mode, abonnement.paiements, setMode]);
-
-    useEffect(() => {
-        if (
-            (abonnement.fournisseurs && fournisseurs.length === 0)
-        ) {
-            setFournisseurs(abonnement.fournisseurs);
-
-        }
-    }, [fournisseurs, abonnement.fournisseurs, setFournisseurs]);
-
-    useEffect(() => {
-        if (
-            (abonnement.durees && !duree)
-        ) {
-            setDuree(abonnement.durees[0]);
-            if (offre) {
-                let ht = offre.prixMad * abonnement.durees[0].name;
-                setPrixht(ht)
-
-                if (abonnement.durees[0].remise) {
-                    let remis = ht * abonnement.durees[0].remise / 100;
-                    let netHt = ht - remis;
-                    let tva = netHt * 0.2;
-                    setRemise(remis)
-                    setPrixhtNet(netHt)
-                    setTva(tva)
-                    setPrixTTC(netHt + tva)
-
-                } else {
-                    let tva = ht * 0.2;
-                    setTva(ht * 0.2)
-                    setPrixTTC(ht + tva)
-                }
-
-            }
-
-        }
-    }, [duree, abonnement.durees, setDuree]);
 
 
 
@@ -740,7 +594,6 @@ function Abonnement(props) {
 
     }
 
-
     function handleClickOpen() {
         setOpen(true);
     }
@@ -750,16 +603,9 @@ function Abonnement(props) {
     }
 
     function handleSubmit(form) {
-        //event.preventDefault();
         const params = props.match.params;
-        const { abonnementId } = params;
-        if (abonnementId === 'new') {
-            dispatch(Actions.saveAbonnement(form, sousSecteurs, offre, mode, duree, discount, paiement));
-        }
-        else {
-            dispatch(Actions.updateAbonnement(form, sousSecteurs, offre, mode, duree, discount, paiement));
-        }
-
+            const { type } = params;
+        dispatch(Actions.saveRenouvellement(form, sousSecteurs, offre, mode, duree, discount, paiement,type));
     }
 
     function handleDelete(value) {
@@ -775,7 +621,6 @@ function Abonnement(props) {
             header={
                 !abonnement.loading
                     ?
-
                     form && (
                         <div className="flex flex-1 w-full items-center justify-between">
 
@@ -793,7 +638,7 @@ function Abonnement(props) {
                                     <div className="flex flex-col min-w-0">
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                             <div className="text-16 sm:text-20 truncate">
-                                                {abonnement.data.reference ? abonnement.data.reference + ', Fournisseur : ' + (fournisseur ? fournisseur.societe : '') : ''}
+                                                {'Renouvellement d\'abonnement, Fournisseur : ' + fournisseur && fournisseur.societe }
                                             </div>
                                         </FuseAnimate>
 
@@ -805,7 +650,7 @@ function Abonnement(props) {
                             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                                 <DialogTitle id="form-dialog-title">Confirmation </DialogTitle>
                                 <DialogContent className="mb-12">
-                                    {!paiement ? 'Voullez-vous vraiment valider la abonnement sans confirmation du paiment?' : 'Vous êtes sur le point d\'affecter une nouvelle abonnement'}
+                                    {!paiement ? 'Voullez-vous vraiment valider l\'abonnement sans confirmation du paiment?' : 'Vous êtes sur le point d\'affecter un nouveau abonnement'}
                                 </DialogContent>
                                 <Divider />
                                 <DialogActions>
@@ -846,7 +691,7 @@ function Abonnement(props) {
                                         onClick={handleClickOpen}
 
                                     >
-                                        Valider l'abonnement
+                                        Renouveler l'abonnement
                                     {abonnement.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                     </Button>
                                 </FuseAnimate>
@@ -872,15 +717,12 @@ function Abonnement(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Détail de la abonnement" />
+                        <Tab className="h-64 normal-case" label="Détail de l'abonnement" />
                         <Tab className="h-64 normal-case" label="Secteurs d'activités" />
                         {
-                            fournisseur ?
+                            fournisseur &&
                                 <Tab className="h-64 normal-case" label="Info. de la société" />
-                                :
-                                ''
                         }
-
 
                     </Tabs>
 
@@ -908,57 +750,20 @@ function Abonnement(props) {
                                         <Divider />
                                         <Grid container spacing={3} className="mt-16 mb-16">
                                             <Grid item xs={12} sm={6}>
-                                                {
-                                                    form['@id'] ?
-                                                        <TextFieldFormsy
-                                                            className="disabled mb-16 "
-                                                            type="text"
-                                                            name="fournisseur"
-                                                            id="fournisseur"
-                                                            value={form.fournisseur.label}
-                                                            label="Fournisseur"
-                                                            disabled
-                                                            InputProps={{
-                                                                readOnly: true,
-                                                            }}
-                                                            fullWidth
-                                                        /> :
-                                                        (abonnement.fournisseurs ?
 
-
-                                                            <SelectReactFormsy
-                                                                id="fournisseur"
-                                                                name="fournisseur"
-                                                                readOnly="true"
-                                                                value={
-                                                                    form.fournisseur
-                                                                }
-                                                                placeholder="Selectionner une société"
-                                                                textFieldProps={{
-                                                                    label: 'Sociétés',
-                                                                    InputLabelProps: {
-                                                                        shrink: true,
-                                                                        readOnly: true
-                                                                    },
-                                                                    variant: 'outlined',
-                                                                    readOnly: true
-                                                                }}
-                                                                className="mb-16 z-9999"
-                                                                options={abonnement.fournisseurs}
-                                                                onChange={(value) => handleFounrisseurChange(value, 'fournisseur')}
-                                                                required
-                                                            />
-                                                            :
-                                                            <ContentLoader
-                                                                height={70}
-                                                                width={400}
-                                                                speed={2}
-                                                                primaryColor="#f3f3f3"
-                                                                secondaryColor="#ecebeb"
-                                                            >
-                                                                <rect x="1" y="13" rx="5" ry="5" width="220" height="24" />
-                                                            </ContentLoader>)
-                                                }
+                                                <TextFieldFormsy
+                                                    className="disabled mb-16 "
+                                                    type="text"
+                                                    name="fournisseur"
+                                                    id="fournisseur"
+                                                    value={form.fournisseur.label}
+                                                    label="Fournisseur"
+                                                    disabled
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                    fullWidth
+                                                />
                                                 <Divider className="mt-8 mb-8" />
                                                 {
                                                     !abonnement.loadingFournisseurs ?
@@ -1437,7 +1242,7 @@ function Abonnement(props) {
                                                 <Typography className="mb-16" variant="h6">Activité(s) choisie(s)</Typography>
 
                                             </Grid>
-                                           
+
                                         </Grid>
                                         <Divider />
                                         <Grid container spacing={3} className="mt-4">
@@ -1753,4 +1558,4 @@ function Abonnement(props) {
     )
 }
 
-export default withReducer('abonnementOffreApp', reducer)(Abonnement);
+export default withReducer('renouvellementAbonnementApp', reducer)(Renouvellement);

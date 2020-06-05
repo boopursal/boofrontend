@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, Typography } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -19,36 +19,54 @@ const useStyles = makeStyles(theme => ({
     },
     chip: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ef5350',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
+
+    },
+    blue: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#3490dc',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
+
 
     },
     chip2: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#4caf50',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
     },
     chipOrange: {
         marginLeft: theme.spacing(1),
+        padding: 2,
         background: '#ff9800',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '11px'
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 function CommandesTable(props) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const commandes = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.data);
-    const loading = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.loading);
-    const pageCount = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.pageCount);
-    const parametres = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.parametres);
-    const searchText = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commandes.searchText);
+    const commandes = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.commandes.data);
+    const loading = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.commandes.loading);
+    const pageCount = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.commandes.pageCount);
+    const searchText = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.commandes.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
 
@@ -66,12 +84,29 @@ function CommandesTable(props) {
         }
     }, [commandes, searchText]);
 
-
+    if (loading) {
+        return (
+            <div className="flex flex-1 items-center justify-center h-full">
+                <Typography color="textSecondary" variant="h5">
+                    Chargement...
+                </Typography>
+            </div>
+        );
+    }
 
     if (!filteredData) {
         return null;
     }
 
+    if (filteredData.length === 0) {
+        return (
+            <div className="flex flex-1 items-center justify-center h-full">
+                <Typography color="textSecondary" variant="h5">
+                    Aucune commande en attente !
+                </Typography>
+            </div>
+        );
+    }
 
 
     return (
@@ -97,23 +132,22 @@ function CommandesTable(props) {
                     {
                         Header: "Référence",
                         className: "font-bold",
+                        sortable: false,
                         id: "reference",
                         accessor: f => f.reference,
                     },
                     {
                         Header: "Offre",
                         className: "font-bold",
+                        sortable: false,
                         id: "offre",
                         accessor: f => f.offre.name,
                     },
-                    {
-                        Header: "Mode de paiement",
-                        id: "mode",
-                        accessor: f => f.mode.name,
-                    },
+                   
                     {
                         Header: "Activités",
                         accessor: "sousSecteurs.name",
+                        sortable: false,
                         filterable: false,
                         Cell: row =>
                             _.truncate(_.join(_.map(row.original.sousSecteurs, 'name'), ', '), {
@@ -123,10 +157,28 @@ function CommandesTable(props) {
 
                     },
                     {
+                        Header: "Durée",
+                        sortable: false,
+                        filterable: false,
+                        Cell: row => (
+                            <div className="flex items-center">
+                                {
+                                    row.original.duree
+                                        ?
+                                        row.original.duree.name + ' mois'
+                                        :
+                                        ''
+                                }
+                            </div>
+                        )
+
+                    },
+                    {
                         Header: "Date de création",
                         accessor: "created",
+                        sortable: false,
                         filterable: false,
-                        Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
+                        Cell: row => moment(row.original.created).format('DD/MM/YYYY')
                     },
                     {
                         Header: "Statut",
@@ -150,28 +202,34 @@ function CommandesTable(props) {
                         )
 
                     },
+                   
                     {
-                        Header: "Durée",
+                        Header: "",
                         sortable: false,
                         filterable: false,
                         Cell: row => (
                             <div className="flex items-center">
+
                                 {
-                                    row.original.duree
+
+                                    row.original.type === false
                                         ?
-                                        row.original.duree.name + ' mois'
+                                        <Chip className={classes.blue} label="Nouvelle" />
                                         :
-                                       ''
+                                        <Chip className={classes.chip2} label="Renouvellement" />
+
+
                                 }
+
                             </div>
                         )
 
                     },
 
 
-
                     {
                         Header: "",
+                        width:64,
                         Cell: row => (
                             <div className="flex items-center">
                                 {row.original.statut === false
@@ -192,30 +250,17 @@ function CommandesTable(props) {
                                         </IconButton>
                                     </Tooltip>
                                 }
+                            
 
                             </div>
                         )
                     }
                 ]}
-                manual
-
-                defaultSortDesc={true}
-                pages={pageCount}
-                defaultPageSize={10}
+                showPagination={false}
+                defaultPageSize={1}
                 loading={loading}
                 showPageSizeOptions={false}
-                onPageChange={(pageIndex) => {
-                    parametres.page = pageIndex + 1;
-                    dispatch(Actions.setParametresData(parametres))
-                }}
-
-                onSortedChange={(newSorted, column, shiftKey) => {
-                    parametres.page = 1;
-                    parametres.filter.id = newSorted[0].id;
-                    parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
-                    dispatch(Actions.setParametresData(parametres))
-                }}
-                noDataText="No Commande found"
+                noDataText="Pas de commande trouvée"
                 loadingText='Chargement...'
                 ofText='sur'
             />

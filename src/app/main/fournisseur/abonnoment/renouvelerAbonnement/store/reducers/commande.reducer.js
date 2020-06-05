@@ -3,23 +3,25 @@ import * as Actions from '../actions';
 const initialState = {
     data: null,
     offres: null,
-    sousSecteurs: null, loadingSecteurs: false,
+    fournisseur: null,
+    loadingSecteurs: false,
     secteurs: null,
+    sousSecteurs: null,
     error: null,
     loading: false,
+    loadingSuggestion: false,
     loadingSS: false,
     success: false,
+    successActivite: false,
     paiements: null,
     durees: null,
-    loadingFournisseurs: false,
-    fournisseurs: null,
-    fournisseur: null,
 };
 
-const abonnementReducer = function (state = initialState, action) {
+const commandeReducer = function (state = initialState, action) {
     switch (action.type) {
 
-        case Actions.REQUEST_ABONNEMENT:
+        case Actions.REQUEST_COMMANDE:
+        case Actions.REQUEST_FOURNISSEUR:
         case Actions.REQUEST_OFFRES:
         case Actions.REQUEST_SAVE:
             {
@@ -27,77 +29,6 @@ const abonnementReducer = function (state = initialState, action) {
                     ...state,
                     loading: true,
                 }
-            }
-        case Actions.REQUEST_FOURNISSEURS:
-        case Actions.REQUEST_FOURNISSEUR:
-            {
-                return {
-                    ...state,
-                    loadingFournisseurs: true,
-                }
-            }
-        case Actions.GET_FOURNISSEURS:
-            {
-                return {
-                    ...state,
-                    fournisseurs: action.payload,
-                    loadingFournisseurs: false,
-                };
-            }
-        case Actions.GET_FOURNISSEUR:
-            {
-                return {
-                    ...state,
-                    fournisseur: action.payload,
-                    loadingFournisseurs: false,
-                };
-            }
-        case Actions.GET_PAIEMENT:
-            {
-                return {
-                    ...state,
-                    paiements: action.payload
-                };
-            }
-        case Actions.GET_DUREE:
-            {
-                return {
-                    ...state,
-                    durees: action.payload
-                };
-            }
-        case Actions.SAVE_ABONNEMENT:
-            {
-                return {
-                    ...state,
-                    loading: false,
-                    success: true
-                };
-            }
-        case Actions.CLEAN_UP:
-            {
-                return {
-                    ...initialState,
-
-                };
-            }
-        case Actions.CLEAN_UP_FRS:
-            {
-                return {
-                    ...state,
-                    fournisseur: null,
-
-
-                };
-            }
-        case Actions.GET_ABONNEMENT:
-            {
-                return {
-                    ...state,
-                    data: action.payload,
-                    loading: false,
-
-                };
             }
         //Secteurs    
         case Actions.REQUEST_SECTEURS:
@@ -133,6 +64,74 @@ const abonnementReducer = function (state = initialState, action) {
 
                 };
             }
+        // Mode paiement   
+        case Actions.GET_PAIEMENT:
+            {
+                return {
+                    ...state,
+                    paiements: action.payload
+                };
+            }
+        // Durée
+        case Actions.GET_DUREE:
+            {
+                return {
+                    ...state,
+                    durees: action.payload
+                };
+            }
+        // Suggestion  
+        case Actions.REQUEST_SUGGESTION:
+            {
+                return {
+                    ...state,
+                    loadingSuggestion: true,
+                }
+            }
+        case Actions.SAVE_SUGGESTION:
+            {
+                return {
+                    ...state,
+                    successActivite: true,
+                    loadingSuggestion: false,
+                };
+            }
+        // Commande    
+        case Actions.GET_COMMANDE:
+            {
+                return {
+                    ...state,
+                    data: action.payload,
+                    loading: false,
+
+                };
+            }
+        case Actions.SAVE_COMMANDE:
+            {
+                return {
+                    ...state,
+                    loading: false,
+                    success: true
+                };
+            }
+        case Actions.CLEAN_UP:
+            {
+                return {
+                    initialState,
+
+                };
+            }
+        // Fournisseur
+        case Actions.GET_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    fournisseur: action.payload,
+                    loading: false,
+
+                };
+            }
+        // Offres    
         case Actions.GET_OFFRES:
             {
                 return {
@@ -142,7 +141,7 @@ const abonnementReducer = function (state = initialState, action) {
 
                 };
             }
-
+        // Erreurs    
         case Actions.SAVE_ERROR:
             {
                 return {
@@ -159,4 +158,4 @@ const abonnementReducer = function (state = initialState, action) {
     }
 };
 
-export default abonnementReducer;
+export default commandeReducer;

@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
-    commandeImageFeaturedStar: {
+    renouvelerImageFeaturedStar: {
         position: 'absolute',
         top: 0,
         right: 0,
@@ -40,28 +40,28 @@ const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1),
     },
-    commandeImageUpload: {
+    renouvelerImageUpload: {
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
         transitionTimingFunction: theme.transitions.easing.easeInOut,
     },
 
-    commandeImageItem: {
+    renouvelerImageItem: {
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
         transitionTimingFunction: theme.transitions.easing.easeInOut,
         '&:hover': {
-            '& $commandeImageFeaturedStar': {
+            '& $renouvelerImageFeaturedStar': {
                 opacity: .8
             }
         },
         '&.featured': {
             pointerEvents: 'none',
             boxShadow: theme.shadows[3],
-            '& $commandeImageFeaturedStar': {
+            '& $renouvelerImageFeaturedStar': {
                 opacity: 1
             },
-            '&:hover $commandeImageFeaturedStar': {
+            '&:hover $renouvelerImageFeaturedStar': {
                 opacity: 1
             }
         }
@@ -112,10 +112,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-function Commande(props) {
+function Renouveler(props) {
 
     const dispatch = useDispatch();
-    const commande = useSelector(({ commandeOffreFrsApp }) => commandeOffreFrsApp.commande);
+    const renouveler = useSelector(({ renouvelerOffreFrsApp }) => renouvelerOffreFrsApp.commande);
 
     const user = useSelector(({ auth }) => auth.user);
 
@@ -147,34 +147,22 @@ function Commande(props) {
         dispatch(Actions.getDurees());
     }, [dispatch, user.id]);
 
-    // Effect redirection and clean state
-    useEffect(() => {
-        if (commande.success) {
-            dispatch(Actions.cleanUp())
-            props.history.push('/abonnement');
-        }
-    }, [commande.success, dispatch]);
 
     // Effect redirection and clean state
     useEffect(() => {
-        if (commande.successActivite) {
+        if (renouveler.successActivite) {
             setOpen(false);
         }
-    }, [commande.successActivite, setOpen]);
+    }, [renouveler.successActivite, setOpen]);
 
     // New Or update form
     useEffect(() => {
-        function updateCommandeState() {
+        function updateRenouvelerState() {
             const params = props.match.params;
             const { commandeId } = params;
-            if (commandeId === 'new') {
-                dispatch(Actions.newCommande());
-            }
-            else {
-                dispatch(Actions.getCommande(commandeId));
-            }
+            dispatch(Actions.getCommande(commandeId));
         }
-        updateCommandeState();
+        updateRenouvelerState();
         return () => {
             dispatch(Actions.cleanUp())
         }
@@ -182,30 +170,30 @@ function Commande(props) {
 
     useEffect(() => {
         if (
-            (commande.data && !form) ||
-            (commande.data && form && commande.data.id !== form.id)
+            (renouveler.data && !form) ||
+            (renouveler.data && form && renouveler.data.id !== form.id)
         ) {
-            setForm({ ...commande.data });
+            setForm({ ...renouveler.data });
 
-            if (commande.data.sousSecteurs) {
-                 setSousSecteurs(commande.data.sousSecteurs.map(item => ({
+            if (renouveler.data.sousSecteurs) {
+                 setSousSecteurs(renouveler.data.sousSecteurs.map(item => ({
                      value: item['@id'],
                      label: item.secteur.name + ': '+item.name
                  })));
              }
-            if (commande.data.offre)
-                setOffre(commande.data.offre)
-            if (commande.data.mode)
-                setMode(commande.data.mode['@id'])
-            if (commande.data.duree) {
-                setDuree(commande.data.duree);
-                if (commande.data.offre) {
-                    if (commande.data.fournisseur.currency.name === 'DHS') {
-                        let ht = commande.data.offre.prixMad * commande.data.duree.name;
+            if (renouveler.data.offre)
+                setOffre(renouveler.data.offre)
+            if (renouveler.data.mode)
+                setMode(renouveler.data.mode['@id'])
+            if (renouveler.data.duree) {
+                setDuree(renouveler.data.duree);
+                if (renouveler.data.offre) {
+                    if (renouveler.data.fournisseur.currency.name === 'DHS') {
+                        let ht = renouveler.data.offre.prixMad * renouveler.data.duree.name;
                         setPrixht(ht)
 
-                        if (commande.data.duree.remise) {
-                            let remis = ht * commande.data.duree.remise / 100;
+                        if (renouveler.data.duree.remise) {
+                            let remis = ht * renouveler.data.duree.remise / 100;
                             let netHt = ht - remis;
                             let tva = netHt * 0.2;
                             setRemise(remis)
@@ -220,10 +208,10 @@ function Commande(props) {
                         }
                     }
                     else {
-                        let ht = commande.data.offre.prixEur * commande.data.duree.name;
+                        let ht = renouveler.data.offre.prixEur * renouveler.data.duree.name;
                         setPrixht(ht)
-                        if (commande.data.duree.remise) {
-                            let remis = ht * commande.data.duree.remise / 100;
+                        if (renouveler.data.duree.remise) {
+                            let remis = ht * renouveler.data.duree.remise / 100;
                             let netHt = ht - remis;
                             //let tva = netHt * 0.2;
                             setRemise(remis)
@@ -238,86 +226,12 @@ function Commande(props) {
                             //setPrixTTC(ht + tva)
                             setPrixTTC(ht)
                         }
-
                     }
-
                 }
             }
         }
-    }, [form, commande.data, setForm]);
+    }, [form, renouveler.data, setForm]);
 
-    useEffect(() => {
-        if (
-            (commande.offres && !offre)
-        ) {
-            setOffre(commande.offres[0]);
-
-        }
-    }, [offre, commande.offres, setOffre]);
-
-    useEffect(() => {
-        if (
-            (commande.paiements && !mode)
-        ) {
-            setMode(commande.paiements[0]['@id']);
-
-        }
-    }, [mode, commande.paiements, setMode]);
-
-    useEffect(() => {
-        if (
-            (commande.durees && !duree)
-        ) {
-            setDuree(commande.durees[0]);
-            if (offre) {
-                if (user.data.currency === 'DHS') {
-                    let ht = offre.prixMad * commande.durees[0].name;
-                    setPrixht(ht)
-
-                    if (commande.durees[0].remise) {
-                        let remis = ht * commande.durees[0].remise / 100;
-                        let netHt = ht - remis;
-                        let tva = netHt * 0.2;
-                        setRemise(remis)
-                        setPrixhtNet(netHt)
-                        setTva(tva)
-                        setPrixTTC(netHt + tva)
-
-                    } else {
-                        let tva = ht * 0.2;
-                        setTva(ht * 0.2)
-                        setPrixTTC(ht + tva)
-                    }
-
-                }
-                else {
-                    let ht = offre.prixEur * commande.durees[0].name;
-                    setPrixht(ht)
-
-                    if (commande.durees[0].remise) {
-                        let remis = ht * commande.durees[0].remise / 100;
-                        let netHt = ht - remis;
-                        //let tva = netHt * 0.2;
-
-                        setRemise(remis)
-                        setPrixhtNet(netHt)
-                        //setTva(tva)
-                        //setPrixTTC(netHt + tva)
-                        setPrixTTC(netHt)
-
-                    } else {
-                        //let tva = ht * 0.2;
-                        //setTva(ht * 0.2)
-                        //setPrixTTC(ht + tva)
-                        setPrixTTC(ht)
-                    }
-
-                }
-
-            }
-
-        }
-    }, [duree, commande.durees, setDuree]);
 
     function handleClickOpen() {
         setOpen(true);
@@ -437,18 +351,9 @@ function Commande(props) {
         }
     }
 
-    function handleSubmit(form) {
-        //event.preventDefault();
-
-        const params = props.match.params;
-        const { commandeId } = params;
-
-        if (commandeId === 'new') {
-            dispatch(Actions.saveCommande(form, sousSecteurs, offre, mode, duree));
-        }
-        else {
-            dispatch(Actions.updateCommande(form, sousSecteurs, offre, mode, duree));
-        }
+    function handleSubmit() {
+        
+        dispatch(Actions.saveRenouvelement(sousSecteurs, offre, mode, duree,props.history));
     }
 
     function handleSubmitActivites() {
@@ -488,7 +393,7 @@ function Commande(props) {
                 header: "min-h-72 h-72 sm:h-136 sm:min-h-136"
             }}
             header={
-                !commande.loading
+                !renouveler.loading
                     ?
 
                     form && (
@@ -497,7 +402,7 @@ function Commande(props) {
                             <div className="flex flex-col items-start max-w-full">
 
                                 <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                    <Typography className="normal-case flex items-center sm:mb-12" component={Link} role="button" to="/abonnement" color="inherit">
+                                    <Typography className="normal-case flex items-center sm:mb-12" component={Link} role="button" to="/offres/renouveler" color="inherit">
                                         <Icon className="mr-4 text-20">arrow_back</Icon>
                                         Retour
                                 </Typography>
@@ -508,13 +413,14 @@ function Commande(props) {
                                     <div className="flex flex-col min-w-0">
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                             <div className="text-16 sm:text-20 truncate">
-                                                {commande.data.reference ? commande.data.reference : 'Nouvelle Commande'}
+                                                Renouveler votre abonnement
                                             </div>
                                         </FuseAnimate>
 
                                     </div>
                                 </div>
                             </div>
+
                             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                                 <Button
                                     className="whitespace-no-wrap"
@@ -523,7 +429,7 @@ function Commande(props) {
                                     onClick={() => handleSubmit(form, sousSecteurs)}
                                 >
                                     Passer la commande
-                                    {commande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                    {renouveler.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                 </Button>
                             </FuseAnimate>
                         </div>
@@ -532,7 +438,7 @@ function Commande(props) {
                     ''
             }
             contentToolbar={
-                commande.loading || !form ?
+                renouveler.loading || !form ?
                     <div className={classes.root}>
                         <LinearProgress color="secondary" />
                     </div>
@@ -552,7 +458,7 @@ function Commande(props) {
 
             }
             content={
-                !commande.loading ?
+                !renouveler.loading ?
 
                     form && (
                         <Formsy
@@ -567,7 +473,7 @@ function Commande(props) {
 
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">Récapitulatif de votre commande</Typography>
+                                                    <Typography className="mb-16" variant="h6">Récapitulatif de votre renouveler</Typography>
 
                                                 </Grid>
                                             </Grid>
@@ -575,8 +481,8 @@ function Commande(props) {
                                             <Grid container spacing={3} className="mt-16 mb-16">
                                                 <Grid item xs={12} sm={6}>
                                                     {
-                                                        commande.offres && offre && commande.fournisseur ?
-                                                            commande.offres.map((item, index) => (
+                                                        renouveler.offres && offre && renouveler.fournisseur ?
+                                                            renouveler.offres.map((item, index) => (
                                                                 <Grid container key={index} spacing={3} >
                                                                     <Grid item xs={6} sm={6}>
                                                                         <strong className="p-1" >
@@ -597,7 +503,7 @@ function Commande(props) {
                                                                                     />
                                                                                 }
                                                                                 label={
-                                                                                    commande.fournisseur.currency.name === 'DHS' ?
+                                                                                    renouveler.fournisseur.currency.name === 'DHS' ?
                                                                                         parseFloat(item.prixMad).toLocaleString(
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.
@@ -638,7 +544,7 @@ function Commande(props) {
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
                                                     {
-                                                        commande.offres && offre && duree ?
+                                                        renouveler.offres && offre && duree ?
                                                             <Table className="w-full -striped">
                                                                 <TableHead className="bg-gray-200">
                                                                     <TableRow>
@@ -851,8 +757,8 @@ function Commande(props) {
                                             <Grid container spacing={3} className="mt-6 mb-16">
                                                 <Grid item xs={12} sm={6}>
                                                     {
-                                                        commande.paiements ?
-                                                            commande.paiements.map((item, index) => (
+                                                        renouveler.paiements ?
+                                                            renouveler.paiements.map((item, index) => (
                                                                 <FormControlLabel onChange={() => setMode(item['@id'])} key={index} value={item['@id']} checked={mode === item['@id']} control={<Radio />} label={item.name} />
                                                             ))
                                                             :
@@ -874,8 +780,8 @@ function Commande(props) {
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
                                                     {
-                                                        commande.durees && duree ?
-                                                            commande.durees.map((item, index) => (
+                                                        renouveler.durees && duree ?
+                                                            renouveler.durees.map((item, index) => (
                                                                 <>
                                                                     <FormControlLabel onChange={() => handleChangeDuree(item)} key={index} value={item['@id']} checked={duree.id === item.id} control={<Radio />} label={item.name + ' mois'} />
 
@@ -932,8 +838,8 @@ function Commande(props) {
                                                         }}
 
                                                         className="mb-16"
-                                                        options={commande.secteurs}
-                                                        isLoading={commande.loadingSecteurs}
+                                                        options={renouveler.secteurs}
+                                                        isLoading={renouveler.loadingSecteurs}
                                                         onChange={(value) => handleChipChange(value, 'secteurs')}
                                                         required
                                                     />
@@ -953,8 +859,8 @@ function Commande(props) {
                                                         }}
 
                                                         className="mb-16"
-                                                        options={commande.sousSecteurs}
-                                                        isLoading={commande.loadingSS}
+                                                        options={renouveler.sousSecteurs}
+                                                        isLoading={renouveler.loadingSS}
                                                         onChange={(value) => handleChipChange(value, 'activites')}
                                                         required
                                                     />
@@ -994,7 +900,7 @@ function Commande(props) {
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
                                                     {
-                                                        commande.fournisseur ?
+                                                        renouveler.fournisseur ?
                                                             <>
 
                                                                 <Typography className="mt-4" variant="caption">{"Si vos secteurs, activités n´existent pas, veuillez nous les envoyer en cliquant"}</Typography>
@@ -1053,10 +959,10 @@ function Commande(props) {
                                                                                 Annnuler
                                                                             </Button>
                                                                             <Button onClick={handleSubmitActivites} variant="contained" color="secondary"
-                                                                                disabled={commande.loadingSuggestion || (sousSecteur.length < 2 || secteur.length <= 2) }
+                                                                                disabled={renouveler.loadingSuggestion || (sousSecteur.length < 2 || secteur.length <= 2) }
                                                                             >
                                                                                 Sauvegarder
-                                                                                {commande.loadingSuggestion && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                                                {renouveler.loadingSuggestion && <CircularProgress size={24} className={classes.buttonProgress} />}
                                                                             </Button>
                                                                         </DialogActions>
                                                                     </Dialog>
@@ -1088,4 +994,4 @@ function Commande(props) {
     )
 }
 
-export default withReducer('commandeOffreFrsApp', reducer)(Commande);
+export default withReducer('renouvelerOffreFrsApp', reducer)(Renouveler);

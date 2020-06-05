@@ -7,11 +7,8 @@ function Widget1(props)
  
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
-            <div className="flex items-center justify-between pr-4 pl-16 pt-4">
-            <Typography className="text-16 font-bold">{/*props.widget.title*/} Demande(s) en cours</Typography>
-                <IconButton aria-label="more">
-                    <Icon>more_vert</Icon>
-                </IconButton>
+            <div className=" items-center pr-4 pl-16 pt-4">
+            <Typography className="text-16 font-bold ">Demande(s) en cours</Typography>
             </div>
             <div className="text-center pt-12 pb-28">
                 <Typography

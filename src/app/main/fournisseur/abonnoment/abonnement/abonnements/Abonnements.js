@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { FusePageCarded } from '@fuse';
 import withReducer from 'app/store/withReducer';
 import AbonnementsTable from './AbonnementsTable';
@@ -7,18 +7,25 @@ import reducer from '../store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import { Helmet } from "react-helmet";
+import { Tab,Tabs } from '@material-ui/core';
+import CommandesTable from './CommandesTable';
 
 function Abonnements() {
 
     const dispatch = useDispatch();
-    const parametres = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.abonnements.parametres);
     const user = useSelector(({ auth }) => auth.user);
+    const [tabValue, setTabValue] = useState(0);
 
     useEffect(() => {
-        if (user)
-            dispatch(Actions.getAbonnements(parametres, user.id));
-    }, [dispatch, parametres, user]);
+        if (user){
+            dispatch(Actions.getAbonnements(user.id));
+            dispatch(Actions.getCommandes(user.id));
+        }
+    }, [dispatch,  user]);
 
+    function handleChangeTab(event, tabValue) {
+        setTabValue(tabValue);
+    }
     return (
         <>
             <Helmet>
@@ -34,8 +41,31 @@ function Abonnements() {
                 header={
                     <AbonnementsHeader />
                 }
+                contentToolbar={
+                    <Tabs
+                        value={tabValue}
+                        onChange={handleChangeTab}
+                        indicatorColor="secondary"
+                        textColor="secondary"
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        classes={{ root: "w-full h-64" }}
+                    >
+                        <Tab className="h-64 normal-case" label="Abonnement" />
+                        <Tab className="h-64 normal-case" label="Commande" />
+                    </Tabs>
+
+                }
                 content={
-                    <AbonnementsTable />
+                    <div className="p-16 sm:p-24 max-w-2xl w-full">
+                        {/*Order Details*/}
+                        {tabValue === 0 &&
+                            <AbonnementsTable />
+                        }
+                        {tabValue === 1 && (
+                            <CommandesTable />
+                        )}
+                    </div>
                 }
                 innerScroll
             />

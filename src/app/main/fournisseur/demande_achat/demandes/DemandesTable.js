@@ -319,7 +319,7 @@ function DemandesTable(props) {
                     parametres.search = filtered;
                     fn(parametres);
                 }}
-                noDataText="Aucune demande trouvée"
+                noDataText="Aucune demande en cours pour l'instant"
                 loadingText='Chargement...'
                 ofText='sur'
             />

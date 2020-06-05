@@ -7,9 +7,8 @@ export const SET_PARAMETRES_DATA = '[COMMANDES AB FRS APP] SET PARAMETRES DATA';
 export const GET_COMMANDES = '[COMMANDES AB FRS APP] GET COMMANDES';
 export const SET_COMMANDES_SEARCH_TEXT = '[COMMANDES AB FRS APP] SET COMMANDES SEARCH TEXT';
 
-export function getCommandes(parametres,id) {
-    var reference = parametres.reference ? `=${parametres.reference}` : '';
-    const request = agent.get(`/api/fournisseurs/${id}/demande_abonnements?page=${parametres.page}&reference${reference}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+export function getCommandes(id) {
+    const request = agent.get(`/api/fournisseurs/${id}/demande_abonnements?itemsPerPage=1&statut=false&order[created]=desc`);
 
     return (dispatch) => {
         dispatch({

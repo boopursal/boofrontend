@@ -3,10 +3,12 @@ import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     data: [],
+    freeProduits: [],
     pageCount: null,
     loading: false,
+    loadingFree: false,
     searchText: '',
-    abonnement:null,
+    abonnement: null,
     parametres: {
         page: 1,
         search: [],
@@ -48,6 +50,23 @@ const produitsReducer = function (state = initialState, action) {
                     data: action.payload['hydra:member'],
                     pageCount: FuseUtils.hydraPageCount(action.payload),
                     loading: false
+                };
+            }
+        case Actions.REQUEST_FREE_PRODUITS:
+            {
+                return {
+                    ...state,
+                    loadingFree: true
+
+                };
+            }
+
+        case Actions.GET_FREE_PRODUITS:
+            {
+                return {
+                    ...state,
+                    freeProduits: action.payload['hydra:member'],
+                    loadingFree : false
                 };
             }
         case Actions.SET_PRODUITS_SEARCH_TEXT:

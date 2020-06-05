@@ -9,14 +9,15 @@ import * as Actions from '../store/actions';
 import { Helmet } from "react-helmet";
 
 function Produits() {
+
     const dispatch = useDispatch();
     const user = useSelector(({ auth }) => auth.user);
     const parametres = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.parametres);
 
     useEffect(() => {
-        if (user)
+        if (user) {
             dispatch(Actions.getProduits(user.id, parametres));
-
+        }
     }, [dispatch, parametres, user]);
 
 

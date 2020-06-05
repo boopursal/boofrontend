@@ -23,6 +23,7 @@ export const GET_SECTEUR = '[PRODUIT FOURNISSEUR APP] GET SECTEUR';
 export const REQUEST_CATEGORIE = '[PRODUIT FOURNISSEUR APP] REQUEST CATEGORIE';
 export const GET_CATEGORIE = '[PRODUIT FOURNISSEUR APP] GET CATEGORIE';
 
+
 export const UPLOAD_ATTACHEMENT = '[PRODUIT FOURNISSEUR APP] UPLOAD ATTACHEMENT';
 export const UPLOAD_REQUEST = '[PRODUIT FOURNISSEUR APP] UPLOAD REQUEST';
 export const UPLOAD_ERROR = '[PRODUIT FOURNISSEUR APP] UPLOAD ERROR';
@@ -92,6 +93,41 @@ export function getVideoYoutubeById(idVideo) {
 
 }
 
+export function getSecteurs() {
+    const request = agent.get('/api/secteurs?pagination=false&props[]=id&props[]=name');
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SECTEUR,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_SECTEUR,
+                payload: response.data
+            })
+        });
+
+    }
+
+}
+
+export function getSousSecteurs(url) {
+    const request = agent.get(`${url}/sous_secteurs?pagination=false&props[]=id&props[]=name`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SOUS_SECTEUR,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_SOUS_SECTEUR,
+                payload: response.data
+            })
+        });
+
+    }
+
+}
 export function getCategories(url) {
     const request = agent.get(`${url}/categories?pagination=false&props[]=id&props[]=name`);
 
@@ -135,32 +171,22 @@ export function getProduit(params) {
 
 }
 
-export function saveProduit(data,secteur,sousSecteur,categorie) {
-    if (data.pu) {
-        data.pu = parseFloat(data.pu);
-    }
-    data.sousSecteurs =sousSecteur.value;
+export function saveProduit(data, secteur, sousSecteur, categorie, abonnee) {
 
-    if (secteur) {
-        data.secteur = secteur[0].secteur['@id'];
-    }
-    if (categorie) {
-        data.categorie = categorie.value;
-    }
-    
-    data.images = _.map(data.images, function (value, key) {
-        return value['@id'];
-    });
-
-    if (data.ficheTechnique) {
-        data.ficheTechnique = data.ficheTechnique["@id"];
+    var postData = {
+        ...data,
+        pu: data.pu ? parseFloat(data.pu) : 0,
+        sousSecteurs: sousSecteur && sousSecteur.value,
+        categorie: categorie && categorie.value,
+        images: data.images && _.map(data.images, function (value, key) {
+            return value['@id'];
+        }),
+        ficheTechnique: data.ficheTechnique && data.ficheTechnique["@id"],
+        featuredImageId: data.featuredImageId && data.featuredImageId["@id"],
+        free: !abonnee && true
     }
 
-    if (data.featuredImageId) {
-        data.featuredImageId = data.featuredImageId["@id"];
-    }
-    
-    const request = agent.post('/api/produits', data);
+    const request = agent.post('/api/produits', postData);
 
     return (dispatch) => {
         dispatch({
@@ -185,33 +211,21 @@ export function saveProduit(data,secteur,sousSecteur,categorie) {
 
 }
 
-export function putProduit(data, url,secteur,sousSecteur,categorie) {
+export function putProduit(data, url, secteur, sousSecteur, categorie) {
 
-    if (data.pu) {
-        data.pu = parseFloat(data.pu);
-    }
-    data.sousSecteurs =sousSecteur.value;
-    if (secteur) {
-        data.secteur = secteur[0].secteur['@id'];
-    }
-    if (categorie) {
-        data.categorie = categorie.value;
-    }
-    else {
-        data.categorie = sousSecteur.value
-    }
-    data.images = _.map(data.images, function (value, key) {
-        return value['@id'];
-    });
-
-    if (data.ficheTechnique) {
-        data.ficheTechnique = data.ficheTechnique["@id"];
+    var putData = {
+        ...data,
+        pu: data.pu ? parseFloat(data.pu) : 0,
+        sousSecteurs: sousSecteur && sousSecteur.value,
+        categorie: categorie && categorie.value,
+        images: data.images && _.map(data.images, function (value, key) {
+            return value['@id'];
+        }),
+        ficheTechnique: data.ficheTechnique && data.ficheTechnique["@id"],
+        featuredImageId: data.featuredImageId && data.featuredImageId["@id"],
     }
 
-    if (data.featuredImageId) {
-        data.featuredImageId = data.featuredImageId["@id"];
-    }
-    const request = agent.put(`/api/produits/${url}`, data);
+    const request = agent.put(`/api/produits/${url}`, putData);
 
     return (dispatch) => {
         dispatch({
@@ -375,21 +389,20 @@ export function uploadFiche(file) {
     };
 }
 
-export function AddSuggestionSecteur(secteur,sousSecteur,categorie,id_user) {
-    return (dispatch, getState) => {
+export function AddSuggestionSecteur(secteur, sousSecteur, categorie, id_user) {
+    return (dispatch) => {
 
-        let data={};
-        
-        if (sousSecteur && categorie){
-            data.sousSecteur = sousSecteur.label;
-            data.secteur = secteur[0].secteur.name;
-            data.categorie = categorie;
-            
-            data.pageSuggestion = "Ajout produit par fournisseur";
-            data.user = `/api/fournisseurs/${id_user}`
+        if (sousSecteur && categorie) {
+            var data = {
+                secteur,
+                sousSecteur,
+                categorie,
+                user: `/api/fournisseurs/${id_user}`,
+                pageSuggestion: "Ajout produit par fournisseur"
+            };
         }
-        
-        else{
+
+        else {
             dispatch({
                 type: SAVE_ERROR_SUGGESTION
             });
@@ -402,7 +415,7 @@ export function AddSuggestionSecteur(secteur,sousSecteur,categorie,id_user) {
             }))
             return;
         }
-    
+
 
         const request = agent.post(`/api/suggestion_secteurs`, data);
         dispatch({

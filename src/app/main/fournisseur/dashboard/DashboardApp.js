@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Tab, Tabs, Typography } from '@material-ui/core';
+import { Tab, Tabs, Typography, Icon, Button } from '@material-ui/core';
 import { FuseAnimateGroup, FusePageSimple } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
@@ -17,6 +17,8 @@ import Widget9 from './widgets/Widget9';
 import { makeStyles } from '@material-ui/styles';
 import ContentLoader from 'react-content-loader'
 import { Helmet } from "react-helmet";
+import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     content: {
@@ -41,6 +43,7 @@ function DashboardApp(props) {
     const dispatch = useDispatch();
     const widgets = useSelector(({ dashboardApp }) => dashboardApp.widgets);
     const user = useSelector(({ auth }) => auth.user);
+    const abonnement = useSelector(({ auth }) => auth.user.abonnement);
     const classes = useStyles(props);
     const pageLayout = useRef(null);
     const [tabValue, setTabValue] = useState(0);
@@ -60,7 +63,7 @@ function DashboardApp(props) {
     if (!widgets) {
         return null;
     }
-
+    
     return (
         <>
             <Helmet>
@@ -77,9 +80,49 @@ function DashboardApp(props) {
                 }}
                 header={
                     <div className="flex flex-col justify-between flex-1 px-24 pt-24">
-                        <div className="flex justify-between items-start">
+                        <div className="flex justify-between">
                             <Typography className="py-0 sm:py-24" variant="h4">Bienvenue, {user.data.displayName}!</Typography>
+                            <div className="items-center">
+                                {
+                                    abonnement &&
+                                    (
+                                        abonnement.statut &&
+                                        (
+                                            moment(abonnement.expired).diff(moment(), 'days') > 0 ?
+                                                <div className=" flex flex-col justify-between flex-1  pt-24 py-0 sm:py-24">
+                                                    <div
+                                                        className="flex items-center px-8 py-4 mr-8 mt-2 rounded rounded-md bg-green text-white">
+                                                        <Icon className="text-20 mr-4">check_circle_outline</Icon> {abonnement.offre && <strong>{abonnement.offre.name}</strong>} <span className="hidden sm:flex">, vous avez {moment(abonnement.expired).diff(moment(), 'days')} jour(s) restant(s) !</span>
+                                                    </div>
+                                                    {
+                                                        moment(abonnement.expired).diff(moment(), 'month', true) <= 1 &&
+                                                        <div className="flex justify-center mt-2">
+                                                            <Button component={Link} to={`/renouveler/${abonnement.id}`} size="small" color="secondary" variant="contained">
+                                                                <span className="hidden sm:flex">Renouveler l'abonnement</span>
+                                                                <span className="flex sm:hidden">Renouveler</span>
+                                                            </Button>
+                                                        </div>
+                                                    }
 
+                                                </div>
+                                                :
+                                                <div className=" flex flex-col justify-between flex-1  pt-24 py-0 sm:py-24">
+                                                    <div
+                                                        className="flex items-center px-8 py-4 mr-8 rounded rounded-md bg-red text-white">
+                                                        Votre abonnement a expiré depuis {moment().diff(abonnement.expired, 'days')} jour(s) !
+                                                    </div>
+                                                    <div className="flex justify-center mt-2">
+                                                        <Button component={Link} to={`/renouveler/${abonnement.id}`} size="small" color="secondary" variant="contained">
+                                                            <span className="hidden sm:flex">Renouveler l'abonnement</span>
+                                                            <span className="flex sm:hidden">Renouveler</span>
+                                                        </Button>
+                                                    </div>
+                                                </div>
+
+                                        )
+                                    )
+                                }
+                            </div>
                         </div>
                     </div>
                 }

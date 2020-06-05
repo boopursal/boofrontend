@@ -10,11 +10,8 @@ export const commandeAbonnementConfigs = {
     routes  : [
         {
             path     : '/offres/commande/:commandeId/',
+            exact : true,
             component: React.lazy(() => import('./commandeAbonnement/Commande'))
-        },
-        {
-            path     : '/offres/commande',
-            component: React.lazy(() => import('./commandesAbonnement/Commandes'))
         }
     ]
 };

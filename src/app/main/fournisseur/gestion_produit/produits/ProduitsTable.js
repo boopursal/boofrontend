@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Chip, Tooltip, IconButton, Icon, TextField } from '@material-ui/core';
+import { Chip, Tooltip, IconButton, Icon, TextField, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -9,6 +9,7 @@ import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
 import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,6 +38,16 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px',
         height: 20
     },
+
+    chip3: {
+        padding: 2,
+        background: '#4caf50',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
+    },
+
     chipOrange: {
         marginLeft: theme.spacing(1),
         padding: 2,
@@ -91,7 +102,7 @@ function ProduitsTable(props) {
     return (
         <FuseAnimate animation="transition.slideUpIn" delay={300}>
             <ReactTable
-                className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
+                className="-striped -highlight h-full sm:rounded-16 overflow-hidden border-2"
                 getTrProps={(state, rowInfo, column) => {
                     return {
                         className: "h-64 cursor-pointer",
@@ -115,17 +126,27 @@ function ProduitsTable(props) {
                         Header: '',
                         accessor: "featuredImageId",
                         Cell: row => (
-                            row.original.featuredImageId ? (
-                                <img className="w-full block rounded" src={FuseUtils.getUrl() + row.original.featuredImageId.url} alt={row.original.reference} />
-                            ) : (
-                                    <img className="w-full block rounded" src="assets/images/ecommerce/product-image-placeholder.png" alt={row.original.reference} />
-                                )
+                            <div className="flex items-center relative ">
+                                {
+                                    row.original.featuredImageId ? (
+                                        <img className={clsx("w-full block rounded")} src={FuseUtils.getUrl() + row.original.featuredImageId.url} alt={row.original.reference} />
+                                    ) : (
+                                            <img className={clsx("w-full block rounded")} src="assets/images/ecommerce/product-image-placeholder.png" alt={row.original.reference} />
+                                        )
+                                }
+                                {
+                                    row.original.free ?
+                                        <Chip className={clsx("absolute bottom-2 left-1", classes.chip3)} label="Free" />
+                                        : ''
+                                }
+                            </div>
+
 
                         ),
-                        className: "justify-center",
+                        className: "justify-center ",
                         width: 64,
                         sortable: false,
-                        filterable: true,
+                        filterable: false,
 
                     },
                     {
@@ -151,6 +172,7 @@ function ProduitsTable(props) {
                                         <Chip className={classes.chip2} label="Produit de la semaine" />
                                         : ''
                                 }
+
                             </div>
                         ),
                         Filter: ({ filter, onChange }) =>
@@ -213,7 +235,7 @@ function ProduitsTable(props) {
                         Cell: row => row.original.secteur ? row.original.secteur.name : 'N/A',
                     },
                     {
-                        Header: "Sous-secteur",
+                        Header: "Activité",
                         className: "font-bold",
                         filterable: true,
                         accessor: "sousSecteurs.name",
@@ -221,7 +243,7 @@ function ProduitsTable(props) {
                     },
 
                     {
-                        Header: "Catégorie",
+                        Header: "Produit",
                         className: "font-bold",
                         filterable: true,
                         accessor: "categorie.name",
@@ -254,7 +276,32 @@ function ProduitsTable(props) {
                                     <IconButton className="text-red text-20"
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            dispatch(Actions.removeProduit(row.original, parametres, user.id));
+                                            dispatch(Actions.openDialog({
+                                                children: (
+                                                    <React.Fragment>
+                                                        <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText id="alert-dialog-description">
+                                                                Voulez vous vraiment supprimer cet enregistrement ?
+                                                            </DialogContentText>
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                Non
+                                                            </Button>
+                                                            <Button
+                                                                onClick={(ev) => {
+                                                                    dispatch(Actions.removeProduit(row.original, parametres, user.id))
+                                                                    dispatch(Actions.closeDialog())
+                                                                }}
+                                                                color="primary"
+                                                                autoFocus>
+                                                                Oui
+                                                            </Button>
+                                                        </DialogActions>
+                                                    </React.Fragment>
+                                                )
+                                            }))
                                         }}
                                     >
                                         <Icon>delete</Icon>

@@ -9,6 +9,8 @@ export const GET_COMMANDE = '[COMMANDE APP] GET COMMANDE';
 
 export const REQUEST_SOUS_SECTEURS = '[COMMANDE APP] REQUEST_SOUS_SECTEURS';
 export const GET_SOUS_SECTEURS = '[COMMANDE APP] GET SOUS_SECTEURS';
+export const REQUEST_SECTEURS = '[COMMANDE APP] REQUEST SECTEURS';
+export const GET_SECTEURS = '[COMMANDE APP] GET SECTEURS';
 
 export const REQUEST_OFFRES = '[COMMANDE APP] REQUEST OFFRES';
 export const GET_OFFRES = '[COMMANDE APP] GET OFFRES';
@@ -77,8 +79,8 @@ export function updateCommande(data,sousSecteurs,offre,mode,duree, remise,paieme
 }
 
 
-export function getSousSecteurs() {
-    const request = agent.get('/api/sous_secteurs?pagination=false&props[]=id&props[]=name');
+export function getSousSecteurs(uri) {
+    const request = agent.get(`${uri}/sous_secteurs?pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
         dispatch({
@@ -87,6 +89,24 @@ export function getSousSecteurs() {
         return request.then((response) => {
             dispatch({
                 type: GET_SOUS_SECTEURS,
+                payload: response.data['hydra:member']
+            })
+        });
+
+    }
+
+}
+
+export function getSecteurs() {
+    const request = agent.get('/api/secteurs?pagination=false&props[]=id&props[]=name&order[name]=asc');
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SECTEURS,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_SECTEURS,
                 payload: response.data['hydra:member']
             })
         });

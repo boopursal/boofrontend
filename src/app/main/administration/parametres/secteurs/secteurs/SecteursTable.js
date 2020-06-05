@@ -16,7 +16,6 @@ function SecteursTable(props) {
 
     const [filteredData, setFilteredData] = useState(null);
 
-console.log(loading)
     useEffect(() => {
         function getFilteredArray(entities, searchText) {
             const arr = Object.keys(entities).map((id) => entities[id]);

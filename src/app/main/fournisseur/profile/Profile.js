@@ -132,6 +132,8 @@ function Profile(props) {
     const Villes = useSelector(({ profileApp }) => profileApp.profile.villes);
 
     const formRef = useRef(null);
+    const formRef2 = useRef(null);
+    const formRef3 = useRef(null);
     const [showIce, setShowIce] = useState(false);
     const [ville, setVille] = useState(false);
     const [pays, setPays] = useState(false);
@@ -169,12 +171,6 @@ function Profile(props) {
     useEffect(() => {
         if (profile.error && (
             profile.error.societe ||
-            profile.error.newPassword ||
-            profile.error.newConfirmpassword ||
-            profile.error.oldPassword ||
-            profile.error.phone ||
-            profile.error.firstName ||
-            profile.error.lastName ||
             profile.error.pays ||
             profile.error.ville ||
             profile.error.adresse1 ||
@@ -183,10 +179,27 @@ function Profile(props) {
             profile.error.fix ||
             profile.error.ice ||
             profile.error.description)) {
-            formRef.current.updateInputsWithError({
+            formRef.current && formRef.current.updateInputsWithError({
                 ...profile.error
             });
-
+            disableButton();
+        }
+        if (profile.error && (
+            profile.error.phone ||
+            profile.error.firstName ||
+            profile.error.lastName)) {
+            formRef2.current && formRef2.current.updateInputsWithError({
+                ...profile.error
+            });
+            disableButton();
+        }
+        if (profile.error && (
+            profile.error.newPassword ||
+            profile.error.newConfirmpassword ||
+            profile.error.oldPassword)) {
+            formRef3.current && formRef3.current.updateInputsWithError({
+                ...profile.error
+            });
             disableButton();
         }
     }, [profile.error]);
@@ -731,13 +744,10 @@ function Profile(props) {
                                         </Formsy>
                                     )}
                                 {tabValue === 1 && (
+
                                     <Formsy
                                         onValidSubmit={handleSubmitSousSecteurs}
-                                        onValid={enableButton}
-                                        onInvalid={disableButton}
-                                        ref={formRef}
                                         className="flex pt-5 flex-col ">
-
                                         <div ref={popperNode} >
                                             <Autosuggest
                                                 {...autosuggestProps}
@@ -831,7 +841,7 @@ function Profile(props) {
                                             value="legacy"
                                         >
                                             Sauvegarder
-                           {profile.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                        {profile.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
                                         </Button>
 
@@ -842,7 +852,7 @@ function Profile(props) {
                                         onValidSubmit={handleSubmitInfoPerso}
                                         onValid={enableButton}
                                         onInvalid={disableButton}
-                                        ref={formRef}
+                                        ref={formRef2}
                                         className="flex pt-5 flex-col ">
 
                                         <Grid container spacing={3}>
@@ -1032,7 +1042,7 @@ function Profile(props) {
                                         onValidSubmit={handleSubmitPassword}
                                         onValid={enableButton}
                                         onInvalid={disableButton}
-                                        ref={formRef}
+                                        ref={formRef3}
                                         className="flex pt-5 flex-col ">
 
                                         <TextFieldFormsy

@@ -15,9 +15,9 @@ export function cleanUp() {
     });
 }
 
-export function getAbonnements(parametres,id) {
-    var reference = parametres.reference ? `=${parametres.reference}` : '';
-    const request = agent.get(`/api/fournisseurs/${id}/abonnements?page=${parametres.page}&reference${reference}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+export function getAbonnements(id) {
+
+    const request = agent.get(`/api/fournisseurs/${id}/abonnements?itemsPerPage=1&order[expired]=desc`);
 
     return (dispatch) => {
         dispatch({

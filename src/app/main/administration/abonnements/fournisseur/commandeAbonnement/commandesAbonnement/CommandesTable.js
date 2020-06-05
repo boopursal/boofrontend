@@ -47,6 +47,17 @@ const useStyles = makeStyles(theme => ({
         height: 20
 
     },
+    blue: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#3490dc',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
+
+
+    },
 }));
 function CommandesTable(props) {
 
@@ -195,7 +206,39 @@ function CommandesTable(props) {
                             </select>
 
                     },
+                    {
+                        Header: "",
+                        sortable: false,
+                        accessor: "type",
+                        filterable: true,
+                        Cell: row => (
+                            <div className="flex items-center">
 
+                                {
+
+                                    row.original.type === false
+                                        ?
+                                        <Chip className={classes.blue} label="Nouvelle" />
+                                        :
+                                        <Chip className={classes.chip2} label="Renouvellement" />
+
+
+                                }
+
+                            </div>
+                        ),
+                        Filter: ({ filter, onChange }) =>
+                            <select
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                            >
+                                <option value="">Tous</option>
+                                <option value="false">Nouvelle</option>
+                                <option value="true">Renouvellement</option>
+                            </select>
+
+                    },
 
 
                     {

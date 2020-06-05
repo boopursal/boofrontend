@@ -213,7 +213,7 @@ function Profile(props) {
     return (
         <>
             <Helmet>
-                <title>Mon profile | Les Achats Industriels</title>
+                <title>Mon profil | Les Achats Industriels</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <meta name="googlebot" content="noindex" />
             </Helmet>

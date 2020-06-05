@@ -489,7 +489,7 @@ function Produit(props) {
                                                     onChange={(value) => handleChipChange(value, 'secteur')}
                                                     placeholder="Selectionner un secteur"
                                                     textFieldProps={{
-                                                        label: 'Secteur',
+                                                        label: 'Secteurs',
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },
@@ -511,9 +511,9 @@ function Produit(props) {
                                                         sousSecteur
                                                     }
                                                     onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                                    placeholder="Selectionner un sous-secteur"
+                                                    placeholder="Selectionner une activité"
                                                     textFieldProps={{
-                                                        label: 'Secteur',
+                                                        label: 'Activités',
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },
@@ -535,9 +535,9 @@ function Produit(props) {
                                                         categorie
                                                     }
                                                     onChange={(value) => handleChipChange(value, 'categorie')}
-                                                    placeholder="Selectionner un categorie"
+                                                    placeholder="Selectionner un produit"
                                                     textFieldProps={{
-                                                        label: 'Catégorie',
+                                                        label: 'Produits',
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },

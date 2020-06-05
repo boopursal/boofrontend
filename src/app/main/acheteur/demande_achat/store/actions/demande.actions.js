@@ -132,6 +132,8 @@ export function putDemande(data, url,history,categories) {
         }),
         budget : data.budget && parseFloat(data.budget)
     }
+    if(putData.motifRejet)
+    delete putData.motifRejet;
 
     const request = agent.put(`/api/demande_achats/${url}`, putData);
 

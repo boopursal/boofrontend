@@ -138,8 +138,9 @@ function Abonnement(props) {
 
                         setRemise(remis)
                         setPrixhtNet(netHt)
-                        setTva(tva)
-                        setPrixTTC(netHt + tva)
+                        setTva(0)
+                        //setPrixTTC(netHt + tva)
+                        setPrixTTC(netHt)
 
                     } else {
                         let netHt = ht;
@@ -147,9 +148,10 @@ function Abonnement(props) {
                             netHt = ht - abonnement.data.remise;
                         }
                         let tva = netHt * 0.2;
-                        setTva(tva)
+                        setTva(0)
                         setPrixhtNet(netHt)
-                        setPrixTTC(netHt + tva)
+                        //setPrixTTC(netHt + tva)
+                        setPrixTTC(netHt)
                     }
 
                 }
@@ -327,7 +329,7 @@ function Abonnement(props) {
                                                     <tr>
                                                         <td className="pr-16">
                                                             <Typography color="textSecondary">
-                                                                DATE D'EXPIRATION
+                                                                DATE DE RENOUVELLEMENT
                                                             </Typography>
                                                         </td>
                                                         <td>

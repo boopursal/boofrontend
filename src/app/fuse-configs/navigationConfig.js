@@ -466,7 +466,7 @@ const navigationConfig = [
                 exact: true,
                 'url': '/abonnement',
             },
-            {
+           /* {
                 'id': 'offre-commandes',
                 'title': 'Vos commandes',
                 'type': 'item',
@@ -474,7 +474,7 @@ const navigationConfig = [
 
                 'icon': 'format_list_bulleted',
                 'url': '/offres/commande',
-            },
+            },*/
             {
                 'id': 'fr-commandes',
                 'title': 'Jetons',

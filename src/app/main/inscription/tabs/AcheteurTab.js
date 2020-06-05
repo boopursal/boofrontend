@@ -278,7 +278,7 @@ function AcheteurTab(props) {
                     color="primary"
                     className="w-full mx-auto mt-16 normal-case"
                     aria-label="REGISTER"
-                    disabled={!isFormValid || !recaptcha || register.loading}
+                    disabled={!isFormValid || /*!recaptcha ||*/ register.loading}
                     value="legacy"
                 >
                     Register

@@ -2,6 +2,7 @@ import { showMessage } from 'app/store/actions/fuse';
 import agent from "agent";
 
 export const REQUEST_PRODUITS = '[PRODUITS FOURNISSEURS APP] REQUEST PRODUITS';
+export const REQUEST_FREE_PRODUITS = '[PRODUITS FOURNISSEURS APP] REQUEST FREE PRODUITS';
 export const REMOVE_PRODUIT = '[PRODUITS FOURNISSEURS APP] REMOVE PRODUITS';
 export const STATUT_PRODUIT = '[PRODUITS FOURNISSEURS APP] STATUT PRODUITS';
 export const SET_PARAMETRES_DATA = '[PRODUITS FOURNISSEURS APP] SET PARAMETRES DATA';
@@ -9,6 +10,7 @@ export const CLEAN_UP = '[PRODUITS FOURNISSEURS APP] CLEAN_UP';
 
 
 export const GET_PRODUITS = '[PRODUITS FOURNISSEURS APP] GET PRODUITS';
+export const GET_FREE_PRODUITS = '[PRODUITS FOURNISSEURS APP] GET FREE PRODUITS';
 export const SET_PRODUITS_SEARCH_TEXT = '[PRODUITS FOURNISSEURS APP] SET PRODUITS SEARCH TEXT';
 
 export function cleanUp() {
@@ -42,13 +44,34 @@ export function getProduits(id_fournisseur,parametres)
     }
        
 }
+
+export function getFreeProduits(id_fournisseur)
+{
+   
+    const request = agent.get(`/api/fournisseurs/${id_fournisseur}/produits?free=true&props[]=id`);
+
+    return (dispatch) =>{
+        dispatch({
+            type   : REQUEST_FREE_PRODUITS
+        })
+       return request.then((response) =>
+            dispatch({
+                type   : GET_FREE_PRODUITS,
+                payload: response.data
+            })
+        );
+    }
+       
+}
+
 export function removeProduit(produit,parametres,id_fournisseur)
 {
     
     let Updateproduit = {del :true}
-    return (dispatch, getState) => {
-
-        
+    return (dispatch) => {
+        dispatch({
+            type   : REQUEST_PRODUITS,
+        });
         const request = agent.put(`/api/produits/${produit.id}`,Updateproduit);
 
         return request.then((response) =>
