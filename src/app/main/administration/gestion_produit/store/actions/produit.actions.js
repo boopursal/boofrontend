@@ -178,7 +178,7 @@ export function saveProduit(data,secteur,sousSecteur,categorie) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Produit Saved' }));
+            dispatch(showMessage({ message: 'Produit enregistré' }));
 
             return dispatch({
                 type: SAVE_PRODUIT,
@@ -300,7 +300,7 @@ export function uploadImage(file) {
 
                 }),
                 dispatch(showMessage({
-                    message: 'Document uploaded!', anchorOrigin: {
+                    message: 'Document téléchargé!', anchorOrigin: {
                         vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },
@@ -355,7 +355,7 @@ export function uploadFiche(file) {
 
                 }),
                 dispatch(showMessage({
-                    message: 'Document uploaded!', anchorOrigin: {
+                    message: 'Document téléchargé!', anchorOrigin: {
                         vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },

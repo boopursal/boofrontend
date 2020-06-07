@@ -159,7 +159,7 @@ function ContactsFournisseurTable(props) {
 
                         },
                         {
-                            Header: "Date création",
+                            Header: "Date de création",
                             accessor: "created",
                             filterable: true,
                             Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm'),

@@ -137,7 +137,7 @@ ColorlibStepIcon.propTypes = {
 };
 
 function getSteps() {
-    return ['Registrement', 'Information de la société'];
+    return ['Inscription', 'Information de la société'];
 }
 
 function Step4App(props) {
@@ -220,7 +220,6 @@ function Step4App(props) {
             </Helmet>
             <div className="flex flex-col items-center justify-center w-full">
 
-                <img className="w-100 m-20" src="assets/images/logos/icon.png" alt="logo" />
 
                 <FuseAnimate animation="transition.expandIn">
 
@@ -260,7 +259,7 @@ function Step4App(props) {
                                                         value={
                                                             form.secteur
                                                         }
-                                                        placeholder="Selectionner votre secteur d'activité"
+                                                        placeholder="Sélectionner votre secteur d'activité"
                                                         textFieldProps={{
                                                             label: 'Secteur d\'activité',
                                                             InputLabelProps: {
@@ -309,7 +308,7 @@ function Step4App(props) {
                                                         value={
                                                             form.pays
                                                         }
-                                                        placeholder="Selectionner une Pays"
+                                                        placeholder="Sélectionner une Pays"
                                                         textFieldProps={{
                                                             label: 'Pays',
                                                             InputLabelProps: {
@@ -331,7 +330,7 @@ function Step4App(props) {
                                                         value={
                                                             form.ville
                                                         }
-                                                        placeholder="Selectionner une ville"
+                                                        placeholder="Sélectionner une ville"
                                                         textFieldProps={{
                                                             label: 'Ville',
                                                             InputLabelProps: {
@@ -430,7 +429,7 @@ function Step4App(props) {
                                                         name="fix"
                                                         value={form.fix}
                                                         onChange={handleChange}
-                                                        label="Fix"
+                                                        label="Fixe"
                                                         autoComplete="fix"
                                                         validations={{
                                                             minLength: 10,

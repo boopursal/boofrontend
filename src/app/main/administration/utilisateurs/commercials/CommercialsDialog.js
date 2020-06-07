@@ -145,7 +145,7 @@ function CommercialsDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {commercialsDialog.type === 'new' ? 'Nouvelle Commercial' : 'Edit Commercial'}
+                        {commercialsDialog.type === 'new' ? 'Nouvelle Commercial' : 'Editer Commercial'}
                     </Typography>
                 </Toolbar>
                 <div className="flex flex-col items-center justify-center pb-24">
@@ -244,7 +244,7 @@ function CommercialsDialog(props) {
                                 minLength: 6
                             }}
                             validationErrors={{
-                                minLength: 'Min character length is 6'
+                                minLength: 'La longueur minimale des caractères est de 6'
                             }}
                             required
                             fullWidth
@@ -265,7 +265,7 @@ function CommercialsDialog(props) {
                                 minLength: 4
                             }}
                             validationErrors={{
-                                minLength: 'Min character length is 6'
+                                minLength: 'La longueur minimale des caractères est de 6'
                             }}
                             fullWidth
                         />
@@ -352,7 +352,7 @@ function CommercialsDialog(props) {
                                             minLength: 6
                                         }}
                                         validationErrors={{
-                                            minLength: 'Min character length is 6'
+                                            minLength: 'La longueur minimale des caractères est de 6'
                                         }}
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
@@ -398,7 +398,7 @@ function CommercialsDialog(props) {
 
                             }
                             onChange={(value) => handleChipChange(value, 'villes')}
-                            placeholder="Selectionner multiple villes"
+                            placeholder="Sélectionner multiple villes"
                             textFieldProps={{
                                 label: 'Villes',
                                 InputLabelProps: {

@@ -518,7 +518,7 @@ function Commande(props) {
                             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                                 <DialogTitle id="form-dialog-title">Confirmation </DialogTitle>
                                 <DialogContent className="mb-12">
-                                    {!paiement ? 'Voullez-vous vraiment valider la commande sans confirmation du paiment?' : 'Vous êtes sur le point d\'affecter une nouvelle abonnement'}
+                                    {!paiement ? 'Voullez-vous vraiment valider la commande sans confirmation du paiment?' : 'Vous êtes sur le point d\'affecter une nouveau abonnement'}
                                 </DialogContent>
                                 <Divider />
                                 <DialogActions>
@@ -1000,7 +1000,7 @@ function Commande(props) {
                                                     id="secteurs"
                                                     name="secteurs"
                                                     value={secteur1}
-                                                    placeholder="Selectionner.. "
+                                                    placeholder="Sélectionner.. "
                                                     textFieldProps={{
                                                         label: 'Secteurs',
                                                         InputLabelProps: {
@@ -1021,7 +1021,7 @@ function Commande(props) {
                                                     id="activites"
                                                     name="activites"
                                                     value=""
-                                                    placeholder="Selectionner.. "
+                                                    placeholder="Sélectionner.. "
                                                     textFieldProps={{
                                                         label: 'Activités',
                                                         InputLabelProps: {
@@ -1156,7 +1156,7 @@ function Commande(props) {
                                                         className="mt-20"
                                                         name="fix"
                                                         value={commande.data.fournisseur.fix}
-                                                        label="Fix"
+                                                        label="Fixe"
                                                         InputProps={{
                                                             readOnly: true,
                                                             endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>

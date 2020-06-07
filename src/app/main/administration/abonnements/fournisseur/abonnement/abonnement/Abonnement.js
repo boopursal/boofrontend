@@ -805,7 +805,7 @@ function Abonnement(props) {
                             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                                 <DialogTitle id="form-dialog-title">Confirmation </DialogTitle>
                                 <DialogContent className="mb-12">
-                                    {!paiement ? 'Voullez-vous vraiment valider la abonnement sans confirmation du paiment?' : 'Vous êtes sur le point d\'affecter une nouvelle abonnement'}
+                                    {!paiement ? 'Voullez-vous vraiment valider la abonnement sans confirmation du paiment?' : 'Vous êtes sur le point d\'affecter une nouveau abonnement'}
                                 </DialogContent>
                                 <Divider />
                                 <DialogActions>
@@ -933,7 +933,7 @@ function Abonnement(props) {
                                                                 value={
                                                                     form.fournisseur
                                                                 }
-                                                                placeholder="Selectionner une société"
+                                                                placeholder="Sélectionner une société"
                                                                 textFieldProps={{
                                                                     label: 'Sociétés',
                                                                     InputLabelProps: {
@@ -1389,7 +1389,7 @@ function Abonnement(props) {
                                                     id="secteurs"
                                                     name="secteurs"
                                                     value={secteur1}
-                                                    placeholder="Selectionner.. "
+                                                    placeholder="Sélectionner.. "
                                                     textFieldProps={{
                                                         label: 'Secteurs',
                                                         InputLabelProps: {
@@ -1410,7 +1410,7 @@ function Abonnement(props) {
                                                     id="activites"
                                                     name="activites"
                                                     value=""
-                                                    placeholder="Selectionner.. "
+                                                    placeholder="Sélectionner.. "
                                                     textFieldProps={{
                                                         label: 'Activités',
                                                         InputLabelProps: {

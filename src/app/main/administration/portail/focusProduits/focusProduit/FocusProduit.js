@@ -126,7 +126,7 @@ function FocusProduit(props) {
                                             value={
                                                 fournisseur
                                             }
-                                            placeholder="Selectionner un fournisseur"
+                                            placeholder="Sélectionner un fournisseur"
                                             textFieldProps={{
                                                 label: 'Fournisseurs',
                                                 InputLabelProps: {
@@ -151,7 +151,7 @@ function FocusProduit(props) {
                                             value={
                                                 categorie
                                             }
-                                            placeholder="Selectionner un catégorie"
+                                            placeholder="Sélectionner un catégorie"
                                             textFieldProps={{
                                                 label: 'Catégories',
                                                 InputLabelProps: {
@@ -307,7 +307,7 @@ function FocusProduit(props) {
                                                                         <Button size="small" variant="contained" onClick={() => {
                                                                             dispatch(Actions.putFocusProduit(item['@id'], produit.data['@id']))
                                                                         }} color="primary">
-                                                                            Selectionner
+                                                                            Sélectionner
                                                                         </Button>
                                                                 }
 

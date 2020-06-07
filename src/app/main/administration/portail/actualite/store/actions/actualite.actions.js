@@ -166,7 +166,7 @@ export function uploadAttachement(file) {
 
                 }),
                 dispatch(showMessage({
-                    message: 'Document uploaded!', anchorOrigin: {
+                    message: 'Document téléchargé!', anchorOrigin: {
                         vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },

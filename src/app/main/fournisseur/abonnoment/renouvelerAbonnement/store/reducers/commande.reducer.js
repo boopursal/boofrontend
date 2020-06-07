@@ -80,7 +80,7 @@ const commandeReducer = function (state = initialState, action) {
                     durees: action.payload
                 };
             }
-        // Suggestion  
+        // Suggestions  
         case Actions.REQUEST_SUGGESTION:
             {
                 return {

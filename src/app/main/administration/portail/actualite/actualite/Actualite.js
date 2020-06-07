@@ -203,7 +203,7 @@ function Actualite(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Basic Info" />
+                        <Tab className="h-64 normal-case" label="Infos générales" />
                         <Tab className="h-64 normal-case"
                             label="Image"
 
@@ -243,7 +243,7 @@ function Actualite(props) {
                                                     minLength: 6
                                                 }}
                                                 validationErrors={{
-                                                    minLength: 'Min character length is 6'
+                                                    minLength: 'La longueur minimale des caractères est de 6'
                                                 }}
                                                 required
                                                 fullWidth

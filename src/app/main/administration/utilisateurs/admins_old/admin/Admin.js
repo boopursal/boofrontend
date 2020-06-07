@@ -256,7 +256,7 @@ function Admin(props)
                                                 minLength: 6
                                             }}
                                             validationErrors={{
-                                                minLength: 'Min character length is 6'
+                                                minLength: 'La longueur minimale des caractères est de 6'
                                             }}
                                             required
                                             fullWidth
@@ -277,7 +277,7 @@ function Admin(props)
                                                 minLength: 6
                                             }}
                                             validationErrors={{
-                                                minLength: 'Min character length is 6'
+                                                minLength: 'La longueur minimale des caractères est de 6'
                                             }}
                                             required
                                             fullWidth
@@ -298,7 +298,7 @@ function Admin(props)
                                                 minLength: 6
                                             }}
                                             validationErrors={{
-                                                minLength: 'Min character length is 6'
+                                                minLength: 'La longueur minimale des caractères est de 6'
                                             }}
                                             required
                                             fullWidth
@@ -319,7 +319,7 @@ function Admin(props)
                                                 minLength: 6
                                             }}
                                             validationErrors={{
-                                                minLength: 'Min character length is 6'
+                                                minLength: 'La longueur minimale des caractères est de 6'
                                             }}
                                             required
                                             fullWidth
@@ -341,7 +341,7 @@ function Admin(props)
                                                 minLength: 6
                                             }}
                                             validationErrors={{
-                                                minLength: 'Min character length is 6'
+                                                minLength: 'La longueur minimale des caractères est de 6'
                                             }}
                                             fullWidth
                                         />
@@ -359,7 +359,7 @@ function Admin(props)
                                                 minLength: 6
                                             }}
                                             validationErrors={{
-                                                minLength: 'Min character length is 6'
+                                                minLength: 'La longueur minimale des caractères est de 6'
                                             }}
                                           
                                             variant="outlined"

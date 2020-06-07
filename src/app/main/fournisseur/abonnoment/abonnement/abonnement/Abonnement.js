@@ -363,7 +363,7 @@ function Abonnement(props) {
                                                                                         ?
                                                                                         <span className="text-red">Annulée</span>
                                                                                         :
-                                                                                        <span className="text-red">En Expirée</span>
+                                                                                        <span className="text-red">En Expiré</span>
                                                                                 )
 
                                                                         )
@@ -374,7 +374,7 @@ function Abonnement(props) {
                                                                                 ?
                                                                                 <span className="text-green">En cours</span>
                                                                                 :
-                                                                                <span className="text-red">Expirée</span>
+                                                                                <span className="text-red">Expiré</span>
                                                                         )
 
                                                                 }

@@ -19,7 +19,7 @@ function MessageHeader(props) {
                     <Icon className="text-32 mr-0 sm:mr-12">email</Icon>
                 </FuseAnimate>
                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                    <Typography className="hidden sm:flex" variant="h6">Liste message</Typography>
+                    <Typography className="hidden sm:flex" variant="h6">Liste des messages</Typography>
                 </FuseAnimate>
             </div>
 

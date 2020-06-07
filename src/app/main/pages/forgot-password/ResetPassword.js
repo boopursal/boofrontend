@@ -122,7 +122,7 @@ function ResetPassword(props) {
                                 label="Mot de passe"
                                 validations={{
                                     minLength: 6,
-                                    matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/
+                                    matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}/
                                 }}
                                 validationErrors={{
                                     minLength: 'La longueur minimale des caractères est de 6',

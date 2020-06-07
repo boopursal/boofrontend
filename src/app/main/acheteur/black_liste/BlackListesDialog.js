@@ -194,7 +194,7 @@ function BlackListesDialog(props) {
 
     function handleSuggestionsFetchRequested({ value }) {
         if (value.trim().length > 1) {
-            dispatch(Actions.loadSuggestions(value));
+            dispatch(Actions.loadSuggestions(value.trim()));
             // Fake an AJAX call
         }
     }
@@ -229,7 +229,7 @@ function BlackListesDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {BlackListesDialog.type === 'new' ? 'Nouveau BlackListe' : 'Edit BlackListe'}
+                        {BlackListesDialog.type === 'new' ? 'Nouveau BlackListe' : 'Editer BlackListe'}
                     </Typography>
                 </Toolbar>
 
@@ -342,7 +342,7 @@ function BlackListesDialog(props) {
                                 minLength: 6
                             }}
                             validationErrors={{
-                                minLength: 'Min character length is 6'
+                                minLength: 'La longueur minimale des caractères est de 6'
                             }}
                             required
                             multiline

@@ -20,7 +20,7 @@ class Auth extends Component {
     jwtCheck = () => {
         jwtService.on('onAutoLogin', () => {
 
-            this.props.showMessage({ message: 'Logging in with JWT' });
+            this.props.showMessage({ message: 'Reconnexion ...' });
 
             /**
              * Sign in and retrieve user data from Api
@@ -33,7 +33,7 @@ class Auth extends Component {
                         this.props.getTokenFournisseur();
                         this.props.getAbonnementFournisseur(user.id);
                     }
-                    this.props.showMessage({ message: 'Logged in with JWT' });
+                    //this.props.showMessage({ message: 'Logged in with JWT' });
                 })
                 .catch(error => {
                     this.props.showMessage({ message: error });

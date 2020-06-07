@@ -175,7 +175,7 @@ function DemandesDevisTable(props) {
 
                         },
                         {
-                            Header: "Date création",
+                            Header: "Date de création",
                             accessor: "created",
                             filterable: false,
                             Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')
@@ -235,7 +235,7 @@ function DemandesDevisTable(props) {
                         parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                         dispatch(Actions.setParametresData(parametres))
                     }}
-                    noDataText="No Demande found"
+                    noDataText="Aucune demande trouvée"
                     loadingText='Chargement...'
                     ofText='sur'
                 />

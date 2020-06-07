@@ -127,7 +127,7 @@ function Widget9(props) {
 
                                             className="whitespace-no-wrap"
                                         >
-                                            Budgets gagner
+                                            Budgets gagnés
                                     </TableCell>
 
                                         <TableCell
@@ -141,7 +141,7 @@ function Widget9(props) {
 
                                             className="whitespace-no-wrap"
                                         >
-                                            Potentiel
+                                            Potentiels
                                     </TableCell>
 
                                     </TableRow>
@@ -240,7 +240,7 @@ function Widget9(props) {
                                                                                 scope="row"
                                                                                 className="truncate text-green font-bold"
                                                                             >
-                                                                                Budget gagner
+                                                                                Budgets gagnés
                                                                         </TableCell>
                                                                             {row.gagnerParMois.map((r, index) => (
                                                                                 <TableCell
@@ -264,7 +264,7 @@ function Widget9(props) {
                                                                                 scope="row"
                                                                                 className="truncate text-blue font-bold"
                                                                             >
-                                                                                Potentiel
+                                                                                Potentiels
                                                                         </TableCell>
                                                                             {row.potentielParMois.map((r, index) => (
                                                                                 <TableCell

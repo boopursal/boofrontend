@@ -129,7 +129,7 @@ function DemandeDevis(props) {
                                             </Typography>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                            <Typography variant="caption">Demande Detail</Typography>
+                                            <Typography variant="caption">Détails de la demande</Typography>
                                         </FuseAnimate>
                                     </div>
                                 </div>

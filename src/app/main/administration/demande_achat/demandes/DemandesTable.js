@@ -244,7 +244,7 @@ function DemandesTable(props) {
                                                 :
                                                 (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
                                                     :
-                                                    <Chip className={classes.chip} label="Refusé" />
+                                                    <Chip className={classes.chip} label="Refusée" />
                                                 )
                                             :
                                             <Chip className={classes.chip} label="Expiré" />
@@ -263,8 +263,8 @@ function DemandesTable(props) {
                                     <option value="">Tous</option>
                                     <option value="0">En attente</option>
                                     <option value="1">En cours</option>
-                                    <option value="2">Refusé</option>
-                                    <option value="3">Expiré</option>
+                                    <option value="2">Refusée</option>
+                                    <option value="3">Expirée</option>
                                 </select>
 
                         },

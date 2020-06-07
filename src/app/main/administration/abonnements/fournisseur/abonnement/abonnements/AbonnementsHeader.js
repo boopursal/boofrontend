@@ -23,7 +23,7 @@ function AbonnementsHeader(props) {
             </div>
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <Button component={Link} to="/admin/offres/abonnement/new" className="whitespace-no-wrap" variant="contained">
-                    <span className="hidden sm:flex">Ajouter nouvelle abonnement</span>
+                    <span className="hidden sm:flex">Ajouter nouveau abonnement</span>
                     <span className="flex sm:hidden">New</span>
                 </Button>
             </FuseAnimate>

@@ -153,10 +153,10 @@ function ConsultationsTable(props) {
                                             (row.original.demande.statut === 1 ?
                                                 <strong className="text-green">En cours</strong>
                                                 :
-                                                <Chip className={classes.chip} label="Refusé" />
+                                                <Chip className={classes.chip} label="Refusée" />
                                             )
                                         :
-                                        <strong className="text-red">Expiré</strong>
+                                        <strong className="text-red">Expirée</strong>
 
                                 }
 
@@ -170,7 +170,7 @@ function ConsultationsTable(props) {
                             >
                                 <option value="">Tous</option>
                                 <option value="1">En cours</option>
-                                <option value="3">Expiré</option>
+                                <option value="3">Expirée</option>
                             </select>
 
 

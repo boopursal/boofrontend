@@ -98,7 +98,7 @@ function FaqCategoriesDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {faqCategoriesDialog.type === 'new' ? 'Nouvelle Categorie' : 'Edit Categorie'}
+                        {faqCategoriesDialog.type === 'new' ? 'Nouvelle Categorie' : 'Editer Categorie'}
                     </Typography>
                 </Toolbar>
 

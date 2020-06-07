@@ -135,7 +135,7 @@ ColorlibStepIcon.propTypes = {
 };
 
 function getSteps() {
-    return ['Registrement', 'Information de la société', 'Secteurs d\'activités'];
+    return ['Inscription', 'Information de la société', 'Secteurs d\'activités'];
 }
 
 function Step2App(props) {
@@ -218,8 +218,6 @@ function Step2App(props) {
              </Helmet>
             <div className="flex flex-col items-center justify-center w-full">
 
-                <img className="w-100 m-20" src="assets/images/logos/icon.png" alt="logo" />
-
                 <FuseAnimate animation="transition.expandIn">
 
                     <Card className={classes.card}>
@@ -258,7 +256,7 @@ function Step2App(props) {
                                                         value={
                                                             form.pays
                                                         }
-                                                        placeholder="Selectionner une Pays"
+                                                        placeholder="Sélectionner une Pays"
                                                         textFieldProps={{
                                                             label: 'Pays',
                                                             InputLabelProps: {
@@ -280,7 +278,7 @@ function Step2App(props) {
                                                         value={
                                                             form.ville
                                                         }
-                                                        placeholder="Selectionner une ville"
+                                                        placeholder="Sélectionner une ville"
                                                         textFieldProps={{
                                                             label: 'Ville',
                                                             InputLabelProps: {

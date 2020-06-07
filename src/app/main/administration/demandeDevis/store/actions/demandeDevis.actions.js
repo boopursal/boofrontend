@@ -50,7 +50,7 @@ export function putDemande(data, id) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Demande Modifié' }));
+            dispatch(showMessage({ message: 'Demande Modifiée' }));
             dispatch(Actions.getCountForBadge('demandes-devis'));
             return dispatch({
                 type: SAVE_DEMANDE,

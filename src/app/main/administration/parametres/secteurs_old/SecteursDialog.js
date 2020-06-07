@@ -105,7 +105,7 @@ function SecteursDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {SecteursDialog.type === 'new' ? 'Nouveau Secteur' : 'Edit Secteur'}
+                        {SecteursDialog.type === 'new' ? 'Nouveau Secteur' : 'Editer Secteur'}
                     </Typography>
                 </Toolbar>
 

@@ -141,7 +141,7 @@ function AdminsDialog(props)
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {adminsDialog.type === 'new' ? 'Nouveau Admins' : 'Edit Admins'}
+                        {adminsDialog.type === 'new' ? 'Nouveau Admins' : 'Editer Admins'}
                     </Typography>
                 </Toolbar>
                 <div className="flex flex-col items-center justify-center pb-24">
@@ -219,7 +219,7 @@ function AdminsDialog(props)
                                 minLength: 6
                             }}
                             validationErrors={{
-                                minLength: 'Min character length is 6'
+                                minLength: 'La longueur minimale des caractères est de 6'
                             }}
                             required
                             fullWidth
@@ -240,7 +240,7 @@ function AdminsDialog(props)
                                 minLength: 4
                             }}
                             validationErrors={{
-                                minLength: 'Min character length is 6'
+                                minLength: 'La longueur minimale des caractères est de 6'
                             }}
                             fullWidth
                         />
@@ -327,7 +327,7 @@ function AdminsDialog(props)
                                 minLength: 6
                             }}
                             validationErrors={{
-                                minLength: 'Min character length is 6'
+                                minLength: 'La longueur minimale des caractères est de 6'
                             }}
                             required
                             fullWidth
@@ -348,7 +348,7 @@ function AdminsDialog(props)
                                                 minLength: 6
                                             }}
                                             validationErrors={{
-                                                minLength: 'Min character length is 6'
+                                                minLength: 'La longueur minimale des caractères est de 6'
                                             }}
                                             InputProps={{
                                                 endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>

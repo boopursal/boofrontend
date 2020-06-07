@@ -62,7 +62,9 @@ function UserMenu(props) {
                         {user.data.displayName}
                     </Typography>
                     <Typography className="text-11 capitalize" color="textSecondary">
-                        {user.role.toString()}
+                        {(user.role.toString() === 'ROLE_FOURNISSEUR_PRE' || user.role.toString() === 'ROLE_FOURNISSEUR') && 'FOURNISSEUR'}
+                        {(user.role.toString() === 'ROLE_ACHETEUR_PRE' || user.role.toString() === 'ROLE_ACHETEUR') && 'ACHETEUR'}
+                        {(user.role.toString() === 'ROLE_ADMIN' || user.role.toString() === 'ROLE_ADMIN') && 'ADMINISTRATEUR'}
                     </Typography>
                 </div>
 
@@ -116,12 +118,16 @@ function UserMenu(props) {
                             <ListItemText className="pl-0" primary="Inbox"/>
                         </MenuItem>
                         */}
-                            <MenuItem component={Link} to="/dashboard">
-                                <ListItemIcon className="min-w-40">
-                                    <Icon>dashboard</Icon>
-                                </ListItemIcon>
-                                <ListItemText className="pl-0" primary="Tableaux de bord" />
-                            </MenuItem>
+                            {
+                                (user.role.toString() !== 'ROLE_FOURNISSEUR_PRE' && user.role.toString() !== 'ROLE_ACHETEUR_PRE') &&
+                                <MenuItem component={Link} to="/dashboard">
+                                    <ListItemIcon className="min-w-40">
+                                        <Icon>dashboard</Icon>
+                                    </ListItemIcon>
+                                    <ListItemText className="pl-0" primary="Tableaux de bord" />
+                                </MenuItem>
+                            }
+
                             <MenuItem
                                 onClick={() => {
                                     dispatch(authActions.logoutUser());

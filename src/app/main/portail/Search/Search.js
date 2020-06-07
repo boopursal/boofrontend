@@ -64,7 +64,7 @@ function renderInputComponent(inputProps) {
 }
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    // console.log('===========================Render Suggestion===============================')
+    // console.log('===========================Render Suggestions===============================')
     //console.log(suggestion)
     let result = '';
     let img = '';
@@ -194,7 +194,7 @@ function Search(props) {
 
     function handleSuggestionsFetchRequested({ value }) {
         if (value.trim().length > 1) {
-            dispatch(Actions.loadSuggestions(value));
+            dispatch(Actions.loadSuggestions(value.trim()));
             // Fake an AJAX call
         }
     }

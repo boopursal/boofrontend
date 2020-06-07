@@ -137,7 +137,7 @@ function SousSecteursDialog(props)
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {SousSecteursDialog.type === 'new' ? 'Nouvelle activité' : 'Edit activité'}
+                        {SousSecteursDialog.type === 'new' ? 'Nouvelle activité' : 'Editer activité'}
                     </Typography>
                 </Toolbar>
                 
@@ -191,7 +191,7 @@ function SousSecteursDialog(props)
                                 
                             }
                             onChange={(value) => handleChipChange(value, 'secteur')}
-                            placeholder="Selectionner un secteur"
+                            placeholder="Sélectionner un secteur"
                             textFieldProps={{
                                 label          : 'Secteur',
                                 InputLabelProps: {

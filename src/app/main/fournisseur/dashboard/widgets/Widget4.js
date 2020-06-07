@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Typography, Paper, IconButton } from '@material-ui/core';
+import {  Typography, Paper } from '@material-ui/core';
 import {Link} from 'react-router-dom';
 
 function Widget4(props) {

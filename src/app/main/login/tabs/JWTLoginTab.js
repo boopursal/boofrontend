@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, InputAdornment, Icon } from '@material-ui/core';
+import { Button, InputAdornment, Icon, IconButton } from '@material-ui/core';
 import { TextFieldFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import * as authActions from 'app/auth/store/actions';
@@ -9,6 +9,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
@@ -33,6 +35,22 @@ function JWTLoginTab(props) {
     const classes = useStyles();
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
+    const [values, setValues] = useState({
+        email: '',
+        password: '',
+        showPassword: false,
+    });
+    const handleChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
+    };
+
+    const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
     useEffect(() => {
         if (login.error && login.error.message) {
@@ -93,17 +111,26 @@ function JWTLoginTab(props) {
 
                 <TextFieldFormsy
                     className="mb-16"
-                    type="password"
+                    type={values.showPassword ? 'text' : 'password'}
                     name="password"
-                    label="Password"
+                    label="Mot de passe"
+                    onChange={handleChange('password')}
                     validations={{
                         minLength: 6
                     }}
                     validationErrors={{
-                        minLength: 'Min character length is 6'
+                        minLength: 'La longueur minimale des caractères est de 6'
                     }}
                     InputProps={{
-                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                        endAdornment: <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                            >
+                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
                     }}
                     variant="outlined"
                     required

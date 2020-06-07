@@ -155,7 +155,7 @@ ColorlibStepIcon.propTypes = {
 };
 
 function getSteps() {
-    return ['Registrement', 'Information de la société', 'Secteurs d\'activités'];
+    return ['Inscription', 'Information de la société', 'Secteurs d\'activités'];
 }
 function renderSuggestion(suggestion, { query, isHighlighted }) {
     return (
@@ -266,7 +266,7 @@ function Step3App(props) {
     function handleSuggestionsFetchRequested({ value, reason }) {
         console.log(reason)
         if (reason === 'input-changed') {
-            value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value));
+            value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value.trim()));
             // Fake an AJAX call
         }
 
@@ -297,7 +297,6 @@ function Step3App(props) {
             </Helmet>
             <div className="flex flex-col items-center justify-center w-full">
 
-                <img className="w-100 m-20" src="assets/images/logos/icon.png" alt="logo" />
 
                 <FuseAnimate animation="transition.expandIn">
 
@@ -364,7 +363,7 @@ function Step3App(props) {
                                                     anchorEl={popperNode.current}
                                                     open={Boolean(options.children) || searchCategories.noSuggestions || searchCategories.loading}
                                                     popperOptions={{ positionFixed: true }}
-                                                    className="z-9999 mb-8"
+                                                    className="z-9999 mb-8 h-200 overflow-auto" 
                                                 >
                                                     <div ref={suggestionsNode}>
                                                         <Paper

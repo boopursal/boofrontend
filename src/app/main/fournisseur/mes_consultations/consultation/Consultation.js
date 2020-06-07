@@ -226,10 +226,10 @@ function Consultation(props) {
                                                             :
                                                             (consultation.data.demande.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
                                                                 :
-                                                                <Chip className={classes.chip} label="Refusé" />
+                                                                <Chip className={classes.chip} label="Refusée" />
                                                             )
                                                         :
-                                                        <Chip className={classes.chip} label="Expiré" />
+                                                        <Chip className={classes.chip} label="Expirée" />
 
                                                 }
                                                 {
@@ -268,7 +268,7 @@ function Consultation(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Basic Info" />
+                        <Tab className="h-64 normal-case" label="Infos générales" />
                         <Tab className="h-64 normal-case"
                             label={
                                 consultation.data && consultation.data.demande.attachements.length > 0
@@ -358,10 +358,10 @@ function Consultation(props) {
                                             <Grid item xs={12} sm={12}>
                                                 <TextFieldFormsy
                                                     className="mb-24"
-                                                    label="Sous-Secteurs"
+                                                    label="Activités"
                                                     id="sousSecteurs"
                                                     name="sousSecteurs"
-                                                    value={_.join(_.map(consultation.data.demande.sousSecteurs, 'name'), ', ')}
+                                                    value={_.join(_.map(consultation.data.demande.categories, 'name'), ', ')}
                                                     InputProps={{
                                                         readOnly: true,
                                                     }}
@@ -505,7 +505,7 @@ function Consultation(props) {
                                                     onChange={handleRadioChange}
                                                 >
                                                     <FormControlLabel value="0" checked={form.statut === 0} control={<Radio />} label="En cours" />
-                                                    <FormControlLabel value="1" checked={form.statut === 1} control={<Radio />} label="Gagner" />
+                                                    <FormControlLabel value="1" checked={form.statut === 1} control={<Radio />} label="Gagnée" />
                                                     <FormControlLabel value="2" checked={form.statut === 2} control={<Radio />} label="Perdue" />
 
                                                 </RadioGroupFormsy>
@@ -518,9 +518,9 @@ function Consultation(props) {
                                                     value={
                                                         personnel
                                                     }
-                                                    placeholder="Selectionner..."
+                                                    placeholder="Sélectionner..."
                                                     textFieldProps={{
-                                                        label: 'Affceter à',
+                                                        label: 'Affecter à',
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },
@@ -682,7 +682,7 @@ function Consultation(props) {
                                                         className="mt-20"
                                                         name="fix"
                                                         value={consultation.data.demande.acheteur.fix}
-                                                        label="Fix"
+                                                        label="Fixe"
                                                         InputProps={{
                                                             readOnly: true,
                                                             endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>

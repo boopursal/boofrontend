@@ -198,7 +198,7 @@ function JetonsDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {JetonsDialog.type === 'new' ? 'Nouveau Jeton' : 'Edit Jeton'}
+                        {JetonsDialog.type === 'new' ? 'Nouveau Jeton' : 'Editer Jeton'}
                     </Typography>
                 </Toolbar>
 

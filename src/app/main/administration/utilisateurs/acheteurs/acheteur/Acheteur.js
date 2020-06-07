@@ -365,7 +365,7 @@ function Acheteur(props) {
                                                     name="fix"
                                                     value={form.fix}
                                                     onChange={handleChange}
-                                                    label="Fix"
+                                                    label="Fixe"
                                                     autoComplete="fix"
                                                     validations={{
                                                         minLength: 10,
@@ -393,7 +393,7 @@ function Acheteur(props) {
                                                 value={
                                                     secteur
                                                 }
-                                                placeholder="Selectionner votre secteur d'activité"
+                                                placeholder="Sélectionner votre secteur d'activité"
                                                 textFieldProps={{
                                                     label: 'Secteur d\'activité',
                                                     InputLabelProps: {
@@ -510,7 +510,7 @@ function Acheteur(props) {
                                                 value={
                                                     pays
                                                 }
-                                                placeholder="Selectionner une Pays"
+                                                placeholder="Sélectionner une Pays"
                                                 textFieldProps={{
                                                     label: 'Pays',
                                                     InputLabelProps: {
@@ -582,7 +582,7 @@ function Acheteur(props) {
                                                 value={
                                                     ville
                                                 }
-                                                placeholder="Selectionner une ville"
+                                                placeholder="Sélectionner une ville"
                                                 textFieldProps={{
                                                     label: 'Ville',
                                                     InputLabelProps: {

@@ -42,28 +42,6 @@ function ConfirmPage(props) {
 
     }, [dispatch, login.error]);
 
-    useEffect(() => {
-        if (login.success) {
-            dispatch(
-                Actions.showMessage({
-                    message: 'ok',//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical: 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: 'success'//success error info warning null
-                }));
-                if(user.data.redirect){
-                    props.history.push({
-                        pathname: user.data.redirect
-                    });
-                }
-                
-        }
-
-    }, [dispatch, login.success]);
-
 
     return (
         <FuseSplashScreen/>

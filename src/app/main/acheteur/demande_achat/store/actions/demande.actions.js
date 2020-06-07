@@ -100,7 +100,7 @@ export function saveDemande(data,history,categories) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Demande Saved' }));
+            dispatch(showMessage({ message: 'Demande enregistrée' }));
 
             dispatch({
                 type: SAVE_DEMANDE,
@@ -143,7 +143,7 @@ export function putDemande(data, url,history,categories) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Demande Modifié' }));
+            dispatch(showMessage({ message: 'Demande Modifiée' }));
 
             dispatch({
                 type: SAVE_DEMANDE,
@@ -215,7 +215,7 @@ export function uploadAttachement(file) {
 
                 }),
                 dispatch(showMessage({
-                    message: 'Document uploaded!', anchorOrigin: {
+                    message: 'Document téléchargé!', anchorOrigin: {
                         vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },
@@ -251,6 +251,7 @@ export function newDemande() {
     const data = {
         reference: '',
         description: '',
+        localisation: 1,
         dateExpiration: null,
         isPublic: false,
         isAnonyme: false,

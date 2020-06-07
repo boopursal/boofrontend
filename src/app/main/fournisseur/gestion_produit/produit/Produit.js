@@ -482,11 +482,11 @@ function Produit(props) {
                                 <CardContent className="flex flex-col items-center justify-center text-center p-48">
 
                                     <Typography variant="h4" className="mb-16 text-red">
-                                        Votre abonnement a expiré depuis {days * -1} jours
+                                        Votre abonnement a expiré depuis {days * -1} jour(s)
                                     </Typography>
 
                                     <Typography color="textSecondary" className="mb-40">
-                                        Pour la renouveler, vous pouvez ajouter une commande en cliquant sur le bouton suivant
+                                        Pour le renouveler, vous pouvez ajouter une commande en cliquant sur le bouton suivant
                                     </Typography>
 
                                     <Button component={Link} to={`/renouveler/${abonnement.id}`} className="whitespace-no-wrap" color="secondary" variant="contained">
@@ -568,11 +568,11 @@ function Produit(props) {
                                 <div className="flex flex-col min-w-0">
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography className="text-16 sm:text-20 truncate">
-                                            {form.reference ? form.reference : 'Nouvelle Produit'}
+                                            {form.reference ? form.reference : 'Nouveau produit'}
                                         </Typography>
                                     </FuseAnimate>
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                        <Typography variant="caption">Produit Detail</Typography>
+                                        <Typography variant="caption">Détails du produit</Typography>
                                     </FuseAnimate>
                                 </div>
                             </div>
@@ -601,7 +601,7 @@ function Produit(props) {
                     scrollButtons="auto"
                     classes={{ root: "w-full h-64" }}
                 >
-                    <Tab className="h-64 normal-case" label="Basic Info" />
+                    <Tab className="h-64 normal-case" label="Infos générales" />
                     <Tab className="h-64 normal-case"
                         label={
                             form && form.images.length > 0
@@ -651,7 +651,7 @@ function Produit(props) {
                                                         secteur
                                                     }
                                                     onChange={(value) => handleChipChange(value, 'secteur')}
-                                                    placeholder="Selectionner un secteur"
+                                                    placeholder="Sélectionner un secteur"
                                                     textFieldProps={{
                                                         label: 'Secteurs',
                                                         InputLabelProps: {
@@ -676,7 +676,7 @@ function Produit(props) {
                                                     sousSecteur
                                                 }
                                                 onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                                placeholder="Selectionner une avtivité"
+                                                placeholder="Sélectionner une avtivité"
                                                 textFieldProps={{
                                                     label: 'Activités',
                                                     InputLabelProps: {
@@ -701,7 +701,7 @@ function Produit(props) {
                                                     categorie
                                                 }
                                                 onChange={(value) => handleChipChange(value, 'categorie')}
-                                                placeholder="Selectionner un produit"
+                                                placeholder="Sélectionner un produit"
                                                 textFieldProps={{
                                                     label: 'Produits',
                                                     InputLabelProps: {
@@ -730,7 +730,7 @@ function Produit(props) {
 
 
                                                 <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                                                    <DialogTitle id="form-dialog-title">Suggestion secteur d'activité</DialogTitle>
+                                                    <DialogTitle id="form-dialog-title">Suggestions secteur d'activité</DialogTitle>
                                                     <DialogContent>
 
                                                         <Grid container spacing={3} >
@@ -820,7 +820,7 @@ function Produit(props) {
                                                     minLength: 6
                                                 }}
                                                 validationErrors={{
-                                                    minLength: 'Min character length is 6'
+                                                    minLength: 'La longueur minimale des caractères est de 6'
                                                 }}
 
                                                 required
@@ -964,7 +964,7 @@ function Produit(props) {
 
                                         <Grid item xs={12} sm={6}>
                                             <Typography variant="caption">
-                                                - Taille maximale par fichier : 1 Mo <br />
+                                                - Taille maximale par fichier : 2 Mb <br />
                                                 - 5 fichiers à télécharger
                                                 </Typography>
                                         </Grid>

@@ -77,7 +77,7 @@ export function putConsultation(data) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Consultation Modifié' }));
+            dispatch(showMessage({ message: 'Consultation Modifiée' }));
             return dispatch({
                 type: SAVE_CONSULTANTION,
                 payload: response.data

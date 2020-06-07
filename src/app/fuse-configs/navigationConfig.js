@@ -256,10 +256,10 @@ const navigationConfig = [
                                 'auth': authRoles.admin,
                                 'url': '/admin/faqs',
                             },
-                            
+
                         ]
                     },
-                    
+
                 ]
             },
             {
@@ -335,16 +335,35 @@ const navigationConfig = [
         'url': '/dashboard'
     },
     {
-        'id': 'demandes_ha',
+        'id': 'demandes-acheteur',
         'title': 'Demandes de devis',
         'auth': authRoles.acheteur,
-        'type': 'item',
         'icon': 'inbox',
-        'url': '/demandes'
+        'type': 'collapse',
+        'children': [
+            {
+                'id': 'demandes_ha',
+                'title': 'Liste des demandes',
+                'auth': authRoles.acheteur,
+                'exact': true,
+                'type': 'item',
+                'url': '/demandes'
+            },
+            {
+                'id': 'demande_nv',
+                'title': 'Nouvelle demande',
+                'auth': authRoles.acheteur,
+                'exact': true,
+                'type': 'item',
+                'url': '/demandes/new'
+            },
+
+        ]
     },
+
     {
         'id': 'black_listes_ha',
-        'title': 'BlackListes',
+        'title': 'Blacklistes',
         'auth': authRoles.acheteur,
         'type': 'item',
         'icon': 'work_off',
@@ -395,28 +414,47 @@ const navigationConfig = [
 
     },
     {
-        'id': 'mes_produits',
+        'id': 'produits-fournisseur',
         'title': 'Produits',
         'auth': authRoles.fournisseur,
-        'type': 'item',
+        'type': 'collapse',
         'icon': 'local_offer',
-        'url': '/produits',
+        'children': [
+            {
+                'id': 'mes_produits',
+                'title': 'Liste des produits',
+                'auth': authRoles.fournisseur,
+                'exact': true,
+                'type': 'item',
+                'url': '/produits',
 
+            },
+            {
+                'id': 'nv_produit',
+                'title': 'Nouveau produit',
+                'auth': authRoles.fournisseur,
+                'exact': true,
+                'type': 'item',
+                'url': '/produits/new',
+
+            },
+            {
+                'id': 'product-devis',
+                'title': 'Demandes de devis',
+                'auth': authRoles.fournisseur,
+                'type': 'item',
+                'url': '/product_devis',
+                'badge': {
+                    'title': 'product-devis',
+                    'bg': 'rgb(255, 111, 0)',
+                    'fg': '#FFFFFF',
+                    'count': 0
+                }
+            },
+        ]
     },
-    {
-        'id': 'product-devis',
-        'title': 'Demandes de devis',
-        'auth': authRoles.fournisseur,
-        'type': 'item',
-        'icon': 'inbox',
-        'url': '/product_devis',
-        'badge': {
-            'title': 'product-devis',
-            'bg': 'rgb(255, 111, 0)',
-            'fg': '#FFFFFF',
-            'count': 0
-        }
-    },
+
+
     {
         'id': 'messages',
         'title': 'Messages',
@@ -466,15 +504,15 @@ const navigationConfig = [
                 exact: true,
                 'url': '/abonnement',
             },
-           /* {
-                'id': 'offre-commandes',
-                'title': 'Vos commandes',
-                'type': 'item',
-                'auth': authRoles.fournisseur,
-
-                'icon': 'format_list_bulleted',
-                'url': '/offres/commande',
-            },*/
+            /* {
+                 'id': 'offre-commandes',
+                 'title': 'Vos commandes',
+                 'type': 'item',
+                 'auth': authRoles.fournisseur,
+ 
+                 'icon': 'format_list_bulleted',
+                 'url': '/offres/commande',
+             },*/
             {
                 'id': 'fr-commandes',
                 'title': 'Jetons',

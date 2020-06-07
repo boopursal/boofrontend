@@ -46,8 +46,6 @@ function AbonnementsTable(props) {
     const dispatch = useDispatch();
     const abonnements = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.abonnements.data);
     const loading = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.abonnements.loading);
-    const pageCount = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.abonnements.pageCount);
-    const parametres = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.abonnements.parametres);
     const searchText = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.abonnements.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
@@ -159,7 +157,7 @@ function AbonnementsTable(props) {
                                                             ?
                                                             <Chip className={classes.chip} label="Annulée" />
                                                             :
-                                                            <Chip className={classes.chip} label="Expirée" />
+                                                            <Chip className={classes.chip} label="Expiré" />
                                                     )
 
                                             )
@@ -170,7 +168,7 @@ function AbonnementsTable(props) {
                                                     ?
                                                     <Chip className={classes.chip2} label="En cours" />
                                                     :
-                                                    <Chip className={classes.chip} label="Expirée" />
+                                                    <Chip className={classes.chip} label="Expiré" />
                                             )
 
                                     }

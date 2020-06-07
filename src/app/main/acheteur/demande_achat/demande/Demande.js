@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress,Popper,Chip, IconButton, Tooltip, SnackbarContent, ListItemText } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, Popper, Chip, IconButton, Tooltip, SnackbarContent, ListItemText, FormControlLabel, Radio } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles, withStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, CheckboxFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, CheckboxFormsy, RadioGroupFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -285,7 +285,7 @@ function Demande(props) {
     function handleSuggestionsFetchRequested({ value, reason }) {
         console.log(reason)
         if (reason === 'input-changed') {
-            value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value));
+            value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value.trim()));
             // Fake an AJAX call
         }
 
@@ -307,7 +307,10 @@ function Demande(props) {
     function handleDelete(id) {
         setCategories(_.reject(categories, function (o) { return o.id == id; }))
     }
+    function handleRadioChange(e) {
 
+        setForm(_.set({ ...form }, 'localisation', parseInt(e.target.value)));
+    }
     function handleSubmit() {
         //event.preventDefault();
 
@@ -315,10 +318,10 @@ function Demande(props) {
         const { demandeId } = params;
 
         if (demandeId === 'new') {
-            dispatch(Actions.saveDemande(form, props.history,categories));
+            dispatch(Actions.saveDemande(form, props.history, categories));
         }
         else {
-            dispatch(Actions.putDemande(form, form.id, props.history,categories));
+            dispatch(Actions.putDemande(form, form.id, props.history, categories));
         }
     }
 
@@ -353,7 +356,7 @@ function Demande(props) {
                                             </Typography>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                            <Typography variant="caption">Demande Detail</Typography>
+                                            <Typography variant="caption">Détails de la demande</Typography>
                                         </FuseAnimate>
                                     </div>
                                 </div>
@@ -390,7 +393,7 @@ function Demande(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Basic Info" />
+                        <Tab className="h-64 normal-case" label="Infos générales" />
                         <Tab className="h-64 normal-case"
                             label={
                                 form && form.attachements.length > 0
@@ -581,12 +584,12 @@ function Demande(props) {
                                                                 {searchCategories.noSuggestions && (
                                                                     <Typography className="px-16 py-12">
                                                                         Aucun résultat..
-                                                                </Typography>
+                                                                    </Typography>
                                                                 )}
                                                                 {searchCategories.loading && (
                                                                     <div className="px-16 py-12 text-center">
                                                                         <CircularProgress color="secondary" /> <br /> Chargement ...
-                                                                </div>
+                                                                    </div>
                                                                 )}
                                                             </Paper>
                                                         </div>
@@ -632,9 +635,20 @@ function Demande(props) {
                                         />
 
 
-                                        <Grid container spacing={3} >
+                                        <Grid container spacing={3} className="flex items-center">
+                                            <Grid item xs={12} sm={4} >
+                                                <RadioGroupFormsy
+                                                    className="inline"
+                                                    name="statut"
+                                                    label="Diffuser à l'échelle"
+                                                    onChange={handleRadioChange}
+                                                >
+                                                    <FormControlLabel value="1" checked={form.localisation === 1} control={<Radio />} label="Internationale" />
+                                                    <FormControlLabel  value="2" checked={form.localisation === 2} control={<Radio />} label="Nationale" />
 
-                                            <Grid item xs={12} sm={4}>
+                                                </RadioGroupFormsy>
+                                            </Grid>
+                                            <Grid item xs={12} sm={4} className="flex items-center"> 
                                                 <CheckboxFormsy
                                                     name="isPublic"
                                                     onChange={(e) => handleCheckBoxChange(e, 'isPublic')}

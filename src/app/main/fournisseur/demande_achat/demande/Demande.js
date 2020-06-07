@@ -177,10 +177,10 @@ function Demande(props) {
                                                             :
                                                             (demande.data.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
                                                                 :
-                                                                <Chip className={classes.chip} label="Refusé" />
+                                                                <Chip className={classes.chip} label="Refusée" />
                                                             )
                                                         :
-                                                        <Chip className={classes.chip} label="Expiré" />
+                                                        <Chip className={classes.chip} label="Expirée" />
 
                                                 }
                                                 {
@@ -233,8 +233,8 @@ function Demande(props) {
                                                                                         <DialogContentText id="alert-dialog-description">
                                                                                             {
                                                                                                 user.jetons > 0
-                                                                                                    ? 'Attention vous allez être débité d´un jeton !'
-                                                                                                    : 'Vous n\'avez plus de jetons, vous pouvez toujours commander des jetons.'
+                                                                                                    ? 'Avertissement! vous allez être débité d´un jeton !'
+                                                                                                    : 'Votre sole de jetons ne vous permet pas de consulter cette demande.'
                                                                                             }
                                                                                         </DialogContentText>
                                                                                     </DialogContent>
@@ -251,7 +251,7 @@ function Demande(props) {
                                                                                                 props.history.push('/abonnement/commandes')
                                                                                             dispatch(Actions.closeDialog())
                                                                                         }} color="primary" autoFocus>
-                                                                                            {user.jetons ? 'Ok' : 'Commander maintenant'}
+                                                                                            {user.jetons ? 'Pas maintenant' : 'Commander jetons'}
                                                                                         </Button>
 
 
@@ -294,7 +294,7 @@ function Demande(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Basic Info" />
+                        <Tab className="h-64 normal-case" label="Infos générales" />
                         <Tab className="h-64 normal-case"
                             label={
                                 demande.data && demande.data.attachements.length > 0
@@ -571,7 +571,7 @@ function Demande(props) {
                                                         className="mt-20"
                                                         name="fix"
                                                         value={demande.visit.demande.acheteur.fix}
-                                                        label="Fix"
+                                                        label="Fixe"
                                                         InputProps={{
                                                             readOnly: true,
                                                             endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
@@ -843,7 +843,7 @@ function Demande(props) {
                                                                 className="mt-20"
                                                                 name="fix"
                                                                 value="+212-522.36.57.97"
-                                                                label="Fix"
+                                                                label="Fixe"
                                                                 InputProps={{
                                                                     readOnly: true,
                                                                     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>

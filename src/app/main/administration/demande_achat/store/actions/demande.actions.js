@@ -125,7 +125,7 @@ export function putDemande(data,sousSecteurs,motif, id,history,categories) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Demande Modifié' }));
+            dispatch(showMessage({ message: 'Demande Modifiée' }));
             dispatch(Actions.getCountForBadge('demandes-admin'));
             dispatch({
                 type: SAVE_DEMANDE,
@@ -196,7 +196,7 @@ export function uploadAttachement(file) {
 
                 }),
                 dispatch(showMessage({
-                    message: 'Document uploaded!', anchorOrigin: {
+                    message: 'Document téléchargé!', anchorOrigin: {
                         vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },

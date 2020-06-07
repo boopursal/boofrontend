@@ -114,7 +114,7 @@ function PersonnelsDialog(props)
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {personnelsDialog.type === 'new' ? 'Nouveau Personnel' : 'Edit Personnel'}
+                        {personnelsDialog.type === 'new' ? 'Nouveau Personnel' : 'Editer Personnel'}
                     </Typography>
                 </Toolbar>
                

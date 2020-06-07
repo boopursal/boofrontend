@@ -126,7 +126,7 @@ function VillesDialog(props)
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {VillesDialog.type === 'new' ? 'Nouvelle Ville' : 'Edit Ville'}
+                        {VillesDialog.type === 'new' ? 'Nouvelle Ville' : 'Editer Ville'}
                     </Typography>
                 </Toolbar>
                 
@@ -180,7 +180,7 @@ function VillesDialog(props)
                                 
                             }
                             onChange={(value) => handleChipChange(value, 'pays')}
-                            placeholder="Selectionner un pays"
+                            placeholder="Sélectionner un pays"
                             textFieldProps={{
                                 label          : 'Pays',
                                 InputLabelProps: {

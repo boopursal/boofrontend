@@ -922,7 +922,7 @@ function Commande(props) {
                                                         id="secteurs"
                                                         name="secteurs"
                                                         value={secteur1}
-                                                        placeholder="Selectionner.. "
+                                                        placeholder="Sélectionner.. "
                                                         textFieldProps={{
                                                             label: 'Secteurs',
                                                             InputLabelProps: {
@@ -943,7 +943,7 @@ function Commande(props) {
                                                         id="activites"
                                                         name="activites"
                                                         value=""
-                                                        placeholder="Selectionner.. "
+                                                        placeholder="Sélectionner.. "
                                                         textFieldProps={{
                                                             label: 'Activités',
                                                             InputLabelProps: {
@@ -971,7 +971,7 @@ function Commande(props) {
 
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">Suggestion </Typography>
+                                                    <Typography className="mb-16" variant="h6">Suggestions </Typography>
                                                 </Grid>
                                             </Grid>
                                             <Divider />

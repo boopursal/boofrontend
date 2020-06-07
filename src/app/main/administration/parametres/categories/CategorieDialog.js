@@ -118,7 +118,7 @@ function CategoriesDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {categorieDialog.type === 'new' ? 'Nouveau produit' : 'Edit produit'}
+                        {categorieDialog.type === 'new' ? 'Nouveau produit' : 'Editer produit'}
                     </Typography>
                 </Toolbar>
 

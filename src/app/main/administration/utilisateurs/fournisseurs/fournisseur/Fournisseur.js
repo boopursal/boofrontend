@@ -397,7 +397,7 @@ function Fournisseur(props) {
                                                         name="fix"
                                                         value={form.fix}
                                                         onChange={handleChange}
-                                                        label="Fix"
+                                                        label="Fixe"
                                                         autoComplete="fix"
                                                         validations={{
                                                             minLength: 10,
@@ -516,7 +516,7 @@ function Fournisseur(props) {
                                                     value={
                                                         pays
                                                     }
-                                                    placeholder="Selectionner une Pays"
+                                                    placeholder="Sélectionner une Pays"
                                                     textFieldProps={{
                                                         label: 'Pays',
                                                         InputLabelProps: {
@@ -588,7 +588,7 @@ function Fournisseur(props) {
                                                     value={
                                                         ville
                                                     }
-                                                    placeholder="Selectionner une ville"
+                                                    placeholder="Sélectionner une ville"
                                                     textFieldProps={{
                                                         label: 'Ville',
                                                         InputLabelProps: {
@@ -679,7 +679,7 @@ function Fournisseur(props) {
 
                                         }
                                         onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                        placeholder="Selectionner multiple secteurs d'activités"
+                                        placeholder="Sélectionner multiple secteurs d'activités"
                                         textFieldProps={{
                                             label: "Secteurs d'activités",
                                             InputLabelProps: {

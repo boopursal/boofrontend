@@ -1194,7 +1194,7 @@ function Renouvellement(props) {
                                                     id="secteurs"
                                                     name="secteurs"
                                                     value={secteur1}
-                                                    placeholder="Selectionner.. "
+                                                    placeholder="Sélectionner.. "
                                                     textFieldProps={{
                                                         label: 'Secteurs',
                                                         InputLabelProps: {
@@ -1215,7 +1215,7 @@ function Renouvellement(props) {
                                                     id="activites"
                                                     name="activites"
                                                     value=""
-                                                    placeholder="Selectionner.. "
+                                                    placeholder="Sélectionner.. "
                                                     textFieldProps={{
                                                         label: 'Activités',
                                                         InputLabelProps: {

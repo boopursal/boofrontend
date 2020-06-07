@@ -219,7 +219,7 @@ function Faq(props) {
                                                 value={
                                                     categorie
                                                 }
-                                                placeholder="Selectionner une categorie"
+                                                placeholder="Sélectionner une categorie"
                                                 textFieldProps={{
                                                     label: 'Catégories',
                                                     InputLabelProps: {

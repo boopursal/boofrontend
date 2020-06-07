@@ -241,6 +241,10 @@ function Demande(props) {
 
         setForm(_.set({ ...form }, 'statut', parseInt(e.target.value)));
     }
+    function handleRadioLocalisation(e) {
+
+        setForm(_.set({ ...form }, 'localisation', parseInt(e.target.value)));
+    }
     function handleCheckBoxChange(e, name) {
 
         setForm(_.set({ ...form }, name, e.target.checked));
@@ -281,7 +285,7 @@ function Demande(props) {
     function handleSuggestionsFetchRequested({ value, reason }) {
         console.log(reason)
         if (reason === 'input-changed') {
-            value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value));
+            value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value.trim()));
             // Fake an AJAX call
         }
 
@@ -343,7 +347,7 @@ function Demande(props) {
                                             </Typography>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                            <Typography variant="caption">Demande Detail</Typography>
+                                            <Typography variant="caption">Détails de la demande</Typography>
                                         </FuseAnimate>
                                     </div>
                                 </div>
@@ -381,7 +385,7 @@ function Demande(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Basic Info" />
+                        <Tab className="h-64 normal-case" label="Infos générales" />
                         <Tab className="h-64 normal-case"
                             label={
                                 form && form.attachements.length > 0
@@ -610,6 +614,16 @@ function Demande(props) {
                                                     <FormControlLabel disabled={form.reference !== null} value="2" checked={form.statut === 2} control={<Radio />} label="Rejeter" />
 
                                                 </RadioGroupFormsy>
+                                                <RadioGroupFormsy
+                                                    className="inline mb-10 "
+                                                    name="statut"
+                                                    label="Diffuser à l'échelle"
+                                                    onChange={handleRadioLocalisation}
+                                                >
+                                                    <FormControlLabel value="1" checked={form.localisation === 1} control={<Radio />} label="Internationale" />
+                                                    <FormControlLabel  value="2" checked={form.localisation === 2} control={<Radio />} label="Nationale" />
+
+                                                </RadioGroupFormsy>
                                             </Grid>
                                             <Grid item xs={12} sm={3}>
                                                 <CheckboxFormsy
@@ -666,7 +680,7 @@ function Demande(props) {
 
                                                 }
                                                 onChange={(value) => handleChipChange2(value, 'motifRejet')}
-                                                placeholder="Selectionner le motif du rejet"
+                                                placeholder="Sélectionner le motif du rejet"
                                                 textFieldProps={{
                                                     label: 'Motif du rejet',
                                                     InputLabelProps: {

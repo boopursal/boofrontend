@@ -104,7 +104,7 @@ function MotifsDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {MotifsDialog.type === 'new' ? 'Nouveau Motif' : 'Edit Motif'}
+                        {MotifsDialog.type === 'new' ? 'Nouveau Motif' : 'Editer Motif'}
                     </Typography>
                 </Toolbar>
 

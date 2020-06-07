@@ -105,7 +105,7 @@ function PaysDialog(props) {
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {paysDialog.type === 'new' ? 'Nouveau Pays' : 'Edit Pays'}
+                        {paysDialog.type === 'new' ? 'Nouveau Pays' : 'Editer Pays'}
                     </Typography>
                 </Toolbar>
 

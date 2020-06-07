@@ -1,19 +1,18 @@
 import React from 'react';
-import {Icon, Typography, Paper, IconButton} from '@material-ui/core';
+import { Typography, Paper } from '@material-ui/core';
+import {Link} from 'react-router-dom';
 
-function Widget2(props)
-{
+function Widget2(props) {
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
             <div className="flex items-center justify-between pr-4 pl-16 pt-4">
                 <Typography className="text-16 font-bold" >{/*props.widget.title*/} Demande(s) consultée(s)</Typography>
-               
+
             </div>
             <div className="text-center pt-12 pb-28">
-                <Typography
-                    className="text-72 leading-none text-teal">{/*props.widget.data.count*/}
+                <Link to="/consultations" className="text-72 leading-none text-teal">
                     {props.widget}
-                    </Typography>
+                </Link>
                 <Typography className="text-16" color="textSecondary">Demande(s)</Typography>
             </div>
             {/*

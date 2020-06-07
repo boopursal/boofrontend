@@ -165,7 +165,7 @@ function MessageTable(props) {
 
                         },
                         {
-                            Header: "Date création",
+                            Header: "Date de création",
                             accessor: "created",
                             filterable: false,
                             Cell: row => moment(row.original.created).format('DD/MM/YYYY HH:mm')

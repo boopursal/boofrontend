@@ -334,7 +334,7 @@ function Profile(props) {
                                                         name="fix"
                                                         value={form.fix}
                                                         onChange={handleChange}
-                                                        label="Fix"
+                                                        label="Fixe"
                                                         autoComplete="fix"
                                                         validations={{
                                                             minLength: 10,
@@ -362,7 +362,7 @@ function Profile(props) {
                                                     value={
                                                         secteur
                                                     }
-                                                    placeholder="Selectionner votre secteur d'activité"
+                                                    placeholder="Sélectionner votre secteur d'activité"
                                                     textFieldProps={{
                                                         label: 'Secteur d\'activité',
                                                         InputLabelProps: {
@@ -479,7 +479,7 @@ function Profile(props) {
                                                     value={
                                                         pays
                                                     }
-                                                    placeholder="Selectionner une Pays"
+                                                    placeholder="Sélectionner une Pays"
                                                     textFieldProps={{
                                                         label: 'Pays',
                                                         InputLabelProps: {
@@ -551,7 +551,7 @@ function Profile(props) {
                                                     value={
                                                         ville
                                                     }
-                                                    placeholder="Selectionner une ville"
+                                                    placeholder="Sélectionner une ville"
                                                     textFieldProps={{
                                                         label: 'Ville',
                                                         InputLabelProps: {
@@ -825,10 +825,10 @@ function Profile(props) {
                                         label="Mot de passe actuel"
                                         validations={{
                                             minLength: 6,
-                                            matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/
+                                            matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}/
                                         }}
                                         validationErrors={{
-                                            minLength: 'Min character length is 6',
+                                            minLength: 'La longueur minimale des caractères est de 6',
                                             matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
                                         }}
                                         InputProps={{
@@ -847,7 +847,7 @@ function Profile(props) {
                                             minLength: 6
                                         }}
                                         validationErrors={{
-                                            minLength: 'Min character length is 6'
+                                            minLength: 'La longueur minimale des caractères est de 6'
                                         }}
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>

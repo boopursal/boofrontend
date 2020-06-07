@@ -235,10 +235,10 @@ function AcheteurTab(props) {
                     label="Mot de passe"
                     validations={{
                         minLength: 6,
-                        matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/
+                        matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}/
                     }}
                     validationErrors={{
-                        minLength: 'Min character length is 6',
+                        minLength: 'La longueur minimale des caractères est de 6',
                         matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
                     }}
                     InputProps={{
@@ -281,7 +281,7 @@ function AcheteurTab(props) {
                     disabled={!isFormValid || /*!recaptcha ||*/ register.loading}
                     value="legacy"
                 >
-                    Register
+                    Enregistrer
                     {register.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                 </Button>
 
