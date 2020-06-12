@@ -95,8 +95,8 @@ class FuseUtils {
 
     static getUrl()
     {
-      //return "https://ha.7e-sky.com";
-      return "http://192.168.1.124:8000";
+      return "https://ha.7e-sky.com";
+      //return "http://192.168.1.124:8000";
       //return "https://enigmatic-bastion-83517.herokuapp.com/";
     }
 
