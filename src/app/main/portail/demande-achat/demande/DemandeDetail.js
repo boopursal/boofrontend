@@ -40,7 +40,15 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px',
         height: 24
     },
-
+    grid: {
+        marginBottom: '-16px',
+        marginTop: '-16px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        '& > .MuiGrid-item': {
+            padding: '16px'
+        }
+    },
 }));
 
 function DemandeDetail(props) {
@@ -87,7 +95,7 @@ function DemandeDetail(props) {
                 </Helmet>
             }
 
-            <Grid container spacing={2} className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
+            <Grid container className={clsx(classes.grid, "max-w-2xl mx-auto py-48 sm:px-16 items-start")}>
 
                 {
                     demande.loading ?
@@ -148,11 +156,10 @@ function DemandeDetail(props) {
                                                                 language: 'fr',       // which language to use (see LANGUAGES)
                                                                 networks: [           // which networks to include (see SHARING NETWORKS)
                                                                     'linkedin',
-                                                                    'facebook',
                                                                     'twitter',
                                                                     'email',
-                                                                    'messenger',
-                                                                    'whatsapp'
+                                                                    'facebook',
+                                                                    
                                                                 ],
                                                                 padding: 8,          // padding within buttons (INTEGER)
                                                                 radius: 4,            // the corner radius on each button (INTEGER)
@@ -162,7 +169,7 @@ function DemandeDetail(props) {
                                                                 // OPTIONAL PARAMETERS
                                                                 //url: 'https://www.sharethis.com', // (defaults to current url)
                                                                 // image: 'https://bit.ly/2CMhCMC',  // (defaults to og:image or twitter:image)
-                                                                description:  demande.data.description,       // (defaults to og:description or twitter:description)
+                                                                description: demande.data.description,       // (defaults to og:description or twitter:description)
                                                                 title: demande.data.titre,            // (defaults to og:title or twitter:title)
                                                                 //message: 'custom email text',     // (only for email sharing)
                                                                 //subject: 'custom email subject',  // (only for email sharing)
@@ -188,8 +195,8 @@ function DemandeDetail(props) {
                                                     activités
                                                 </div>
                                                 {
-                                                    demande.data.sousSecteurs &&
-                                                    demande.data.sousSecteurs.map((item, index) => (
+                                                    demande.data.categories &&
+                                                    demande.data.categories.map((item, index) => (
                                                         <Chip
                                                             key={index}
                                                             label={item.name}
@@ -207,7 +214,7 @@ function DemandeDetail(props) {
                                                 }
 
                                                 {
-                                                    demande.data.attachements &&
+                                                    demande.data.attachements && demande.data.attachements.length > 0 &&
                                                     <>
                                                         <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16 ">
                                                             Pièce(s) jointe(s)
@@ -253,7 +260,7 @@ function DemandeDetail(props) {
                                                     // or use a string like 'en-US' to override it.
                                                     { minimumFractionDigits: 2 }
                                                 ) +
-                                                (demande.data.currency ? ' ' + demande.data.currency.name+ ' HT' :'') 
+                                                (demande.data.currency ? ' ' + demande.data.currency.name + ' HT' : '')
                                                 :
                                                 <span className="capitalize">à consulter</span>
                                             }

@@ -20,7 +20,7 @@ function FooterLayout3(props) {
                             </Typography>
                             <Typography className="text-justify">
                                 Les Achats Industriels est une place de marché b2b qui permet aux Acheteurs et aux Fournisseurs de se rencontrer dans une même plate-forme (électronique).
-                                <br /><br /> Nous nous positionnons en tant qu'intermédiaire entre les deux parties afin de faciliter aux uns et aux autres de vendre ou/et d’acheter de manière fluide, économique, rapide, sans limites géographique .
+                                <br /><br /> Nous nous positionnons en tant qu'intermédiaire entre les deux parties afin de faciliter aux uns et aux autres de vendre ou/et d’acheter de manière fluide, économique, rapide, sans limites géographiques.
                             </Typography>
 
 

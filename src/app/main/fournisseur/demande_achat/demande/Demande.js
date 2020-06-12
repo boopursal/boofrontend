@@ -354,13 +354,13 @@ function Demande(props) {
                                                 />
 
                                             </Grid>
-                                           
+
                                         </Grid>
 
                                         <Grid container spacing={3} >
 
                                             <Grid item xs={12} sm={4}>
-                                            <TextFieldFormsy
+                                                <TextFieldFormsy
                                                     className="mb-24"
                                                     label={demande.data.currency ? "Budget en " + demande.data.currency.name : 'Budget'}
                                                     id="budget"
@@ -478,7 +478,7 @@ function Demande(props) {
 
                                                 </div>
                                             ))
-                                            : 'Aucune pièce jointe attaché a cette demande'
+                                            : 'Aucune pièce jointe attachée a cette demande'
                                         }
                                     </div>
 

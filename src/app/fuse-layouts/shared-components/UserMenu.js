@@ -13,6 +13,7 @@ function UserMenu(props) {
     const dispatch = useDispatch();
     const user = useSelector(({ auth }) => auth.user);
     const [userMenu, setUserMenu] = useState(null);
+    const config = useSelector(({fuse}) => fuse.settings.current.layout);
 
     const userMenuClick = event => {
         setUserMenu(event.currentTarget);
@@ -25,7 +26,7 @@ function UserMenu(props) {
     return (
         <React.Fragment>
             {/* ============= TOKENS FOURNISSEURS ============*/}
-            {user.role === 'ROLE_FOURNISSEUR' ?
+            {user.role === 'ROLE_FOURNISSEUR' && config.style === 'layout1' ?
                 (
                     !user.requestJeton ?
                         <div

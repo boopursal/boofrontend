@@ -7,7 +7,7 @@ class ScrollToTop extends React.Component {
     if (
       this.props.location.pathname !== prevProps.location.pathname
     ) {
-        let ps = document.querySelector('.ps');
+        let ps = document.querySelector('.st');
         if(ps)
         ps.scrollTop = 0;
     }

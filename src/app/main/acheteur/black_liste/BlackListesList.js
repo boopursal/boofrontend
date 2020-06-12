@@ -81,12 +81,12 @@ function BlackListesList(props) {
                         className: "font-bold"
                     },
                     {
-                        Header: "Date de blackListe",
+                        Header: "Date de Blackliste",
                         id: "created",
                         accessor: d => moment(d.created).format('DD/MM/YYYY HH:mm'),
                     },
                     {
-                        Header: "Date de déblackListe",
+                        Header: "Date de Déblackliste",
                         id: "deblacklister",
                         accessor: d => moment(d.deblacklister).format('DD/MM/YYYY HH:mm'),
                     },

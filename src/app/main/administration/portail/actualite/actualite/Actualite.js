@@ -339,7 +339,7 @@ function Actualite(props) {
                                                 actualite.imageReqInProgress ?
                                                     <CircularProgress size={24} className={classes.buttonProgress} />
                                                     :
-                                                    <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                                    <Icon fontSize="large" color="action">arrow_upward</Icon>
 
                                             }
                                         </label>

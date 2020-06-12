@@ -69,6 +69,8 @@ function SideBareSearch(props) {
     const secteurs = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.secteurs);
     const loadingActivites = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.loadingActivites);
     const activites = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.activites);
+    const loadingCategories = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.loadingCategories);
+    const categories = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.categories);
     const loadingPays = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.loadingPays);
     const payss = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.pays);
     const fournisseurs = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.data);
@@ -77,7 +79,7 @@ function SideBareSearch(props) {
 
     const query = useQuery(props.location);
     const params = props.match.params;
-    const { secteur, activite } = params;
+    const { secteur, activite, categorie } = params;
     const pays = query.get("pays");
     const ville = query.get("ville");
     const q = query.get("q");
@@ -88,21 +90,35 @@ function SideBareSearch(props) {
             searchText = (q ? '&q=' + q : '')
         else searchText = (q ? 'q=' + q : '')
         props.history.replace({ pathname: '/entreprises', search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
+    }
+
+    function handleDeletePathActivite() {
+        let searchText;
+        if (pays)
+            searchText = (q ? '&q=' + q : '')
+        else searchText = (q ? 'q=' + q : '')
+        props.history.replace({ pathname: '/entreprises/' + secteur, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+        document.querySelector('.st').scrollTop = 0;
     }
 
     function handleDeleteQuerySearchText() {
         let secteurParm = '';
         let activiteParm = '';
+        let categorieParm = '';
         if (secteur) {
             secteurParm = '/' + secteur;
         }
         if (activite) {
             activiteParm = '/' + activite;
         }
-        const path = secteurParm + activiteParm;
+        if (categorie) {
+            categorieParm = '/' + categorie;
+        }
+
+        const path = secteurParm + activiteParm + categorieParm;
         props.history.replace({ pathname: '/entreprises' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') })
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
 
@@ -110,18 +126,29 @@ function SideBareSearch(props) {
 
         let secteurParm = '';
         let activiteParm = '';
+        let categorieParm = '';
         if (secteur) {
             secteurParm = '/' + secteur;
         }
         if (activite) {
             activiteParm = '/' + activite;
         }
+        if (categorie) {
+            categorieParm = '/' + categorie;
+        }
 
-        const path = secteurParm + activiteParm;
+        const path = secteurParm + activiteParm + categorieParm;
         props.history.replace({ pathname: '/entreprises' + path, search: q ? 'q=' + q : '' })
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
+    function getSecteurTitle() {
+        return secteurs.length > 0 ? secteurs.filter(x => x.slug === secteur)[0] && _.capitalize(secteurs.filter(x => x.slug === secteur)[0].name) : _.capitalize(secteur.replace('-', ' '))
+    }
+    function getActiviteTitle() {
+        return activites.length > 0 ? activites.filter(x => x.slug === activite)[0] && _.capitalize(activites.filter(x => x.slug === activite)[0].name) : _.capitalize(activite.replace('-', ' '))
+    }
+    
     return (
         <>
             <Card className={clsx("", classes.root)} >
@@ -170,7 +197,7 @@ function SideBareSearch(props) {
                                                                     const location = props.location;
                                                                     query.set('ville', item.slug)
                                                                     props.history.replace({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug + (q ? '&q=' + q : '') })
-                                                                    document.querySelector('.ps').scrollTop = 0;
+                                                                    document.querySelector('.st').scrollTop = 0;
                                                                 }}>
                                                                 <ListItemText
                                                                     primary={item.name + ' (' + item.count + ')'}
@@ -201,7 +228,7 @@ function SideBareSearch(props) {
                                                             const location = props.location;
                                                             query.set('pays', item.slug)
                                                             props.history.replace({ pathname: location.pathname, search: 'pays=' + query.get('pays') + (q ? '&q=' + q : '') })
-                                                            document.querySelector('.ps').scrollTop = 0;
+                                                            document.querySelector('.st').scrollTop = 0;
                                                         }}>
                                                         <ListItemText
                                                             primary={item.name + ' (' + item.count + ')'}
@@ -234,7 +261,7 @@ function SideBareSearch(props) {
                                         <ListItemText
                                             primary={
                                                 <Chip
-                                                    label={jsUcfirst(secteur.replace('-', ' '))}
+                                                    label={getSecteurTitle()}
                                                     onDelete={handleDeletePathSecteur}
                                                     className={classes.chip}
                                                     color="primary"
@@ -245,40 +272,87 @@ function SideBareSearch(props) {
                                     </ListItem>
                                     <List component="div" className={classes.listRoot2}>
                                         {
-                                            loadingActivites ?
-                                                <LinearProgress color="secondary" /> :
-                                                <FuseAnimateGroup
-                                                    enter={{
-                                                        animation: "transition.slideUpBigIn"
-                                                    }}
-                                                >
-                                                    {
-                                                        activites && activites.map((item, index) => (
-                                                            <ListItem
-                                                                key={index}
-                                                                className={classes.nested}
-                                                                selected={item.slug === activite}
-                                                                button={item.slug !== activite}
-                                                                onClick={event => {
-                                                                    let searchText;
-                                                                    if (pays)
-                                                                        searchText = (q ? '&q=' + q : '')
-                                                                    else searchText = (q ? 'q=' + q : '')
-                                                                    item.slug !== activite &&
-                                                                        (props.history.replace({ pathname: '/entreprises/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText }))
-                                                                    document.querySelector('.ps').scrollTop = 0
+                                            fournisseurs.length > 0 && activite ?
+                                                <>
+                                                    <ListItem className={classes.nested}>
+                                                        <ListItemText
+                                                            primary={
+                                                                <Chip
+                                                                    label={getActiviteTitle()}
+                                                                    onDelete={handleDeletePathActivite}
+                                                                    className={classes.chip}
+                                                                    color="primary"
+                                                                    variant="outlined"
+                                                                />}
+                                                        />
+                                                    </ListItem>
+                                                    <List component="div" className={classes.listRoot2}>
+                                                        {
+                                                            loadingCategories ?
+                                                                <LinearProgress color="secondary" /> :
+                                                                <FuseAnimateGroup
+                                                                    enter={{
+                                                                        animation: "transition.slideUpBigIn"
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        categories && categories.map((item, index) => (
+                                                                            <ListItem
+                                                                                key={index}
+                                                                                className={classes.nested2}
+                                                                                selected={item.slug === categorie}
+                                                                                button={item.slug !== categorie}
+                                                                                onClick={event => {
+                                                                                    let searchText;
+                                                                                    if (pays)
+                                                                                        searchText = (q ? '&q=' + q : '')
+                                                                                    else searchText = (q ? 'q=' + q : '')
+                                                                                    item.slug !== categorie &&
+                                                                                        (props.history.replace({ pathname: '/entreprises/' + secteur + '/' + activite + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText }))
+                                                                                    document.querySelector('.st').scrollTop = 0
+                                                                                }}>
+                                                                                <ListItemText
+                                                                                    primary={item.name + ' (' + item.count + ')'}
+                                                                                />
+                                                                            </ListItem>
 
-                                                                }}>
-                                                                <ListItemText
-                                                                    primary={item.name + ' (' + item.count + ')'}
-                                                                />
-                                                            </ListItem>
+                                                                        ))
+                                                                    }
+                                                                </FuseAnimateGroup>
 
-                                                        ))
-                                                    }
-                                                </FuseAnimateGroup>
+                                                        }
+                                                    </List>
+                                                </> :
+                                                loadingActivites ? <LinearProgress color="secondary" /> :
+                                                    <FuseAnimateGroup
+                                                        enter={{
+                                                            animation: "transition.slideUpBigIn"
+                                                        }}
+                                                    >
+                                                        {
+                                                            activites && activites.map((item, index) => (
+                                                                <ListItem
+                                                                    key={index}
+                                                                    className={classes.nested}
+                                                                    button
+                                                                    onClick={event => {
+                                                                        let searchText;
+                                                                        if (pays)
+                                                                            searchText = (q ? '&q=' + q : '')
+                                                                        else searchText = (q ? 'q=' + q : '')
+                                                                        props.history.replace({ pathname: '/entreprises/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText });
+                                                                        document.querySelector('.st').scrollTop = 0;
+
+                                                                    }}>
+                                                                    <ListItemText
+                                                                        primary={item.name + ' (' + item.count + ')'}
+                                                                    />
+                                                                </ListItem>
+
+                                                            ))
+                                                        }
+                                                    </FuseAnimateGroup>
                                         }
-
                                     </List>
                                 </> :
                                 (
@@ -296,9 +370,9 @@ function SideBareSearch(props) {
                                                         button
                                                         onClick={event => {
                                                             let searchText;
-                                                                        if (pays)
-                                                                            searchText = (q ? '&q=' + q : '')
-                                                                        else searchText = (q ? 'q=' + q : '')
+                                                            if (pays)
+                                                                searchText = (q ? '&q=' + q : '')
+                                                            else searchText = (q ? 'q=' + q : '')
                                                             props.history.replace({ pathname: '/entreprises/' + secteur.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
                                                         }}>
                                                         <ListItemText

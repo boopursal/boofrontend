@@ -415,9 +415,9 @@ function Profile(props) {
                                 scrollButtons="auto"
                                 classes={{ root: "w-full h-64" }}
                             >
-                                <Tab className="h-64 normal-case" label="Info société" />
+                                <Tab className="h-64 normal-case" label="Infos société" />
                                 <Tab className="h-64 normal-case" label="Activités" />
-                                <Tab className="h-64 normal-case" label="Info utilisateur" />
+                                <Tab className="h-64 normal-case" label="Infos utilisateur" />
                                 <Tab className="h-64 normal-case" label="Photo" />
                                 <Tab className="h-64 normal-case" label="Mot de passe" />
 
@@ -1009,7 +1009,7 @@ function Profile(props) {
                                                     profile.profileReqInProgress ?
                                                         <CircularProgress size={24} className={classes.buttonProgress} />
                                                         :
-                                                        <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                                        <Icon fontSize="large" color="action">arrow_upward</Icon>
 
                                                 }
                                             </label>

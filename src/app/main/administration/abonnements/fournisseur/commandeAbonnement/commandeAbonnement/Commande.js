@@ -527,7 +527,7 @@ function Commande(props) {
                                         variant="outlined"
                                         color="secondary"
                                     >
-                                        Annnuler
+                                        Annuler
                                     </Button>
                                     <Button onClick={() => handleSubmit(form, sousSecteurs)}
                                         variant="contained" color="secondary" disabled={commande.loading}
@@ -585,9 +585,9 @@ function Commande(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Détail de la commande" />
+                        <Tab className="h-64 normal-case" label="Détails de la commande" />
                         <Tab className="h-64 normal-case" label="Secteurs d'activités" />
-                        <Tab className="h-64 normal-case" label="Info. de la société" />
+                        <Tab className="h-64 normal-case" label="Infos de la société" />
 
 
                     </Tabs>

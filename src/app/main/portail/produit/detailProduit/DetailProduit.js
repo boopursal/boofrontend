@@ -204,7 +204,16 @@ const useStyles = makeStyles(theme => ({
                 border: '10px solid #55c39e'
             }
         }
-    }
+    },
+    grid:{
+        marginBottom:'-16px',
+        marginTop:'-16px',
+        marginLeft:'auto',
+        marginRight:'auto',
+        '& > .MuiGrid-item' : {
+            padding: '16px'
+        }
+    },
 }));
 
 function DetailProduit(props) {
@@ -227,6 +236,7 @@ function DetailProduit(props) {
         slidesToScroll: produit.produitsSimilaires && produit.produitsSimilaires.length < 4 ? produit.produitsSimilaires.length : 4,
         slidesToShow: produit.produitsSimilaires && produit.produitsSimilaires.length < 4 ? produit.produitsSimilaires.length : 4,
         dots: false,
+        infinite: produit.produitsSimilaires && produit.produitsSimilaires.length > 3,
         responsive: [
             {
                 breakpoint: 1024,
@@ -322,7 +332,7 @@ function DetailProduit(props) {
                 </Helmet>
             }
 
-            <Grid container spacing={2} className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
+            <Grid container  className={clsx(classes.grid,"max-w-2xl mx-auto py-48 sm:px-16 items-start")}>
 
                 {
                     produit.loading ?
@@ -622,7 +632,7 @@ function DetailProduit(props) {
             </Grid>
 
 
-            <Grid container spacing={2} className="max-w-2xl mx-auto pb-48">
+            <Grid container className="max-w-2xl mx-auto pb-48">
                 <Grid item sm={12}>
                     <div>
                         <ListItem className="mb-16">

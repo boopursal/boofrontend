@@ -51,6 +51,11 @@ const useStyles = makeStyles(theme => ({
         width: 20,
         height: 20,
     },
+    grid: {
+        [theme.breakpoints.down('xs')]: {
+            width: '100%'
+        },
+    }
 }));
 
 function useQuery(location) {
@@ -62,13 +67,16 @@ function FournisseursApp(props) {
     const dispatch = useDispatch();
     const query = useQuery(props.location);
     const params = props.match.params;
-    const { secteur, activite } = params;
+    const { secteur, activite, categorie } = params;
     const pays = query.get("pays");
     const q = query.get("q");
     const ville = query.get("ville");
     const parametres = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.parametres);
     const fournisseurs = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.data);
     const loading = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.loading);
+    const secteurs = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.secteurs);
+    const activites = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.activites);
+    const categories = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseurs.categories);
 
     useEffect(() => {
 
@@ -90,11 +98,23 @@ function FournisseursApp(props) {
                 dispatch(Actions.getVilleCounts(params, pays, q));
             }
             if (secteur && !pays) {
-                dispatch(Actions.getActivitesCounts(params, pays, ville, q));
+                if (activite) {
+                    dispatch(Actions.getCategoriesCounts(params, pays, ville, q));
+
+                } else {
+                    dispatch(Actions.getActivitesCounts(params, pays, ville, q));
+
+                }
                 dispatch(Actions.getPaysCounts(params, pays, q));
             }
             if (secteur && pays) {
-                dispatch(Actions.getActivitesCounts(params, pays, ville, q));
+                if (activite) {
+                    dispatch(Actions.getCategoriesCounts(params, pays, ville, q));
+
+                } else {
+                    dispatch(Actions.getActivitesCounts(params, pays, ville, q));
+
+                }
                 dispatch(Actions.getVilleCounts(params, pays, q));
             }
         }
@@ -106,12 +126,16 @@ function FournisseursApp(props) {
 
         let secteurParm = '';
         let activiteParm = '';
+        let categorieParm = '';
 
         if (secteur) {
             secteurParm = '/' + secteur;
         }
         if (activite) {
             activiteParm = '/' + activite;
+        }
+        if (categorie) {
+            categorieParm = '/' + categorie;
         }
 
         let searchText;
@@ -120,12 +144,25 @@ function FournisseursApp(props) {
             searchText = (q ? '&q=' + q : '')
         else searchText = (q ? 'q=' + q : '')
 
-        const path = secteurParm + activiteParm;
+        const path = secteurParm + activiteParm + categorieParm;
         props.history.replace({ pathname: '/vente-produits' + path, search: (pays ? 'pays=' + pays : '') + searchText })
 
     }
+    function getPath(fournisseurs) {
+        return categorie ? 'de ' + getCategorieTitle() :
+                    activite ? 'de ' + getActiviteTitle() :
+                        secteur ? 'de ' + getSecteurTitle() : '';
+    }
 
-
+    function getSecteurTitle() {
+        return secteurs.length > 0 ? secteurs.filter(x => x.slug === secteur)[0] && _.capitalize(secteurs.filter(x => x.slug === secteur)[0].name) : _.capitalize(secteur.replace('-', ' '))
+    }
+    function getActiviteTitle() {
+        return activites.length > 0 ? activites.filter(x => x.slug === activite)[0] && _.capitalize(activites.filter(x => x.slug === activite)[0].name) : _.capitalize(activite.replace('-', ' '))
+    }
+    function getCategorieTitle() {
+        return categories.length > 0 ? categories.filter(x => x.slug === categorie)[0] && _.capitalize(categories.filter(x => x.slug === categorie)[0].name) : _.capitalize(categorie.replace('-', ' '))
+    }
     if (loading) {
         return (
             <div className="flex flex-col min-h-md">
@@ -138,14 +175,18 @@ function FournisseursApp(props) {
             <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
                 <div
                     className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                    <Grid container spacing={2} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                    <Grid container spacing={2}
+                        classes={{
+                            'spacing-xs-2': classes.grid
+                        }}
+                        className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                         <Grid item sm={12} xs={12}>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 
                                 <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} className={classes.breadcrumbs} aria-label="breadcrumb">
                                     <Link color="inherit" to="/" className={classes.link}>
                                         <HomeIcon className={classes.icon} />
-                                    Accueil
+                                        Accueil
                                 </Link>
                                     {
                                         secteur ?
@@ -156,9 +197,16 @@ function FournisseursApp(props) {
                                     }
 
                                     {
-                                        fournisseurs.length > 0 && activite &&
+                                        activite &&
                                         <span className="text-white">
-                                            {_.capitalize(fournisseurs[0].sousSecteurs && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0] && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0].name)}
+                                            {_.capitalize(activite.replace('-', ' '))}
+                                        </span>
+
+                                    }
+                                    {
+                                        categorie &&
+                                        <span className="text-white">
+                                            {_.capitalize(categorie.replace('-', ' '))}
                                         </span>
 
                                     }
@@ -181,8 +229,9 @@ function FournisseursApp(props) {
                 <div className="w-full max-w-2xl mx-auto   min-h-md">
                     <Helmet>
                         <title>{'Fournisseurs ' + (
-                            activite ? 'de ' + _.capitalize(activite) :
-                                secteur ? 'de ' + _.capitalize(secteur) : ''
+                            categorie ? 'de ' + _.capitalize(categorie) :
+                                activite ? 'de ' + _.capitalize(activite) :
+                                    secteur ? 'de ' + _.capitalize(secteur) : ''
                         ) + (pays ? _.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
                         }</title>
                         <meta name="robots" content="noindex, nofollow" />
@@ -191,8 +240,9 @@ function FournisseursApp(props) {
                     <Typography color="primary" className="mt-16 flex items-center" variant="h6">
                         <Icon className="mr-8">search</Icon>
                         <span> {'Fournisseurs ' + (
-                            activite ? 'de ' + _.capitalize(activite) :
-                                secteur ? 'de ' + _.capitalize(secteur) : ''
+                            categorie ? 'de ' + _.capitalize(categorie) :
+                                activite ? 'de ' + _.capitalize(activite) :
+                                    secteur ? 'de ' + _.capitalize(secteur) : ''
                         ) + (pays ? _.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
                         }</span>
                     </Typography>
@@ -228,25 +278,14 @@ function FournisseursApp(props) {
             {
                 fournisseurs.length > 0 &&
                 <Helmet>
-                    <title>{_.truncate('Fournisseurs ' + (
-                        activite ? 'de ' + _.capitalize(fournisseurs[0].sousSecteurs && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0] && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0].name) :
-                            secteur ? 'de ' + _.capitalize(secteur) : ''
-                    ) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : '')
+                    <title>{_.truncate('Fournisseurs ' + (getPath(fournisseurs)) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : '')
                         , { 'length': 70, 'separator': ' ' })}</title>
                     {
                         q && <meta property="keyword" content={q} />
                     }
-                    <meta name="description" content={_.truncate('Les achats industriels la place de marché numéro 1 au maroc, trouver vos fournisseurs de ' + (fournisseurs[0].sousSecteurs && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0] && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0].name) + ', ' + (secteur), { 'length': 160, 'separator': ' ' })} />
-                    <meta property="og:title" content={_.truncate('Fournisseurs ' + (
-                        activite ? _.capitalize(fournisseurs[0].sousSecteurs && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0] && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0].name) :
-                            secteur ? _.capitalize(secteur) : ''
-                    ) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : ''), { 'length': 70, 'separator': ' ' })} />
-                    <meta property="og:description" content={_.truncate('Les achats industriels la place de marché numéro 1 au maroc, trouver vos fournisseurs de ' + (fournisseurs[0].sousSecteurs && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0] && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0].name) + ', ' + (secteur), { 'length': 160, 'separator': ' ' })} />
-                    <meta property="twitter:title" content={_.truncate('Vente de fournisseurs ' + (
-                        activite ? _.capitalize(fournisseurs[0].sousSecteurs && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0] && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0].name) :
-                            secteur ? _.capitalize(secteur) : ''
-                    ) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : ''), { 'length': 70, 'separator': ' ' })} />
-                    <meta property="twitter:description" content={_.truncate('Les achats industriels la place de marché numéro 1 au maroc, trouver vos fournisseurs de ' + (fournisseurs[0].sousSecteurs && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0] && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0].name) + ', ' + (secteur), { 'length': 160, 'separator': ' ' })} />
+                    <meta name="description" content={_.truncate('Les achats industriels la place de marché numéro 1 au maroc, trouver vos fournisseurs de ' + (categorie && getCategorieTitle()+ ', ')  + ( activite && getActiviteTitle()+ ', ')  + (secteur && getSecteurTitle()), { 'length': 160, 'separator': ' ' })} />
+                    <meta property="og:title" content={_.truncate('Fournisseurs ' + (getPath(fournisseurs)) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : ''), { 'length': 70, 'separator': ' ' })} />
+                    <meta property="twitter:title" content={_.truncate('Vente de fournisseurs ' + (getPath(fournisseurs)) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : ''), { 'length': 70, 'separator': ' ' })} />
                 </Helmet>
 
             }
@@ -254,7 +293,11 @@ function FournisseursApp(props) {
 
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                <Grid container spacing={2} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                <Grid container spacing={2}
+                    classes={{
+                        'spacing-xs-2': classes.grid
+                    }}
+                    className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 
@@ -266,15 +309,22 @@ function FournisseursApp(props) {
                                 {
                                     secteur ?
                                         <Link color="inherit" to={`/entreprises/${secteur}`} className={classes.link}>
-                                            {_.capitalize(secteur.replace('-', ' '))}
+                                            {getSecteurTitle()}
                                         </Link>
                                         : ''
                                 }
 
                                 {
                                     fournisseurs.length > 0 && activite &&
+                                    <Link color="inherit" to={`/entreprises/${secteur}/${activite}`} className={classes.link}>
+                                        {getActiviteTitle()}
+                                    </Link>
+
+                                }
+                                {
+                                    fournisseurs.length > 0 && categorie &&
                                     <span className="text-white">
-                                        {_.capitalize(fournisseurs[0].sousSecteurs && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0] && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0].name)}
+                                        {getCategorieTitle()}
                                     </span>
 
                                 }
@@ -293,15 +343,16 @@ function FournisseursApp(props) {
                     </Grid>
                 </Grid>
             </div>
-            <Grid container spacing={2} className="max-w-2xl mx-auto sm:px-16 pt-24 items-center">
+            <Grid container spacing={2}
+                classes={{
+                    'spacing-xs-2': classes.grid
+                }}
+                className="max-w-2xl mx-auto sm:px-16 pt-24 items-center">
                 <Grid item sm={8} xs={12}>
                     {
                         fournisseurs.length > 0 &&
                         <Typography variant="h1" className="text-24 font-bold">
-                            {'Fournisseurs ' + (
-                                activite ? 'de ' + _.capitalize(fournisseurs[0].sousSecteurs && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0] && fournisseurs[0].sousSecteurs.filter(x => x.slug === activite)[0].name) :
-                                    secteur ? 'de ' + _.capitalize(secteur) : ''
-                            ) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : '')
+                            {'Fournisseurs ' + (getPath(fournisseurs)) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : '')
                             }
                         </Typography>
                     }
@@ -318,7 +369,11 @@ function FournisseursApp(props) {
                     </Button>
                 </Grid>
             </Grid>
-            <Grid container spacing={2} className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
+            <Grid container spacing={2}
+                classes={{
+                    'spacing-xs-2': classes.grid
+                }}
+                className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
 
                 <Grid item sm={4} md={3} xs={12} className="sticky top-0 order-last sm:order-first">
                     <SideBareSearch  {...props} />

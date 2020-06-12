@@ -659,7 +659,7 @@ function Renouvellement(props) {
                                         variant="outlined"
                                         color="secondary"
                                     >
-                                        Annnuler
+                                        Annuler
                                     </Button>
                                     <Button onClick={() => handleSubmit(form, sousSecteurs)}
                                         variant="contained" color="secondary" disabled={abonnement.loading}
@@ -717,11 +717,11 @@ function Renouvellement(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Détail de l'abonnement" />
+                        <Tab className="h-64 normal-case" label="Détails de l'abonnement" />
                         <Tab className="h-64 normal-case" label="Secteurs d'activités" />
                         {
                             fournisseur &&
-                                <Tab className="h-64 normal-case" label="Info. de la société" />
+                                <Tab className="h-64 normal-case" label="Infos de la société" />
                         }
 
                     </Tabs>

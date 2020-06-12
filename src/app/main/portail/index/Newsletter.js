@@ -42,7 +42,7 @@ const CustomForm = ({ status, message, onValidated }) => {
                             className="h-28 w-full"
                             ref={node => (email = node)}
                             type="email"
-                            placeholder="Your email"
+                            placeholder="exemple@exemple.com"
                         />
                         
                     </Paper>

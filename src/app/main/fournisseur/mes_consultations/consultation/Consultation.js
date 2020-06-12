@@ -589,7 +589,7 @@ function Consultation(props) {
 
                                                 </div>
                                             ))
-                                            : 'Aucune pièce jointe attaché a cette consultation'
+                                            : 'Aucune pièce jointe attachée a cette consultation'
                                         }
                                     </div>
 

@@ -45,7 +45,10 @@ const useStyles = makeStyles(theme => ({
         transitionDuration: theme.transitions.duration.short,
         transitionTimingFunction: theme.transitions.easing.easeInOut,
     },
-
+    border: {
+        borderLeft: '11px solid ' + theme.palette.secondary.main + '!important',
+        paddingLeft: 11
+    },
     renouvelerImageItem: {
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
@@ -174,13 +177,12 @@ function Renouveler(props) {
             (renouveler.data && form && renouveler.data.id !== form.id)
         ) {
             setForm({ ...renouveler.data });
-
             if (renouveler.data.sousSecteurs) {
-                 setSousSecteurs(renouveler.data.sousSecteurs.map(item => ({
-                     value: item['@id'],
-                     label: item.secteur.name + ': '+item.name
-                 })));
-             }
+                setSousSecteurs(renouveler.data.sousSecteurs.map(item => ({
+                    value: item['@id'],
+                    label: item.secteur.name + ': ' + item.name
+                })));
+            }
             if (renouveler.data.offre)
                 setOffre(renouveler.data.offre)
             if (renouveler.data.mode)
@@ -189,7 +191,9 @@ function Renouveler(props) {
                 setDuree(renouveler.data.duree);
                 if (renouveler.data.offre) {
                     if (renouveler.data.fournisseur.currency.name === 'DHS') {
+
                         let ht = renouveler.data.offre.prixMad * renouveler.data.duree.name;
+
                         setPrixht(ht)
 
                         if (renouveler.data.duree.remise) {
@@ -276,7 +280,7 @@ function Renouveler(props) {
             if (item.remise) {
                 let remis = ht * item.remise / 100;
                 let netHt = ht - remis;
-               // let tva = netHt * 0.2;
+                // let tva = netHt * 0.2;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
@@ -352,14 +356,14 @@ function Renouveler(props) {
     }
 
     function handleSubmit() {
-        
-        dispatch(Actions.saveRenouvelement(sousSecteurs, offre, mode, duree,props.history));
+
+        dispatch(Actions.saveRenouvelement(sousSecteurs, offre, mode, duree, props.history));
     }
 
     function handleSubmitActivites() {
-    
+
         dispatch(Actions.AddSuggestionSecteur(secteur, sousSecteur, user.id));
-         
+
     }
     function handleDelete(value) {
         setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value == value; }))
@@ -370,12 +374,12 @@ function Renouveler(props) {
             if (sousSecteurs.length === offre.nbActivite) {
                 return;
             }
-            if(!_.find(sousSecteurs, ['label', value.label])){
+            if (!_.find(sousSecteurs, ['value', value.value])) {
                 var v = value;
-                v.label = secteur1.label + ': '+v.label;
+                v.label = secteur1.label + ': ' + v.label;
                 setSousSecteurs([value, ...sousSecteurs])
             }
-            
+
         }
         else {
             if (value.value) {
@@ -420,18 +424,42 @@ function Renouveler(props) {
                                     </div>
                                 </div>
                             </div>
+                            <div className="flex items-end">
+                                {
+                                    tabValue === 0 ?
 
-                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                <Button
-                                    className="whitespace-no-wrap"
-                                    variant="contained"
-                                    disabled={sousSecteurs.length === 0}
-                                    onClick={() => handleSubmit(form, sousSecteurs)}
-                                >
-                                    Passer la commande
-                                    {renouveler.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                </Button>
-                            </FuseAnimate>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={(event) => handleChangeTab(event, 1)}
+                                        >
+                                            Suivant <Icon>navigate_next</Icon>
+                                        </Button>
+                                        :
+                                        <>
+                                            <Button
+                                                variant="outlined"
+                                                color="secondary"
+                                                className="mr-4"
+                                                onClick={(event) => handleChangeTab(event, 0)}
+                                            >
+                                                <Icon>navigate_before</Icon> Précédent
+                                            </Button>
+                                            <Button
+                                                className="whitespace-no-wrap"
+                                                variant="contained"
+                                                color="secondary"
+                                                disabled={sousSecteurs.length === 0}
+                                                onClick={() => handleSubmit(form, sousSecteurs)}
+                                            >
+                                                Passer la commande
+                                                {renouveler.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                            </Button>
+                                        </>
+                                }
+                            </div>
+
+
                         </div>
                     )
                     :
@@ -467,19 +495,18 @@ function Renouveler(props) {
                                 {tabValue === 0 &&
                                     (
                                         <>
-                                            <Grid container spacing={3} className="">
+                                            <Grid container spacing={3} className="mb-8">
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">1- Offres & Activités</Typography>
+                                                    <Typography variant="h6"><span className={classes.border}>Offres & Activités</span></Typography>
 
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">Récapitulatif de votre renouveler</Typography>
+                                                    <Typography variant="h6"><span className={classes.border}>Récapitulatif de votre renouveler</span></Typography>
 
                                                 </Grid>
                                             </Grid>
-                                            <Divider />
                                             <Grid container spacing={3} className="mt-16 mb-16">
-                                                <Grid item xs={12} sm={6}>
+                                                <Grid item xs={12} sm={6} className="border-1">
                                                     {
                                                         renouveler.offres && offre && renouveler.fournisseur ?
                                                             renouveler.offres.map((item, index) => (
@@ -742,20 +769,19 @@ function Renouveler(props) {
 
                                                 </Grid>
                                             </Grid>
-                                            <Grid container spacing={3} className="">
+                                            <Grid container spacing={3} className="mb-8">
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">2- Mode de paiement </Typography>
+                                                    <Typography variant="h6"><span className={classes.border}>Mode de paiement </span></Typography>
 
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">3- Durée de votre abonnement</Typography>
+                                                    <Typography variant="h6"><span className={classes.border}>Durée de votre abonnement</span></Typography>
 
                                                 </Grid>
                                             </Grid>
 
-                                            <Divider />
                                             <Grid container spacing={3} className="mt-6 mb-16">
-                                                <Grid item xs={12} sm={6}>
+                                                <Grid item xs={12} sm={6} className="border-1">
                                                     {
                                                         renouveler.paiements ?
                                                             renouveler.paiements.map((item, index) => (
@@ -778,7 +804,7 @@ function Renouveler(props) {
 
 
                                                 </Grid>
-                                                <Grid item xs={12} sm={6}>
+                                                <Grid item xs={12} sm={6} className="border-1">
                                                     {
                                                         renouveler.durees && duree ?
                                                             renouveler.durees.map((item, index) => (
@@ -809,6 +835,21 @@ function Renouveler(props) {
                                                     }
                                                 </Grid>
                                             </Grid>
+
+
+                                            <Grid container spacing={3} className="mt-6 mb-16">
+                                                <Grid item xs={12} sm={12} className="flex justify-end">
+                                                    <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        onClick={(event) => handleChangeTab(event, 1)}
+                                                    >
+                                                        Suivant <Icon>navigate_next</Icon>
+                                                    </Button>
+                                                </Grid>
+
+                                            </Grid>
+
                                         </>
                                     )}
                                 {
@@ -816,12 +857,11 @@ function Renouveler(props) {
                                         <>
                                             <Grid container spacing={3} className="">
                                                 <Grid item xs={12} >
-                                                    <Typography className="mb-16" variant="h6">Secteurs & Activités</Typography>
+                                                    <Typography className="mb-16" variant="h6"><span className={classes.border}>Secteurs & Activités</span></Typography>
 
                                                 </Grid>
 
                                             </Grid>
-                                            <Divider />
                                             <Grid container spacing={3} className="mt-16 mb-16">
                                                 <Grid item xs={12} sm={6}>
                                                     <SelectReactFormsy
@@ -873,24 +913,23 @@ function Renouveler(props) {
                                             </Grid>
                                             <Grid container spacing={3} className="">
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">Activité(s) choisie(s)</Typography>
+                                                    <Typography className="mb-16" variant="h6"><span className={classes.border}>Activité(s) choisie(s)</span></Typography>
 
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">Suggestions </Typography>
+                                                    <Typography className="mb-16" variant="h6"><span className={classes.border}>Suggestions </span> </Typography>
                                                 </Grid>
                                             </Grid>
-                                            <Divider />
-                                            <Grid container spacing={3} className="mt-4">
-                                                <Grid item xs={12} sm={6}>
+                                            <Grid container spacing={3} className="mt-4" >
+                                                <Grid item xs={12} sm={6} className="border-1">
                                                     <div className={clsx(classes.chips)}>
                                                         {
                                                             sousSecteurs && sousSecteurs.length > 0 &&
-                                                            _.sortBy(sousSecteurs, [function(o) { return o.label; }]).map((item, index) => (
+                                                            _.sortBy(sousSecteurs, [function (o) { return o.label; }]).map((item, index) => (
                                                                 <Chip
                                                                     key={index}
                                                                     label={item.label}
-                                                                    color="secondary"
+                                                                    color="primary"
                                                                     onDelete={() => handleDelete(item.value)}
                                                                     className="mt-8 mr-8"
                                                                 />
@@ -898,12 +937,12 @@ function Renouveler(props) {
                                                         }
                                                     </div>
                                                 </Grid>
-                                                <Grid item xs={12} sm={6}>
+                                                <Grid item xs={12} sm={6} className="border-1">
                                                     {
                                                         renouveler.fournisseur ?
                                                             <>
+                                                                <Typography className="mt-4" variant="caption">{"Si vos secteurs ou activités n´existent pas, veuillez nous les envoyer en cliquant"}</Typography>
 
-                                                                <Typography className="mt-4" variant="caption">{"Si vos secteurs, activités n´existent pas, veuillez nous les envoyer en cliquant"}</Typography>
                                                                 <div className="mt-4">
 
                                                                     <Link2
@@ -912,54 +951,57 @@ function Renouveler(props) {
                                                                         color="secondary"
                                                                         onClick={handleClickOpen}
                                                                     >
-                                                                        Ajouter autres activités
+                                                                        Suggerer d'autres secteurs et activités
                                                                 </Link2>
                                                                     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                                                                        <DialogTitle id="form-dialog-title">Vos activités</DialogTitle>
+                                                                        <DialogTitle id="form-dialog-title">Vos suggestions</DialogTitle>
                                                                         <DialogContent>
-                                                                          
-                                                                                <Grid container spacing={3} >
-                                                                                    <Grid item xs={12} sm={6}>
-                                                                                        <TextField
-                                                                                            className="mt-8 mb-16"
-                                                                                            error={secteur.length <= 2}
-                                                                                            required
-                                                                                            label="Secteur"
-                                                                                            autoFocus
-                                                                                            value={secteur}
-                                                                                            id="secteur"
-                                                                                            name="secteur"
-                                                                                            onChange={(event) => setSecteur(event.target.value)}
-                                                                                            variant="outlined"
-                                                                                            fullWidth
-                                                                                            helperText={secteur.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
-                                                                                        />
-                                                                                    </Grid>
-                                                                                    <Grid item xs={12} sm={6}>
-                                                                                        <TextField
-                                                                                            className="mt-8 mb-16"
-                                                                                            id="sousSecteur"
-                                                                                            name="sousSecteur"
-                                                                                            error={sousSecteur.length <= 2}
-                                                                                            onChange={(event) => setSousSecteur(event.target.value)}
-                                                                                            label="Activité"
-                                                                                            type="text"
-                                                                                            required
-                                                                                            value={sousSecteur}
-                                                                                            variant="outlined"
-                                                                                            fullWidth
-                                                                                            helperText={sousSecteur.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères ' : ''}
-                                                                                        />
-                                                                                    </Grid>
+                                                                            <Typography variant="caption">
+                                                                                Ces suggestions seront prises en compte par l'administrateur dans les plus brefs délais.
+                                                                            </Typography>
+
+                                                                            <Grid container spacing={3} >
+                                                                                <Grid item xs={12} sm={6}>
+                                                                                    <TextField
+                                                                                        className="mt-8 mb-16"
+                                                                                        error={secteur.length <= 2}
+                                                                                        required
+                                                                                        label="Secteur"
+                                                                                        autoFocus
+                                                                                        value={secteur}
+                                                                                        id="secteur"
+                                                                                        name="secteur"
+                                                                                        onChange={(event) => setSecteur(event.target.value)}
+                                                                                        variant="outlined"
+                                                                                        fullWidth
+                                                                                        helperText={secteur.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
+                                                                                    />
                                                                                 </Grid>
+                                                                                <Grid item xs={12} sm={6}>
+                                                                                    <TextField
+                                                                                        className="mt-8 mb-16"
+                                                                                        id="sousSecteur"
+                                                                                        name="sousSecteur"
+                                                                                        error={sousSecteur.length <= 2}
+                                                                                        onChange={(event) => setSousSecteur(event.target.value)}
+                                                                                        label="Activité"
+                                                                                        type="text"
+                                                                                        required
+                                                                                        value={sousSecteur}
+                                                                                        variant="outlined"
+                                                                                        fullWidth
+                                                                                        helperText={sousSecteur.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères ' : ''}
+                                                                                    />
+                                                                                </Grid>
+                                                                            </Grid>
                                                                         </DialogContent>
                                                                         <Divider />
                                                                         <DialogActions>
                                                                             <Button onClick={handleClose} variant="outlined" color="primary">
-                                                                                Annnuler
+                                                                                Annuler
                                                                             </Button>
                                                                             <Button onClick={handleSubmitActivites} variant="contained" color="secondary"
-                                                                                disabled={renouveler.loadingSuggestion || (sousSecteur.length < 2 || secteur.length <= 2) }
+                                                                                disabled={renouveler.loadingSuggestion || (sousSecteur.length < 2 || secteur.length <= 2)}
                                                                             >
                                                                                 Sauvegarder
                                                                                 {renouveler.loadingSuggestion && <CircularProgress size={24} className={classes.buttonProgress} />}
@@ -980,6 +1022,29 @@ function Renouveler(props) {
                                                             </ContentLoader>
                                                     }
                                                 </Grid>
+                                            </Grid>
+                                            <Grid container spacing={3} className="mt-16 mb-16 flex justify-end">
+                                                <Grid item xs={12} sm={6}  className="flex justify-end">
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="secondary"
+                                                        className="mr-4"
+                                                        onClick={(event) => handleChangeTab(event, 0)}
+                                                    >
+                                                        <Icon>navigate_before</Icon> Précédent
+                                                    </Button>
+                                                    <Button
+                                                        className="whitespace-no-wrap"
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        disabled={sousSecteurs.length === 0}
+                                                        onClick={() => handleSubmit(form, sousSecteurs)}
+                                                    >
+                                                        Passer la commande
+                                                        {renouveler.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                    </Button>
+                                                </Grid>
+
                                             </Grid>
                                         </>
                                     )

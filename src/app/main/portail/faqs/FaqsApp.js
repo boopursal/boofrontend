@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
     },
-
+    
 }));
 
 function FaqsApp(props) {
@@ -66,7 +66,7 @@ function FaqsApp(props) {
             </Helmet>
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                <Grid container spacing={2} className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                <Grid container  className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <HeaderFaq {...props} />
                     </Grid>

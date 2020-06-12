@@ -50,6 +50,11 @@ const useStyles = makeStyles(theme => ({
         width: 20,
         height: 20,
     },
+    grid: {
+        [theme.breakpoints.down('xs')]: {
+            width: '100%'
+        },
+    }
 }));
 
 function useQuery(location) {
@@ -61,19 +66,20 @@ function DemandesAchatsApp(props) {
     const dispatch = useDispatch();
     const query = useQuery(props.location);
     const params = props.match.params;
-    const { secteur, activite } = params;
+    const { secteur, activite, categorie } = params;
     const pays = query.get("pays");
     const ville = query.get("ville");
     const parametres = useSelector(({ demandesAchat }) => demandesAchat.demandes.parametres);
+    const demandes = useSelector(({ demandesAchat }) => demandesAchat.demandes.data);
 
     useEffect(() => {
 
         function updateDemandeAchatState() {
-            dispatch(Actions.getDemandeAchats(params, pays, ville,parametres));
+            dispatch(Actions.getDemandeAchats(params, pays, ville, parametres));
         }
 
         updateDemandeAchatState();
-    }, [dispatch, params, pays,ville, parametres]);
+    }, [dispatch, params, pays, ville, parametres]);
 
     useEffect(() => {
 
@@ -82,21 +88,35 @@ function DemandesAchatsApp(props) {
                 dispatch(Actions.getSecteursAndPaysCounts());
             }
             if (!secteur && pays) {
-                dispatch(Actions.getSecteursCounts(params, pays,ville));
+                dispatch(Actions.getSecteursCounts(params, pays, ville));
                 dispatch(Actions.getVilleCounts(params, pays));
             }
             if (secteur && !pays) {
-                dispatch(Actions.getActivitesCounts(params, pays,ville));
+                if (activite) {
+                    dispatch(Actions.getCategoriesCounts(params, pays, ville));
+
+                } else {
+                    dispatch(Actions.getActivitesCounts(params, pays, ville));
+
+                }
                 dispatch(Actions.getPaysCounts(params, pays));
+
             }
             if (secteur && pays) {
-                dispatch(Actions.getActivitesCounts(params, pays,ville));
+                if (activite) {
+                    dispatch(Actions.getCategoriesCounts(params, pays, ville));
+
+                } else {
+                    dispatch(Actions.getActivitesCounts(params, pays, ville));
+
+                }
                 dispatch(Actions.getVilleCounts(params, pays));
+
             }
         }
 
         updateDemandeAchatState();
-    }, [dispatch, params, pays,ville]);
+    }, [dispatch, params, pays, ville]);
 
     return (
         <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
@@ -112,7 +132,11 @@ function DemandesAchatsApp(props) {
             </Helmet>
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                <Grid container spacing={2} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                <Grid container spacing={2}
+                    classes={{
+                        'spacing-xs-2': classes.grid
+                    }}
+                    className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 
@@ -130,10 +154,17 @@ function DemandesAchatsApp(props) {
                                 }
                                 {
                                     activite &&
-                                            <span className="text-white">
-                                                {_.capitalize(activite.replace('-', ' '))}
-                                            </span>
-                                            
+                                    <span className="text-white">
+                                        {_.capitalize(activite.replace('-', ' '))}
+                                    </span>
+
+                                }
+                                {
+                                    categorie &&
+                                    <span className="text-white">
+                                        {_.capitalize(categorie.replace('-', ' '))}
+                                    </span>
+
                                 }
 
 
@@ -143,7 +174,11 @@ function DemandesAchatsApp(props) {
                     </Grid>
                 </Grid>
             </div>
-            <Grid container spacing={2} className="max-w-2xl mx-auto sm:px-16 pt-24 items-start">
+            <Grid container spacing={2}
+                classes={{
+                    'spacing-xs-2': classes.grid
+                }}
+                className="max-w-2xl mx-auto sm:px-16 pt-24 items-start">
                 <Grid item sm={12} xs={12}>
                     <Typography variant="h1" className="text-24 font-bold">Toutes les demandes d'achat {
                         activite ? _.capitalize(activite.replace('-', ' ')) :
@@ -155,7 +190,10 @@ function DemandesAchatsApp(props) {
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid container spacing={2} className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
+            <Grid container spacing={2}
+                classes={{
+                    'spacing-xs-2': classes.grid
+                }} className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
 
                 <Grid item sm={4} md={3} xs={12} className="sticky top-0 order-last sm:order-first">
                     <SideBareSearch  {...props} />

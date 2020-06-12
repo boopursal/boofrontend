@@ -218,13 +218,13 @@ function DemandesTable(props) {
 
                     },
                     {
-                        Header: "Publier",
+                        Header: "Publiée",
                         filterable: true,
                         accessor: "isPublic",
                         Cell: row =>
                             row.original.isPublic ?
                                 (
-                                    <Tooltip title="Publié">
+                                    <Tooltip title="Publiée">
                                         <IconButton className="text-green text-20" onClick={(ev) => {
                                             ev.stopPropagation();
                                             dispatch(Actions.PublishDemande(row.original, false, parametres))
@@ -235,7 +235,7 @@ function DemandesTable(props) {
                                     </Tooltip>
                                 ) :
                                 (
-                                    <Tooltip title="Privé">
+                                    <Tooltip title="Privée">
                                         <IconButton className="text-red text-20" onClick={(ev) => {
                                             ev.stopPropagation();
                                             dispatch(Actions.PublishDemande(row.original, true, parametres))
@@ -252,8 +252,8 @@ function DemandesTable(props) {
                                 value={filter ? filter.value : ""}
                             >
                                 <option value="">Tous</option>
-                                <option value="true">Public</option>
-                                <option value="false">Privé</option>
+                                <option value="true">Publiée</option>
+                                <option value="false">Privée</option>
                             </select>
 
 

@@ -36,7 +36,7 @@ export const demandeAchatConfig = {
             component: React.lazy(() => import('./demande/DemandeAchat'))
         },
        {
-            path: '/demandes-achats/:secteur?/:activite?',
+            path: '/demandes-achats/:secteur?/:activite?/:categorie?',
             exact: true,
             component: React.lazy(() => import('./demandes/DemandesAchatsApp'))
         }

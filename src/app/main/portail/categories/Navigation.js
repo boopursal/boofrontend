@@ -22,10 +22,19 @@ import {
 const useStyles = makeStyles(theme => ({
     demo: {
         backgroundColor: theme.palette.background.paper,
+        width: '96%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+            marginBottom: 10
+        },
+        border: '1px solid #ccc',
+        borderRadius:10
+
     },
     mainAvatar: {
         margin: theme.spacing(1.25, 1.25, 1.25, 0),
         color: '#fff',
+        
         backgroundColor: theme.palette.primary.main,
     },
 
@@ -58,7 +67,7 @@ function Navigation(props) {
                     }
                 />
             </ListItem>
-            <List dense={true} disablePadding>
+            <List dense={true} disablePadding className="mt-16">
                 {
                     categoriesNav.loadingSecteurs ? 'Chargement...' :
                         (
@@ -71,7 +80,7 @@ function Navigation(props) {
             </List>
             {
                 categoriesNav.secteurs &&
-                <div className="p-16 text-right">
+                <div className="px-16 py-20 text-right">
                     <Link2 component={Link} to={`/annuaire-entreprises`} className="">
                         Tous les secteurs d’activité >
                     </Link2>

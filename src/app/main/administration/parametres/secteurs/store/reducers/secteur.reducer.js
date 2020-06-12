@@ -2,7 +2,7 @@ import * as Actions from '../actions';
 import _ from '@lodash';
 
 const initialState = {
-    loading: false,
+    loadingSS: false,
     requestSecteur: false,
     error: null,
     data: null,
@@ -16,7 +16,7 @@ const secteurReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    loading: false,
+                    loadingS: false,
                     requestSecteur: false,
                     error: null,
                     data: null,
@@ -28,21 +28,21 @@ const secteurReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    loading: false
+                    loadingS: false
                 }
             }
         case Actions.REQUEST_SAVE_SECTEUR:
             {
                 return {
                     ...state,
-                    loading: true,
+                    loadingS: true,
                 };
             }
         case Actions.REQUEST_SECTEURS:
             {
                 return {
                     ...state,
-                    loading: true,
+                    loadingS: true,
                 };
             }
 
@@ -61,7 +61,7 @@ const secteurReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    loading: false,
+                    loadingS: false,
                     error: null
 
                 };
@@ -70,7 +70,7 @@ const secteurReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    loading: false,
+                    loadingS: false,
                     error: action.payload,
                 };
             }

@@ -7,10 +7,12 @@ export const REQUEST_FOURNISSEURS = '[FOURNISSEURS PORTAIL APP] REQUEST_FOURNISS
 export const REQUEST_SECTEURS_COUNT = '[FOURNISSEURS PORTAIL APP] REQUEST_SECTEURS_COUNT';
 export const REQUEST_PAYS_COUNT = '[FOURNISSEURS PORTAIL APP] REQUEST_PAYS_COUNT';
 export const REQUEST_ACTIVITES_COUNT = '[FOURNISSEURS PORTAIL APP] REQUEST_ACTIVITES_COUNT';
+export const REQUEST_CATEGORIES_COUNT = '[FOURNISSEURS PORTAIL APP] REQUEST_CATEGORIES_COUNT';
 export const REQUEST_VILLES_COUNT = '[FOURNISSEURS PORTAIL APP] REQUEST_VILLES_COUNT';
 
 export const GET_VILLES_COUNT = '[FOURNISSEURS PORTAIL APP] GET_VILLES_COUNT';
 export const GET_ACTIVITES_COUNT = '[FOURNISSEURS PORTAIL APP] GET_ACTIVITES_COUNT';
+export const GET_CATEGORIES_COUNT = '[FOURNISSEURS PORTAIL APP] GET_CATEGORIES_COUNT';
 export const GET_FOURNISSEURS = '[FOURNISSEURS PORTAIL APP] GET_FOURNISSEURS';
 export const GET_SECTEURS_COUNT = '[FOURNISSEURS PORTAIL APP] GET_SECTEURS_COUNT';
 export const GET_PAYS_COUNT = '[FOURNISSEURS PORTAIL APP] GET_PAYS_COUNT';
@@ -24,10 +26,10 @@ export function cleanUp() {
 }
 
 export function getFournisseurs(params, pays, parametres, ville, q) {
-    const { secteur, activite } = params;
+    const { secteur, activite,categorie } = params;
     let parametre = '';
     if (secteur) {
-        parametre += `sousSecteurs.secteur.slug=${secteur}`
+        parametre += `categories.sousSecteurs.secteur.slug=${secteur}`
     }
     if (pays) {
         if (parametre)
@@ -42,7 +44,10 @@ export function getFournisseurs(params, pays, parametres, ville, q) {
         parametre += `&societeLower=${q}`
     }
     if (activite) {
-        parametre += `&sousSecteurs.slug=${activite}`
+        parametre += `&categories.sousSecteurs.slug=${activite}`
+    }
+    if (categorie) {
+        parametre += `&categories.slug=${categorie}`
     }
 
 
@@ -114,17 +119,35 @@ export function getActivitesCounts(params, pays, ville, q) {
             })
 
         }
+        );
+    }
 
+}
 
+export function getCategoriesCounts(params, pays, ville, q) {
+    const { secteur, activite, categorie } = params;
+    const request = agent.get(`/count_fournisseur_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}&ville=${ville ? ville : ''}&q=${q ? q : ''}`);
 
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_CATEGORIES_COUNT,
+        });
+        return request.then((response) => {
+
+            dispatch({
+                type: GET_CATEGORIES_COUNT,
+                payload: response.data
+            })
+
+        }
         );
     }
 
 }
 
 export function getVilleCounts(params, pays, q) {
-    const { secteur, activite } = params;
-    const request = agent.get(`/count_fournisseur_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&pays=${pays ? pays : ''}&q=${q ? q : ''}`);
+    const { secteur, activite, categorie } = params;
+    const request = agent.get(`/count_fournisseur_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}&q=${q ? q : ''}`);
 
     return (dispatch) => {
         dispatch({
@@ -147,8 +170,8 @@ export function getVilleCounts(params, pays, q) {
 
 }
 export function getPaysCounts(params, pays, q) {
-    const { secteur, activite } = params;
-    const request = agent.get(`/count_fournisseur_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&pays=${pays ? pays : ''}&q=${q ? q : ''}`);
+    const { secteur, activite, categorie } = params;
+    const request = agent.get(`/count_fournisseur_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}&q=${q ? q : ''}`);
 
     return (dispatch) => {
         dispatch({

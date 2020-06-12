@@ -94,7 +94,7 @@ function InfoEntreprise(props) {
                         Actavités
                     </Typography>
                     {
-                         data.sousSecteurs && data.sousSecteurs.map((item, index) => (
+                         data.categories && data.categories.map((item, index) => (
                             <Chip
                                 label={_.capitalize(item.name)}
                                 classes={{

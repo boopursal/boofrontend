@@ -58,19 +58,19 @@ function FournisseurListItem(props) {
     function handlePreviousClick() {
         parametres.page = Math.max(parametres.page - 1, 1);
         dispatch(Actions.setParametresData(parametres))
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
     function handleNextClick() {
         parametres.page = Math.min(parametres.page + 1, pageCount);
         dispatch(Actions.setParametresData(parametres))
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
     function handleChangeItems(ev) {
         parametres.page = 1;
         parametres.itemsPerPage = ev.target.value;
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
         dispatch(Actions.setParametresData(parametres))
     }
     return (
@@ -148,7 +148,7 @@ function FournisseurListItem(props) {
                                                     <Grid item>
                                                         Fournisseur de :
                                                         {
-                                                            fournisseur.sousSecteurs && fournisseur.sousSecteurs.map((item, index) => (
+                                                            fournisseur.categories && fournisseur.categories.map((item, index) => (
                                                                 index < 3 &&  <Chip
                                                                     label={_.capitalize(item.name)}
                                                                     classes={{

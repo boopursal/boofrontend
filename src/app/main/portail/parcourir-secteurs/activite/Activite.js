@@ -57,6 +57,15 @@ const useStyles = makeStyles(theme => ({
         fontSize: 20,
         pointerEvents: 'none'
     },
+    grid:{
+        marginBottom:'-16px',
+        marginTop:'-16px',
+        marginLeft:'auto',
+        marginRight:'auto',
+        '& > .MuiGrid-item' : {
+            padding: '16px'
+        }
+    },
 }));
 
 function Activite(props) {
@@ -87,13 +96,13 @@ function Activite(props) {
             }
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                <Grid container spacing={2} className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                <Grid container className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <HeaderActivite {...props} />
                     </Grid>
                 </Grid>
             </div>
-            <Grid container spacing={4} className=" max-w-2xl mx-auto py-8  sm:px-16 ">
+            <Grid container className={clsx(classes.grid," max-w-2xl mx-auto py-8  sm:px-16 ")}>
                 <Grid item sm={8} xs={12}>
                     <Paper variant="outlined" className={clsx(classes.paper, 'p-0 my-16')}>
                         <div className="p-16 pl-32">

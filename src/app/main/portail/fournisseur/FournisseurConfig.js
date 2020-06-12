@@ -36,7 +36,7 @@ export const FournisseurConfig = {
             component: React.lazy(() => import('./ficheFournisseur/FicheFournisseurApp'))
         },
         {
-            path: '/entreprises/:secteur?/:activite?',
+            path: '/entreprises/:secteur?/:activite?/:categorie?',
             exact: true,
             component: React.lazy(() => import('./fournisseurs/FournisseursApp'))
         }

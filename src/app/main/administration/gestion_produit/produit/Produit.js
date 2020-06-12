@@ -676,7 +676,7 @@ function Produit(props) {
                                                 produit.imageReqInProgress ?
                                                     <CircularProgress size={24} className={classes.buttonProgress} />
                                                     :
-                                                    <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                                    <Icon fontSize="large" color="action">arrow_upward</Icon>
 
                                             }
                                         </label>
@@ -758,7 +758,7 @@ function Produit(props) {
                                                 produit.ficheReqInProgress ?
                                                     <CircularProgress size={24} className={classes.buttonProgress} />
                                                     :
-                                                    <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                                    <Icon fontSize="large" color="action">arrow_upward</Icon>
 
                                             }
                                         </label>

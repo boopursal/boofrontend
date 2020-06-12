@@ -84,7 +84,7 @@ function SideBareSearch(props) {
             searchText = (q ? '&q=' + q : '')
         else searchText = (q ? 'q=' + q : '')
         props.history.replace({ pathname: '/vente-produits', search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
     function handleDeletePathActivite() {
         let searchText;
@@ -92,7 +92,7 @@ function SideBareSearch(props) {
             searchText = (q ? '&q=' + q : '')
         else searchText = (q ? 'q=' + q : '')
         props.history.replace({ pathname: '/vente-produits/' + secteur, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
     function handleDeleteQuerySearchText() {
@@ -111,7 +111,7 @@ function SideBareSearch(props) {
         
         const path = secteurParm + activiteParm + categorieParm;
         props.history.replace({ pathname: '/vente-produits' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '')  })
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
     function handleDeleteQueryPays() {
@@ -129,7 +129,7 @@ function SideBareSearch(props) {
         }
         const path = secteurParm + activiteParm + categorieParm;
         props.history.replace({ pathname: '/vente-produits' + path, search: q ? 'q=' + q : '' })
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
     return (
@@ -180,7 +180,7 @@ function SideBareSearch(props) {
                                                                     const location = props.location;
                                                                     query.set('ville', item.slug)
                                                                     props.history.replace({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug + (q ? '&q=' + q : '') })
-                                                                    document.querySelector('.ps').scrollTop = 0;
+                                                                    document.querySelector('.st').scrollTop = 0;
                                                                 }}>
                                                                 <ListItemText
                                                                     primary={item.name + ' (' + item.count + ')'}
@@ -211,7 +211,7 @@ function SideBareSearch(props) {
                                                             const location = props.location;
                                                             query.set('pays', item.slug)
                                                             props.history.replace({ pathname: location.pathname, search: 'pays=' + query.get('pays') + (q ? '&q=' + q : '') })
-                                                            document.querySelector('.ps').scrollTop = 0;
+                                                            document.querySelector('.st').scrollTop = 0;
                                                         }}>
                                                         <ListItemText
                                                             primary={item.name + ' (' + item.count + ')'}
@@ -292,7 +292,7 @@ function SideBareSearch(props) {
                                                                                     else searchText = (q ? 'q=' + q : '')
                                                                                     item.slug !== categorie &&
                                                                                         (props.history.replace({ pathname: '/vente-produits/' + secteur + '/' + activite + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText }))
-                                                                                    document.querySelector('.ps').scrollTop = 0
+                                                                                    document.querySelector('.st').scrollTop = 0
                                                                                 }}>
                                                                                 <ListItemText
                                                                                     primary={item.name + ' (' + item.count + ')'}
@@ -324,7 +324,7 @@ function SideBareSearch(props) {
                                                                             searchText = (q ? '&q=' + q : '')
                                                                         else searchText = (q ? 'q=' + q : '')
                                                                         props.history.replace({ pathname: '/vente-produits/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText });
-                                                                        document.querySelector('.ps').scrollTop = 0;
+                                                                        document.querySelector('.st').scrollTop = 0;
 
                                                                     }}>
                                                                     <ListItemText

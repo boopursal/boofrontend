@@ -792,7 +792,7 @@ function Produit(props) {
                                                     <Divider />
                                                     <DialogActions>
                                                         <Button onClick={handleClose} variant="outlined" color="primary">
-                                                            Annnuler
+                                                            Annuler
                                                             </Button>
                                                         <Button onClick={handleSubmitActivites} variant="contained" color="secondary"
                                                             disabled={produit.loadingSuggestion || categorieSuggester.length < 2}
@@ -916,7 +916,7 @@ function Produit(props) {
                                             produit.imageReqInProgress ?
                                                 <CircularProgress size={24} className={classes.buttonProgress} />
                                                 :
-                                                <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                                <Icon fontSize="large" color="action">arrow_upward</Icon>
 
                                         }
                                     </label>
@@ -998,7 +998,7 @@ function Produit(props) {
                                             produit.ficheReqInProgress ?
                                                 <CircularProgress size={24} className={classes.buttonProgress} />
                                                 :
-                                                <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                                <Icon fontSize="large" color="action">arrow_upward</Icon>
 
                                         }
                                     </label>

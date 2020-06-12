@@ -176,7 +176,7 @@ function ConsultationsTable(props) {
 
                     },
                     {
-                        Header: "Affecté à",
+                        Header: "Affectée à",
                         className: "font-bold",
                         filterable: true,
                         accessor: "personnel.name",

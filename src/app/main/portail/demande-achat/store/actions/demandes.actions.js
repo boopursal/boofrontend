@@ -8,7 +8,9 @@ export const REQUEST_SECTEURS_COUNT = '[DEMANDES ACHATS PORTAIL APP] REQUEST_SEC
 export const REQUEST_PAYS_COUNT = '[DEMANDES ACHATS PORTAIL APP] REQUEST_PAYS_COUNT';
 export const REQUEST_VILLES_COUNT = '[DEMANDES ACHATS PORTAIL APP] REQUEST_VILLES_COUNT';
 export const REQUEST_ACTIVITES_COUNT = '[DEMANDES ACHATS PORTAIL APP] REQUEST_ACTIVITES_COUNT';
+export const REQUEST_CATEGORIES_COUNT = '[DEMANDES ACHATS PORTAIL APP] REQUEST_CATEGORIES_COUNT';
 
+export const GET_CATEGORIES_COUNT = '[DEMANDES ACHATS PORTAIL APP] GET_CATEGORIES_COUNT';
 export const GET_ACTIVITES_COUNT = '[DEMANDES ACHATS PORTAIL APP] GET_ACTIVITES_COUNT';
 export const GET_DEMANDES_ACHATS = '[DEMANDES ACHATS PORTAIL APP] GET_DEMANDES_ACHATS';
 export const GET_SECTEURS_COUNT = '[DEMANDES ACHATS PORTAIL APP] GET_SECTEURS_COUNT';
@@ -24,10 +26,10 @@ export function cleanUp() {
 }
 
 export function getDemandeAchats(params, pays, ville, parametres) {
-    const { secteur, activite } = params;
+    const { secteur, activite, categorie } = params;
     let parametre = '';
     if (secteur) {
-        parametre += `sousSecteurs.secteur.slug=${secteur}`
+        parametre += `categories.sousSecteurs.secteur.slug=${secteur}`
     }
     if (pays) {
         if (parametre)
@@ -40,10 +42,11 @@ export function getDemandeAchats(params, pays, ville, parametres) {
         }
     }
     if (activite) {
-        parametre += `&sousSecteurs.slug=${activite}`
+        parametre += `&categories.sousSecteurs.slug=${activite}`
     }
-
-
+    if (categorie) {
+        parametre += `&categories.slug=${categorie}`
+    }
     if (parametre) {
         parametre = '&' + parametre;
     }
@@ -120,10 +123,35 @@ export function getActivitesCounts(params, pays, ville) {
 
 }
 
+export function getCategoriesCounts(params, pays, ville) {
+    const { secteur, activite, categorie } = params;
+    const request = agent.get(`/count_demandes_achats_categorie?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}&ville=${ville ? ville : ''}`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_CATEGORIES_COUNT,
+        });
+
+        return request.then((response) => {
+
+            dispatch({
+                type: GET_CATEGORIES_COUNT,
+                payload: response.data
+            })
+
+        }
+
+
+
+        );
+    }
+
+}
+
 
 export function getPaysCounts(params, pays) {
-    const { secteur, activite } = params;
-    const request = agent.get(`/count_demandes_achats_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&pays=${pays ? pays : ''}`);
+    const { secteur, activite, categorie } = params;
+    const request = agent.get(`/count_demandes_achats_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}`);
 
     return (dispatch) => {
         dispatch({
@@ -147,8 +175,8 @@ export function getPaysCounts(params, pays) {
 }
 
 export function getVilleCounts(params, pays) {
-    const { secteur, activite } = params;
-    const request = agent.get(`/count_demandes_achats_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&pays=${pays ? pays : ''}`);
+    const { secteur, activite, categorie } = params;
+    const request = agent.get(`/count_demandes_achats_pays?secteur=${secteur ? secteur : ''}&sousSecteur=${activite ? activite : ''}&categorie=${categorie ? categorie : ''}&pays=${pays ? pays : ''}`);
 
     return (dispatch) => {
         dispatch({

@@ -6,6 +6,7 @@ const initialState = {
     data: [],
     secteurs: [],
     activites: [],
+    categories: [],
     pays: [],
     villes: [],
     loading: false,
@@ -71,7 +72,13 @@ const fournisseursReducer = function (state = initialState, action) {
                     loadingActivites: true,
                 };
             }
-
+        case Actions.REQUEST_CATEGORIES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingCategories: true,
+                };
+            }
         case Actions.GET_FOURNISSEURS:
             {
                 return {
@@ -116,6 +123,15 @@ const fournisseursReducer = function (state = initialState, action) {
                     ...state,
                     loadingActivites: false,
                     activites: action.payload
+
+                };
+            }
+        case Actions.GET_CATEGORIES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingCategories: false,
+                    categories: action.payload
 
                 };
             }

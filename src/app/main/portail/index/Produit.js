@@ -13,6 +13,13 @@ const useStyles = makeStyles(theme => ({
     mediaProduit: {
         height: 200,
     },
+    cardContent: {
+        maxHeight: 160,
+        minHeight: 160,
+    },
+    card:{
+        maxWidth:260
+    }
 }));
 
 export default function Produit(props) {
@@ -30,7 +37,7 @@ export default function Produit(props) {
                     }
                     title={produit.titre}
                 />
-                <CardContent>
+                <CardContent  className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h5">
                         {_.capitalize(_.truncate(produit.titre, {
                             'length': 18

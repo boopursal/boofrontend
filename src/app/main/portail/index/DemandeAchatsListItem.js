@@ -36,7 +36,7 @@ function DemandeAchatsListItem(props) {
 
                 <Typography
                     variant="subtitle1"
-                    className="todo-title truncate"
+                    className="todo-title truncate font-600"
                     color={"inherit"}
                 >
                 [ RFQ-{props.demande.reference} ] {props.demande.titre} 
@@ -61,7 +61,8 @@ function DemandeAchatsListItem(props) {
                             ...props.classes
                         }}
                         className="mr-4"
-                        variant="outlined"
+                        color="secondary"
+                        variant="contained"
                         onDelete={props.onDelete}
                     />
                     <Chip
@@ -73,8 +74,9 @@ function DemandeAchatsListItem(props) {
                             deleteIcon: "w-16 ml-0",
                             ...props.classes
                         }}
-                        variant="outlined"
+                        variant="contained"
                         className="mr-4"
+                        color="secondary"
                         onDelete={props.onDelete}
                     />
                     
@@ -87,7 +89,8 @@ function DemandeAchatsListItem(props) {
                             deleteIcon: "w-16 ml-0",
                             ...props.classes
                         }}
-                        variant="outlined"
+                        variant="contained"
+                        color="secondary"
                         className="mr-4"
                         onDelete={props.onDelete}
                     />

@@ -188,11 +188,11 @@ function Secteur(props) {
                             <Button
                                 className="whitespace-no-wrap"
                                 variant="contained"
-                                disabled={secteur.loading || !form.name || !form.image}
+                                disabled={secteur.loadingSSS || !form.name || !form.image}
                                 onClick={() => handleSubmit(form)}
                             >
                                 Sauvegarder
-                                    {secteur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                    {secteur.loadingSSS && <CircularProgress size={24} className={classes.buttonProgress} />}
                             </Button>
                         </FuseAnimate>
 
@@ -210,7 +210,7 @@ function Secteur(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Info secteur" />
+                        <Tab className="h-64 normal-case" label="Infos secteur" />
                         <Tab className="h-64 normal-case" label="File" />
                     </Tabs>)
 
@@ -237,10 +237,10 @@ function Secteur(props) {
                                             onChange={handleChange}
                                             label="Nom du secteur"
                                             validations={{
-                                                minLength: 4
+                                                minLength: 3
                                             }}
                                             validationErrors={{
-                                                minLength: 'La longueur minimale de caractère est 4'
+                                                minLength: 'La longueur minimale de caractère est 3'
                                             }}
                                             variant="outlined"
                                             required
@@ -276,7 +276,7 @@ function Secteur(props) {
                                             secteur.secteurReqInProgress ?
                                                 <CircularProgress size={24} className={classes.buttonProgress} />
                                                 :
-                                                <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                                <Icon fontSize="large" color="action">arrow_upward</Icon>
 
                                         }
                                     </label>

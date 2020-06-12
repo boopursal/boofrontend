@@ -177,7 +177,7 @@ function Faq(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Info faq" />
+                        <Tab className="h-64 normal-case" label="Infos faq" />
                     </Tabs>)
 
             }

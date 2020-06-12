@@ -58,6 +58,11 @@ const useStyles = makeStyles(theme => ({
     btn: {
         fontSize: 11,
         padding: '0px 8px'
+    },
+    grid:{
+        [theme.breakpoints.down('xs')]: {
+           width:'100%'
+        },
     }
 }));
 
@@ -78,38 +83,41 @@ function NewsApp(props) {
     function handlePreviousClick() {
         news.parametres.page = Math.max(news.parametres.page - 1, 1);
         dispatch(Actions.setParametresData(news.parametres))
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
     function handleNextClick() {
         news.parametres.page = Math.min(news.parametres.page + 1, news.pageCount);
         dispatch(Actions.setParametresData(news.parametres))
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
     function handleChangeItems(ev) {
         news.parametres.page = 1;
         news.parametres.itemsPerPage = ev.target.value;
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
         dispatch(Actions.setParametresData(news.parametres))
     }
 
     function handleTitreChange(ev) {
         news.parametres.page = 1;
         news.parametres.titre = ev.target.value;
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
         dispatch(Actions.setParametresData(news.parametres))
     }
 
     return (
-        <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
+        <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, '  min-h-md')}>
             <Helmet>
                 <title>Toutes l'Actualité | Les Achats Industriels</title>
                 <meta name="description" content='' />
             </Helmet>
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                <Grid container spacing={2} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                <Grid container spacing={2}
+                classes={{
+                    'spacing-xs-2':classes.grid
+                }} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <div className="flex items-center">
                             <Button variant="outlined" size="small" color="secondary" onClick={() => props.history.goBack()} className={clsx(classes.btn, "mr-8")}>
@@ -130,7 +138,9 @@ function NewsApp(props) {
                     </Grid>
                 </Grid>
             </div>
-            <Grid container spacing={2} className="max-w-2xl mx-auto sm:px-16 pt-24 items-center">
+            <Grid container classes={{
+                    'spacing-xs-2':classes.grid
+                }} spacing={2} className="max-w-2xl mx-auto sm:px-16 pt-24 items-center">
                 <Grid item sm={8} xs={8}>
                     <Typography variant="h1" className="text-24 font-bold uppercase"> Les Achats Industriels | Actualités</Typography>
                 </Grid>
@@ -152,7 +162,9 @@ function NewsApp(props) {
                     />
                 </Grid>
             </Grid>
-            <Grid container spacing={2} className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
+            <Grid container classes={{
+                    'spacing-xs-2':classes.grid
+                }} spacing={2} className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
 
                 {
                     news.loading ?
@@ -179,7 +191,9 @@ function NewsApp(props) {
 
                 {
                     news.data && (
-                        <Grid container spacing={2} className="justify-between mt-16">
+                        <Grid container classes={{
+                            'spacing-xs-2':classes.grid
+                        }} spacing={2} className="justify-between mt-16">
                             <Grid item xs={12} xs={6}>
                                 Montrer:&ensp;
                                             <Select

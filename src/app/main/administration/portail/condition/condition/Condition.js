@@ -163,7 +163,7 @@ function Condition(props) {
                         scrollButtons="auto"
                         classes={{ root: "w-full h-64" }}
                     >
-                        <Tab className="h-64 normal-case" label="Info condition" />
+                        <Tab className="h-64 normal-case" label="Infos condition" />
                     </Tabs>)
 
             }

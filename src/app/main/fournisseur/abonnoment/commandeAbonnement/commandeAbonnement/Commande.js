@@ -70,7 +70,10 @@ const useStyles = makeStyles(theme => ({
     error: {
         backgroundColor: theme.palette.error.dark,
     },
-
+    border: {
+        borderLeft: '11px solid ' + theme.palette.secondary.main + '!important',
+        paddingLeft: 11
+    },
     icon: {
         fontSize: 20,
     },
@@ -188,11 +191,11 @@ function Commande(props) {
             setForm({ ...commande.data });
 
             if (commande.data.sousSecteurs) {
-                 setSousSecteurs(commande.data.sousSecteurs.map(item => ({
-                     value: item['@id'],
-                     label: item.secteur.name + ': '+item.name
-                 })));
-             }
+                setSousSecteurs(commande.data.sousSecteurs.map(item => ({
+                    value: item['@id'],
+                    label: item.secteur.name + ': ' + item.name
+                })));
+            }
             if (commande.data.offre)
                 setOffre(commande.data.offre)
             if (commande.data.mode)
@@ -362,7 +365,7 @@ function Commande(props) {
             if (item.remise) {
                 let remis = ht * item.remise / 100;
                 let netHt = ht - remis;
-               // let tva = netHt * 0.2;
+                // let tva = netHt * 0.2;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
@@ -452,9 +455,9 @@ function Commande(props) {
     }
 
     function handleSubmitActivites() {
-    
+
         dispatch(Actions.AddSuggestionSecteur(secteur, sousSecteur, user.id));
-         
+
     }
     function handleDelete(value) {
         setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value == value; }))
@@ -465,12 +468,12 @@ function Commande(props) {
             if (sousSecteurs.length === offre.nbActivite) {
                 return;
             }
-            if(!_.find(sousSecteurs, ['label', value.label])){
+            if (!_.find(sousSecteurs, ['value', value.value])) {
                 var v = value;
-                v.label = secteur1.label + ': '+v.label;
+                v.label = secteur1.label + ': ' + v.label;
                 setSousSecteurs([value, ...sousSecteurs])
             }
-            
+
         }
         else {
             if (value.value) {
@@ -515,17 +518,40 @@ function Commande(props) {
                                     </div>
                                 </div>
                             </div>
-                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                <Button
-                                    className="whitespace-no-wrap"
-                                    variant="contained"
-                                    disabled={sousSecteurs.length === 0}
-                                    onClick={() => handleSubmit(form, sousSecteurs)}
-                                >
-                                    Passer la commande
-                                    {commande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                </Button>
-                            </FuseAnimate>
+                            <div className="flex items-end">
+                                {
+                                    tabValue === 0 ?
+
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={(event) => handleChangeTab(event, 1)}
+                                        >
+                                            Suivant <Icon>navigate_next</Icon>
+                                        </Button>
+                                        :
+                                        <>
+                                            <Button
+                                                variant="outlined"
+                                                color="secondary"
+                                                className="mr-4"
+                                                onClick={(event) => handleChangeTab(event, 0)}
+                                            >
+                                                <Icon>navigate_before</Icon> Précédent
+                                            </Button>
+                                            <Button
+                                                className="whitespace-no-wrap"
+                                                variant="contained"
+                                                color="secondary"
+                                                disabled={sousSecteurs.length === 0}
+                                                onClick={() => handleSubmit(form, sousSecteurs)}
+                                            >
+                                                Passer la commande
+                                                {commande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                            </Button>
+                                        </>
+                                }
+                            </div>
                         </div>
                     )
                     :
@@ -563,17 +589,16 @@ function Commande(props) {
                                         <>
                                             <Grid container spacing={3} className="">
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">1- Offres & Activités</Typography>
+                                                    <Typography className="mb-16 " variant="h6"><span className={classes.border}>Offres</span></Typography>
 
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">Récapitulatif de votre commande</Typography>
+                                                    <Typography className="mb-16" variant="h6"> <span className={classes.border}>Récapitulatif de votre commande</span></Typography>
 
                                                 </Grid>
                                             </Grid>
-                                            <Divider />
-                                            <Grid container spacing={3} className="mt-16 mb-16">
-                                                <Grid item xs={12} sm={6}>
+                                            <Grid container spacing={3} className="mt-16 mb-8">
+                                                <Grid item xs={12} sm={6} className="border-1">
                                                     {
                                                         commande.offres && offre && commande.fournisseur ?
                                                             commande.offres.map((item, index) => (
@@ -838,18 +863,16 @@ function Commande(props) {
                                             </Grid>
                                             <Grid container spacing={3} className="">
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">2- Mode de paiement </Typography>
+                                                    <Typography className="mb-16" variant="h6"><span className={classes.border}>Mode de paiement</span>  </Typography>
 
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">3- Durée de votre abonnement</Typography>
+                                                    <Typography className="mb-16" variant="h6"><span className={classes.border}>Durée de votre abonnement</span> </Typography>
 
                                                 </Grid>
                                             </Grid>
-
-                                            <Divider />
-                                            <Grid container spacing={3} className="mt-6 mb-16">
-                                                <Grid item xs={12} sm={6}>
+                                            <Grid container spacing={3} className="mt-6 mb-8">
+                                                <Grid item xs={12} sm={6} className="border-1">
                                                     {
                                                         commande.paiements ?
                                                             commande.paiements.map((item, index) => (
@@ -872,7 +895,7 @@ function Commande(props) {
 
 
                                                 </Grid>
-                                                <Grid item xs={12} sm={6}>
+                                                <Grid item xs={12} sm={6} className="border-1">
                                                     {
                                                         commande.durees && duree ?
                                                             commande.durees.map((item, index) => (
@@ -903,6 +926,18 @@ function Commande(props) {
                                                     }
                                                 </Grid>
                                             </Grid>
+                                            <Grid container spacing={3} className="mt-6 mb-16">
+                                                <Grid item xs={12} sm={12} className="flex justify-end">
+                                                    <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        onClick={(event) => handleChangeTab(event, 1)}
+                                                    >
+                                                        Suivant <Icon>navigate_next</Icon>
+                                                    </Button>
+                                                </Grid>
+
+                                            </Grid>
                                         </>
                                     )}
                                 {
@@ -910,13 +945,12 @@ function Commande(props) {
                                         <>
                                             <Grid container spacing={3} className="">
                                                 <Grid item xs={12} >
-                                                    <Typography className="mb-16" variant="h6">Secteurs & Activités</Typography>
+                                                    <Typography className="mb-16" variant="h6"><span className={classes.border}>Secteurs & Activités</span></Typography>
 
                                                 </Grid>
 
                                             </Grid>
-                                            <Divider />
-                                            <Grid container spacing={3} className="mt-16 mb-16">
+                                            <Grid container spacing={3} className="mt-8 mb-8">
                                                 <Grid item xs={12} sm={6}>
                                                     <SelectReactFormsy
                                                         id="secteurs"
@@ -965,22 +999,21 @@ function Commande(props) {
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
-                                            <Grid container spacing={3} className="">
+                                            <Grid container spacing={3} className="mb-8">
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">Activité(s) choisie(s)</Typography>
+                                                    <Typography variant="h6"><span className={classes.border}>Activité(s) choisie(s)</span></Typography>
 
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <Typography className="mb-16" variant="h6">Suggestions </Typography>
+                                                    <Typography variant="h6"><span className={classes.border}>Suggestions</span> </Typography>
                                                 </Grid>
                                             </Grid>
-                                            <Divider />
-                                            <Grid container spacing={3} className="mt-4">
+                                            <Grid container spacing={3} className="mt-4" className="border-1">
                                                 <Grid item xs={12} sm={6}>
                                                     <div className={clsx(classes.chips)}>
                                                         {
                                                             sousSecteurs && sousSecteurs.length > 0 &&
-                                                            _.sortBy(sousSecteurs, [function(o) { return o.label; }]).map((item, index) => (
+                                                            _.sortBy(sousSecteurs, [function (o) { return o.label; }]).map((item, index) => (
                                                                 <Chip
                                                                     key={index}
                                                                     label={item.label}
@@ -992,12 +1025,12 @@ function Commande(props) {
                                                         }
                                                     </div>
                                                 </Grid>
-                                                <Grid item xs={12} sm={6}>
+                                                <Grid item xs={12} sm={6} className="border-1">
                                                     {
                                                         commande.fournisseur ?
                                                             <>
 
-                                                                <Typography className="mt-4" variant="caption">{"Si vos secteurs, activités n´existent pas, veuillez nous les envoyer en cliquant"}</Typography>
+                                                                <Typography className="mt-4" variant="caption">{"Si vos secteurs ou activités n´existent pas, veuillez nous les envoyer en cliquant"}</Typography>
                                                                 <div className="mt-4">
 
                                                                     <Link2
@@ -1006,56 +1039,60 @@ function Commande(props) {
                                                                         color="secondary"
                                                                         onClick={handleClickOpen}
                                                                     >
-                                                                        Ajouter autres activités
+                                                                        Suggerer d'autres secteurs et activités
                                                                 </Link2>
                                                                     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                                                                        <DialogTitle id="form-dialog-title">Vos activités</DialogTitle>
+                                                                        <DialogTitle id="form-dialog-title">Vos suggestions</DialogTitle>
                                                                         <DialogContent>
-                                                                          
-                                                                                <Grid container spacing={3} >
-                                                                                    <Grid item xs={12} sm={6}>
-                                                                                        <TextField
-                                                                                            className="mt-8 mb-16"
-                                                                                            error={secteur.length <= 2}
-                                                                                            required
-                                                                                            label="Secteur"
-                                                                                            autoFocus
-                                                                                            value={secteur}
-                                                                                            id="secteur"
-                                                                                            name="secteur"
-                                                                                            onChange={(event) => setSecteur(event.target.value)}
-                                                                                            variant="outlined"
-                                                                                            fullWidth
-                                                                                            helperText={secteur.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
-                                                                                        />
-                                                                                    </Grid>
-                                                                                    <Grid item xs={12} sm={6}>
-                                                                                        <TextField
-                                                                                            className="mt-8 mb-16"
-                                                                                            id="sousSecteur"
-                                                                                            name="sousSecteur"
-                                                                                            error={sousSecteur.length <= 2}
-                                                                                            onChange={(event) => setSousSecteur(event.target.value)}
-                                                                                            label="Activité"
-                                                                                            type="text"
-                                                                                            required
-                                                                                            value={sousSecteur}
-                                                                                            variant="outlined"
-                                                                                            fullWidth
-                                                                                            helperText={sousSecteur.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères ' : ''}
-                                                                                        />
-                                                                                    </Grid>
+                                                                            <Typography variant="caption">
+                                                                                Ces suggestions seront prises en compte par l'administrateur dans les plus brefs délais.
+                                                                            </Typography>
+
+
+                                                                            <Grid container spacing={3} >
+                                                                                <Grid item xs={12} sm={6}>
+                                                                                    <TextField
+                                                                                        className="mt-8 mb-16"
+                                                                                        error={secteur.length <= 2}
+                                                                                        required
+                                                                                        label="Secteur"
+                                                                                        autoFocus
+                                                                                        value={secteur}
+                                                                                        id="secteur"
+                                                                                        name="secteur"
+                                                                                        onChange={(event) => setSecteur(event.target.value)}
+                                                                                        variant="outlined"
+                                                                                        fullWidth
+                                                                                        helperText={secteur.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
+                                                                                    />
                                                                                 </Grid>
+                                                                                <Grid item xs={12} sm={6}>
+                                                                                    <TextField
+                                                                                        className="mt-8 mb-16"
+                                                                                        id="sousSecteur"
+                                                                                        name="sousSecteur"
+                                                                                        error={sousSecteur.length <= 2}
+                                                                                        onChange={(event) => setSousSecteur(event.target.value)}
+                                                                                        label="Activité"
+                                                                                        type="text"
+                                                                                        required
+                                                                                        value={sousSecteur}
+                                                                                        variant="outlined"
+                                                                                        fullWidth
+                                                                                        helperText={sousSecteur.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères ' : ''}
+                                                                                    />
+                                                                                </Grid>
+                                                                            </Grid>
                                                                         </DialogContent>
                                                                         <Divider />
                                                                         <DialogActions>
                                                                             <Button onClick={handleClose} variant="outlined" color="primary">
-                                                                                Annnuler
+                                                                                Annuler
                                                                             </Button>
                                                                             <Button onClick={handleSubmitActivites} variant="contained" color="secondary"
-                                                                                disabled={commande.loadingSuggestion || (sousSecteur.length < 2 || secteur.length <= 2) }
+                                                                                disabled={commande.loadingSuggestion || (sousSecteur.length < 2 || secteur.length <= 2)}
                                                                             >
-                                                                                Sauvegarder
+                                                                                Soumettre la suggestion
                                                                                 {commande.loadingSuggestion && <CircularProgress size={24} className={classes.buttonProgress} />}
                                                                             </Button>
                                                                         </DialogActions>
@@ -1074,6 +1111,29 @@ function Commande(props) {
                                                             </ContentLoader>
                                                     }
                                                 </Grid>
+                                            </Grid>
+                                            <Grid container spacing={3} className="mt-16 mb-16 flex justify-end">
+                                                <Grid item xs={12} sm={6} className="flex justify-end">
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="secondary"
+                                                        className="mr-4"
+                                                        onClick={(event) => handleChangeTab(event, 0)}
+                                                    >
+                                                        <Icon>navigate_before</Icon> Précédent
+                                                    </Button>
+                                                    <Button
+                                                        className="whitespace-no-wrap"
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        disabled={sousSecteurs.length === 0}
+                                                        onClick={() => handleSubmit(form, sousSecteurs)}
+                                                    >
+                                                        Passer la commande
+                                                        {commande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                    </Button>
+                                                </Grid>
+
                                             </Grid>
                                         </>
                                     )

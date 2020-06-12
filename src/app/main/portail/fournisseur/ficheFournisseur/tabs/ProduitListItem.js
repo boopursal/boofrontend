@@ -54,19 +54,19 @@ function ProduitListItem(props) {
     function handlePreviousClick() {
         parametres.page = Math.max(parametres.page - 1, 1);
         dispatch(Actions.setParametresData(parametres))
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
     function handleNextClick() {
         parametres.page = Math.min(parametres.page + 1, pageCount);
         dispatch(Actions.setParametresData(parametres))
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
     }
 
     function handleChangeItems(ev) {
         parametres.page = 1;
         parametres.itemsPerPage = ev.target.value;
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
         dispatch(Actions.setParametresData(parametres))
     }
     return (

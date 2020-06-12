@@ -269,11 +269,17 @@ const navigationConfig = [
                 'icon': 'build',
                 'children': [
                     {
+                        'id': 'suggestions-component',
+                        'title': 'Suggestions',
+                        'auth': authRoles.admin,
+                        'type': 'item',
+                        'url': '/parametres/suggestions',
+                    },
+                    {
                         'id': 'pays-component',
                         'title': 'Pays',
                         'auth': authRoles.admin,
                         'type': 'item',
-                        'icon': 'public',
                         'url': '/parametres/pays',
                     },
                     {
@@ -281,7 +287,6 @@ const navigationConfig = [
                         'title': 'Villes',
                         'auth': authRoles.admin,
                         'type': 'item',
-                        'icon': 'location_city',
                         'url': '/parametres/villes',
                     },
                     {
@@ -289,7 +294,6 @@ const navigationConfig = [
                         'title': 'Secteurs',
                         'auth': authRoles.admin,
                         'type': 'item',
-                        'icon': 'work',
                         'url': '/parametres/secteurs',
                     },
                     {
@@ -297,7 +301,6 @@ const navigationConfig = [
                         'title': 'Sous-Secteurs',
                         'type': 'item',
                         'auth': authRoles.admin,
-                        'icon': 'ballot',
                         'url': '/parametres/sous_secteurs',
                     },
                     {
@@ -305,7 +308,6 @@ const navigationConfig = [
                         'title': 'Produits',
                         'type': 'item',
                         'auth': authRoles.admin,
-                        'icon': 'ballot',
                         'url': '/parametres/categories',
                     },
                     {
@@ -313,7 +315,6 @@ const navigationConfig = [
                         'title': 'Motifs du rejet',
                         'type': 'item',
                         'auth': authRoles.admin,
-                        'icon': 'remove_circle_outline',
                         'url': '/parametres/motifs',
                     }
                 ]

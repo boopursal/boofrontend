@@ -7,7 +7,7 @@ function Widget3(props)
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
             <div className="flex items-center justify-between pr-4 pl-16 pt-4">
-                <Typography className="text-16">Demandes en attentes</Typography>
+                <Typography className="text-16">Demandes en attente</Typography>
                 
             </div>
             <div className="text-center pt-12 pb-28">

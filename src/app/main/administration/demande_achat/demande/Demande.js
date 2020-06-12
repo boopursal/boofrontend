@@ -614,16 +614,7 @@ function Demande(props) {
                                                     <FormControlLabel disabled={form.reference !== null} value="2" checked={form.statut === 2} control={<Radio />} label="Rejeter" />
 
                                                 </RadioGroupFormsy>
-                                                <RadioGroupFormsy
-                                                    className="inline mb-10 "
-                                                    name="statut"
-                                                    label="Diffuser à l'échelle"
-                                                    onChange={handleRadioLocalisation}
-                                                >
-                                                    <FormControlLabel value="1" checked={form.localisation === 1} control={<Radio />} label="Internationale" />
-                                                    <FormControlLabel  value="2" checked={form.localisation === 2} control={<Radio />} label="Nationale" />
 
-                                                </RadioGroupFormsy>
                                             </Grid>
                                             <Grid item xs={12} sm={3}>
                                                 <CheckboxFormsy
@@ -655,6 +646,21 @@ function Demande(props) {
                                                     label="Mettre la demande anonyme"
                                                 />
                                             </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <RadioGroupFormsy
+                                                    className="inline mb-10 "
+                                                    name="statut"
+                                                    label="Diffuser à l'échelle"
+                                                    onChange={handleRadioLocalisation}
+                                                >
+                                                    <FormControlLabel value="2" checked={form.localisation === 2} control={<Radio />} label="Locale" />
+                                                    <FormControlLabel value="3" checked={form.localisation === 3} control={<Radio />} label="Internationale" />
+                                                    <FormControlLabel value="1" checked={form.localisation === 1} control={<Radio />} label="Les deux" />
+
+
+                                                </RadioGroupFormsy>
+                                            </Grid>
+
                                         </Grid>
 
                                         <Grid container spacing={3} >
@@ -736,7 +742,7 @@ function Demande(props) {
                                                 demande.attachementReqInProgress ?
                                                     <CircularProgress size={24} className={classes.buttonProgress} />
                                                     :
-                                                    <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                                    <Icon fontSize="large" color="action">arrow_upward</Icon>
 
                                             }
                                         </label>

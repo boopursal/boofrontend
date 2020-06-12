@@ -151,12 +151,12 @@ function ActualitesTable(props) {
                     },
 
                     {
-                        Header: "Publier",
+                        Header: "Publiée",
                         accessor: "isActive",
                         Cell: row =>
                             row.original.isActive ?
                                 (
-                                    <Tooltip title="Actif">
+                                    <Tooltip title="Publiée">
                                         <IconButton className="text-green text-20" onClick={(ev) => {
                                             ev.stopPropagation();
                                             dispatch(Actions.PublishActualite(row.original, false, parametres))

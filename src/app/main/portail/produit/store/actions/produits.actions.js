@@ -55,7 +55,7 @@ export function getProduits(params, pays, parametres,ville,q) {
         parametre = '&' + parametre;
     }
     let order = _.split(parametres.filter.id, '-');
-    const request = agent.get(`/api/produits?page=${parametres.page}&itemsPerPage=${parametres.itemsPerPage}&order[${order[0]}]=${order[1]}` + (parametre ? parametre : ''));
+    const request = agent.get(`/api/produits?page=${parametres.page}&isValid=true&itemsPerPage=${parametres.itemsPerPage}&order[${order[0]}]=${order[1]}` + (parametre ? parametre : ''));
 
     return (dispatch) => {
         dispatch({

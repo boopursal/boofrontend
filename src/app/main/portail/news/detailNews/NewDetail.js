@@ -10,6 +10,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { InlineShareButtons } from 'sharethis-reactjs';
 import _ from '@lodash';
 import { FuseUtils } from '@fuse';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -42,7 +43,18 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px',
         height: 24
     },
-
+    grid:{
+        marginBottom:'-16px',
+        marginTop:'-16px',
+        marginLeft:'auto',
+        marginRight:'auto',
+        [theme.breakpoints.down('xs')]: {
+            '& > .MuiGrid-item' : {
+                padding: '16px'
+            }
+        },
+        
+    },
 }));
 
 function NewDetail(props) {
@@ -83,7 +95,7 @@ function NewDetail(props) {
 
             }
 
-            <Grid container spacing={2} className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
+            <Grid container  className={clsx(classes.grid,"max-w-2xl mx-auto py-48 sm:px-16 items-start")}>
 
                 {
                     actualite.loading ?

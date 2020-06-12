@@ -1,49 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton,  Tooltip } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
-import * as Actions from '../store/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 import moment from 'moment';
 import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
-import { makeStyles } from '@material-ui/core/styles';
-import _ from '@lodash';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-    chip: {
-        marginLeft: theme.spacing(1),
-        background: '#ef5350',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
 
-    },
-    chip2: {
-        marginLeft: theme.spacing(1),
-        background: '#4caf50',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-    chipOrange: {
-        marginLeft: theme.spacing(1),
-        background: '#ff9800',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-}));
 function FocusProduitsTable(props) {
 
-    const classes = useStyles();
-    const dispatch = useDispatch();
     const focusProduits = useSelector(({ focusProduitsApp }) => focusProduitsApp.focusProduits.data);
     const searchText = useSelector(({ focusProduitsApp }) => focusProduitsApp.focusProduits.searchText);
     const loading = useSelector(({ focusProduitsApp }) => focusProduitsApp.focusProduits.loading);

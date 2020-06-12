@@ -6,6 +6,7 @@ const initialState = {
     data: [],
     secteurs: [],
     activites: [],
+    categories: [],
     pays: [],
     villes: [],
     loading: false,
@@ -21,6 +22,7 @@ const initialState = {
     loadingSecteurs: false,
     loadingPays: false,
     loadingActivites: false,
+    loadingCategories: false,
     loadingVilles: false,
 
 
@@ -61,6 +63,13 @@ const demandesReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loadingActivites: true,
+                };
+            }
+        case Actions.REQUEST_CATEGORIES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingCategories: true,
                 };
             }
         case Actions.REQUEST_VILLES_COUNT:
@@ -105,6 +114,15 @@ const demandesReducer = function (state = initialState, action) {
                     ...state,
                     loadingActivites: false,
                     activites: action.payload
+
+                };
+            }
+        case Actions.GET_CATEGORIES_COUNT:
+            {
+                return {
+                    ...state,
+                    loadingCategories: false,
+                    categories: action.payload
 
                 };
             }

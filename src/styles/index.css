@@ -91,7 +91,7 @@ form label {
     z-index: 99;
 }
 .slick-initialized .slick-slide {
-    padding: 15px!important;
+    padding: 5px!important;
 }
 
 .slick-prev:before, .slick-next:before {

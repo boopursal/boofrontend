@@ -406,7 +406,7 @@ function Admin(props)
                                                     "flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5"
                                                 )}
                                         >
-                                            <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                            <Icon fontSize="large" color="action">arrow_upward</Icon>
                                         </label>
                                         {form.images.map(media => (
                                             <div

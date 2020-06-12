@@ -1,11 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { Card, Icon, CardContent, List, ListItem, ListItemText, Typography, Chip, IconButton, ListItemSecondaryAction } from '@material-ui/core';
 import { FuseAnimateGroup } from '@fuse';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import * as Actions from '../store/actions';
+import _ from '@lodash';
 
 const useStyles = makeStyles(theme => ({
     layoutRoot: {},
@@ -70,39 +71,52 @@ function SideBareSearch(props) {
     const secteurs = useSelector(({ demandesAchat }) => demandesAchat.demandes.secteurs);
     const loadingActivites = useSelector(({ demandesAchat }) => demandesAchat.demandes.loadingActivites);
     const activites = useSelector(({ demandesAchat }) => demandesAchat.demandes.activites);
+    const loadingCategories = useSelector(({ demandesAchat }) => demandesAchat.demandes.loadingCategories);
+    const categories = useSelector(({ demandesAchat }) => demandesAchat.demandes.categories);
     const loadingPays = useSelector(({ demandesAchat }) => demandesAchat.demandes.loadingPays);
     const loadingVilles = useSelector(({ demandesAchat }) => demandesAchat.demandes.loadingVilles);
     const payss = useSelector(({ demandesAchat }) => demandesAchat.demandes.pays);
     const villes = useSelector(({ demandesAchat }) => demandesAchat.demandes.villes);
     const parametres = useSelector(({ demandesAchat }) => demandesAchat.demandes.parametres);
+    const demandes = useSelector(({ demandesAchat }) => demandesAchat.demandes.data);
 
     const query = useQuery(props.location);
     const params = props.match.params;
-    const { secteur, activite } = params;
+    const { secteur, activite, categorie } = params;
     const pays = query.get("pays");
     const ville = query.get("ville");
 
     function handleDeletePathSecteur() {
         props.history.replace({ pathname: '/demandes-achats', search: pays && (ville ? 'pays=' + pays + '&ville=' + ville : 'pays=' + pays) })
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
         parametres.page = 1;
         dispatch(Actions.setParametresData(parametres))
+    }
+    function handleDeletePathActivite() {
+      
+        props.history.replace({ pathname: '/demandes-achats/' + secteur, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '')  })
+        document.querySelector('.st').scrollTop = 0;
     }
 
 
     function handleDeleteQueryPays() {
+
         let secteurParm = '';
         let activiteParm = '';
+        let categorieParm = '';
+
         if (secteur) {
             secteurParm = '/' + secteur;
         }
         if (activite) {
             activiteParm = '/' + activite;
         }
-
-        const path = secteurParm + activiteParm;
+        if (categorie) {
+            categorieParm = '/' + categorie;
+        }
+        const path = secteurParm + activiteParm + categorieParm;
         props.history.replace({ pathname: '/demandes-achats' + path, search: '' })
-        document.querySelector('.ps').scrollTop = 0;
+        document.querySelector('.st').scrollTop = 0;
         parametres.page = 1;
         dispatch(Actions.setParametresData(parametres))
     }
@@ -154,8 +168,8 @@ function SideBareSearch(props) {
                                                                 onClick={event => {
                                                                     const location = props.location;
                                                                     query.set('ville', item.slug)
-                                                                    props.history.replace({ pathname: location.pathname, search: 'pays=' + pays+'&ville='+item.slug })
-                                                                    document.querySelector('.ps').scrollTop = 0;
+                                                                    props.history.replace({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug })
+                                                                    document.querySelector('.st').scrollTop = 0;
                                                                     parametres.page = 1;
                                                                     dispatch(Actions.setParametresData(parametres))
                                                                 }}>
@@ -188,7 +202,7 @@ function SideBareSearch(props) {
                                                             const location = props.location;
                                                             query.set('pays', item.slug)
                                                             props.history.replace({ pathname: location.pathname, search: 'pays=' + query.get('pays') })
-                                                            document.querySelector('.ps').scrollTop = 0;
+                                                            document.querySelector('.st').scrollTop = 0;
                                                             parametres.page = 1;
                                                             dispatch(Actions.setParametresData(parametres))
                                                         }}>
@@ -233,39 +247,82 @@ function SideBareSearch(props) {
 
                                     </ListItem>
                                     <List component="div" className={classes.listRoot2}>
+                                       
                                         {
-                                            loadingActivites ?
-                                                <LinearProgress color="secondary" /> :
-                                                <FuseAnimateGroup
-                                                    enter={{
-                                                        animation: "transition.slideUpBigIn"
-                                                    }}
-                                                >
-                                                    {
-                                                        activites && activites.map((item, index) => (
-                                                            <ListItem
-                                                                key={index}
-                                                                className={classes.nested}
-                                                                selected={item.slug === activite}
-                                                                button={item.slug !== activite}
-                                                                onClick={event => {
-                                                                    item.slug !== activite &&
-                                                                        (props.history.replace({ pathname: '/demandes-achats/' + secteur + '/' + item.slug, search: pays ? 'pays=' + pays : '' }))
-                                                                    document.querySelector('.ps').scrollTop = 0;
-                                                                    parametres.page = 1;
-                                                                    dispatch(Actions.setParametresData(parametres))
+                                            demandes.length > 0 && activite ?
+                                                <>
+                                                    <ListItem className={classes.nested}>
+                                                        <ListItemText
+                                                            primary={
+                                                                <Chip
+                                                                    label={_.capitalize(activite.replace('-', ' '))}
+                                                                    onDelete={handleDeletePathActivite}
+                                                                    className={classes.chip}
+                                                                    color="primary"
+                                                                    variant="outlined"
+                                                                />}
+                                                        />
+                                                    </ListItem>
+                                                    <List component="div" className={classes.listRoot2}>
+                                                        {
+                                                            loadingCategories ?
+                                                                <LinearProgress color="secondary" /> :
+                                                                <FuseAnimateGroup
+                                                                    enter={{
+                                                                        animation: "transition.slideUpBigIn"
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        categories && categories.map((item, index) => (
+                                                                            <ListItem
+                                                                                key={index}
+                                                                                className={classes.nested2}
+                                                                                selected={item.slug === categorie}
+                                                                                button={item.slug !== categorie}
+                                                                                onClick={event => {
 
-                                                                }}>
-                                                                <ListItemText
-                                                                    primary={item.name + ' (' + item.count + ')'}
-                                                                />
-                                                            </ListItem>
+                                                                                    item.slug !== categorie &&
+                                                                                        (props.history.replace({ pathname: '/demandes-achats/' + secteur + '/' + activite + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') }))
+                                                                                    document.querySelector('.st').scrollTop = 0
+                                                                                }}>
+                                                                                <ListItemText
+                                                                                    primary={item.name + ' (' + item.count + ')'}
+                                                                                />
+                                                                            </ListItem>
 
-                                                        ))
-                                                    }
-                                                </FuseAnimateGroup>
+                                                                        ))
+                                                                    }
+                                                                </FuseAnimateGroup>
+
+                                                        }
+                                                    </List>
+                                                </> :
+                                                loadingActivites ? <LinearProgress color="secondary" /> :
+                                                    <FuseAnimateGroup
+                                                        enter={{
+                                                            animation: "transition.slideUpBigIn"
+                                                        }}
+                                                    >
+                                                        {
+                                                            activites && activites.map((item, index) => (
+                                                                <ListItem
+                                                                    key={index}
+                                                                    className={classes.nested}
+                                                                    button
+                                                                    onClick={event => {
+                                                                        props.history.replace({ pathname: '/demandes-achats/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') });
+                                                                        document.querySelector('.st').scrollTop = 0;
+
+                                                                    }}>
+                                                                    <ListItemText
+                                                                        primary={item.name + ' (' + item.count + ')'}
+                                                                    />
+                                                                </ListItem>
+
+                                                            ))
+                                                        }
+                                                    </FuseAnimateGroup>
                                         }
-
                                     </List>
                                 </> :
                                 (

@@ -9,6 +9,7 @@ import {
     ListItemAvatar,
     Avatar,
     Button,
+    ListItemSecondaryAction,
 
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -42,6 +43,9 @@ const useStyles = makeStyles(theme => ({
         height: 'auto',
         backgroundColor: theme.palette.background.default
     },
+    container: {
+        listStyleType: "none"
+    },
     header: {
         backgroundColor: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
         color: theme.palette.getContrastText(theme.palette.primary.main),
@@ -70,7 +74,8 @@ const useStyles = makeStyles(theme => ({
     },
     demo: {
         backgroundColor: theme.palette.background.paper,
-
+        border: '1px solid #ccc',
+        borderRadius:10
     },
     mainHeader: {
         backgroundColor: 'rgba(0,0,0,.7)',
@@ -95,7 +100,20 @@ const useStyles = makeStyles(theme => ({
     media: {
         height: 140,
     },
-
+    buttonXs: {
+        [theme.breakpoints.down('xs')]: {
+            margin: '11px 0',
+            position:'static',
+            textAlign:'end'
+        },
+    },
+    buttonSm: {
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 11,
+            position:'static',
+            textAlign:'end'
+        },
+    }
 }));
 
 function generate(element) {
@@ -120,6 +138,7 @@ function Index(props) {
         slidesToScroll: portail.produits && portail.produits.length < 4 ? portail.produits.length : 4,
         slidesToShow: portail.produits && portail.produits.length < 4 ? portail.produits.length : 4,
         dots: false,
+        infinite: portail.produits && portail.produits.length > 3,
         autoplay: true,
         autoplaySpeed: 5000,
         responsive: [
@@ -204,7 +223,7 @@ function Index(props) {
             {/** 
              ===================CATEGORIES & RFQs=================
             **/}
-            <Grid container spacing={2} className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
+            <Grid container  className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
                 <Grid item sm={4} xs={12}>
                     <Navigation {...props} />
                 </Grid>
@@ -264,7 +283,7 @@ function Index(props) {
 
                         {
                             portail.data &&
-                            <div className="p-16 text-right">
+                            <div className="px-16 py-16 text-right">
                                 <Link2 component={Link} to={`/demandes-achats`} className="">
                                     Toutes les demandes de devis >
                                 </Link2>
@@ -277,10 +296,12 @@ function Index(props) {
             {/** 
              ===================FOCUS PORDUCTS=================
             **/}
-            <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 py-24">
+            <Grid container className="max-w-2xl mx-auto mb-16 px-8 sm:px-16 py-24">
                 <Grid item sm={12}>
                     <div>
-                        <ListItem>
+                        <ListItem classes={{
+                            container: classes.container,
+                        }}>
                             <ListItemAvatar>
                                 <Avatar className={classes.mainAvatar}>
                                     <Icon >collections_bookmark</Icon>
@@ -294,6 +315,14 @@ function Index(props) {
                                 }
                                 secondary='Un extrait des catalogues B2B des fournisseurs et fabricants présents sur Les Achats Industriels.'
                             />
+                            <ListItemSecondaryAction classes={{
+                                root: classes.buttonSm
+                            }}>
+                                <Button component={Link} to="/vente-produits" className="whitespace-no-wrap" color="secondary" variant="outlined">
+                                    Plus de produits
+                                    <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon>
+                                </Button>
+                            </ListItemSecondaryAction>
                         </ListItem>
                         {
                             portail.loadingProduits ?
@@ -341,14 +370,7 @@ function Index(props) {
                 </Grid>
 
             </Grid>
-            <Grid container spacing={2} className="justify-center mb-24" >
 
-                <Button component={Link} to="/vente-produits" className="whitespace-no-wrap" color="secondary" variant="contained">
-                    Plus de produits
-                     <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon>
-                </Button>
-
-            </Grid>
 
             {/* 
              ===================DECOUVREZ LES SHA=================
@@ -356,7 +378,7 @@ function Index(props) {
             <div
                 className={clsx(classes.middle, "relative overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-512 sm:h-288 ")}>
                 <div className={classes.overlay} />
-                <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 items-center py-24 z-9999">
+                <Grid container className="max-w-2xl mx-auto px-8 sm:px-16 items-center py-24 z-9999">
                     <Grid item sm={7} xs={12}>
                         <Typography variant="h2" component="h2" className='text-white text-24 uppercase mb-16' >
                             Découvrez le service <span className="font-extrabold">Les Achats Industriels</span>
@@ -379,7 +401,10 @@ function Index(props) {
             {/** 
              ===================INSCRIPTION FOURNISSEUR=================
             **/}
-            <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 py-24">
+            <Grid
+                container
+                className="max-w-2xl mx-auto px-8 sm:px-16 py-24"
+            >
                 <Grid item sm={12}>
                     <BioFournisseur />
                 </Grid>
@@ -388,10 +413,15 @@ function Index(props) {
             {/** 
              ===================NEWS=================
             **/}
-            <Grid container spacing={2} className="max-w-2xl mx-auto px-8 sm:px-16 py-24">
+            <Grid
+                container
+                className="max-w-2xl mx-auto px-8 mb-16 sm:px-16 py-24"
+            >
                 <Grid item sm={12}>
                     <div>
-                        <ListItem>
+                        <ListItem classes={{
+                            container: classes.container,
+                        }}>
                             <ListItemAvatar>
                                 <Avatar className={classes.mainAvatar}>
                                     <Icon >local_library</Icon>
@@ -404,6 +434,13 @@ function Index(props) {
                                     </Typography>
                                 }
                             />
+                            <ListItemSecondaryAction classes={{
+                                root: classes.buttonXs
+                            }}>
+                                <Button component={Link} to="/actualites" className="whitespace-no-wrap" color="secondary" variant="outlined">
+                                    Toute l'actualité<Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon>
+                                </Button>
+                            </ListItemSecondaryAction>
                         </ListItem>
                         <Grid container spacing={2} className="justify-center">
 
@@ -433,14 +470,6 @@ function Index(props) {
                                     )
                             }
                         </Grid>
-                        <Grid container spacing={2} className="justify-center mt-24 mb-24" >
-
-                            <Button component={Link} to="/actualites" className="whitespace-no-wrap" color="secondary" variant="contained">
-                                Toute l'actualité
-                                </Button>
-
-                        </Grid>
-
                     </div>
                 </Grid>
 
@@ -452,7 +481,7 @@ function Index(props) {
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-300 sm:h-96 ")}>
                 <div className={classes.overlay} />
-                <Grid container spacing={2} className="max-w-2xl mx-auto px-8  sm:px-16 items-center z-9999">
+                <Grid container className="max-w-2xl mx-auto px-8  sm:px-16 items-center z-9999">
                     <Grid item sm={7} xs={12}>
                         <Typography variant="h2" component="h2" className='text-white text-24 uppercase mb-2' >
                             Newsletters <span className="font-extrabold"> Les Achats Industriels</span>

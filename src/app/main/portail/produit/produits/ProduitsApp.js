@@ -51,6 +51,11 @@ const useStyles = makeStyles(theme => ({
         width: 20,
         height: 20,
     },
+    grid:{
+        [theme.breakpoints.down('xs')]: {
+           width:'100%'
+        },
+    }
 }));
 
 function useQuery(location) {
@@ -123,11 +128,17 @@ function ProduitsApp(props) {
     function handleUrlFournisseurs() {
         let secteurParm = '';
         let activiteParm = '';
+        let categorieParm = '';
+
+        
         if (secteur) {
             secteurParm = '/' + secteur;
         }
         if (activite) {
             activiteParm = '/' + activite;
+        }
+        if (categorie) {
+            categorieParm = '/' + categorie;
         }
 
         let searchText;
@@ -135,7 +146,7 @@ function ProduitsApp(props) {
             searchText = (q ? '&q=' + q : '')
         else searchText = (q ? 'q=' + q : '')
 
-        const path = secteurParm + activiteParm;
+        const path = secteurParm + activiteParm + categorieParm;
         props.history.replace({ pathname: '/entreprises' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
     }
 
@@ -151,14 +162,18 @@ function ProduitsApp(props) {
             <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
                 <div
                     className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                    <Grid container spacing={2} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                    <Grid container
+                        classes={{
+                            'spacing-xs-2': classes.grid
+                        }}
+                        className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                         <Grid item sm={12} xs={12}>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 
                                 <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} className={classes.breadcrumbs}>
                                     <Link color="inherit" to="/" className={classes.link}>
                                         <HomeIcon className={classes.icon} />
-                                    Accueil
+                                        Accueil
                                 </Link>
                                     {
                                         produits.length > 0 && secteur &&
@@ -204,7 +219,7 @@ function ProduitsApp(props) {
                         <title>{'Produits ' + (
                             activite ? 'de ' + _.capitalize(activite) :
                                 secteur ? 'de ' + _.capitalize(secteur) : ''
-                        ) + (pays ? ' au '+_.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
+                        ) + (pays ? ' au ' + _.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
                         }</title>
                         <meta name="robots" content="noindex, nofollow" />
                         <meta name="googlebot" content="noindex" />
@@ -214,7 +229,7 @@ function ProduitsApp(props) {
                         <span> {'Produits ' + (
                             activite ? 'de ' + _.capitalize(activite) :
                                 secteur ? 'de ' + _.capitalize(secteur) : ''
-                        ) + (pays ? ' au '+_.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
+                        ) + (pays ? ' au ' + _.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
                         }</span>
                     </Typography>
                     <div className="flex items-center ml-2 my-16">
@@ -284,7 +299,12 @@ function ProduitsApp(props) {
 
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                <Grid container spacing={2} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                <Grid container
+                    classes={{
+                        'spacing-xs-2': classes.grid
+                    }}
+                    spacing={2}
+                    className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 
@@ -332,7 +352,12 @@ function ProduitsApp(props) {
                 </Grid>
             </div>
 
-            <Grid container spacing={2} className="max-w-2xl  mx-auto sm:px-16 pt-24 items-center">
+            <Grid container
+                classes={{
+                    'spacing-xs-2': classes.grid
+                }}
+                spacing={2}
+                className="max-w-2xl  mx-auto sm:px-16 pt-24 items-center">
                 <Grid item sm={8} xs={12}>
                     <Typography variant="h1" className="text-24 font-bold">
                         {
@@ -358,7 +383,12 @@ function ProduitsApp(props) {
                     </Button>
                 </Grid>
             </Grid>
-            <Grid container spacing={2} className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
+            <Grid container
+                classes={{
+                    'spacing-xs-2': classes.grid
+                }}
+                spacing={2}
+                className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
 
                 <Grid item sm={4} md={3} xs={12} className="sticky top-0 order-last sm:order-first">
                     <SideBareSearch  {...props} />

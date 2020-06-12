@@ -60,7 +60,7 @@ function DemandeAchat(props) {
         <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                <Grid container spacing={2} className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                <Grid container  className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <HeaderDetailDemande {...props} />
                     </Grid>

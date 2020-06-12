@@ -7,7 +7,15 @@ import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import clsx from 'clsx';
+import { classes } from 'istanbul-lib-coverage';
+import { makeStyles } from '@material-ui/styles';
+const useStyles = makeStyles(theme => ({
+    border: {
+        borderLeft: '11px solid ' + theme.palette.secondary.main + '!important',
+        paddingLeft: 11
+    },
+}));
 const ExpansionPanel = withStyles({
     root: {
         border: '1px solid rgba(0, 0, 0, .125)',
@@ -39,6 +47,7 @@ const ExpansionPanelSummary = withStyles({
             margin: '12px 0',
         },
     },
+  
     expanded: {},
 })(MuiExpansionPanelSummary);
 const ExpansionPanelDetails = withStyles(theme => ({
@@ -50,12 +59,13 @@ const ExpansionPanelDetails = withStyles(theme => ({
 function FaqDetail(props) {
     const faqs = useSelector(({ faqsApp }) => faqsApp.faqs);
     const [expanded, setExpanded] = React.useState('panel1');
-
+    const classes = useStyles();
+    
     const handleChange = panel => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
     return (
-        <Grid container spacing={2} className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
+        <Grid container className="max-w-2xl mx-auto py-48 sm:px-16 items-start">
             {
                 faqs.loading ?
                     <Grid item xs={12} sm={12}>
@@ -82,7 +92,7 @@ function FaqDetail(props) {
                         faqs.data.map((categorie, index) => (
                             categorie.faqs && (
                                 <div key={index} className="mb-16">
-                                    <Typography variant="h6" className="mb-16">
+                                    <Typography variant="h6" className={clsx(classes.border,"mb-16")}>
                                         {categorie.name}
                                     </Typography>
                                     {

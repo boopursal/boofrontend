@@ -58,7 +58,7 @@ export function saveRenouvelement(sousSecteurs, offre, mode, duree,history) {
         return request.then((response) => {
 
             dispatch(showMessage({ message: 'Votre commande a bien été enregistré, un mail vous sera envoyé dès la validation de votre commande, nous vous remercions pour votre confiance!' }));
-            history.push('/offres/commande')
+            history.push('/abonnement')
             return dispatch({
                 type: SAVE_COMMANDE,
                 payload: response.data

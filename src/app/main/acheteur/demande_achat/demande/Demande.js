@@ -401,9 +401,10 @@ function Demande(props) {
                                     : "Pièce(s) jointe(s)"}
 
                         />
-                        {form && form.diffusionsdemandes.length > 0 ?
+                        
+                        {/*form && form.diffusionsdemandes.length > 0 ?
                             <Tab className="h-64 normal-case" label={"Diffuser (" + form.diffusionsdemandes.length + " fois)"} />
-                            : ''}
+                        : ''*/}
 
                     </Tabs>
 
@@ -443,7 +444,7 @@ function Demande(props) {
                                                 <Typography variant="caption"  >
                                                     - Soumettez votre demande c'est gratuit et sans engagement.<br />
                                                     - Détaillez la demande, vous recevrez de meilleures offres.<br />
-                                                    - Attention seules les demandes sérieuses (pas de projets étudiants) seront validées
+                                                    - Attention seules les demandes sérieuses (pas de projets étudiants) seront validées.
                                                  </Typography>
                                             </Grid>
                                         </Grid>
@@ -643,8 +644,10 @@ function Demande(props) {
                                                     label="Diffuser à l'échelle"
                                                     onChange={handleRadioChange}
                                                 >
-                                                    <FormControlLabel value="1" checked={form.localisation === 1} control={<Radio />} label="Internationale" />
-                                                    <FormControlLabel  value="2" checked={form.localisation === 2} control={<Radio />} label="Nationale" />
+                                                
+                                                    <FormControlLabel  value="2" checked={form.localisation === 2} control={<Radio />} label="Locale" />
+                                                    <FormControlLabel  value="3" checked={form.localisation === 3} control={<Radio />} label="Internationale" />
+                                                    <FormControlLabel value="1" checked={form.localisation === 1} control={<Radio />} label="Les deux" />
 
                                                 </RadioGroupFormsy>
                                             </Grid>
@@ -699,11 +702,10 @@ function Demande(props) {
                                                 demande.attachementReqInProgress ?
                                                     <CircularProgress size={24} className={classes.buttonProgress} />
                                                     :
-                                                    <Icon fontSize="large" color="action">cloud_upload</Icon>
+                                                    <Icon fontSize="large" color="action">arrow_upward</Icon>
 
                                             }
                                         </label>
-
 
                                         {form.attachements.map(media => (
                                             <div
@@ -749,7 +751,7 @@ function Demande(props) {
 
                                 </div>
                             )}
-                            {tabValue === 2 && (
+                            {/*tabValue === 2 && (
                                 <div className="w-full flex flex-col">
 
 
@@ -792,7 +794,7 @@ function Demande(props) {
 
 
                                 </div>
-                            )}
+                            )*/}
 
 
                         </div>

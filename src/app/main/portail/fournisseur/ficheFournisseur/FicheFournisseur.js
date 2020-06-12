@@ -95,6 +95,11 @@ const useStyles = makeStyles(theme => ({
         height: 512,
         pointerEvents: 'none'
     },
+    grid: {
+        [theme.breakpoints.down('xs')]: {
+            width: '100%'
+        },
+    }
 }));
 
 function FicheFournisseur(props) {
@@ -146,10 +151,17 @@ function FicheFournisseur(props) {
             {
                 loading ? '' :
                     <>
-                        <Grid container spacing={2} className={clsx(classes.fiche, " relative max-w-2xl mx-auto")}>
+                        <Grid container spacing={2}
+                            classes={{
+                                'spacing-xs-2': classes.grid
+                            }}
+                            className={clsx(classes.fiche, " relative max-w-2xl mx-auto")}>
                             <div className={classes.overlay} />
 
-                            <Grid container spacing={2} className="py-24 z-999 sm:px-16 items-start">
+                            <Grid container spacing={2} classes={{
+                                'spacing-xs-2': classes.grid
+                            }}
+                                className="py-24 z-999 sm:px-16 items-start">
                                 <Grid item xs={12} sm={2} >
                                     {
                                         data.avatar ?
@@ -170,7 +182,11 @@ function FicheFournisseur(props) {
                             </Grid>
                             <Icon className={classes.headerIcon}>school</Icon>
                         </Grid>
-                        <Grid container spacing={2} className={clsx(classes.position, "max-w-2xl  z-999 mx-auto sm:px-16 items-start ")}>
+                        <Grid container spacing={2}
+                            classes={{
+                                'spacing-xs-2': classes.grid
+                            }}
+                            className={clsx(classes.position, "max-w-2xl  z-999 mx-auto sm:px-16 items-start ")}>
                             <Grid item xs={12} sm={7} md={8} >
                                 <Paper className={classes.root}>
                                     <Tabs

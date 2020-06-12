@@ -15,7 +15,7 @@ function FooterLayout1(props) {
                    
                     <div className="flex flex-1">
                     <Typography variant="caption">
-                        Copyright © {moment().format('YYYY')} Les Achats Industriels, Tous les droits sont réservés.
+                        Copyright © {moment().format('YYYY')} 7e-Sky, Tous les droits sont réservés.
                     </Typography>
                     </div>
 
