@@ -56,6 +56,7 @@ function DemandesTable(props) {
     const loading = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.loading);
     const pageCount = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.pageCount);
     const parametres = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.parametres);
+    const user = useSelector(({ auth }) => auth.user);
 
     const searchText = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.searchText);
 
@@ -211,7 +212,7 @@ function DemandesTable(props) {
                                     }
                                     &ensp;
                                     {
-                                        row.original.currency && row.original.currency.name 
+                                        row.original.currency && row.original.currency.name
                                     }
                                 </>
                             )
@@ -227,7 +228,7 @@ function DemandesTable(props) {
                                     <Tooltip title="Publiée">
                                         <IconButton className="text-green text-20" onClick={(ev) => {
                                             ev.stopPropagation();
-                                            dispatch(Actions.PublishDemande(row.original, false, parametres))
+                                            dispatch(Actions.PublishDemande(row.original, false, parametres, user.id))
 
                                         }}>
                                             <Icon>check_circle</Icon>
@@ -238,7 +239,7 @@ function DemandesTable(props) {
                                     <Tooltip title="Privée">
                                         <IconButton className="text-red text-20" onClick={(ev) => {
                                             ev.stopPropagation();
-                                            dispatch(Actions.PublishDemande(row.original, true, parametres))
+                                            dispatch(Actions.PublishDemande(row.original, true, parametres, user.id))
 
                                         }} >
                                             <Icon>remove_circle</Icon>
@@ -321,7 +322,7 @@ function DemandesTable(props) {
                                             <IconButton className="text-red text-20"
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
-                                                    dispatch(Actions.removeDemande(row.original, parametres));
+                                                    dispatch(Actions.removeDemande(row.original, parametres, user.id));
                                                 }}
                                             >
                                                 <Icon>delete</Icon>

@@ -201,6 +201,12 @@ const produitReducer = function (state = initialState, action) {
                     success: true
                 };
             }
+        case Actions.CLEAN_UP_PRODUCT:
+            {
+                return {
+                    ...initialState
+                };
+            }
         case Actions.CLEAN_ERROR:
             {
                 return {

@@ -5,8 +5,7 @@ import agent from 'agent';
 
 class jwtService extends FuseUtils.EventEmitter {
 
-    init()
-    {
+    init() {
         this.setInterceptors();
         this.handleAuthentication();
     }
@@ -16,8 +15,7 @@ class jwtService extends FuseUtils.EventEmitter {
             return response;
         }, err => {
             return new Promise((resolve, reject) => {
-                if ( err.response.status === 401 && err.config && !err.config.__isRetryRequest )
-                {
+                if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
                     // if you ever get an unauthorized response, logout the user
                     this.emit('onAutoLogout', 'Session expirée');
                     this.setSession(null);
@@ -31,19 +29,16 @@ class jwtService extends FuseUtils.EventEmitter {
 
         let access_token = this.getAccessToken();
 
-      
-        if ( !access_token )
-        {
+
+        if (!access_token) {
             return;
         }
 
-        if ( this.isAuthTokenValid(access_token) )
-        {
+        if (this.isAuthTokenValid(access_token)) {
             this.setSession(access_token);
             this.emit('onAutoLogin', true);
         }
-        else
-        {
+        else {
             this.setSession(null);
             this.emit('onAutoLogout', 'Session expirée');
         }
@@ -53,13 +48,11 @@ class jwtService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
             axios.post('/api/auth/register', data)
                 .then(response => {
-                    if ( response.data.user )
-                    {
+                    if (response.data.user) {
                         this.setSession(response.data.access_token);
                         resolve(response.data.user);
                     }
-                    else
-                    {
+                    else {
                         reject(response.data.error);
                     }
                 });
@@ -69,27 +62,25 @@ class jwtService extends FuseUtils.EventEmitter {
     signInWithEmailAndPassword = (email, password) => {
         return new Promise((resolve, reject) => {
             agent.post('api/login_check', {
-                    email,
-                    password
+                email,
+                password
             }).then(response => {
-                
-                if ( response.data.user )
-                {
+
+                if (response.data.user) {
                     //console.log(response.data.token)
                     this.setSession(response.data.token);
                     resolve(response.data.user);
                 }
-                else
-                {
+                else {
                     reject(response.data.error);
                 }
-                
+
             }).catch((e) => {
                 const error = {
-                    message   : e.response.data.message
+                    message: e.response.data.message
                 };
                 reject(error);
-             });
+            });
         });
     };
 
@@ -97,42 +88,41 @@ class jwtService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
             agent.get('api/currentUser')
                 .then(response => {
-                  
-                    if ( response.data.user )
-                    {
+
+                    if (response.data.user) {
                         this.setSession(response.data.token);
                         resolve(response.data.user);
                     }
-                    else
-                    {
+                    else {
                         reject(response.data.error);
                     }
                 }).catch((e) => {
                     const error = {
-                        message   : e.response.data.message
+                        message: e.response.data.message
                     };
                     reject(error);
-                 });
+                });
         });
     };
     signInWithConfirmToken = (confirmationToken) => {
+        let data = {
+            confirmationToken
+        }
         return new Promise((resolve, reject) => {
-            agent.post('api/users/confirm',confirmationToken)
+            agent.post('api/users/confirm', data)
                 .then(response => {
-                  
-                    if ( response.data.user )
-                    {
+
+                    if (response.data.user) {
                         this.setSession(response.data.token);
                         resolve(response.data.user);
                     }
-                    else
-                    {
+                    else {
                         reject(response.data.error);
                     }
                 }).catch((e) => {
                     const error = FuseUtils.parseApiErrors(e);
                     reject(error);
-                 }); ;
+                });;
         });
     };
 
@@ -143,14 +133,12 @@ class jwtService extends FuseUtils.EventEmitter {
     };
 
     setSession = access_token => {
-        if ( access_token )
-        {
+        if (access_token) {
             localStorage.setItem('jwt_access_token', access_token);
             agent.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-            
+
         }
-        else
-        {
+        else {
             localStorage.removeItem('jwt_access_token');
             delete agent.defaults.headers.common['Authorization'];
         }
@@ -161,19 +149,16 @@ class jwtService extends FuseUtils.EventEmitter {
     };
 
     isAuthTokenValid = access_token => {
-        if ( !access_token )
-        {
+        if (!access_token) {
             return false;
         }
         const decoded = jwtDecode(access_token);
         const currentTime = Date.now() / 1000;
-        if ( decoded.exp < currentTime )
-        {
+        if (decoded.exp < currentTime) {
             console.warn('Session expirée');
             return false;
         }
-        else
-        {
+        else {
             return true;
         }
     };

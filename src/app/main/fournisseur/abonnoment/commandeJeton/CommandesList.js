@@ -33,7 +33,7 @@ function CommandesList(props) {
     const user = useSelector(({ auth }) => auth.user);
     const classes = useStyles();
 
-   
+
     const [filteredData, setFilteredData] = useState(null);
 
     useEffect(() => {
@@ -105,7 +105,7 @@ function CommandesList(props) {
                         id: "isUse",
                         filterable: true,
                         accessor: d => d.isUse ?
-                            <Chip className={classes.chip2} label="Traité" /> :
+                            <Chip className={classes.chip2} label="Traitée" /> :
                             <Chip className={classes.chipOrange} label="En attente" />,
                     },
                     {
@@ -135,7 +135,7 @@ function CommandesList(props) {
                                                                 !row.original.isUse ?
                                                                     'Voulez vous vraiment supprimer cet enregistrement ?'
                                                                     :
-                                                                    'Vous ne pouvez pas supprimer cet enregistrement, car il est traité!'
+                                                                    'Vous ne pouvez pas supprimer cet enregistrement, car il est traitée!'
                                                             }
                                                         </DialogContentText>
                                                     </DialogContent>

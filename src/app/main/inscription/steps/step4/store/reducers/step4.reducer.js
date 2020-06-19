@@ -1,5 +1,4 @@
 import * as Actions from '../actions';
-import _ from '@lodash';
 
 const initialState = {
     pays: null,
@@ -27,7 +26,7 @@ const step4Reducer = function (state = initialState, action) {
                 return {
                     ...state,
                     villes: null,
-                    loadingVille : true
+                    loadingVille: true
 
                 };
             }
@@ -35,7 +34,7 @@ const step4Reducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    pays: _.keyBy(action.payload, 'id'),
+                    pays: action.payload,
                     loading: false
 
                 };
@@ -45,7 +44,7 @@ const step4Reducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    secteurs: _.keyBy(action.payload, 'id'),
+                    secteurs: action.payload,
 
                 };
             }
@@ -53,7 +52,7 @@ const step4Reducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    currencies: _.keyBy(action.payload, 'id'),
+                    currencies: action.payload,
 
                 };
             }
@@ -62,9 +61,9 @@ const step4Reducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    villes: _.keyBy(action.payload, 'id'),
-                    loadingVille : false
-                    
+                    villes: [...action.payload, { '@id': '/api/villes/113', name: 'Autre' }],
+                    loadingVille: false
+
                 };
             }
         case Actions.UPDATE_ACHETEUR:

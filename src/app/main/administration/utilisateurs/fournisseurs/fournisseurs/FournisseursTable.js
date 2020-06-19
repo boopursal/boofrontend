@@ -210,8 +210,38 @@ function FournisseursTable(props) {
 
 
                         },
+                        {
+                            Header: "Etape",
+                            accessor: "step",
+                            filterable: true,
+                            Cell: row =>
+                                (
+                                    row.original.step === 1
+                                        ?
+                                        (!row.original.isactif ? 'Confirmation email' : 'Infos de la société')
+                                        :
+                                        row.original.step === 2 ? 'Produits' : <span className="text-green">Inscription complète</span>
+
+                                )
+                            ,
+                            Filter: ({ filter, onChange }) =>
+                                <select
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : ""}
+                                >
+                                    <option value="">Tous</option>
+                                    <option value="-1">Confirmation email</option>
+                                    <option value="1">Infos de la société</option>
+                                    <option value="2">Produits</option>
+                                    <option value="3">Inscription complète</option>
+                                </select>
+
+
+                        },
                     ]}
                     manual
+
                     defaultSortDesc={true}
                     pages={pageCount}
                     defaultPageSize={10}
@@ -230,7 +260,7 @@ function FournisseursTable(props) {
                     onFilteredChange={filtered => {
                         parametres.page = 1;
                         parametres.search = filtered;
-                       // _.debounce( dispatch(Actions.setParametresData(parametres)),3000)
+                        // _.debounce( dispatch(Actions.setParametresData(parametres)),3000)
                         fn(parametres);
                     }}
                     noDataText="Aucun fournisseur trouvé"

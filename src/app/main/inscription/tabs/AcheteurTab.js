@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, InputAdornment, Icon, Grid, MenuItem } from '@material-ui/core';
+import { Button, InputAdornment, Icon, Grid, MenuItem, IconButton } from '@material-ui/core';
 import { TextFieldFormsy, SelectFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import * as authActions from 'app/auth/store/actions';
@@ -10,6 +10,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import ReCAPTCHA from "react-google-recaptcha";
 import Link from '@material-ui/core/Link';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,7 +53,17 @@ function AcheteurTab(props) {
     const [isFormValid, setIsFormValid] = useState(false);
     const [recaptcha, setRecaptcha] = useState(null);
     const formRef = useRef(null);
+    const [values, setValues] = useState({
+        showPassword: false,
+    });
 
+    const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
     useEffect(() => {
         if (register.error && (register.error.civilite || register.error.firstName || register.error.lastName || register.error.societe || register.error.phone || register.error.email || register.error.password || register.error.confirmpassword)) {
             formRef.current.updateInputsWithError({
@@ -74,7 +86,7 @@ function AcheteurTab(props) {
 
     }, [register.error]);
 
-  
+
     function disableButton() {
         setIsFormValid(false);
     }
@@ -84,7 +96,7 @@ function AcheteurTab(props) {
     }
 
     function handleSubmit(model) {
-        dispatch(authActions.submitRegisterAcheteur(model,props.history));
+        dispatch(authActions.submitRegisterAcheteur(model, props.history));
     }
 
     function onChange(value) {
@@ -230,9 +242,9 @@ function AcheteurTab(props) {
 
                 <TextFieldFormsy
                     className="mb-16"
-                    type="password"
                     name="password"
                     label="Mot de passe"
+                    type={values.showPassword ? 'text' : 'password'}
                     validations={{
                         minLength: 6,
                         matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}/
@@ -242,7 +254,15 @@ function AcheteurTab(props) {
                         matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
                     }}
                     InputProps={{
-                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                        endAdornment: <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                            >
+                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
                     }}
                     variant="outlined"
                     required
@@ -250,7 +270,7 @@ function AcheteurTab(props) {
 
                 <TextFieldFormsy
                     className="mb-16"
-                    type="password"
+                    type={values.showPassword ? 'text' : 'password'}
                     name="confirmpassword"
                     label="Confirmer le mot de passe"
                     validations="equalsField:password"
@@ -258,7 +278,15 @@ function AcheteurTab(props) {
                         equalsField: 'les mots de passe saisis ne sont pas identiques'
                     }}
                     InputProps={{
-                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                        endAdornment: <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                            >
+                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
                     }}
                     variant="outlined"
                     required

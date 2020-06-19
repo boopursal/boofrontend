@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme => ({
     demo: {
         backgroundColor: theme.palette.background.paper,
         border: '1px solid #ccc',
-        borderRadius:10
+        borderRadius: 10
     },
     mainHeader: {
         backgroundColor: 'rgba(0,0,0,.7)',
@@ -103,15 +103,15 @@ const useStyles = makeStyles(theme => ({
     buttonXs: {
         [theme.breakpoints.down('xs')]: {
             margin: '11px 0',
-            position:'static',
-            textAlign:'end'
+            position: 'static',
+            textAlign: 'end'
         },
     },
     buttonSm: {
         [theme.breakpoints.down('sm')]: {
             marginTop: 11,
-            position:'static',
-            textAlign:'end'
+            position: 'static',
+            textAlign: 'end'
         },
     }
 }));
@@ -223,7 +223,7 @@ function Index(props) {
             {/** 
              ===================CATEGORIES & RFQs=================
             **/}
-            <Grid container  className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
+            <Grid container className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
                 <Grid item sm={4} xs={12}>
                     <Navigation {...props} />
                 </Grid>
@@ -430,7 +430,7 @@ function Index(props) {
                             <ListItemText
                                 primary={
                                     <Typography variant="h2" component="h2" className="text-20 font-bold uppercase xs:text-11 mb-1">
-                                        LES DERNIERS ARTICLE DE NEWS
+                                        LES DERNIERS ARTICLES DE NEWS
                                     </Typography>
                                 }
                             />

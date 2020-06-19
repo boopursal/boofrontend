@@ -1,6 +1,6 @@
 import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
-import {showMessage} from 'app/store/actions/fuse';
+import { showMessage } from 'app/store/actions/fuse';
 import _ from '@lodash';
 
 export const GET_COMMANDES = '[COMMANDES FOURNISSEUR APP] GET COMMANDES';
@@ -24,88 +24,83 @@ export function cleanUp() {
         type: CLEAN_UP,
     });
 }
-export function getCommandes(id)
-{
+export function getCommandes(id) {
     const request = agent.get(`/api/fournisseurs/${id}/commandes?pagination=false&order[created]=desc`);
 
     return (dispatch) =>
-        request.then((response) =>{
+        request.then((response) => {
             dispatch({
-                type   : GET_COMMANDES,
+                type: GET_COMMANDES,
                 payload: response.data['hydra:member']
             })
         });
 }
 
-export function setSearchText(event)
-{
+export function setSearchText(event) {
     return {
-        type      : SET_SEARCH_TEXT,
+        type: SET_SEARCH_TEXT,
         searchText: event.target.value
     }
 }
 
 
-export function openNewCommandesDialog()
-{
+export function openNewCommandesDialog() {
     return {
         type: OPEN_NEW_COMMANDES_DIALOG
     }
 }
 
-export function closeNewCommandesDialog()
-{
+export function closeNewCommandesDialog() {
     return {
         type: CLOSE_NEW_COMMANDES_DIALOG
     }
 }
 
-export function openEditCommandesDialog(data)
-{
+export function openEditCommandesDialog(data) {
     return {
         type: OPEN_EDIT_COMMANDES_DIALOG,
         data
     }
 }
 
-export function closeEditCommandesDialog()
-{
+export function closeEditCommandesDialog() {
     return {
         type: CLOSE_EDIT_COMMANDES_DIALOG
     }
 }
 
-export function addCommande(newCommande,id)
-{
-    
+export function addCommande(newCommande, id) {
+
     return (dispatch, getState) => {
 
-       
-        const request = agent.post('/api/demande_jetons',newCommande);
+
+        const request = agent.post('/api/demande_jetons', newCommande);
 
         return request.then((response) =>
             Promise.all([
                 dispatch({
                     type: ADD_COMMANDE
                 }),
-                dispatch(showMessage({message: 'Commande bien ajouté!',anchorOrigin: {
-                    vertical  : 'top',//top bottom
-                    horizontal: 'right'//left center right
-                },
-                variant: 'success'}))
+                dispatch(showMessage({
+                    message: 'Commande bien ajoutée!', anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'success'
+                }))
             ]).then(() => dispatch(getCommandes(id)))
-        ).catch((error)=>{
+        ).catch((error) => {
             dispatch({
                 type: SAVE_ERROR,
             });
             dispatch(
                 showMessage({
-                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
+                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                        return key + ': ' + value;
+                    }),//text or html
                     autoHideDuration: 6000,//ms
                     anchorOrigin: {
-                        vertical  : 'top',//top bottom
+                        vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },
                     variant: 'error'//success error info warning null
@@ -114,51 +109,51 @@ export function addCommande(newCommande,id)
     };
 }
 
-export function updateCommande(Commande,id)
-{
+export function updateCommande(Commande, id) {
     return (dispatch, getState) => {
 
-     
-        const request = agent.put(Commande['@id'],Commande);
+
+        const request = agent.put(Commande['@id'], Commande);
 
         return request.then((response) =>
             Promise.all([
                 dispatch({
                     type: UPDATE_COMMANDE
                 }),
-                dispatch(showMessage({message: 'Commande bien modifié!',anchorOrigin: {
-                    vertical  : 'top',//top bottom
-                    horizontal: 'right'//left center right
-                },
-                variant: 'success'}))
-            ]).then(() => dispatch(getCommandes(id)))
-        )
-        .catch((error)=>{
-            dispatch({
-                type: SAVE_ERROR,
-
-            });
-            dispatch(
-                showMessage({
-                    message     : _.map(FuseUtils.parseApiErrors(error), function(value, key) {
-                        return key+': '+value;
-                      }) ,//text or html
-                    autoHideDuration: 6000,//ms
-                    anchorOrigin: {
-                        vertical  : 'top',//top bottom
+                dispatch(showMessage({
+                    message: 'Commande bien modifiée!', anchorOrigin: {
+                        vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },
-                    variant: 'error'//success error info warning null
+                    variant: 'success'
                 }))
-        });
+            ]).then(() => dispatch(getCommandes(id)))
+        )
+            .catch((error) => {
+                dispatch({
+                    type: SAVE_ERROR,
+
+                });
+                dispatch(
+                    showMessage({
+                        message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                            return key + ': ' + value;
+                        }),//text or html
+                        autoHideDuration: 6000,//ms
+                        anchorOrigin: {
+                            vertical: 'top',//top bottom
+                            horizontal: 'right'//left center right
+                        },
+                        variant: 'error'//success error info warning null
+                    }))
+            });
     };
 }
 
-export function removeCommande(Commande,id)
-{
+export function removeCommande(Commande, id) {
     return (dispatch, getState) => {
 
-        
+
         const request = agent.delete(Commande['@id']);
 
         return request.then((response) =>
@@ -166,11 +161,13 @@ export function removeCommande(Commande,id)
                 dispatch({
                     type: REMOVE_COMMANDE
                 }),
-                dispatch(showMessage({message: 'Commande bien supprimé!',anchorOrigin: {
-                    vertical  : 'top',//top bottom
-                    horizontal: 'right'//left center right
-                },
-                variant: 'success'}))
+                dispatch(showMessage({
+                    message: 'Commande bien supprimée!', anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'success'
+                }))
             ]).then(() => dispatch(getCommandes(id)))
         );
     };

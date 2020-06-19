@@ -368,11 +368,11 @@ function Profile(props) {
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },
-                                                        variant: 'outlined'
+                                                        variant: 'outlined',
+                                                        required: 'required'
                                                     }}
                                                     options={profile.secteurs}
                                                     onChange={(value) => handleChipChange(value, 'secteur')}
-                                                    required
                                                     fullWidth
                                                 />
 
@@ -485,7 +485,10 @@ function Profile(props) {
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },
-                                                        variant: 'outlined'
+                                                        variant: 'outlined',
+                                                        required: 'required'
+
+
                                                     }}
 
                                                     className="mt-20"
@@ -557,7 +560,9 @@ function Profile(props) {
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },
-                                                        variant: 'outlined'
+                                                        variant: 'outlined',
+                                                        required: 'required'
+
                                                     }}
                                                     className=""
                                                     options={Villes}

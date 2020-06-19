@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip, TextField, InputAdornment } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField, InputAdornment, Typography, Button } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -9,6 +9,7 @@ import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
 import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -53,6 +54,7 @@ function DemandesTable(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const demandes = useSelector(({ demandesApp }) => demandesApp.demandes.data);
+    const error = useSelector(({ demandesApp }) => demandesApp.demandes.error);
     const loading = useSelector(({ demandesApp }) => demandesApp.demandes.loading);
     const pageCount = useSelector(({ demandesApp }) => demandesApp.demandes.pageCount);
     const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
@@ -81,6 +83,19 @@ function DemandesTable(props) {
         return null;
     }
 
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full">
+                <Typography color="textSecondary" className='mb-16' variant="h6">
+                    Pour recever et consulter les demandes de devis qui vous intéresse, vous devez choisir les produits dans lesquelles vous êtes actif.
+                </Typography>
+
+                <Button component={Link} to="/user/profile/1" color="secondary" variant="contained">
+                    Modifier votre profile
+                </Button>
+            </div>
+        );
+    }
     //dispatch from function filter
     const run = (parametres) => (
         dispatch(Actions.setParametresData(parametres))
@@ -180,7 +195,7 @@ function DemandesTable(props) {
                             )
                     },
                     {
-                        Header: "Activités",
+                        Header: "Produits",
                         accessor: "categories.name",
                         filterable: true,
                         Cell: row =>

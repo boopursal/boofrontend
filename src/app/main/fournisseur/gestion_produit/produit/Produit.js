@@ -168,6 +168,9 @@ function Produit(props) {
             dispatch(Actions.getSecteurs());
         }
         updateProduitState();
+        return () => {
+            dispatch(Actions.cleanUpProduct())
+        }
     }, [dispatch, produitId]);
 
     useEffect(() => {
@@ -501,6 +504,40 @@ function Produit(props) {
                 </div>
             )
         }
+        if (freeProduits.length >= 5 && produitId === 'new') {
+            return (
+                <div className={clsx(classes.root2, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
+
+                    <div className="flex flex-col items-center justify-center w-full">
+
+                        <Grow in={true}>
+
+                            <Card className="w-full ">
+
+                                <CardContent className="flex flex-col items-center justify-center text-center p-48">
+
+                                    <Typography variant="h4" className="mb-16 text-red">
+                                        Vous avez atteint le nombre gratuit de produits
+                                </Typography>
+
+                                    <Typography color="textSecondary" className="mb-40">
+                                        Pour ajouter vos produits vous devez avoir un pack d'abonnement,
+                                        pour consulter les offres d'abonnements cliquer sur le bouton suivant
+                                </Typography>
+
+                                    <Button component={Link} to="/offres/commande/new" className="whitespace-no-wrap" color="secondary" variant="contained">
+                                        <span className="">Commander abonnement</span>
+                                    </Button>
+
+                                </CardContent>
+
+                            </Card>
+
+                        </Grow>
+                    </div>
+                </div>
+            );
+        }
         return (
             <div className={clsx(classes.root2, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
 
@@ -513,7 +550,7 @@ function Produit(props) {
                             <CardContent className="flex flex-col items-center justify-center text-center p-48">
 
                                 <Typography variant="h4" className="mb-16 text-red">
-                                    Vous avez atteint le nombre gratuit de produits
+                                    Reserver à nos abonnés
                                 </Typography>
 
                                 <Typography color="textSecondary" className="mb-40">
@@ -657,7 +694,8 @@ function Produit(props) {
                                                         InputLabelProps: {
                                                             shrink: true
                                                         },
-                                                        variant: 'outlined'
+                                                        variant: 'outlined',
+                                                        required: 'required'
                                                     }}
                                                     isLoading={produit.loadingSecteurs}
                                                     options={produit.secteurs}
@@ -682,7 +720,8 @@ function Produit(props) {
                                                     InputLabelProps: {
                                                         shrink: true
                                                     },
-                                                    variant: 'outlined'
+                                                    variant: 'outlined',
+                                                    required: 'required'
                                                 }}
                                                 isLoading={produit.loadingSousSecteurs}
 
@@ -707,7 +746,8 @@ function Produit(props) {
                                                     InputLabelProps: {
                                                         shrink: true
                                                     },
-                                                    variant: 'outlined'
+                                                    variant: 'outlined',
+                                                    required: 'required'
                                                 }}
                                                 isLoading={produit.loadingCategories}
                                                 options={produit.categories}

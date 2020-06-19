@@ -13,7 +13,7 @@ function UserMenu(props) {
     const dispatch = useDispatch();
     const user = useSelector(({ auth }) => auth.user);
     const [userMenu, setUserMenu] = useState(null);
-    const config = useSelector(({fuse}) => fuse.settings.current.layout);
+    const config = useSelector(({ fuse }) => fuse.settings.current.layout);
 
     const userMenuClick = event => {
         setUserMenu(event.currentTarget);
@@ -32,9 +32,12 @@ function UserMenu(props) {
                         <div
                             className={clsx("flex items-center px-8 py-4 mr-8 rounded-sm", !user.jetons ? "bg-red text-white" : "bg-green text-white")}>
                             <Icon className="text-20 mr-4">monetization_on</Icon>
-                            <Hidden only={['xs']}> <span>Vous avez</span></Hidden>&ensp;
+                            <Hidden only={['xs']}> <span>Actuellement vous avez</span></Hidden>&ensp;
                              <b className="text-20">{user.jetons}</b> &ensp;
-                             <Hidden only={['xs']}> <span>Jeton(s) restant(s)</span></Hidden>
+                             <Hidden only={['xs']}> <span>Jeton(s).</span></Hidden>
+                            <Link to="/abonnement/commandes/true" className="ml-2 text-blue">
+                                Charger
+                            </Link>
                         </div>
                         :
                         <div className="flex  items-center px-8 py-4 mr-8 ">
@@ -44,105 +47,91 @@ function UserMenu(props) {
                 : ''
             }
             {/* ============= FIN TOKENS FOURNISSEURS ============*/}
+            {
+                (!user.role || user.role.length === 0 ?
+                    <div className="flex items-center mr-2">
 
-            <Button className="h-64" onClick={userMenuClick}>
-                {user.data.photoURL ?
-                    (
-                        <Avatar className="" alt="user photo" src={FuseUtils.getUrl() + user.data.photoURL} />
-                    )
+                        <Button component={Link} to="/login" size="small" className="mr-2 h-40" >
+                            se connecter
+                        </Button>
+                        <Button component={Link} to="/register" size="small" variant="outlined" color="primary" className=" h-40" >
+                            Inscrivez-vous
+                        </Button>
+
+                    </div>
                     :
-                    (
-                        <Avatar className="">
-                            <Icon >account_circle</Icon>
-                        </Avatar>
-                    )
-                }
-
-                <div className="hidden md:flex flex-col ml-12 items-start">
-                    <Typography component="span" className="normal-case font-600 flex">
-                        {user.data.displayName}
-                    </Typography>
-                    <Typography className="text-11 capitalize" color="textSecondary">
-                        {(user.role.toString() === 'ROLE_FOURNISSEUR_PRE' || user.role.toString() === 'ROLE_FOURNISSEUR') && 'FOURNISSEUR'}
-                        {(user.role.toString() === 'ROLE_ACHETEUR_PRE' || user.role.toString() === 'ROLE_ACHETEUR') && 'ACHETEUR'}
-                        {(user.role.toString() === 'ROLE_ADMIN' || user.role.toString() === 'ROLE_ADMIN') && 'ADMINISTRATEUR'}
-                    </Typography>
-                </div>
-
-                <Icon className="text-16 ml-12 hidden sm:flex" variant="action">keyboard_arrow_down</Icon>
-            </Button>
-
-            <Popover
-                open={Boolean(userMenu)}
-                anchorEl={userMenu}
-                onClose={userMenuClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center'
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center'
-                }}
-                classes={{
-                    paper: "py-8"
-                }}
-            >
-                {!user.role || user.role.length === 0 ? (
-                    <React.Fragment>
-                        <MenuItem component={Link} to="/login">
-                            <ListItemIcon className="min-w-40">
-                                <Icon>lock</Icon>
-                            </ListItemIcon>
-                            <ListItemText className="pl-0" primary="Connexion" />
-                        </MenuItem>
-                        <MenuItem component={Link} to="/register">
-                            <ListItemIcon className="min-w-40">
-                                <Icon>person_add</Icon>
-                            </ListItemIcon>
-                            <ListItemText className="pl-0" primary="Inscrivez-vous" />
-                        </MenuItem>
-                    </React.Fragment>
-                ) : (
-                        <React.Fragment>
-                            {/*
-                        <MenuItem component={Link} to="/pages/profile" onClick={userMenuClose}>
-                            <ListItemIcon className="min-w-40">
-                                <Icon>account_circle</Icon>
-                            </ListItemIcon>
-                            <ListItemText className="pl-0" primary="My Profile"/>
-                        </MenuItem>
-                        <MenuItem component={Link} to="/apps/mail" onClick={userMenuClose}>
-                            <ListItemIcon className="min-w-40">
-                                <Icon>mail</Icon>
-                            </ListItemIcon>
-                            <ListItemText className="pl-0" primary="Inbox"/>
-                        </MenuItem>
-                        */}
-                            {
-                                (user.role.toString() !== 'ROLE_FOURNISSEUR_PRE' && user.role.toString() !== 'ROLE_ACHETEUR_PRE') &&
-                                <MenuItem component={Link} to="/dashboard">
-                                    <ListItemIcon className="min-w-40">
-                                        <Icon>dashboard</Icon>
-                                    </ListItemIcon>
-                                    <ListItemText className="pl-0" primary="Tableaux de bord" />
-                                </MenuItem>
+                    <>
+                        <Button className="h-64" onClick={userMenuClick}>
+                            {user.data.photoURL ?
+                                (
+                                    <Avatar className="" alt="user photo" src={FuseUtils.getUrl() + user.data.photoURL} />
+                                )
+                                :
+                                (
+                                    <Avatar className="">
+                                        <Icon >account_circle</Icon>
+                                    </Avatar>
+                                )
                             }
 
-                            <MenuItem
-                                onClick={() => {
-                                    dispatch(authActions.logoutUser());
-                                    userMenuClose();
-                                }}
-                            >
-                                <ListItemIcon className="min-w-40">
-                                    <Icon>exit_to_app</Icon>
-                                </ListItemIcon>
-                                <ListItemText className="pl-0" primary="Déconnexion" />
-                            </MenuItem>
-                        </React.Fragment>
-                    )}
-            </Popover>
+                            <div className="hidden md:flex flex-col ml-12 items-start">
+                                <Typography component="span" className="normal-case font-600 flex">
+                                    {user.data.displayName}
+                                </Typography>
+                                <Typography className="text-11 capitalize" color="textSecondary">
+                                    {(user.role.toString() === 'ROLE_FOURNISSEUR_PRE' || user.role.toString() === 'ROLE_FOURNISSEUR') && 'FOURNISSEUR'}
+                                    {(user.role.toString() === 'ROLE_ACHETEUR_PRE' || user.role.toString() === 'ROLE_ACHETEUR') && 'ACHETEUR'}
+                                    {(user.role.toString() === 'ROLE_ADMIN' || user.role.toString() === 'ROLE_ADMIN') && 'ADMINISTRATEUR'}
+                                </Typography>
+                            </div>
+                            <Icon className="text-16 ml-12 hidden sm:flex" variant="action">keyboard_arrow_down</Icon>
+                        </Button>
+
+                        <Popover
+                            open={Boolean(userMenu)}
+                            anchorEl={userMenu}
+                            onClose={userMenuClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center'
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center'
+                            }}
+                            classes={{
+                                paper: "py-8"
+                            }}
+                        >
+                            <React.Fragment>
+
+                                {
+                                    (user.role.toString() !== 'ROLE_FOURNISSEUR_PRE' && user.role.toString() !== 'ROLE_ACHETEUR_PRE') &&
+                                    <MenuItem component={Link} to="/dashboard">
+                                        <ListItemIcon className="min-w-40">
+                                            <Icon>dashboard</Icon>
+                                        </ListItemIcon>
+                                        <ListItemText className="pl-0" primary="Tableaux de bord" />
+                                    </MenuItem>
+                                }
+
+                                <MenuItem
+                                    onClick={() => {
+                                        dispatch(authActions.logoutUser());
+                                        userMenuClose();
+                                    }}
+                                >
+                                    <ListItemIcon className="min-w-40">
+                                        <Icon>exit_to_app</Icon>
+                                    </ListItemIcon>
+                                    <ListItemText className="pl-0" primary="Déconnexion" />
+                                </MenuItem>
+                            </React.Fragment>
+                        </Popover>
+                    </>
+                )
+            }
+
         </React.Fragment>
     );
 }

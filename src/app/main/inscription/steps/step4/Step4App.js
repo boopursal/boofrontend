@@ -5,7 +5,7 @@ import reducer from './store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { Card, Grid, CardContent, InputAdornment, Icon, Stepper, Step, StepLabel, Button } from '@material-ui/core';
+import { Card, Grid, CardContent, InputAdornment, Icon, Stepper, Step, StepLabel, Button, Typography } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import { FuseAnimate } from '@fuse';
 import Formsy from 'formsy-react';
@@ -59,7 +59,8 @@ const defaultFormState = {
     website: '',
     fix: '',
     ice: '',
-    description: ''
+    description: '',
+    autreVille: ''
 };
 const ColorlibConnector = withStyles({
     alternativeLabel: {
@@ -149,6 +150,7 @@ function Step4App(props) {
 
     const [isFormValid, setIsFormValid] = useState(false);
     const [showIce, setShowIce] = useState(false);
+    const [showAutreVille, setShowAutreVille] = useState(false);
     const formRef = useRef(null);
 
     const Pays = useSelector(({ step4App }) => step4App.step4.pays);
@@ -193,13 +195,19 @@ function Step4App(props) {
 
         if (name === 'ville' || name === 'secteur' || name === 'currency') {
             setForm(_.set({ ...form }, name, value));
+            if (name === 'ville' && value.label === 'Autre') {
+                setShowAutreVille(true)
+            }
+            if (name === 'ville' && value.label !== 'Autre') {
+                setShowAutreVille(false)
+            }
         }
         else {
             setForm(_.set({ ...form }, name, value));
             if (value.value) {
                 dispatch(Actions.getVilles(value.value));
             }
-
+            setShowAutreVille(false)
             if (value.label === 'Maroc') {
                 setShowIce(true)
             }
@@ -265,7 +273,8 @@ function Step4App(props) {
                                                             InputLabelProps: {
                                                                 shrink: true
                                                             },
-                                                            variant: 'outlined'
+                                                            variant: 'outlined',
+                                                            required: 'required'
                                                         }}
                                                         className="mb-16"
                                                         options={step4.secteurs}
@@ -286,7 +295,8 @@ function Step4App(props) {
                                                             InputLabelProps: {
                                                                 shrink: true
                                                             },
-                                                            variant: 'outlined'
+                                                            variant: 'outlined',
+                                                            required: 'required'
                                                         }}
                                                         className="mb-16"
                                                         options={Currencies}
@@ -314,7 +324,8 @@ function Step4App(props) {
                                                             InputLabelProps: {
                                                                 shrink: true
                                                             },
-                                                            variant: 'outlined'
+                                                            variant: 'outlined',
+                                                            required: 'required'
                                                         }}
 
                                                         className="mb-16"
@@ -336,7 +347,8 @@ function Step4App(props) {
                                                             InputLabelProps: {
                                                                 shrink: true
                                                             },
-                                                            variant: 'outlined'
+                                                            variant: 'outlined',
+                                                            required: 'required'
                                                         }}
                                                         className="mb-16"
                                                         options={Villes}
@@ -348,7 +360,31 @@ function Step4App(props) {
 
 
                                             </Grid>
+                                            {
+                                                showAutreVille ?
+                                                    <TextFieldFormsy
+                                                        className="mb-16 w-full"
+                                                        type="text"
+                                                        name="autreVille"
+                                                        value={form.autreVille}
+                                                        onChange={handleChange}
+                                                        label="Autre ville"
+                                                        autoComplete="ville"
+                                                        validations={{
+                                                            minLength: 2,
+                                                            maxLength: 50,
 
+                                                        }}
+                                                        validationErrors={{
+                                                            minLength: 'La longueur minimale de caractère est 2',
+                                                            maxLength: 'La longueur maximale de caractère est 50',
+                                                        }}
+                                                        variant="outlined"
+                                                        required
+                                                    />
+                                                    :
+                                                    ''
+                                            }
                                             <Grid container spacing={3} >
                                                 <Grid item xs={12} sm={6}>
                                                     <TextFieldFormsy
@@ -501,7 +537,9 @@ function Step4App(props) {
                                                 rows="4"
 
                                             />
-
+                                            <Typography variant="caption" className="flex items-center mb-16">
+                                                <span className="mr-4 text-red">*</span> Champs obligatoires
+                                            </Typography>
 
                                             <Button
                                                 type="submit"
@@ -512,7 +550,7 @@ function Step4App(props) {
                                                 disabled={!isFormValid || step4.loading}
                                                 value="legacy"
                                             >
-                                                Suivant
+                                                Terminer
                                                 {step4.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
                                             </Button>

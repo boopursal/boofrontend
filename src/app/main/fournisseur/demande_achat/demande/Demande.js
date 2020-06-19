@@ -234,27 +234,27 @@ function Demande(props) {
                                                                                             {
                                                                                                 user.jetons > 0
                                                                                                     ? 'Avertissement! vous allez être débité d´un jeton !'
-                                                                                                    : 'Votre sole de jetons ne vous permet pas de consulter cette demande.'
+                                                                                                    : 'Votre solde de jetons ne vous permet pas de consulter cette demande.'
                                                                                             }
                                                                                         </DialogContentText>
                                                                                     </DialogContent>
                                                                                     <DialogActions>
-                                                                                        <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
-                                                                                            Non
-                                                                                </Button>
-
+                                                                                        <Button onClick={() => dispatch(Actions.closeDialog())} variant="outlined" color="primary">
+                                                                                            {user.jetons ? 'Pas maintenant' : 'Non'}
+                                                                                        </Button>
                                                                                         <Button onClick={(ev) => {
                                                                                             user.jetons > 0
                                                                                                 ?
                                                                                                 dispatch(Actions.addVisiteDemande(user.id, demande.data))
                                                                                                 :
-                                                                                                props.history.push('/abonnement/commandes')
+                                                                                                props.history.push('/abonnement/commandes/true')
                                                                                             dispatch(Actions.closeDialog())
-                                                                                        }} color="primary" autoFocus>
-                                                                                            {user.jetons ? 'Pas maintenant' : 'Commander jetons'}
+                                                                                        }}
+                                                                                            color="secondary"
+                                                                                            variant="contained"
+                                                                                        >
+                                                                                            {user.jetons ? 'Continuer' : 'Commander jetons'}
                                                                                         </Button>
-
-
                                                                                     </DialogActions>
                                                                                 </React.Fragment>
                                                                             )
@@ -343,7 +343,7 @@ function Demande(props) {
 
                                                 <TextFieldFormsy
                                                     className="mb-24"
-                                                    label="Titre"
+                                                    label="Designation"
                                                     id="titre"
                                                     name="titre"
                                                     value={demande.data.titre}
@@ -418,9 +418,9 @@ function Demande(props) {
                                             <Grid item xs={12} sm={12}>
                                                 <TextFieldFormsy
                                                     className="mb-24"
-                                                    label="Activités"
-                                                    id="sousSecteurs"
-                                                    name="sousSecteurs"
+                                                    label="Produits"
+                                                    id="categories"
+                                                    name="categories"
                                                     value={_.join(_.map(demande.data.categories, 'name'), ', ')}
                                                     InputProps={{
                                                         readOnly: true,
@@ -440,7 +440,7 @@ function Demande(props) {
                                             value={demande.data.description}
                                             label="Description"
                                             multiline
-                                            rows="4"
+                                            rows="6"
                                             InputProps={{
                                                 readOnly: true,
                                             }}

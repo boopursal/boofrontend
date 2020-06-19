@@ -1,5 +1,5 @@
 import React from 'react';
-import {authRoles} from 'app/auth';
+import { authRoles } from 'app/auth';
 
 export const CommandesAppConfig = {
     settings: {
@@ -7,10 +7,10 @@ export const CommandesAppConfig = {
             config: {}
         }
     },
-    auth    : authRoles.fournisseur,
-    routes  : [
+    auth: authRoles.fournisseur,
+    routes: [
         {
-            path     : '/abonnement/commandes',
+            path: '/abonnement/commandes/:open?',
             component: React.lazy(() => import('./CommandesApp'))
         }
     ]

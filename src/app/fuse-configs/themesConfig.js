@@ -1,157 +1,190 @@
-import {fuseDark} from '@fuse/fuse-colors';
+import { fuseDark } from '@fuse/fuse-colors';
 import lightBlue from '@material-ui/core/colors/lightBlue';
 import red from '@material-ui/core/colors/red';
 
 const themesConfig = {
-    default    : {
+    default: {
         palette: {
-            type     : 'light',
-            primary  : fuseDark,
+            type: 'light',
+            primary: fuseDark,
             secondary: {
                 light: lightBlue[400],
-                main : lightBlue[600],
-                dark : lightBlue[700]
+                main: lightBlue[600],
+                dark: lightBlue[700]
             },
-            error    : red
+            error: red
         },
-        status : {
+        overrides: {
+            MuiFormLabel: {
+                asterisk: {
+                    color: "#db3131",
+                    fontWeight: 'bold',
+                    "&$error": {
+                        color: "#db3131"
+                    }
+                }
+            }
+        },
+        status: {
             danger: 'orange'
         }
     },
-    sunset     : {
+    sunset: {
         palette: {
-            type     : 'light',
-            primary  : {
+            type: 'light',
+            primary: {
                 light: '#ff908b',
-                main : '#d0605e',
-                dark : '#9b3134'
+                main: '#d0605e',
+                dark: '#9b3134'
             },
             secondary: {
-                light       : '#c76a1d',
-                main        : '#ff994c',
-                dark        : '#ffca7b',
+                light: '#c76a1d',
+                main: '#ff994c',
+                dark: '#ffca7b',
                 contrastText: '#fff'
             },
-            error    : red
+            error: red
         },
-        status : {
+        overrides: {
+            MuiFormLabel: {
+                asterisk: {
+                    color: "#db3131",
+                    fontWeight: 'bold',
+                    "&$error": {
+                        color: "#db3131"
+                    }
+                }
+            }
+        },
+        status: {
             danger: 'orange'
         }
     },
-    greeny     : {
+    greeny: {
         palette: {
-            type     : 'light',
-            primary  : {
+            type: 'light',
+            primary: {
                 light: '#f9c69a',
-                main : '#f48d35',
-                dark : '#f48d35',
-                rgba : '#387ca399',
+                main: '#f48d35',
+                dark: '#f48d35',
+                rgba: '#387ca399',
             },
             secondary: {
-                light       : '#3d9cb4',
-                main        : '#3e5790',
-                dark        : '#3e5790',
+                light: '#3d9cb4',
+                main: '#3e5790',
+                dark: '#3e5790',
                 contrastText: '#fff',
-                rgba        : '#159270',
+                rgba: '#159270',
             },
-            error    : red
+            error: red
         },
-        status : {
+        overrides: {
+            MuiFormLabel: {
+                asterisk: {
+                    color: "#db3131",
+                    fontWeight: 'bold',
+                    "&$error": {
+                        color: "#db3131"
+                    }
+                }
+            }
+        },
+        status: {
             danger: 'orange'
         }
     },
-    beach      : {
+    beach: {
         palette: {
-            type     : 'light',
-            primary  : {
-                light       : '#c4d8dd',
-                main        : '#93a7ab',
-                dark        : '#65787c',
+            type: 'light',
+            primary: {
+                light: '#c4d8dd',
+                main: '#93a7ab',
+                dark: '#65787c',
                 contrastText: '#fff'
             },
             secondary: {
-                light       : '#ffb281',
-                main        : '#f18153',
-                dark        : '#ba5228',
+                light: '#ffb281',
+                main: '#f18153',
+                dark: '#ba5228',
                 contrastText: '#fff'
             }
         }
     },
-    tech       : {
+    tech: {
         palette: {
-            type     : 'light',
-            primary  : {
-                light       : '#87efff',
-                main        : '#4dbce9',
-                dark        : '#008cb7',
+            type: 'light',
+            primary: {
+                light: '#87efff',
+                main: '#4dbce9',
+                dark: '#008cb7',
                 contrastText: '#fff'
             },
             secondary: {
                 light: '#ffff83',
-                main : '#d1e751',
-                dark : '#9db516'
+                main: '#d1e751',
+                dark: '#9db516'
             }
         }
     },
-    sweetHues  : {
+    sweetHues: {
         palette: {
-            type     : 'light',
-            primary  : {
-                light       : '#d5c1eb',
-                main        : '#a391b9',
-                dark        : '#746389',
+            type: 'light',
+            primary: {
+                light: '#d5c1eb',
+                main: '#a391b9',
+                dark: '#746389',
                 contrastText: '#fff'
             },
             secondary: {
                 light: '#90afd4',
-                main : '#6080a3',
-                dark : '#325474'
+                main: '#6080a3',
+                dark: '#325474'
             }
         }
     },
     defaultDark: {
         palette: {
-            type     : 'dark',
-            primary  : fuseDark,
+            type: 'dark',
+            primary: fuseDark,
             secondary: {
                 light: lightBlue[400],
-                main : lightBlue[600],
-                dark : lightBlue[700]
+                main: lightBlue[600],
+                dark: lightBlue[700]
             },
-            error    : red
+            error: red
         },
-        status : {
+        status: {
             danger: 'orange'
         }
     },
-    deepOcean  : {
+    deepOcean: {
         palette: {
-            type     : 'dark',
-            primary  : {
+            type: 'dark',
+            primary: {
                 light: '#8f53e7',
-                main : '#5a24b4',
-                dark : '#1e0083'
+                main: '#5a24b4',
+                dark: '#1e0083'
             },
             secondary: {
-                light       : '#ff61ff',
-                main        : '#fe00e9',
-                dark        : '#c600b6',
+                light: '#ff61ff',
+                main: '#fe00e9',
+                dark: '#c600b6',
                 contrastText: '#fff'
             }
         }
     },
-    slate      : {
+    slate: {
         palette: {
-            type     : 'dark',
-            primary  : {
+            type: 'dark',
+            primary: {
                 light: '#86fff7',
-                main : '#4ecdc4',
-                dark : '#009b94'
+                main: '#4ecdc4',
+                dark: '#009b94'
             },
             secondary: {
-                light       : '#ff9d99',
-                main        : '#ff6b6b',
-                dark        : '#c73840',
+                light: '#ff9d99',
+                main: '#ff6b6b',
+                dark: '#c73840',
                 contrastText: '#fff'
             }
         }

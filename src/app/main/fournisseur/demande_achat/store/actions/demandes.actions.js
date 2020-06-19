@@ -6,6 +6,8 @@ export const SET_PARAMETRES_DATA = '[DEMANDES FOURNISSEUR APP] SET PARAMETRES DA
 
 
 export const GET_DEMANDES = '[DEMANDES FOURNISSEUR APP] GET DEMANDES';
+export const ERRORS = '[DEMANDES FOURNISSEUR APP] ERRORS';
+export const ERROR_404 = '[DEMANDES FOURNISSEUR APP] ERROR_404';
 export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES FOURNISSEUR APP] SET DEMANDES SEARCH TEXT';
 
 export function getDemandes(parametres) {
@@ -40,7 +42,16 @@ export function getDemandes(parametres) {
                 type: GET_DEMANDES,
                 payload: response.data
             })
-        );
+        ).catch((error) => {
+            if (error.response.status === 404) {
+                dispatch({
+                    type: ERROR_404,
+                });
+            }
+            dispatch({
+                type: ERRORS,
+            });
+        });
     }
 
 }

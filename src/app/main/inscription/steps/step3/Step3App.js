@@ -5,9 +5,9 @@ import reducer from './store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { Card, CardContent, Stepper, Step, StepLabel, Button, ListItemText, Popper, Typography, Chip } from '@material-ui/core';
+import { Card, CardContent, Stepper, Step, StepLabel, Button, ListItemText, Popper, Typography, Chip, Icon, IconButton } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
-import { FuseAnimate } from '@fuse';
+import { FuseAnimate, TextFieldFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import StepConnector from '@material-ui/core/StepConnector';
 import PropTypes from 'prop-types';
@@ -23,7 +23,8 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Highlighter from "react-highlight-words";
-
+import Collapse from '@material-ui/core/Collapse';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 /**=============== FOUNRISSEUR SOUS-SECTEURS ======================= */
 const useStyles = makeStyles(theme => ({
     card: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles(theme => ({
         maxWidth: 675,
         overflow: 'hidden'
     },
-    chips:{
+    chips: {
         flex: 1,
         display: 'flex',
         flexWrap: 'wrap',
@@ -74,11 +75,23 @@ const useStyles = makeStyles(theme => ({
     divider: {
         height: theme.spacing(2),
     },
-
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
 }));
+
 const defaultFormState = {
-    categories: null
+    categories: null,
+    autreCategories: null
 };
+
 const ColorlibConnector = withStyles({
     alternativeLabel: {
         top: 22,
@@ -155,7 +168,7 @@ ColorlibStepIcon.propTypes = {
 };
 
 function getSteps() {
-    return ['Inscription', 'Information de la société', 'Secteurs d\'activités'];
+    return ['Inscription', 'Information de la société', 'Produits'];
 }
 function renderSuggestion(suggestion, { query, isHighlighted }) {
     return (
@@ -175,8 +188,8 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
         </MenuItem>
 
     );
-
 }
+
 function renderInputComponent(inputProps) {
     const { classes, inputRef = () => { }, ref, ...other } = inputProps;
     return (
@@ -195,6 +208,7 @@ function renderInputComponent(inputProps) {
         />
     );
 }
+
 function Step3App(props) {
     const suggestionsNode = useRef(null);
     const popperNode = useRef(null);
@@ -211,8 +225,12 @@ function Step3App(props) {
 
     const step3 = useSelector(({ step3App }) => step3App.step3);
 
-    const { form, setForm } = useForm(defaultFormState);
+    const { form, handleChange, setForm } = useForm(defaultFormState);
+    const [expanded, setExpanded] = React.useState(false);
 
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
 
     useEffect(() => {
         if (step3.success) {
@@ -232,11 +250,12 @@ function Step3App(props) {
 
     function handleSubmit(model) {
         let data =
-        {
-            categories: _.map(categories, function (value, key) {
-                return value['@id'];
-            })
-        }
+            {
+                categories: _.map(categories, function (value, key) {
+                    return value['@id'];
+                }),
+                autreCategories: form.autreCategories
+            }
         dispatch(Actions.setStep3(data, user.id, props.history));
     }
 
@@ -253,7 +272,6 @@ function Step3App(props) {
             hideSearch();
             dispatch(Actions.cleanUp());
         }
-
     }
 
     function hideSearch() {
@@ -279,7 +297,7 @@ function Step3App(props) {
         renderInputComponent,
         //alwaysRenderSuggestions: true,
         suggestions: searchCategories.suggestions,
-        focusInputOnSuggestionClick:false,
+        focusInputOnSuggestionClick: false,
         onSuggestionsFetchRequested: handleSuggestionsFetchRequested,
         onSuggestionsClearRequested: handleSuggestionsClearRequested,
         renderSuggestion
@@ -324,6 +342,12 @@ function Step3App(props) {
                                     className="flex flex-col justify-center w-full"
                                 >
                                     <div ref={popperNode} >
+                                        <Typography variant="caption" className="flex items-center mb-16">
+                                            <Icon>info</Icon>&ensp;
+                                            <span> Vous pouvez choisir <span className="uppercase font-extrabold">un</span> ou <span className="uppercase font-extrabold">plusieurs produits</span>,
+                                            il suffit de taper un mot-clé ensuite sélectionner les produits qui vous conviennent.</span>
+                                        </Typography>
+
                                         <Autosuggest
                                             {...autosuggestProps}
                                             getSuggestionValue={suggestion => searchCategories.searchText}
@@ -332,7 +356,7 @@ function Step3App(props) {
                                                     event.preventDefault();
                                                 }
                                                 !_.find(categories, ['name', suggestion.name]) &&
-                                                    setCategories([ suggestion,...categories]);
+                                                    setCategories([suggestion, ...categories]);
                                                 //setForm(_.set({ ...form }, 'categories', suggestion['@id']))
                                                 //hideSearch();
                                                 popperNode.current.focus();
@@ -340,8 +364,8 @@ function Step3App(props) {
                                             required
                                             inputProps={{
                                                 classes,
-                                                label: 'Activités',
-                                                placeholder: "Activité (ex: Rayonnage lourd)",
+                                                label: 'Produits',
+                                                placeholder: "Produit (ex: Rayonnages charges lourdes)",
                                                 value: searchCategories.searchText,
                                                 variant: "outlined",
                                                 name: "categories",
@@ -363,7 +387,7 @@ function Step3App(props) {
                                                     anchorEl={popperNode.current}
                                                     open={Boolean(options.children) || searchCategories.noSuggestions || searchCategories.loading}
                                                     popperOptions={{ positionFixed: true }}
-                                                    className="z-9999 mb-8 h-200 overflow-auto" 
+                                                    className="z-9999 mb-8 h-200 overflow-auto"
                                                 >
                                                     <div ref={suggestionsNode}>
                                                         <Paper
@@ -388,6 +412,7 @@ function Step3App(props) {
                                                 </Popper>
                                             )}
                                         />
+
                                     </div>
                                     <div className={clsx(classes.chips)}>
                                         {
@@ -395,6 +420,7 @@ function Step3App(props) {
                                             categories.map((item, index) => (
                                                 <Chip
                                                     key={index}
+                                                    color="secondary"
                                                     label={item.name}
                                                     onDelete={() => handleDelete(item.id)}
                                                     className="mt-8 mr-8"
@@ -404,6 +430,46 @@ function Step3App(props) {
 
                                         }
                                     </div>
+                                    <Typography paragraph className="flex   items-center " color="secondary">
+                                        <Icon className="mr-2" color="secondary">help_outline</Icon>
+                                        Si vos produits n´existent pas, veuillez nous les envoyer en cliquant:
+                                            <IconButton
+                                            className={clsx(classes.expand, "ml-2", {
+                                                [classes.expandOpen]: expanded,
+                                            })}
+                                            color="secondary"
+                                            onClick={handleExpandClick}
+                                            aria-expanded={expanded}
+                                            aria-label="show more"
+                                        >
+                                            <ExpandMoreIcon />
+                                        </IconButton>
+
+                                    </Typography>
+                                    <Collapse in={expanded} timeout="auto" className=" " unmountOnExit>
+
+                                        <TextFieldFormsy
+                                            className="w-full"
+                                            type="text"
+                                            name="autreCategories"
+                                            value={form.autreCategories}
+                                            onChange={handleChange}
+                                            label="Autre produits"
+                                            validations={{
+                                                minLength: 2,
+                                                maxLength: 50,
+
+                                            }}
+                                            validationErrors={{
+                                                minLength: 'La longueur minimale de caractère est 2',
+                                                maxLength: 'La longueur maximale de caractère est 50',
+                                            }}
+                                            variant="outlined"
+                                        />
+                                        <Typography variant="caption">Veuillez séparer vos produits avec des virgules</Typography>
+                                    </Collapse>
+
+
 
                                     <Button
                                         type="submit"
@@ -411,7 +477,7 @@ function Step3App(props) {
                                         color="primary"
                                         className="w-full mx-auto mt-16 normal-case"
                                         aria-label="Suivant"
-                                        disabled={ step3.loading || categories.length === 0}
+                                        disabled={step3.loading || (categories.length === 0 && !form.autreCategories)}
                                         value="legacy"
                                     >
                                         Terminer

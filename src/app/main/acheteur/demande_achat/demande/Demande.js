@@ -142,6 +142,7 @@ function renderInputComponent(inputProps) {
                     input: classes.input,
                 },
             }}
+            required
             {...other}
         />
     );
@@ -401,7 +402,7 @@ function Demande(props) {
                                     : "Pièce(s) jointe(s)"}
 
                         />
-                        
+
                         {/*form && form.diffusionsdemandes.length > 0 ?
                             <Tab className="h-64 normal-case" label={"Diffuser (" + form.diffusionsdemandes.length + " fois)"} />
                         : ''*/}
@@ -440,11 +441,16 @@ function Demande(props) {
                                         }
                                         <Grid container spacing={3} className="mb-8">
 
-                                            <Grid item xs={12} sm={12}>
+                                            <Grid item xs={12} sm={6}>
                                                 <Typography variant="caption"  >
                                                     - Soumettez votre demande c'est gratuit et sans engagement.<br />
                                                     - Détaillez la demande, vous recevrez de meilleures offres.<br />
-                                                    - Attention seules les demandes sérieuses (pas de projets étudiants) seront validées.
+                                                    - Attention seules les demandes sérieuses (pas de projets étudiants) seront validées.<br />
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6} className="justify-end text-right">
+                                                <Typography variant="caption"  >
+                                                    <span className="text-red font-600">*</span> Champs obligatoires.
                                                  </Typography>
                                             </Grid>
                                         </Grid>
@@ -452,7 +458,7 @@ function Demande(props) {
                                             <Grid item xs={12} sm={8}>
                                                 <TextFieldFormsy
                                                     className="mb-24"
-                                                    label="Titre"
+                                                    label="Designation"
                                                     autoFocus
                                                     id="titre"
                                                     name="titre"
@@ -644,14 +650,14 @@ function Demande(props) {
                                                     label="Diffuser à l'échelle"
                                                     onChange={handleRadioChange}
                                                 >
-                                                
-                                                    <FormControlLabel  value="2" checked={form.localisation === 2} control={<Radio />} label="Locale" />
-                                                    <FormControlLabel  value="3" checked={form.localisation === 3} control={<Radio />} label="Internationale" />
+
+                                                    <FormControlLabel value="2" checked={form.localisation === 2} control={<Radio />} label="Locale" />
+                                                    <FormControlLabel value="3" checked={form.localisation === 3} control={<Radio />} label="Internationale" />
                                                     <FormControlLabel value="1" checked={form.localisation === 1} control={<Radio />} label="Les deux" />
 
                                                 </RadioGroupFormsy>
                                             </Grid>
-                                            <Grid item xs={12} sm={4} className="flex items-center"> 
+                                            <Grid item xs={12} sm={4} className="flex items-center">
                                                 <CheckboxFormsy
                                                     name="isPublic"
                                                     onChange={(e) => handleCheckBoxChange(e, 'isPublic')}

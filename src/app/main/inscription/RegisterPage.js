@@ -41,12 +41,9 @@ function RegisterPage(props) {
 
                         <CardContent className="flex flex-col items-center justify-center p-32">
 
-                            <img className="w-128 m-20" src="assets/images/logos/icon.png" alt="logo" />
+                            <img className=" mb-12" src="assets/images/logos/logo-1.png" alt="Les Achats industriels logo" />
 
-                            <Typography variant="h6" className="mt-16 mb-32">CRÉER UN COMPTE</Typography>
-
-
-
+                            <Typography variant="h6" className="mt-16 mb-16 uppercase">Inscrivez-vous en tant que :</Typography>
 
                             <Tabs
                                 value={selectedTab}

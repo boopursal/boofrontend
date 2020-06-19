@@ -343,20 +343,20 @@ const navigationConfig = [
         'type': 'collapse',
         'children': [
             {
-                'id': 'demandes_ha',
-                'title': 'Liste des demandes',
-                'auth': authRoles.acheteur,
-                'exact': true,
-                'type': 'item',
-                'url': '/demandes'
-            },
-            {
                 'id': 'demande_nv',
                 'title': 'Nouvelle demande',
                 'auth': authRoles.acheteur,
                 'exact': true,
                 'type': 'item',
                 'url': '/demandes/new'
+            },
+            {
+                'id': 'demandes_ha',
+                'title': 'Liste des demandes',
+                'auth': authRoles.acheteur,
+                'exact': true,
+                'type': 'item',
+                'url': '/demandes'
             },
 
         ]
@@ -422,15 +422,6 @@ const navigationConfig = [
         'icon': 'local_offer',
         'children': [
             {
-                'id': 'mes_produits',
-                'title': 'Liste des produits',
-                'auth': authRoles.fournisseur,
-                'exact': true,
-                'type': 'item',
-                'url': '/produits',
-
-            },
-            {
                 'id': 'nv_produit',
                 'title': 'Nouveau produit',
                 'auth': authRoles.fournisseur,
@@ -439,6 +430,16 @@ const navigationConfig = [
                 'url': '/produits/new',
 
             },
+            {
+                'id': 'mes_produits',
+                'title': 'Liste des produits',
+                'auth': authRoles.fournisseur,
+                'exact': true,
+                'type': 'item',
+                'url': '/produits',
+
+            },
+
             {
                 'id': 'product-devis',
                 'title': 'Demandes de devis',

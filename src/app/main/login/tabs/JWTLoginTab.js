@@ -8,9 +8,9 @@ import * as Actions from 'app/store/actions';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
-
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',

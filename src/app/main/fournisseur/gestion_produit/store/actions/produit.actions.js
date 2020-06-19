@@ -39,6 +39,7 @@ export const DELETE_SUCCESS = '[PRODUIT FOURNISSEUR APP] DELETE SUCCESS';
 export const ERROR_DELETE = '[PRODUIT FOURNISSEUR APP] ERROR DELETE';
 
 
+export const CLEAN_UP_PRODUCT = '[PRODUIT FOURNISSEUR APP] CLEAN_UP_PRODUCT';
 export const CLEAN_ERROR = '[PRODUIT FOURNISSEUR APP] CLEAN_ERROR';
 export const CLEAN_IMAGE = '[PRODUIT FOURNISSEUR APP] CLEAN_IMAGE';
 export const CLEAN_DELETE_IMAGE = '[PRODUIT FOURNISSEUR APP] CLEAN_DELETE_IMAGE';
@@ -173,7 +174,7 @@ export function getProduit(params) {
 
 export function saveProduit(data, secteur, sousSecteur, categorie, abonnee) {
 
-    var postData = {
+    const postData = {
         ...data,
         pu: data.pu ? parseFloat(data.pu) : 0,
         sousSecteurs: sousSecteur && sousSecteur.value,
@@ -213,7 +214,7 @@ export function saveProduit(data, secteur, sousSecteur, categorie, abonnee) {
 
 export function putProduit(data, url, secteur, sousSecteur, categorie) {
 
-    var putData = {
+    const putData = {
         ...data,
         pu: data.pu ? parseFloat(data.pu) : 0,
         sousSecteurs: sousSecteur && sousSecteur.value,
@@ -224,6 +225,7 @@ export function putProduit(data, url, secteur, sousSecteur, categorie) {
         ficheTechnique: data.ficheTechnique && data.ficheTechnique["@id"],
         featuredImageId: data.featuredImageId && data.featuredImageId["@id"],
     }
+    putData.secteur && delete putData.secteur;
 
     const request = agent.put(`/api/produits/${url}`, putData);
 
@@ -467,6 +469,12 @@ export function cleanError() {
     });
 }
 
+export function cleanUpProduct() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_PRODUCT,
+    });
+}
 export function cleanImage() {
 
     return (dispatch) => dispatch({

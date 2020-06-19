@@ -5,10 +5,11 @@ const initialState = {
     data: [],
     pageCount: null,
     loading: false,
+    error: true,
     searchText: '',
     parametres: {
         page: 1,
-        search:[],
+        search: [],
         description: '',
         filter: {
             id: 'created',
@@ -23,8 +24,24 @@ const demandesReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    loading: true
+                    loading: true,
+                    error: false,
 
+                };
+            }
+        case Actions.ERROR_404:
+            {
+                return {
+                    ...state,
+                    loading: false,
+                    error: true,
+                };
+            }
+        case Actions.ERRORS:
+            {
+                return {
+                    ...state,
+                    loading: false
                 };
             }
         case Actions.GET_DEMANDES:

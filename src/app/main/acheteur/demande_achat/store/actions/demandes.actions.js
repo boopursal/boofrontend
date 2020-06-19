@@ -61,7 +61,7 @@ export function getDemandes(id_acheteur, parametres) {
     }
 
 }
-export function removeDemande(demande, parametres) {
+export function removeDemande(demande, parametres, id) {
 
     let Updatedemande = { del: true, reference: demande.reference + '_deleted-' + demande.id }
     return (dispatch, getState) => {
@@ -75,18 +75,18 @@ export function removeDemande(demande, parametres) {
                     type: REMOVE_DEMANDE
                 }),
                 dispatch(showMessage({
-                    message: 'Demande bien supprimé!', anchorOrigin: {
+                    message: 'Demande bien supprimée!', anchorOrigin: {
                         vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },
                     variant: 'success'
                 }))
-            ]).then(() => dispatch(getDemandes(demande.acheteur.id, parametres)))
+            ]).then(() => dispatch(getDemandes(id, parametres)))
         );
     };
 }
 
-export function PublishDemande(demande, active, parametres) {
+export function PublishDemande(demande, active, parametres, id) {
 
     let Updatedemande = { isPublic: active }
     return (dispatch) => {
@@ -106,7 +106,7 @@ export function PublishDemande(demande, active, parametres) {
                     },
                     variant: 'success'
                 }))
-            ]).then(() => dispatch(getDemandes(demande.acheteur.id, parametres)))
+            ]).then(() => dispatch(getDemandes(id, parametres)))
         );
     };
 }

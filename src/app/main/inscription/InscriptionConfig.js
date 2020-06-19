@@ -5,16 +5,16 @@ export const InscriptionConfig = {
     settings: {
         layout: {
             config: {
-                navbar        : {
+                navbar: {
                     display: false
                 },
-                toolbar       : {
+                toolbar: {
                     display: false
                 },
-                footer        : {
+                footer: {
                     display: false
                 },
-                leftSidePanel : {
+                leftSidePanel: {
                     display: false
                 },
                 rightSidePanel: {
@@ -23,23 +23,21 @@ export const InscriptionConfig = {
             }
         }
     },
-    routes  : [
-       
+    routes: [
         {
-            exact :true,
-            path     : '/register/confirm/:confirmationToken',
+            exact: true,
+            path: '/register/confirm/:confirmationToken',
             component: React.lazy(() => import('./ConfirmPage'))
         },
         {
-            exact :true,
-            path     : '/register',
+            exact: true,
+            path: '/register',
             component: React.lazy(() => import('./RegisterPage'))
         },
         {
-            exact :true,
-            path     : '/mail-confirm',
+            exact: true,
+            path: '/mail-confirm',
             component: React.lazy(() => import('./MailConfirmPage'))
         }
-        
     ]
 };

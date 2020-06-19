@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar, MenuItem } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar, MenuItem, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFormsy, SelectFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
@@ -70,7 +70,7 @@ function Fournisseur(props) {
     const [showIce, setShowIce] = useState(false);
     const [ville, setVille] = useState(false);
     const [pays, setPays] = useState(false);
-    const [sousSecteurs, setSousSecteurs] = useState(false);
+    const [categories, setCategories] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
 
     const [tabValue, setTabValue] = useState(0);
@@ -146,7 +146,7 @@ function Fournisseur(props) {
 
             }
             setForm({ ...fournisseur.data });
-            setSousSecteurs(fournisseur.data.sousSecteurs.map(item => ({
+            setCategories(fournisseur.data.categories.map(item => ({
                 value: item['@id'],
                 label: item.name
             })));
@@ -179,14 +179,14 @@ function Fournisseur(props) {
 
     function handleChipChange(value, name) {
 
-        if (name === 'sousSecteurs') {
+        if (name === 'categories') {
             if (!_.some(value, 'value')) {
                 setForm(_.set({ ...form }, name, ''));
-                setSousSecteurs(null);
+                setCategories(null);
             }
             else {
                 setForm(_.set({ ...form }, name, value));
-                setSousSecteurs(value);
+                setCategories(value);
             }
         }
         else if (name === 'ville') {
@@ -256,7 +256,7 @@ function Fournisseur(props) {
                             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                                 <Typography className="normal-case flex items-center sm:mb-12" component={Link} role="button" to="/users/fournisseurs" color="inherit">
                                     <Icon className="mr-4 text-20">arrow_back</Icon>
-                                        Retour
+                                    Retour
                                 </Typography>
                             </FuseAnimate>
                             <div className="flex items-center max-w-full">
@@ -295,7 +295,7 @@ function Fournisseur(props) {
                                         variant="contained"
                                         color="secondary"
                                         disabled={fournisseur.loading}
-                                        onClick={() => dispatch(Actions.etatFournisseur(form,false))}
+                                        onClick={() => dispatch(Actions.etatFournisseur(form, false))}
                                     >
                                         Mettre ce compte invalide
                                         {fournisseur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
@@ -306,7 +306,7 @@ function Fournisseur(props) {
                                         color="secondary"
 
                                         disabled={fournisseur.loading}
-                                        onClick={() => dispatch(Actions.etatFournisseur(form,true))}
+                                        onClick={() => dispatch(Actions.etatFournisseur(form, true))}
                                     >
                                         Mettre ce compte valide
                                         {fournisseur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
@@ -334,10 +334,9 @@ function Fournisseur(props) {
                             classes={{ root: "w-full h-64" }}
                         >
                             <Tab className="h-64 normal-case" label="Infos société" />
-                            <Tab className="h-64 normal-case" label="Activités" />
+                            <Tab className="h-64 normal-case" label="Produits" />
                             <Tab className="h-64 normal-case" label="Infos utilisateur" />
                             <Tab className="h-64 normal-case" label="Photo" />
-
                         </Tabs>)
                     :
                     <div className={classes.root}>
@@ -564,14 +563,6 @@ function Fournisseur(props) {
                                                         name="codepostal"
                                                         value={String(form.codepostal)}
                                                         onChange={handleChange}
-                                                        validations={{
-                                                            minLength: 5,
-                                                            maxLength: 5,
-                                                        }}
-                                                        validationErrors={{
-                                                            minLength: 'La longueur minimale de caractère est 5',
-                                                            maxLength: 'La longueur maximale de caractère est 5',
-                                                        }}
                                                         autoComplete="codepostal"
                                                         label="Code Postal"
                                                         variant="outlined"
@@ -585,9 +576,7 @@ function Fournisseur(props) {
                                                 <SelectReactFormsy
                                                     id="ville"
                                                     name="ville"
-                                                    value={
-                                                        ville
-                                                    }
+                                                    value={ville}
                                                     placeholder="Sélectionner une ville"
                                                     textFieldProps={{
                                                         label: 'Ville',
@@ -667,46 +656,39 @@ function Fournisseur(props) {
                                     ref={formRef}
                                     className="flex pt-5 flex-col ">
 
-                                    <SelectReactFormsy
-
-                                        id="sousSecteurs"
-                                        name="sousSecteurs"
-                                        className="MuiFormControl-fullWidth MuiTextField-root mb-24"
-                                        value={
-
-                                            sousSecteurs
+                                    <div className={clsx(classes.chips)}>
+                                        {
+                                            categories && categories.length > 0 &&
+                                            categories.map((item, index) => (
+                                                < Chip
+                                                    key={index}
+                                                    label={item.label}
+                                                    // onDelete={() => handleDelete(item.id)}
+                                                    className="mt-8 mr-8"
+                                                />
+                                            ))
 
 
                                         }
-                                        onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                        placeholder="Sélectionner multiple secteurs d'activités"
-                                        textFieldProps={{
-                                            label: "Secteurs d'activités",
-                                            InputLabelProps: {
-                                                shrink: true
-                                            },
-                                            variant: 'outlined'
-                                        }}
-                                        options={fournisseur.sousSecteurs}
-                                        fullWidth
-                                        isMulti
-                                        required
-                                    />
-
-
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        className="w-200 pr-auto mt-16 normal-case"
-                                        aria-label="Sauvegarder"
-                                        disabled={!isFormValid || fournisseur.loading || !form.sousSecteurs}
-                                        value="legacy"
-                                    >
-                                        Sauvegarder
-                           {fournisseur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-
-                                    </Button>
+                                    </div>
+                                    {
+                                        /**
+                                         * 
+                                                                        <Button
+                                                                            type="submit"
+                                                                            variant="contained"
+                                                                            color="primary"
+                                                                            className="w-200 pr-auto mt-16 normal-case"
+                                                                            aria-label="Sauvegarder"
+                                                                            disabled={!isFormValid || fournisseur.loading || !form.categories}
+                                                                            value="legacy"
+                                                                        >
+                                                                            Sauvegarder
+                                                                            {fournisseur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                    
+                                                                        </Button>
+                                         */
+                                    }
 
                                 </Formsy>
                             )}

@@ -5,7 +5,7 @@ import reducer from './store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { Card, Grid, CardContent, InputAdornment, Icon, Stepper, Step, StepLabel, Button } from '@material-ui/core';
+import { Card, Grid, CardContent, InputAdornment, Icon, Stepper, Step, StepLabel, Button, Typography } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import { FuseAnimate } from '@fuse';
 import Formsy from 'formsy-react';
@@ -57,7 +57,8 @@ const defaultFormState = {
     website: '',
     fix: '',
     ice: '',
-    description: ''
+    description: '',
+    autreVille: ''
 };
 const ColorlibConnector = withStyles({
     alternativeLabel: {
@@ -135,7 +136,7 @@ ColorlibStepIcon.propTypes = {
 };
 
 function getSteps() {
-    return ['Inscription', 'Information de la société', 'Secteurs d\'activités'];
+    return ['Inscription', 'Information de la société', 'Produits'];
 }
 
 function Step2App(props) {
@@ -146,6 +147,7 @@ function Step2App(props) {
     const user = useSelector(({ auth }) => auth.user);
 
     const [isFormValid, setIsFormValid] = useState(false);
+    const [showAutreVille, setShowAutreVille] = useState(false);
     const [showIce, setShowIce] = useState(false);
     const formRef = useRef(null);
 
@@ -190,12 +192,19 @@ function Step2App(props) {
 
         if (name === 'ville' || name === 'currency') {
             setForm(_.set({ ...form }, name, value));
+            if (name === 'ville' && value.label === 'Autre') {
+                setShowAutreVille(true)
+            }
+            if (name === 'ville' && value.label !== 'Autre') {
+                setShowAutreVille(false)
+            }
         }
         else {
             setForm(_.set({ ...form }, name, value));
             if (value.value) {
                 dispatch(Actions.getVilles(value.value));
             }
+            setShowAutreVille(false)
 
             if (value.label === 'Maroc') {
                 setShowIce(true)
@@ -215,18 +224,13 @@ function Step2App(props) {
                 <title>Inscription Fournisseur| Les Achats Industriels</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <meta name="googlebot" content="noindex" />
-             </Helmet>
+            </Helmet>
             <div className="flex flex-col items-center justify-center w-full">
 
                 <FuseAnimate animation="transition.expandIn">
-
                     <Card className={classes.card}>
-
                         <CardContent >
-
-
                             <div >
-
                                 <Stepper alternativeLabel activeStep={1} connector={<ColorlibConnector />}>
                                     {steps.map(label => (
                                         <Step key={label}>
@@ -262,7 +266,8 @@ function Step2App(props) {
                                                             InputLabelProps: {
                                                                 shrink: true
                                                             },
-                                                            variant: 'outlined'
+                                                            variant: 'outlined',
+                                                            required: 'required'
                                                         }}
 
                                                         className="mb-16"
@@ -284,7 +289,8 @@ function Step2App(props) {
                                                             InputLabelProps: {
                                                                 shrink: true
                                                             },
-                                                            variant: 'outlined'
+                                                            variant: 'outlined',
+                                                            required: 'required'
                                                         }}
                                                         className="mb-16"
                                                         options={Villes}
@@ -296,6 +302,32 @@ function Step2App(props) {
 
 
                                             </Grid>
+                                            {
+                                                showAutreVille ?
+                                                    <TextFieldFormsy
+                                                        className="mb-16 w-full"
+                                                        type="text"
+                                                        name="autreVille"
+                                                        value={form.autreVille}
+                                                        onChange={handleChange}
+                                                        label="Autre ville"
+                                                        autoComplete="ville"
+
+                                                        validations={{
+                                                            minLength: 2,
+                                                            maxLength: 50,
+
+                                                        }}
+                                                        validationErrors={{
+                                                            minLength: 'La longueur minimale de caractère est 2',
+                                                            maxLength: 'La longueur maximale de caractère est 50',
+                                                        }}
+                                                        variant="outlined"
+                                                        required
+                                                    />
+                                                    :
+                                                    ''
+                                            }
 
                                             <Grid container spacing={3} >
                                                 <Grid item xs={12} sm={12}>
@@ -361,7 +393,8 @@ function Step2App(props) {
                                                             InputLabelProps: {
                                                                 shrink: true
                                                             },
-                                                            variant: 'outlined'
+                                                            variant: 'outlined',
+                                                            required: 'required'
                                                         }}
                                                         className="mb-16"
                                                         options={Currencies}
@@ -470,6 +503,9 @@ function Step2App(props) {
                                                 rows="4"
 
                                             />
+                                            <Typography variant="caption" className="flex items-center mb-16">
+                                                <span className="mr-4 text-red">*</span> Champs obligatoires
+                                            </Typography>
 
 
                                             <Button

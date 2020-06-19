@@ -112,6 +112,7 @@ function renderInputComponent(inputProps) {
                     input: classes.input,
                 },
             }}
+            required
             {...other}
         />
     );
@@ -123,6 +124,9 @@ function Profile(props) {
     const popperNode = useRef(null);
     const searchCategories = useSelector(({ profileApp }) => profileApp.searchCategories);
     const [categories, setCategories] = React.useState([]);
+    const params = props.match.params;
+    const { tab } = params;
+    console.log(tab)
 
     const dispatch = useDispatch();
     const classes = useStyles();
@@ -140,7 +144,7 @@ function Profile(props) {
     const [sousSecteurs, setSousSecteurs] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
 
-    const [tabValue, setTabValue] = useState(0);
+    const [tabValue, setTabValue] = useState(parseInt(tab) ? parseInt(tab) : 0);
     const { form, handleChange, setForm } = useForm(null);
 
 
@@ -416,7 +420,7 @@ function Profile(props) {
                                 classes={{ root: "w-full h-64" }}
                             >
                                 <Tab className="h-64 normal-case" label="Infos société" />
-                                <Tab className="h-64 normal-case" label="Activités" />
+                                <Tab className="h-64 normal-case" label="Produits" />
                                 <Tab className="h-64 normal-case" label="Infos utilisateur" />
                                 <Tab className="h-64 normal-case" label="Photo" />
                                 <Tab className="h-64 normal-case" label="Mot de passe" />
@@ -605,7 +609,8 @@ function Profile(props) {
                                                             InputLabelProps: {
                                                                 shrink: true
                                                             },
-                                                            variant: 'outlined'
+                                                            variant: 'outlined',
+                                                            required: 'required'
                                                         }}
 
                                                         className="mt-20"
@@ -677,7 +682,8 @@ function Profile(props) {
                                                             InputLabelProps: {
                                                                 shrink: true
                                                             },
-                                                            variant: 'outlined'
+                                                            variant: 'outlined',
+                                                            required: 'required'
                                                         }}
                                                         className=""
                                                         options={Villes}
@@ -711,7 +717,7 @@ function Profile(props) {
 
                                                         variant="outlined"
                                                         multiline
-                                                        rows="2"
+                                                        rows="6"
 
                                                     />
 
@@ -749,6 +755,8 @@ function Profile(props) {
                                         onValidSubmit={handleSubmitSousSecteurs}
                                         className="flex pt-5 flex-col ">
                                         <div ref={popperNode} >
+                                            <Typography variant="caption" className="flex items-center mb-16"><Icon>info</Icon>&ensp;Vous pouvez choisir un ou plusieurs produits </Typography>
+
                                             <Autosuggest
                                                 {...autosuggestProps}
                                                 getSuggestionValue={suggestion => searchCategories.searchText}
@@ -765,8 +773,8 @@ function Profile(props) {
                                                 required
                                                 inputProps={{
                                                     classes,
-                                                    label: 'Activités',
-                                                    placeholder: "Activité (ex: Rayonnage lourd)",
+                                                    label: 'Produits',
+                                                    placeholder: "Produit (ex: Rayonnage lourd)",
                                                     value: searchCategories.searchText,
                                                     variant: "outlined",
                                                     name: "categories",

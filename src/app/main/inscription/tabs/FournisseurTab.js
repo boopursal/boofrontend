@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, InputAdornment, Icon, Grid, MenuItem } from '@material-ui/core';
+import { Button, InputAdornment, Icon, Grid, MenuItem, IconButton } from '@material-ui/core';
 import { TextFieldFormsy, SelectFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import * as authActions from 'app/auth/store/actions';
@@ -9,6 +9,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import ReCAPTCHA from "react-google-recaptcha";
 import Link from '@material-ui/core/Link';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,7 +53,17 @@ function FournisseurTab(props) {
 
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
+    const [values, setValues] = useState({
+        showPassword: false,
+    });
 
+    const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
     useEffect(() => {
         if (register.error && (register.error.civilite || register.error.firstName || register.error.lastName || register.error.societe || register.error.phone || register.error.email || register.error.password || register.error.confirmpassword)) {
             formRef.current.updateInputsWithError({
@@ -70,7 +82,7 @@ function FournisseurTab(props) {
     }
 
     function handleSubmit(model) {
-        dispatch(authActions.submitRegisterFournisseur(model,props.history));
+        dispatch(authActions.submitRegisterFournisseur(model, props.history));
     }
     function onChange(value) {
         if (value && value.trim().length > 0)
@@ -210,7 +222,7 @@ function FournisseurTab(props) {
 
                 <TextFieldFormsy
                     className="mb-16"
-                    type="password"
+                    type={values.showPassword ? 'text' : 'password'}
                     name="password"
                     label="Mot de passe"
                     validations={{
@@ -220,10 +232,18 @@ function FournisseurTab(props) {
                     validationErrors={{
                         minLength: 'La longueur minimale des caractères est de 6',
                         matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
-                    
+
                     }}
                     InputProps={{
-                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                        endAdornment: <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                            >
+                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
                     }}
                     variant="outlined"
                     required
@@ -231,7 +251,7 @@ function FournisseurTab(props) {
 
                 <TextFieldFormsy
                     className="mb-16"
-                    type="password"
+                    type={values.showPassword ? 'text' : 'password'}
                     name="confirmpassword"
                     label="Confirmer le mot de passe"
                     validations="equalsField:password"
@@ -239,7 +259,15 @@ function FournisseurTab(props) {
                         equalsField: 'les mots de passe saisis ne sont pas identiques'
                     }}
                     InputProps={{
-                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                        endAdornment: <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                            >
+                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
                     }}
                     variant="outlined"
                     required

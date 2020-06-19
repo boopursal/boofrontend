@@ -1,6 +1,6 @@
-import React, {useEffect, useRef} from 'react';
-import {FusePageSimple} from '@fuse';
-import {useDispatch,useSelector} from 'react-redux';
+import React, { useEffect, useRef } from 'react';
+import { FusePageSimple } from '@fuse';
+import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import CommandesList from './CommandesList';
 import CommandesHeader from './CommandesHeader';
@@ -10,24 +10,30 @@ import reducer from './store/reducers';
 import { Helmet } from "react-helmet";
 
 
-function CommandesApp(props)
-{
+function CommandesApp(props) {
     const dispatch = useDispatch();
-    const user = useSelector(({auth}) => auth.user);
+    const user = useSelector(({ auth }) => auth.user);
     const pageLayout = useRef(null);
-
+    const params = props.match.params;
+    const { open } = params;
     useEffect(() => {
-        if(user.id)
-        dispatch(Actions.getCommandes(user.id));
+        if (user.id)
+            dispatch(Actions.getCommandes(user.id));
 
-        return ()=>{
+        return () => {
             dispatch(Actions.cleanUp())
         }
-    }, [dispatch,user.id]);
+    }, [dispatch, user.id]);
+
+    useEffect(() => {
+        if (open) {
+            dispatch(Actions.openNewCommandesDialog())
+        }
+    }, [dispatch, open]);
 
     return (
         <React.Fragment>
-              <Helmet>
+            <Helmet>
                 <title>Commandes jetons | Les Achats Industriels</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <meta name="googlebot" content="noindex" />
@@ -35,22 +41,22 @@ function CommandesApp(props)
             <FusePageSimple
                 classes={{
                     contentWrapper: "p-0 sm:p-24 pb-80 sm:pb-80 h-full",
-                    content       : "flex flex-col h-full",
-                    leftSidebar   : "w-256 border-0",
-                    header        : "min-h-72 h-72 sm:h-136 sm:min-h-136"
+                    content: "flex flex-col h-full",
+                    leftSidebar: "w-256 border-0",
+                    header: "min-h-72 h-72 sm:h-136 sm:min-h-136"
                 }}
                 header={
-                    <CommandesHeader pageLayout={pageLayout}/>
+                    <CommandesHeader pageLayout={pageLayout} />
                 }
                 content={
-                    <CommandesList/>
+                    <CommandesList />
                 }
                 sidebarInner
                 ref={pageLayout}
                 innerScroll
             />
-            
-            <CommandesDialog/>
+
+            <CommandesDialog />
         </React.Fragment>
     )
 }

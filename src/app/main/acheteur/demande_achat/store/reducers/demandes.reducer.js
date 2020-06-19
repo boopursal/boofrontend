@@ -8,10 +8,10 @@ const initialState = {
     searchText: '',
     parametres: {
         page: 1,
-        search:[],
+        search: [],
         description: '',
         filter: {
-            id: 'dateExpiration',
+            id: 'created',
             direction: 'desc'
         }
     },
@@ -23,8 +23,8 @@ const demandesReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    data :[]
-                    
+                    data: []
+
                 };
             }
         case Actions.REQUEST_DEMANDES:
