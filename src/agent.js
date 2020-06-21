@@ -5,5 +5,4 @@ export default axios.create({
   //baseURL: `http://192.168.1.124:8000/`
   //baseURL: `https://ha.7e-sky.com/`
   baseURL: `https://it.3findustrie.com/`
-  
 });
