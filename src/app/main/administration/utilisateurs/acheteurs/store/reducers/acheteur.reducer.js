@@ -1,5 +1,4 @@
 import * as Actions from '../actions';
-import _ from '@lodash';
 
 const initialState = {
     pays: null,
@@ -12,10 +11,42 @@ const initialState = {
     acheteurReqInProgress: false,
     avatar: null,
     acheteur_deleted: null,
+    loadingAddVille: false,
+    villeAdded: false,
 };
 
 const acheteurReducer = function (state = initialState, action) {
     switch (action.type) {
+        case Actions.REQUEST_ADD_VILLE:
+            {
+                return {
+                    ...state,
+                    loadingAddVille: true,
+                }
+            }
+        case Actions.SAVE_ADD_VILLE:
+            {
+                return {
+                    ...state,
+                    loadingAddVille: false,
+                    villeAdded: true,
+                }
+            }
+        case Actions.SAVE_ERROR_ADD_VILLE:
+            {
+                return {
+                    ...state,
+                    loadingAddVille: false,
+                }
+            }
+        case Actions.CLEAN_UP_VILLE:
+            {
+                return {
+                    ...state,
+                    villeAdded: false,
+                }
+            }
+
         case Actions.CLEAN_UP_ACHETEUR:
             {
                 return {
@@ -77,7 +108,7 @@ const acheteurReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    pays: _.keyBy(action.payload, 'id'),
+                    pays: action.payload,
                     loading: false
 
                 };
@@ -87,7 +118,7 @@ const acheteurReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    villes: _.keyBy(action.payload, 'id'),
+                    villes: [...action.payload, { '@id': '/api/villes/113', name: 'Autre' }],
                 };
             }
         case Actions.UPDATE_ACHETEUR:
@@ -95,7 +126,7 @@ const acheteurReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: false,
-                    data : action.payload,
+                    data: action.payload,
                     error: null
 
                 };

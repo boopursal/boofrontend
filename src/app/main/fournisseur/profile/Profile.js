@@ -126,7 +126,6 @@ function Profile(props) {
     const [categories, setCategories] = React.useState([]);
     const params = props.match.params;
     const { tab } = params;
-    console.log(tab)
 
     const dispatch = useDispatch();
     const classes = useStyles();
@@ -141,7 +140,6 @@ function Profile(props) {
     const [showIce, setShowIce] = useState(false);
     const [ville, setVille] = useState(false);
     const [pays, setPays] = useState(false);
-    const [sousSecteurs, setSousSecteurs] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
 
     const [tabValue, setTabValue] = useState(parseInt(tab) ? parseInt(tab) : 0);

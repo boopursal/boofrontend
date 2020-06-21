@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar, MenuItem, Chip } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, ListItemText, Popper, Icon, Typography, Divider, Grid, Avatar, MenuItem, Chip, IconButton, DialogTitle, DialogContent, DialogActions, Dialog } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFormsy, SelectFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
@@ -14,7 +14,10 @@ import green from '@material-ui/core/colors/green';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-
+import Autosuggest from 'react-autosuggest';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Highlighter from "react-highlight-words";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,6 +25,19 @@ const useStyles = makeStyles(theme => ({
         '& > * + *': {
             marginTop: theme.spacing(2),
         },
+    },
+    chips: {
+        flex: 1,
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    suggestion: {
+        display: 'block',
+    },
+    suggestionsList: {
+        margin: 0,
+        padding: 0,
+        listStyleType: 'none',
     },
     buttonProgress: {
         color: green[500],
@@ -41,42 +57,127 @@ const useStyles = makeStyles(theme => ({
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
         transitionTimingFunction: theme.transitions.easing.easeInOut,
-        '&:hover': {
-            '& $fournisseurImageFeaturedStar': {
-                opacity: .8
-            }
-        },
-        '&.featured': {
-            pointerEvents: 'none',
-            boxShadow: theme.shadows[3],
-            '& $fournisseurImageFeaturedStar': {
-                opacity: 1
-            },
-            '&:hover $fournisseurImageFeaturedStar': {
-                opacity: 1
-            }
-        }
     },
 }));
+
+/**
+ * 
+ * Suugestion
+ */
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+    return (
+
+        <MenuItem selected={isHighlighted} component="div" className="z-999" dense={true}>
+            <ListItemText
+                className="pl-0 "
+                primary={
+                    <Highlighter
+                        highlightClassName="YourHighlightClass"
+                        searchWords={[query]}
+                        autoEscape={true}
+                        textToHighlight={suggestion.name}
+                    />
+                }
+            />
+        </MenuItem>
+
+    );
+
+}
+function renderInputComponent(inputProps) {
+    const { classes, inputRef = () => { }, ref, ...other } = inputProps;
+    return (
+        <TextField
+            fullWidth
+            InputProps={{
+                inputRef: node => {
+                    ref(node);
+                    inputRef(node);
+                },
+                classes: {
+                    input: classes.input,
+                },
+            }}
+            {...other}
+        />
+    );
+}
+/**
+ * 
+ * FIN Suugestion
+ */
+
 function Fournisseur(props) {
+
+    const suggestionsNode = useRef(null);
+    const popperNode = useRef(null);
+    const searchCategories = useSelector(({ fournisseurApp }) => fournisseurApp.searchCategories);
+    const [categories, setCategories] = useState([]);
 
     const dispatch = useDispatch();
     const classes = useStyles();
     const fournisseur = useSelector(({ fournisseurApp }) => fournisseurApp.fournisseur);
     const Pays = useSelector(({ fournisseurApp }) => fournisseurApp.fournisseur.pays);
     const Villes = useSelector(({ fournisseurApp }) => fournisseurApp.fournisseur.villes);
-
+    const [secteur, setSecteur] = useState(null);
+    const [sousSecteur, setSousSecteur] = useState(null);
     const formRef = useRef(null);
     const [showIce, setShowIce] = useState(false);
     const [ville, setVille] = useState(false);
     const [pays, setPays] = useState(false);
-    const [categories, setCategories] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
+
+    const [nouveauSecteur, setNouveauSecteur] = useState('');
+    const [nouvelleActivite, setNouvelleActivite] = useState('');
 
     const [tabValue, setTabValue] = useState(0);
     const { form, handleChange, setForm } = useForm(null);
     const params = props.match.params;
     const { fournisseurId } = params;
+
+    //Nouveau secteur
+    const [openSecteur, setOpenSecteur] = useState(false);
+    function handleClickOpenSecteur() {
+        setOpenSecteur(true);
+    }
+
+    function handleCloseSecteur() {
+        setOpenSecteur(false);
+    }
+    function handleAddNouveauSecteur() {
+        dispatch(Actions.addSecteur(nouveauSecteur));
+        handleCloseSecteur();
+    }
+
+    //Fin Nouveau Secteur
+
+    //Nouveau produit
+    const [produit, setProduit] = useState('');
+    useEffect(() => {
+        if (fournisseur.produit && !_.find(categories, ['name', fournisseur.produit.name])) {
+            setCategories([fournisseur.produit, ...categories]);
+            setProduit('')
+        }
+    }, [form, fournisseur.produit, setForm]);
+
+    //Fin Nouveau produit
+
+    //Nouvelle Activité
+    const [openActivite, setOpenActivite] = useState(false);
+    function handleClickOpenActivite() {
+        setOpenActivite(true);
+    }
+
+    function handleCloseActivite() {
+        setOpenActivite(false);
+    }
+    function handleAddNouveauActivite() {
+        dispatch(Actions.addActivite(secteur.value, nouvelleActivite));
+        handleCloseActivite();
+    }
+
+    //Fin Nouvelle Activité
+
 
 
     useEffect(() => {
@@ -84,7 +185,6 @@ function Fournisseur(props) {
         function updateFournisseurState() {
             dispatch(Actions.getFournisseur(fournisseurId));
         }
-
         updateFournisseurState();
         return () => {
             dispatch(Actions.cleanUpFournisseur())
@@ -96,14 +196,15 @@ function Fournisseur(props) {
 
     useEffect(() => {
         dispatch(Actions.getPays());
-        dispatch(Actions.getSousSecteurs());
+        dispatch(Actions.getSecteurs());
+
     }, [dispatch]);
 
     //GET VILLE IF PAYS EXIST
     useEffect(() => {
         if (fournisseur.data && !form) {
             if (fournisseur.data.pays)
-                dispatch(Actions.getVilles(fournisseur.data.pays.id));
+                dispatch(Actions.getVilles(fournisseur.data.pays['@id']));
         }
 
     }, [dispatch, fournisseur.data, form]);
@@ -137,8 +238,6 @@ function Fournisseur(props) {
             (fournisseur.data && !form) ||
             (fournisseur.data && form && fournisseur.data.id !== form.id)
         ) {
-
-
             if (fournisseur.data.pays) {
                 if (fournisseur.data.pays.name === 'Maroc') {
                     setShowIce(true);
@@ -146,10 +245,7 @@ function Fournisseur(props) {
 
             }
             setForm({ ...fournisseur.data });
-            setCategories(fournisseur.data.categories.map(item => ({
-                value: item['@id'],
-                label: item.name
-            })));
+            setCategories(fournisseur.data.categories.map(item => item));
             setVille({
                 value: fournisseur.data.ville['@id'],
                 label: fournisseur.data.ville.name,
@@ -164,6 +260,19 @@ function Fournisseur(props) {
 
     }, [form, fournisseur.data, setForm]);
 
+    useEffect(() => {
+        if (fournisseur.data && fournisseur.villeAdded) {
+            setForm({ ...fournisseur.data });
+            setVille({
+                value: fournisseur.data.ville['@id'],
+                label: fournisseur.data.ville.name,
+            });
+            return () => {
+                dispatch(Actions.cleanUpAddedVille())
+            }
+        }
+
+    }, [form, fournisseur.villeAdded, fournisseur.data, setForm]);
 
     useEffect(() => {
 
@@ -211,6 +320,22 @@ function Fournisseur(props) {
 
     }
 
+    function handleChipSuggestionChange(value, name) {
+        if (name === 'secteur') {
+            if (value.value) {
+                dispatch(Actions.getSousSecteurs(value.value));
+                setSousSecteur(null)
+                setSecteur(value)
+            }
+        }
+        if (name === 'sousSecteurs') {
+            if (value.value) {
+                setSousSecteur(value)
+            }
+        }
+
+    }
+
     function handleUploadChange(e) {
         const file = e.target.files[0];
         if (!file) {
@@ -232,13 +357,63 @@ function Fournisseur(props) {
         dispatch(Actions.updateSocieteInfo(model, form.id));
     }
 
-    function handleSubmitSousSecteurs(model) {
-        dispatch(Actions.updateSocieteSousSecteurs(model, form.id));
+    function handleSubmitSousSecteurs() {
+        dispatch(Actions.updateSocieteSousSecteurs(categories, form.id));
     }
 
     function handleSubmitInfoPerso(model) {
         dispatch(Actions.updateUserInfo(model, form.id));
     }
+
+    /** 
+     * ===============> AUTO SUGGESTION <====================
+     */
+    function handleChangeSearch(event) {
+        dispatch(Actions.setGlobalSearchText(event))
+    }
+    function showSearch() {
+        dispatch(Actions.showSearch());
+        document.addEventListener("keydown", escFunction, false);
+    }
+
+    function escFunction(event) {
+        if (event.keyCode === 27) {
+            hideSearch();
+            dispatch(Actions.cleanUp());
+        }
+
+    }
+
+    function hideSearch() {
+        dispatch(Actions.hideSearch());
+        document.removeEventListener("keydown", escFunction, false);
+
+    }
+    function handleSuggestionsFetchRequested({ value, reason }) {
+        if (reason === 'input-changed') {
+            value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value.trim()));
+            // Fake an AJAX call
+        }
+
+    }
+    function handleSuggestionsClearRequested() {
+        //dispatch(Actions.hideSearch());
+
+    }
+    const autosuggestProps = {
+        renderInputComponent,
+        //alwaysRenderSuggestions: true,
+        suggestions: searchCategories.suggestions,
+        focusInputOnSuggestionClick: false,
+        onSuggestionsFetchRequested: handleSuggestionsFetchRequested,
+        onSuggestionsClearRequested: handleSuggestionsClearRequested,
+        renderSuggestion
+    };
+
+    function handleDelete(id) {
+        setCategories(_.reject(categories, function (o) { return o.id == id; }))
+    }
+
 
 
     return (
@@ -590,6 +765,34 @@ function Fournisseur(props) {
                                                     onChange={(value) => handleChipChange(value, 'ville')}
                                                     required
                                                 />
+                                                {
+                                                    (ville.label === 'Autre' || ville.label === 'autre') &&
+                                                    <TextFieldFormsy
+                                                        className="mb-5 mt-20  w-full"
+                                                        type="text"
+                                                        name="autreVille"
+                                                        onChange={handleChange}
+                                                        value={form.autreVille}
+                                                        label="Autre ville"
+                                                        InputProps={{
+                                                            endAdornment:
+                                                                fournisseur.loadingAddVille ?
+                                                                    <CircularProgress color="secondary" />
+                                                                    :
+                                                                    (<InputAdornment position="end">
+                                                                        <IconButton
+                                                                            color="secondary"
+                                                                            disabled={!form.autreVille}
+                                                                            onClick={(ev) => dispatch(Actions.addVille(form.autreVille, form.pays.id, form.id))}
+                                                                        >
+                                                                            <Icon>add_circle</Icon>
+                                                                        </IconButton>
+                                                                    </InputAdornment>)
+                                                        }}
+                                                        variant="outlined"
+                                                    />
+                                                }
+
 
                                             </Grid>
 
@@ -649,48 +852,323 @@ function Fournisseur(props) {
                                     </Formsy>
                                 )}
                             {tabValue === 1 && (
-                                <Formsy
-                                    onValidSubmit={handleSubmitSousSecteurs}
-                                    onValid={enableButton}
-                                    onInvalid={disableButton}
-                                    ref={formRef}
-                                    className="flex pt-5 flex-col ">
 
-                                    <div className={clsx(classes.chips)}>
-                                        {
-                                            categories && categories.length > 0 &&
-                                            categories.map((item, index) => (
-                                                < Chip
-                                                    key={index}
-                                                    label={item.label}
-                                                    // onDelete={() => handleDelete(item.id)}
-                                                    className="mt-8 mr-8"
+
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12} sm={fournisseur.data.autreCategories ? 6 : 12}>
+                                        <Formsy
+                                            onValidSubmit={handleSubmitSousSecteurs}
+                                            onValid={enableButton}
+                                            onInvalid={disableButton}
+                                            ref={formRef}
+                                            className="flex pt-5 flex-col ">
+                                            <Typography variant="h6" color="secondary" className="uppercase mb-16 border-l-8 pl-16">
+                                                Produits sélectionnés
+                                            </Typography>
+                                            <div ref={popperNode} >
+                                                <Autosuggest
+                                                    {...autosuggestProps}
+                                                    getSuggestionValue={suggestion => searchCategories.searchText}
+                                                    onSuggestionSelected={(event, { suggestion, method }) => {
+                                                        if (method === "enter") {
+                                                            event.preventDefault();
+                                                        }
+                                                        !_.find(categories, ['name', suggestion.name]) &&
+                                                            setCategories([suggestion, ...categories]);
+                                                        //setForm(_.set({ ...form }, 'categories', suggestion['@id']))
+                                                        //hideSearch();
+                                                        popperNode.current.focus();
+                                                    }}
+                                                    required
+                                                    inputProps={{
+                                                        classes,
+                                                        label: 'Produits',
+                                                        placeholder: "Produit (ex: Rayonnage lourd)",
+                                                        value: searchCategories.searchText,
+                                                        variant: "outlined",
+                                                        name: "categories",
+                                                        onChange: handleChangeSearch,
+                                                        onFocus: showSearch,
+                                                        InputLabelProps: {
+                                                            shrink: true,
+                                                        }
+
+                                                    }}
+                                                    theme={{
+                                                        container: classes.container,
+                                                        suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                                        suggestionsList: classes.suggestionsList,
+                                                        suggestion: classes.suggestion,
+                                                    }}
+                                                    renderSuggestionsContainer={options => (
+                                                        <Popper
+                                                            anchorEl={popperNode.current}
+                                                            open={Boolean(options.children) || searchCategories.noSuggestions || searchCategories.loading}
+                                                            popperOptions={{ positionFixed: true }}
+                                                            className="z-9999 mb-8"
+                                                        >
+                                                            <div ref={suggestionsNode}>
+                                                                <Paper
+                                                                    elevation={1}
+                                                                    square
+                                                                    {...options.containerProps}
+                                                                    style={{ width: popperNode.current ? popperNode.current.clientWidth : null }}
+                                                                >
+                                                                    {options.children}
+                                                                    {searchCategories.noSuggestions && (
+                                                                        <Typography className="px-16 py-12">
+                                                                            Aucun résultat..
+                                                                        </Typography>
+                                                                    )}
+                                                                    {searchCategories.loading && (
+                                                                        <div className="px-16 py-12 text-center">
+                                                                            <CircularProgress color="secondary" /> <br /> Chargement ...
+                                                                        </div>
+                                                                    )}
+                                                                </Paper>
+                                                            </div>
+                                                        </Popper>
+                                                    )}
                                                 />
-                                            ))
+                                            </div>
+                                            <div className={clsx(classes.chips)}>
+                                                {
+                                                    categories && categories.length > 0 ?
+                                                        categories.map((item, index) => (
+                                                            <Chip
+                                                                key={index}
+                                                                label={item.name}
+                                                                onDelete={() => handleDelete(item.id)}
+                                                                className="mt-8 mr-8"
+                                                            />
+                                                        ))
+                                                        :
+                                                        <Typography variant="caption" className="my-16">
+                                                            Aucun produit sélectionné
+                                                </Typography>
 
 
-                                        }
-                                    </div>
+                                                }
+                                            </div>
+
+                                            <Button
+                                                type="submit"
+                                                variant="contained"
+                                                color="primary"
+                                                className="w-200 pr-auto mt-16 normal-case"
+                                                aria-label="Sauvegarder"
+                                                disabled={fournisseur.loading || !categories.length}
+                                                value="legacy"
+                                            >
+                                                Sauvegarder
+                                                {fournisseur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                            </Button>
+                                        </Formsy>
+                                    </Grid>
                                     {
-                                        /**
-                                         * 
-                                                                        <Button
-                                                                            type="submit"
-                                                                            variant="contained"
-                                                                            color="primary"
-                                                                            className="w-200 pr-auto mt-16 normal-case"
-                                                                            aria-label="Sauvegarder"
-                                                                            disabled={!isFormValid || fournisseur.loading || !form.categories}
-                                                                            value="legacy"
-                                                                        >
-                                                                            Sauvegarder
-                                                                            {fournisseur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                    
-                                                                        </Button>
-                                         */
+                                        fournisseur.data.autreCategories &&
+                                        <Grid item xs={12} sm={6}>
+                                            <Formsy>
+                                                <>
+                                                    <Typography variant="h6" color="secondary" className="uppercase mb-16  border-l-8 pl-16">
+                                                        Produits suggérés
+                                                    </Typography>
+                                                    <Typography paragraph className="flex items-center">
+                                                        {fournisseur.data.autreCategories}
+                                                        <Button
+                                                            variant="contained"
+                                                            color="secondary"
+                                                            size="small"
+                                                            disabled={!fournisseur.data.autreCategories || fournisseur.loading}
+                                                            className="ml-16 normal-case"
+                                                            onClick={() => dispatch(Actions.viderAutreCategories(form.id))}
+                                                            aria-label="Clear"
+                                                        >
+                                                            Vider les suggestions
+                                                    {fournisseur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+
+                                                        </Button>
+                                                    </Typography>
+                                                </>
+
+                                                <Grid container spacing={3} className="mt-16">
+                                                    <Grid item xs={12} className="flex items-center">
+                                                        <SelectReactFormsy
+                                                            id="secteur"
+                                                            name="secteur"
+                                                            className="flex-1"
+                                                            value={
+                                                                secteur
+                                                            }
+                                                            onChange={(value) => handleChipSuggestionChange(value, 'secteur')}
+                                                            placeholder="Sélectionner un secteur"
+                                                            textFieldProps={{
+                                                                label: 'Secteurs',
+                                                                InputLabelProps: {
+                                                                    shrink: true
+                                                                },
+                                                                variant: 'outlined',
+                                                                required: 'required'
+                                                            }}
+                                                            isLoading={fournisseur.loadingSecteurs}
+                                                            options={fournisseur.secteurs}
+                                                            fullWidth
+                                                        />
+                                                        <IconButton
+                                                            color="secondary"
+                                                            onClick={handleClickOpenSecteur}
+                                                        >
+                                                            <Icon>add_circle</Icon>
+                                                        </IconButton>
+                                                        <Dialog open={openSecteur} onClose={handleCloseSecteur} aria-labelledby="form-dialog-title">
+                                                            <DialogTitle id="form-dialog-title">Nouveau secteur</DialogTitle>
+                                                            <DialogContent>
+
+                                                                <Grid container spacing={3} >
+
+                                                                    <Grid item xs={12}>
+                                                                        <TextField
+                                                                            className="mt-8"
+                                                                            error={nouveauSecteur.length <= 2}
+                                                                            required
+                                                                            label="Secteur"
+                                                                            autoFocus
+                                                                            value={nouveauSecteur}
+                                                                            id="nouveauSecteur"
+                                                                            name="nouveauSecteur"
+                                                                            onChange={(event) => setNouveauSecteur(event.target.value)}
+                                                                            variant="outlined"
+                                                                            fullWidth
+                                                                            helperText={nouveauSecteur.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
+                                                                        />
+                                                                    </Grid>
+
+                                                                </Grid>
+                                                            </DialogContent>
+                                                            <Divider />
+                                                            <DialogActions>
+                                                                <Button onClick={handleCloseSecteur} variant="outlined" color="primary">
+                                                                    Annuler
+                                                            </Button>
+                                                                <Button onClick={handleAddNouveauSecteur} variant="contained" color="secondary"
+                                                                    disabled={fournisseur.loadingAddSecteurs || nouveauSecteur.length < 2}
+                                                                >
+                                                                    Sauvegarder
+                                                                {fournisseur.loadingAddSecteurs && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                                </Button>
+                                                            </DialogActions>
+                                                        </Dialog>
+
+                                                    </Grid>
+
+                                                    <Grid item xs={12} className="flex items-center">
+                                                        <SelectReactFormsy
+                                                            id="sousSecteurs"
+                                                            name="sousSecteurs"
+                                                            className="flex-1"
+                                                            value={
+                                                                sousSecteur
+                                                            }
+                                                            onChange={(value) => handleChipSuggestionChange(value, 'sousSecteurs')}
+                                                            placeholder="Sélectionner une avtivité"
+                                                            textFieldProps={{
+                                                                label: 'Activités',
+                                                                InputLabelProps: {
+                                                                    shrink: true
+                                                                },
+                                                                variant: 'outlined',
+                                                                required: 'required',
+                                                                fullWidth: 'fullWidth'
+
+                                                            }}
+                                                            isLoading={fournisseur.loadingSousSecteurs}
+                                                            options={fournisseur.sousSecteurs}
+                                                        />
+                                                        <IconButton
+                                                            color="secondary"
+                                                            disabled={!secteur}
+                                                            onClick={handleClickOpenActivite}
+                                                        >
+                                                            <Icon>add_circle</Icon>
+                                                        </IconButton>
+                                                        <Dialog open={openActivite} onClose={handleCloseActivite} aria-labelledby="form-dialog-title">
+                                                            <DialogTitle id="form-dialog-title">Nouvelle activité</DialogTitle>
+                                                            <DialogContent>
+
+                                                                <Grid container spacing={3} >
+
+                                                                    <Grid item xs={12}>
+                                                                        <TextField
+                                                                            className="mt-8"
+                                                                            error={nouvelleActivite.length <= 2}
+                                                                            required
+                                                                            label="Activité"
+                                                                            autoFocus
+                                                                            value={nouvelleActivite}
+                                                                            id="nouvelleActivite"
+                                                                            name="nouvelleActivite"
+                                                                            onChange={(event) => setNouvelleActivite(event.target.value)}
+                                                                            variant="outlined"
+                                                                            fullWidth
+                                                                            helperText={nouvelleActivite.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
+                                                                        />
+                                                                    </Grid>
+
+                                                                </Grid>
+                                                            </DialogContent>
+                                                            <Divider />
+                                                            <DialogActions>
+                                                                <Button onClick={handleCloseActivite} variant="outlined" color="primary">
+                                                                    Annuler
+                                                            </Button>
+                                                                <Button onClick={handleAddNouveauActivite} variant="contained" color="secondary"
+                                                                    disabled={nouvelleActivite.length < 2}
+                                                                >
+                                                                    Sauvegarder
+                                                    </Button>
+                                                            </DialogActions>
+                                                        </Dialog>
+
+                                                    </Grid>
+
+                                                    <Grid item xs={12} >
+                                                        <TextField
+                                                            required
+                                                            label="Produit"
+                                                            autoFocus
+                                                            value={produit}
+                                                            disabled={!sousSecteur}
+                                                            id="produit"
+                                                            name="produit"
+                                                            onChange={(event) => setProduit(event.target.value)}
+                                                            variant="outlined"
+                                                            fullWidth
+                                                            helperText={produit.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
+                                                        />
+                                                    </Grid>
+
+                                                </Grid>
+
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    disabled={produit.length <= 2 || fournisseur.loadingProduit}
+                                                    className="w-200 pr-auto mt-16 normal-case"
+                                                    onClick={() => dispatch(Actions.addProduit(sousSecteur.value, produit))}
+                                                    aria-label="Ajouter"
+                                                >
+                                                    Ajouter
+                                                    {fournisseur.loadingProduit && <CircularProgress size={24} className={classes.buttonProgress} />}
+
+                                                </Button>
+                                            </Formsy>
+                                        </Grid>
                                     }
 
-                                </Formsy>
+                                </Grid>
+
+
+
                             )}
                             {tabValue === 2 && (
                                 <Formsy

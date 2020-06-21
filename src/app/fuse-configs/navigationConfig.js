@@ -68,6 +68,34 @@ const navigationConfig = [
 
     },
     {
+        'id': 'acheteur-admin',
+        'title': 'Acheteurs',
+        'auth': authRoles.admin,
+        'type': 'item',
+        'icon': 'supervisor_account',
+        'url': '/users/acheteurs',
+        'badge': {
+            'title': 'acheteur-admin',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        }
+    },
+    {
+        'id': 'fournisseurs-admin',
+        'title': 'Fournisseurs',
+        'auth': authRoles.admin,
+        'type': 'item',
+        'icon': 'supervisor_account',
+        'url': '/users/fournisseurs',
+        'badge': {
+            'title': 'fournisseurs-admin',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        },
+    },
+    {
         'id': 'utilisateurs',
         'title': 'Utilisateur',
         'auth': authRoles.admin,
@@ -80,22 +108,8 @@ const navigationConfig = [
                 'type': 'collapse',
                 'icon': 'group',
                 'children': [
-                    {
-                        'id': 'acheteur-admin',
-                        'title': 'Acheteurs',
-                        'auth': authRoles.admin,
-                        'type': 'item',
-                        'icon': 'supervisor_account',
-                        'url': '/users/acheteurs',
-                    },
-                    {
-                        'id': 'fournisseurs-admin',
-                        'title': 'Fournisseurs',
-                        'auth': authRoles.admin,
-                        'type': 'item',
-                        'icon': 'supervisor_account',
-                        'url': '/users/fournisseurs',
-                    },
+                    
+                   
                     {
                         'id': 'admins-component',
                         'title': 'Admins',

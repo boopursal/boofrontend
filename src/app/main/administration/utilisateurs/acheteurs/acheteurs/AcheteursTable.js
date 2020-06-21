@@ -126,6 +126,14 @@ function AcheteursTable(props) {
                             Header: "Société",
                             accessor: "societe",
                             filterable: true,
+                            getProps: (state, rowInfo, column) => {
+                                return {
+                                   
+                                    style: {
+                                        color: rowInfo && (rowInfo.original.ville && rowInfo.original.ville.id === 113)  ? 'orange' : null,
+                                    },
+                                };
+                            },
 
                         },
                         {

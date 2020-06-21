@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar, MenuItem } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar, MenuItem, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFormsy, SelectFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
@@ -14,7 +14,6 @@ import green from '@material-ui/core/colors/green';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -102,7 +101,7 @@ function Acheteur(props) {
     useEffect(() => {
         if (acheteur.data && !form) {
             if (acheteur.data.pays)
-                dispatch(Actions.getVilles(acheteur.data.pays.id));
+                dispatch(Actions.getVilles(acheteur.data.pays['@id']));
         }
 
     }, [dispatch, acheteur.data, form]);
@@ -142,10 +141,21 @@ function Acheteur(props) {
                 label: acheteur.data.pays.name,
             });
         }
-
     }, [form, acheteur.data, setForm]);
 
+    useEffect(() => {
+        if (acheteur.data && acheteur.villeAdded) {
+            setForm({ ...acheteur.data });
+            setVille({
+                value: acheteur.data.ville['@id'],
+                label: acheteur.data.ville.name,
+            });
+            return () => {
+                dispatch(Actions.cleanUpAddedVille())
+            }
+        }
 
+    }, [form, acheteur.villeAdded, acheteur.data, setForm]);
     useEffect(() => {
 
         if (acheteur.avatar) {
@@ -558,14 +568,6 @@ function Acheteur(props) {
                                                     name="codepostal"
                                                     value={String(form.codepostal)}
                                                     onChange={handleChange}
-                                                    validations={{
-                                                        minLength: 5,
-                                                        maxLength: 5,
-                                                    }}
-                                                    validationErrors={{
-                                                        minLength: 'La longueur minimale de caractère est 5',
-                                                        maxLength: 'La longueur maximale de caractère est 5',
-                                                    }}
                                                     autoComplete="codepostal"
                                                     label="Code Postal"
                                                     variant="outlined"
@@ -595,6 +597,34 @@ function Acheteur(props) {
                                                 onChange={(value) => handleChipChange(value, 'ville')}
                                                 required
                                             />
+
+                                            {
+                                                (ville.label === 'Autre' || ville.label === 'autre') &&
+                                                <TextFieldFormsy
+                                                    className="mb-5 mt-20  w-full"
+                                                    type="text"
+                                                    name="autreVille"
+                                                    onChange={handleChange}
+                                                    value={form.autreVille}
+                                                    label="Autre ville"
+                                                    InputProps={{
+                                                        endAdornment:
+                                                            acheteur.loadingAddVille ?
+                                                                <CircularProgress color="secondary" />
+                                                                :
+                                                                (<InputAdornment position="end">
+                                                                    <IconButton
+                                                                        color="secondary"
+                                                                        disabled={!form.autreVille}
+                                                                        onClick={(ev) => dispatch(Actions.addVille(form.autreVille, form.pays.id, form.id))}
+                                                                    >
+                                                                        <Icon>add_circle</Icon>
+                                                                    </IconButton>
+                                                                </InputAdornment>)
+                                                    }}
+                                                    variant="outlined"
+                                                />
+                                            }
 
                                         </Grid>
 

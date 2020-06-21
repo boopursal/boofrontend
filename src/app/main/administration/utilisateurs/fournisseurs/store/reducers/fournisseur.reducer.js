@@ -1,5 +1,4 @@
 import * as Actions from '../actions';
-import _ from '@lodash';
 
 const initialState = {
     pays: null,
@@ -12,10 +11,124 @@ const initialState = {
     fournisseurReqInProgress: false,
     avatar: null,
     fournisseur_deleted: null,
+    loadingAddVille: false,
+    villeAdded: false,
+    loadingAddSecteurs: false,
+    loadingSecteurs: false,
+    loadingProduit: false,
+    loadingSousSecteurs: false,
+    secteurs: [],
+    sousSecteurs: [],
+    produit: null
+
 };
 
 const fournisseurReducer = function (state = initialState, action) {
     switch (action.type) {
+        case Actions.REQUEST_ADD_PRODUIT:
+            {
+                return {
+                    ...state,
+                    loadingProduit: true,
+
+                }
+            }
+        case Actions.SAVE_ADD_PRODUIT:
+            {
+                return {
+                    ...state,
+                    loadingProduit: false,
+                    produit: action.payload
+
+                }
+            }
+        case Actions.SAVE_ERROR_ADD_PRODUIT:
+            {
+                return {
+                    ...state,
+                    loadingProduit: false,
+
+                }
+            }
+        case Actions.REQUEST_ADD_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingAddSecteurs: true,
+
+                }
+            }
+        case Actions.SAVE_ADD_SECTEUR:
+        case Actions.SAVE_ERROR_ADD_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingAddSecteurs: false,
+
+                }
+            }
+        case Actions.REQUEST_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingSecteurs: true,
+                    sousSecteurs: [],
+
+                }
+            }
+        case Actions.REQUEST_SOUS_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingSousSecteurs: true,
+
+                }
+            }
+        case Actions.GET_SECTEUR:
+            {
+                return {
+                    ...state,
+                    secteurs: action.payload['hydra:member'],
+                    loadingSecteurs: false
+                };
+            }
+        case Actions.GET_SOUS_SECTEUR:
+            {
+                return {
+                    ...state,
+                    sousSecteurs: action.payload['hydra:member'],
+                    loadingSousSecteurs: false
+                };
+            }
+        case Actions.REQUEST_ADD_VILLE:
+            {
+                return {
+                    ...state,
+                    loadingAddVille: true,
+                }
+            }
+        case Actions.SAVE_ADD_VILLE:
+            {
+                return {
+                    ...state,
+                    loadingAddVille: false,
+                    villeAdded: true,
+                }
+            }
+        case Actions.SAVE_ERROR_ADD_VILLE:
+            {
+                return {
+                    ...state,
+                    loadingAddVille: false,
+                }
+            }
+        case Actions.CLEAN_UP_VILLE:
+            {
+                return {
+                    ...state,
+                    villeAdded: false,
+                }
+            }
         case Actions.CLEAN_UP_FOURNISSEUR:
             {
                 return {
@@ -30,6 +143,8 @@ const fournisseurReducer = function (state = initialState, action) {
                     fournisseurReqInProgress: false,
                     avatar: null,
                     fournisseur_deleted: null,
+                    loadingSecteurs: false,
+                    secteurs: [],
                 }
             }
         case Actions.REQUEST_UPDATE_FOURNISSEUR:
@@ -61,23 +176,15 @@ const fournisseurReducer = function (state = initialState, action) {
                     ...state,
                     data: action.payload,
                     requestFournisseur: false,
-                    error: null
-
-
+                    error: null,
                 };
             }
-        case Actions.GET_SOUS_SECTEUR:
-            {
-                return {
-                    ...state,
-                    sousSecteurs: action.payload
-                };
-            }
+
         case Actions.GET_PAYS:
             {
                 return {
                     ...state,
-                    pays: _.keyBy(action.payload, 'id'),
+                    pays: action.payload,
                     loading: false
 
                 };
@@ -87,7 +194,7 @@ const fournisseurReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    villes: _.keyBy(action.payload, 'id'),
+                    villes: [...action.payload, { '@id': '/api/villes/113', name: 'Autre' }],
                 };
             }
         case Actions.UPDATE_FOURNISSEUR:
@@ -95,8 +202,8 @@ const fournisseurReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: false,
-                    data : action.payload,
-                    error: null
+                    data: action.payload,
+                    error: null,
 
                 };
             }

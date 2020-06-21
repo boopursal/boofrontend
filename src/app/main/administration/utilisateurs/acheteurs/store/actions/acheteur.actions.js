@@ -2,6 +2,7 @@ import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
 import { showMessage } from 'app/store/actions/fuse';
 import _ from '@lodash';
+import * as Actions from '@fuse/components/FuseNavigation/store/actions';
 
 export const REQUEST_ACHETEUR = '[ACHETEURS ADMIN APP] REQUEST ACHETEUR';
 export const GET_ACHETEUR = '[ACHETEURS ADMIN APP] GET ACHETEUR';
@@ -13,6 +14,11 @@ export const SAVE_ERROR = '[ACHETEURS ADMIN APP] SAVE ERROR';
 export const UPDATE_ACHETEUR = '[ACHETEURS ADMIN APP] UPDATE ACHETEUR';
 export const REQUEST_UPDATE_ACHETEUR = '[ACHETEURS ADMIN APP] REQUEST UPDATE_ACHETEUR';
 export const GET_SECTEURS = '[ACHETEURS ADMIN APP] GET_SECTEURS';
+
+export const REQUEST_ADD_VILLE = '[ACHETEURS ADMIN APP] REQUEST_ADD_VILLE';
+export const SAVE_ADD_VILLE = '[ACHETEURS ADMIN APP] SAVE_ADD_VILLE';
+export const SAVE_ERROR_ADD_VILLE = '[ACHETEURS ADMIN APP] SAVE_ERROR_ADD_VILLE';
+export const CLEAN_UP_VILLE = '[ACHETEURS ADMIN APP] CLEAN_UP_VILLE';
 
 export const UPLOAD_AVATAR = '[ACHETEURS ADMIN APP] UPLOAD AVATAR';
 export const UPLOAD_REQUEST = '[ACHETEURS ADMIN APP] UPLOAD REQUEST';
@@ -28,6 +34,15 @@ export function cleanUpAcheteur() {
         type: CLEAN_UP_ACHETEUR,
     });
 }
+
+
+export function cleanUpAddedVille() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_VILLE,
+    });
+}
+
 
 export function getAcheteur(id_acheteur) {
     const request = agent.get(`/api/acheteurs/${id_acheteur}`);
@@ -68,7 +83,7 @@ export function getPays() {
 }
 
 export function getVilles(pays_id) {
-    const request = agent.get(`/api/pays/${pays_id}/villes?pagination=false&props[]=id&props[]=name`);
+    const request = agent.get(`${pays_id}/villes?pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
         dispatch({
@@ -86,12 +101,67 @@ export function getVilles(pays_id) {
 
 }
 
+export function addVille(name, pays_id, acheteur_id) {
+
+    let data = {
+        name,
+        pays: `/api/pays/${pays_id}`
+    }
+
+    const request = agent.post(`/api/villes`, data);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_ADD_VILLE,
+        });
+        dispatch({
+            type: REQUEST_UPDATE_ACHETEUR,
+        });
+        return request.then((response) => {
+            dispatch(getVilles(`/api/pays/${pays_id}`));
+            let data = {
+                ville: response.data['@id'],
+                autreVille: null
+            }
+            const request2 = agent.put(`/api/acheteurs/${acheteur_id}`, data);
+            return request2.then((response) => {
+                dispatch(Actions.getCountForBadge('acheteur-admin'));
+                dispatch({
+                    type: UPDATE_ACHETEUR,
+                    payload: response.data
+                });
+                dispatch({
+                    type: SAVE_ADD_VILLE,
+                });
+            });
+        }).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR_ADD_VILLE,
+            });
+            dispatch(
+                showMessage({
+                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                        return value;
+                    }),//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }));
+        });;
+
+    }
+
+}
+
 
 export function getSecteurs() {
     const request = agent.get(`/api/secteurs?pagination=false&props[]=id&props[]=name`);
 
     return (dispatch) => {
-       
+
         return request.then((response) => {
             dispatch({
                 type: GET_SECTEURS,
@@ -108,22 +178,21 @@ export function getSecteurs() {
 export function updateSocieteInfo(data, id_acheteur) {
 
 
-    if (data.pays.label !== 'Maroc') {
-        data.ice = null;
+    let putData = {
+        ...data,
+        ice: data.pays.label !== 'Maroc' && null,
+        pays: data.pays.value,
+        ville: data.ville.value,
+        secteur: data.secteur.value,
+        codepostal: data.codepostal ? parseInt(data.codepostal) : null,
     }
-    data.pays =  data.pays.value;
-    data.ville =  data.ville.value;
-    data.secteur =  data.secteur.value;
-
-    if (data.codepostal === null) {
-        delete data.codepostal;
-    } else {
-        data.codepostal = parseInt(data.codepostal);
+    if (putData.codepostal === null) {
+        delete putData.codepostal;
     }
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
 
-        const request = agent.put(`/api/acheteurs/${id_acheteur}`, data);
+        const request = agent.put(`/api/acheteurs/${id_acheteur}`, putData);
         dispatch({
             type: REQUEST_UPDATE_ACHETEUR,
         });
@@ -152,36 +221,35 @@ export function updateSocieteInfo(data, id_acheteur) {
 
 }
 
-export function etatAcheteur(acheteur,active)
-{
-    
-    let Updateacheteur = {isactif : active}
-    return (dispatch, getState) => {
+export function etatAcheteur(acheteur, active) {
+
+    let Updateacheteur = { isactif: active }
+    return (dispatch) => {
         dispatch({
             type: REQUEST_UPDATE_ACHETEUR,
         });
-        const request = agent.put(acheteur['@id'],Updateacheteur);
+        const request = agent.put(acheteur['@id'], Updateacheteur);
         return request.then((response) =>
             Promise.all([
                 dispatch({
                     type: UPDATE_ACHETEUR,
                     payload: response.data
                 }),
-                dispatch(showMessage({message: 'Statut modifié!',anchorOrigin: {
-                    vertical  : 'top',//top bottom
-                    horizontal: 'right'//left center right
-                },
-                variant: 'success'}))
+                dispatch(showMessage({
+                    message: 'Statut modifié!', anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'success'
+                }))
             ])
         );
     };
 }
 
-
-
 export function updateUserInfo(data, id_acheteur) {
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
 
         const request = agent.put(`/api/acheteurs/${id_acheteur}`, data);
         dispatch({
@@ -216,7 +284,7 @@ export function updateUserInfo(data, id_acheteur) {
 
 export function uploadAvatar(file, id_acheteur) {
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
 
         const formData = new FormData();
         formData.append("file", file);
@@ -264,9 +332,7 @@ export function uploadAvatar(file, id_acheteur) {
 
 export function updateUserAvatar(data, id_acheteur) {
 
-
-
-    return (dispatch, getState) => {
+    return (dispatch) => {
 
         const request = agent.put(`/api/acheteurs/${id_acheteur}`, data);
         dispatch({

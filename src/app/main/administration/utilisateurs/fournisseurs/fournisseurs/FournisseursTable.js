@@ -120,6 +120,7 @@ function FournisseursTable(props) {
 
                             ,
                             className: "justify-center",
+                           
                             width: 64,
                             sortable: false
                         },
@@ -127,6 +128,14 @@ function FournisseursTable(props) {
                             Header: "Société",
                             accessor: "societe",
                             filterable: true,
+                            getProps: (state, rowInfo, column) => {
+                                return {
+                                   
+                                    style: {
+                                        color: rowInfo && (rowInfo.original.autreCategories || (rowInfo.original.ville && rowInfo.original.ville.id === 113))  ? 'orange' : null,
+                                    },
+                                };
+                            },
 
                         },
                         {
@@ -141,16 +150,18 @@ function FournisseursTable(props) {
                             filterable: true,
 
                         },
-                        {
-                            Header: "Email",
-                            accessor: "email",
-                            filterable: true,
-
-                        },
+                       
                         {
                             Header: "Téléphone",
                             accessor: "phone",
                             filterable: true,
+
+                        },
+                        {
+                            Header: "Ville",
+                            accessor: "ville.name",
+                            filterable: true,
+                            Cell: row => row.original.ville && row.original.ville.name
 
                         },
                         {
