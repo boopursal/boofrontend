@@ -3,27 +3,22 @@ import _ from '@lodash';
 
 class EventEmitter {
 
-    constructor()
-    {
+    constructor() {
         this.events = {};
     }
 
-    _getEventListByName(eventName)
-    {
-        if ( typeof this.events[eventName] === 'undefined' )
-        {
+    _getEventListByName(eventName) {
+        if (typeof this.events[eventName] === 'undefined') {
             this.events[eventName] = new Set();
         }
         return this.events[eventName]
     }
 
-    on(eventName, fn)
-    {
+    on(eventName, fn) {
         this._getEventListByName(eventName).add(fn);
     }
 
-    once(eventName, fn)
-    {
+    once(eventName, fn) {
 
         const self = this;
 
@@ -35,8 +30,7 @@ class EventEmitter {
 
     }
 
-    emit(eventName, ...args)
-    {
+    emit(eventName, ...args) {
 
         this._getEventListByName(eventName).forEach(function (fn) {
 
@@ -46,18 +40,15 @@ class EventEmitter {
 
     }
 
-    removeListener(eventName, fn)
-    {
+    removeListener(eventName, fn) {
         this._getEventListByName(eventName).delete(fn);
     }
 }
 
 class FuseUtils {
 
-    static filterArrayByString(mainArr, searchText)
-    {
-        if ( searchText === '' )
-        {
+    static filterArrayByString(mainArr, searchText) {
+        if (searchText === '') {
             return mainArr;
         }
 
@@ -68,22 +59,21 @@ class FuseUtils {
         });
     };
 
-    static parseApiErrors(error)
-    {
-        if(error.response.data.violations){
+    static parseApiErrors(error) {
+        if (error.response.data.violations) {
             return error.response.data.violations.reduce(
-                (parsedErrors,violation)=>{
-                    parsedErrors[violation['propertyPath']]=violation['message'];
+                (parsedErrors, violation) => {
+                    parsedErrors[violation['propertyPath']] = violation['message'];
                     return parsedErrors;
                 },
                 {}
             );
         }
-        else if(error.response.data['hydra:description']){
-            return {"Erreur":error.response.data['hydra:description'] };
+        else if (error.response.data['hydra:description']) {
+            return { "Erreur": error.response.data['hydra:description'] };
         }
         else
-        return {"Erreur":'Une erreur est survenue, veuillez recommencer'}
+            return { "Erreur": 'Une erreur est survenue, veuillez recommencer' }
         /*return error.response.data.violations.reduce(
             (parsedErrors,violation)=>{
                 parsedErrors[violation['propertyPath']]=violation['message'];
@@ -93,20 +83,18 @@ class FuseUtils {
         );*/
     }
 
-    static getUrl()
-    {
-      return "https://it.3findustrie.com";
-      //return "http://192.168.1.124:8000";
-      //return "http://192.168.1.124:8000";
-      //return "https://enigmatic-bastion-83517.herokuapp.com/";
+    static getUrl() {
+        return "https://it.3findustrie.com";
+        //return "http://192.168.11.124:8000";
+        //return "http://192.168.1.124:8000";
+        //return "https://enigmatic-bastion-83517.herokuapp.com/";
     }
 
-    static hydraPageCount(collection)
-    {
-        if(!collection['hydra:view']){
+    static hydraPageCount(collection) {
+        if (!collection['hydra:view']) {
             return 1;
         }
-        if(!collection['hydra:view']['hydra:last']){
+        if (!collection['hydra:view']['hydra:last']) {
             return 1;
         }
         return Number(
@@ -114,94 +102,72 @@ class FuseUtils {
         );
     }
 
-    static searchInObj(itemObj, searchText)
-    {
-        for ( const prop in itemObj )
-        {
-            if ( !itemObj.hasOwnProperty(prop) )
-            {
+    static searchInObj(itemObj, searchText) {
+        for (const prop in itemObj) {
+            if (!itemObj.hasOwnProperty(prop)) {
                 continue;
             }
 
             const value = itemObj[prop];
 
-            if ( typeof value === 'string' )
-            {
-                if ( this.searchInString(value, searchText) )
-                {
+            if (typeof value === 'string') {
+                if (this.searchInString(value, searchText)) {
                     return true;
                 }
             }
 
-            else if ( Array.isArray(value) )
-            {
-                if ( this.searchInArray(value, searchText) )
-                {
+            else if (Array.isArray(value)) {
+                if (this.searchInArray(value, searchText)) {
                     return true;
                 }
             }
 
-            if ( typeof value === 'object' )
-            {
-                if ( this.searchInObj(value, searchText) )
-                {
+            if (typeof value === 'object') {
+                if (this.searchInObj(value, searchText)) {
                     return true;
                 }
             }
         }
     }
 
-    static searchInArray(arr, searchText)
-    {
-        for ( const value of arr )
-        {
-            if ( typeof value === 'string' )
-            {
-                if ( this.searchInString(value, searchText) )
-                {
+    static searchInArray(arr, searchText) {
+        for (const value of arr) {
+            if (typeof value === 'string') {
+                if (this.searchInString(value, searchText)) {
                     return true;
                 }
             }
 
-            if ( typeof value === 'object' )
-            {
-                if ( this.searchInObj(value, searchText) )
-                {
+            if (typeof value === 'object') {
+                if (this.searchInObj(value, searchText)) {
                     return true;
                 }
             }
         }
     }
 
-    static searchInString(value, searchText)
-    {
+    static searchInString(value, searchText) {
         return value.toLowerCase().includes(searchText);
     }
 
-    static generateGUID()
-    {
-        function S4()
-        {
+    static generateGUID() {
+        function S4() {
             return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
         }
 
         return S4() + S4();
     }
 
-    static toggleInArray(item, array)
-    {
-        if ( array.indexOf(item) === -1 )
-        {
+    static toggleInArray(item, array) {
+        if (array.indexOf(item) === -1) {
             array.push(item);
         }
-        else
-        {
+        else {
             array.splice(array.indexOf(item), 1);
         }
     }
 
-    static handleize(text)
-    {
+    static handleize(text) {
         return text.toString().toLowerCase()
             .replace(/\s+/g, '-')           // Replace spaces with -
             .replace(/\W+/g, '')       // Remove all non-word chars
@@ -210,18 +176,16 @@ class FuseUtils {
             .replace(/-+$/, '');            // Trim - from end of text
     }
 
-    static setRoutes(config)
-    {
+    static setRoutes(config) {
         let routes = [...config.routes];
 
-        if ( config.settings || config.auth )
-        {
+        if (config.settings || config.auth) {
             routes = routes.map((route) => {
                 let auth = config.auth ? [...config.auth] : null;
                 auth = route.auth ? [...auth, ...route.auth] : auth;
                 return {
                     ...route,
-                    settings: {...config.settings, ...route.settings},
+                    settings: { ...config.settings, ...route.settings },
                     auth
                 };
             });
@@ -230,8 +194,7 @@ class FuseUtils {
         return [...routes];
     }
 
-    static generateRoutesFromConfigs(configs)
-    {
+    static generateRoutesFromConfigs(configs) {
         let allRoutes = [];
         configs.forEach((config) => {
             allRoutes = [
@@ -242,21 +205,16 @@ class FuseUtils {
         return allRoutes;
     }
 
-    static findById(o, id)
-    {
+    static findById(o, id) {
         //Early return
-        if ( o.id === id )
-        {
+        if (o.id === id) {
             return o;
         }
         let result, p;
-        for ( p in o )
-        {
-            if ( o.hasOwnProperty(p) && typeof o[p] === 'object' )
-            {
+        for (p in o) {
+            if (o.hasOwnProperty(p) && typeof o[p] === 'object') {
                 result = this.findById(o[p], id);
-                if ( result )
-                {
+                if (result) {
                     return result;
                 }
             }
@@ -264,34 +222,28 @@ class FuseUtils {
         return result;
     }
 
-    static getFlatNavigation(navigationItems, flatNavigation)
-    {
+    static getFlatNavigation(navigationItems, flatNavigation) {
         flatNavigation = flatNavigation ? flatNavigation : [];
-        for ( const navItem of navigationItems )
-        {
-            if ( navItem.type === 'subheader' )
-            {
+        for (const navItem of navigationItems) {
+            if (navItem.type === 'subheader') {
                 continue;
             }
 
-            if ( navItem.type === 'item' )
-            {
+            if (navItem.type === 'item') {
                 flatNavigation.push({
-                    id   : navItem.id,
+                    id: navItem.id,
                     title: navItem.title,
-                    type : navItem.type,
-                    icon : navItem.icon || false,
-                    url  : navItem.url,
-                    auth : navItem.auth || null
+                    type: navItem.type,
+                    icon: navItem.icon || false,
+                    url: navItem.url,
+                    auth: navItem.auth || null
                 });
 
                 continue;
             }
 
-            if ( navItem.type === 'collapse' || navItem.type === 'group' )
-            {
-                if ( navItem.children )
-                {
+            if (navItem.type === 'collapse' || navItem.type === 'group') {
+                if (navItem.children) {
                     this.getFlatNavigation(navItem.children, flatNavigation);
                 }
             }
@@ -300,8 +252,7 @@ class FuseUtils {
         return flatNavigation;
     }
 
-    static randomMatColor(hue)
-    {
+    static randomMatColor(hue) {
         hue = hue ? hue : '400';
         const mainColors = [
             'red',
@@ -325,13 +276,10 @@ class FuseUtils {
         return colors[randomColor][hue];
     }
 
-    static difference(object, base)
-    {
-        function changes(object, base)
-        {
+    static difference(object, base) {
+        function changes(object, base) {
             return _.transform(object, function (result, value, key) {
-                if ( !_.isEqual(value, base[key]) )
-                {
+                if (!_.isEqual(value, base[key])) {
                     result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
                 }
             });
@@ -342,53 +290,43 @@ class FuseUtils {
 
     static EventEmitter = EventEmitter;
 
-    static updateNavItem(nav, id, item)
-    {
+    static updateNavItem(nav, id, item) {
         return nav.map(_item => {
 
-            if ( _item.id === id )
-            {
+            if (_item.id === id) {
                 return _.merge({}, _item, item);
             }
 
-            if ( _item.children )
-            {
+            if (_item.children) {
                 return _.merge({}, _item, {
                     children: this.updateNavItem(_item.children, id, item)
                 });
             }
-            else
-            {
+            else {
                 return _.merge({}, _item);
             }
         })
     }
 
-    static removeNavItem(nav, id)
-    {
+    static removeNavItem(nav, id) {
         return nav.map(_item => {
-            if ( _item.id === id )
-            {
+            if (_item.id === id) {
                 return null;
             }
 
-            if ( _item.children )
-            {
+            if (_item.children) {
                 return _.merge({}, _.omit(_item, ['children']), {
                     children: this.removeNavItem(_item.children, id)
                 });
             }
-            else
-            {
+            else {
                 return _.merge({}, _item);
             }
         }).filter(s => s)
     }
 
-    static prependNavItem(nav, item, parentId)
-    {
-        if ( !parentId )
-        {
+    static prependNavItem(nav, item, parentId) {
+        if (!parentId) {
             return [
                 item,
                 ...nav
@@ -397,8 +335,7 @@ class FuseUtils {
 
         return nav.map(_item => {
 
-            if ( _item.id === parentId && _item.children )
-            {
+            if (_item.id === parentId && _item.children) {
                 return {
                     _item,
                     children: [
@@ -408,23 +345,19 @@ class FuseUtils {
                 };
             }
 
-            if ( _item.children )
-            {
+            if (_item.children) {
                 return _.merge({}, _item, {
                     children: this.prependNavItem(_item.children, item, parentId)
                 });
             }
-            else
-            {
+            else {
                 return _.merge({}, _item);
             }
         })
     }
 
-    static appendNavItem(nav, item, parentId)
-    {
-        if ( !parentId )
-        {
+    static appendNavItem(nav, item, parentId) {
+        if (!parentId) {
             return [
                 ...nav,
                 item
@@ -433,8 +366,7 @@ class FuseUtils {
 
         return nav.map(_item => {
 
-            if ( _item.id === parentId && _item.children )
-            {
+            if (_item.id === parentId && _item.children) {
                 return {
                     _item,
                     children: [
@@ -444,27 +376,23 @@ class FuseUtils {
                 };
             }
 
-            if ( _item.children )
-            {
+            if (_item.children) {
                 return _.merge({}, _item, {
                     children: this.appendNavItem(_item.children, item, parentId)
                 });
             }
-            else
-            {
+            else {
                 return _.merge({}, _item);
             }
         })
     }
 
-    static hasPermission(authArr, userRole)
-    {
+    static hasPermission(authArr, userRole) {
         /**
          * If auth array is not defined
          * Pass and allow
          */
-        if ( authArr === null || authArr === undefined )
-        {
+        if (authArr === null || authArr === undefined) {
             // console.info("auth is null || undefined:", authArr);
             return true;
         }
@@ -472,22 +400,19 @@ class FuseUtils {
          * if auth array is empty means,
          * allow only user role is guest (null or empty[])
          */
-        else if ( authArr.length === 0 )
-        {
+        else if (authArr.length === 0) {
             // console.info("auth is empty[]:", authArr);
             return !userRole || userRole.length === 0;
         }
         /**
          * Check if user has grants
          */
-        else
-        {
+        else {
             // console.info("auth arr:", authArr);
             /*
             Check if user role is array,
             */
-            if ( userRole && Array.isArray(userRole) )
-            {
+            if (userRole && Array.isArray(userRole)) {
                 return authArr.some(r => userRole.indexOf(r) >= 0);
             }
 
