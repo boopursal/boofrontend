@@ -240,7 +240,7 @@ function Demande(props) {
                                                                                     </DialogContent>
                                                                                     <DialogActions>
                                                                                         <Button onClick={() => dispatch(Actions.closeDialog())} variant="outlined" color="primary">
-                                                                                            {user.jetons ? 'Pas maintenant' : 'Non'}
+                                                                                            Pas maintenant
                                                                                         </Button>
                                                                                         <Button onClick={(ev) => {
                                                                                             user.jetons > 0

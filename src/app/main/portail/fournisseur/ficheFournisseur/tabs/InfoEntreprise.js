@@ -91,10 +91,10 @@ function InfoEntreprise(props) {
 
 
                     <Typography variant="h2" className="my-24 p-12 bg-gray-300 uppercase font-bold text-16">
-                        Actavités
+                        Activités
                     </Typography>
                     {
-                         data.categories && data.categories.map((item, index) => (
+                        data.categories && data.categories.map((item, index) => (
                             <Chip
                                 label={_.capitalize(item.name)}
                                 classes={{
@@ -110,7 +110,7 @@ function InfoEntreprise(props) {
                         ))
 
                     }
-                   
+
 
                 </FuseAnimateGroup>
             }

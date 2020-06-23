@@ -1,272 +1,45 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!doctype html>
+<title>Site Maintenance | Shifter</title>
+<style>
+    body {
+        text-align: center;
+        padding: 150px;
+    }
 
-<head>
-    <meta charset="utf-8">
-    <meta name="author" content="7e-Sky">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <base href="/">
-    <!--
-          manifest.json provides metadata used when your web app is added to the
-          homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
-        -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    h1 {
+        font-size: 50px;
+    }
 
-    <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
-    <link href="%PUBLIC_URL%/assets/fonts/material-outline-icons/styles.css" rel="stylesheet">
-    <link href="%PUBLIC_URL%/assets/fonts/meteocons/style.css" rel="stylesheet">
+    body {
+        font: 20px Helvetica, sans-serif;
+        color: #333;
+    }
 
-    <noscript id="jss-insertion-point"></noscript>
-    <!--
-          Notice the use of %PUBLIC_URL% in the tags above.
-          It will be replaced with the URL of the `public` folder during the build.
-          Only files inside the `public` folder can be referenced from the HTML.
+    article {
+        display: block;
+        text-align: left;
+        width: 650px;
+        margin: 0 auto;
+    }
 
-          Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-          work correctly both with client-side routing and a non-root public URL.
-          Learn how to configure a non-root public URL by running `npm run build`.
-     
-    <title>Les Achats Industriels | La place de marché BtoB</title>
-    <meta name="description"
-        content="Les Achats Industriels est une place de marché b2b qui permet aux Acheteurs et aux Fournisseurs de se rencontrer dans une même plate-forme." />
+    a {
+        color: #dc8100;
+        text-decoration: none;
+    }
 
-   -->
-    <!-- FUSE Splash Screen CSS -->
-    <style type="text/css">
-        #fuse-splash-screen {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #2D323D;
-            z-index: 99999;
-            pointer-events: none;
-        }
+    a:hover {
+        color: #333;
+        text-decoration: none;
+    }
+</style>
 
-        #fuse-splash-screen .center {
-            display: block;
-            width: 100%;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        #fuse-splash-screen .logo {
-            width: 128px;
-            margin: 0 auto;
-        }
-
-        #fuse-splash-screen .logo img {
-            filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.2))
-        }
-
-        #fuse-splash-screen .spinner-wrapper {
-            display: block;
-            position: relative;
-            width: 100%;
-            min-height: 100px;
-            height: 100px;
-        }
-
-        #fuse-splash-screen .spinner-wrapper .spinner {
-            position: absolute;
-            overflow: hidden;
-            left: 50%;
-            margin-left: -50px;
-            animation: outer-rotate 2.91667s linear infinite;
-        }
-
-        #fuse-splash-screen .spinner-wrapper .spinner .inner {
-            width: 100px;
-            height: 100px;
-            position: relative;
-            animation: sporadic-rotate 5.25s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-        }
-
-        #fuse-splash-screen .spinner-wrapper .spinner .inner .gap {
-            position: absolute;
-            left: 49px;
-            right: 49px;
-            top: 0;
-            bottom: 0;
-            border-top: 10px solid;
-            box-sizing: border-box;
-        }
-
-        #fuse-splash-screen .spinner-wrapper .spinner .inner .left,
-        #fuse-splash-screen .spinner-wrapper .spinner .inner .right {
-            position: absolute;
-            top: 0;
-            height: 100px;
-            width: 50px;
-            overflow: hidden;
-        }
-
-        #fuse-splash-screen .spinner-wrapper .spinner .inner .left .half-circle,
-        #fuse-splash-screen .spinner-wrapper .spinner .inner .right .half-circle {
-            position: absolute;
-            top: 0;
-            width: 100px;
-            height: 100px;
-            box-sizing: border-box;
-            border: 10px solid #4285F4;
-            border-bottom-color: transparent;
-            border-radius: 50%;
-        }
-
-        #fuse-splash-screen .spinner-wrapper .spinner .inner .left {
-            left: 0;
-        }
-
-        #fuse-splash-screen .spinner-wrapper .spinner .inner .left .half-circle {
-            left: 0;
-            border-right-color: transparent;
-            animation: left-wobble 1.3125s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-            -webkit-animation: left-wobble 1.3125s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-        }
-
-        #fuse-splash-screen .spinner-wrapper .spinner .inner .right {
-            right: 0;
-        }
-
-        #fuse-splash-screen .spinner-wrapper .spinner .inner .right .half-circle {
-            right: 0;
-            border-left-color: transparent;
-            animation: right-wobble 1.3125s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-            -webkit-animation: right-wobble 1.3125s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-        }
-
-        @keyframes outer-rotate {
-            0% {
-                transform: rotate(0deg) scale(0.5);
-            }
-
-            100% {
-                transform: rotate(360deg) scale(0.5);
-            }
-        }
-
-        @keyframes left-wobble {
-
-            0%,
-            100% {
-                transform: rotate(130deg);
-            }
-
-            50% {
-                transform: rotate(-5deg);
-            }
-        }
-
-        @keyframes right-wobble {
-
-            0%,
-            100% {
-                transform: rotate(-130deg);
-            }
-
-            50% {
-                transform: rotate(5deg);
-            }
-        }
-
-        @keyframes sporadic-rotate {
-            12.5% {
-                transform: rotate(135deg);
-            }
-
-            25% {
-                transform: rotate(270deg);
-            }
-
-            37.5% {
-                transform: rotate(405deg);
-            }
-
-            50% {
-                transform: rotate(540deg);
-            }
-
-            62.5% {
-                transform: rotate(675deg);
-            }
-
-            75% {
-                transform: rotate(810deg);
-            }
-
-            87.5% {
-                transform: rotate(945deg);
-            }
-
-            100% {
-                transform: rotate(1080deg);
-            }
-        }
-    </style>
-    <!-- / FUSE Splash Screen CSS -->
-</head>
-
-<body>
-    <noscript>
-        Vous devez activer JavaScript pour exécuter cette application.
-    </noscript>
-    <div id="root" class="flex">
-        <!-- FUSE Splash Screen -->
-        <div id="fuse-splash-screen">
-
-            <div class="center">
-
-                <div class="logo">
-                    <img width="128" src="assets/images/logos/icon.png" alt="logo">
-                </div>
-
-                <!-- Material Design Spinner -->
-                <div class="spinner-wrapper">
-                    <div class="spinner">
-                        <div class="inner">
-                            <div class="gap"></div>
-                            <div class="left">
-                                <div class="half-circle"></div>
-                            </div>
-                            <div class="right">
-                                <div class="half-circle"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- / Material Design Spinner -->
-
-            </div>
-
-        </div>
-        <!-- / FUSE Splash Screen -->
+<article>
+    <h1>Nous reviendrons bientôt</h1>
+    <div>
+        <p>Désolé pour le dérangement, mais nous effectuons actuellement une maintenance. Vous pouvez nous contacter sur l'adresse
+            email suivante
+            <a href="mailto=webmaster@lesindustriels.com">webmaster@lesindustriels.com</a>
+        </p>
+        <p>Les Achats Industriels</p>
     </div>
-
-    <!--
-          This HTML file is a template.
-          If you open it directly in the browser, you will see an empty page.
-
-          You can add webfonts, meta tags, or analytics to this file.
-          The build step will place the bundled scripts into the <body> tag.
-
-          To begin the development, run `npm start` or `yarn start`.
-          To create a production bundle, use `npm run build` or `yarn build`.
-        -->
-    <!-- Start of LiveChat (www.livechatinc.com) code -->
-    <script>
-        window.__lc = window.__lc || {};
-        window.__lc.license = 11945763;
-        ; (function (n, t, c) { function i(n) { return e._h ? e._h.apply(null, n) : e._q.push(n) } var e = { _q: [], _h: null, _v: "2.0", on: function () { i(["on", c.call(arguments)]) }, once: function () { i(["once", c.call(arguments)]) }, off: function () { i(["off", c.call(arguments)]) }, get: function () { if (!e._h) throw new Error("[LiveChatWidget] You can't use getters before load."); return i(["get", c.call(arguments)]) }, call: function () { i(["call", c.call(arguments)]) }, init: function () { var n = t.createElement("script"); n.async = !0, n.type = "text/javascript", n.src = "https://cdn.livechatinc.com/tracking.js", t.head.appendChild(n) } }; !n.__lc.asyncInit && e.init(), n.LiveChatWidget = n.LiveChatWidget || e }(window, document, [].slice))
-    </script>
-    <noscript><a href="https://www.livechatinc.com/chat-with/11945763/" rel="nofollow">Chat with us</a>, powered by <a
-            href="https://www.livechatinc.com/?welcome" rel="noopener nofollow" target="_blank">LiveChat</a></noscript>
-    <!-- End of LiveChat code -->
-
-</body>
-
-</html>
+</article>
