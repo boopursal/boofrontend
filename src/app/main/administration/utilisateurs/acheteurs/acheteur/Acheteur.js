@@ -128,18 +128,21 @@ function Acheteur(props) {
                 }
             }
             setForm({ ...acheteur.data });
-            setSecteur({
-                value: acheteur.data.secteur['@id'],
-                label: acheteur.data.secteur.name
-            });
-            setVille({
-                value: acheteur.data.ville['@id'],
-                label: acheteur.data.ville.name,
-            });
-            setPays({
-                value: acheteur.data.pays['@id'],
-                label: acheteur.data.pays.name,
-            });
+            acheteur.data.secteur &&
+                setSecteur({
+                    value: acheteur.data.secteur['@id'],
+                    label: acheteur.data.secteur.name
+                });
+            acheteur.data.ville &&
+                setVille({
+                    value: acheteur.data.ville['@id'],
+                    label: acheteur.data.ville.name,
+                });
+            acheteur.data.pays &&
+                setPays({
+                    value: acheteur.data.pays['@id'],
+                    label: acheteur.data.pays.name,
+                });
         }
     }, [form, acheteur.data, setForm]);
 
@@ -237,7 +240,7 @@ function Acheteur(props) {
                             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                                 <Typography className="normal-case flex items-center sm:mb-12" component={Link} role="button" to="/users/acheteurs" color="inherit">
                                     <Icon className="mr-4 text-20">arrow_back</Icon>
-                                        Retour
+                                    Retour
                                 </Typography>
                             </FuseAnimate>
                             <div className="flex items-center max-w-full">

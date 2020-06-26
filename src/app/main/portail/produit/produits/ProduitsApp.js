@@ -46,14 +46,18 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         'align-items': 'center',
     },
+    img: {
+        width: '70%'
+
+    },
     icon: {
         marginRight: theme.spacing(0.5),
         width: 20,
         height: 20,
     },
-    grid:{
+    grid: {
         [theme.breakpoints.down('xs')]: {
-           width:'100%'
+            width: '100%'
         },
     }
 }));
@@ -130,7 +134,7 @@ function ProduitsApp(props) {
         let activiteParm = '';
         let categorieParm = '';
 
-        
+
         if (secteur) {
             secteurParm = '/' + secteur;
         }
@@ -147,7 +151,7 @@ function ProduitsApp(props) {
         else searchText = (q ? 'q=' + q : '')
 
         const path = secteurParm + activiteParm + categorieParm;
-        props.history.replace({ pathname: '/entreprises' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+        props.history.push({ pathname: '/entreprises' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
     }
 
     if (loading) {
@@ -216,43 +220,45 @@ function ProduitsApp(props) {
 
                 <div className="w-full max-w-2xl mx-auto   min-h-md">
                     <Helmet>
-                        <title>{'Produits ' + (
-                            activite ? 'de ' + _.capitalize(activite) :
-                                secteur ? 'de ' + _.capitalize(secteur) : ''
+                        <title>Résultats de recherche {(
+                            activite ? 'de [ ' + _.capitalize(activite) + ' ]' :
+                                secteur ? 'de [ ' + _.capitalize(secteur) + ' ]' :
+                                    ''
                         ) + (pays ? ' au ' + _.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
                         }</title>
                         <meta name="robots" content="noindex, nofollow" />
                         <meta name="googlebot" content="noindex" />
                     </Helmet>
-                    <Typography color="primary" className="mt-16 flex items-center" variant="h6">
-                        <Icon className="mr-8">search</Icon>
-                        <span> {'Produits ' + (
-                            activite ? 'de ' + _.capitalize(activite) :
-                                secteur ? 'de ' + _.capitalize(secteur) : ''
-                        ) + (pays ? ' au ' + _.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
-                        }</span>
-                    </Typography>
-                    <div className="flex items-center ml-2 my-16">
-                        <Typography className="text-13 mr-16">Voir résultats de:</Typography>
-                        <Button onClick={handleUrlFournisseurs} variant="outlined" color="secondary" size="small" >
-                            Fournisseurs
+                    {
+                        /**
+                         * <Typography color="secondary" className="mt-16 flex items-center uppercase" variant="h6">
+                         <Icon className="mr-8">search</Icon>
+                         <span>Résultats de recherche {(
+                             categorie ? 'de [ ' + _.capitalize(categorie) + ' ]' :
+                                 activite ? 'de [ ' + _.capitalize(activite) + ' ]' :
+                                     secteur ? 'de [ ' + _.capitalize(secteur) + ' ]' :
+                                         ''
+                         ) + (pays ? ' au ' + _.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
+                         }</span>
+                     </Typography>
+                         */
+                    }
+
+
+                    <Paper className="p-32 w-full my-16 text-center">
+                        <img className={classes.img} alt="product not found" src="assets/images/product_not_found.jpg" />
+                        <Typography variant="h6" className="mb-16 uppercase" >
+
+                            Oups! Nous n'avons pas pu trouver de résultats pour votre recherche
+                        </Typography>
+
+                        <Typography variant="h6" className="mb-16 uppercase" color="primary">
+                            Le produit sera affiché prochainement
+                        </Typography>
+
+                        <Button variant="outlined" size="small" color="secondary" onClick={() => props.history.goBack()} className={clsx(classes.btn, "mr-8")}>
+                            <Icon>chevron_left</Icon> <span className="transition ease-in-out duration-700 ">Retour</span>
                         </Button>
-                    </div>
-                    <Paper className="p-32 w-full mt-6">
-                        <Typography variant="h6" className="mb-16">
-                            Reformulez votre recherche à l'aide des conseils suivants :
-                        </Typography>
-                        <ul>
-                            <li>Vérifiez l'orthographe des mots tapés</li>
-                            <li>Essayez un terme plus générique ou des synonymes</li>
-                        </ul>
-
-                        <Divider className="my-16" />
-
-                        <Typography variant="h6" className="mb-16">
-                            Vous pouvez également nous contacter :
-                        </Typography>
-                        <p>Envoyez nous un message sur <span className="font-bold">webmaster@lesachatsindustriels.com</span></p>
 
                     </Paper>
                 </div>

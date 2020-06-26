@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { Card, CardActionArea, CardContent, CardActions, Button, CardMedia, Chip, Icon } from '@material-ui/core';
 import ReactHtmlParser from 'react-html-parser';
 import _ from '@lodash';
-import {FuseUtils} from '@fuse';
+import { FuseUtils } from '@fuse';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
@@ -17,8 +17,8 @@ const useStyles = makeStyles(theme => ({
         maxHeight: 160,
         minHeight: 160,
     },
-    card:{
-        maxWidth:260
+    card: {
+        maxWidth: 260
     }
 }));
 
@@ -37,14 +37,14 @@ export default function Produit(props) {
                     }
                     title={produit.titre}
                 />
-                <CardContent  className={classes.cardContent}>
+                <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h5">
                         {_.capitalize(_.truncate(produit.titre, {
                             'length': 18
                         }))}
                     </Typography>
                     <Typography variant="caption" color="textSecondary" component="p" className="mb-16">Réf.{produit.reference}</Typography>
-                   
+
                     {
                         produit.images.length > 0 ?
                             <Chip
@@ -53,8 +53,6 @@ export default function Produit(props) {
                                 classes={{
                                     root: "h-24",
                                     label: "pl-4 pr-6 py-4 text-11",
-                                    deleteIcon: "w-16 ml-0",
-                                    ...props.classes
                                 }}
                                 variant="outlined"
                                 className="mr-4"
@@ -69,8 +67,6 @@ export default function Produit(props) {
                                 classes={{
                                     root: "h-24",
                                     label: "pl-4 pr-6 py-4 text-11",
-                                    deleteIcon: "w-16 ml-0",
-                                    ...props.classes
                                 }}
                                 variant="outlined"
                                 className="mr-4"
@@ -86,8 +82,6 @@ export default function Produit(props) {
                                 classes={{
                                     root: "h-24",
                                     label: "pl-4 pr-6 py-4 text-11",
-                                    deleteIcon: "w-16 ml-0",
-                                    ...props.classes
                                 }}
                                 variant="outlined"
                                 className="mr-4"
@@ -98,7 +92,7 @@ export default function Produit(props) {
 
                 </CardContent>
             </CardActionArea>
-            
+
         </Card>
     );
 }

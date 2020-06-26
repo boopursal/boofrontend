@@ -26,11 +26,18 @@ export function cleanUp() {
 }
 
 export function getFournisseurs(params, pays, parametres, ville, q) {
-    const { secteur, activite,categorie } = params;
+    const { secteur, activite, categorie } = params;
     let parametre = '';
-    if (secteur) {
+    if (categorie) {
+        parametre += `&categories.slug=${categorie}`
+    }
+    else if (activite) {
+        parametre += `&categories.sousSecteurs.slug=${activite}`
+    }
+    else if (secteur) {
         parametre += `categories.sousSecteurs.secteur.slug=${secteur}`
     }
+
     if (pays) {
         if (parametre)
             parametre += `&pays.slug=${pays}`
@@ -43,12 +50,8 @@ export function getFournisseurs(params, pays, parametres, ville, q) {
     if (q) {
         parametre += `&societeLower=${q}`
     }
-    if (activite) {
-        parametre += `&categories.sousSecteurs.slug=${activite}`
-    }
-    if (categorie) {
-        parametre += `&categories.slug=${categorie}`
-    }
+
+
 
 
     if (parametre) {

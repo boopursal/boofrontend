@@ -87,14 +87,14 @@ function SideBareSearch(props) {
     const ville = query.get("ville");
 
     function handleDeletePathSecteur() {
-        props.history.replace({ pathname: '/demandes-achats', search: pays && (ville ? 'pays=' + pays + '&ville=' + ville : 'pays=' + pays) })
+        props.history.push({ pathname: '/demandes-achats', search: pays && (ville ? 'pays=' + pays + '&ville=' + ville : 'pays=' + pays) })
         document.querySelector('.st').scrollTop = 0;
         parametres.page = 1;
         dispatch(Actions.setParametresData(parametres))
     }
     function handleDeletePathActivite() {
-      
-        props.history.replace({ pathname: '/demandes-achats/' + secteur, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '')  })
+
+        props.history.push({ pathname: '/demandes-achats/' + secteur, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') })
         document.querySelector('.st').scrollTop = 0;
     }
 
@@ -115,7 +115,7 @@ function SideBareSearch(props) {
             categorieParm = '/' + categorie;
         }
         const path = secteurParm + activiteParm + categorieParm;
-        props.history.replace({ pathname: '/demandes-achats' + path, search: '' })
+        props.history.push({ pathname: '/demandes-achats' + path, search: '' })
         document.querySelector('.st').scrollTop = 0;
         parametres.page = 1;
         dispatch(Actions.setParametresData(parametres))
@@ -127,7 +127,7 @@ function SideBareSearch(props) {
                 <div className="p-20 bg-gray-400 uppercase flex items-center font-bold text-16 ">
                     <Icon className={classes.filterIcon}>settings_input_component</Icon>
 
-                    <span>  AFFINER VOTRE RECHERCHE</span>
+                    <span>  Affinez votre recherche</span>
                 </div>
                 <CardContent>
                     <Typography color="textPrimary" className="pl-16 text-18 uppercase w-full " >
@@ -168,7 +168,7 @@ function SideBareSearch(props) {
                                                                 onClick={event => {
                                                                     const location = props.location;
                                                                     query.set('ville', item.slug)
-                                                                    props.history.replace({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug })
+                                                                    props.history.push({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug })
                                                                     document.querySelector('.st').scrollTop = 0;
                                                                     parametres.page = 1;
                                                                     dispatch(Actions.setParametresData(parametres))
@@ -201,7 +201,7 @@ function SideBareSearch(props) {
                                                         onClick={event => {
                                                             const location = props.location;
                                                             query.set('pays', item.slug)
-                                                            props.history.replace({ pathname: location.pathname, search: 'pays=' + query.get('pays') })
+                                                            props.history.push({ pathname: location.pathname, search: 'pays=' + query.get('pays') })
                                                             document.querySelector('.st').scrollTop = 0;
                                                             parametres.page = 1;
                                                             dispatch(Actions.setParametresData(parametres))
@@ -247,7 +247,7 @@ function SideBareSearch(props) {
 
                                     </ListItem>
                                     <List component="div" className={classes.listRoot2}>
-                                       
+
                                         {
                                             demandes.length > 0 && activite ?
                                                 <>
@@ -282,7 +282,7 @@ function SideBareSearch(props) {
                                                                                 onClick={event => {
 
                                                                                     item.slug !== categorie &&
-                                                                                        (props.history.replace({ pathname: '/demandes-achats/' + secteur + '/' + activite + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') }))
+                                                                                        (props.history.push({ pathname: '/demandes-achats/' + secteur + '/' + activite + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') }))
                                                                                     document.querySelector('.st').scrollTop = 0
                                                                                 }}>
                                                                                 <ListItemText
@@ -310,7 +310,7 @@ function SideBareSearch(props) {
                                                                     className={classes.nested}
                                                                     button
                                                                     onClick={event => {
-                                                                        props.history.replace({ pathname: '/demandes-achats/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') });
+                                                                        props.history.push({ pathname: '/demandes-achats/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') });
                                                                         document.querySelector('.st').scrollTop = 0;
 
                                                                     }}>
@@ -339,7 +339,7 @@ function SideBareSearch(props) {
                                                         key={index}
                                                         button
                                                         onClick={event => {
-                                                            props.history.replace({ pathname: '/demandes-achats/' + secteur.slug, search: pays ? 'pays=' + pays : '' });
+                                                            props.history.push({ pathname: '/demandes-achats/' + secteur.slug, search: pays ? 'pays=' + pays : '' });
                                                             parametres.page = 1;
                                                             dispatch(Actions.setParametresData(parametres))
                                                         }}>

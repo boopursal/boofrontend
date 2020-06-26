@@ -47,6 +47,8 @@ function InfoEntreprise(props) {
                                                         root: "w-full sm:w-1/2 md:w-1/4",
                                                         tile: "rounded-8"
                                                     }}
+                                                    component={Link}
+                                                    to={`/detail-produit/${item.sousSecteurs.slug}/${item.categorie.slug}/${item.id}-${item.slug}`}
                                                     key={index}
                                                 >
                                                     <img src={item.featuredImageId ?
@@ -100,8 +102,8 @@ function InfoEntreprise(props) {
                                 classes={{
                                     root: "h-24",
                                     label: "pl-4 pr-6 py-4 text-11",
-                                    deleteIcon: "w-16 ml-0",
                                 }}
+                                onClick={() => item.sousSecteurs[0] && props.history.push({ pathname: '/entreprises/' + item.sousSecteurs[0].secteur.slug + '/' + item.sousSecteurs[0].slug + '/' + item.slug })}
                                 key={index}
                                 variant="outlined"
                                 className="ml-4 mb-4 h-24"

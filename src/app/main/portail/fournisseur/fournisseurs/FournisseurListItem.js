@@ -46,6 +46,7 @@ const styles = theme => ({
     },
 });
 
+
 function FournisseurListItem(props) {
 
     const dispatch = useDispatch();
@@ -129,40 +130,41 @@ function FournisseurListItem(props) {
                                                                 'length': 70
                                                             }))}
                                                         </Typography>
+                                                        <Typography variant="caption" className="mb-16 font-600">
+                                                            Pays, ville / Fournisseur
+                                                        </Typography>
+                                                        <br />
                                                         <Chip
                                                             icon={<Icon className="text-16 mr-0">location_on</Icon>}
                                                             label={(fournisseur.pays ? fournisseur.pays.name : '') + (fournisseur.ville ? ', ' + fournisseur.ville.name : '')}
                                                             classes={{
-                                                                root: clsx("h-24", props.className),
+                                                                root: clsx("h-24"),
                                                                 label: "pl-4 pr-6 py-4 text-11",
                                                                 deleteIcon: "w-16 ml-0",
-                                                                ...props.classes
                                                             }}
                                                             className="mr-4"
                                                             variant="outlined"
-                                                            onDelete={props.onDelete}
                                                         />
 
 
                                                     </Grid>
                                                     <Grid item>
                                                         Fournisseur de :
+
                                                         {
                                                             fournisseur.categories && fournisseur.categories.map((item, index) => (
-                                                                index < 3 &&  <Chip
+                                                                index < 3 && <Chip
                                                                     label={_.capitalize(item.name)}
                                                                     classes={{
                                                                         root: "h-24",
                                                                         label: "pl-4 pr-6 py-4 text-11",
-                                                                        deleteIcon: "w-16 ml-0",
                                                                     }}
+                                                                    onClick={() => item.sousSecteurs[0] && props.history.push({ pathname: '/entreprises/' + item.sousSecteurs[0].secteur.slug + '/' + item.sousSecteurs[0].slug + '/' + item.slug })}
                                                                     key={index}
                                                                     variant="outlined"
                                                                     className="ml-4 mb-4 h-24"
-                                                                /> 
-                                                                
+                                                                />
                                                             ))
-
                                                         }
                                                     </Grid>
                                                 </Grid>

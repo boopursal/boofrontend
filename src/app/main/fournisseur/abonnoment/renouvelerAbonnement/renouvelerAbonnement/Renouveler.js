@@ -190,7 +190,7 @@ function Renouveler(props) {
             if (renouveler.data.duree) {
                 setDuree(renouveler.data.duree);
                 if (renouveler.data.offre) {
-                    if (renouveler.data.fournisseur.currency.name === 'DHS') {
+                    if (renouveler.data.fournisseur.currency.name === 'MAD') {
 
                         let ht = renouveler.data.offre.prixMad * renouveler.data.duree.name;
 
@@ -251,7 +251,7 @@ function Renouveler(props) {
 
     function handleChangeDuree(item) {
         setDuree(item);
-        if (user.data.currency === 'DHS') {
+        if (user.data.currency === 'MAD') {
             let ht = offre.prixMad * item.name;
             setPrixht(ht)
 
@@ -306,7 +306,7 @@ function Renouveler(props) {
             setSousSecteurs(_.slice(sousSecteurs, 0, item.nbActivite));
         }
 
-        if (user.data.currency === 'DHS') {
+        if (user.data.currency === 'MAD') {
             let ht = item.prixMad * duree.name;
             setPrixht(ht)
 
@@ -530,12 +530,12 @@ function Renouveler(props) {
                                                                                     />
                                                                                 }
                                                                                 label={
-                                                                                    renouveler.fournisseur.currency.name === 'DHS' ?
+                                                                                    renouveler.fournisseur.currency.name === 'MAD' ?
                                                                                         parseFloat(item.prixMad).toLocaleString(
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.
                                                                                             { minimumFractionDigits: 2 }
-                                                                                        ) + ' DHS HT / mois' :
+                                                                                        ) + ' MAD HT / mois' :
                                                                                         parseFloat(item.prixEur).toLocaleString(
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.
@@ -1024,7 +1024,7 @@ function Renouveler(props) {
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={3} className="mt-16 mb-16 flex justify-end">
-                                                <Grid item xs={12} sm={6}  className="flex justify-end">
+                                                <Grid item xs={12} sm={6} className="flex justify-end">
                                                     <Button
                                                         variant="outlined"
                                                         color="secondary"

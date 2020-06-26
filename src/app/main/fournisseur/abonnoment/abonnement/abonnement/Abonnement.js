@@ -98,19 +98,19 @@ function Abonnement(props) {
             (abonnement.data && !form) ||
             (abonnement.data && form && abonnement.data.id !== form.id)
         ) {
-/*
-            if (abonnement.data.sousSecteurs) {
-                setSousSecteurs(abonnement.data.sousSecteurs.map(item => ({
-                    value: item['@id'],
-                    label: item.name
-                })));
-            }
-*/
+            /*
+                        if (abonnement.data.sousSecteurs) {
+                            setSousSecteurs(abonnement.data.sousSecteurs.map(item => ({
+                                value: item['@id'],
+                                label: item.name
+                            })));
+                        }
+            */
             if (abonnement.data.offre) {
                 setOffre(abonnement.data.offre)
             }
 
-            
+
             if (abonnement.data.fournisseur) {
                 setFournisseur(abonnement.data.fournisseur)
             }
@@ -124,7 +124,7 @@ function Abonnement(props) {
 
             if (abonnement.data.offre && abonnement.data.duree) {
 
-                if (abonnement.data.currency && abonnement.data.currency.name !== 'DHS') {
+                if (abonnement.data.currency && abonnement.data.currency.name !== 'MAD') {
                     let ht = abonnement.data.offre.prixEur * abonnement.data.duree.name;
                     setPrixht(ht)
 
@@ -241,23 +241,23 @@ function Abonnement(props) {
                             </div>
 
                             <div className="flex items-end max-w-full">
-                            {
-                                tabValue === 1 ?  
-                                <Pdf targetRef={ref} filename={form && 'factrue_'+form.reference+'.pdf'}>
-                                    {({ toPdf }) =>
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            className={classes.button}
-                                            onClick={toPdf}
-                                        >
-                                            Télécharger
+                                {
+                                    tabValue === 1 ?
+                                        <Pdf targetRef={ref} filename={form && 'factrue_' + form.reference + '.pdf'}>
+                                            {({ toPdf }) =>
+                                                <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    className={classes.button}
+                                                    onClick={toPdf}
+                                                >
+                                                    Télécharger
                                   </Button>
-                                    }
-                                </Pdf>
-                                : ''
-                            }
-                                
+                                            }
+                                        </Pdf>
+                                        : ''
+                                }
+
 
                             </div>
                         </div>
@@ -450,7 +450,7 @@ function Abonnement(props) {
                                                         <TableCell align="right">
                                                             {
 
-                                                                form && form.currency && form.currency.name !== 'DHS' ?
+                                                                form && form.currency && form.currency.name !== 'MAD' ?
                                                                     parseFloat(offre.prixEur).toLocaleString(
                                                                         'fr', // leave undefined to use the browser's locale,
                                                                         // or use a string like 'en-US' to override it.
@@ -802,7 +802,7 @@ function Abonnement(props) {
                                                             <TableCell align="right">
                                                                 {
 
-                                                                    form && form.currency && form.currency.name !== 'DHS' ?
+                                                                    form && form.currency && form.currency.name !== 'MAD' ?
                                                                         parseFloat(offre.prixEur).toLocaleString(
                                                                             'fr', // leave undefined to use the browser's locale,
                                                                             // or use a string like 'en-US' to override it.

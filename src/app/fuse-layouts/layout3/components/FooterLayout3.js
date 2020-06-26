@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar,  Typography, Grid, Divider } from '@material-ui/core';
+import { AppBar, Typography, Grid, Divider } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -20,7 +20,7 @@ function FooterLayout3(props) {
                             </Typography>
                             <Typography className="text-justify">
                                 Les Achats Industriels est une place de marché b2b qui permet aux Acheteurs et aux Fournisseurs de se rencontrer dans une même plate-forme (électronique).
-                                <br /><br /> Nous nous positionnons en tant qu'intermédiaire entre les deux parties afin de faciliter aux uns et aux autres de vendre ou/et d’acheter de manière fluide, économique, rapide, sans limites géographiques.
+                                <br /><br /> Nous nous positionnons en tant qu'intermédiaire entre les deux parties afin de faciliter aux uns et aux autres de vendre ou/et acheter de manière fluide, économique, rapide, sans limites géographiques.
                             </Typography>
 
 

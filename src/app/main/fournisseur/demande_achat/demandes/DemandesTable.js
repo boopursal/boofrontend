@@ -149,15 +149,24 @@ function DemandesTable(props) {
                         ,
                     },
                     {
-                        Header: "",
+                        Header: "Visibilité",
                         accessor: "historiques",
                         width: 64,
                         filterable: false,
                         Cell: row =>
                             row.original.historiques.length > 0 && _.findKey(row.original.historiques, function (o) { return o.fournisseur.id === user.id; })
-                                ? <strong className="text-green">Lu</strong>
+                                ?
+                                <Tooltip title="Lu" >
+                                    <IconButton className="text-green text-20">
+                                        <Icon>remove_red_eye</Icon>
+                                    </IconButton>
+                                </Tooltip>
                                 :
-                                <strong className="text-orange">Non lu</strong>
+                                <Tooltip title="Non lu" >
+                                    <IconButton className="text-orange text-20">
+                                        <Icon>remove_red_eye</Icon>
+                                    </IconButton>
+                                </Tooltip>
 
                     },
                     {

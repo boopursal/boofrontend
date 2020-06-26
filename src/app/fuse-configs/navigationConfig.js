@@ -40,7 +40,7 @@ const navigationConfig = [
     },
     {
         'id': 'message-fournisseur',
-        'title': 'Messages Fournisseur',
+        'title': 'Destination Fournisseur',
         'auth': authRoles.admin,
         'type': 'item',
         'icon': 'email',
@@ -108,8 +108,8 @@ const navigationConfig = [
                 'type': 'collapse',
                 'icon': 'group',
                 'children': [
-                    
-                   
+
+
                     {
                         'id': 'admins-component',
                         'title': 'Admins',

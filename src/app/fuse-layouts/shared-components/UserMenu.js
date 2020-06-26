@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Button, Icon, ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden } from '@material-ui/core';
+import { Avatar, Button, Icon, ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden, Tooltip } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import * as authActions from 'app/auth/store/actions';
 import { Link } from 'react-router-dom';
@@ -31,11 +31,13 @@ function UserMenu(props) {
                     !user.requestJeton ?
                         <div
                             className={clsx("flex items-center px-8 py-4 mr-8 rounded-sm", !user.jetons ? "bg-red text-white" : "bg-green text-white")}>
-                            <Icon className="text-20 mr-4">monetization_on</Icon>
+                            <Tooltip title="Les jetons vous donnent accès au profil de l'acheteur ciblé (Après avoir consulté sa demande d'achat)." >
+                                <Icon className="text-20 mr-4">info</Icon>
+                            </Tooltip>
                             <Hidden only={['xs']}> <span>Actuellement vous avez</span></Hidden>&ensp;
                              <b className="text-20">{user.jetons}</b> &ensp;
                              <Hidden only={['xs']}> <span>Jeton(s).</span></Hidden>
-                            <Link to="/abonnement/commandes/true" className="ml-2 text-blue">
+                            <Link to="/abonnement/commandes/true" className="ml-2 text-blue  font-bold  uppercase">
                                 Charger
                             </Link>
                         </div>

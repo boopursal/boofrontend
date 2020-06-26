@@ -41,14 +41,11 @@ function ToolbarLayout3(props) {
                     <div className="flex flex-shrink items-center">
                         <PSecteurs />
                     </div>
-                   
+
 
                     <div className="flex flex-1">
                         <Hidden xsDown>
-                            {
-                                history.location && history.location.pathname === '/' ? '' :
-                                    <Search className="mx-16 lg:mx-24" variant="basic" />
-                            }
+                            <Search className="mx-16 lg:mx-24" variant="basic" />
 
                         </Hidden>
                     </div>

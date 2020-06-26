@@ -48,7 +48,7 @@ function CategorieItemsLink(props) {
                             >
                                 <ListItemText
                                     disableTypography
-                                    primary={<Typography type="body2" style={{ color: '#387ca3', fontWeight: 'bold' }}>{sousSecteur.name} </Typography>}
+                                    primary={<Typography type="body2" style={{ color: '#387ca3', fontWeight: 'bold' }}>{sousSecteur.name + ' (' + sousSecteur.count + ')'} </Typography>}
                                     className="uppercase hover:underline" />
                             </ListItem>
 
@@ -62,7 +62,7 @@ function CategorieItemsLink(props) {
                                             <Icon className="text-16 arrow-icon">keyboard_arrow_right</Icon>
                                             <ListItemText
                                                 disableTypography
-                                                primary={<Typography type="body2" style={{ fontSize: 11 }}>{categorie.name}</Typography>}
+                                                primary={<Typography type="body2" style={{ fontSize: 11 }}>{categorie.name + ' (' + categorie.count + ')'}</Typography>}
                                             />
                                         </ListItem>
                                     ))

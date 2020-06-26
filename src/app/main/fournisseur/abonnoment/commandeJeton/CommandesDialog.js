@@ -124,10 +124,10 @@ function CommandesDialog(props) {
                             required
                             onChange={handleRadioChange}
                         >
-                            <FormControlLabel value="5" checked={form.nbrJeton === 5} control={<Radio />} label={!user.data.currency || user.data.currency === 'DHS' ? "5 ( 500,00 Dhs )" : "5 ( 50,00 €/$   ) "}
+                            <FormControlLabel value="5" checked={form.nbrJeton === 5} control={<Radio />} label={!user.data.currency || user.data.currency === 'MAD' ? "5 ( 500,00 Dhs )" : "5 ( 50,00 €/$   ) "}
                             />
-                            <FormControlLabel value="10" checked={form.nbrJeton === 10} control={<Radio />} label={!user.data.currency || user.data.currency === 'DHS' ? "10 ( 1000,00 Dhs )" : "10 ( 100,00 €/$   ) "} />
-                            <FormControlLabel value="20" checked={form.nbrJeton === 20} control={<Radio />} label={!user.data.currency || user.data.currency === 'DHS' ? "20 ( 2000,00 Dhs )" : "20 ( 200,00 €/$   ) "} />
+                            <FormControlLabel value="10" checked={form.nbrJeton === 10} control={<Radio />} label={!user.data.currency || user.data.currency === 'MAD' ? "10 ( 1000,00 Dhs )" : "10 ( 100,00 €/$   ) "} />
+                            <FormControlLabel value="20" checked={form.nbrJeton === 20} control={<Radio />} label={!user.data.currency || user.data.currency === 'MAD' ? "20 ( 2000,00 Dhs )" : "20 ( 200,00 €/$   ) "} />
 
                         </RadioGroupFormsy>
 
@@ -136,12 +136,16 @@ function CommandesDialog(props) {
                     </div>
                     <br />
                     <Typography variant="caption" color="inherit">
-                        Votre commande va être traitée dès que le virement est fait, voici les coordonnées bancaires. <br /><br />
-                        3F industrie<br />
+                        Votre commande va être traitée dès que le virement sera fait,<br /> ci-dessous les coordonnées bancaires: <br /><br />
+                    </Typography>
+
+                    <br />
+                    <Typography variant="caption" color="inherit">
+                        <strong className="uppercase">3F industrie</strong><br />
                         ATTIJARIWAFA BANK<br />
                         CENTRE D'AFFAIRE CASA PORTE D'ANFA<br />
                         Casablanca, Maroc<br />
-                        RIB : 007 780 000 4095 00000 254 292
+                        <strong className="uppercase"> RIB : 007 780 000 4095 00000 254 292</strong>
                     </Typography>
 
 

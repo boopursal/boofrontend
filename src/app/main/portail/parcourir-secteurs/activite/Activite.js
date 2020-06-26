@@ -57,12 +57,12 @@ const useStyles = makeStyles(theme => ({
         fontSize: 20,
         pointerEvents: 'none'
     },
-    grid:{
-        marginBottom:'-16px',
-        marginTop:'-16px',
-        marginLeft:'auto',
-        marginRight:'auto',
-        '& > .MuiGrid-item' : {
+    grid: {
+        marginBottom: '-16px',
+        marginTop: '-16px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        '& > .MuiGrid-item': {
             padding: '16px'
         }
     },
@@ -102,7 +102,7 @@ function Activite(props) {
                     </Grid>
                 </Grid>
             </div>
-            <Grid container className={clsx(classes.grid," max-w-2xl mx-auto py-8  sm:px-16 ")}>
+            <Grid container className={clsx(classes.grid, " max-w-2xl mx-auto py-8  sm:px-16 ")}>
                 <Grid item sm={8} xs={12}>
                     <Paper variant="outlined" className={clsx(classes.paper, 'p-0 my-16')}>
                         <div className="p-16 pl-32">
@@ -119,7 +119,7 @@ function Activite(props) {
                         <Divider />
                         <div className={clsx('p-32 ')}>
                             <Typography variant="h6" >
-                                Sélectionnez une activité dans&ensp;
+                                Sélectionnez un produit dans&ensp;
                                     <span className="font-bold uppercase">{activites.sousSecteur && activites.sousSecteur.name}</span>
                             </Typography>
                             <Grid container spacing={4} className="">
@@ -166,7 +166,7 @@ function Activite(props) {
                                                                         >
                                                                             <ListItemText
                                                                                 disableTypography
-                                                                                primary={<Typography type="body2" style={{ fontSize: 12 }}>{categorie.name}</Typography>}
+                                                                                primary={<Typography type="body2" style={{ fontSize: 12 }}>{categorie.name + " (" + categorie.count + ")"}</Typography>}
                                                                             />
                                                                             <ListItemSecondaryAction>
                                                                                 <IconButton edge="end" aria-label="more">
@@ -194,7 +194,7 @@ function Activite(props) {
                                                                         >
                                                                             <ListItemText
                                                                                 disableTypography
-                                                                                primary={<Typography type="body2" style={{ fontSize: 12 }}>{categorie.name}</Typography>}
+                                                                                primary={<Typography type="body2" style={{ fontSize: 12 }}>{categorie.name + " (" + categorie.count + ")"}</Typography>}
                                                                             />
                                                                             <ListItemSecondaryAction>
                                                                                 <IconButton edge="end" aria-label="more">

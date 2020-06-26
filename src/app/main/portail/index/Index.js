@@ -211,7 +211,7 @@ function Index(props) {
                 <div className={clsx(classes.mainHeader, "items-center md:w-xl xs:w-auto z-999 px-8 py-20 rounded-lg")} >
                     <FuseAnimate duration={400} delay={600}>
                         <Typography variant="h1" component="h1" className="sm:text-18 uppercase text-13 font-bold mb-16 text-white mx-auto max-w-xl">
-                            Les Achats Industriels, c'est une communauté de 1000 sociétés, Acheteurs et Fournisseurs
+                            Les Achats Industriels, c'est la communauté de +1000 sociétés, Acheteurs et Fournisseurs
                         </Typography>
                     </FuseAnimate>
                     <div className="md:w-md xs:w-auto m-auto bg-white rounded-8">

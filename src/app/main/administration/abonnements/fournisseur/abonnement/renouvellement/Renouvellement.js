@@ -193,7 +193,7 @@ function Renouvellement(props) {
 
             if (abonnement.data.offre && abonnement.data.duree) {
 
-                if (abonnement.data.currency && abonnement.data.currency.name !== 'DHS') {
+                if (abonnement.data.currency && abonnement.data.currency.name !== 'MAD') {
                     let ht = abonnement.data.offre.prixEur * abonnement.data.duree.name;
                     setPrixht(ht)
 
@@ -279,7 +279,7 @@ function Renouvellement(props) {
     function handleChangeDuree(item) {
         setDuree(item);
         if (fournisseur) {
-            if (fournisseur.currency && fournisseur.currency.name !== 'DHS') {
+            if (fournisseur.currency && fournisseur.currency.name !== 'MAD') {
                 let ht = offre.prixEur * item.name;
                 setPrixht(ht)
 
@@ -373,7 +373,7 @@ function Renouvellement(props) {
         setDiscount(value);
 
         if (fournisseur) {
-            if (fournisseur.currency && fournisseur.currency.name !== 'DHS') {
+            if (fournisseur.currency && fournisseur.currency.name !== 'MAD') {
                 let ht = offre.prixEur * duree.name;
                 setPrixht(ht)
 
@@ -473,7 +473,7 @@ function Renouvellement(props) {
             setSousSecteurs(_.slice(sousSecteurs, 0, item.nbActivite));
         }
         if (fournisseur) {
-            if (fournisseur.currency && fournisseur.currency.name !== 'DHS') {
+            if (fournisseur.currency && fournisseur.currency.name !== 'MAD') {
                 let ht = item.prixEur * duree.name;
                 setPrixht(ht)
 
@@ -604,8 +604,8 @@ function Renouvellement(props) {
 
     function handleSubmit(form) {
         const params = props.match.params;
-            const { type } = params;
-        dispatch(Actions.saveRenouvellement(form, sousSecteurs, offre, mode, duree, discount, paiement,type));
+        const { type } = params;
+        dispatch(Actions.saveRenouvellement(form, sousSecteurs, offre, mode, duree, discount, paiement, type));
     }
 
     function handleDelete(value) {
@@ -638,7 +638,7 @@ function Renouvellement(props) {
                                     <div className="flex flex-col min-w-0">
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                             <div className="text-16 sm:text-20 truncate">
-                                                {'Renouvellement d\'abonnement, Fournisseur : ' + fournisseur && fournisseur.societe }
+                                                {'Renouvellement d\'abonnement, Fournisseur : ' + fournisseur && fournisseur.societe}
                                             </div>
                                         </FuseAnimate>
 
@@ -721,7 +721,7 @@ function Renouvellement(props) {
                         <Tab className="h-64 normal-case" label="Secteurs d'activités" />
                         {
                             fournisseur &&
-                                <Tab className="h-64 normal-case" label="Infos de la société" />
+                            <Tab className="h-64 normal-case" label="Infos de la société" />
                         }
 
                     </Tabs>
@@ -793,7 +793,7 @@ function Renouvellement(props) {
                                                                                 label={
                                                                                     fournisseur ?
                                                                                         (
-                                                                                            fournisseur.currency && fournisseur.currency.name !== 'DHS' ?
+                                                                                            fournisseur.currency && fournisseur.currency.name !== 'MAD' ?
                                                                                                 parseFloat(item.prixEur).toLocaleString(
                                                                                                     'fr', // leave undefined to use the browser's locale,
                                                                                                     // or use a string like 'en-US' to override it.
@@ -803,7 +803,7 @@ function Renouvellement(props) {
                                                                                                     'fr', // leave undefined to use the browser's locale,
                                                                                                     // or use a string like 'en-US' to override it.
                                                                                                     { minimumFractionDigits: 2 }
-                                                                                                ) + ' DHS HT / mois'
+                                                                                                ) + ' MAD HT / mois'
 
                                                                                         )
                                                                                         :
@@ -811,7 +811,7 @@ function Renouvellement(props) {
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.
                                                                                             { minimumFractionDigits: 2 }
-                                                                                        ) + ' DHS HT / mois'
+                                                                                        ) + ' MAD HT / mois'
                                                                                 }
                                                                             />
                                                                         </FormGroup>
@@ -870,7 +870,7 @@ function Renouvellement(props) {
                                                                             <br />
                                                                             {
                                                                                 fournisseur ? (
-                                                                                    fournisseur.currency && fournisseur.currency.name !== 'DHS' ?
+                                                                                    fournisseur.currency && fournisseur.currency.name !== 'MAD' ?
                                                                                         parseFloat(offre.prixEur).toLocaleString(
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.

@@ -136,6 +136,7 @@ function Demande(props) {
     const demande = useSelector(({ demandesAdminApp }) => demandesAdminApp.demande);
 
     const [isFormValid, setIsFormValid] = useState(false);
+    const [showDiffusion, setShowDiffusion] = useState(false);
     const formRef = useRef(null);
     const { form, handleChange, setForm } = useForm();
 
@@ -238,8 +239,11 @@ function Demande(props) {
     }
 
     function handleRadioChange(e) {
-
+        if (parseInt(e.target.value) === 2) {
+            form.isPublic = false;
+        }
         setForm(_.set({ ...form }, 'statut', parseInt(e.target.value)));
+
     }
     function handleRadioLocalisation(e) {
 
@@ -606,7 +610,7 @@ function Demande(props) {
                                             <Grid item xs={12} sm={3}>
 
                                                 <RadioGroupFormsy
-                                                    className="mb-10 inline"
+                                                    className="inline"
                                                     name="statut"
                                                     onChange={handleRadioChange}
                                                 >
@@ -618,7 +622,6 @@ function Demande(props) {
                                             </Grid>
                                             <Grid item xs={12} sm={3}>
                                                 <CheckboxFormsy
-                                                    className="mb-10"
                                                     name="sendEmail"
                                                     disabled={form.statut !== 1 || !form.isPublic}
                                                     onChange={(e) => handleCheckBoxChange(e, 'sendEmail')}
@@ -628,9 +631,9 @@ function Demande(props) {
                                             </Grid>
                                             <Grid item xs={12} sm={3}>
                                                 <CheckboxFormsy
-                                                    className="mb-10"
                                                     name="isPublic"
                                                     value={form.isPublic}
+                                                    disabled={form.statut === 2}
                                                     onChange={(e) => handleCheckBoxChange(e, 'isPublic')}
                                                     label="Mettre en ligne"
                                                 />
@@ -638,7 +641,6 @@ function Demande(props) {
 
                                             <Grid item xs={12} sm={3}>
                                                 <CheckboxFormsy
-                                                    className="mb-10"
                                                     disabled={form.statut !== 1}
                                                     name="isAnonyme"
                                                     value={form.isAnonyme}
@@ -646,74 +648,75 @@ function Demande(props) {
                                                     label="Mettre la demande anonyme"
                                                 />
                                             </Grid>
-                                            <Grid item xs={12} sm={6}>
+                                            {(form.statut === 2 || form.motifRejet)
+                                                ?
+                                                <Grid item xs={12}>
+                                                    <SelectReactFormsy
+
+                                                        id="motifRejet"
+                                                        name="motifRejet"
+                                                        className="MuiFormControl-fullWidth MuiTextField-root"
+                                                        value={
+
+                                                            motif
+
+
+                                                        }
+                                                        onChange={(value) => handleChipChange2(value, 'motifRejet')}
+                                                        placeholder="Sélectionner le motif du rejet"
+                                                        textFieldProps={{
+                                                            label: 'Motif du rejet',
+                                                            InputLabelProps: {
+                                                                shrink: true
+                                                            },
+                                                            variant: 'outlined'
+                                                        }}
+                                                        options={demande.motifs}
+                                                        fullWidth
+                                                        required
+                                                    />
+                                                </Grid>
+                                                :
+                                                ''}
+                                            <Grid item xs={12} sm={6} className="flex items-center">
                                                 <RadioGroupFormsy
-                                                    className="inline mb-10 "
+                                                    className="inline"
                                                     name="statut"
                                                     label="Diffuser à l'échelle"
                                                     onChange={handleRadioLocalisation}
                                                 >
-                                                    <FormControlLabel value="2" checked={form.localisation === 2} control={<Radio />} label="Locale" />
-                                                    <FormControlLabel value="3" checked={form.localisation === 3} control={<Radio />} label="Internationale" />
-                                                    <FormControlLabel value="1" checked={form.localisation === 1} control={<Radio />} label="Les deux" />
+                                                    <FormControlLabel value="2" disabled={!showDiffusion} checked={form.localisation === 2} control={<Radio />} label="Locale" />
+                                                    <FormControlLabel value="3" disabled={!showDiffusion} checked={form.localisation === 3} control={<Radio />} label="Internationale" />
+                                                    <FormControlLabel value="1" disabled={!showDiffusion} checked={form.localisation === 1} control={<Radio />} label="Les deux" />
 
 
                                                 </RadioGroupFormsy>
+                                                <IconButton onClick={() => setShowDiffusion(!showDiffusion)}>
+                                                    <Icon color="secondary">
+                                                        {
+                                                            showDiffusion ? 'visibility_off' : 'visibility'
+                                                        }
+                                                    </Icon>
+                                                </IconButton>
+                                            </Grid>
+
+                                            <Grid item sm={6} xs={12}>
+                                                <Button
+                                                    type="submit"
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    className="w-200 pr-auto mt-16 normal-case"
+                                                    aria-label="Suivant"
+                                                    disabled={!isFormValid || demande.loading}
+                                                    value="legacy"
+                                                >
+                                                    Sauvegarder
+                                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                </Button>
                                             </Grid>
 
                                         </Grid>
 
-                                        <Grid container spacing={3} >
-
-
-
-                                            <Grid item xs={12} sm={4}>
-
-                                            </Grid>
-                                        </Grid>
-
-                                        {(form.statut === 2 || form.motifRejet)
-                                            ?
-                                            <SelectReactFormsy
-
-                                                id="motifRejet"
-                                                name="motifRejet"
-                                                className="MuiFormControl-fullWidth MuiTextField-root mb-24"
-                                                value={
-
-                                                    motif
-
-
-                                                }
-                                                onChange={(value) => handleChipChange2(value, 'motifRejet')}
-                                                placeholder="Sélectionner le motif du rejet"
-                                                textFieldProps={{
-                                                    label: 'Motif du rejet',
-                                                    InputLabelProps: {
-                                                        shrink: true
-                                                    },
-                                                    variant: 'outlined'
-                                                }}
-                                                options={demande.motifs}
-                                                fullWidth
-                                                required
-                                            />
-                                            :
-                                            ''}
-
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            color="primary"
-                                            className="w-200 pr-auto mt-16 normal-case"
-                                            aria-label="Suivant"
-                                            disabled={!isFormValid || demande.loading}
-                                            value="legacy"
-                                        >
-                                            Sauvegarder
-                                                {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-
-                                        </Button>
 
                                     </Formsy>
                                 )}

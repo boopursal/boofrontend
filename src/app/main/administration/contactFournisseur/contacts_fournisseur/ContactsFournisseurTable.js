@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip, TextField } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -219,7 +219,31 @@ function ContactsFournisseurTable(props) {
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeMessage(row.original, parametres));
+                                                        dispatch(Actions.openDialog({
+                                                            children: (
+                                                                <React.Fragment>
+                                                                    <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                                                    <DialogContent>
+                                                                        <DialogContentText id="alert-dialog-description">
+                                                                            Voulez vous vraiment supprimer cet enregistrement ?
+                                                                        </DialogContentText>
+                                                                    </DialogContent>
+                                                                    <DialogActions>
+                                                                        <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                            Non
+                                                                        </Button>
+                                                                        <Button
+                                                                            onClick={(ev) => {
+                                                                                dispatch(Actions.removeMessage(row.original, parametres));
+                                                                                dispatch(Actions.closeDialog())
+                                                                            }} color="primary"
+                                                                            autoFocus>
+                                                                            Oui
+                                                                        </Button>
+                                                                    </DialogActions>
+                                                                </React.Fragment>
+                                                            )
+                                                        }))
                                                     }}
                                                 >
                                                     <Icon>delete</Icon>

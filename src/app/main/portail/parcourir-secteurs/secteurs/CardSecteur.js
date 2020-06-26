@@ -9,7 +9,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import { List, ListItem, Icon, ListItemText, Button, Divider } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import {FuseUtils} from '@fuse';
+import { FuseUtils } from '@fuse';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,12 +21,13 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     color: theme.palette.primary.main,
+    fontSize: 16,
   },
   btn: {
     fontSize: 11,
     padding: '0px 8px'
   },
-  content:{
+  content: {
     minHeight: 156,
 
   }
@@ -49,14 +50,14 @@ export default function RecipeReviewCard(props) {
         className={classes.media}
         image={
           secteur.url ?
-          FuseUtils.getUrl()+'/images/secteur/'+secteur.url :
-          "https://source.unsplash.com/collection/9456871/1600x900"
+            FuseUtils.getUrl() + '/images/secteur/' + secteur.url :
+            "https://source.unsplash.com/collection/9456871/1600x900"
         }
         title={
           secteur.name
         }
       />
-      <CardContent className={clsx(classes.content,"p-0")}>
+      <CardContent className={clsx(classes.content, "p-0")}>
         <List dense={true} >
           {
             secteur.sousSecteurs && secteur.sousSecteurs.map((sousSecteur, i) => (
@@ -68,7 +69,7 @@ export default function RecipeReviewCard(props) {
                   <Icon className="text-16 arrow-icon">keyboard_arrow_right</Icon>
                   <ListItemText
                     disableTypography
-                    primary={<Typography type="body2" className="normal-case" style={{ fontSize: 12 }}>{sousSecteur.name}</Typography>}
+                    primary={<Typography type="body2" className="normal-case" style={{ fontSize: 12 }}>{sousSecteur.name + " (" + sousSecteur.count + ")"}</Typography>}
                   />
                 </ListItem>
                 <Divider component="li" />
@@ -79,7 +80,7 @@ export default function RecipeReviewCard(props) {
         </List>
       </CardContent>
       <CardActions disableSpacing >
-        <Button size="small" color="secondary" component={Link}  to={`/annuaire-entreprises/${secteur.id}-${secteur.slug}`} className={clsx(classes.btn)} variant="outlined">VOIR TOUT LE SECTEUR <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon></Button>
+        <Button size="small" color="secondary" component={Link} to={`/annuaire-entreprises/${secteur.id}-${secteur.slug}`} className={clsx(classes.btn)} variant="outlined">VOIR TOUT LE SECTEUR <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon></Button>
       </CardActions>
     </Card>
   );

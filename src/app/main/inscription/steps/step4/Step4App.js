@@ -13,7 +13,6 @@ import { TextFieldFormsy } from '@fuse';
 import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
 import StepConnector from '@material-ui/core/StepConnector';
 import PropTypes from 'prop-types';
-import CheckIcon from '@material-ui/icons/Check';
 import DomainIcon from '@material-ui/icons/Domain';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { useForm } from '@fuse/hooks';
@@ -49,6 +48,9 @@ const useStyles = makeStyles(theme => ({
         marginTop: -12,
         marginLeft: -12,
     },
+    labelBold: {
+        fontWeight: 'bold!important'
+    }
 }));
 const defaultFormState = {
     step4: '',
@@ -60,7 +62,8 @@ const defaultFormState = {
     fix: '',
     ice: '',
     description: '',
-    autreVille: ''
+    autreVille: '',
+    autreCurrency: '',
 };
 const ColorlibConnector = withStyles({
     alternativeLabel: {
@@ -69,13 +72,13 @@ const ColorlibConnector = withStyles({
     active: {
         '& $line': {
             backgroundImage:
-                'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                'linear-gradient(45deg, #5AFF15 30%, #00B712 90%)',
         },
     },
     completed: {
         '& $line': {
             backgroundImage:
-                'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                'linear-gradient(45deg, #5AFF15 30%, #00B712 90%)',
         },
     },
     line: {
@@ -100,12 +103,12 @@ const useColorlibStepIconStyles = makeStyles({
     },
     active: {
         backgroundImage:
-            'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+            'linear-gradient(45deg, #5AFF15 30%, #00B712 90%)',
         boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
     },
     completed: {
         backgroundImage:
-            'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+            'linear-gradient(45deg, #5AFF15 30%, #00B712 90%)',
     },
 });
 
@@ -114,7 +117,7 @@ function ColorlibStepIcon(props) {
     const { active, completed } = props;
 
     const icons = {
-        1: <CheckIcon />,
+        1: <Icon>person_add</Icon>,
         2: <DomainIcon />,
         3: <SettingsIcon />,
     };
@@ -138,7 +141,7 @@ ColorlibStepIcon.propTypes = {
 };
 
 function getSteps() {
-    return ['Inscription', 'Information de la société'];
+    return ['Inscription', 'Informations de la société'];
 }
 
 function Step4App(props) {
@@ -151,11 +154,12 @@ function Step4App(props) {
     const [isFormValid, setIsFormValid] = useState(false);
     const [showIce, setShowIce] = useState(false);
     const [showAutreVille, setShowAutreVille] = useState(false);
+    const [showAutreCurrency, setShowAutreCurrency] = useState(false);
     const formRef = useRef(null);
 
-    const Pays = useSelector(({ step4App }) => step4App.step4.pays);
-    const Villes = useSelector(({ step4App }) => step4App.step4.villes);
-    const Currencies = useSelector(({ step4App }) => step4App.step4.currencies);
+    const pays = useSelector(({ step4App }) => step4App.step4.pays);
+    const villes = useSelector(({ step4App }) => step4App.step4.villes);
+    const currencies = useSelector(({ step4App }) => step4App.step4.currencies);
     const step4 = useSelector(({ step4App }) => step4App.step4);
 
     const { form, handleChange, setForm } = useForm(defaultFormState);
@@ -201,6 +205,12 @@ function Step4App(props) {
             if (name === 'ville' && value.label !== 'Autre') {
                 setShowAutreVille(false)
             }
+            if (name === 'currency' && value.label === 'Autre') {
+                setShowAutreCurrency(true)
+            }
+            if (name === 'currency' && value.label !== 'Autre') {
+                setShowAutreCurrency(false)
+            }
         }
         else {
             setForm(_.set({ ...form }, name, value));
@@ -241,7 +251,10 @@ function Step4App(props) {
                                 <Stepper alternativeLabel activeStep={1} connector={<ColorlibConnector />}>
                                     {steps.map(label => (
                                         <Step key={label}>
-                                            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+                                            <StepLabel classes={{
+                                                label: 'font-bold',
+                                                alternativeLabel: classes.labelBold
+                                            }} StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
                                         </Step>
                                     ))}
                                 </Stepper>
@@ -299,10 +312,35 @@ function Step4App(props) {
                                                             required: 'required'
                                                         }}
                                                         className="mb-16"
-                                                        options={Currencies}
+                                                        options={currencies}
                                                         onChange={(value) => handleChipChange(value, 'currency')}
                                                         required
                                                     />
+                                                    {
+                                                        showAutreCurrency ?
+                                                            <TextFieldFormsy
+                                                                className="mb-16 w-full"
+                                                                type="text"
+                                                                name="autreCurrency"
+                                                                value={form.autreCurrency}
+                                                                onChange={handleChange}
+                                                                label="Autre Devise"
+                                                                autoComplete="currency"
+                                                                validations={{
+                                                                    minLength: 2,
+                                                                    maxLength: 5,
+
+                                                                }}
+                                                                validationErrors={{
+                                                                    minLength: 'La longueur minimale de caractère est 2',
+                                                                    maxLength: 'La longueur maximale de caractère est 5',
+                                                                }}
+                                                                variant="outlined"
+                                                                required
+                                                            />
+                                                            :
+                                                            ''
+                                                    }
                                                 </Grid>
 
 
@@ -318,7 +356,7 @@ function Step4App(props) {
                                                         value={
                                                             form.pays
                                                         }
-                                                        placeholder="Sélectionner une Pays"
+                                                        placeholder="Sélectionner une pays"
                                                         textFieldProps={{
                                                             label: 'Pays',
                                                             InputLabelProps: {
@@ -329,7 +367,7 @@ function Step4App(props) {
                                                         }}
 
                                                         className="mb-16"
-                                                        options={Pays}
+                                                        options={pays}
                                                         onChange={(value) => handleChipChange(value, 'pays')}
                                                         required
                                                     />
@@ -351,7 +389,7 @@ function Step4App(props) {
                                                             required: 'required'
                                                         }}
                                                         className="mb-16"
-                                                        options={Villes}
+                                                        options={villes}
                                                         isLoading={step4.loadingVille}
                                                         onChange={(value) => handleChipChange(value, 'ville')}
                                                         required

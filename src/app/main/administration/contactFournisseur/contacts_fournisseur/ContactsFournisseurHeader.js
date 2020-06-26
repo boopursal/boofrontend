@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Icon, Typography } from '@material-ui/core';
+import { Icon, Typography } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 
 function ContactsFournisseurHeader(props) {
@@ -11,11 +11,11 @@ function ContactsFournisseurHeader(props) {
                     <Icon className="text-32 mr-0 sm:mr-12">email</Icon>
                 </FuseAnimate>
                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                    <Typography className="hidden sm:flex" variant="h6">Validation les messages envoyés aux Fournisseurs</Typography>
+                    <Typography className="hidden sm:flex" variant="h6">Validation des messages envoyés aux Fournisseurs</Typography>
                 </FuseAnimate>
             </div>
 
-      
+
         </div>
     );
 }

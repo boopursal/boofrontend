@@ -38,7 +38,7 @@ const styles = theme => ({
         margin: 'auto',
         display: 'block',
         maxWidth: '100%',
-        maxHeight: '100%',
+        maxHeight: '150px',
     },
 });
 
@@ -99,111 +99,112 @@ function ProduitListItem(props) {
                             }}
                         >
                             {
-                                produits.length > 0 ? 
-                                produits.map((produit, index) => (
+                                produits.length > 0 ?
+                                    produits.map((produit, index) => (
 
-                                    <Paper className={classes.paper} key={index}>
-                                        <Grid container spacing={2}>
-                                            <Grid item >
-                                                <ButtonBase className={classes.image} component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`}>
-                                                    <img className={classes.img} alt={produit.titre} src={
-                                                        produit.featuredImageId ?
-                                                            FuseUtils.getUrl() + produit.featuredImageId.url
-                                                            :
-                                                            'assets/images/ecommerce/product-placeholder.jpg'
-                                                    } />
-                                                </ButtonBase>
-                                            </Grid>
-                                            <Grid item xs={12} sm container>
-                                                <Grid item xs container direction="column" spacing={2}>
-                                                    <Grid item xs>
-                                                        <Typography gutterBottom component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} variant="h6">
-                                                            {produit.titre}
-                                                        </Typography>
-                                                        <Typography variant="body2" gutterBottom>
-                                                            {_.capitalize(_.truncate(produit.description, {
-                                                                'length': 70
-                                                            }))}
-                                                        </Typography>
-                                                        <Typography variant="body2" className="mb-8" color="textSecondary">
-                                                            Réf: {produit.reference}
+                                        <Paper className={classes.paper} key={index}>
+                                            <Grid container spacing={2}>
+                                                <Grid item >
+                                                    <ButtonBase className={classes.image} component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`}>
+                                                        <img className={classes.img} alt={produit.titre} src={
+                                                            produit.featuredImageId ?
+                                                                FuseUtils.getUrl() + produit.featuredImageId.url
+                                                                :
+                                                                'assets/images/ecommerce/product-placeholder.jpg'
+                                                        } />
+                                                    </ButtonBase>
+                                                </Grid>
+                                                <Grid item xs={12} sm container>
+                                                    <Grid item xs container direction="column" spacing={2}>
+                                                        <Grid item xs>
+                                                            <Typography gutterBottom component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} variant="h6">
+                                                                {produit.titre}
+                                                            </Typography>
+                                                            <Typography variant="body2" gutterBottom>
+                                                                {_.capitalize(_.truncate(produit.description, {
+                                                                    'length': 70
+                                                                }))}
+                                                                <Link to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} className="ml-2 text-blue" >Voir détails</Link>
+                                                            </Typography>
+                                                            <Typography variant="body2" className="mb-8" color="textSecondary">
+                                                                Réf: {produit.reference}
+                                                            </Typography>
+                                                            {
+                                                                produit.images.length > 0 ?
+                                                                    <Chip
+                                                                        icon={<Icon className="text-16 mr-0">image</Icon>}
+                                                                        label={produit.images.length}
+                                                                        classes={{
+                                                                            root: "h-24",
+                                                                            label: "pl-4 pr-6 py-4 text-11",
+                                                                            deleteIcon: "w-16 ml-0",
+                                                                        }}
+                                                                        variant="outlined"
+                                                                        className="mr-4 h-24"
+                                                                    />
+                                                                    : ''
+                                                            }
+
+                                                            {
+                                                                produit.videos ?
+                                                                    <Chip
+                                                                        icon={<Icon className="text-16 mr-0">videocam</Icon>}
+                                                                        label="1"
+                                                                        classes={{
+                                                                            root: "h-24",
+                                                                            label: "pl-4 pr-6 py-4 text-11",
+                                                                            deleteIcon: "w-16 ml-0",
+                                                                        }}
+                                                                        variant="outlined"
+                                                                        className="mr-4 h-24"
+                                                                    />
+                                                                    : ''
+                                                            }
+
+                                                            {
+                                                                produit.ficheTechnique ?
+                                                                    <Chip
+                                                                        icon={<Icon className="text-16 mr-0">picture_as_pdf</Icon>}
+                                                                        label="1 fiche technique"
+                                                                        classes={{
+                                                                            root: "h-24",
+                                                                            label: "pl-4 pr-6 py-4 text-11",
+                                                                            deleteIcon: "w-16 ml-0",
+                                                                        }}
+                                                                        variant="outlined"
+                                                                        className="mr-4 h-24"
+                                                                    />
+                                                                    : ''
+                                                            }
+                                                        </Grid>
+
+                                                    </Grid>
+                                                    <Grid item className='text-right content-between '>
+                                                        <Typography variant="subtitle1" color='secondary' className="font-600">
+                                                            {
+                                                                produit.pu ?
+                                                                    parseFloat(produit.pu).toLocaleString(
+                                                                        undefined, // leave undefined to use the browser's locale,
+                                                                        // or use a string like 'en-US' to override it.
+                                                                        { minimumFractionDigits: 2 }
+                                                                    ) + (produit.currency ? ' ' + produit.currency.name : '')
+                                                                    : 'A consulter'}
                                                         </Typography>
                                                         {
-                                                            produit.images.length > 0 ?
-                                                                <Chip
-                                                                    icon={<Icon className="text-16 mr-0">image</Icon>}
-                                                                    label={produit.images.length}
-                                                                    classes={{
-                                                                        root: "h-24",
-                                                                        label: "pl-4 pr-6 py-4 text-11",
-                                                                        deleteIcon: "w-16 ml-0",
-                                                                    }}
-                                                                    variant="outlined"
-                                                                    className="mr-4 h-24"
-                                                                />
-                                                                : ''
-                                                        }
-
-                                                        {
-                                                            produit.videos ?
-                                                                <Chip
-                                                                    icon={<Icon className="text-16 mr-0">videocam</Icon>}
-                                                                    label="1"
-                                                                    classes={{
-                                                                        root: "h-24",
-                                                                        label: "pl-4 pr-6 py-4 text-11",
-                                                                        deleteIcon: "w-16 ml-0",
-                                                                    }}
-                                                                    variant="outlined"
-                                                                    className="mr-4 h-24"
-                                                                />
-                                                                : ''
-                                                        }
-
-                                                        {
-                                                            produit.ficheTechnique ?
-                                                                <Chip
-                                                                    icon={<Icon className="text-16 mr-0">picture_as_pdf</Icon>}
-                                                                    label="1 fiche technique"
-                                                                    classes={{
-                                                                        root: "h-24",
-                                                                        label: "pl-4 pr-6 py-4 text-11",
-                                                                        deleteIcon: "w-16 ml-0",
-                                                                    }}
-                                                                    variant="outlined"
-                                                                    className="mr-4 h-24"
-                                                                />
-                                                                : ''
+                                                            produit['@id'] &&
+                                                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                                                <Button size="small" onClick={ev => dispatch(Actions.openNewDemandeDevisDialog(produit['@id']))} className="mb-8 text-12 mt-2 w-full items-center" color="primary" variant="outlined">
+                                                                    Demandez un devis
+                                                            </Button>
+                                                            </FuseAnimate>
                                                         }
                                                     </Grid>
-
-                                                </Grid>
-                                                <Grid item className='text-right content-between '>
-                                                    <Typography variant="subtitle1" color='secondary' className="font-600">
-                                                        {
-                                                            produit.pu ?
-                                                                parseFloat(produit.pu).toLocaleString(
-                                                                    undefined, // leave undefined to use the browser's locale,
-                                                                    // or use a string like 'en-US' to override it.
-                                                                    { minimumFractionDigits: 2 }
-                                                                ) + (produit.currency ? ' ' + produit.currency.name : '')
-                                                                : 'A consulter'}
-                                                    </Typography>
-                                                    {
-                                                        produit['@id'] &&
-                                                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                                                            <Button size="small" onClick={ev => dispatch(Actions.openNewDemandeDevisDialog(produit['@id']))} className="mb-8 text-12 mt-2 w-full items-center" color="primary" variant="outlined">
-                                                                Demandez un devis
-                                                            </Button>
-                                                        </FuseAnimate>
-                                                    }
                                                 </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </Paper>
-                                ))
-                                :
-                                ''
+                                        </Paper>
+                                    ))
+                                    :
+                                    ''
                             }
                             {
                                 produits.length > 0 && (

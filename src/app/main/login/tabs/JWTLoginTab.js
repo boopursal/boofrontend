@@ -56,7 +56,8 @@ function JWTLoginTab(props) {
         if (login.error && login.error.message) {
             dispatch(
                 Actions.showMessage({
-                    message: login.error.message,//text or html
+                    //message: login.error.message,//text or html
+                    message: login.error.message === "Invalid credentials." ? "Email ou mot de passe incorrect." : login.error.message,
                     autoHideDuration: 6000,//ms
                     anchorOrigin: {
                         vertical: 'top',//top bottom

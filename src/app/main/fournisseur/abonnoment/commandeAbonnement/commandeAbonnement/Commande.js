@@ -203,7 +203,7 @@ function Commande(props) {
             if (commande.data.duree) {
                 setDuree(commande.data.duree);
                 if (commande.data.offre) {
-                    if (commande.data.fournisseur.currency.name === 'DHS') {
+                    if (commande.data.fournisseur.currency.name === 'MAD') {
                         let ht = commande.data.offre.prixMad * commande.data.duree.name;
                         setPrixht(ht)
 
@@ -273,7 +273,7 @@ function Commande(props) {
         ) {
             setDuree(commande.durees[0]);
             if (offre) {
-                if (user.data.currency === 'DHS') {
+                if (user.data.currency === 'MAD') {
                     let ht = offre.prixMad * commande.durees[0].name;
                     setPrixht(ht)
 
@@ -336,7 +336,7 @@ function Commande(props) {
 
     function handleChangeDuree(item) {
         setDuree(item);
-        if (user.data.currency === 'DHS') {
+        if (user.data.currency === 'MAD') {
             let ht = offre.prixMad * item.name;
             setPrixht(ht)
 
@@ -391,7 +391,7 @@ function Commande(props) {
             setSousSecteurs(_.slice(sousSecteurs, 0, item.nbActivite));
         }
 
-        if (user.data.currency === 'DHS') {
+        if (user.data.currency === 'MAD') {
             let ht = item.prixMad * duree.name;
             setPrixht(ht)
 
@@ -622,12 +622,12 @@ function Commande(props) {
                                                                                     />
                                                                                 }
                                                                                 label={
-                                                                                    commande.fournisseur.currency.name === 'DHS' ?
+                                                                                    commande.fournisseur.currency.name === 'MAD' ?
                                                                                         parseFloat(item.prixMad).toLocaleString(
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.
                                                                                             { minimumFractionDigits: 2 }
-                                                                                        ) + ' DHS HT / mois' :
+                                                                                        ) + ' MAD HT / mois' :
                                                                                         parseFloat(item.prixEur).toLocaleString(
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.

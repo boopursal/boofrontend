@@ -11,6 +11,7 @@ import routes from './fuse-configs/routesConfig';
 import ScrollToTop from './ScrollToTop';
 import { create } from 'jss';
 import { StylesProvider, jssPreset, createGenerateClassName } from '@material-ui/styles';
+import CookieConsent, { Cookies } from "react-cookie-consent";
 
 const jss = create({
     ...jssPreset(),
@@ -36,6 +37,16 @@ const App = () => {
                             <FuseAuthorization>
                                 <FuseTheme>
                                     <FuseLayout />
+                                    <CookieConsent
+                                        location="bottom"
+                                        buttonText="J'accepte"
+                                        cookieName="Les Achats Indsutriels Cookies "
+                                        style={{ background: "#2B373B" }}
+                                        buttonStyle={{ color: "#fff", background: "#f48d35", fontSize: "13px" }}
+                                        expires={150}
+                                    >
+                                        En poursuivant votre navigation sur ce site, vous acceptez l’utilisation de cookies pour nous permettre de réaliser des statistiques de visites.
+                                    </CookieConsent>
                                 </FuseTheme>
                             </FuseAuthorization>
                         </Router>

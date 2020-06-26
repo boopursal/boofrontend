@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Grid, Paper, Typography } from '@material-ui/core';
+import { Grid, Paper, Typography, Icon, Input } from '@material-ui/core';
 import HeaderSecteurs from './HeaderSecteurs';
 import CardSecteur from './CardSecteur';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import ContentLoader from 'react-content-loader'
 import { Helmet } from "react-helmet";
+import { FuseUtils } from '@fuse';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -26,12 +27,12 @@ const useStyles = makeStyles(theme => ({
         position: 'relative',
         marginBottom: theme.spacing(4),
     },
-    grid:{
-        marginBottom:'-16px',
-        marginTop:'-16px',
-        marginLeft:'auto',
-        marginRight:'auto',
-        '& > .MuiGrid-item' : {
+    grid: {
+        marginBottom: '-16px',
+        marginTop: '-16px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        '& > .MuiGrid-item': {
             padding: '16px'
         }
     },
@@ -63,11 +64,27 @@ function Secteurs(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const secteurs = useSelector(({ parcourirSecteurs }) => parcourirSecteurs.pSecteurs);
+    const [filteredData, setFilteredData] = useState(null);
 
     useEffect(() => {
         if (!secteurs.data)
             dispatch(Actions.getPSecteurs());
     }, [dispatch, secteurs.data]);
+
+
+    useEffect(() => {
+        function getFilteredArray(entities, searchText) {
+            const arr = Object.keys(entities).map((id) => entities[id]);
+            if (searchText.length === 0) {
+                return arr;
+            }
+            return FuseUtils.filterArrayByString(arr, searchText);
+        }
+
+        if (secteurs.data) {
+            setFilteredData(getFilteredArray(secteurs.data, secteurs.searchText));
+        }
+    }, [secteurs.data, secteurs.searchText]);
 
 
     return (
@@ -90,12 +107,29 @@ function Secteurs(props) {
                     </Grid>
                 </Grid>
             </div>
-            <Grid container  className={clsx(classes.grid," max-w-2xl mx-auto py-8  sm:px-16 ")}>
+            <Grid container className={clsx(classes.grid, " max-w-2xl mx-auto py-8  sm:px-16 ")}>
                 <Grid item sm={8} xs={12}>
                     <Paper variant="outlined" className={clsx(classes.paper, 'p-32 my-16')}>
+
                         <Typography className={classes.title} component="h1" color="primary">
-                            Découvrez <span className="font-bold">Les Achats Industriels</span> à travers ses secteurs d'activité
+                            Découvrez <span className="font-bold">Les Achats Industriels</span> à travers ses secteurs d'activités
                         </Typography>
+                        <Paper className="flex items-center w-full mb-16 px-8 py-4 rounded-8" elevation={1}>
+                            <Icon className="mr-8" color="action">search</Icon>
+                            <Input
+                                placeholder="Rechercher dans les secteurs d'activités"
+                                className="flex flex-1"
+                                disableUnderline
+                                fullWidth
+                                value={secteurs.searchText}
+                                inputProps={{
+                                    'aria-label': 'Rechercher'
+                                }}
+                                onChange={ev => dispatch(Actions.setSearchText(ev))}
+
+
+                            />
+                        </Paper>
                         <Grid container spacing={2} className="">
                             {
                                 secteurs.loading ?
@@ -129,7 +163,7 @@ function Secteurs(props) {
                                     :
                                     (
 
-                                        secteurs.data && secteurs.data.map((item, index) => (
+                                        filteredData && filteredData.map((item, index) => (
                                             <Grid item sm={6} xs={12} key={index}>
 
                                                 <CardSecteur {...props} secteur={item} />

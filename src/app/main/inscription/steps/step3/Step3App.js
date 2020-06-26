@@ -11,7 +11,7 @@ import { FuseAnimate, TextFieldFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import StepConnector from '@material-ui/core/StepConnector';
 import PropTypes from 'prop-types';
-import CheckIcon from '@material-ui/icons/Check';
+import DomainIcon from '@material-ui/icons/Domain';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { useForm } from '@fuse/hooks';
 import _ from '@lodash';
@@ -25,11 +25,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Highlighter from "react-highlight-words";
 import Collapse from '@material-ui/core/Collapse';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 /**=============== FOUNRISSEUR SOUS-SECTEURS ======================= */
 const useStyles = makeStyles(theme => ({
     card: {
-        minWidth: 675,
-        maxWidth: 675,
+        minWidth: 900,
+        maxWidth: 900,
+        borderRadius: '20px',
+        padding: '20px',
+        height: 600,
         overflow: 'hidden'
     },
     chips: {
@@ -85,6 +89,15 @@ const useStyles = makeStyles(theme => ({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
+    labelBold: {
+        fontWeight: 'bold!important'
+    },
+    alert: {
+        backgroundColor: " #ebf8ff",
+        color: "#2b6cb0!important",
+        borderColor: "#2b6cb0!important"
+
+    }
 }));
 
 const defaultFormState = {
@@ -99,13 +112,13 @@ const ColorlibConnector = withStyles({
     active: {
         '& $line': {
             backgroundImage:
-                'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                'linear-gradient(45deg, #5AFF15 30%, #00B712 90%)',
         },
     },
     completed: {
         '& $line': {
             backgroundImage:
-                'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                'linear-gradient(45deg, #5AFF15 30%, #00B712 90%)',
         },
     },
     line: {
@@ -130,12 +143,13 @@ const useColorlibStepIconStyles = makeStyles({
     },
     active: {
         backgroundImage:
-            'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+            'linear-gradient(45deg, #5AFF15 30%, #00B712 90%)',
         boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
     },
     completed: {
         backgroundImage:
-            'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+            'linear-gradient(45deg, #5AFF15 30%, #00B712 90%)',
+
     },
 });
 
@@ -144,8 +158,8 @@ function ColorlibStepIcon(props) {
     const { active, completed } = props;
 
     const icons = {
-        1: <CheckIcon />,
-        2: <CheckIcon />,
+        1: <Icon>person_add</Icon>,
+        2: <DomainIcon />,
         3: <SettingsIcon />,
     };
 
@@ -168,7 +182,7 @@ ColorlibStepIcon.propTypes = {
 };
 
 function getSteps() {
-    return ['Inscription', 'Information de la société', 'Produits'];
+    return ['Inscription', 'Informations de la société', 'Produits'];
 }
 function renderSuggestion(suggestion, { query, isHighlighted }) {
     return (
@@ -313,7 +327,7 @@ function Step3App(props) {
                 <meta name="robots" content="noindex, nofollow" />
                 <meta name="googlebot" content="noindex" />
             </Helmet>
-            <div className="flex flex-col items-center justify-center w-full">
+            <div className="flex flex-col items-center full-width justify-center">
 
 
                 <FuseAnimate animation="transition.expandIn">
@@ -322,16 +336,16 @@ function Step3App(props) {
 
                         <CardContent >
 
-
-
                             <Stepper alternativeLabel activeStep={2} connector={<ColorlibConnector />}>
                                 {steps.map(label => (
                                     <Step key={label}>
-                                        <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+                                        <StepLabel classes={{
+                                            label: 'font-bold',
+                                            alternativeLabel: classes.labelBold
+                                        }} StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
                                     </Step>
                                 ))}
                             </Stepper>
-
 
                             <div className="w-full">
                                 <Formsy
@@ -342,12 +356,19 @@ function Step3App(props) {
                                     className="flex flex-col justify-center w-full"
                                 >
                                     <div ref={popperNode} >
-                                        <Typography variant="caption" className="flex items-center mb-16">
-                                            <Icon>info</Icon>&ensp;
-                                            <span> Vous pouvez choisir <span className="uppercase font-extrabold">un</span> ou <span className="uppercase font-extrabold">plusieurs produits</span>,
-                                            il suffit de taper un mot-clé ensuite sélectionner les produits qui vous conviennent.</span>
+                                        <Typography variant="h6" className="text-center uppercase mb-16 " >
+                                            Une dernière étape pour finaliser votre inscription !
                                         </Typography>
-
+                                        <div className={clsx("rounded py-8 px-4 border-t-4 shadow-md mb-16", classes.alert)} role="alert">
+                                            <div className="flex items-center">
+                                                <Icon className="mr-2">info</Icon>
+                                                <Typography className="font-bold">Plus vous sélectionnez des produits, mieux vous receverez des demandes d'achats.</Typography>
+                                            </div>
+                                        </div>
+                                        <ul className="mb-24 text-12 font-600">
+                                            <li className="mb-4">Tapez un mot clé, utilisez des termes génériques (ex: Chariot élévateur). </li>
+                                            <li>Choisissez au moins un produit de votre activité.</li>
+                                        </ul>
                                         <Autosuggest
                                             {...autosuggestProps}
                                             getSuggestionValue={suggestion => searchCategories.searchText}
@@ -365,7 +386,7 @@ function Step3App(props) {
                                             inputProps={{
                                                 classes,
                                                 label: 'Produits',
-                                                placeholder: "Produit (ex: Rayonnages charges lourdes)",
+                                                placeholder: "ex: Chariot élévateur",
                                                 value: searchCategories.searchText,
                                                 variant: "outlined",
                                                 name: "categories",
@@ -430,9 +451,9 @@ function Step3App(props) {
 
                                         }
                                     </div>
-                                    <Typography paragraph className="flex   items-center " color="secondary">
+                                    <Typography paragraph className="flex mt-16 items-center " color="secondary">
                                         <Icon className="mr-2" color="secondary">help_outline</Icon>
-                                        Si vos produits n´existent pas, veuillez nous les envoyer en cliquant:
+                                        Si vos produits n´existent pas, veuillez cliquer ici:
                                             <IconButton
                                             className={clsx(classes.expand, "ml-2", {
                                                 [classes.expandOpen]: expanded,

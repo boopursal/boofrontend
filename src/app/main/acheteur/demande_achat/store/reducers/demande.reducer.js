@@ -9,6 +9,7 @@ const initialState = {
     deleteReqInProgress: false,
     attachement: null,
     attachement_deleted: null,
+    new: false,
 };
 
 const demandeReducer = function (state = initialState, action) {
@@ -21,13 +22,22 @@ const demandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: true,
-
+                    new: false,
                 }
             }
         case Actions.CLEAN_UP_DEMANDE:
             {
                 return {
                     ...initialState,
+                    new: false,
+
+                }
+            }
+        case Actions.NEW_DEMANDE:
+            {
+                return {
+                    ...state,
+                    new: true
 
                 }
             }
@@ -97,7 +107,7 @@ const demandeReducer = function (state = initialState, action) {
                     ...state,
                     loading: false,
                     data: null,
-                    
+
                 };
             }
         case Actions.SAVE_ERROR:

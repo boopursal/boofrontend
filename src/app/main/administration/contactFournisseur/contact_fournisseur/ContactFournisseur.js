@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, Divider } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded,  TextFieldFormsy,   CheckboxFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, TextFieldFormsy, CheckboxFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import _ from '@lodash';
@@ -81,10 +81,10 @@ function ContactFournisseur(props) {
 
 
     useEffect(() => {
-        if (contactFournisseur.error && ( contactFournisseur.error.statut ||  contactFournisseur.error.email ||  contactFournisseur.error.message ||  contactFournisseur.error.contact ||  contactFournisseur.error.phone)) {
-                formRef.current.updateInputsWithError({
-                    ...contactFournisseur.error
-                });
+        if (contactFournisseur.error && (contactFournisseur.error.statut || contactFournisseur.error.email || contactFournisseur.error.message || contactFournisseur.error.contact || contactFournisseur.error.phone)) {
+            formRef.current.updateInputsWithError({
+                ...contactFournisseur.error
+            });
             disableButton();
             return () => {
                 dispatch(Actions.cleanError())
@@ -92,7 +92,7 @@ function ContactFournisseur(props) {
         }
     }, [contactFournisseur.error]);
 
-    
+
 
 
     useEffect(() => {
@@ -135,7 +135,7 @@ function ContactFournisseur(props) {
 
     function handleSubmit() {
 
-        dispatch(Actions.putMessage(form, form.id,props.history));
+        dispatch(Actions.putMessage(form, form.id, props.history));
 
     }
 
@@ -179,6 +179,7 @@ function ContactFournisseur(props) {
                                 <Button
                                     className="whitespace-no-wrap"
                                     variant="contained"
+                                    color="secondary"
                                     type="submit"
                                     disabled={!isFormValid || contactFournisseur.loading}
                                     onClick={() => handleSubmit()}
@@ -242,10 +243,10 @@ function ContactFournisseur(props) {
                                                         readOnly: true,
                                                     }}
                                                     fullWidth
-
+                                                    disabled
                                                 />
                                             </Grid>
-                                           
+
 
                                         </Grid>
 
@@ -255,7 +256,7 @@ function ContactFournisseur(props) {
 
                                         <Grid container spacing={3} className="mt-5 mb-5">
 
-                                            
+
                                             <Grid item xs={12} sm={4}>
                                                 <TextFieldFormsy
                                                     type="text"
@@ -263,17 +264,13 @@ function ContactFournisseur(props) {
                                                     value={form.contact}
                                                     onChange={handleChange}
                                                     label="NOM & Prénom"
-                                                    validations={{
-                                                        minLength: 4
-                                                    }}
-                                                    validationErrors={{
-                                                        minLength: 'La longueur minimale de caractère est 4'
-                                                    }}
+                                                    disabled
                                                     InputProps={{
+                                                        readOnly: true,
                                                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
                                                     }}
+
                                                     variant="outlined"
-                                                    required
                                                     fullWidth
                                                 />
                                             </Grid>
@@ -283,17 +280,14 @@ function ContactFournisseur(props) {
                                                     type="text"
                                                     name="email"
                                                     label="Email"
-                                                    validations="isEmail"
                                                     value={form.email}
                                                     onChange={handleChange}
-                                                    validationErrors={{
-                                                        isEmail: 'Veuillez saisir un e-mail valide'
-                                                    }}
                                                     InputProps={{
+                                                        readOnly: true,
                                                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
                                                     }}
+                                                    disabled
                                                     variant="outlined"
-                                                    required
                                                     fullWidth
                                                 />
                                             </Grid>
@@ -306,24 +300,17 @@ function ContactFournisseur(props) {
                                                     type="text"
                                                     name="phone"
                                                     label="Téléphone"
-                                                    validations={{
-                                                        minLength: 10,
-                                                        maxLength: 13,
-                                                    }}
-                                                    validationErrors={{
-                                                        minLength: 'La longueur minimale de caractère est 10',
-                                                        maxLength: 'La longueur maximale de caractère est 13'
-                                                    }}
+                                                    disabled
                                                     InputProps={{
+                                                        readOnly: true,
                                                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
                                                     }}
                                                     variant="outlined"
-                                                    required
                                                     fullWidth
                                                 />
 
                                             </Grid>
-                                           
+
 
 
                                         </Grid>
@@ -347,25 +334,31 @@ function ContactFournisseur(props) {
                                             multiline
                                             rows="4"
                                             required
-
                                         />
 
 
-                                        <Grid container spacing={3} >
+                                        <Grid container spacing={3} className="flex items-center" >
 
 
-                                            <Grid item xs={12} sm={6}>
+                                            <Grid item xs={12} sm={12} className="flex items-center" >
                                                 <CheckboxFormsy
-                                                    className="mb-10"
                                                     name="statut"
                                                     onChange={(e) => handleCheckBoxChange(e, 'statut')}
                                                     label="Valider et alerter le fournisseur"
                                                     value={form.statut}
                                                 />
+                                                <Button
+                                                    className="ml-4"
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    type="submit"
+                                                    disabled={!isFormValid || contactFournisseur.loading}
+                                                    onClick={() => handleSubmit()}
+                                                >
+                                                    Sauvegarder
+                                                    {contactFournisseur.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                </Button>
                                             </Grid>
-
-
-
                                         </Grid>
 
                                     </Formsy>

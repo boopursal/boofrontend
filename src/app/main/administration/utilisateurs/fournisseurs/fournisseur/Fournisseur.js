@@ -246,14 +246,16 @@ function Fournisseur(props) {
             }
             setForm({ ...fournisseur.data });
             setCategories(fournisseur.data.categories.map(item => item));
-            setVille({
-                value: fournisseur.data.ville['@id'],
-                label: fournisseur.data.ville.name,
-            });
-            setPays({
-                value: fournisseur.data.pays['@id'],
-                label: fournisseur.data.pays.name,
-            });
+            fournisseur.data.ville &&
+                setVille({
+                    value: fournisseur.data.ville['@id'],
+                    label: fournisseur.data.ville.name,
+                });
+            fournisseur.data.pays &&
+                setPays({
+                    value: fournisseur.data.pays['@id'],
+                    label: fournisseur.data.pays.name,
+                });
 
 
         }

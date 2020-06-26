@@ -4,6 +4,14 @@ import _ from '@lodash';
 export const CLEAN_UP = '[SECTEURS PORTAIL APP] CLEAN_UP';
 export const REQUEST_SECTEURS = '[SECTEURS PORTAIL APP] REQUEST_SECTEURS';
 export const GET_SECTEURS = '[SECTEURS PORTAIL APP] GET_SECTEURS';
+export const SET_DEMANDES_SEARCH_TEXT = '[SECTEURS PORTAIL APP] SET DEMANDES SEARCH TEXT';
+
+export function setSearchText(event) {
+    return {
+        type: SET_DEMANDES_SEARCH_TEXT,
+        searchText: event.target.value
+    }
+}
 
 export function cleanUp() {
 

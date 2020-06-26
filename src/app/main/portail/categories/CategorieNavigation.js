@@ -93,7 +93,7 @@ function CategorieNavigationCollapse(props) {
                         >
                             <Grow in={opened} id="menu-list-grow" style={{ transformOrigin: '0 0 0' }}>
                                 <Paper
-                                    className={clsx(classes.paper,'px-16 pb-16 max-w-md')}
+                                    className={clsx(classes.paper, 'px-16 pb-16 max-w-md')}
                                     onMouseEnter={() => handleToggle(true)}
                                     onMouseLeave={() => handleToggle(false)}
                                 >

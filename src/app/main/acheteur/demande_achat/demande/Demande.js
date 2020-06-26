@@ -210,8 +210,14 @@ function Demande(props) {
             demande.attachement_deleted = null;
         }
     }, [demande.attachement_deleted]);
+    useEffect(() => {
+        if (demande.new) {
+            setForm({ ...demande.data });
+            setCategories([]);
+            demande.new = false;
+        }
+    }, [demande, setForm]);
 
-    console.log(categories)
 
     useEffect(() => {
         if (
@@ -220,11 +226,6 @@ function Demande(props) {
         ) {
             setForm({ ...demande.data });
             if (demande.data.categories) {
-                //let sousSecteurs = demande.data.sousSecteurs.map(item => ({
-                //  value: item['@id'],
-                // label: item.name
-                // }));
-                // setForm(_.set({ ...demande.data }, 'sousSecteurs', sousSecteurs));
                 setCategories(demande.data.categories.map(item => item));
             }
         }
@@ -248,7 +249,6 @@ function Demande(props) {
     }
 
     function handleDateChange(value, name) {
-        //setForm(_.set({...form}, name, value.map(item => item.value)));
         setForm(_.set({ ...form }, name, moment(value).format('YYYY-MM-DDTHH:mm:ssZ')));
     }
 
@@ -284,10 +284,8 @@ function Demande(props) {
 
 
     function handleSuggestionsFetchRequested({ value, reason }) {
-        console.log(reason)
         if (reason === 'input-changed') {
             value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value.trim()));
-            // Fake an AJAX call
         }
 
     }
@@ -312,14 +310,14 @@ function Demande(props) {
 
         setForm(_.set({ ...form }, 'localisation', parseInt(e.target.value)));
     }
-    function handleSubmit() {
+    function handleSubmit(vider = false) {
         //event.preventDefault();
 
         const params = props.match.params;
         const { demandeId } = params;
 
         if (demandeId === 'new') {
-            dispatch(Actions.saveDemande(form, props.history, categories));
+            dispatch(Actions.saveDemande(form, props.history, categories, vider));
         }
         else {
             dispatch(Actions.putDemande(form, form.id, props.history, categories));
@@ -664,6 +662,9 @@ function Demande(props) {
                                                     value={form.isPublic}
                                                     label="Mettre en ligne après validation"
                                                 />
+                                                <Tooltip placement="top" title="Si vous mettez la demande en ligne après validation, elle sera visibile par les founrisseurs et les visiteurs du site web." aria-label="anonyme">
+                                                    <Icon className="ml-4 text-20">help_outline</Icon>
+                                                </Tooltip>
                                             </Grid>
 
                                             <Grid item xs={12} sm={4} className="flex items-center">
@@ -678,9 +679,32 @@ function Demande(props) {
                                                 </Tooltip>
                                             </Grid>
                                         </Grid>
+                                        <Grid container spacing={3} className="mt-4">
+                                            <Grid item xs={12} sm={10} >
+                                                <Button
+                                                    className="whitespace-no-wrap"
+                                                    variant="contained"
+                                                    disabled={!isFormValid || demande.loading || !categories.length}
+                                                    onClick={() => handleSubmit(false)}
+                                                >
+                                                    Sauvegarder
+                                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                </Button>
+                                                {
+                                                    demandeId === 'new' &&
+                                                    <Button
+                                                        className="ml-8"
+                                                        variant="contained"
+                                                        disabled={!isFormValid || demande.loading || !categories.length}
+                                                        onClick={() => handleSubmit(true)}
+                                                    >
+                                                        Sauvegarder et ajouter nouvelle demande
+                                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                    </Button>
+                                                }
 
-
-
+                                            </Grid>
+                                        </Grid>
                                     </Formsy>
                                 )}
                             {tabValue === 1 && (

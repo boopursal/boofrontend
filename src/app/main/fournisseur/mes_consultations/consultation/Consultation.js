@@ -380,7 +380,7 @@ function Consultation(props) {
                                                     <Grid item xs={12} sm={12}>
                                                         <TextFieldFormsy
                                                             className="mb-24"
-                                                            label={"Entrer le budget facturé en " + consultation.data.demande.currency.name}
+                                                            label={"Budget en " + consultation.data.demande.currency.name}
                                                             id="budget"
                                                             type="number"
                                                             name="budget"
@@ -411,7 +411,7 @@ function Consultation(props) {
                                                                 type="text"
                                                                 name="description"
                                                                 value={consultation.data.demande.budget}
-                                                                label={"Le budget de la demande en " + consultation.data.demande.currency.name}
+                                                                label={"Budget en " + consultation.data.demande.currency.name}
                                                                 InputProps={{
                                                                     readOnly: true,
                                                                 }}
@@ -449,7 +449,7 @@ function Consultation(props) {
                                                         <Grid item xs={12} sm={4}>
                                                             <TextFieldFormsy
                                                                 className="mb-24"
-                                                                label={"Le budget avec monnaie locale (" + user.data.currency + ")"}
+                                                                label={"Budget en (" + user.data.currency + ")"}
                                                                 id="budget"
                                                                 type="number"
                                                                 name="budget"
@@ -466,7 +466,7 @@ function Consultation(props) {
 
                                                                 InputProps={{
                                                                     min: 1,
-                                                                    step:'any'
+                                                                    step: 'any'
                                                                 }}
                                                                 required
                                                                 fullWidth
@@ -496,21 +496,6 @@ function Consultation(props) {
 
                                         />
                                         <Grid container spacing={3} >
-
-                                            <Grid item xs={12} sm={4}>
-                                                <RadioGroupFormsy
-                                                    className="mt-20 inline"
-                                                    name="statut"
-                                                    label='Statut'
-                                                    onChange={handleRadioChange}
-                                                >
-                                                    <FormControlLabel value="0" checked={form.statut === 0} control={<Radio />} label="En cours" />
-                                                    <FormControlLabel value="1" checked={form.statut === 1} control={<Radio />} label="Gagnée" />
-                                                    <FormControlLabel value="2" checked={form.statut === 2} control={<Radio />} label="Perdue" />
-
-                                                </RadioGroupFormsy>
-                                            </Grid>
-
                                             <Grid item xs={12} sm={4}>
                                                 <SelectReactFormsy
                                                     id="personnel"
@@ -542,6 +527,21 @@ function Consultation(props) {
                                                     label="Alerter par email"
                                                 />
                                             </Grid>
+                                            <Grid item xs={12} sm={4}>
+                                                <RadioGroupFormsy
+                                                    className="mt-20 inline"
+                                                    name="statut"
+                                                    label='Statut'
+                                                    onChange={handleRadioChange}
+                                                >
+                                                    <FormControlLabel value="0" checked={form.statut === 0} control={<Radio />} label="En cours" />
+                                                    <FormControlLabel value="1" checked={form.statut === 1} control={<Radio />} label="Gagnée" />
+                                                    <FormControlLabel value="2" checked={form.statut === 2} control={<Radio />} label="Perdue" />
+
+                                                </RadioGroupFormsy>
+                                            </Grid>
+
+
 
                                         </Grid>
                                         <Button
@@ -564,8 +564,6 @@ function Consultation(props) {
                                 <div>
 
                                     <div className="flex justify-center sm:justify-start flex-wrap">
-
-
 
                                         {consultation.data.demande.attachements.length > 0 ?
                                             consultation.data.demande.attachements.map(media => (

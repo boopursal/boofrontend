@@ -40,7 +40,7 @@ export function getSousSecteur(id) {
 }
 
 export function getPCategories(id) {
-    const request = agent.get(`/api/sous_secteurs/${id}/categories?pagination=false&props[]=id&props[]=name&props[]=slug`);
+    const request = agent.get(`/api/parcourir_categories/${id}`);
     return (dispatch) => {
         dispatch({
             type: REQUEST_CATEGORIES,
@@ -50,7 +50,7 @@ export function getPCategories(id) {
 
             dispatch({
                 type: GET_CATEGORIES,
-                payload: response.data['hydra:member']
+                payload: response.data
             })
 
         }

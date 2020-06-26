@@ -22,6 +22,13 @@ const globalSearchReducer = function (state = initialState, action) {
                     noSuggestions: false
                 };
             }
+        case Actions.NEW_DEMANDE:
+            {
+                return {
+                    ...initialState
+
+                }
+            }
         case Actions.REQUEST_DATA:
             {
                 return {

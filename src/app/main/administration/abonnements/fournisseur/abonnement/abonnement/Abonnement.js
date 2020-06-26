@@ -203,7 +203,7 @@ function Abonnement(props) {
 
             if (abonnement.data.offre && abonnement.data.duree) {
 
-                if (abonnement.data.currency && abonnement.data.currency.name !== 'DHS') {
+                if (abonnement.data.currency && abonnement.data.currency.name !== 'MAD') {
                     let ht = abonnement.data.offre.prixEur * abonnement.data.duree.name;
                     setPrixht(ht)
 
@@ -291,7 +291,7 @@ function Abonnement(props) {
         ) {
             setFournisseur(abonnement.fournisseur);
 
-            if (abonnement.fournisseur.currency && abonnement.fournisseur.currency.name !== 'DHS') {
+            if (abonnement.fournisseur.currency && abonnement.fournisseur.currency.name !== 'MAD') {
 
                 let ht = offre.prixEur * duree.name;
                 setPrixht(ht)
@@ -425,7 +425,7 @@ function Abonnement(props) {
     function handleChangeDuree(item) {
         setDuree(item);
         if (fournisseur) {
-            if (fournisseur.currency && fournisseur.currency.name !== 'DHS') {
+            if (fournisseur.currency && fournisseur.currency.name !== 'MAD') {
                 let ht = offre.prixEur * item.name;
                 setPrixht(ht)
 
@@ -519,7 +519,7 @@ function Abonnement(props) {
         setDiscount(value);
 
         if (fournisseur) {
-            if (fournisseur.currency && fournisseur.currency.name !== 'DHS') {
+            if (fournisseur.currency && fournisseur.currency.name !== 'MAD') {
                 let ht = offre.prixEur * duree.name;
                 setPrixht(ht)
 
@@ -619,7 +619,7 @@ function Abonnement(props) {
             setSousSecteurs(_.slice(sousSecteurs, 0, item.nbActivite));
         }
         if (fournisseur) {
-            if (fournisseur.currency && fournisseur.currency.name !== 'DHS') {
+            if (fournisseur.currency && fournisseur.currency.name !== 'MAD') {
                 let ht = item.prixEur * duree.name;
                 setPrixht(ht)
 
@@ -988,7 +988,7 @@ function Abonnement(props) {
                                                                                 label={
                                                                                     fournisseur ?
                                                                                         (
-                                                                                            fournisseur.currency && fournisseur.currency.name !== 'DHS' ?
+                                                                                            fournisseur.currency && fournisseur.currency.name !== 'MAD' ?
                                                                                                 parseFloat(item.prixEur).toLocaleString(
                                                                                                     'fr', // leave undefined to use the browser's locale,
                                                                                                     // or use a string like 'en-US' to override it.
@@ -998,7 +998,7 @@ function Abonnement(props) {
                                                                                                     'fr', // leave undefined to use the browser's locale,
                                                                                                     // or use a string like 'en-US' to override it.
                                                                                                     { minimumFractionDigits: 2 }
-                                                                                                ) + ' DHS HT / mois'
+                                                                                                ) + ' MAD HT / mois'
 
                                                                                         )
                                                                                         :
@@ -1006,7 +1006,7 @@ function Abonnement(props) {
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.
                                                                                             { minimumFractionDigits: 2 }
-                                                                                        ) + ' DHS HT / mois'
+                                                                                        ) + ' MAD HT / mois'
                                                                                 }
                                                                             />
                                                                         </FormGroup>
@@ -1065,7 +1065,7 @@ function Abonnement(props) {
                                                                             <br />
                                                                             {
                                                                                 fournisseur ? (
-                                                                                    fournisseur.currency && fournisseur.currency.name !== 'DHS' ?
+                                                                                    fournisseur.currency && fournisseur.currency.name !== 'MAD' ?
                                                                                         parseFloat(offre.prixEur).toLocaleString(
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.
@@ -1437,7 +1437,7 @@ function Abonnement(props) {
                                                 <Typography className="mb-16" variant="h6">Activité(s) choisie(s)</Typography>
 
                                             </Grid>
-                                           
+
                                         </Grid>
                                         <Divider />
                                         <Grid container spacing={3} className="mt-4">

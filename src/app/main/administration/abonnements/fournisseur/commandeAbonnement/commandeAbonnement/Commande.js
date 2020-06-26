@@ -171,7 +171,7 @@ function Commande(props) {
             if (commande.data.sousSecteurs) {
                 setSousSecteurs(commande.data.sousSecteurs.map(item => ({
                     value: item['@id'],
-                    label: item.secteur.name + ': '+item.name
+                    label: item.secteur.name + ': ' + item.name
                 })));
             }
             if (commande.data.offre) {
@@ -185,7 +185,7 @@ function Commande(props) {
                 setDuree(commande.data.duree)
 
                 if (commande.data.offre) {
-                    if (commande.data.fournisseur.currency.name === 'DHS') {
+                    if (commande.data.fournisseur.currency.name === 'MAD') {
                         let ht = commande.data.offre.prixMad * commande.data.duree.name;
                         setPrixht(ht)
 
@@ -243,7 +243,7 @@ function Commande(props) {
 
     function handleChangeDuree(item) {
         setDuree(item);
-        if (commande.data.fournisseur.currency.name === 'DHS') {
+        if (commande.data.fournisseur.currency.name === 'MAD') {
             let ht = offre.prixMad * item.name;
             setPrixht(ht)
 
@@ -306,7 +306,7 @@ function Commande(props) {
     function handleChangeDiscount(value) {
         setDiscount(value);
 
-        if (commande.data.fournisseur.currency.name === 'DHS') {
+        if (commande.data.fournisseur.currency.name === 'MAD') {
             let ht = offre.prixMad * duree.name;
             setPrixht(ht)
 
@@ -375,7 +375,7 @@ function Commande(props) {
         if (sousSecteurs.length > 0) {
             setSousSecteurs(_.slice(sousSecteurs, 0, item.nbActivite));
         }
-        if (commande.data.fournisseur.currency.name === 'DHS') {
+        if (commande.data.fournisseur.currency.name === 'MAD') {
             let ht = item.prixMad * duree.name;
             setPrixht(ht)
 
@@ -641,12 +641,12 @@ function Commande(props) {
                                                                                 />
                                                                             }
                                                                             label={
-                                                                                commande.data.fournisseur.currency.name === 'DHS' ?
+                                                                                commande.data.fournisseur.currency.name === 'MAD' ?
                                                                                     parseFloat(item.prixMad).toLocaleString(
                                                                                         'fr', // leave undefined to use the browser's locale,
                                                                                         // or use a string like 'en-US' to override it.
                                                                                         { minimumFractionDigits: 2 }
-                                                                                    ) + ' DHS HT / mois' :
+                                                                                    ) + ' MAD HT / mois' :
                                                                                     parseFloat(item.prixEur).toLocaleString(
                                                                                         'fr', // leave undefined to use the browser's locale,
                                                                                         // or use a string like 'en-US' to override it.
@@ -709,7 +709,7 @@ function Commande(props) {
                                                                         <br />
                                                                         {
 
-                                                                            commande.data.fournisseur.currency.name === 'DHS' ?
+                                                                            commande.data.fournisseur.currency.name === 'MAD' ?
                                                                                 parseFloat(offre.prixMad).toLocaleString(
                                                                                     'fr', // leave undefined to use the browser's locale,
                                                                                     // or use a string like 'en-US' to override it.

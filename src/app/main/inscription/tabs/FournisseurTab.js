@@ -109,6 +109,7 @@ function FournisseurTab(props) {
                             value="M."
                             variant="outlined"
                             required
+                            fullWidth
 
                         >
 
@@ -120,6 +121,7 @@ function FournisseurTab(props) {
                     <Grid item xs={12} sm={5}>
                         <TextFieldFormsy
                             className="mb-16"
+                            fullWidth
                             type="text"
                             name="lastName"
                             label="Nom"
@@ -141,6 +143,7 @@ function FournisseurTab(props) {
                     <Grid item xs={12} sm={5}>
                         <TextFieldFormsy
                             className="mb-16"
+                            fullWidth
                             type="text"
                             name="firstName"
                             label="Prénom"
@@ -161,117 +164,134 @@ function FournisseurTab(props) {
                     </Grid>
 
                 </Grid>
-                <TextFieldFormsy
-                    className="mb-16"
-                    type="text"
-                    name="societe"
-                    label="Raison sociale"
-                    validations={{
-                        matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
-                        minLength: 2,
-                        maxLength: 20
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <TextFieldFormsy
+                            className="mb-16"
+                            type="text"
+                            name="societe"
+                            label="Raison sociale"
+                            validations={{
+                                matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
+                                minLength: 2,
+                                maxLength: 20
 
-                    }}
-                    validationErrors={{
-                        minLength: 'Raison sociale doit dépasser 2 caractères alphanumériques',
-                        maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
-                        matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
-                    }}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">work_outline</Icon></InputAdornment>
-                    }}
-                    variant="outlined"
-                    required
-                />
+                            }}
+                            validationErrors={{
+                                minLength: 'Raison sociale doit dépasser 2 caractères alphanumériques',
+                                maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
+                                matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
+                            }}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">work_outline</Icon></InputAdornment>
+                            }}
+                            fullWidth
+                            variant="outlined"
+                            required
+                        />
+                    </Grid></Grid>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <TextFieldFormsy
+                            className="mb-16"
+                            type="text"
+                            name="email"
+                            label="Email"
+                            validations="isEmail"
+                            validationErrors={{
+                                isEmail: 'Veuillez saisir un e-mail valide'
+                            }}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
+                            }}
+                            variant="outlined"
+                            required
+                            fullWidth
+                        />
+                    </Grid></Grid>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <TextFieldFormsy
+                            className="mb-16"
+                            type="text"
+                            name="phone"
+                            label="Téléphone"
+                            validations={{
+                                minLength: 10,
+                                maxLength: 20,
+                            }}
+                            validationErrors={{
+                                minLength: 'La longueur minimale de caractère est 10',
+                                maxLength: 'La longueur maximale de caractère est 20'
+                            }}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">phone</Icon></InputAdornment>
+                            }}
+                            variant="outlined"
+                            required
+                            fullWidth
+                        />
+                    </Grid></Grid>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <TextFieldFormsy
+                            className="mb-16"
+                            type={values.showPassword ? 'text' : 'password'}
+                            name="password"
+                            label="Mot de passe"
+                            validations={{
+                                minLength: 6,
+                                matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}/
+                            }}
+                            validationErrors={{
+                                minLength: 'La longueur minimale des caractères est de 6',
+                                matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
 
-                <TextFieldFormsy
-                    className="mb-16"
-                    type="text"
-                    name="email"
-                    label="Email"
-                    validations="isEmail"
-                    validationErrors={{
-                        isEmail: 'Veuillez saisir un e-mail valide'
-                    }}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
-                    }}
-                    variant="outlined"
-                    required
-                />
+                            }}
 
-                <TextFieldFormsy
-                    className="mb-16"
-                    type="text"
-                    name="phone"
-                    label="Téléphone"
-                    validations={{
-                        minLength: 10,
-                        maxLength: 20,
-                    }}
-                    validationErrors={{
-                        minLength: 'La longueur minimale de caractère est 10',
-                        maxLength: 'La longueur maximale de caractère est 20'
-                    }}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">phone</Icon></InputAdornment>
-                    }}
-                    variant="outlined"
-                    required
-                />
-
-                <TextFieldFormsy
-                    className="mb-16"
-                    type={values.showPassword ? 'text' : 'password'}
-                    name="password"
-                    label="Mot de passe"
-                    validations={{
-                        minLength: 6,
-                        matchRegexp: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}/
-                    }}
-                    validationErrors={{
-                        minLength: 'La longueur minimale des caractères est de 6',
-                        matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
-
-                    }}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                            >
-                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    }}
-                    variant="outlined"
-                    required
-                />
-
-                <TextFieldFormsy
-                    className="mb-16"
-                    type={values.showPassword ? 'text' : 'password'}
-                    name="confirmpassword"
-                    label="Confirmer le mot de passe"
-                    validations="equalsField:password"
-                    validationErrors={{
-                        equalsField: 'les mots de passe saisis ne sont pas identiques'
-                    }}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                            >
-                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    }}
-                    variant="outlined"
-                    required
-                />
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }}
+                            variant="outlined"
+                            required
+                            fullWidth
+                        />
+                    </Grid></Grid>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <TextFieldFormsy
+                            className="mb-16"
+                            type={values.showPassword ? 'text' : 'password'}
+                            name="confirmpassword"
+                            label="Confirmer le mot de passe"
+                            validations="equalsField:password"
+                            validationErrors={{
+                                equalsField: 'les mots de passe saisis ne sont pas identiques'
+                            }}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }}
+                            variant="outlined"
+                            required
+                            fullWidth
+                        />
+                    </Grid></Grid>
                 <div className="flex justify-center">
                     <ReCAPTCHA
                         sitekey="6LdJmucUAAAAAPdVMcYK_a_7z4OxePNUj2HYT-pj"
@@ -287,7 +307,7 @@ function FournisseurTab(props) {
                     color="primary"
                     className="w-full mx-auto mt-16 normal-case"
                     aria-label="REGISTER"
-                    disabled={!isFormValid || /*!recaptcha ||*/ register.loading}
+                    disabled={!isFormValid || !recaptcha || register.loading}
                     value="legacy"
                 >
                     Enregistrer

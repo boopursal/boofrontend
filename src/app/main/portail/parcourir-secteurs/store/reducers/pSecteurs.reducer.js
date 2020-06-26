@@ -4,6 +4,7 @@ const initialState = {
     data: null,
     loading: false,
 
+    searchText: '',
 };
 
 const pSecteursReducer = function (state = initialState, action) {
@@ -31,6 +32,13 @@ const pSecteursReducer = function (state = initialState, action) {
                     loading: false,
                     data: action.payload
 
+                };
+            }
+        case Actions.SET_DEMANDES_SEARCH_TEXT:
+            {
+                return {
+                    ...state,
+                    searchText: action.searchText
                 };
             }
         default:

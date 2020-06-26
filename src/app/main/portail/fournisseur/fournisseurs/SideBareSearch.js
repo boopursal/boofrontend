@@ -89,7 +89,7 @@ function SideBareSearch(props) {
         if (pays)
             searchText = (q ? '&q=' + q : '')
         else searchText = (q ? 'q=' + q : '')
-        props.history.replace({ pathname: '/entreprises', search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+        props.history.push({ pathname: '/entreprises', search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
         document.querySelector('.st').scrollTop = 0;
     }
 
@@ -98,7 +98,26 @@ function SideBareSearch(props) {
         if (pays)
             searchText = (q ? '&q=' + q : '')
         else searchText = (q ? 'q=' + q : '')
-        props.history.replace({ pathname: '/entreprises/' + secteur, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+        props.history.push({ pathname: '/entreprises/' + secteur, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+        document.querySelector('.st').scrollTop = 0;
+    }
+
+    function handleDeletePathCategorie() {
+        let searchText;
+        let secteurParm = '';
+        let activiteParm = '';
+        if (secteur) {
+            secteurParm = '/' + secteur;
+        }
+        if (activite) {
+            activiteParm = '/' + activite;
+        }
+
+        const path = secteurParm + activiteParm;
+        if (pays)
+            searchText = (q ? '&q=' + q : '')
+        else searchText = (q ? 'q=' + q : '')
+        props.history.push({ pathname: '/entreprises' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
         document.querySelector('.st').scrollTop = 0;
     }
 
@@ -117,7 +136,7 @@ function SideBareSearch(props) {
         }
 
         const path = secteurParm + activiteParm + categorieParm;
-        props.history.replace({ pathname: '/entreprises' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') })
+        props.history.push({ pathname: '/entreprises' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') })
         document.querySelector('.st').scrollTop = 0;
     }
 
@@ -138,7 +157,7 @@ function SideBareSearch(props) {
         }
 
         const path = secteurParm + activiteParm + categorieParm;
-        props.history.replace({ pathname: '/entreprises' + path, search: q ? 'q=' + q : '' })
+        props.history.push({ pathname: '/entreprises' + path, search: q ? 'q=' + q : '' })
         document.querySelector('.st').scrollTop = 0;
     }
 
@@ -148,14 +167,14 @@ function SideBareSearch(props) {
     function getActiviteTitle() {
         return activites.length > 0 ? activites.filter(x => x.slug === activite)[0] && _.capitalize(activites.filter(x => x.slug === activite)[0].name) : _.capitalize(activite.replace('-', ' '))
     }
-    
+
     return (
         <>
             <Card className={clsx("", classes.root)} >
                 <div className="p-20 bg-gray-400 uppercase flex items-center font-bold text-16 ">
                     <Icon className={classes.filterIcon}>settings_input_component</Icon>
 
-                    <span>  AFFINER VOTRE RECHERCHE</span>
+                    <span>  Affinez votre recherche</span>
                 </div>
                 <CardContent>
                     <Typography color="textPrimary" className="pl-16 text-18 uppercase w-full " >
@@ -196,7 +215,7 @@ function SideBareSearch(props) {
                                                                 onClick={event => {
                                                                     const location = props.location;
                                                                     query.set('ville', item.slug)
-                                                                    props.history.replace({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug + (q ? '&q=' + q : '') })
+                                                                    props.history.push({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug + (q ? '&q=' + q : '') })
                                                                     document.querySelector('.st').scrollTop = 0;
                                                                 }}>
                                                                 <ListItemText
@@ -227,7 +246,7 @@ function SideBareSearch(props) {
                                                         onClick={event => {
                                                             const location = props.location;
                                                             query.set('pays', item.slug)
-                                                            props.history.replace({ pathname: location.pathname, search: 'pays=' + query.get('pays') + (q ? '&q=' + q : '') })
+                                                            props.history.push({ pathname: location.pathname, search: 'pays=' + query.get('pays') + (q ? '&q=' + q : '') })
                                                             document.querySelector('.st').scrollTop = 0;
                                                         }}>
                                                         <ListItemText
@@ -263,6 +282,7 @@ function SideBareSearch(props) {
                                                 <Chip
                                                     label={getSecteurTitle()}
                                                     onDelete={handleDeletePathSecteur}
+                                                    onClick={handleDeletePathActivite}
                                                     className={classes.chip}
                                                     color="primary"
                                                     variant="outlined"
@@ -280,6 +300,7 @@ function SideBareSearch(props) {
                                                                 <Chip
                                                                     label={getActiviteTitle()}
                                                                     onDelete={handleDeletePathActivite}
+                                                                    onClick={handleDeletePathCategorie}
                                                                     className={classes.chip}
                                                                     color="primary"
                                                                     variant="outlined"
@@ -308,12 +329,13 @@ function SideBareSearch(props) {
                                                                                         searchText = (q ? '&q=' + q : '')
                                                                                     else searchText = (q ? 'q=' + q : '')
                                                                                     item.slug !== categorie &&
-                                                                                        (props.history.replace({ pathname: '/entreprises/' + secteur + '/' + activite + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText }))
+                                                                                        (props.history.push({ pathname: '/entreprises/' + secteur + '/' + activite + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText }))
                                                                                     document.querySelector('.st').scrollTop = 0
                                                                                 }}>
                                                                                 <ListItemText
                                                                                     primary={item.name + ' (' + item.count + ')'}
                                                                                 />
+
                                                                             </ListItem>
 
                                                                         ))
@@ -340,7 +362,7 @@ function SideBareSearch(props) {
                                                                         if (pays)
                                                                             searchText = (q ? '&q=' + q : '')
                                                                         else searchText = (q ? 'q=' + q : '')
-                                                                        props.history.replace({ pathname: '/entreprises/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText });
+                                                                        props.history.push({ pathname: '/entreprises/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText });
                                                                         document.querySelector('.st').scrollTop = 0;
 
                                                                     }}>
@@ -373,7 +395,7 @@ function SideBareSearch(props) {
                                                             if (pays)
                                                                 searchText = (q ? '&q=' + q : '')
                                                             else searchText = (q ? 'q=' + q : '')
-                                                            props.history.replace({ pathname: '/entreprises/' + secteur.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+                                                            props.history.push({ pathname: '/entreprises/' + secteur.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
                                                         }}>
                                                         <ListItemText
                                                             primary={secteur.name + ' (' + secteur.count + ')'}

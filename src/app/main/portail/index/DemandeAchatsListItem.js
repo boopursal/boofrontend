@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import _ from '@lodash';
 import moment from 'moment';
 import 'moment/locale/fr';
-import { NavLinkAdapter} from '@fuse';
+import { NavLinkAdapter } from '@fuse';
 const useStyles = makeStyles({
     todoItem: {
         '&.completed': {
@@ -39,60 +39,48 @@ function DemandeAchatsListItem(props) {
                     className="todo-title truncate font-600"
                     color={"inherit"}
                 >
-                [ RFQ-{props.demande.reference} ] {props.demande.titre} 
+                    [ RFQ-{props.demande.reference} ] {props.demande.titre}
                 </Typography>
-              
+
 
                 <Typography
                     color="textSecondary"
                     className="todo-notes truncate"
                 >
-                 {_.truncate(props.demande.description.replace(/<(?:.|\n)*?>/gm, ''), {'length': 180})}
+                    {_.truncate(props.demande.description.replace(/<(?:.|\n)*?>/gm, ''), { 'length': 180 })}
                 </Typography>
 
                 <div className={clsx(classes.labels, "flex mt-8")}>
                     <Chip
                         icon={<Icon className="text-16 mr-0">location_on</Icon>}
-                        label={props.demande.ville+', '+props.demande.pays}
+                        label={props.demande.ville + ', ' + props.demande.pays}
                         classes={{
-                            root: clsx("h-24", props.className),
+                            root: clsx("h-24"),
                             label: "pl-4 pr-6 py-4 text-11",
-                            deleteIcon: "w-16 ml-0",
-                            ...props.classes
                         }}
                         className="mr-4"
                         color="secondary"
-                        variant="contained"
-                        onDelete={props.onDelete}
                     />
                     <Chip
                         icon={<Icon className="text-16 mr-0">access_time</Icon>}
                         label={moment(props.demande.created).fromNow()}
                         classes={{
-                            root: clsx("h-24", props.className),
+                            root: clsx("h-24"),
                             label: "pl-4 pr-6 py-4 text-11",
-                            deleteIcon: "w-16 ml-0",
-                            ...props.classes
                         }}
-                        variant="contained"
                         className="mr-4"
                         color="secondary"
-                        onDelete={props.onDelete}
                     />
-                    
+
                     <Chip
                         icon={<Icon className="text-16 mr-0">access_time</Icon>}
-                        label={'Clôture le '+moment(props.demande.dateExpiration).format("DD-MM-YYYY à HH:mm")}
+                        label={'Clôture le ' + moment(props.demande.dateExpiration).format("DD-MM-YYYY à HH:mm")}
                         classes={{
-                            root: clsx("h-24", props.className),
+                            root: clsx("h-24"),
                             label: "pl-4 pr-6 py-4 text-11",
-                            deleteIcon: "w-16 ml-0",
-                            ...props.classes
                         }}
-                        variant="contained"
                         color="secondary"
                         className="mr-4"
-                        onDelete={props.onDelete}
                     />
 
                 </div>

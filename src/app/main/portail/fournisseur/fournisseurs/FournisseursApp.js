@@ -46,6 +46,10 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         'align-items': 'center',
     },
+    img: {
+        width: '70%'
+
+    },
     icon: {
         marginRight: theme.spacing(0.5),
         width: 20,
@@ -145,13 +149,13 @@ function FournisseursApp(props) {
         else searchText = (q ? 'q=' + q : '')
 
         const path = secteurParm + activiteParm + categorieParm;
-        props.history.replace({ pathname: '/vente-produits' + path, search: (pays ? 'pays=' + pays : '') + searchText })
+        props.history.push({ pathname: '/vente-produits' + path, search: (pays ? 'pays=' + pays : '') + searchText })
 
     }
     function getPath(fournisseurs) {
-        return categorie ? 'de ' + getCategorieTitle() :
-                    activite ? 'de ' + getActiviteTitle() :
-                        secteur ? 'de ' + getSecteurTitle() : '';
+        return categorie ? 'de [ ' + getCategorieTitle() + ' ]' :
+            activite ? 'de [ ' + getActiviteTitle() + ' ]' :
+                secteur ? 'de [ ' + getSecteurTitle() + ' ]' : '';
     }
 
     function getSecteurTitle() {
@@ -237,36 +241,22 @@ function FournisseursApp(props) {
                         <meta name="robots" content="noindex, nofollow" />
                         <meta name="googlebot" content="noindex" />
                     </Helmet>
-                    <Typography color="primary" className="mt-16 flex items-center" variant="h6">
-                        <Icon className="mr-8">search</Icon>
-                        <span> {'Fournisseurs ' + (
-                            categorie ? 'de ' + _.capitalize(categorie) :
-                                activite ? 'de ' + _.capitalize(activite) :
-                                    secteur ? 'de ' + _.capitalize(secteur) : ''
-                        ) + (pays ? _.capitalize(pays) : '') + (q ? ' #' + _.capitalize(q) : '')
-                        }</span>
-                    </Typography>
-                    <div className="flex items-center ml-2 my-16">
-                        <Typography className="text-13 mr-16">Voir résultats de:</Typography>
-                        <Button onClick={handleUrlProduits} variant="outlined" color="secondary" size="small" >
-                            Produits
+
+
+                    <Paper className="p-32 w-full my-6 text-center">
+                        <img className={classes.img} alt="product not found" src="assets/images/product_not_found.jpg" />
+                        <Typography variant="h6" className="mb-16 uppercase" >
+
+                            Oups! Nous n'avons pas pu trouver de résultats pour votre recherche
+                        </Typography>
+
+                        <Typography variant="h6" className="mb-16 uppercase" color="primary">
+                            Les fournisseurs de ce secteur seront affichés prochainement
+                        </Typography>
+
+                        <Button variant="outlined" size="small" color="secondary" onClick={() => props.history.goBack()} className={clsx(classes.btn, "mr-8")}>
+                            <Icon>chevron_left</Icon> <span className="transition ease-in-out duration-700 ">Retour</span>
                         </Button>
-                    </div>
-                    <Paper className="p-32 w-full mt-6">
-                        <Typography variant="h6" className="mb-16">
-                            Reformulez votre recherche à l'aide des conseils suivants :
-                        </Typography>
-                        <ul>
-                            <li>Vérifiez l'orthographe des mots tapés</li>
-                            <li>Essayez un terme plus générique ou des synonymes</li>
-                        </ul>
-
-                        <Divider className="my-16" />
-
-                        <Typography variant="h6" className="mb-16">
-                            Vous pouvez également nous contacter :
-                        </Typography>
-                        <p>Envoyez nous un message sur <span className="font-bold">webmaster@lesachatsindustriels.com</span></p>
 
                     </Paper>
                 </div>
@@ -283,7 +273,7 @@ function FournisseursApp(props) {
                     {
                         q && <meta property="keyword" content={q} />
                     }
-                    <meta name="description" content={_.truncate('Les achats industriels la place de marché numéro 1 au maroc, trouver vos fournisseurs de ' + (categorie && getCategorieTitle()+ ', ')  + ( activite && getActiviteTitle()+ ', ')  + (secteur && getSecteurTitle()), { 'length': 160, 'separator': ' ' })} />
+                    <meta name="description" content={_.truncate('Les achats industriels la place de marché numéro 1 au maroc, trouver vos fournisseurs de ' + (categorie && getCategorieTitle() + ', ') + (activite && getActiviteTitle() + ', ') + (secteur && getSecteurTitle()), { 'length': 160, 'separator': ' ' })} />
                     <meta property="og:title" content={_.truncate('Fournisseurs ' + (getPath(fournisseurs)) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : ''), { 'length': 70, 'separator': ' ' })} />
                     <meta property="twitter:title" content={_.truncate('Vente de fournisseurs ' + (getPath(fournisseurs)) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : ''), { 'length': 70, 'separator': ' ' })} />
                 </Helmet>

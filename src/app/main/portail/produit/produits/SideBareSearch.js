@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
-import { Card, Icon, CardContent, List, ListItem, ListItemText, Typography, Chip } from '@material-ui/core';
+import { Card, Icon, CardContent, List, ListItem, ListItemText, Typography, Chip, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import { FuseAnimateGroup } from '@fuse';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import _ from '@lodash';
@@ -83,7 +83,7 @@ function SideBareSearch(props) {
         if (pays)
             searchText = (q ? '&q=' + q : '')
         else searchText = (q ? 'q=' + q : '')
-        props.history.replace({ pathname: '/vente-produits', search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+        props.history.push({ pathname: '/vente-produits', search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
         document.querySelector('.st').scrollTop = 0;
     }
     function handleDeletePathActivite() {
@@ -91,7 +91,27 @@ function SideBareSearch(props) {
         if (pays)
             searchText = (q ? '&q=' + q : '')
         else searchText = (q ? 'q=' + q : '')
-        props.history.replace({ pathname: '/vente-produits/' + secteur, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+        props.history.push({ pathname: '/vente-produits/' + secteur, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+        document.querySelector('.st').scrollTop = 0;
+    }
+
+    function handleDeletePathCategorie() {
+        let searchText;
+        let secteurParm = '';
+        let activiteParm = '';
+        if (secteur) {
+            secteurParm = '/' + secteur;
+        }
+        if (activite) {
+            activiteParm = '/' + activite;
+        }
+
+
+        const path = secteurParm + activiteParm;
+        if (pays)
+            searchText = (q ? '&q=' + q : '')
+        else searchText = (q ? 'q=' + q : '')
+        props.history.push({ pathname: '/vente-produits' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
         document.querySelector('.st').scrollTop = 0;
     }
 
@@ -108,9 +128,9 @@ function SideBareSearch(props) {
         if (categorie) {
             categorieParm = '/' + categorie;
         }
-        
+
         const path = secteurParm + activiteParm + categorieParm;
-        props.history.replace({ pathname: '/vente-produits' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '')  })
+        props.history.push({ pathname: '/vente-produits' + path, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') })
         document.querySelector('.st').scrollTop = 0;
     }
 
@@ -128,7 +148,7 @@ function SideBareSearch(props) {
             categorieParm = '/' + categorie;
         }
         const path = secteurParm + activiteParm + categorieParm;
-        props.history.replace({ pathname: '/vente-produits' + path, search: q ? 'q=' + q : '' })
+        props.history.push({ pathname: '/vente-produits' + path, search: q ? 'q=' + q : '' })
         document.querySelector('.st').scrollTop = 0;
     }
 
@@ -138,7 +158,7 @@ function SideBareSearch(props) {
                 <div className="p-20 bg-gray-400 uppercase flex items-center font-bold text-16 ">
                     <Icon className={classes.filterIcon}>settings_input_component</Icon>
 
-                    <span>  AFFINER VOTRE RECHERCHE</span>
+                    <span>  Affinez votre recherche</span>
                 </div>
                 <CardContent>
                     <Typography color="textPrimary" className="pl-16 text-18 uppercase w-full " >
@@ -179,7 +199,7 @@ function SideBareSearch(props) {
                                                                 onClick={event => {
                                                                     const location = props.location;
                                                                     query.set('ville', item.slug)
-                                                                    props.history.replace({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug + (q ? '&q=' + q : '') })
+                                                                    props.history.push({ pathname: location.pathname, search: 'pays=' + pays + '&ville=' + item.slug + (q ? '&q=' + q : '') })
                                                                     document.querySelector('.st').scrollTop = 0;
                                                                 }}>
                                                                 <ListItemText
@@ -210,7 +230,7 @@ function SideBareSearch(props) {
                                                         onClick={event => {
                                                             const location = props.location;
                                                             query.set('pays', item.slug)
-                                                            props.history.replace({ pathname: location.pathname, search: 'pays=' + query.get('pays') + (q ? '&q=' + q : '') })
+                                                            props.history.push({ pathname: location.pathname, search: 'pays=' + query.get('pays') + (q ? '&q=' + q : '') })
                                                             document.querySelector('.st').scrollTop = 0;
                                                         }}>
                                                         <ListItemText
@@ -269,7 +289,7 @@ function SideBareSearch(props) {
                                                                 />}
                                                         />
                                                     </ListItem>
-                                                    <List component="div" className={classes.listRoot2}>
+                                                    <List component="div" dense className={classes.listRoot2}>
                                                         {
                                                             loadingCategories ?
                                                                 <LinearProgress color="secondary" /> :
@@ -291,12 +311,20 @@ function SideBareSearch(props) {
                                                                                         searchText = (q ? '&q=' + q : '')
                                                                                     else searchText = (q ? 'q=' + q : '')
                                                                                     item.slug !== categorie &&
-                                                                                        (props.history.replace({ pathname: '/vente-produits/' + secteur + '/' + activite + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText }))
+                                                                                        (props.history.push({ pathname: '/vente-produits/' + secteur + '/' + activite + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText }))
                                                                                     document.querySelector('.st').scrollTop = 0
                                                                                 }}>
                                                                                 <ListItemText
                                                                                     primary={item.name + ' (' + item.count + ')'}
                                                                                 />
+                                                                                {
+                                                                                    item.slug === categorie &&
+                                                                                    <ListItemSecondaryAction>
+                                                                                        <IconButton edge="end" onClick={handleDeletePathCategorie} aria-label="delete">
+                                                                                            <Icon>clear</Icon>
+                                                                                        </IconButton>
+                                                                                    </ListItemSecondaryAction>
+                                                                                }
                                                                             </ListItem>
 
                                                                         ))
@@ -323,7 +351,7 @@ function SideBareSearch(props) {
                                                                         if (pays)
                                                                             searchText = (q ? '&q=' + q : '')
                                                                         else searchText = (q ? 'q=' + q : '')
-                                                                        props.history.replace({ pathname: '/vente-produits/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText });
+                                                                        props.history.push({ pathname: '/vente-produits/' + secteur + '/' + item.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText });
                                                                         document.querySelector('.st').scrollTop = 0;
 
                                                                     }}>
@@ -357,7 +385,7 @@ function SideBareSearch(props) {
                                                             if (pays)
                                                                 searchText = (q ? '&q=' + q : '')
                                                             else searchText = (q ? 'q=' + q : '')
-                                                            props.history.replace({ pathname: '/vente-produits/' + secteur.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
+                                                            props.history.push({ pathname: '/vente-produits/' + secteur.slug, search: (pays ? 'pays=' + pays : '') + (ville ? '&ville=' + ville : '') + searchText })
                                                         }}>
                                                         <ListItemText
                                                             primary={secteur.name + ' (' + secteur.count + ')'}
@@ -386,7 +414,7 @@ function SideBareSearch(props) {
                         <Chip
                             label={_.capitalize(q)}
                             onDelete={handleDeleteQuerySearchText}
-                            className={clsx(classes.chip,'mt-16 ml-8') }
+                            className={clsx(classes.chip, 'mt-16 ml-8')}
                             color="primary"
                             variant="outlined"
                         /> </CardContent>

@@ -112,7 +112,6 @@ function FicheFournisseur(props) {
     const params = props.match.params;
     const { id, tab, slug } = params;
 
-    console.log(window.location.href)
     useEffect(() => {
         if (tab === 'produits') {
             setValue(1);

@@ -9,8 +9,8 @@ export const GET_DEMANDE = '[DEMANDE APP] GET DEMANDE';
 export const REQUEST_SAVE = '[DEMANDE APP] REQUEST SAVE';
 export const REDIRECT_SUCCESS = '[DEMANDE APP] REDIRECT SUCCESS';
 
-
 export const SAVE_DEMANDE = '[DEMANDE APP] SAVE DEMANDE';
+export const NEW_DEMANDE = '[DEMANDE APP] NEW DEMANDE';
 export const SAVE_ERROR = '[DEMANDE APP] SAVE ERROR';
 
 export const REQUEST_SOUS_SECTEUR = '[DEMANDE APP] REQUEST SOUS_SECTEUR';
@@ -64,7 +64,7 @@ export function getDemande(params) {
                 type: GET_DEMANDE,
                 payload: response.data
             })
-            
+
         }
 
         ).catch((error) => {
@@ -78,20 +78,20 @@ export function getDemande(params) {
 
 }
 
-export function saveDemande(data,history,categories) {
+export function saveDemande(data, history, categories, vider) {
 
-    var postData = 
-    {
-        ...data,
-        categories: _.map(categories, function (value, key) {
-            return value['@id'];
-        }),
-        attachements :_.map(data.attachements, function (value, key) {
-            return value['@id'];
-        }),
-        budget : data.budget && parseFloat(data.budget)
-    }
-    
+    var postData =
+        {
+            ...data,
+            categories: _.map(categories, function (value, key) {
+                return value['@id'];
+            }),
+            attachements: _.map(data.attachements, function (value, key) {
+                return value['@id'];
+            }),
+            budget: data.budget && parseFloat(data.budget)
+        }
+
     const request = agent.post('/api/demande_achats', postData);
 
     return (dispatch) => {
@@ -107,7 +107,15 @@ export function saveDemande(data,history,categories) {
                 payload: response.data
             });
 
-            history.push('/demandes')
+            if (!vider) {
+                history.push('/demandes')
+            }
+            else {
+                dispatch(newDemande());
+                dispatch({
+                    type: NEW_DEMANDE,
+                });
+            }
 
         }
         ).catch((error) => {
@@ -120,20 +128,20 @@ export function saveDemande(data,history,categories) {
 
 }
 
-export function putDemande(data, url,history,categories) {
-    var putData = 
-    {
-        ...data,
-        categories: _.map(categories, function (value, key) {
-            return value['@id'];
-        }),
-        attachements :_.map(data.attachements, function (value, key) {
-            return value['@id'];
-        }),
-        budget : data.budget && parseFloat(data.budget)
-    }
-    if(putData.motifRejet)
-    delete putData.motifRejet;
+export function putDemande(data, url, history, categories) {
+    var putData =
+        {
+            ...data,
+            categories: _.map(categories, function (value, key) {
+                return value['@id'];
+            }),
+            attachements: _.map(data.attachements, function (value, key) {
+                return value['@id'];
+            }),
+            budget: data.budget && parseFloat(data.budget)
+        }
+    if (putData.motifRejet)
+        delete putData.motifRejet;
 
     const request = agent.put(`/api/demande_achats/${url}`, putData);
 
@@ -150,7 +158,7 @@ export function putDemande(data, url,history,categories) {
                 payload: response.data
             })
             history.push('/demandes')
-            
+
         }
         ).catch((error) => {
             dispatch({
@@ -249,13 +257,14 @@ export function uploadAttachement(file) {
 
 export function newDemande() {
     const data = {
+        id: null,
         reference: '',
         description: '',
         localisation: 1,
         dateExpiration: null,
         isPublic: false,
         isAnonyme: false,
-        sousSecteurs: null,
+        categories: null,
         budget: null,
         motifRejet: '',
         statut: null,
