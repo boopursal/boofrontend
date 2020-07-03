@@ -4,27 +4,34 @@ import { showMessage } from 'app/store/actions/fuse';
 import agent from 'agent';
 import _ from '@lodash';
 
-export const REQUEST_DEMANDE = '[DEMANDE APP] REQUEST DEMANDE';
-export const GET_DEMANDE = '[DEMANDE APP] GET DEMANDE';
-export const REQUEST_SAVE = '[DEMANDE APP] REQUEST SAVE';
-export const REDIRECT_SUCCESS = '[DEMANDE APP] REDIRECT SUCCESS';
+export const REQUEST_DEMANDE = '[ DEMANDE ACHETEUR APP] REQUEST DEMANDE';
+export const GET_DEMANDE = '[ DEMANDE ACHETEUR APP] GET DEMANDE';
+export const REQUEST_DEMANDE_FOURNISSEURS = '[ DEMANDE ACHETEUR APP] REQUEST DEMANDE FOURNISSEURS';
+export const GET_DEMANDE_FOURNISSEURS = '[ DEMANDE ACHETEUR APP] GET DEMANDEFOURNISSEURS';
 
-export const SAVE_DEMANDE = '[DEMANDE APP] SAVE DEMANDE';
-export const NEW_DEMANDE = '[DEMANDE APP] NEW DEMANDE';
-export const SAVE_ERROR = '[DEMANDE APP] SAVE ERROR';
+export const REQUEST_SAVE = '[ DEMANDE ACHETEUR APP] REQUEST SAVE';
+export const REDIRECT_SUCCESS = '[ DEMANDE ACHETEUR APP] REDIRECT SUCCESS';
 
-export const REQUEST_SOUS_SECTEUR = '[DEMANDE APP] REQUEST SOUS_SECTEUR';
-export const GET_SOUS_SECTEUR = '[DEMANDE APP] GET SOUS SECTEUR';
+export const SAVE_DEMANDE = '[ DEMANDE ACHETEUR APP] SAVE DEMANDE';
+export const NEW_DEMANDE = '[ DEMANDE ACHETEUR APP] NEW DEMANDE';
+export const SAVE_ERROR = '[ DEMANDE ACHETEUR APP] SAVE ERROR';
 
-export const UPLOAD_ATTACHEMENT = '[DEMANDE APP] UPLOAD ATTACHEMENT';
-export const UPLOAD_REQUEST = '[DEMANDE APP] UPLOAD REQUEST';
-export const UPLOAD_ERROR = '[DEMANDE APP] UPLOAD ERROR';
+export const REQUEST_SOUS_SECTEUR = '[ DEMANDE ACHETEUR APP] REQUEST SOUS_SECTEUR';
+export const GET_SOUS_SECTEUR = '[ DEMANDE ACHETEUR APP] GET SOUS SECTEUR';
+
+export const UPLOAD_ATTACHEMENT = '[ DEMANDE ACHETEUR APP] UPLOAD ATTACHEMENT';
+export const UPLOAD_REQUEST = '[ DEMANDE ACHETEUR APP] UPLOAD REQUEST';
+export const UPLOAD_ERROR = '[ DEMANDE ACHETEUR APP] UPLOAD ERROR';
 
 
-export const REQUEST_DELETE = '[DEMANDE APP] REQUEST DELETE';
-export const DELETE_SUCCESS = '[DEMANDE APP] DELETE SUCCESS';
-export const ERROR_DELETE = '[DEMANDE APP] ERROR DELETE';
-export const CLEAN_UP_DEMANDE = '[DEMANDE APP] CLEAN_UP';
+export const REQUEST_DELETE = '[ DEMANDE ACHETEUR APP] REQUEST DELETE';
+export const DELETE_SUCCESS = '[ DEMANDE ACHETEUR APP] DELETE SUCCESS';
+export const ERROR_DELETE = '[ DEMANDE ACHETEUR APP] ERROR DELETE';
+export const CLEAN_UP_DEMANDE = '[ DEMANDE ACHETEUR APP] CLEAN_UP';
+
+export const REQUEST_SAVE_FOURNISSEUR = '[ DEMANDE ACHETEUR APP] REQUEST_SAVE_FOURNISSEUR';
+export const SAVE_FOURNISSEUR = '[ DEMANDE ACHETEUR APP] SAVE_FOURNISSEUR';
+
 
 
 export function cleanUpDemande() {
@@ -73,6 +80,52 @@ export function getDemande(params) {
                 payload: FuseUtils.parseApiErrors(error),
 
             })
+        });
+    }
+
+}
+
+// Récuperer les fournisseurs qui sont participer a cette demande 
+export function getFournisseurParticipe(id_demande) {
+    const request = agent.get(`/api/demande_achats/${id_demande}/visites`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_DEMANDE_FOURNISSEURS,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_DEMANDE_FOURNISSEURS,
+                payload: response.data
+            })
+
+
+        });
+    }
+
+}
+
+export function saveFournisseurGange(id_fournisseur, id_demande) {
+
+    var postData =
+        {
+            id_fournisseur,
+        }
+
+    const request = agent.post(`/api/demande_achats/${id_demande}/fournisseur_gagne`, postData);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SAVE_FOURNISSEUR,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: SAVE_FOURNISSEUR,
+            });
+            dispatch(getDemande(response.data.id))
+        }
+        ).catch((error) => {
+
         });
     }
 
@@ -128,7 +181,10 @@ export function saveDemande(data, history, categories, vider) {
 
 }
 
-export function putDemande(data, url, history, categories) {
+
+
+
+export function putDemande(data, url, history, categories, updated, updateExpiration, annulation) {
     var putData =
         {
             ...data,
@@ -138,11 +194,14 @@ export function putDemande(data, url, history, categories) {
             attachements: _.map(data.attachements, function (value, key) {
                 return value['@id'];
             }),
-            budget: data.budget && parseFloat(data.budget)
+            budget: data.budget && parseFloat(data.budget),
+            updated,
+            updateExpiration,
+            annulation
         }
+    delete putData.reference;
     if (putData.motifRejet)
         delete putData.motifRejet;
-
     const request = agent.put(`/api/demande_achats/${url}`, putData);
 
     return (dispatch) => {
@@ -153,10 +212,10 @@ export function putDemande(data, url, history, categories) {
 
             dispatch(showMessage({ message: 'Demande Modifiée' }));
 
-            dispatch({
+            /*dispatch({
                 type: SAVE_DEMANDE,
                 payload: response.data
-            })
+            })*/
             history.push('/demandes')
 
         }

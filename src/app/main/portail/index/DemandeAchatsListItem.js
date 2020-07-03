@@ -73,7 +73,7 @@ function DemandeAchatsListItem(props) {
                     />
 
                     <Chip
-                        icon={<Icon className="text-16 mr-0">access_time</Icon>}
+                        icon={<Icon className="text-16 mr-0">hourglass_empty</Icon>}
                         label={'Clôture le ' + moment(props.demande.dateExpiration).format("DD-MM-YYYY à HH:mm")}
                         classes={{
                             root: clsx("h-24"),

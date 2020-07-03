@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, Popper, Chip, IconButton, Tooltip, SnackbarContent, ListItemText, FormControlLabel, Radio } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, Popper, Chip, IconButton, Tooltip, SnackbarContent, ListItemText, FormControlLabel, Radio, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, CheckboxFormsy, RadioGroupFormsy } from '@fuse';
@@ -21,6 +21,17 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Highlighter from "react-highlight-words";
+
+const ColorButton = withStyles((theme) => ({
+    root: {
+        color: theme.palette.secondary.main,
+        backgroundColor: 'white',
+        '&:hover': {
+            backgroundColor: theme.palette.secondary.main,
+            color: 'white',
+        },
+    },
+}))(Button);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -105,6 +116,10 @@ const useStyles = makeStyles(theme => ({
     },
     margin: {
         margin: theme.spacing(1),
+    },
+    titre: {
+        paddingLeft: '10px',
+        borderLeft: '10px solid ' + theme.palette.secondary.main
     }
 }));
 moment.defaultFormat = "DD/MM/YYYY HH:mm";
@@ -156,6 +171,14 @@ function Demande(props) {
     const dispatch = useDispatch();
     const demande = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demande);
     const [isFormValid, setIsFormValid] = useState(false);
+
+    // Set Statut to "En attente" if it's "En cours" after any changes of this data (Titre,Description,Produits,Pièce jointe)
+    const [updateStatut, setUpdateStatut] = useState(false);
+
+    const [updateExpiration, setUpdateExpiration] = useState(false);
+    const [interval, setInterval] = useState(null);
+
+
     const formRef = useRef(null);
     const { form, handleChange, setForm } = useForm(null);
 
@@ -171,6 +194,7 @@ function Demande(props) {
             }
             else {
                 dispatch(Actions.getDemande(demandeId));
+                dispatch(Actions.getFournisseurParticipe(demandeId));
             }
         }
         updateDemandeState();
@@ -210,6 +234,7 @@ function Demande(props) {
             demande.attachement_deleted = null;
         }
     }, [demande.attachement_deleted]);
+
     useEffect(() => {
         if (demande.new) {
             setForm({ ...demande.data });
@@ -231,6 +256,49 @@ function Demande(props) {
         }
     }, [form, demande.data, setForm]);
 
+    useEffect(() => {
+        if (demandeId !== 'new' && demande.data && form && demande.data.statut === 1) {
+            if (
+                demande.data.titre !== form.titre ||
+                demande.data.description !== form.description ||
+                !(_.isEqual(demande.data.attachements, form.attachements)) ||
+                !(_.isEqual(categories, demande.data.categories))
+
+            ) {
+                setUpdateStatut(true)
+            }
+            else {
+                setUpdateStatut(false)
+
+            }
+        }
+    }, [form, demande.data, demandeId, categories]);
+
+    useEffect(() => {
+        if (demandeId !== 'new' && demande.data && form && demande.data.statut === 1) {
+            if (
+                moment(demande.data.dateExpiration).isSame(form.dateExpiration)
+
+            ) {
+                setInterval(null)
+                setUpdateExpiration(false)
+            }
+            else {
+                let duration = moment.duration(moment(form.dateExpiration).diff(demande.data.dateExpiration));
+                let hours = duration.hours();
+                let days = duration.days();
+                let months = duration.months();
+                let years = duration.years();
+                let result = years !== 0 && `${years} an(s)` || months !== 0 && `${months} mois` || days !== 0 && `${days} jour(s)` || hours !== 0 && `${hours} heure(s)`;
+                result = ((years < 0 || months < 0 || days < 0 || hours < 0) ? 'écourtée de ' : 'prolongée de ') + result;
+                setInterval(result)
+                setUpdateExpiration(true)
+            }
+        }
+    }, [form, demande.data, demandeId]);
+
+
+
     function handleCheckBoxChange(e, name) {
 
         setForm(_.set({ ...form }, name, e.target.checked));
@@ -249,7 +317,7 @@ function Demande(props) {
     }
 
     function handleDateChange(value, name) {
-        setForm(_.set({ ...form }, name, moment(value).format('YYYY-MM-DDTHH:mm:ssZ')));
+        setForm(_.set({ ...form }, name, moment(value).format('YYYY-MM-DDTHH:mm')));
     }
 
     function disableButton() {
@@ -320,9 +388,10 @@ function Demande(props) {
             dispatch(Actions.saveDemande(form, props.history, categories, vider));
         }
         else {
-            dispatch(Actions.putDemande(form, form.id, props.history, categories));
+            dispatch(Actions.putDemande(form, form.id, props.history, categories, updateStatut, updateExpiration, vider));
         }
     }
+
 
     return (
         <FusePageCarded
@@ -360,18 +429,76 @@ function Demande(props) {
                                     </div>
                                 </div>
                             </div>
-                            <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                            <div>
 
+                                {
+                                    moment(demande.data.dateExpiration) >= moment() && demande.data.statut
+                                    &&
+                                    <Button
+                                        className="mr-4"
+                                        variant="outlined"
+                                        color="secondary"
+                                        disabled={!isFormValid || demande.loading || !categories.length || demande.data.statut === 3}
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            dispatch(Actions.openDialog({
+                                                children: (
+                                                    <React.Fragment>
+                                                        <DialogTitle id="alert-dialog-title">Annulation</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText id="alert-dialog-description">
+                                                                Voulez vous vraiment annuler cette demande ?
+                                                            </DialogContentText>
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button variant="outlined" onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                Non
+                                                            </Button>
+                                                            <Button
+                                                                variant="contained"
+                                                                color="secondary"
+                                                                onClick={(ev) => {
+                                                                    handleSubmit(true);
+                                                                    dispatch(Actions.closeDialog())
+                                                                }}
+                                                                autoFocus>
+                                                                Oui
+                                                        </Button>
+
+                                                        </DialogActions>
+                                                    </React.Fragment>
+                                                )
+                                            }))
+                                        }}
+                                    >
+                                        annuler la demande
+                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                    </Button>
+                                }
                                 <Button
                                     className="whitespace-no-wrap"
                                     variant="contained"
-                                    disabled={!isFormValid || demande.loading || !categories.length}
-                                    onClick={() => handleSubmit(form)}
+                                    color="secondary"
+                                    disabled={!isFormValid || demande.loading || !categories.length || demande.data.statut === 3}
+                                    onClick={() => handleSubmit(false)}
                                 >
                                     Sauvegarder
-                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                 </Button>
-                            </FuseAnimate>
+                                {
+                                    demandeId === 'new' &&
+                                    <Button
+                                        className="ml-8"
+                                        color="secondary"
+                                        variant="contained"
+                                        disabled={!isFormValid || demande.loading || !categories.length}
+                                        onClick={() => handleSubmit(true)}
+                                    >
+                                        Sauvegarder et ajouter nouvelle demande
+                                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                    </Button>
+                                }
+                            </div>
                         </div>
                     )
                     :
@@ -401,9 +528,14 @@ function Demande(props) {
 
                         />
 
-                        {/*form && form.diffusionsdemandes.length > 0 ?
-                            <Tab className="h-64 normal-case" label={"Diffuser (" + form.diffusionsdemandes.length + " fois)"} />
-                        : ''*/}
+                        {demande && demande.fournisseurs.length > 0 ?
+                            <Tab className={clsx("h-64 normal-case text-orange", demande.data.statut === 3 ? "text-green" : "text-orange")} label=
+                                {
+                                    demande.data && demande.data && demande.data.statut === 3 ?
+                                        'Adjugée' :
+                                        demande.fournisseurs.length + " fournisseur(s) participant(s)"
+                                } />
+                            : ''}
 
                     </Tabs>
 
@@ -439,18 +571,29 @@ function Demande(props) {
                                         }
                                         <Grid container spacing={3} className="mb-8">
 
-                                            <Grid item xs={12} sm={6}>
+                                            <Grid item xs={12} sm={8}>
                                                 <Typography variant="caption"  >
                                                     - Soumettez votre demande c'est gratuit et sans engagement.<br />
                                                     - Détaillez la demande, vous recevrez de meilleures offres.<br />
                                                     - Attention seules les demandes sérieuses (pas de projets étudiants) seront validées.<br />
                                                 </Typography>
+
                                             </Grid>
-                                            <Grid item xs={12} sm={6} className="justify-end text-right">
+                                            <Grid item xs={12} sm={4} className="justify-end text-right">
                                                 <Typography variant="caption"  >
                                                     <span className="text-red font-600">*</span> Champs obligatoires.
                                                  </Typography>
                                             </Grid>
+                                            {
+                                                form.statut === 1 &&
+                                                <Grid item xs={12}>
+
+                                                    <Typography variant="caption" className="font-bold flex items-center" color="secondary">
+                                                        <Icon className="mr-2">info</Icon>Toutes modifications sur les champs ( Désignation, Description, Produits, Pièce(s) jointe(s) ), la demande sera remis à l'état initial "En attente" pour la validation de l'administrateur.
+                                                    </Typography>
+                                                </Grid>
+
+                                            }
                                         </Grid>
                                         <Grid container spacing={3} >
                                             <Grid item xs={12} sm={8}>
@@ -499,7 +642,6 @@ function Demande(props) {
                                             <Grid item xs={12} sm={6}>
 
                                                 <DatePickerFormsy
-                                                    className="mb-24"
                                                     label="Date d'éxpiration"
                                                     id="dateExpiration"
                                                     name="dateExpiration"
@@ -509,6 +651,12 @@ function Demande(props) {
                                                     required
                                                     fullWidth
                                                 />
+                                                {
+                                                    updateExpiration && interval &&
+                                                    <Typography variant="caption" className="uppercase font-bold mb-16 flex items-center" color="secondary">
+                                                        <Icon>info</Icon>&ensp;{interval}
+                                                    </Typography>
+                                                }
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
@@ -553,8 +701,8 @@ function Demande(props) {
                                                 required
                                                 inputProps={{
                                                     classes,
-                                                    label: 'Activités',
-                                                    placeholder: "Activité (ex: Rayonnage lourd)",
+                                                    label: 'Produits',
+                                                    placeholder: "Produit (ex: Projecteur)",
                                                     value: searchCategories.searchText,
                                                     variant: "outlined",
                                                     name: "categories",
@@ -649,15 +797,16 @@ function Demande(props) {
                                                     onChange={handleRadioChange}
                                                 >
 
-                                                    <FormControlLabel value="2" checked={form.localisation === 2} control={<Radio />} label="Locale" />
-                                                    <FormControlLabel value="3" checked={form.localisation === 3} control={<Radio />} label="Internationale" />
-                                                    <FormControlLabel value="1" checked={form.localisation === 1} control={<Radio />} label="Les deux" />
+                                                    <FormControlLabel value="2" disabled={form.statut === 1} checked={form.localisation === 2} control={<Radio />} label="Locale" />
+                                                    <FormControlLabel value="3" disabled={form.statut === 1} checked={form.localisation === 3} control={<Radio />} label="Internationale" />
+                                                    <FormControlLabel value="1" disabled={form.statut === 1} checked={form.localisation === 1} control={<Radio />} label="Les deux" />
 
                                                 </RadioGroupFormsy>
                                             </Grid>
                                             <Grid item xs={12} sm={4} className="flex items-center">
                                                 <CheckboxFormsy
                                                     name="isPublic"
+                                                    disabled={form.statut === 1}
                                                     onChange={(e) => handleCheckBoxChange(e, 'isPublic')}
                                                     value={form.isPublic}
                                                     label="Mettre en ligne après validation"
@@ -671,6 +820,7 @@ function Demande(props) {
                                                 <CheckboxFormsy
                                                     onChange={(e) => handleCheckBoxChange(e, 'isAnonyme')}
                                                     name="isAnonyme"
+                                                    disabled={form.statut === 1}
                                                     value={form.isAnonyme}
                                                     label="Mettre la demande anonyme"
                                                 />
@@ -684,7 +834,8 @@ function Demande(props) {
                                                 <Button
                                                     className="whitespace-no-wrap"
                                                     variant="contained"
-                                                    disabled={!isFormValid || demande.loading || !categories.length}
+                                                    color="secondary"
+                                                    disabled={!isFormValid || demande.loading || !categories.length || demande.data.statut === 3}
                                                     onClick={() => handleSubmit(false)}
                                                 >
                                                     Sauvegarder
@@ -695,6 +846,7 @@ function Demande(props) {
                                                     <Button
                                                         className="ml-8"
                                                         variant="contained"
+                                                        color="secondary"
                                                         disabled={!isFormValid || demande.loading || !categories.length}
                                                         onClick={() => handleSubmit(true)}
                                                     >
@@ -781,50 +933,190 @@ function Demande(props) {
 
                                 </div>
                             )}
-                            {/*tabValue === 2 && (
+                            {tabValue === 2 && (
                                 <div className="w-full flex flex-col">
+                                    {
+                                        demande.data && demande.data.statut === 3 ?
+                                            (
+                                                <div className="flex flex-1 items-center justify-center h-full">
+                                                    <Typography variant="h6" className="flex items-center">
+                                                        <Icon className="mr-2 text-40" color="secondary">gavel</Icon> Cette demande a été adjugée par : <strong className="uppercase ml-2"> {demande.data.fournisseurGagne ? demande.data.fournisseurGagne.societe : 'Fournisseur hors site'}</strong>
+                                                    </Typography>
+                                                </div>
+                                            )
+                                            :
+                                            <div>
+                                                <Typography variant="h6" className={clsx("mb-8 ml-2", classes.titre)}>
+                                                    Détail de la demande
+                                                </Typography>
+                                                <div className="table-responsive mb-16">
+                                                    <table className="simple">
+                                                        <thead>
+                                                            <tr>
+                                                                <th className="font-bold">Référence</th>
+                                                                <th className="font-bold">Désignation</th>
+                                                                <th className="font-bold">Description</th>
+                                                                <th className="font-bold">Produits</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <div className="flex items-center">
+                                                                        <Typography className="truncate">
+                                                                            {
+                                                                                'RFQ-' + demande.data.reference
+                                                                            }
+                                                                        </Typography>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <Typography className="truncate">
+                                                                        {
+                                                                            demande.data.titre
+                                                                        }
+                                                                    </Typography>
+                                                                </td>
+                                                                <td>
+                                                                    <Typography className="truncate">
+                                                                        {
+                                                                            demande.data.description
+                                                                        }
+                                                                    </Typography>
+                                                                </td>
+                                                                <td>
+                                                                    <span className="truncate">
+                                                                        {
+                                                                            _.join(_.map(demande.data.categories, 'name'), ', ')
+                                                                        }
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div className="flex flex-1 items-center justify-between mb-10">
+                                                    <Typography variant="h6" className={clsx("mb-8 ml-2", classes.titre)}>
+                                                        Fournisseurs participants ( {demande.fournisseurs.length} )
+                                                    </Typography>
+                                                    <ColorButton
+                                                        color="secondary"
+                                                        size="small"
+                                                        variant="outlined"
+                                                        disabled={demande.requestSaveFrs}
+                                                        onClick={(ev) => {
+                                                            ev.stopPropagation();
+                                                            dispatch(Actions.openDialog({
+                                                                children: (
+                                                                    <React.Fragment>
+                                                                        <DialogTitle id="alert-dialog-title">Attribution</DialogTitle>
+                                                                        <DialogContent>
+                                                                            <DialogContentText id="alert-dialog-description">
+                                                                                Voulez vous vraiment attribuer cette demande à un fournisseur hors site ?
+                                                                                        </DialogContentText>
+                                                                        </DialogContent>
+                                                                        <DialogActions>
+                                                                            <Button variant="outlined" onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                                Non
+                                                                                        </Button>
+                                                                            <Button
+                                                                                variant="contained"
+                                                                                color="secondary"
+                                                                                onClick={(ev) => {
+                                                                                    dispatch(Actions.saveFournisseurGange(null, form.id));
+                                                                                    dispatch(Actions.closeDialog())
+                                                                                }}
+                                                                                autoFocus>
+                                                                                Oui
+                                                                                    </Button>
+
+                                                                        </DialogActions>
+                                                                    </React.Fragment>
+                                                                )
+                                                            }))
+                                                        }}
+                                                    >
+                                                        attribuée à un fournisseur hors site
+                                                                    {demande.requestSaveFrs && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                    </ColorButton>
+                                                </div>
+                                                <ReactTable
+                                                    className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
+                                                    data={demande.fournisseurs}
+
+                                                    columns={[
+
+                                                        {
+                                                            Header: "Nombre de fournisseur",
+                                                            accessor: "id",
+                                                            Cell: row => <div style={{ textAlign: "center" }}>{row.index + 1}</div>
+                                                        },
+                                                        {
+                                                            Header: "Fournisseur",
+                                                            className: "font-bold",
+                                                            id: "fournisseur",
+                                                            accessor: f => f.fournisseur.societe + ' ' + f.fournisseur.firstName + ' ' + f.fournisseur.lastName + ' ' + f.fournisseur.phone,
+                                                        },
+                                                        {
+                                                            Header: "",
+                                                            Cell: row => (
+                                                                <div className="flex items-center">
+                                                                    <ColorButton
+                                                                        color="secondary"
+                                                                        size="small"
+                                                                        variant="outlined"
+                                                                        disabled={demande.requestSaveFrs}
+                                                                        onClick={(ev) => {
+                                                                            ev.stopPropagation();
+                                                                            dispatch(Actions.openDialog({
+                                                                                children: (
+                                                                                    <React.Fragment>
+                                                                                        <DialogTitle id="alert-dialog-title">Attribution</DialogTitle>
+                                                                                        <DialogContent>
+                                                                                            <DialogContentText id="alert-dialog-description">
+                                                                                                Voulez vous vraiment attribuer cette demande à <strong>{row.original.fournisseur.societe}</strong> ?
+                                                                                        </DialogContentText>
+                                                                                        </DialogContent>
+                                                                                        <DialogActions>
+                                                                                            <Button variant="outlined" onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                                                Non
+                                                                                        </Button>
+                                                                                            <Button
+                                                                                                variant="contained"
+                                                                                                color="secondary"
+                                                                                                onClick={(ev) => {
+                                                                                                    dispatch(Actions.saveFournisseurGange(row.original.fournisseur.id, form.id));
+                                                                                                    dispatch(Actions.closeDialog())
+                                                                                                }}
+                                                                                                autoFocus>
+                                                                                                Oui
+                                                                                    </Button>
+
+                                                                                        </DialogActions>
+                                                                                    </React.Fragment>
+                                                                                )
+                                                                            }))
+                                                                        }}
+                                                                    >
+                                                                        Adjugée
+                                                                    {demande.requestSaveFrs && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                                                    </ColorButton>
+                                                                </div>
+                                                            )
+                                                        }
+
+                                                    ]}
+                                                    defaultPageSize={demande.fournisseurs.length < 10 ? demande.fournisseurs.length : 10}
+                                                    ofText='sur'
+                                                />
+                                            </div>
 
 
-                                    <FuseAnimate animation="transition.slideUpIn" delay={300}>
-
-                                        <ReactTable
-
-                                            className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
-                                            data={form.diffusionsdemandes}
-                                            columns={[
-
-                                                {
-                                                    Header: "#",
-                                                    accessor: "id",
-                                                    Cell: row => row.index + 1
-
-
-                                                },
-                                                {
-                                                    Header: "Fournisseurs",
-                                                    className: "font-bold",
-                                                    id: "fournisseur",
-                                                    accessor: f => f.fournisseur.societe + ' ' + f.fournisseur.firstName + ' ' + f.fournisseur.lastName + ' ' + f.fournisseur.phone,
-                                                },
-                                                {
-                                                    Header: "Date de diffusion",
-                                                    id: "dateDiffusion",
-                                                    accessor: d => moment(d.dateDiffusion).format('DD/MM/YYYY HH:mm'),
-                                                },
-
-
-
-                                            ]}
-                                            defaultPageSize={10}
-                                            ofText='sur'
-                                        />
-                                    </FuseAnimate>
-
-
-
+                                    }
 
                                 </div>
-                            )*/}
+                            )}
 
 
                         </div>

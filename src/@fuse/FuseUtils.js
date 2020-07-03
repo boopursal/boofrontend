@@ -60,7 +60,7 @@ class FuseUtils {
     };
 
     static parseApiErrors(error) {
-        if (error.response.data.violations) {
+        if (error.response && error.response.data.violations) {
             return error.response.data.violations.reduce(
                 (parsedErrors, violation) => {
                     parsedErrors[violation['propertyPath']] = violation['message'];
@@ -69,7 +69,7 @@ class FuseUtils {
                 {}
             );
         }
-        else if (error.response.data['hydra:description']) {
+        else if (error.response && error.response.data['hydra:description']) {
             return { "Erreur": error.response.data['hydra:description'] };
         }
         else
@@ -87,7 +87,6 @@ class FuseUtils {
         return "https://it.3findustrie.com";
         //return "http://192.168.11.124:8000";
         //return "http://192.168.1.124:8000";
-        //return "https://enigmatic-bastion-83517.herokuapp.com/";
     }
 
     static hydraPageCount(collection) {

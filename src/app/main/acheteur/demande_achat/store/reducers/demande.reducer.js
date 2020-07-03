@@ -2,6 +2,7 @@ import * as Actions from '../actions';
 
 const initialState = {
     data: null,
+    fournisseurs: [],
     error: null,
     sousSecteurs: null,
     loading: false,
@@ -10,6 +11,7 @@ const initialState = {
     attachement: null,
     attachement_deleted: null,
     new: false,
+    requestSaveFrs: false,
 };
 
 const demandeReducer = function (state = initialState, action) {
@@ -23,6 +25,36 @@ const demandeReducer = function (state = initialState, action) {
                     ...state,
                     loading: true,
                     new: false,
+                }
+            }
+        case Actions.REQUEST_SAVE_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    requestSaveFrs: true,
+                }
+            }
+        case Actions.SAVE_FOURNISSEUR:
+            {
+                return {
+                    ...state,
+                    requestSaveFrs: false,
+
+                }
+            }
+        case Actions.REQUEST_DEMANDE_FOURNISSEURS:
+            {
+                return {
+                    ...state,
+                    loadingFrs: true,
+                }
+            }
+        case Actions.GET_DEMANDE_FOURNISSEURS:
+            {
+                return {
+                    ...state,
+                    fournisseurs: action.payload['hydra:member'],
+                    loadingFrs: false,
                 }
             }
         case Actions.CLEAN_UP_DEMANDE:

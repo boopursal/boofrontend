@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip, TextField, InputAdornment } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField, InputAdornment, DialogTitle, DialogContent, DialogActions, DialogContentText, Button } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -322,7 +322,34 @@ function DemandesTable(props) {
                                             <IconButton className="text-red text-20"
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
-                                                    dispatch(Actions.removeDemande(row.original, parametres, user.id));
+                                                    dispatch(Actions.openDialog({
+                                                        children: (
+                                                            <React.Fragment>
+                                                                <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                                                <DialogContent>
+                                                                    <DialogContentText id="alert-dialog-description">
+                                                                        Voulez vous vraiment supprimer cette demande ?
+                                                                    </DialogContentText>
+                                                                </DialogContent>
+                                                                <DialogActions>
+                                                                    <Button variant="outlined" onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                        Non
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        color="secondary"
+                                                                        onClick={(ev) => {
+                                                                            dispatch(Actions.removeDemande(row.original, parametres, user.id));
+                                                                            dispatch(Actions.closeDialog())
+                                                                        }}
+                                                                        autoFocus>
+                                                                        Oui
+                                                                </Button>
+
+                                                                </DialogActions>
+                                                            </React.Fragment>
+                                                        )
+                                                    }))
                                                 }}
                                             >
                                                 <Icon>delete</Icon>

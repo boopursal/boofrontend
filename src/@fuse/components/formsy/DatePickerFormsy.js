@@ -23,15 +23,18 @@ function DatePickerFormsy(props) {
     ]);
 
     const errorMessage = props.getErrorMessage();
-    const value = props.getValue() !== null ?  moment(props.getValue()) : null;
+    console.log(props.getValue())
+    console.log(moment(props.getValue()).format('YYYY-MM-DDTHH:mm'))
+
+    const value = props.getValue() !== null ? moment(props.getValue()).format('YYYY-MM-DDTHH:mm') : null;
 
     function changeValue(event) {
-        
-        props.setValue(moment(event).format('YYYY-MM-DDTHH:mm:ssZ')) ;
+
+        props.setValue(moment(event).format('YYYY-MM-DDTHH:mm'));
         if (props.onChange) {
-            props.onChange(moment(event).format('YYYY-MM-DDTHH:mm:ssZ'));
+            props.onChange(moment(event).format('YYYY-MM-DDTHH:mm'));
         }
-      
+
     }
 
     return (
@@ -45,6 +48,7 @@ function DatePickerFormsy(props) {
                 inputVariant="outlined"
                 format="dd/MM/yyyy HH:mm"
                 minDate={moment()}
+                ampm={false}
                 error={Boolean(errorMessage)}
                 helperText={errorMessage}
             />
