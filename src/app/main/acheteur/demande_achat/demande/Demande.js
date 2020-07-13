@@ -379,8 +379,6 @@ function Demande(props) {
         setForm(_.set({ ...form }, 'localisation', parseInt(e.target.value)));
     }
     function handleSubmit(vider = false) {
-        //event.preventDefault();
-
         const params = props.match.params;
         const { demandeId } = params;
 
