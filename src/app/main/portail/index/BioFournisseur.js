@@ -51,37 +51,46 @@ export default function BioFournisseur(props) {
                         <Typography component="h2" variant="h5" className="uppercase">
                             Vendre
                         </Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
-                            Créez un compte fournisseur vous permet de toucher un grand nombre de vos futurs clients en intent record.
+                        <Typography variant="subtitle1" color="textSecondary" className="text-justify">
+                            Créez un compte fournisseur <strong className="uppercase">gratuitement</strong> vous permet de toucher un grand nombre de vos futurs clients en un temps record.
                         </Typography>
                         <List >
-                            <ListItem>
+                            <ListItem classes={{
+                                root: 'pl-0'
+                            }}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.mainAvatar}>
                                         <Icon >local_mall</Icon>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
+                                    className="text-justify"
                                     primary="Que vous soyez novice sur internet ou expert en e-commerce, nous vous aidons à augmenter vos prospects"
                                 />
                             </ListItem>
-                            <ListItem>
+                            <ListItem classes={{
+                                root: 'pl-0'
+                            }}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.lightAvatar}>
                                         <Icon >people_outline</Icon>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
+                                    className="text-justify"
                                     primary="Élargissez votre réseau de clients avec de nouveaux acheteurs au niveau local, national et international"
                                 />
                             </ListItem>
-                            <ListItem>
+                            <ListItem classes={{
+                                root: 'pl-0'
+                            }}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.darkAvatar}>
                                         <Icon >remove_red_eye</Icon>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
+                                    className="text-justify"
                                     primary="Profitez de notre large audience. Plus de 200.000 acheteurs potentiels nous visitent chaque jour"
                                 />
                             </ListItem>

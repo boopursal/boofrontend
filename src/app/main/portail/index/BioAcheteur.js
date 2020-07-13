@@ -12,6 +12,7 @@ import { NavLinkAdapter } from '@fuse';
 import { ListItem, ListItemAvatar, Avatar, List, ListItemText, Icon } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
+
     card: {
         display: 'flex',
     },
@@ -51,38 +52,47 @@ export default function BioAcheteur(props) {
                         <Typography component="h2" variant="h5" className="uppercase">
                             Acheter
                         </Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
-                            Créez un compte acheteur vous permet de toucher un grand nombre de vos futurs clients en intent record.
+                        <Typography variant="subtitle1" color="textSecondary" className="text-justify" >
+                            Créez un compte acheteur <strong className="uppercase">gratuitement</strong> vous permet d'avoir un pouvoir négociateur puissant, garanti et très important.
                         </Typography>
-                        <List >
-                            <ListItem>
+                        <List>
+                            <ListItem classes={{
+                                root: 'pl-0'
+                            }}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.mainAvatar}>
                                         <Icon >local_mall</Icon>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary="Que vous soyez novice sur internet ou expert en e-commerce, nous vous aidons à augmenter vos prospects"
+                                    className="text-justify"
+                                    primary="Que vous ayez un service d'achat développé ou pas encore, vous serez contacté par les meilleurs fournisseurs."
                                 />
                             </ListItem>
-                            <ListItem>
+                            <ListItem classes={{
+                                root: 'pl-0'
+                            }}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.lightAvatar}>
                                         <Icon >people_outline</Icon>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary="Élargissez votre réseau de clients avec de nouveaux acheteurs au niveau local, national et international"
+                                    className="text-justify"
+                                    primary="Construisez votre panel fournisseurs ( Shortlist ) personnalisé que ce soit par produit ou service."
                                 />
                             </ListItem>
-                            <ListItem>
+                            <ListItem classes={{
+                                root: 'pl-0'
+                            }}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.darkAvatar}>
                                         <Icon >remove_red_eye</Icon>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary="Profitez de notre large audience. Plus de 200.000 acheteurs potentiels nous visitent chaque jour"
+                                    className="text-justify"
+                                    primary="Augmentez votre valeur ajoutée en employant moins de temps à la recherche des fournisseurs."
                                 />
                             </ListItem>
                         </List>
