@@ -389,7 +389,7 @@ function Index(props) {
              ===================DECOUVREZ LES SHA=================
             **/}
             <div
-                className={clsx(classes.middle, "relative overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-512 sm:h-288 ")}>
+                className={clsx(classes.middle, "relative hidden overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-512 sm:h-288 ")}>
                 <div className={classes.overlay} />
                 <Grid container className="max-w-2xl mx-auto px-8 sm:px-16 items-center py-24 z-9999">
                     <Grid item sm={7} xs={12}>
