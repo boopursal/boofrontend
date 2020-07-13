@@ -642,7 +642,7 @@ function Demande(props) {
                                             <Grid item xs={12} sm={6}>
 
                                                 <DatePickerFormsy
-                                                    label="Date d'éxpiration"
+                                                    label="Date d'expiration"
                                                     id="dateExpiration"
                                                     name="dateExpiration"
                                                     value={form.dateExpiration}

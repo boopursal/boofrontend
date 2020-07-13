@@ -235,7 +235,7 @@ function ConsultationsTable(props) {
                     },
 
                     {
-                        Header: "Date d'éxpiration",
+                        Header: "Date d'expiration",
                         accessor: "demande.dateExpiration",
                         minWidth: 125,
                         filterable: true,

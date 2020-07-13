@@ -4,15 +4,18 @@ import React from 'react';
 export const InscriptionConfig = {
     settings: {
         layout: {
+            style: 'layout3',
             config: {
+                mode: 'container',
                 navbar: {
                     display: false
                 },
                 toolbar: {
-                    display: false
+                    display: true
                 },
                 footer: {
-                    display: false
+                    display: true,
+                    style: 'static'
                 },
                 leftSidePanel: {
                     display: false
@@ -21,7 +24,10 @@ export const InscriptionConfig = {
                     display: false
                 }
             }
-        }
+        },
+        theme: {
+            main: 'greeny',
+        },
     },
     routes: [
         {
@@ -31,7 +37,7 @@ export const InscriptionConfig = {
         },
         {
             exact: true,
-            path: '/register',
+            path: '/register/:page',
             component: React.lazy(() => import('./RegisterPage'))
         },
         {

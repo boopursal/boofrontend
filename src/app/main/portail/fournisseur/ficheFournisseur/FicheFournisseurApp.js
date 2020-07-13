@@ -46,41 +46,29 @@ function FicheFournisseurApp(props) {
     const dispatch = useDispatch();
     const parametres = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.parametres);
     const fournisseur = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.data);
+    const params = props.match.params;
+    const { id, tab } = params;
+    useEffect(() => {
+        function updateFournisseurState() {
+            dispatch(Actions.getFournisseur(id));
+        }
+        updateFournisseurState();
+    }, [dispatch, id]);
 
     useEffect(() => {
 
         function updateFournisseurState() {
-            const params = props.match.params;
-            const { id, tab } = params;
             if (!tab) {
-                if (fournisseur.length === 0)
-                    dispatch(Actions.getFournisseur(id));
                 dispatch(Actions.getFournisseurProduitsApercu(id));
-            }
-
-
-        }
-
-
-        updateFournisseurState();
-    }, [dispatch, props.match.params]);
-
-    useEffect(() => {
-
-        function updateProduitsState() {
-            const params = props.match.params;
-            const { id, tab } = params;
-            if (tab) {
-                if (fournisseur.length === 0)
-                    dispatch(Actions.getFournisseur(id));
+            } else {
                 dispatch(Actions.getFournisseurProduits(id, parametres));
-
             }
 
         }
+        updateFournisseurState();
+    }, [dispatch, tab, id, parametres]);
 
-        updateProduitsState();
-    }, [dispatch, props.match.params, parametres]);
+
 
     return (
         <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>

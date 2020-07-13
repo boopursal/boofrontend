@@ -323,7 +323,7 @@ function Consultation(props) {
 
                                                 <TextFieldFormsy
                                                     className="mb-24"
-                                                    label="Date d'éxpiration"
+                                                    label="Date d'expiration"
                                                     id="dateExpiration"
                                                     name="dateExpiration"
                                                     value={

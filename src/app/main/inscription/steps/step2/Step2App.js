@@ -25,8 +25,12 @@ import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(theme => ({
     card: {
-        minWidth: 675,
         maxWidth: 675,
+        padding: 20,
+        [theme.breakpoints.down('xs')]: {
+            padding: 8
+        },
+
     },
     root: {
         background: 'radial-gradient(' + darken(theme.palette.primary.dark, 0.5) + ' 0%, ' + theme.palette.primary.dark + ' 80%)',

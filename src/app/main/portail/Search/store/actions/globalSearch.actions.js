@@ -34,7 +34,7 @@ export function loadSuggestions(value) {
         });
 
         // Fake an AJAX call
-        timeOut= setTimeout(() => {
+        timeOut = setTimeout(() => {
             dispatch(getResults(value));
         }, randomDelay());
     };
@@ -52,6 +52,7 @@ export function getResults(searchText) {
     });
 
     return (dispatch) => {
+
 
         return request.then((response) => {
             dispatch({

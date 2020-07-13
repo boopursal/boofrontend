@@ -20,6 +20,7 @@ import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import DemandeAchatsListItem from './DemandeAchatsListItem';
 import Newsletter from './Newsletter';
+import BioAcheteur from './BioAcheteur';
 import BioFournisseur from './BioFournisseur';
 import News from './News';
 import Produit from './Produit';
@@ -112,6 +113,18 @@ const useStyles = makeStyles(theme => ({
             marginTop: 11,
             position: 'static',
             textAlign: 'end'
+        },
+    },
+    bioFournisseur: {
+        paddingRight: 16,
+        [theme.breakpoints.down('xs')]: {
+            paddingRight: 0,
+        },
+    },
+    bioAchteur: {
+        paddingLeft: 16,
+        [theme.breakpoints.down('xs')]: {
+            paddingLeft: 0,
         },
     }
 }));
@@ -405,8 +418,11 @@ function Index(props) {
                 container
                 className="max-w-2xl mx-auto px-8 sm:px-16 py-24"
             >
-                <Grid item sm={12}>
+                <Grid item sm={6} xs={12} className={classes.bioFournisseur}>
                     <BioFournisseur />
+                </Grid>
+                <Grid item sm={6} xs={12} className={classes.bioAchteur}>
+                    <BioAcheteur />
                 </Grid>
             </Grid>
 

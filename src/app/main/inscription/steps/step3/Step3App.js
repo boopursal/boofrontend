@@ -23,18 +23,13 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Highlighter from "react-highlight-words";
-import Collapse from '@material-ui/core/Collapse';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 /**=============== FOUNRISSEUR SOUS-SECTEURS ======================= */
 const useStyles = makeStyles(theme => ({
     card: {
-        minWidth: 900,
         maxWidth: 900,
-        borderRadius: '20px',
         padding: '20px',
-        height: 600,
-        overflow: 'hidden'
+        height: 'auto',
     },
     chips: {
         flex: 1,
@@ -228,6 +223,7 @@ function Step3App(props) {
     const popperNode = useRef(null);
     const searchCategories = useSelector(({ step3App }) => step3App.searchCategories);
     const [categories, setCategories] = React.useState([]);
+    const [produitsSuggestion, setProduitsSuggestion] = React.useState([]);
 
     const dispatch = useDispatch();
     const classes = useStyles();
@@ -268,7 +264,7 @@ function Step3App(props) {
                 categories: _.map(categories, function (value, key) {
                     return value['@id'];
                 }),
-                autreCategories: form.autreCategories
+                autreCategories: produitsSuggestion.length > 0 ? _.join(_.map(produitsSuggestion, 'value'), ', ') : null
             }
         dispatch(Actions.setStep3(data, user.id, props.history));
     }
@@ -296,7 +292,6 @@ function Step3App(props) {
 
 
     function handleSuggestionsFetchRequested({ value, reason }) {
-        console.log(reason)
         if (reason === 'input-changed') {
             value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value.trim()));
             // Fake an AJAX call
@@ -320,6 +315,23 @@ function Step3App(props) {
     function handleDelete(id) {
         setCategories(_.reject(categories, function (o) { return o.id == id; }))
     }
+
+    function addProduitSuggestion(event) {
+        if (!_.find(produitsSuggestion, ['value', searchCategories.searchText])) {
+            setProduitsSuggestion([...produitsSuggestion, { value: searchCategories.searchText }])
+            hideSearch();
+            dispatch(Actions.cleanUp());
+        }
+    }
+    function escProduitSuggestion(event) {
+        hideSearch();
+        dispatch(Actions.cleanUp());
+    }
+
+    function handleDeleteProduit(value) {
+        setProduitsSuggestion(_.reject(produitsSuggestion, function (o) { return o.value == value; }))
+    }
+
     return (
         <div className={clsx(classes.root, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
             <Helmet>
@@ -362,7 +374,7 @@ function Step3App(props) {
                                         <div className={clsx("rounded py-8 px-4 border-t-4 shadow-md mb-16", classes.alert)} role="alert">
                                             <div className="flex items-center">
                                                 <Icon className="mr-2">info</Icon>
-                                                <Typography className="font-bold">Plus vous sélectionnez des produits, mieux vous receverez des demandes d'achats.</Typography>
+                                                <Typography className="font-bold">Plus vous sélectionnez de produits, plus vous receverez des demandes d'achats.</Typography>
                                             </div>
                                         </div>
                                         <ul className="mb-24 text-12 font-600">
@@ -420,7 +432,9 @@ function Step3App(props) {
                                                             {options.children}
                                                             {searchCategories.noSuggestions && (
                                                                 <Typography className="px-16 py-12">
-                                                                    Aucun résultat..
+                                                                    Ce produit n'existe pas encore sur notre base de données. <br />
+                                                                    Ajouter ce produit <Button size="small" onClick={addProduitSuggestion} variant="contained" color="secondary">oui</Button> <Button size="small" onClick={escProduitSuggestion} variant="outlined" color="primary">non</Button>
+
                                                                 </Typography>
                                                             )}
                                                             {searchCategories.loading && (
@@ -435,12 +449,17 @@ function Step3App(props) {
                                         />
 
                                     </div>
+                                    {
+                                        categories && categories.length > 0 &&
+
+                                        <Typography paragraph className="mt-8 mb-2 font-bold">Produit(s) sélectioné(s)</Typography>
+                                    }
                                     <div className={clsx(classes.chips)}>
                                         {
                                             categories && categories.length > 0 &&
-                                            categories.map((item, index) => (
+                                            categories.map((item) => (
                                                 <Chip
-                                                    key={index}
+                                                    key={item.id}
                                                     color="secondary"
                                                     label={item.name}
                                                     onDelete={() => handleDelete(item.id)}
@@ -451,44 +470,32 @@ function Step3App(props) {
 
                                         }
                                     </div>
-                                    <Typography paragraph className="flex mt-16 items-center " color="secondary">
-                                        <Icon className="mr-2" color="secondary">help_outline</Icon>
-                                        Si vos produits n´existent pas, veuillez cliquer ici:
-                                            <IconButton
-                                            className={clsx(classes.expand, "ml-2", {
-                                                [classes.expandOpen]: expanded,
-                                            })}
-                                            color="secondary"
-                                            onClick={handleExpandClick}
-                                            aria-expanded={expanded}
-                                            aria-label="show more"
-                                        >
-                                            <ExpandMoreIcon />
-                                        </IconButton>
 
-                                    </Typography>
-                                    <Collapse in={expanded} timeout="auto" className=" " unmountOnExit>
+                                    {
+                                        produitsSuggestion && produitsSuggestion.length > 0 &&
+                                        <>
+                                            <Typography paragraph className="mt-8 mb-2 font-bold">Produit(s) suggéré(s)</Typography>
+                                            <Typography variant="caption" className="">Ce produit sera activé une fois validé par administrateur, Merci.</Typography>
 
-                                        <TextFieldFormsy
-                                            className="w-full"
-                                            type="text"
-                                            name="autreCategories"
-                                            value={form.autreCategories}
-                                            onChange={handleChange}
-                                            label="Autre produits"
-                                            validations={{
-                                                minLength: 2,
-                                                maxLength: 50,
+                                        </>
+                                    }
+                                    <div className={clsx(classes.chips)}>
 
-                                            }}
-                                            validationErrors={{
-                                                minLength: 'La longueur minimale de caractère est 2',
-                                                maxLength: 'La longueur maximale de caractère est 50',
-                                            }}
-                                            variant="outlined"
-                                        />
-                                        <Typography variant="caption">Veuillez séparer vos produits avec des virgules</Typography>
-                                    </Collapse>
+                                        {
+                                            produitsSuggestion && produitsSuggestion.length > 0 &&
+                                            produitsSuggestion.map((item) => (
+                                                <Chip
+                                                    key={item.value}
+                                                    color="secondary"
+                                                    label={item.value}
+                                                    onDelete={() => handleDeleteProduit(item.value)}
+                                                    className="mt-8 mr-8"
+                                                />
+                                            ))
+
+
+                                        }
+                                    </div>
 
 
 
@@ -498,7 +505,7 @@ function Step3App(props) {
                                         color="primary"
                                         className="w-full mx-auto mt-16 normal-case"
                                         aria-label="Suivant"
-                                        disabled={step3.loading || (categories.length === 0 && !form.autreCategories)}
+                                        disabled={step3.loading || (categories.length === 0 && produitsSuggestion.length === 0)}
                                         value="legacy"
                                     >
                                         Terminer

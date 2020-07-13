@@ -38,21 +38,21 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function BioFournisseur(props) {
+export default function BioAcheteur(props) {
     const classes = useStyles();
     const { post } = props;
 
     return (
         <CardActionArea component={NavLinkAdapter}
-            to={'/register/1'} >
+            to={'/register/2'} >
             <Card className={classes.card}>
                 <div className={classes.cardDetails}>
                     <CardContent>
                         <Typography component="h2" variant="h5" className="uppercase">
-                            Vendre
+                            Acheter
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary">
-                            Créez un compte fournisseur vous permet de toucher un grand nombre de vos futurs clients en intent record.
+                            Créez un compte acheteur vous permet de toucher un grand nombre de vos futurs clients en intent record.
                         </Typography>
                         <List >
                             <ListItem>
@@ -87,18 +87,18 @@ export default function BioFournisseur(props) {
                             </ListItem>
                         </List>
                         <Typography variant="subtitle1" color="primary">
-                            Créez un compte Fournisseur
+                            Créez un compte Acheteur
                         </Typography>
                     </CardContent>
                 </div>
                 <Hidden xsDown>
-                    <CardMedia className={classes.cardMedia} image='https://source.unsplash.com/collection/11353394' title='Inscrivez-vous' />
+                    <CardMedia className={classes.cardMedia} image='https://source.unsplash.com/collection/11353378' title='Inscrivez-vous' />
                 </Hidden>
             </Card>
         </CardActionArea>
     );
 }
 
-BioFournisseur.propTypes = {
+BioAcheteur.propTypes = {
     post: PropTypes.object,
 };

@@ -84,7 +84,12 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
         result = suggestion.name
         img = <Avatar >{suggestion.name[0]}</Avatar>
     }
-
+    else if (suggestion.autreFrs) {
+        result = suggestion.autreFrs
+    }
+    else if (suggestion.autreProduits) {
+        result = suggestion.autreProduits
+    }
 
     return (
         <MenuItem selected={isHighlighted} component="div" dense={true}>
@@ -119,6 +124,12 @@ function getSuggestionValue(suggestion) {
     }
     else if (suggestion.name) {
         result = suggestion.name
+    }
+    else if (suggestion.autreFrs) {
+        result = suggestion.autreFrs
+    }
+    else if (suggestion.autreProduits) {
+        result = suggestion.autreProduits
     }
     return result;
 }
@@ -187,9 +198,9 @@ function Search(props) {
         if (event.keyCode === 27) {
             hideSearch();
         }
-        if (event.keyCode === 13) {
-            event.target.value &&  history.push(`/vente-produits?q=${event.target.value}`);
-        }
+        /*  if (event.keyCode === 13) {
+              event.target.value && history.push(`/vente-produits?q=${event.target.value}`);
+          }*/
     }
 
     function handleSuggestionsFetchRequested({ value }) {
@@ -215,6 +226,12 @@ function Search(props) {
         }
         else if (suggestion.name) {
             url = `/vente-produits/${suggestion.sect}/${suggestion.slug}`
+        }
+        else if (suggestion.autreFrs) {
+            url = `/entreprises?q=${suggestion.value}`
+        }
+        else if (suggestion.autreProduits) {
+            url = `/vente-produits?q=${suggestion.value}`
         }
         history.push(url);
         hideSearch();

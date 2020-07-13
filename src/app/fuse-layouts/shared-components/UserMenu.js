@@ -13,14 +13,21 @@ function UserMenu(props) {
     const dispatch = useDispatch();
     const user = useSelector(({ auth }) => auth.user);
     const [userMenu, setUserMenu] = useState(null);
+    const [userMenu2, setUserMenu2] = useState(null);
     const config = useSelector(({ fuse }) => fuse.settings.current.layout);
 
     const userMenuClick = event => {
         setUserMenu(event.currentTarget);
     };
+    const userMenuClick2 = event => {
+        setUserMenu2(event.currentTarget);
+    };
 
     const userMenuClose = () => {
         setUserMenu(null);
+    };
+    const userMenuClose2 = () => {
+        setUserMenu2(null);
     };
 
     return (
@@ -56,9 +63,37 @@ function UserMenu(props) {
                         <Button component={Link} to="/login" size="small" className="mr-2 h-40" >
                             se connecter
                         </Button>
-                        <Button component={Link} to="/register" size="small" variant="outlined" color="primary" className=" h-40" >
+                        <Button size="small"
+                            variant="outlined"
+                            color="primary" className=" h-40"
+                            onClick={userMenuClick2} >
                             Inscrivez-vous
                         </Button>
+                        <Popover
+                            open={Boolean(userMenu2)}
+                            anchorEl={userMenu2}
+                            onClose={userMenuClose2}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center'
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center'
+                            }}
+                            classes={{
+                                paper: "py-8"
+                            }}
+                        >
+                            <React.Fragment>
+                                <MenuItem component={Link} to="/register/2">
+                                    <ListItemText className="pl-0" primary="Acheteur" />
+                                </MenuItem>
+                                <MenuItem component={Link} to="/register/1">
+                                    <ListItemText className="pl-0" primary="Fournisseur" />
+                                </MenuItem>
+                            </React.Fragment>
+                        </Popover>
 
                     </div>
                     :
