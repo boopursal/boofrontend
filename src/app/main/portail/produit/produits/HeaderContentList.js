@@ -1,9 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Chip, Typography, Select } from '@material-ui/core';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
-import ContentLoader from "react-content-loader"
 
 const useStyles = makeStyles(theme => ({
     chip: {
@@ -19,9 +18,9 @@ function HeaderContentList(props) {
     const parametres = useSelector(({ produitsApp }) => produitsApp.produits.parametres);
     const loading = useSelector(({ produitsApp }) => produitsApp.produits.loading);
     const dispatch = useDispatch();
-    
 
-    function handleChangeRange(ev){
+
+    function handleChangeRange(ev) {
         parametres.page = 1;
         parametres.filter.id = ev.target.value;
         dispatch(Actions.setParametresData(parametres))
@@ -31,10 +30,10 @@ function HeaderContentList(props) {
         <div className="flex justify-between">
             <div>
                 {
-                    loading ? '' :  <Chip label={totalItems +' produit(s) trouvé(s)'} color="primary" className={classes.chip} />
+                    loading ? '' : <Chip label={totalItems + ' produit(s) trouvé(s)'} color="primary" className={classes.chip} />
                 }
-               
-                </div>
+
+            </div>
             <div className="flex items-center justify-between ">
                 <Typography className="text-13 mr-16">Résultats triés par</Typography>
 

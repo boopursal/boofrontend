@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import FicheFournisseur from './FicheFournisseur';
 import HeaderFicheFournisseur from './HeaderFicheFournisseur';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,7 +44,6 @@ function FicheFournisseurApp(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const parametres = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.parametres);
-    const fournisseur = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.data);
     const params = props.match.params;
     const { id, tab } = params;
     useEffect(() => {

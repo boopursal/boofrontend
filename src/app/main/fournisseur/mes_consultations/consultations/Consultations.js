@@ -17,7 +17,7 @@ function Consultations() {
     useEffect(() => {
         if (user)
             dispatch(Actions.getConsultations(parametres, user.id));
-    }, [dispatch, parametres, user.id]);
+    }, [dispatch, parametres, user]);
 
     return (
         <>

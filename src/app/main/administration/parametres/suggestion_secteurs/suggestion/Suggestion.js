@@ -1,68 +1,21 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Button, Tab, Tabs, Icon, Typography, Grid, InputAdornment, IconButton } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
+import React, { useEffect, useRef } from 'react';
+import { Icon, Typography, Grid, InputAdornment, IconButton } from '@material-ui/core';
+import { FuseAnimate, FusePageCarded, TextFieldFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
-import _ from '@lodash';
 import Formsy from 'formsy-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import green from '@material-ui/core/colors/green';
-import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-    buttonProgress: {
-        color: green[500],
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
-        marginLeft: -12,
-    },
-    profileImageUpload: {
-        transitionProperty: 'box-shadow',
-        transitionDuration: theme.transitions.duration.short,
-        transitionTimingFunction: theme.transitions.easing.easeInOut,
-    },
-
-    profileImageItem: {
-        transitionProperty: 'box-shadow',
-        transitionDuration: theme.transitions.duration.short,
-        transitionTimingFunction: theme.transitions.easing.easeInOut,
-        '&:hover': {
-            '& $profileImageFeaturedStar': {
-                opacity: .8
-            }
-        },
-        '&.featured': {
-            pointerEvents: 'none',
-            boxShadow: theme.shadows[3],
-            '& $profileImageFeaturedStar': {
-                opacity: 1
-            },
-            '&:hover $profileImageFeaturedStar': {
-                opacity: 1
-            }
-        }
-    },
-}));
 
 function Suggestion(props) {
 
     const dispatch = useDispatch();
-    const classes = useStyles();
     const suggestion = useSelector(({ suggestionsApp }) => suggestionsApp.suggestion);
     const formRef = useRef(null);
     const { form, handleChange, setForm } = useForm(null);
@@ -104,31 +57,19 @@ function Suggestion(props) {
     }, [form, suggestion.data, setForm]);
 
 
-
-
-
-    function handleSubmit(model) {
-
-        const params = props.match.params;
-        const { suggestionId } = params;
-        // dispatch(Actions.updateSuggestion(form, props.history));
-
-    }
-
-
     function handleAddSecteur(secteur) {
 
         dispatch(Actions.saveSecteur(secteur));
 
     }
-    function handleAddSousSecteur(sousSecteur,secteur) {
+    function handleAddSousSecteur(sousSecteur, secteur) {
 
-        dispatch(Actions.saveSousSecteur(sousSecteur,secteur));
+        dispatch(Actions.saveSousSecteur(sousSecteur, secteur));
 
     }
-    function handleAddCategorie(categorie,sousSecteur) {
+    function handleAddCategorie(categorie, sousSecteur) {
 
-        dispatch(Actions.saveCategorie(categorie,sousSecteur));
+        dispatch(Actions.saveCategorie(categorie, sousSecteur));
 
     }
 
@@ -216,8 +157,8 @@ function Suggestion(props) {
                                                             <IconButton
                                                                 color="secondary"
                                                                 aria-label="toggle add sous secteur"
-                                                                disabled={suggestion.sousSecteur || !suggestion.secteur  || !form.sousSecteur}
-                                                                onClick={() => handleAddSousSecteur(form.sousSecteur,suggestion.secteur['@id'])}
+                                                                disabled={suggestion.sousSecteur || !suggestion.secteur || !form.sousSecteur}
+                                                                onClick={() => handleAddSousSecteur(form.sousSecteur, suggestion.secteur['@id'])}
                                                             >
                                                                 <Icon>add_circle</Icon>
                                                             </IconButton>
@@ -246,9 +187,9 @@ function Suggestion(props) {
                                                             <IconButton
                                                                 color="secondary"
                                                                 aria-label="toggle add sous secteur"
-                                                                disabled={suggestion.categorie || !suggestion.sousSecteur  || !form.categorie}
-                                                                onClick={() => handleAddCategorie(form.categorie,suggestion.sousSecteur['@id'])}
-                                                                //onClick={handleClickShowPassword}
+                                                                disabled={suggestion.categorie || !suggestion.sousSecteur || !form.categorie}
+                                                                onClick={() => handleAddCategorie(form.categorie, suggestion.sousSecteur['@id'])}
+                                                            //onClick={handleClickShowPassword}
                                                             >
                                                                 <Icon>add_circle</Icon>
                                                             </IconButton>

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Icon, IconButton, Chip, Tooltip, Typography } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
-import * as Actions from '../store/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
@@ -43,7 +42,6 @@ const useStyles = makeStyles(theme => ({
 function AbonnementsTable(props) {
 
     const classes = useStyles();
-    const dispatch = useDispatch();
     const abonnements = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.abonnements.data);
     const loading = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.abonnements.loading);
     const searchText = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.abonnements.searchText);
@@ -98,7 +96,6 @@ function AbonnementsTable(props) {
                         {
                             Header: "Offre",
                             className: "font-bold",
-                            className: "text-center",
                             sortable: false,
                             id: "offre",
                             accessor: f => f.offre.name,

@@ -48,11 +48,10 @@ const useStyles = makeStyles(theme => ({
         listStyleType: "none"
     },
     header: {
-        backgroundColor: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
+        background: theme.palette.primary.main,
         color: theme.palette.getContrastText(theme.palette.primary.main),
         position: 'relative',
         marginBottom: theme.spacing(4),
-        backgroundColor: theme.palette.primary.main,
         backgroundImage: 'url(https://source.unsplash.com/collection/9456871/1600x900)',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
@@ -145,8 +144,6 @@ function Index(props) {
     const description = 'Les Achats Industriels Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce';
     const portail = useSelector(({ IndexApp }) => IndexApp.poratilIndex);
     const settings = {
-        dots: true,
-        infinite: true,
         speed: 500,
         slidesToScroll: portail.produits && portail.produits.length < 4 ? portail.produits.length : 4,
         slidesToShow: portail.produits && portail.produits.length < 4 ? portail.produits.length : 4,

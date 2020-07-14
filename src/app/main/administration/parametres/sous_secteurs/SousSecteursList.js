@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
+import { Icon, IconButton, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
@@ -51,10 +51,10 @@ function SousSecteursList(props) {
         return null;
     }
 
- 
 
-     //dispatch from function filter
-     const run = (parametres) => (
+
+    //dispatch from function filter
+    const run = (parametres) => (
         dispatch(Actions.setParametresData(parametres))
     )
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, Typography, LinearProgress, Grid, Tabs, Tab, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Divider, Radio, Table, TableHead, TableRow, TableCell, TableBody, Chip } from '@material-ui/core';
+import { Button, Icon, Typography, LinearProgress, Grid, Tabs, Tab, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Divider, Radio, Table, TableHead, TableRow, TableCell, TableBody, Chip } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, SelectReactFormsy } from '@fuse';
@@ -123,8 +123,6 @@ function Renouveler(props) {
     const user = useSelector(({ auth }) => auth.user);
 
     const [sousSecteurs, setSousSecteurs] = useState([]);
-    const [secteurs, setSecteurs] = useState([]);
-    const [sousSecteursFrounisseur, setSousSecteursFrounisseur] = useState(null);
     const [sousSecteur, setSousSecteur] = useState('');
     const [secteur, setSecteur] = useState('');
     const [secteur1, setSecteur1] = useState(null);
@@ -366,7 +364,7 @@ function Renouveler(props) {
 
     }
     function handleDelete(value) {
-        setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value == value; }))
+        setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value === value; }))
     }
     function handleChipChange(value, name) {
 

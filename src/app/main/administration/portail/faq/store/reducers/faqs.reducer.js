@@ -1,5 +1,4 @@
 import * as Actions from '../actions';
-import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     entities: [],
@@ -32,7 +31,7 @@ const faqsReducer = function (state = initialState, action) {
                     searchText: action.searchText
                 };
             }
-       
+
         default:
             {
                 return state;

@@ -155,11 +155,6 @@ export function saveDemande(data, history, categories, vider) {
 
             dispatch(showMessage({ message: 'Demande enregistrée' }));
 
-            dispatch({
-                type: SAVE_DEMANDE,
-                payload: response.data
-            });
-
             if (!vider) {
                 history.push('/demandes')
             }

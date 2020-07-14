@@ -10,7 +10,6 @@ import AcheteurTab from './tabs/AcheteurTab';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from "react-helmet";
 
-import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
     root: {

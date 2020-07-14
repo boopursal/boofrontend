@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Tooltip } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -7,48 +7,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
-import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-    chip: {
-        marginLeft: theme.spacing(1),
-        background: '#ef5350',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-
-    },
-    chip2: {
-        marginLeft: theme.spacing(1),
-        background: '#4caf50',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-    chipOrange: {
-        marginLeft: theme.spacing(1),
-        background: '#ff9800',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-}));
 function DemandesDevisTable(props) {
 
-    const classes = useStyles();
     const dispatch = useDispatch();
     const demandesDevis = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.data);
     const loading = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.loading);
     const pageCount = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.pageCount);
     const parametres = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.parametres);
-    const user = useSelector(({auth}) => auth.user);
+    const user = useSelector(({ auth }) => auth.user);
     const searchText = useSelector(({ demandesDevisFrsApp }) => demandesDevisFrsApp.demandesDevis.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
@@ -105,7 +73,7 @@ function DemandesDevisTable(props) {
                     data={filteredData}
                     columns={[
 
-                       
+
                         {
                             Header: "",
                             filterable: false,
@@ -191,7 +159,7 @@ function DemandesDevisTable(props) {
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeDemande(row.original, parametres,user.id));
+                                                        dispatch(Actions.removeDemande(row.original, parametres, user.id));
                                                     }}
                                                 >
                                                     <Icon>delete</Icon>

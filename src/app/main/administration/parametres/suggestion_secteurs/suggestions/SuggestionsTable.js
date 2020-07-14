@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Tooltip, Avatar, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
-import _ from '@lodash';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Actions from '../store/actions';
 
 function SuggestionsTable(props) {

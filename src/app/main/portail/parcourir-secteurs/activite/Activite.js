@@ -8,7 +8,6 @@ import withReducer from 'app/store/withReducer';
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from 'react-redux';
 import HeaderActivite from './HeaderActivite';
-import _ from '@lodash';
 import { FuseUtils } from '@fuse';
 import { Link } from 'react-router-dom';
 import ContentLoader from 'react-content-loader'

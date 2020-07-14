@@ -1,5 +1,4 @@
 import agent from "agent";
-import _ from '@lodash';
 
 export const CLEAN_UP = '[ACTIVITES PORTAIL APP] CLEAN_UP';
 export const REQUEST_CATEGORIES = '[ACTIVITES PORTAIL APP] REQUEST_CATEGORIES';

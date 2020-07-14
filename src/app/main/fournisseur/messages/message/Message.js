@@ -1,8 +1,8 @@
-import React, {  useEffect } from 'react';
-import {  Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid,  Divider } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded,  TextFieldFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, TextFieldFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -74,7 +74,7 @@ function Message(props) {
     const classes = useStyles(props);
     const tabValue = 0;
 
-   
+
 
     useEffect(() => {
         function updateDemandeState() {
@@ -123,14 +123,14 @@ function Message(props) {
                                 <div className="flex items-center max-w-full">
 
                                     <div className="flex flex-col min-w-0">
-                                        
+
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                             <Typography variant="caption">Détails du message</Typography>
                                         </FuseAnimate>
                                     </div>
                                 </div>
                             </div>
-                          
+
                         </div>
                     )
                     :
@@ -165,19 +165,19 @@ function Message(props) {
                                     <Formsy
                                         className="flex pt-10 flex-col ">
 
-                                       
+
 
                                         {/* Information du client*/}
 
                                         <Grid container spacing={3} className="mb-5">
 
-                                          
+
                                             <Grid item xs={12} sm={4}>
                                                 <TextFieldFormsy
                                                     type="text"
                                                     name="contact"
                                                     value={form.contact}
-                                                    label="NOM & Prénom"                                                   
+                                                    label="NOM & Prénom"
                                                     InputProps={{
                                                         readOnly: true,
                                                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -203,7 +203,7 @@ function Message(props) {
                                                     value={form.phone}
                                                     type="text"
                                                     name="phone"
-                                                    label="Téléphone"                                                   
+                                                    label="Téléphone"
                                                     InputProps={{
                                                         readOnly: true,
                                                         endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
@@ -212,7 +212,7 @@ function Message(props) {
                                                 />
 
                                             </Grid>
-                                          
+
                                         </Grid>
 
                                         <TextFieldFormsy

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton,  Tooltip, Typography } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -7,42 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
-import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-    chip: {
-        marginLeft: theme.spacing(1),
-        background: '#ef5350',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
 
-    },
-    chip2: {
-        marginLeft: theme.spacing(1),
-        background: '#4caf50',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-    chipOrange: {
-        marginLeft: theme.spacing(1),
-        background: '#ff9800',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-}));
 function MessageTable(props) {
 
-    const classes = useStyles();
     const dispatch = useDispatch();
     const messages = useSelector(({ messagesFrsApp }) => messagesFrsApp.messages.data);
     const loading = useSelector(({ messagesFrsApp }) => messagesFrsApp.messages.loading);
@@ -138,20 +107,20 @@ function MessageTable(props) {
                             Header: "Nom Contact",
                             accessor: "contact",
                             filterable: true,
-                            Cell: row =>row.original.contact ? row.original.contact : '',
+                            Cell: row => row.original.contact ? row.original.contact : '',
                         },
                         {
                             Header: "Téléphone",
                             accessor: "phone",
                             filterable: true,
-                            Cell: row =>row.original.phone ? row.original.phone : '',
+                            Cell: row => row.original.phone ? row.original.phone : '',
                         },
                         {
                             Header: "Email",
                             accessor: "email",
                             filterable: true,
-                            Cell: row =>row.original.email ? row.original.email : '',
-                               
+                            Cell: row => row.original.email ? row.original.email : '',
+
                         },
                         {
                             Header: "Message",

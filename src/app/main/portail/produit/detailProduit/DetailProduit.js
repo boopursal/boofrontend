@@ -205,12 +205,12 @@ const useStyles = makeStyles(theme => ({
             }
         }
     },
-    grid:{
-        marginBottom:'-16px',
-        marginTop:'-16px',
-        marginLeft:'auto',
-        marginRight:'auto',
-        '& > .MuiGrid-item' : {
+    grid: {
+        marginBottom: '-16px',
+        marginTop: '-16px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        '& > .MuiGrid-item': {
             padding: '16px'
         }
     },
@@ -323,16 +323,16 @@ function DetailProduit(props) {
                 produit.data &&
 
                 <Helmet>
-                    <title>{_.truncate(produit.data.titre, { 'length': 70, 'separator': ' ' })}</title>
+                    <title>{_.truncate(produit.data.titre + ' | ' + (produit.data.fournisseur && produit.data.fournisseur.societe), { 'length': 70, 'separator': ' ' })}</title>
                     <meta name="description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
-                    <meta property="og:title" content={_.truncate(produit.data.titre, { 'length': 70, 'separator': ' ' })} />
+                    <meta property="og:title" content={_.truncate(produit.data.titre + ' | ' + (produit.data.fournisseur && produit.data.fournisseur.societe), { 'length': 70, 'separator': ' ' })} />
                     <meta property="og:description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
-                    <meta property="twitter:title" content={_.truncate(produit.data.titre, { 'length': 70, 'separator': ' ' })} />
+                    <meta property="twitter:title" content={_.truncate(produit.data.titre + ' | ' + (produit.data.fournisseur && produit.data.fournisseur.societe), { 'length': 70, 'separator': ' ' })} />
                     <meta property="twitter:description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
                 </Helmet>
             }
 
-            <Grid container  className={clsx(classes.grid,"max-w-2xl mx-auto py-48 sm:px-16 items-start")}>
+            <Grid container className={clsx(classes.grid, "max-w-2xl mx-auto py-48 sm:px-16 items-start")}>
 
                 {
                     produit.loading ?
@@ -634,64 +634,65 @@ function DetailProduit(props) {
 
             <Grid container className="max-w-2xl mx-auto pb-48">
                 <Grid item sm={12}>
-                    <div>
-                        <ListItem className="mb-16">
-                            <ListItemAvatar>
-                                <Avatar className={classes.mainAvatar}>
-                                    <Icon >collections_bookmark</Icon>
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={
-                                    <Typography variant="h2" component="h2" className="text-20 uppercase font-bold xs:text-11 mb-1">
-                                        Produits similaires
-                                    </Typography>
-                                }
-                            />
-                        </ListItem>
-                        {
-                            produit.loadingPS ?
-                                <ContentLoader
-                                    viewBox="0 0 1360 400"
-                                    height={400}
-                                    width={1360}
-                                    speed={2}
-                                >
-                                    <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
-                                    <rect x="30" y="250" rx="0" ry="0" width="200" height="18" />
-                                    <rect x="30" y="275" rx="0" ry="0" width="120" height="20" />
-                                    <rect x="250" y="20" rx="8" ry="8" width="200" height="200" />
-                                    <rect x="250" y="250" rx="0" ry="0" width="200" height="18" />
-                                    <rect x="250" y="275" rx="0" ry="0" width="120" height="20" />
-                                    <rect x="470" y="20" rx="8" ry="8" width="200" height="200" />
-                                    <rect x="470" y="250" rx="0" ry="0" width="200" height="18" />
-                                    <rect x="470" y="275" rx="0" ry="0" width="120" height="20" />
-                                    <rect x="690" y="20" rx="8" ry="8" width="200" height="200" />
-                                    <rect x="690" y="250" rx="0" ry="0" width="200" height="18" />
-                                    <rect x="690" y="275" rx="0" ry="0" width="120" height="20" />
-                                    <rect x="910" y="20" rx="8" ry="8" width="200" height="200" />
-                                    <rect x="910" y="250" rx="0" ry="0" width="200" height="18" />
-                                    <rect x="910" y="275" rx="0" ry="0" width="120" height="20" />
-                                    <rect x="1130" y="20" rx="8" ry="8" width="200" height="200" />
-                                    <rect x="1130" y="250" rx="0" ry="0" width="200" height="18" />
-                                    <rect x="1130" y="275" rx="0" ry="0" width="120" height="20" />
+                    {
+                        produit.loadingPS ?
+                            <ContentLoader
+                                viewBox="0 0 1360 400"
+                                height={400}
+                                width={1360}
+                                speed={2}
+                            >
+                                <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
+                                <rect x="30" y="250" rx="0" ry="0" width="200" height="18" />
+                                <rect x="30" y="275" rx="0" ry="0" width="120" height="20" />
+                                <rect x="250" y="20" rx="8" ry="8" width="200" height="200" />
+                                <rect x="250" y="250" rx="0" ry="0" width="200" height="18" />
+                                <rect x="250" y="275" rx="0" ry="0" width="120" height="20" />
+                                <rect x="470" y="20" rx="8" ry="8" width="200" height="200" />
+                                <rect x="470" y="250" rx="0" ry="0" width="200" height="18" />
+                                <rect x="470" y="275" rx="0" ry="0" width="120" height="20" />
+                                <rect x="690" y="20" rx="8" ry="8" width="200" height="200" />
+                                <rect x="690" y="250" rx="0" ry="0" width="200" height="18" />
+                                <rect x="690" y="275" rx="0" ry="0" width="120" height="20" />
+                                <rect x="910" y="20" rx="8" ry="8" width="200" height="200" />
+                                <rect x="910" y="250" rx="0" ry="0" width="200" height="18" />
+                                <rect x="910" y="275" rx="0" ry="0" width="120" height="20" />
+                                <rect x="1130" y="20" rx="8" ry="8" width="200" height="200" />
+                                <rect x="1130" y="250" rx="0" ry="0" width="200" height="18" />
+                                <rect x="1130" y="275" rx="0" ry="0" width="120" height="20" />
 
-                                </ContentLoader>
-                                :
-                                produit.produitsSimilaires &&
+                            </ContentLoader>
+                            :
+                            produit.produitsSimilaires.length > 1 &&
+                            <div>
+                                <ListItem className="mb-16">
+                                    <ListItemAvatar>
+                                        <Avatar className={classes.mainAvatar}>
+                                            <Icon >collections_bookmark</Icon>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={
+                                            <Typography variant="h2" component="h2" className="text-20 uppercase font-bold xs:text-11 mb-1">
+                                                Produits similaires
+                                        </Typography>
+                                        }
+                                    />
+                                </ListItem>
                                 <Slider {...settings}>
                                     {
 
                                         (
-                                             produit.produitsSimilaires.map((item, index) => (
+                                            produit.produitsSimilaires.map((item, index) => (
                                                 item['@id'] !== produit.data['@id'] &&
                                                 <Produit produit={item} key={index} />
                                             ))
                                         )
                                     }
                                 </Slider>
-                        }
-                    </div>
+                            </div>
+                    }
+
                 </Grid>
             </Grid>
         </>

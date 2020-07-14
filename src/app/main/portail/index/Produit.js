@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { Card, CardActionArea, CardContent, CardActions, Button, CardMedia, Chip, Icon } from '@material-ui/core';
-import ReactHtmlParser from 'react-html-parser';
+import { Card, CardActionArea, CardContent, CardMedia, Chip, Icon } from '@material-ui/core';
+//import ReactHtmlParser from 'react-html-parser';
 import _ from '@lodash';
 import { FuseUtils } from '@fuse';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({

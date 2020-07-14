@@ -1,7 +1,6 @@
 import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
 import { showMessage } from 'app/store/actions/fuse';
-import _ from '@lodash';
 
 export const REQUEST_FAQ = '[FAQ APP APP] REQUEST FAQ';
 export const REQUEST_CATEGORIES = '[FAQ APP APP] REQUEST CATEGORIES';
@@ -57,9 +56,9 @@ export function getCategoriess() {
 
 }
 
-export function updateFaq(data,history) {
-    if(data.categorie)
-    data.categorie = data.categorie.value;
+export function updateFaq(data, history) {
+    if (data.categorie)
+        data.categorie = data.categorie.value;
     return (dispatch, getState) => {
 
         const request = agent.put(data['@id'], data);
@@ -83,19 +82,19 @@ export function updateFaq(data,history) {
                 history.push('/admin/faqs')
             ])
         ).catch((error) => {
-                dispatch({
-                    type: SAVE_ERROR,
-                    payload: FuseUtils.parseApiErrors(error)
-                });
+            dispatch({
+                type: SAVE_ERROR,
+                payload: FuseUtils.parseApiErrors(error)
             });
+        });
     };
 
 }
 
-export function saveFaq(data,history) {
- 
-    if(data.categorie)
-    data.categorie = data.categorie.value;
+export function saveFaq(data, history) {
+
+    if (data.categorie)
+        data.categorie = data.categorie.value;
     const request = agent.post('/api/faqs', data);
 
     return (dispatch) => {

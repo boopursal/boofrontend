@@ -159,7 +159,7 @@ function DemandeDetail(props) {
                                                                     'twitter',
                                                                     'email',
                                                                     'facebook',
-                                                                    
+
                                                                 ],
                                                                 padding: 8,          // padding within buttons (INTEGER)
                                                                 radius: 4,            // the corner radius on each button (INTEGER)
@@ -192,7 +192,7 @@ function DemandeDetail(props) {
                                                 </Typography>
 
                                                 <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16">
-                                                    activités
+                                                    Cette demande fait parti de famille de ce produit
                                                 </div>
                                                 {
                                                     demande.data.categories &&

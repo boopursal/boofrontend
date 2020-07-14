@@ -309,7 +309,7 @@ function Demande(props) {
     };
 
     function handleDelete(id) {
-        setCategories(_.reject(categories, function (o) { return o.id == id; }))
+        setCategories(_.reject(categories, function (o) { return o.id === id; }))
     }
 
 

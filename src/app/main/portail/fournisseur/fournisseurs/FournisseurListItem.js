@@ -186,7 +186,7 @@ function FournisseurListItem(props) {
                             {
                                 fournisseurs && (
                                     <Grid container spacing={2} className="justify-between mt-16">
-                                        <Grid item xs={12} xs={6}>
+                                        <Grid item xs={12} md={6}>
                                             Montrer:&ensp;
                                             <Select
                                                 className="text-13"
@@ -204,7 +204,7 @@ function FournisseurListItem(props) {
                                             </Select>
                                         </Grid>
 
-                                        <Grid item xs={12} xs={6} className="text-right">
+                                        <Grid item xs={12} md={6} className="text-right">
                                             <IconButton aria-label="Previous" className={classes.margin} disabled={parametres.page === 1} onClick={handlePreviousClick}>
                                                 <Icon>arrow_back</Icon>
                                             </IconButton>

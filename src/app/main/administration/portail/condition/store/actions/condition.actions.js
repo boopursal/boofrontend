@@ -1,7 +1,6 @@
 import agent from "agent";
 import FuseUtils from '@fuse/FuseUtils';
 import { showMessage } from 'app/store/actions/fuse';
-import _ from '@lodash';
 
 export const REQUEST_CONDITION = '[CONDITION APP APP] REQUEST CONDITION';
 export const REQUEST_CATEGORIES = '[CONDITION APP APP] REQUEST CATEGORIES';
@@ -39,8 +38,8 @@ export function getCondition(id_condition) {
 }
 
 
-export function updateCondition(data,history) {
-   
+export function updateCondition(data, history) {
+
     return (dispatch, getState) => {
 
         const request = agent.put(data['@id'], data);
@@ -64,18 +63,18 @@ export function updateCondition(data,history) {
                 history.push('/admin/conditions')
             ])
         ).catch((error) => {
-                dispatch({
-                    type: SAVE_ERROR,
-                    payload: FuseUtils.parseApiErrors(error)
-                });
+            dispatch({
+                type: SAVE_ERROR,
+                payload: FuseUtils.parseApiErrors(error)
             });
+        });
     };
 
 }
 
-export function saveCondition(data,history) {
- 
-   
+export function saveCondition(data, history) {
+
+
     const request = agent.post('/api/condition_generales', data);
 
     return (dispatch) => {

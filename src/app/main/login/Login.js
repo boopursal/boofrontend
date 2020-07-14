@@ -43,6 +43,8 @@ function Login() {
                         LA PLACE DE MARCHE B TO B N° 1 AU MAROC, DES ACHETEURS ET FOURNISSEURS AVERTIS.
                     </Typography>
                 </FuseAnimate>
+
+
             </div>
 
             <FuseAnimate animation={{ translateX: [0, '100%'] }}>

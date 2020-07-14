@@ -134,7 +134,7 @@ function Abonnement(props) {
                         if (abonnement.data.remise && abonnement.data.remise > 0) {
                             netHt = netHt - abonnement.data.remise;
                         }
-                        let tva = netHt * 0.2;
+                        // let tva = netHt * 0.2;
 
                         setRemise(remis)
                         setPrixhtNet(netHt)
@@ -147,7 +147,7 @@ function Abonnement(props) {
                         if (abonnement.data.remise && abonnement.data.remise > 0) {
                             netHt = ht - abonnement.data.remise;
                         }
-                        let tva = netHt * 0.2;
+                        // let tva = netHt * 0.2;
                         setTva(0)
                         setPrixhtNet(netHt)
                         //setPrixTTC(netHt + tva)

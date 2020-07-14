@@ -8,7 +8,6 @@ import withReducer from 'app/store/withReducer';
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from 'react-redux';
 import HeaderSecteur from './HeaderSecteur';
-import _ from '@lodash';
 import { FuseUtils } from '@fuse';
 import { Link } from 'react-router-dom';
 import ContentLoader from 'react-content-loader'
@@ -45,10 +44,8 @@ const useStyles = makeStyles(theme => ({
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
     },
-    title: {
-        fontSize: 28,
-        color: theme.palette.secondary.main,
-        fontWeight: 'bold'
+    shadow: {
+        'text-shadow': '1px 1px 1px #000'
     },
     divTitle: {
         backgroundColor: 'rgba(0,0,0,.5)',
@@ -132,7 +129,7 @@ function Secteur(props) {
                                 activites.secteur.image && 'url(' + FuseUtils.getUrl() + activites.secteur.image.url + ')'
                         }}>
                             <div className={clsx(classes.divTitle)}>
-                                <Typography className={clsx(classes.title)} component="h1" color="primary">
+                                <Typography className={clsx(classes.shadow, "uppercase  text-28 font-bold text-white tracking-wide ")} component="h1" color="primary">
                                     {
                                         activites.loadingSecteur ? 'Chargement ...' :
                                             activites.secteur && activites.secteur.name

@@ -17,7 +17,7 @@ function DemandesDevis() {
     useEffect(() => {
         if (user)
             dispatch(Actions.getDemandes(parametres, user.id));
-    }, [dispatch, parametres]);
+    }, [dispatch, parametres, user]);
 
     return (
         <>

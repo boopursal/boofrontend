@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Icon, Chip, Typography, LinearProgress, Grid, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Divider, Radio, Table, TableHead, TableRow, TableCell, TableBody, Tab, Tabs, InputAdornment, Checkbox } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, SelectReactFormsyS_S, TextFieldFormsy, SelectReactFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, TextFieldFormsy, SelectReactFormsy } from '@fuse';
 import { Link } from 'react-router-dom';
 import _ from '@lodash';
 import { useDispatch, useSelector } from 'react-redux';
@@ -213,7 +213,7 @@ function Abonnement(props) {
                         if (abonnement.data.remise && abonnement.data.remise > 0) {
                             netHt = netHt - abonnement.data.remise;
                         }
-                        let tva = netHt * 0.2;
+                        // let tva = netHt * 0.2;
 
                         setRemise(remis)
                         setPrixhtNet(netHt)
@@ -226,7 +226,7 @@ function Abonnement(props) {
                         if (abonnement.data.remise && abonnement.data.remise > 0) {
                             netHt = ht - abonnement.data.remise;
                         }
-                        let tva = netHt * 0.2;
+                        // let tva = netHt * 0.2;
                         setTva(0)
                         setPrixhtNet(netHt)
                         //setPrixTTC(netHt + tva)
@@ -303,7 +303,7 @@ function Abonnement(props) {
                         netHt = (ht - remis) - discount;
                     }
 
-                    let tva = netHt * 0.2;
+                    //let tva = netHt * 0.2;
 
                     setRemise(remis)
                     setPrixhtNet(netHt)
@@ -318,7 +318,7 @@ function Abonnement(props) {
                         netHt = ht - discount;
                     }
 
-                    let tva = netHt * 0.2;
+                    //let tva = netHt * 0.2;
                     setPrixhtNet(netHt)
                     setTva(0)
                     //setPrixTTC(netHt + tva)
@@ -435,7 +435,7 @@ function Abonnement(props) {
                     if (discount && discount > 0) {
                         netHt = (ht - remis) - discount;
                     }
-                    let tva = netHt * 0.2;
+                    // let tva = netHt * 0.2;
 
                     setRemise(remis)
                     setPrixhtNet(netHt)
@@ -448,7 +448,7 @@ function Abonnement(props) {
                     if (discount && discount > 0) {
                         netHt = ht - discount;
                     }
-                    let tva = netHt * 0.2;
+                    // let tva = netHt * 0.2;
                     setTva(0)
                     setPrixhtNet(netHt)
                     //setPrixTTC(netHt + tva)
@@ -530,7 +530,7 @@ function Abonnement(props) {
                         netHt = (ht - remis) - value;
                     }
 
-                    let tva = netHt * 0.2;
+                    // let tva = netHt * 0.2;
 
                     setRemise(remis)
                     setPrixhtNet(netHt)
@@ -545,7 +545,7 @@ function Abonnement(props) {
                         netHt = ht - value;
                     }
 
-                    let tva = netHt * 0.2;
+                    //let tva = netHt * 0.2;
                     setPrixhtNet(netHt)
                     setTva(0)
                     //setPrixTTC(netHt + tva)
@@ -629,7 +629,7 @@ function Abonnement(props) {
                     if (discount && discount > 0) {
                         netHt = (ht - remis) - discount;
                     }
-                    let tva = netHt * 0.2;
+                    //let tva = netHt * 0.2;
 
                     setRemise(remis)
                     setPrixhtNet(netHt)
@@ -642,7 +642,7 @@ function Abonnement(props) {
                     if (discount && discount > 0) {
                         netHt = ht - discount;
                     }
-                    let tva = netHt * 0.2;
+                    //let tva = netHt * 0.2;
                     setTva(0)
                     setPrixhtNet(netHt)
                     //setPrixTTC(netHt + tva)
@@ -763,7 +763,7 @@ function Abonnement(props) {
     }
 
     function handleDelete(value) {
-        setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value == value; }))
+        setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value === value; }))
     }
 
     return (

@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography } from '@material-ui/core';
+import { Icon, IconButton, Typography, Tooltip } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
-import _ from '@lodash';
-import Tooltip from '@material-ui/core/Tooltip'
-import { withStyles } from '@material-ui/core/styles';
 
 function FaqCategoriesList(props) {
     const dispatch = useDispatch();
@@ -14,19 +11,8 @@ function FaqCategoriesList(props) {
     const loading = useSelector(({ faqCategorieApp }) => faqCategorieApp.faqCategories.loading);
     const searchText = useSelector(({ faqCategorieApp }) => faqCategorieApp.faqCategories.searchText);
 
-    const HtmlTooltip = withStyles(theme => ({
-        tooltip: {
-            maxWidth: 220,
-            fontSize: theme.typography.pxToRem(12),
-            border: '1px solid #dadde9',
-            '& b': {
-                fontWeight: theme.typography.fontWeightMedium,
-            },
-        },
-    }))(Tooltip);
-
     const [filteredData, setFilteredData] = useState(null);
-   
+
     useEffect(() => {
         function getFilteredArray(entities, searchText) {
             const arr = Object.keys(entities).map((id) => entities[id]);
@@ -73,7 +59,7 @@ function FaqCategoriesList(props) {
                 }}
                 data={filteredData}
                 columns={[
-                  
+
                     {
                         Header: "Categorie",
                         accessor: "name",

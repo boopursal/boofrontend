@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import {  Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import DetailProduit from './DetailProduit';
 import HeaderDetailProduit from './HeaderDetailProduit';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import withReducer from 'app/store/withReducer';
@@ -39,16 +39,15 @@ const useStyles = makeStyles(theme => ({
 function DetailProduitApp(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const produit = useSelector(({ produitsApp }) => produitsApp.detailProduit);
 
     useEffect(() => {
 
         function updateProduitState() {
             const params = props.match.params;
-           
+
             const { id } = params;
             dispatch(Actions.getProduit(id));
-            
+
         }
 
         updateProduitState();
@@ -59,7 +58,7 @@ function DetailProduitApp(props) {
         <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
-                <Grid container  className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                <Grid container className=" max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <HeaderDetailProduit {...props} />
                     </Grid>

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Icon, IconButton, Chip, Tooltip, Typography } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
-import * as Actions from '../store/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
@@ -62,10 +61,8 @@ const useStyles = makeStyles(theme => ({
 function CommandesTable(props) {
 
     const classes = useStyles();
-    const dispatch = useDispatch();
     const commandes = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.commandes.data);
     const loading = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.commandes.loading);
-    const pageCount = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.commandes.pageCount);
     const searchText = useSelector(({ abonnementFrsApp }) => abonnementFrsApp.commandes.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
@@ -143,7 +140,7 @@ function CommandesTable(props) {
                         id: "offre",
                         accessor: f => f.offre.name,
                     },
-                   
+
                     {
                         Header: "Activités",
                         accessor: "sousSecteurs.name",
@@ -202,7 +199,7 @@ function CommandesTable(props) {
                         )
 
                     },
-                   
+
                     {
                         Header: "",
                         sortable: false,
@@ -229,7 +226,7 @@ function CommandesTable(props) {
 
                     {
                         Header: "",
-                        width:64,
+                        width: 64,
                         Cell: row => (
                             <div className="flex items-center">
                                 {row.original.statut === false
@@ -250,7 +247,7 @@ function CommandesTable(props) {
                                         </IconButton>
                                     </Tooltip>
                                 }
-                            
+
 
                             </div>
                         )

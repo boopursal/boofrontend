@@ -83,7 +83,7 @@ function Secteur(props) {
         }
 
         updateSecteurstate();
-        return ()=>{
+        return () => {
             dispatch(Actions.cleanUp())
         }
     }, [dispatch, props.match.params]);
@@ -216,99 +216,99 @@ function Secteur(props) {
 
             }
             content={
-                secteur.requestSecteur  ? <LinearProgress color="secondary" /> :
+                secteur.requestSecteur ? <LinearProgress color="secondary" /> :
 
-                form && (
-                    <div className=" sm:p-10 max-w-2xl">
+                    form && (
+                        <div className=" sm:p-10 max-w-2xl">
 
-                        {tabValue === 0 && (
-                            <Formsy
-                                ref={formRef}
-                                className="flex pt-5 flex-col ">
+                            {tabValue === 0 && (
+                                <Formsy
+                                    ref={formRef}
+                                    className="flex pt-5 flex-col ">
 
-                                <Grid container spacing={3}>
+                                    <Grid container spacing={3}>
 
-                                    <Grid item xs={12} sm={12}>
-                                        <TextFieldFormsy
-                                            className="mb-16"
-                                            type="text"
-                                            name="name"
-                                            value={form.name}
-                                            onChange={handleChange}
-                                            label="Nom du secteur"
-                                            validations={{
-                                                minLength: 3
-                                            }}
-                                            validationErrors={{
-                                                minLength: 'La longueur minimale de caractère est 3'
-                                            }}
-                                            variant="outlined"
-                                            required
-                                            fullWidth
-                                        />
+                                        <Grid item xs={12} sm={12}>
+                                            <TextFieldFormsy
+                                                className="mb-16"
+                                                type="text"
+                                                name="name"
+                                                value={form.name}
+                                                onChange={handleChange}
+                                                label="Nom du secteur"
+                                                validations={{
+                                                    minLength: 3
+                                                }}
+                                                validationErrors={{
+                                                    minLength: 'La longueur minimale de caractère est 3'
+                                                }}
+                                                variant="outlined"
+                                                required
+                                                fullWidth
+                                            />
+                                        </Grid>
                                     </Grid>
-                                </Grid>
 
-                            </Formsy>
-                        )}
+                                </Formsy>
+                            )}
 
-                        {tabValue === 1 && (
-                            <div>
-                                <input
-                                    className="hidden"
-                                    id="button-file"
-                                    type="file"
-                                    disabled={secteur.secteurReqInProgress}
-                                    onChange={handleUploadSecteurChange}
-                                />
-                                <div className="flex justify-center sm:justify-start flex-wrap">
-                                    <label
-                                        htmlFor="button-file"
+                            {tabValue === 1 && (
+                                <div>
+                                    <input
+                                        className="hidden"
+                                        id="button-file"
+                                        type="file"
+                                        disabled={secteur.secteurReqInProgress}
+                                        onChange={handleUploadSecteurChange}
+                                    />
+                                    <div className="flex justify-center sm:justify-start flex-wrap">
+                                        <label
+                                            htmlFor="button-file"
 
-                                        className={
-                                            clsx(
-                                                classes.secteurImageUpload,
-                                                "flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5",
+                                            className={
+                                                clsx(
+                                                    classes.secteurImageUpload,
+                                                    "flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5",
 
-                                            )}
-                                    >
+                                                )}
+                                        >
+                                            {
+                                                secteur.secteurReqInProgress ?
+                                                    <CircularProgress size={24} className={classes.buttonProgress} />
+                                                    :
+                                                    <Icon fontSize="large" color="action">arrow_upward</Icon>
+
+                                            }
+                                        </label>
+
                                         {
-                                            secteur.secteurReqInProgress ?
-                                                <CircularProgress size={24} className={classes.buttonProgress} />
+                                            form.image ?
+                                                <div
+                                                    className={
+                                                        clsx(
+                                                            classes.secteurImageItem,
+                                                            "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
+                                                    }
+                                                    onClick={form.image ? () => window.open(FuseUtils.getUrl() + form.image.url, "_blank") : ''}
+                                                >
+                                                    <img className="max-w-none w-auto h-full"
+                                                        src={FuseUtils.getUrl() + form.image.url}
+                                                        alt={form.name} />
+
+
+                                                </div>
                                                 :
-                                                <Icon fontSize="large" color="action">arrow_upward</Icon>
-
+                                                ''
                                         }
-                                    </label>
-
-                                    {
-                                        form.image ?
-                                            <div
-                                                className={
-                                                    clsx(
-                                                        classes.secteurImageItem,
-                                                        "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
-                                                }
-                                                onClick={form.image ? () => window.open(FuseUtils.getUrl() + form.image.url, "_blank") : ''}
-                                            >
-                                                <img className="max-w-none w-auto h-full"
-                                                    src={FuseUtils.getUrl() + form.image.url}
-                                                    alt={form.name} />
 
 
-                                            </div>
-                                            :
-                                            ''
-                                    }
-
-
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
 
-                    </div>
-                )
+                        </div>
+                    )
 
             }
             innerScroll

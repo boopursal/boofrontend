@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Grow, Paper, Icon, IconButton, ListItem, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { FuseUtils } from '@fuse';
 import { useDebounce } from '@fuse/hooks';
 import { withRouter } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { Manager, Reference, Popper } from 'react-popper';
 import * as ReactDOM from 'react-dom';
 import CategorieItems from './CategorieItems';
@@ -45,7 +43,7 @@ function CategorieNavigationCollapse(props) {
 
     const classes = useStyles(props);
     const [opened, setOpened] = useState(false);
-    const { item, nestedLevel, dense } = props;
+    const { item, nestedLevel } = props;
 
     const handleToggle = useDebounce((open) => {
         setOpened(open);

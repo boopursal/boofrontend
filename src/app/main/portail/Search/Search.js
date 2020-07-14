@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Popper, ClickAwayListener, MenuItem, Icon, IconButton, ListItemIcon, ListItemText, Paper, TextField, Tooltip, Typography, ListItemAvatar, Avatar, ListItemSecondaryAction } from '@material-ui/core';
+import { Popper, ClickAwayListener, MenuItem, Icon, IconButton, ListItemText, Paper, TextField, Tooltip, Typography, ListItemSecondaryAction } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import Autosuggest from 'react-autosuggest';
@@ -9,8 +9,8 @@ import * as Actions from './store/actions';
 import withReducer from 'app/store/withReducer';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Highlighter from "react-highlight-words";
-import { FuseUtils } from '@fuse';
 import history from '@history';
+
 function renderInputComponent(inputProps) {
     const {
         variant,
@@ -67,22 +67,22 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
     // console.log('===========================Render Suggestions===============================')
     //console.log(suggestion)
     let result = '';
-    let img = '';
+    //let img = '';
     if (suggestion.societe) {
         result = suggestion.societe;
-        img = <Avatar >{suggestion.societe[0]}</Avatar>
+        //    img = <Avatar >{suggestion.societe[0]}</Avatar>
     }
     else if (suggestion.titre) {
         result = suggestion.titre
-        suggestion.featuredImageId ?
-            img = <Avatar alt={suggestion.titre} src={FuseUtils.getUrl() + suggestion.featuredImageId.url} />
-            :
-            img = <Avatar alt={suggestion.titre} src="assets/images/ecommerce/product-placeholder.jpg" />
-
+        /* suggestion.featuredImageId ?
+             img = <Avatar alt={suggestion.titre} src={FuseUtils.getUrl() + suggestion.featuredImageId.url} />
+             :
+             img = <Avatar alt={suggestion.titre} src="assets/images/ecommerce/product-placeholder.jpg" />
+ */
     }
     else if (suggestion.name) {
         result = suggestion.name
-        img = <Avatar >{suggestion.name[0]}</Avatar>
+        // img = <Avatar >{suggestion.name[0]}</Avatar>
     }
     else if (suggestion.autreFrs) {
         result = suggestion.autreFrs

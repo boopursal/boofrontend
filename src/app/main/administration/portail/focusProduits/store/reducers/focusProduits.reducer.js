@@ -1,5 +1,4 @@
 import * as Actions from '../actions';
-import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     data: [],
@@ -13,8 +12,8 @@ const focusProduitsReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    data :[]
-                    
+                    data: []
+
                 };
             }
         case Actions.REQUEST_PRODUITS:
@@ -33,7 +32,7 @@ const focusProduitsReducer = function (state = initialState, action) {
                     loading: false
                 };
             }
-       
+
         default:
             {
                 return state;

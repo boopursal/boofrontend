@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment, CircularProgress } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, Icon, Typography, Toolbar, AppBar, InputAdornment, CircularProgress } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import * as Actions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -286,7 +286,7 @@ function DemandeDevisDialog(props) {
 
                     {/*Conditions d'utilisation Politique*/}
 
-                     En appuyant sur le bouton <span className="font-bold"> "Envoyer"</span>, vous acceptez les <Link href='/conditions' target="_blank" rel="noreferrer noopener">Conditions d'utilisation</Link> Politique de protection des données
+                    En appuyant sur le bouton <span className="font-bold"> "Envoyer"</span>, vous acceptez les <Link href='/conditions' target="_blank" rel="noreferrer noopener">Conditions d'utilisation</Link> Politique de protection des données
 
 
                 </DialogContent>

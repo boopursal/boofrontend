@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Tooltip, Avatar, Typography } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
-import _ from '@lodash';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Actions from '../store/actions';
 
@@ -93,9 +92,9 @@ function FaqsTable(props) {
                         Header: "Catégorie",
                         filterable: true,
                         id: "categorie",
-                        accessor: f => f.categorie?  f.categorie.name : 'N/A'
+                        accessor: f => f.categorie ? f.categorie.name : 'N/A'
                     },
-                    
+
                     {
                         Header: "",
                         Cell: row => (

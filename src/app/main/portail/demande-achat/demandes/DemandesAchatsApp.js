@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { FusePageSimple, DemoContent, FuseAnimate } from '@fuse';
+import { FuseAnimate } from '@fuse';
 import { Typography, Grid, Breadcrumbs } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -70,7 +70,6 @@ function DemandesAchatsApp(props) {
     const pays = query.get("pays");
     const ville = query.get("ville");
     const parametres = useSelector(({ demandesAchat }) => demandesAchat.demandes.parametres);
-    const demandes = useSelector(({ demandesAchat }) => demandesAchat.demandes.data);
 
     useEffect(() => {
 
@@ -180,10 +179,11 @@ function DemandesAchatsApp(props) {
                 }}
                 className="max-w-2xl mx-auto sm:px-16 pt-24 items-start">
                 <Grid item sm={12} xs={12}>
-                    <Typography variant="h1" className="text-24 font-bold">Toutes les demandes d'achat {
-                        activite ? _.capitalize(activite.replace('-', ' ')) :
-                            (secteur ? _.capitalize(secteur.replace('-', ' ')) : '')
-                    }
+                    <Typography variant="h1" className="text-24 font-bold">Toutes les demandes d'achat
+                        {
+                            activite ? _.capitalize(activite.replace('-', ' ')) :
+                                (secteur ? _.capitalize(secteur.replace('-', ' ')) : '')
+                        }
                         {
                             pays ? ' au ' + _.capitalize(pays.replace('-', ' ')) : ''
                         }

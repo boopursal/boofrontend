@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon,  Typography, Toolbar, AppBar } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, Icon, Typography, Toolbar, AppBar } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,16 +30,16 @@ function CategoriesDialog(props) {
              * Dialog type: 'edit'
              */
             if (categorieDialog.type === 'edit' && categorieDialog.data) {
-                
+
                 setForm({ ...categorieDialog.data });
-                if(categorieDialog.data.sousSecteurs){
+                if (categorieDialog.data.sousSecteurs) {
                     let sousSecteurs = categorieDialog.data.sousSecteurs.map(item => ({
                         value: item['@id'],
                         label: item.name
                     }));
                     setForm(_.set({ ...categorieDialog.data }, 'sousSecteurs', sousSecteurs));
                 }
-                
+
             }
 
             /**
@@ -84,12 +84,12 @@ function CategoriesDialog(props) {
         closeComposeDialog();
     }
 
-    function handleRemove() {
-
-        dispatch(Actions.removeCategorie(form, parametres));
-        dispatch(Actions.closeDialog())
-        closeComposeDialog();
-    }
+    /* function handleRemove() {
+ 
+         dispatch(Actions.removeCategorie(form, parametres));
+         dispatch(Actions.closeDialog())
+         closeComposeDialog();
+     }*/
     function handleChipChange(value, name) {
         //setForm(_.set({...form}, name, value.map(item => item.value)));
         setForm(_.set({ ...form }, name, value));

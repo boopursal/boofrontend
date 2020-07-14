@@ -1,5 +1,4 @@
 import agent from "agent";
-import _ from '@lodash';
 
 export const CLEAN_UP = '[ACTIVITES PORTAIL APP] CLEAN_UP';
 export const REQUEST_ACTIVITES = '[ACTIVITES PORTAIL APP] REQUEST_ACTIVITES';
@@ -60,7 +59,7 @@ export function getPActivites(id) {
 }
 
 export function getTopFounrisseurs(slug) {
-    const request = agent.get(`/api/fournisseurs?sousSecteurs.secteur.slug=${slug}&itemsPerPage=5&order[visite]=desc&props[]=societe&props[]=slug&props[]=avatar&props[]=pays&props[]=id`);
+    const request = agent.get(`/api/fournisseurs?categories.sousSecteurs.secteur.slug=${slug}&itemsPerPage=5&order[visite]=desc&props[]=societe&props[]=slug&props[]=avatar&props[]=pays&props[]=id`);
     return (dispatch) => {
         dispatch({
             type: REQUEST_FOURNISEEURS,

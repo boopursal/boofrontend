@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -41,7 +40,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function BioAcheteur(props) {
     const classes = useStyles();
-    const { post } = props;
 
     return (
         <CardActionArea component={NavLinkAdapter}
@@ -61,7 +59,7 @@ export default function BioAcheteur(props) {
                             }}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.mainAvatar}>
-                                        <Icon >local_mall</Icon>
+                                        <Icon >star_border</Icon>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -74,7 +72,7 @@ export default function BioAcheteur(props) {
                             }}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.lightAvatar}>
-                                        <Icon >people_outline</Icon>
+                                        <Icon >list_alt</Icon>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -87,7 +85,7 @@ export default function BioAcheteur(props) {
                             }}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.darkAvatar}>
-                                        <Icon >remove_red_eye</Icon>
+                                        <Icon >timeline</Icon>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText

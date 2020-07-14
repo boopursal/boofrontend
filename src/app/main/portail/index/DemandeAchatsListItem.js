@@ -1,8 +1,6 @@
 import React from 'react';
-import { IconButton, Icon, Typography, Checkbox, ListItem, Chip } from '@material-ui/core';
+import { IconButton, Icon, Typography, ListItem, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import red from '@material-ui/core/colors/red';
-import amber from '@material-ui/core/colors/amber';
 import clsx from 'clsx';
 import _ from '@lodash';
 import moment from 'moment';

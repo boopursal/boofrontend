@@ -281,7 +281,7 @@ function Commande(props) {
                 if (discount && discount > 0) {
                     netHt = (ht - remis) - discount;
                 }
-                let tva = netHt * 0.2;
+                // let tva = netHt * 0.2;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
@@ -294,7 +294,7 @@ function Commande(props) {
                 if (discount && discount > 0) {
                     netHt = ht - discount;
                 }
-                let tva = netHt * 0.2;
+                // let tva = netHt * 0.2;
                 //setTva(tva)
                 setPrixhtNet(netHt)
                 //setPrixTTC(netHt + tva)
@@ -346,7 +346,7 @@ function Commande(props) {
                     netHt = (ht - remis) - value;
                 }
 
-                let tva = netHt * 0.2;
+                // let tva = netHt * 0.2;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
@@ -361,7 +361,7 @@ function Commande(props) {
                     netHt = ht - value;
                 }
 
-                let tva = netHt * 0.2;
+                // let tva = netHt * 0.2;
                 setPrixhtNet(netHt)
                 //setTva(tva)
                 //setPrixTTC(netHt + tva)
@@ -413,7 +413,7 @@ function Commande(props) {
                 if (discount && discount > 0) {
                     netHt = (ht - remis) - discount;
                 }
-                let tva = netHt * 0.2;
+                //let tva = netHt * 0.2;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
@@ -426,7 +426,7 @@ function Commande(props) {
                 if (discount && discount > 0) {
                     netHt = ht - discount;
                 }
-                let tva = netHt * 0.2;
+                //let tva = netHt * 0.2;
                 //setTva(tva)
                 setPrixhtNet(netHt)
                 //setPrixTTC(netHt + tva)
@@ -476,7 +476,7 @@ function Commande(props) {
     }
 
     function handleDelete(value) {
-        setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value == value; }))
+        setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value === value; }))
     }
 
     return (

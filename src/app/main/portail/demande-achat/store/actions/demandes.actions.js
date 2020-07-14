@@ -28,9 +28,7 @@ export function cleanUp() {
 export function getDemandeAchats(params, pays, ville, parametres) {
     const { secteur, activite, categorie } = params;
     let parametre = '';
-    if (secteur) {
-        parametre += `categories.sousSecteurs.secteur.slug=${secteur}`
-    }
+
     if (pays) {
         if (parametre)
             parametre += `&acheteur.pays.slug=${pays}`
@@ -41,17 +39,20 @@ export function getDemandeAchats(params, pays, ville, parametres) {
             parametre += `&acheteur.ville.slug=${ville}`
         }
     }
-    if (activite) {
-        parametre += `&categories.sousSecteurs.slug=${activite}`
-    }
+
     if (categorie) {
         parametre += `&categories.slug=${categorie}`
     }
-    if (parametre) {
-        parametre = '&' + parametre;
+    else if (activite) {
+        parametre += `&categories.sousSecteurs.slug=${activite}`
     }
+    else if (secteur) {
+        parametre += `&categories.sousSecteurs.secteur.slug=${secteur}`
+    }
+
+
     let order = _.split(parametres.filter.id, '-');
-    const request = agent.get(`/api/demande_achats?page=${parametres.page}&itemsPerPage=${parametres.itemsPerPage}&order[${order[0]}]=${order[1]}` + (parametre ? parametre : ''));
+    const request = agent.get(`/api/demande_achats?page=${parametres.page}&itemsPerPage=${parametres.itemsPerPage}&statut=1&order[${order[0]}]=${order[1]}` + (parametre ? parametre : ''));
 
     return (dispatch) => {
         dispatch({

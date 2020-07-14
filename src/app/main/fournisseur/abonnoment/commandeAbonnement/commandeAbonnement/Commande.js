@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, Typography, LinearProgress, Grid, Tabs, Tab, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Divider, Radio, Table, TableHead, TableRow, TableCell, TableBody, Chip } from '@material-ui/core';
+import { Button, Icon, Typography, LinearProgress, Grid, Tabs, Tab, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Divider, Radio, Table, TableHead, TableRow, TableCell, TableBody, Chip } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, SelectReactFormsy } from '@fuse';
@@ -123,8 +123,6 @@ function Commande(props) {
     const user = useSelector(({ auth }) => auth.user);
 
     const [sousSecteurs, setSousSecteurs] = useState([]);
-    const [secteurs, setSecteurs] = useState([]);
-    const [sousSecteursFrounisseur, setSousSecteursFrounisseur] = useState(null);
     const [sousSecteur, setSousSecteur] = useState('');
     const [secteur, setSecteur] = useState('');
     const [secteur1, setSecteur1] = useState(null);
@@ -460,7 +458,7 @@ function Commande(props) {
 
     }
     function handleDelete(value) {
-        setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value == value; }))
+        setSousSecteurs(_.reject(sousSecteurs, function (o) { return o.value === value; }))
     }
     function handleChipChange(value, name) {
 
@@ -899,8 +897,8 @@ function Commande(props) {
                                                     {
                                                         commande.durees && duree ?
                                                             commande.durees.map((item, index) => (
-                                                                <>
-                                                                    <FormControlLabel onChange={() => handleChangeDuree(item)} key={index} value={item['@id']} checked={duree.id === item.id} control={<Radio />} label={item.name + ' mois'} />
+                                                                <React.Fragment key={index}>
+                                                                    <FormControlLabel onChange={() => handleChangeDuree(item)} value={item['@id']} checked={duree.id === item.id} control={<Radio />} label={item.name + ' mois'} />
 
                                                                     {
                                                                         item.remise ?
@@ -908,7 +906,7 @@ function Commande(props) {
                                                                             : ''
                                                                     }
 
-                                                                </>
+                                                                </React.Fragment>
                                                             ))
                                                             :
                                                             <ContentLoader
@@ -1008,14 +1006,14 @@ function Commande(props) {
                                                     <Typography variant="h6"><span className={classes.border}>Suggestions</span> </Typography>
                                                 </Grid>
                                             </Grid>
-                                            <Grid container spacing={3} className="mt-4" className="border-1">
+                                            <Grid container spacing={3} className="mt-4 border-1" >
                                                 <Grid item xs={12} sm={6}>
                                                     <div className={clsx(classes.chips)}>
                                                         {
                                                             sousSecteurs && sousSecteurs.length > 0 &&
                                                             _.sortBy(sousSecteurs, [function (o) { return o.label; }]).map((item, index) => (
                                                                 <Chip
-                                                                    key={index}
+                                                                    key={item.label}
                                                                     label={item.label}
                                                                     color="secondary"
                                                                     onDelete={() => handleDelete(item.value)}

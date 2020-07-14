@@ -15,8 +15,8 @@ function Message() {
 
     useEffect(() => {
         if (user)
-            dispatch(Actions.getMessages( user.id));
-    }, [dispatch]);
+            dispatch(Actions.getMessages(user.id));
+    }, [dispatch, user]);
 
     return (
         <>

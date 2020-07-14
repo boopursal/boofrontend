@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/styles';
 import { Chip, Typography, Select } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../../store/actions';
-import ContentLoader from "react-content-loader"
 
 const useStyles = makeStyles(theme => ({
     chip: {

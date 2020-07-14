@@ -1,10 +1,10 @@
 import React from 'react';
 import MailchimpSubscribe from "react-mailchimp-subscribe"
-import { Grid, Button, Input, Icon, Paper } from '@material-ui/core';
+import { Grid, Button, Icon, Paper } from '@material-ui/core';
 
 
 const CustomForm = ({ status, message, onValidated }) => {
-    let email, name;
+    let email;
     const submit = () =>
         email &&
         email.value.indexOf("@") > -1 &&
@@ -16,7 +16,7 @@ const CustomForm = ({ status, message, onValidated }) => {
         <div
             style={{
                 display: "inline-block",
-                width:'100%',
+                width: '100%',
             }}
         >
             {status === "sending" && <div style={{ color: "blue" }}>Envoi en cours...</div>}
@@ -44,7 +44,7 @@ const CustomForm = ({ status, message, onValidated }) => {
                             type="email"
                             placeholder="exemple@exemple.com"
                         />
-                        
+
                     </Paper>
 
                 </Grid>

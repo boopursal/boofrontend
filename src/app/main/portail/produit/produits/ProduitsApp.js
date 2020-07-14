@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate } from '@fuse';
-import { Typography, Grid, Breadcrumbs, Button, Icon, Paper, LinearProgress, Divider } from '@material-ui/core';
+import { Typography, Grid, Breadcrumbs, Button, Icon, Paper, LinearProgress } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';

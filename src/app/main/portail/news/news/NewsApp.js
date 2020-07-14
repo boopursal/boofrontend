@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { makeStyles } from '@material-ui/styles';
-import { Typography, Grid, Breadcrumbs, Button, Icon, Select, IconButton,TextField } from '@material-ui/core';
+import { Typography, Grid, Breadcrumbs, Button, Icon, Select, IconButton, TextField } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { FuseAnimate } from '@fuse';
 import clsx from 'clsx';
@@ -59,9 +59,9 @@ const useStyles = makeStyles(theme => ({
         fontSize: 11,
         padding: '0px 8px'
     },
-    grid:{
+    grid: {
         [theme.breakpoints.down('xs')]: {
-           width:'100%'
+            width: '100%'
         },
     }
 }));
@@ -115,9 +115,9 @@ function NewsApp(props) {
             <div
                 className={clsx(classes.middle, "mb-0 relative overflow-hidden flex flex-col flex-shrink-0 ")}>
                 <Grid container spacing={2}
-                classes={{
-                    'spacing-xs-2':classes.grid
-                }} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
+                    classes={{
+                        'spacing-xs-2': classes.grid
+                    }} className="max-w-2xl mx-auto py-8  sm:px-16 items-center z-9999">
                     <Grid item sm={12} xs={12}>
                         <div className="flex items-center">
                             <Button variant="outlined" size="small" color="secondary" onClick={() => props.history.goBack()} className={clsx(classes.btn, "mr-8")}>
@@ -139,8 +139,8 @@ function NewsApp(props) {
                 </Grid>
             </div>
             <Grid container classes={{
-                    'spacing-xs-2':classes.grid
-                }} spacing={2} className="max-w-2xl mx-auto sm:px-16 pt-24 items-center">
+                'spacing-xs-2': classes.grid
+            }} spacing={2} className="max-w-2xl mx-auto sm:px-16 pt-24 items-center">
                 <Grid item sm={8} xs={8}>
                     <Typography variant="h1" className="text-24 font-bold uppercase"> Les Achats Industriels | Actualités</Typography>
                 </Grid>
@@ -163,13 +163,13 @@ function NewsApp(props) {
                 </Grid>
             </Grid>
             <Grid container classes={{
-                    'spacing-xs-2':classes.grid
-                }} spacing={2} className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
+                'spacing-xs-2': classes.grid
+            }} spacing={2} className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
 
                 {
                     news.loading ?
                         generate(
-                            <Grid item item xs={12} sm={4} lg={3}>
+                            <Grid item xs={12} sm={4} lg={3}>
                                 <ContentLoader
                                     speed={2}
                                     width={119}
@@ -192,9 +192,9 @@ function NewsApp(props) {
                 {
                     news.data && (
                         <Grid container classes={{
-                            'spacing-xs-2':classes.grid
+                            'spacing-xs-2': classes.grid
                         }} spacing={2} className="justify-between mt-16">
-                            <Grid item xs={12} xs={6}>
+                            <Grid item xs={12} md={6}>
                                 Montrer:&ensp;
                                             <Select
                                     className="text-13"
@@ -212,7 +212,7 @@ function NewsApp(props) {
                                 </Select>
                             </Grid>
 
-                            <Grid item xs={12} xs={6} className="text-right">
+                            <Grid item xs={12} md={6} className="text-right">
                                 <IconButton aria-label="Previous" className={classes.margin} disabled={news.parametres.page === 1} onClick={handlePreviousClick}>
                                     <Icon>arrow_back</Icon>
                                 </IconButton>

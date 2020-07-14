@@ -2,7 +2,6 @@
 import { FuseUtils } from '@fuse';
 import { showMessage } from 'app/store/actions/fuse';
 import agent from 'agent';
-import _ from '@lodash';
 
 export const REQUEST_PRODUIT_SELECTED = '[PRODUIT_SELECTED APP] REQUEST PRODUIT_SELECTED';
 export const GET_PRODUIT_SELECTED = '[PRODUIT_SELECTED APP] GET PRODUIT_SELECTED';
@@ -105,7 +104,7 @@ export function GetAllCategorieByFournisseur(id_fournisseur) {
 
 }
 
-export function GetProductsByCategorieByFournisseur(id_fournisseur,id_categorie) {
+export function GetProductsByCategorieByFournisseur(id_fournisseur, id_categorie) {
 
     const request = agent.get(`/api/produits?fournisseur=${id_fournisseur}&categorie=${id_categorie}`);
 
@@ -133,9 +132,9 @@ export function GetProductsByCategorieByFournisseur(id_fournisseur,id_categorie)
 
 
 export function putFocusProduit(produit, url) {
-   
-    
-    const request = agent.put(url, {'produit':produit});
+
+
+    const request = agent.put(url, { 'produit': produit });
 
     return (dispatch) => {
         dispatch({

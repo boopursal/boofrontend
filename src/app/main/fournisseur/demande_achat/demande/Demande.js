@@ -181,7 +181,6 @@ function Demande(props) {
                                                             )
                                                         :
                                                         <Chip className={classes.chip} label="Expirée" />
-
                                                 }
                                                 {
                                                     moment(demande.data.dateExpiration) >= moment()
@@ -214,7 +213,7 @@ function Demande(props) {
                                             (
                                                 demande.visit && demande.visit
                                                     ?
-                                                    <Chip className={classes.chip3} label="Déjà visité" />
+                                                    <Chip className={classes.chip3} label={"Déjà vu, première visite le " + moment(demande.visit.created).format('DD/MM/YYYY')} />
                                                     :
                                                     (
                                                         moment(demande.data.dateExpiration) >= moment()

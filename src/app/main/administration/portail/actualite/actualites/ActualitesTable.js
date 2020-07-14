@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Tooltip } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -7,42 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
-import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-    chip: {
-        marginLeft: theme.spacing(1),
-        background: '#ef5350',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
 
-    },
-    chip2: {
-        marginLeft: theme.spacing(1),
-        background: '#4caf50',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-    chipOrange: {
-        marginLeft: theme.spacing(1),
-        background: '#ff9800',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-}));
 function ActualitesTable(props) {
 
-    const classes = useStyles();
     const dispatch = useDispatch();
     const actualites = useSelector(({ actualiteApp }) => actualiteApp.actualites.data);
     const loading = useSelector(({ actualiteApp }) => actualiteApp.actualites.loading);
@@ -137,8 +106,8 @@ function ActualitesTable(props) {
                             <div className="flex items-center">
                                 {
                                     _.capitalize(_.truncate(row.original.description, {
-                                    'length': 50
-                                }))
+                                        'length': 50
+                                    }))
                                 }
                             </div>
                         )

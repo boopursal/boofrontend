@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip, Avatar, TextField } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Avatar, TextField } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -7,42 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
-import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-    chip: {
-        marginLeft: theme.spacing(1),
-        background: '#ef5350',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-
-    },
-    chip2: {
-        marginLeft: theme.spacing(1),
-        background: '#4caf50',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-    chipOrange: {
-        marginLeft: theme.spacing(1),
-        background: '#ff9800',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '11px'
-    },
-}));
 function AcheteursTable(props) {
 
-    const classes = useStyles();
     const dispatch = useDispatch();
     const acheteurs = useSelector(({ acheteursAdminApp }) => acheteursAdminApp.acheteurs.data);
     const loading = useSelector(({ acheteursAdminApp }) => acheteursAdminApp.acheteurs.loading);
@@ -74,12 +42,12 @@ function AcheteursTable(props) {
     }
 
     //dispatch from function filter
-    const run = (parametres) => 
+    const run = (parametres) =>
         dispatch(Actions.setParametresData(parametres))
 
     //call run function
-    const fn = 
-    _.debounce(run, 1000);
+    const fn =
+        _.debounce(run, 1000);
 
     return (
         <div className="w-full flex flex-col">
@@ -128,9 +96,9 @@ function AcheteursTable(props) {
                             filterable: true,
                             getProps: (state, rowInfo, column) => {
                                 return {
-                                   
+
                                     style: {
-                                        color: rowInfo && (rowInfo.original.ville && rowInfo.original.ville.id === 113)  ? 'orange' : null,
+                                        color: rowInfo && (rowInfo.original.ville && rowInfo.original.ville.id === 113) ? 'orange' : null,
                                     },
                                 };
                             },
@@ -238,7 +206,7 @@ function AcheteursTable(props) {
                     onFilteredChange={filtered => {
                         parametres.page = 1;
                         parametres.search = filtered;
-                       // _.debounce( dispatch(Actions.setParametresData(parametres)),3000)
+                        // _.debounce( dispatch(Actions.setParametresData(parametres)),3000)
                         fn(parametres);
                     }}
                     noDataText="No Acheteur found"

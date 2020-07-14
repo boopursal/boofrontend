@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useForm } from '@fuse/hooks';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,11 +39,10 @@ function FocusProduit(props) {
     const produit = useSelector(({ focusProduitsApp }) => focusProduitsApp.focusProduit);
     const [fournisseur, setFournisseur] = useState(null);
     const [categorie, setCategorie] = useState(null);
-    const formRef = useRef(null);
     const { form, setForm } = useForm(null);
     const classes = useStyles(props);
 
-    
+
 
     useEffect(() => {
         function updateFocusProduitState() {
@@ -64,12 +63,12 @@ function FocusProduit(props) {
             setForm({ ...produit.data });
             if (produit.data.produit) {
                 setFournisseur({ value: produit.data.produit.fournisseur.id, label: produit.data.produit.fournisseur.societe })
-                setCategorie({ value: produit.data.produit.categorie.id, label: produit.data.produit.categorie.name})
+                setCategorie({ value: produit.data.produit.categorie.id, label: produit.data.produit.categorie.name })
                 dispatch(Actions.GetAllCategorieByFournisseur(produit.data.produit.fournisseur.id));
                 dispatch(Actions.GetProductsByCategorieByFournisseur(produit.data.produit.fournisseur.id, produit.data.produit.categorie.id));
             }
         }
-    }, [dispatch,form, produit.data, setForm]);
+    }, [dispatch, form, produit.data, setForm]);
 
 
     return (
@@ -168,11 +167,11 @@ function FocusProduit(props) {
                                         />
                                     </Grid>
                                     <Grid item sm={4}>
-                                    <Button size='large' className="mt-8" variant="contained" disabled={!fournisseur || !categorie} onClick={() => {
-                                                dispatch(Actions.GetProductsByCategorieByFournisseur(fournisseur.value, categorie.value));
-                                        
-                                    }} color="primary">
-                                                                            Rechercher
+                                        <Button size='large' className="mt-8" variant="contained" disabled={!fournisseur || !categorie} onClick={() => {
+                                            dispatch(Actions.GetProductsByCategorieByFournisseur(fournisseur.value, categorie.value));
+
+                                        }} color="primary">
+                                            Rechercher
                                                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -205,7 +204,7 @@ function FocusProduit(props) {
                                         <rect x="1130" y="20" rx="8" ry="8" width="200" height="200" />
                                         <rect x="1130" y="250" rx="0" ry="0" width="200" height="18" />
                                         <rect x="1130" y="275" rx="0" ry="0" width="120" height="20" />
-                                        
+
                                     </ContentLoader>
                                     :
                                     (

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, InputAdornment, CircularProgress } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, Icon, Typography, Toolbar, AppBar, InputAdornment, CircularProgress } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import * as Actions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,10 +38,10 @@ function ContactFournisseurDialog(props) {
 
     // Effect handle errors
     useEffect(() => {
-        if (fournisseur.error && (fournisseur.error.contact  || fournisseur.error.phone || fournisseur.error.email || fournisseur.error.message  )) {
-                formRef.current.updateInputsWithError({
-                    ...fournisseur.error
-                });
+        if (fournisseur.error && (fournisseur.error.contact || fournisseur.error.phone || fournisseur.error.email || fournisseur.error.message)) {
+            formRef.current.updateInputsWithError({
+                ...fournisseur.error
+            });
             disableButton();
         }
         return () => {
@@ -70,8 +70,8 @@ function ContactFournisseurDialog(props) {
 
     function handleSubmit(model) {
         //event.preventDefault();
-     if (contactFournisseurDialog.type === 'new') {
-            dispatch(Actions.addMessage(model,contactFournisseurDialog.data));
+        if (contactFournisseurDialog.type === 'new') {
+            dispatch(Actions.addMessage(model, contactFournisseurDialog.data));
         }
 
     }
@@ -112,7 +112,7 @@ function ContactFournisseurDialog(props) {
                 ref={formRef}
                 className="flex flex-col overflow-hidden">
                 <DialogContent classes={{ root: "p-24" }}>
-                   
+
                     <div className="flex">
                         <TextFieldFormsy
                             className="mb-24"
@@ -139,7 +139,7 @@ function ContactFournisseurDialog(props) {
                             fullWidth
                         />
                     </div>
-               
+
                     <div className="flex">
                         <TextFieldFormsy
                             className="mb-24"
@@ -188,7 +188,7 @@ function ContactFournisseurDialog(props) {
                             required
                         />
                     </div>
-                
+
                     <div className="flex">
                         <TextFieldFormsy
                             className="mb-16  w-full"
@@ -216,7 +216,7 @@ function ContactFournisseurDialog(props) {
 
                         />
                     </div>
-                   {/*Conditions d'utilisation Politique*/} 
+                    {/*Conditions d'utilisation Politique*/}
 
                     En appuyant sur le bouton <span className="font-bold"> "Envoyer"</span>, vous acceptez les <Link href='/conditions' target="_blank" rel="noreferrer noopener">Conditions d'utilisation</Link> Politique de protection des données
 
@@ -232,7 +232,7 @@ function ContactFournisseurDialog(props) {
                     >
                         Envoyer
                         {fournisseur.loadingsContact && <CircularProgress size={24} />}
-                        </Button>
+                    </Button>
                     <p className="pr-16">* Champs obligatoires</p>
                 </DialogActions>
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
-import { Card, Icon, CardContent, List, ListItem, ListItemText, Typography, Chip, IconButton, ListItemSecondaryAction } from '@material-ui/core';
+import { Card, Icon, CardContent, List, ListItem, ListItemText, Typography, Chip } from '@material-ui/core';
 import { FuseAnimateGroup } from '@fuse';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import * as Actions from '../store/actions';

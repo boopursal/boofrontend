@@ -4,7 +4,6 @@ import { FuseAnimate } from '@fuse';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import HomeIcon from '@material-ui/icons/Home';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import _ from '@lodash';
 import { Button, Icon } from '@material-ui/core';
@@ -43,7 +42,7 @@ function HeaderSecteurs(props) {
                 <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} className={classes.breadcrumbs}>
                     <Link color="inherit" to="/" className={classes.link}>
                         <HomeIcon className={classes.icon} />
-                            Accueil
+                        Accueil
                     </Link>
 
                     <span className="text-white">

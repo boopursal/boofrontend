@@ -5,7 +5,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import HomeIcon from '@material-ui/icons/Home';
 import { Link } from 'react-router-dom';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { Button, Icon, Typography, IconButton, Hidden } from '@material-ui/core';
+import { Button, Icon, IconButton, Hidden } from '@material-ui/core';
 import clsx from 'clsx';
 import { withRouter } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -41,7 +41,6 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.getContrastText(theme.palette.primary.main),
         position: 'relative',
         marginBottom: theme.spacing(4),
-        backgroundColor: theme.palette.primary.main,
         backgroundImage: 'url(https://source.unsplash.com/collection/9804105)',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
@@ -93,7 +92,7 @@ function HeaderCondition(props) {
                 <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} className={classes.breadcrumbs}>
                     <Link color="inherit" to="/" className={classes.link}>
                         <HomeIcon className={classes.icon} />
-                            Accueil
+                        Accueil
                     </Link>
 
                     <span className="text-white">

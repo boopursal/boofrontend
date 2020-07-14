@@ -9,7 +9,6 @@ import _ from '@lodash';
 function ConfirmPage(props) {
     const dispatch = useDispatch();
     const login = useSelector(({ auth }) => auth.login);
-    const user = useSelector(({ auth }) => auth.user);
     const params = props.match.params;
     const { confirmationToken } = params;
 

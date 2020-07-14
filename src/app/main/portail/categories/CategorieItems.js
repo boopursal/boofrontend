@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { withRouter } from 'react-router-dom';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
-import * as Actions from './store/actions';
-import { Grid, Icon, List, ListItem, ListItemText, Typography, Divider, Button } from '@material-ui/core';
+import { Grid, Icon, List, ListItem, ListItemText, Typography, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 
@@ -27,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 function CategorieItemsLink(props) {
     const classes = useStyles(props);
-    const { item, nestedLevel, dense } = props;
+    const { item } = props;
 
     return (
         <Grid container spacing={3} >
@@ -37,7 +34,6 @@ function CategorieItemsLink(props) {
                         <List
                             component="nav"
                             dense={true}
-                            className='p-0'
                             aria-labelledby="nested-list-subheader"
                             className={classes.root}
                         >
@@ -74,9 +70,8 @@ function CategorieItemsLink(props) {
                                         href={`/annuaire-entreprises/${item.slug}/${sousSecteur.id}-${sousSecteur.slug}`}
                                         className={classes.nested}>
                                         <Icon className="text-16 arrow-icon">keyboard_arrow_right</Icon>
-                                        <ListItemText primary="Voir tout"
+                                        <ListItemText
                                             disableTypography
-
                                             primary={<Typography type="body2" style={{ color: '#387ca3', fontSize: 11 }}>Voir tout</Typography>}
                                         />
                                     </ListItem>

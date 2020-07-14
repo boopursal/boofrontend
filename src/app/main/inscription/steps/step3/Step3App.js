@@ -5,9 +5,9 @@ import reducer from './store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { Card, CardContent, Stepper, Step, StepLabel, Button, ListItemText, Popper, Typography, Chip, Icon, IconButton } from '@material-ui/core';
+import { Card, CardContent, Stepper, Step, StepLabel, Button, ListItemText, Popper, Typography, Chip, Icon } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
-import { FuseAnimate, TextFieldFormsy } from '@fuse';
+import { FuseAnimate } from '@fuse';
 import Formsy from 'formsy-react';
 import StepConnector from '@material-ui/core/StepConnector';
 import PropTypes from 'prop-types';
@@ -230,18 +230,18 @@ function Step3App(props) {
     const steps = getSteps();
     const user = useSelector(({ auth }) => auth.user);
 
-    const [isFormValid, setIsFormValid] = useState(false);
+    //const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
 
     const step3 = useSelector(({ step3App }) => step3App.step3);
 
-    const { form, handleChange, setForm } = useForm(defaultFormState);
+    //const { form, handleChange, setForm } = useForm(defaultFormState);
     const [expanded, setExpanded] = React.useState(false);
 
-    const handleExpandClick = () => {
+    /*const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-
+    */
     useEffect(() => {
         if (step3.success) {
             if (step3.redirect_success) {
@@ -249,15 +249,15 @@ function Step3App(props) {
             }
         }
     }, [step3.success]);
-
-    function disableButton() {
-        setIsFormValid(false);
-    }
-
-    function enableButton() {
-        setIsFormValid(true);
-    }
-
+    /*
+        function disableButton() {
+            setIsFormValid(false);
+        }
+    
+        function enableButton() {
+            setIsFormValid(true);
+        }
+    */
     function handleSubmit(model) {
         let data =
             {
@@ -313,7 +313,7 @@ function Step3App(props) {
     };
 
     function handleDelete(id) {
-        setCategories(_.reject(categories, function (o) { return o.id == id; }))
+        setCategories(_.reject(categories, function (o) { return o.id === id; }))
     }
 
     function addProduitSuggestion(event) {
@@ -329,7 +329,7 @@ function Step3App(props) {
     }
 
     function handleDeleteProduit(value) {
-        setProduitsSuggestion(_.reject(produitsSuggestion, function (o) { return o.value == value; }))
+        setProduitsSuggestion(_.reject(produitsSuggestion, function (o) { return o.value === value; }))
     }
 
     return (
@@ -362,8 +362,8 @@ function Step3App(props) {
                             <div className="w-full">
                                 <Formsy
                                     onValidSubmit={handleSubmit}
-                                    onValid={enableButton}
-                                    onInvalid={disableButton}
+                                    // onValid={enableButton}
+                                    //onInvalid={disableButton}
                                     ref={formRef}
                                     className="flex flex-col justify-center w-full"
                                 >

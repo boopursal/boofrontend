@@ -1,9 +1,8 @@
 import * as Actions from '../actions';
-import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     searchText: '',
-    suggestions:[],
+    suggestions: [],
     loading: false,
     opened: false,
     noSuggestions: false
