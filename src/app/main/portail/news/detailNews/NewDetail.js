@@ -22,8 +22,7 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(2),
     },
     title: {
-        fontSize: 30,
-        textTransform: 'capitalize'
+        fontSize: 22,
     },
     chip: {
         padding: 0,
@@ -43,17 +42,17 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px',
         height: 24
     },
-    grid:{
-        marginBottom:'-16px',
-        marginTop:'-16px',
-        marginLeft:'auto',
-        marginRight:'auto',
+    grid: {
+        marginBottom: '-16px',
+        marginTop: '-16px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         [theme.breakpoints.down('xs')]: {
-            '& > .MuiGrid-item' : {
+            '& > .MuiGrid-item': {
                 padding: '16px'
             }
         },
-        
+
     },
 }));
 
@@ -95,7 +94,7 @@ function NewDetail(props) {
 
             }
 
-            <Grid container  className={clsx(classes.grid,"max-w-2xl mx-auto py-48 sm:px-16 items-start")}>
+            <Grid container className={clsx(classes.grid, "max-w-2xl mx-auto py-48 sm:px-16 items-start")}>
 
                 {
                     actualite.loading ?

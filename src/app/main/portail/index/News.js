@@ -15,8 +15,11 @@ const useStyles = makeStyles(theme => ({
         backgroundSize: 'contain'
     },
     cardContent: {
-        maxHeight: 102,
-        minHeight: 102,
+        maxHeight: 80,
+        minHeight: 80,
+    },
+    titre: {
+        fontSize: '16px'
     }
 }));
 
@@ -33,9 +36,9 @@ export default function News(props) {
                     title={news.titre}
                 />
                 <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h6" component="h6">
+                    <Typography gutterBottom variant="h6" className={classes.titre}>
                         {_.capitalize(_.truncate(news.titre, {
-                            'length': 35
+                            'length': 55
                         }))}
                     </Typography>
 
@@ -57,7 +60,7 @@ export default function News(props) {
                 />
 
                 <Button size="small" color="primary" component={NavLinkAdapter}
-                to={`/actualite/${news.id}-${news.slug}`} >
+                    to={`/actualite/${news.id}-${news.slug}`} >
                     Lire la suite
                 </Button>
             </CardActions>
