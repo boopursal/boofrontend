@@ -12,6 +12,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import Link from '@material-ui/core/Link';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -109,7 +110,10 @@ function AcheteurTab(props) {
 
 
         <div className="w-full">
-
+            <Helmet>
+                <title>Inscription Acheteur | Les Achats Industriels</title>
+                <meta name="description" content="Inscrivez-vous en tant qu'ACHETEUR. Vous pouvez vous inscrire en même temps en tant que FOURNISSEUR, dans ce cas vous devez vous déconnecter et vous inscrire en cliquant sur le lien FOURNISSEUR." />
+            </Helmet>
             <Formsy
                 onValidSubmit={handleSubmit}
                 onValid={enableButton}

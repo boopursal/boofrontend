@@ -11,6 +11,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import Link from '@material-ui/core/Link';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -92,6 +93,11 @@ function FournisseurTab(props) {
     }
     return (
         <div className="w-full">
+            <Helmet>
+                <title>Inscription Fournisseur | Les Achats Industriels</title>
+                <meta name="description" content="L'inscription sur notre site est gratuite ainsi que la réception des demandes de prix.
+Afin de recevoir le maximum d'alertes, veuillez choisir le maximum de produits pour lesquelles vous souhaitez recevoir de demandes." />
+            </Helmet>
             <Formsy
                 onValidSubmit={handleSubmit}
                 onValid={enableButton}

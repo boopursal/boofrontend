@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import FournisseurTab from './tabs/FournisseurTab';
 import AcheteurTab from './tabs/AcheteurTab';
 import { withRouter } from 'react-router-dom';
-import { Helmet } from "react-helmet";
 
 
 const useStyles = makeStyles(theme => ({
@@ -54,10 +53,7 @@ function RegisterPage(props) {
 
     return (
         <div className={clsx(classes.root, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
-            <Helmet>
-                <title>Inscription | Les Achats Industriels</title>
-                <meta name="description" content="inscription sur notre place de marché B to B, b2b est gratuite pour les Achteurs ainsi que pour les Fournisseurs" />
-            </Helmet>
+
             <div className="flex flex-col items-center justify-center w-full">
 
                 <FuseAnimate animation="transition.expandIn">

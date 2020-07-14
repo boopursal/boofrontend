@@ -239,7 +239,7 @@ function Secteur(props) {
                                 <Typography variant="h6" >
                                     Et VOTRE entreprise, est-elle référencée dans ce secteur?
                                     </Typography>
-                                <Button component={Link} className="mt-8" to="/register" color="secondary" variant="contained">
+                                <Button component={Link} className="mt-8" to="/register/1" color="secondary" variant="contained">
                                     <span >Inscrivez-vous mantenant</span>
                                     <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon>
                                 </Button>

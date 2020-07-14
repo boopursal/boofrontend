@@ -38,7 +38,7 @@ export default function News(props) {
                 <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h6" className={classes.titre}>
                         {_.capitalize(_.truncate(news.titre, {
-                            'length': 55
+                            'length': 45
                         }))}
                     </Typography>
 

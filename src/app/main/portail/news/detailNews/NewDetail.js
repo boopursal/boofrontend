@@ -31,8 +31,6 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bold',
         fontSize: '11px',
         height: 24
-
-
     },
     chip2: {
         padding: 0,
@@ -85,11 +83,11 @@ function NewDetail(props) {
                 actualite.data &&
                 <Helmet>
                     <title>{_.truncate(actualite.data.titre, { 'length': 70, 'separator': ' ' })}</title>
-                    <meta name="description" content={_.truncate(actualite.data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta name="description" content={_.truncate(actualite.data.apercu, { 'length': 160, 'separator': ' ' })} />
                     <meta property="og:title" content={_.truncate(actualite.data.titre, { 'length': 70, 'separator': ' ' })} />
-                    <meta property="og:description" content={_.truncate(actualite.data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="og:description" content={_.truncate(actualite.data.apercu, { 'length': 160, 'separator': ' ' })} />
                     <meta property="twitter:title" content={_.truncate(actualite.data.titre, { 'length': 70, 'separator': ' ' })} />
-                    <meta property="twitter:description" content={_.truncate(actualite.data.description, { 'length': 160, 'separator': ' ' })} />
+                    <meta property="twitter:description" content={_.truncate(actualite.data.apercu, { 'length': 160, 'separator': ' ' })} />
                 </Helmet>
 
             }
@@ -132,7 +130,7 @@ function NewDetail(props) {
 
                                             <CardContent>
                                                 <div className="flex justify-between items-center">
-                                                    <div>
+                                                    <div className="mb-16">
                                                         <Typography className={classes.title} component="h1" color="primary">
                                                             {actualite.data.titre}
                                                         </Typography>
@@ -153,10 +151,8 @@ function NewDetail(props) {
                                                                     language: 'fr',       // which language to use (see LANGUAGES)
                                                                     networks: [           // which networks to include (see SHARING NETWORKS)
                                                                         'linkedin',
-                                                                        'facebook',
                                                                         'twitter',
                                                                         'email',
-                                                                        'messenger',
                                                                         'whatsapp'
                                                                     ],
                                                                     padding: 8,          // padding within buttons (INTEGER)
@@ -171,7 +167,7 @@ function NewDetail(props) {
                                                                     //description: 'custom text',       // (defaults to og:description or twitter:description)
                                                                     title: actualite.data.titre,            // (defaults to og:title or twitter:title)
                                                                     //message: 'custom email text',     // (only for email sharing)
-                                                                    //subject: 'custom email subject',  // (only for email sharing)
+                                                                    subject: actualite.data.titre,  // (only for email sharing)
                                                                     //username: 'custom twitter handle' // (only for twitter sharing)
                                                                 }}
                                                             />
@@ -203,7 +199,7 @@ function NewDetail(props) {
                                                 {
                                                     actualite.data.source &&
                                                     <div className="mt-16">
-                                                        Source : <a href={actualite.data.source}>{actualite.data.source}</a>
+                                                        Source : <a href={actualite.data.source} target="_blank" rel="noreferrer">{actualite.data.source}</a>
                                                     </div>
                                                 }
 

@@ -17,9 +17,6 @@ const useStyles = makeStyles(theme => ({
 
 function Login() {
     const classes = useStyles();
-
-
-
     return (
         <div className={clsx(classes.root, "flex flex-col flex-1 flex-shrink-0 p-24 md:flex-row md:p-0")}>
             <Helmet>
