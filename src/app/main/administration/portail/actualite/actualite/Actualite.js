@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs,  Icon, Typography, LinearProgress,  CircularProgress } from '@material-ui/core';
+import { Button, Tab, Tabs, Icon, Typography, LinearProgress, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: -12,
         marginLeft: -12,
     },
-  
+
 
 
 }));
@@ -250,6 +250,32 @@ function Actualite(props) {
                                             />
 
                                         </div>
+
+                                        <div className="flex">
+
+
+                                            <TextFieldFormsy
+                                                className="mb-16 mt-16  w-full"
+                                                type="text"
+                                                name="apercu"
+                                                value={form.apercu}
+                                                onChange={handleChange}
+                                                label="Aperçu"
+                                                validations={{
+                                                    minLength: 20,
+                                                }}
+                                                validationErrors={{
+                                                    minLength: 'La longueur minimale de caractère est 20',
+                                                }}
+                                                required
+                                                variant="outlined"
+                                                multiline
+                                                rows="2"
+
+                                            />
+                                        </div>
+
+
 
                                         <div className="flex">
 
