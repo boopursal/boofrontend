@@ -24,8 +24,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function News(props) {
+
     const classes = useStyles();
     const { news } = props;
+
     return (
         <Card className={classes.card}>
             <CardActionArea component={NavLinkAdapter}
