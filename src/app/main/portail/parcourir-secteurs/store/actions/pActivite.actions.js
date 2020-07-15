@@ -60,7 +60,7 @@ export function getPCategories(id) {
 }
 
 export function getTopFounrisseursActivites(slug) {
-    const request = agent.get(`/api/fournisseurs?sousSecteurs.slug=${slug}&itemsPerPage=5&order[visite]=desc&props[]=societe&props[]=slug&props[]=avatar&props[]=pays&props[]=id`);
+    const request = agent.get(`/api/fournisseurs?categories.sousSecteurs.slug==${slug}&itemsPerPage=5&order[visite]=desc&props[]=societe&props[]=slug&props[]=avatar&props[]=pays&props[]=id`);
     return (dispatch) => {
         dispatch({
             type: REQUEST_FOURNISEEURS,
