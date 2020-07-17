@@ -10,6 +10,7 @@ import {
     Avatar,
     Button,
     ListItemSecondaryAction,
+    IconButton,
 
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -33,6 +34,28 @@ import Search from '../Search/Search';
 import { Helmet } from "react-helmet";
 import Navigation from '../categories/Navigation';
 import Link2 from '@material-ui/core/Link';
+
+function SampleNextArrow(props) {
+    const { style, onClick } = props;
+    return (
+        <IconButton aria-label="Next"
+            style={{ ...style, display: "block", backgroundColor: 'rgba(255,255,255,0.7)', border: '1px solid #bfbfbf', color: '#4a4a4a', right: '-25px', position: 'absolute', top: '50%' }}
+            onClick={onClick}>
+            <Icon fontSize="small">arrow_forward_ios</Icon>
+        </IconButton>
+    );
+}
+
+function SamplePrevArrow(props) {
+    const { style, onClick } = props;
+    return (
+        <IconButton aria-label="Previous"
+            style={{ ...style, display: "block", zIndex: '999', backgroundColor: 'rgba(255,255,255,0.7)', border: '1px solid #bfbfbf', color: '#4a4a4a', left: '-25px', position: 'absolute', top: '50%' }}
+            onClick={onClick}>
+            <Icon fontSize="small">arrow_back_ios</Icon>
+        </IconButton>
+    );
+}
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -151,6 +174,8 @@ function Index(props) {
         infinite: portail.produits && portail.produits.length > 3,
         autoplay: true,
         autoplaySpeed: 5000,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
         responsive: [
             {
                 breakpoint: 1024,

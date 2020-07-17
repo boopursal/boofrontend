@@ -95,6 +95,9 @@ const useStyles = makeStyles(theme => ({
         height: 512,
         pointerEvents: 'none'
     },
+    img: {
+        width: '70%'
+    },
     grid: {
         [theme.breakpoints.down('xs')]: {
             width: '100%'
@@ -129,6 +132,30 @@ function FicheFournisseur(props) {
     }
     if (loading) {
         return <LinearProgress color="secondary" />;
+    }
+    if (fournisseur.data.length === 0 && !fournisseur.loading) {
+        return (
+            <div className="w-full max-w-2xl mx-auto   min-h-md">
+                <Helmet>
+                    <title>Fournisseur inexistant</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                    <meta name="googlebot" content="noindex" />
+                </Helmet>
+
+                <Paper className="p-32 w-full my-6 text-center">
+                    <img className={classes.img} alt="product not found" src="assets/images/product_not_found.jpg" />
+                    <Typography variant="h6" className="mb-16 uppercase" >
+
+                        Oups! Nous n'avons pas pu trouver cette entreprise
+                </Typography>
+
+                    <Button variant="outlined" size="small" color="secondary" onClick={() => props.history.goBack()} className={clsx(classes.btn, "mr-8")}>
+                        <Icon>chevron_left</Icon> <span className="transition ease-in-out duration-700 ">Retour</span>
+                    </Button>
+
+                </Paper>
+            </div>
+        );
     }
     if (!data) {
         return null;

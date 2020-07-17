@@ -25,7 +25,7 @@ export const REQUEST_SAVE = '[ZONES APP] REQUEST SAVE';
 export const REQUEST_ZONE = '[ZONES APP] REQUEST_ZONE';
 
 export function getPays() {
-    const request = agent.get('/api/pays');
+    const request = agent.get('/api/pays?pagination=false&props[]=id&props[]=name');
 
     return (dispatch) =>
         request.then((response) => {
@@ -41,9 +41,9 @@ export function getPays() {
 export function getZones() {
     const request = agent.get('/api/zone_commercials');
 
-    return (dispatch) =>{
+    return (dispatch) => {
         dispatch({
-            type   : REQUEST_ZONE,
+            type: REQUEST_ZONE,
         })
         return request.then((response) => {
             dispatch({
@@ -52,7 +52,7 @@ export function getZones() {
             })
         });
     }
-        
+
 }
 
 export function setSearchText(event) {

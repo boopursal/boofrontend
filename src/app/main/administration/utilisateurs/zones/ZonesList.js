@@ -56,7 +56,7 @@ function ZonesList(props) {
         return (
             <div className="flex flex-1 items-center justify-center h-full">
                 <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas d'Admins commerciales!
+                    Il n'y a pas d'Admins commerciaux!
                 </Typography>
             </div>
         );

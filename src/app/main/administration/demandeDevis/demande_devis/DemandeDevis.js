@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, CircularProgress, Divider } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded,  TextFieldFormsy,   CheckboxFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, TextFieldFormsy, CheckboxFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import _ from '@lodash';
@@ -82,9 +82,9 @@ function DemandeDevis(props) {
 
     useEffect(() => {
         if (demandeDevis.error && (demandeDevis.error.reference || demandeDevis.error.statut || demandeDevis.error.motifRejet || demandeDevis.error.description || demandeDevis.error.descriptionEn || demandeDevis.error.descriptionEs || demandeDevis.error.dateExpiration || demandeDevis.error.isPublic || demandeDevis.error.isAnonyme || demandeDevis.error.sousSecteurs || demandeDevis.error.budget)) {
-                formRef.current.updateInputsWithError({
-                    ...demandeDevis.error
-                });
+            formRef.current.updateInputsWithError({
+                ...demandeDevis.error
+            });
             disableButton();
             demandeDevis.error = null;
         }
@@ -300,13 +300,13 @@ function DemandeDevis(props) {
                                                     variant="outlined"
                                                     validations={{
                                                         matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
-                                                        minLength: 4,
-                                                        maxLength: 20
+                                                        minLength: 2,
+                                                        maxLength: 40
 
                                                     }}
                                                     validationErrors={{
-                                                        minLength: 'Raison sociale doit dépasser 4 caractères alphanumériques',
-                                                        maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
+                                                        minLength: 'Raison sociale doit dépasser 2 caractères alphanumériques',
+                                                        maxLength: 'Raison sociale ne peut dépasser 40 caractères alphanumériques',
                                                         matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
                                                     }}
                                                     required

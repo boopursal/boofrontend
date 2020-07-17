@@ -31,12 +31,90 @@ export const DELETE_SUCCESS = '[DEMANDE ADMIN APP] DELETE SUCCESS';
 export const ERROR_DELETE = '[DEMANDE ADMIN APP] ERROR DELETE';
 export const CLEAN_UP_DEMANDE = '[DEMANDE ADMIN APP] CLEAN_UP';
 
+export const REQUEST_SOUS_SECTEUR_ADMIN = '[DEMANDE ADMIN APP] REQUEST SOUS_SECTEUR_ADMIN';
+export const GET_SOUS_SECTEUR_ADMIN = '[DEMANDE ADMIN APP] GET SOUS SECTEUR ADMIN';
+
+export const GET_SECTEURS = '[DEMANDE ADMIN APP] GET SECTEURS';
+
+export const OPEN_SUGGESTION_DIALOG = '[DEMANDE ADMIN APP] OPEN SUGGESTION DIALOG';
+export const CLOSE_SUGGESTION_DIALOG = '[DEMANDE ADMIN APP] CLOSE SUGGESTION DIALOG';
+
+export const REQUEST_SAVE_PRODUIT = '[DEMANDE ADMIN APP] REQUEST_SAVE_PRODUIT';
+export const SAVE_PRODUIT = '[DEMANDE ADMIN APP] SAVE_PRODUIT';
 
 export function cleanUpDemande() {
 
     return (dispatch) => dispatch({
         type: CLEAN_UP_DEMANDE,
     });
+}
+
+export function openSuggestionDialog(data) {
+    return {
+        type: OPEN_SUGGESTION_DIALOG,
+        data
+    }
+}
+export function closeSuggestionDialog() {
+    return {
+        type: CLOSE_SUGGESTION_DIALOG
+    }
+}
+
+export function getSecteurs() {
+    const request = agent.get('/api/secteurs?pagination=false&props[]=id&props[]=name');
+
+    return (dispatch) =>
+        request.then((response) => {
+            dispatch({
+                type: GET_SECTEURS,
+                payload: response.data
+            })
+        });
+}
+
+export function getSousSecteursAdmin(url) {
+    const request = agent.get(`${url}/sous_secteurs?pagination=false&props[]=id&props[]=name`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SOUS_SECTEUR_ADMIN,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_SOUS_SECTEUR_ADMIN,
+                payload: response.data
+            })
+        });
+
+    }
+
+}
+
+
+export function saveProduit(data) {
+    let postData = {
+        name: data.name,
+        sousSecteurs: [data.sousSecteurs.value]
+    }
+    const request = agent.post(`/api/categories`, postData);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SAVE_PRODUIT,
+        });
+        return request.then((response) => {
+            dispatch(showMessage({ message: 'Suggestion ajoutée!' }));
+            dispatch({
+                type: SAVE_PRODUIT,
+                payload: response.data
+            });
+            dispatch(closeSuggestionDialog());
+        });
+
+    }
+
+
 }
 
 export function getMotifs() {
@@ -53,7 +131,7 @@ export function getMotifs() {
             })
         });
     }
-    
+
 }
 
 export function getSousSecteurs() {
@@ -71,7 +149,7 @@ export function getSousSecteurs() {
         });
 
     }
-   
+
 
 }
 
@@ -102,19 +180,20 @@ export function getDemande(params) {
 
 
 
-export function putDemande(data,sousSecteurs,motif, id,history,categories) {
+export function putDemande(data, sousSecteurs, suggestions, motif, id, history, categories) {
 
-    
-    let postData ={
+
+    let postData = {
         ...data,
         categories: _.map(categories, function (value, key) {
             return value['@id'];
         }),
-        attachements:_.map(data.attachements, function (value, key) {
+        attachements: _.map(data.attachements, function (value, key) {
             return value['@id'];
         }),
-        budget : data.budget && parseFloat(data.budget),
-        motifRejet : data.motifRejet? motif.value : null
+        budget: data.budget && parseFloat(data.budget),
+        motifRejet: data.motifRejet ? motif.value : null,
+        autreCategories: suggestions.length > 0 ? _.join(_.map(suggestions), ', ') : null,
     }
 
     const request = agent.put(`/api/demande_achats/${id}`, postData);

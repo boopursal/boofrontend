@@ -13,6 +13,15 @@ const initialState = {
     acheteur_deleted: null,
     loadingAddVille: false,
     villeAdded: false,
+    parametres: {
+        page: 1,
+        search: [],
+        description: '',
+        filter: {
+            id: 'created',
+            direction: 'desc'
+        }
+    },
 };
 
 const acheteurReducer = function (state = initialState, action) {
@@ -164,6 +173,22 @@ const acheteurReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     acheteurReqInProgress: false
+
+                };
+            }
+        case Actions.SET_PARAMETRES_DATA:
+            {
+                return {
+                    ...state,
+                    parametres: {
+                        page: action.parametres.page,
+                        search: action.parametres.search,
+                        description: action.parametres.description,
+                        filter: {
+                            id: action.parametres.filter.id,
+                            direction: action.parametres.filter.direction
+                        }
+                    }
 
                 };
             }

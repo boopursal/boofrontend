@@ -695,7 +695,7 @@ function Produit(props) {
                                                             shrink: true
                                                         },
                                                         variant: 'outlined',
-                                                        required: 'required'
+                                                        required: true
                                                     }}
                                                     isLoading={produit.loadingSecteurs}
                                                     options={produit.secteurs}
@@ -721,7 +721,7 @@ function Produit(props) {
                                                         shrink: true
                                                     },
                                                     variant: 'outlined',
-                                                    required: 'required'
+                                                    required: true
                                                 }}
                                                 isLoading={produit.loadingSousSecteurs}
 
@@ -747,7 +747,7 @@ function Produit(props) {
                                                         shrink: true
                                                     },
                                                     variant: 'outlined',
-                                                    required: 'required'
+                                                    required: true
                                                 }}
                                                 isLoading={produit.loadingCategories}
                                                 options={produit.categories}

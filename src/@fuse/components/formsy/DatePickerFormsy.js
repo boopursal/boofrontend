@@ -23,9 +23,6 @@ function DatePickerFormsy(props) {
     ]);
 
     const errorMessage = props.getErrorMessage();
-    console.log(props.getValue())
-    console.log(moment(props.getValue()).format('YYYY-MM-DDTHH:mm'))
-
     const value = props.getValue() !== null ? moment(props.getValue()).format('YYYY-MM-DDTHH:mm') : null;
 
     function changeValue(event) {

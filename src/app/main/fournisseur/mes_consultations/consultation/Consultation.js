@@ -171,11 +171,6 @@ function Consultation(props) {
         setIsFormValid(true);
     }
 
-    function handleRadioChange(e) {
-
-        setForm(_.set({ ...form }, 'statut', parseInt(e.target.value)));
-    }
-
     function handleCheckBoxChange(e, name) {
 
         setForm(_.set({ ...form }, name, e.target.checked));
@@ -532,11 +527,10 @@ function Consultation(props) {
                                                     className="mt-20 inline"
                                                     name="statut"
                                                     label='Statut'
-                                                    onChange={handleRadioChange}
                                                 >
-                                                    <FormControlLabel value="0" checked={form.statut === 0} control={<Radio />} label="En cours" />
-                                                    <FormControlLabel value="1" checked={form.statut === 1} control={<Radio />} label="Gagnée" />
-                                                    <FormControlLabel value="2" checked={form.statut === 2} control={<Radio />} label="Perdue" />
+                                                    <FormControlLabel value="0" disabled checked={form.statut === 0} control={<Radio />} label="En cours" />
+                                                    <FormControlLabel value="1" disabled checked={form.statut === 1} control={<Radio />} label="Gagnée" />
+                                                    <FormControlLabel value="2" disabled checked={form.statut === 2} control={<Radio />} label="Perdue" />
 
                                                 </RadioGroupFormsy>
                                             </Grid>

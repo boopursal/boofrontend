@@ -169,6 +169,7 @@ function Demande(props) {
     const popperNode = useRef(null);
     const searchCategories = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.searchCategories);
     const [categories, setCategories] = React.useState([]);
+    const [suggestions, setSuggestions] = React.useState([]);
     const dispatch = useDispatch();
     const demande = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demande);
     const [isFormValid, setIsFormValid] = useState(false);
@@ -253,6 +254,9 @@ function Demande(props) {
             setForm({ ...demande.data });
             if (demande.data.categories) {
                 setCategories(demande.data.categories.map(item => item));
+            }
+            if (demande.data.autreCategories) {
+                setSuggestions(_.split(demande.data.autreCategories, ','))
             }
         }
     }, [form, demande.data, setForm]);
@@ -373,23 +377,38 @@ function Demande(props) {
     };
 
     function handleDelete(id) {
-        setCategories(_.reject(categories, function (o) { return o.id == id; }))
+        setCategories(_.reject(categories, function (o) { return o.id === id; }))
+    }
+
+    function handleDeleteSuggestion(item) {
+        setSuggestions(_.reject(suggestions, function (i) { return i === item }))
+
     }
     function handleRadioChange(e) {
 
         setForm(_.set({ ...form }, 'localisation', parseInt(e.target.value)));
     }
+
+    function handleAddSuggestion() {
+        if (suggestions.indexOf(searchCategories.searchText) === -1)
+            setSuggestions([searchCategories.searchText, ...suggestions]);
+
+        hideSearch();
+        dispatch(Actions.cleanUp());
+    }
+
     function handleSubmit(vider = false) {
         const params = props.match.params;
         const { demandeId } = params;
 
         if (demandeId === 'new') {
-            dispatch(Actions.saveDemande(form, props.history, categories, vider));
+            dispatch(Actions.saveDemande(form, props.history, categories, suggestions, vider));
         }
         else {
-            dispatch(Actions.putDemande(form, form.id, props.history, categories, updateStatut, updateExpiration, vider));
+            dispatch(Actions.putDemande(form, form.id, props.history, categories, suggestions, updateStatut, updateExpiration, vider));
         }
     }
+
 
 
     return (
@@ -484,7 +503,7 @@ function Demande(props) {
                                         className="whitespace-no-wrap"
                                         variant="contained"
                                         color="secondary"
-                                        disabled={!isFormValid || demande.loading || !categories.length || demande.data.statut === 3}
+                                        disabled={!isFormValid || demande.loading || (!categories.length && !suggestions.length) || demande.data.statut === 3}
                                         onClick={() => handleSubmit(false)}
                                     >
                                         <span className="hidden sm:flex">Sauvegarder</span>
@@ -497,7 +516,7 @@ function Demande(props) {
                                             className="ml-8"
                                             color="secondary"
                                             variant="contained"
-                                            disabled={!isFormValid || demande.loading || !categories.length}
+                                            disabled={!isFormValid || demande.loading || (!categories.length && !suggestions.length)}
                                             onClick={() => handleSubmit(true)}
                                         >
                                             <span className="hidden sm:flex">Sauvegarder et ajouter nouvelle demande</span>
@@ -536,7 +555,7 @@ function Demande(props) {
 
                             />
 
-                            {demande && demande.fournisseurs.length > 0 ?
+                            {demande && demande.fournisseurs.length > 0 && !demande.data.isAnonyme ?
                                 <Tab className={clsx("h-64 normal-case text-orange", demande.data.statut === 3 ? "text-green" : "text-orange")} label=
                                     {
                                         demande.data && demande.data && demande.data.statut === 3 ?
@@ -742,15 +761,20 @@ function Demande(props) {
                                                                     style={{ width: popperNode.current ? popperNode.current.clientWidth : null }}
                                                                 >
                                                                     {options.children}
-                                                                    {searchCategories.noSuggestions && (
-                                                                        <Typography className="px-16 py-12">
-                                                                            Aucun résultat..
-                                                                    </Typography>
-                                                                    )}
+                                                                    {
+                                                                        searchCategories.noSuggestions && (
+                                                                            <MenuItem component="div" className="z-999" onClick={handleAddSuggestion} dense={true}>
+                                                                                <ListItemText
+                                                                                    className="pl-0 "
+                                                                                    primary={searchCategories.searchText}
+                                                                                />
+                                                                            </MenuItem>
+                                                                        )
+                                                                    }
                                                                     {searchCategories.loading && (
                                                                         <div className="px-16 py-12 text-center">
                                                                             <CircularProgress color="secondary" /> <br /> Chargement ...
-                                                                    </div>
+                                                                        </div>
                                                                     )}
                                                                 </Paper>
                                                             </div>
@@ -770,6 +794,19 @@ function Demande(props) {
                                                             key={index}
                                                             label={item.name}
                                                             onDelete={() => handleDelete(item.id)}
+                                                            className="mt-8 mr-8"
+                                                        />
+                                                    ))
+
+
+                                                }
+                                                {
+                                                    suggestions && suggestions.length > 0 &&
+                                                    suggestions.map((item, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            label={item}
+                                                            onDelete={() => handleDeleteSuggestion(item)}
                                                             className="mt-8 mr-8"
                                                         />
                                                     ))
@@ -847,7 +884,7 @@ function Demande(props) {
                                                         className="whitespace-no-wrap"
                                                         variant="contained"
                                                         color="secondary"
-                                                        disabled={!isFormValid || demande.loading || !categories.length || demande.data.statut === 3}
+                                                        disabled={!isFormValid || demande.loading || (!categories.length && !suggestions.length) || demande.data.statut === 3}
                                                         onClick={() => handleSubmit(false)}
                                                     >
                                                         <span className="hidden sm:flex">Sauvegarder</span>
@@ -860,7 +897,7 @@ function Demande(props) {
                                                             className="ml-8"
                                                             variant="contained"
                                                             color="secondary"
-                                                            disabled={!isFormValid || demande.loading || !categories.length}
+                                                            disabled={!isFormValid || demande.loading || (!categories.length && !suggestions.length)}
                                                             onClick={() => handleSubmit(true)}
                                                         >
                                                             <span className="hidden sm:flex">Sauvegarder et ajouter nouvelle demande</span>
@@ -951,7 +988,7 @@ function Demande(props) {
                                 {tabValue === 2 && (
                                     <div className="w-full flex flex-col">
                                         {
-                                            demande.data && demande.data.statut === 3 ?
+                                            demande.data && demande.data.statut === 3 && !demande.data.isAnonyme ?
                                                 (
                                                     <div className="flex flex-1 items-center justify-center h-full">
                                                         <Typography variant="h6" className="flex items-center">

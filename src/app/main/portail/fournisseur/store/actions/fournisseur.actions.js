@@ -11,6 +11,7 @@ export const GET_FOURNISSEUR = '[DETAIL FOURNISSEUR APP] GET_FOURNISSEUR';
 export const GET_FOURNISSEUR_PRODUITS_APERCU = '[DETAIL FOURNISSEUR APP] GET_FOURNISSEUR_PRODUITS_APERCU';
 export const GET_FOURNISSEUR_PRODUITS = '[DETAIL FOURNISSEUR APP] GET_FOURNISSEUR_PRODUITS';
 export const SAVE_ERROR = '[DETAIL FOURNISSEUR APP] SAVE ERROR';
+export const SAVE_ERROR_GET = '[DETAIL FOURNISSEUR APP] SAVE ERROR GET';
 export const REQUEST_UPDATE_FOURNISSEUR = '[DETAIL FOURNISSEUR APP] REQUEST_UPDATE_FOURNISSEUR';
 export const GET_UPDATE_FOURNISSEUR = '[DETAIL FOURNISSEUR APP] GET_UPDATE_FOURNISSEUR';
 export const SET_PARAMETRES_DATA = '[DETAIL FOURNISSEUR APP] SET PARAMETRES DATA';
@@ -40,7 +41,7 @@ export function getFournisseur(id) {
         dispatch({
             type: REQUEST_FOURNISSEUR,
         });
-       
+
         return request.then((response) => {
 
             dispatch({
@@ -50,7 +51,11 @@ export function getFournisseur(id) {
 
         }
 
-        );
+        ).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR_GET,
+            })
+        });
     }
 
 }
@@ -61,7 +66,7 @@ export function getFournisseurProduitsApercu(id) {
         dispatch({
             type: REQUEST_FOURNISSEUR_PRODUITS_APERCU,
         });
-       
+
         return request.then((response) => {
 
             dispatch({
@@ -83,7 +88,7 @@ export function getFournisseurProduits(id, parametres) {
         dispatch({
             type: REQUEST_FOURNISSEUR_PRODUITS,
         });
-       
+
         return request.then((response) => {
 
             dispatch({
@@ -125,23 +130,21 @@ export function setParametresData(parametres) {
     }
 }
 
-export function openNewContactFournisseurDialog(id)
-{
+export function openNewContactFournisseurDialog(id) {
     return {
         type: OPEN_NEW_CONTACT_FOURNISSEUR_DIALOG,
         id
     }
 }
 
-export function closeNewContactFournisseurDialog()
-{
+export function closeNewContactFournisseurDialog() {
     return {
         type: CLOSE_NEW_CONTACT_FOURNISSEUR_DIALOG
     }
 }
-export function addMessage(data,fournisseur) {
+export function addMessage(data, fournisseur) {
 
-    data.fournisseur='/api/fournisseurs/'+fournisseur;
+    data.fournisseur = '/api/fournisseurs/' + fournisseur;
     const request = agent.post(`/api/contact_fournisseurs`, data);
 
     return (dispatch) => {

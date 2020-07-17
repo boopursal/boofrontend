@@ -128,7 +128,7 @@ const navigationConfig = [
                     },
                     {
                         'id': 'commercial-component',
-                        'title': 'Commercials',
+                        'title': 'Commerciaux',
                         'auth': authRoles.admin,
                         'type': 'item',
                         'icon': 'group',

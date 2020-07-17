@@ -45,7 +45,7 @@ export function getPersonnels(params) {
     const request = agent.get(`/api/fournisseurs/${params}/personnels`);
 
     return (dispatch) => {
-        
+
         return request.then((response) => {
             dispatch({
                 type: GET_PERSONNELS,
@@ -60,20 +60,19 @@ export function getPersonnels(params) {
 
 export function putConsultation(data) {
 
-   
+
     let UpdatedData = {
-        budget : parseFloat(data.budget),
-        personnel : data.personnel? data.personnel.value : null,
-        statut : data.statut,
+        budget: parseFloat(data.budget),
+        personnel: data.personnel ? data.personnel.value : null,
         sendEmail: data.sendEmail ? data.sendEmail : false,
     }
 
     const request = agent.put(data['@id'], UpdatedData);
 
     return (dispatch) => {
-      
+
         dispatch({
-            type:REQUEST_SAVE
+            type: REQUEST_SAVE
         });
         return request.then((response) => {
 

@@ -21,6 +21,13 @@ const initialState = {
 
 const detailProduitReducer = function (state = initialState, action) {
     switch (action.type) {
+        case Actions.SAVE_ERROR_GET:
+            {
+                return {
+                    ...state,
+                    loading: false
+                }
+            }
         case Actions.CLEAN_UP:
             {
                 return {
@@ -124,7 +131,7 @@ const detailProduitReducer = function (state = initialState, action) {
                     ...state,
                     error: action.payload,
                     loadingsDevis: false,
-                    
+
 
                 };
             }

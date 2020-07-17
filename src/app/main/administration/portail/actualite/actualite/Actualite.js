@@ -173,11 +173,11 @@ function Actualite(props) {
                                     <div className="flex flex-col min-w-0">
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                             <Typography className="text-16 sm:text-20 truncate">
-                                                {form.titre ? form.titre : 'Nouvelle Actualite'}
+                                                {form.titre ? form.titre : 'Nouvelle Actualité'}
                                             </Typography>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                            <Typography variant="caption">Actualite Detail</Typography>
+                                            <Typography variant="caption">Détails de l'actualité </Typography>
                                         </FuseAnimate>
                                     </div>
                                 </div>

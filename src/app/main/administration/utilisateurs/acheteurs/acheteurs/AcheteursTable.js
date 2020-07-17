@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Tooltip, Avatar, TextField } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Avatar, TextField, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -151,25 +151,72 @@ function AcheteursTable(props) {
                             Header: "Statut",
                             accessor: "isactif",
                             filterable: true,
-
                             Cell: row =>
                                 row.original.isactif ?
                                     (
                                         <Tooltip title="Activé">
                                             <IconButton className="text-green text-20" onClick={(ev) => {
                                                 ev.stopPropagation();
-                                                dispatch(Actions.activeAccount(row.original, false, parametres))
+                                                dispatch(Actions.openDialog({
+                                                    children: (
+                                                        <React.Fragment>
+                                                            <DialogTitle id="alert-dialog-title">Désactivation</DialogTitle>
+                                                            <DialogContent>
+                                                                <DialogContentText id="alert-dialog-description">
+                                                                    Voulez vous vraiment désactivé ce compte ?
+                                                            </DialogContentText>
+                                                            </DialogContent>
+                                                            <DialogActions>
+                                                                <Button onClick={() => dispatch(Actions.closeDialog())} variant='contained' color="primary">
+                                                                    Non
+                                                                </Button>
+                                                                <Button onClick={(ev) => {
+                                                                    dispatch(Actions.activeAccount(row.original, false, parametres))
+                                                                    dispatch(Actions.closeDialog())
+                                                                }} color="primary" variant='outlined' autoFocus>
+                                                                    Oui
+                                                                </Button>
 
-                                            }}><Icon>check_circle</Icon>
+                                                            </DialogActions>
+                                                        </React.Fragment>
+                                                    )
+                                                }))
+                                            }}
+                                            ><Icon>check_circle</Icon>
                                             </IconButton>
                                         </Tooltip>
                                     ) :
                                     (
                                         <Tooltip title="Désactivé">
-                                            <IconButton className="text-red text-20" onClick={(ev) => {
-                                                ev.stopPropagation();
-                                                dispatch(Actions.activeAccount(row.original, true, parametres));
-                                            }}><Icon>remove_circle</Icon>
+                                            <IconButton className="text-red text-20"
+                                                onClick={(ev) => {
+                                                    ev.stopPropagation();
+                                                    dispatch(Actions.openDialog({
+                                                        children: (
+                                                            <React.Fragment>
+                                                                <DialogTitle id="alert-dialog-title">Activation</DialogTitle>
+                                                                <DialogContent>
+                                                                    <DialogContentText id="alert-dialog-description">
+                                                                        Voulez vous vraiment activé ce compte ?
+                                                            </DialogContentText>
+                                                                </DialogContent>
+                                                                <DialogActions>
+                                                                    <Button onClick={() => dispatch(Actions.closeDialog())} variant='contained' color="primary">
+                                                                        Non
+                                                                </Button>
+                                                                    <Button onClick={(ev) => {
+                                                                        dispatch(Actions.activeAccount(row.original, true, parametres));
+                                                                        dispatch(Actions.closeDialog())
+                                                                    }} color="primary" variant='outlined' autoFocus>
+                                                                        Oui
+                                                                </Button>
+
+                                                                </DialogActions>
+                                                            </React.Fragment>
+                                                        )
+                                                    }))
+                                                }}
+                                            ><Icon>remove_circle</Icon>
                                             </IconButton>
                                         </Tooltip>
                                     )
@@ -187,6 +234,24 @@ function AcheteursTable(props) {
 
 
                         },
+                        {
+                            Header: "",
+                            Cell: row => (
+                                <div className="flex items-center">
+
+                                    <Tooltip title="Détails"
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            props.history.push('/users/acheteur/show/' + row.original.id);
+                                        }} >
+                                        <IconButton className="text-teal text-20">
+                                            <Icon>remove_red_eye</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+
+                                </div>
+                            )
+                        }
                     ]}
                     manual
                     pages={pageCount}

@@ -18,7 +18,7 @@ function CommercialsHeader(props) {
                     <Icon className="text-32 mr-0 sm:mr-12">group</Icon>
                 </FuseAnimate>
                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                    <Typography className="hidden sm:flex" variant="h6">Gestion des commercials</Typography>
+                    <Typography className="hidden sm:flex" variant="h6">Gestion des commerciaux</Typography>
                 </FuseAnimate>
             </div>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, CircularProgress, CardContent, Typography, Icon, Avatar, Button, Chip, Divider, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { Grid, Card, CircularProgress, CardContent, Typography, Icon, Avatar, Button, Chip, Divider, ListItem, ListItemAvatar, ListItemText, Paper, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from "react-slick";
 import { Link } from 'react-router-dom';
@@ -16,6 +16,29 @@ import { Helmet } from "react-helmet";
 import { InlineShareButtons } from 'sharethis-reactjs';
 import _ from '@lodash';
 
+
+function SampleNextArrow(props) {
+    const { style, onClick } = props;
+    return (
+
+        <IconButton aria-label="Next"
+            style={{ ...style, display: "block", backgroundColor: 'rgba(255,255,255,0.7)', border: '1px solid #bfbfbf', color: '#4a4a4a', right: '-25px', position: 'absolute', top: '50%' }}
+            onClick={onClick}>
+            <Icon fontSize="small">arrow_forward_ios</Icon>
+        </IconButton>
+    );
+}
+
+function SamplePrevArrow(props) {
+    const { style, onClick } = props;
+    return (
+        <IconButton aria-label="Previous"
+            style={{ ...style, display: "block", zIndex: '999', backgroundColor: 'rgba(255,255,255,0.7)', border: '1px solid #bfbfbf', color: '#4a4a4a', left: '-25px', position: 'absolute', top: '50%' }}
+            onClick={onClick}>
+            <Icon fontSize="small">arrow_back_ios</Icon>
+        </IconButton>
+    );
+}
 function arrowGenerator(color) {
     return {
         '&[x-placement*="bottom"] $arrow': {
@@ -131,6 +154,9 @@ const useStyles = makeStyles(theme => ({
         minWidth: 275,
 
     },
+    img: {
+        width: '70%'
+    },
     progress: {
         margin: theme.spacing(2),
     },
@@ -230,13 +256,13 @@ function DetailProduit(props) {
         }
     };
     const settings = {
-        dots: true,
-        infinite: true,
         speed: 500,
         slidesToScroll: produit.produitsSimilaires && produit.produitsSimilaires.length < 4 ? produit.produitsSimilaires.length : 4,
         slidesToShow: produit.produitsSimilaires && produit.produitsSimilaires.length < 4 ? produit.produitsSimilaires.length : 4,
         dots: false,
-        infinite: produit.produitsSimilaires && produit.produitsSimilaires.length > 3,
+        infinite: produit.produitsSimilaires && produit.produitsSimilaires.length > 4,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
         responsive: [
             {
                 breakpoint: 1024,
@@ -265,7 +291,7 @@ function DetailProduit(props) {
                     slidesToScroll: 1,
                     infinite: true,
                     dots: true,
-                    className: "slick-slider-m mb-16",
+                    className: "slick-slider-m m-auto",
                     arrows: false,
                 }
             }
@@ -290,24 +316,35 @@ function DetailProduit(props) {
         infinite: true,
         speed: 500,
         slidesToShow: 1,
-        slidesToScroll: 1
+        slidesToScroll: 1,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />
     };
-    /*
-        if ( !produit.data )
-        {
-            return props.history.push('/')
-        }
-        if ( produit.data.length === 0 && !produit.loading)
-        {
-            return (
-                <div className="flex flex-1 items-center justify-center h-full">
-                    <Typography color="textSecondary" variant="h5">
-                        Il n'y a pas de Villes!
-                    </Typography>
-                </div>
-            );
-        }
-    */
+
+    if (produit.data.length === 0 && !produit.loading) {
+        return (
+            <div className="w-full max-w-2xl mx-auto   min-h-md">
+                <Helmet>
+                    <title>Produit inexistant</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                    <meta name="googlebot" content="noindex" />
+                </Helmet>
+
+                <Paper className="p-32 w-full my-6 text-center">
+                    <img className={classes.img} alt="product not found" src="assets/images/product_not_found.jpg" />
+                    <Typography variant="h6" className="mb-16 uppercase" >
+
+                        Oups! Nous n'avons pas pu trouver ce produit
+                </Typography>
+
+                    <Button variant="outlined" size="small" color="secondary" onClick={() => props.history.goBack()} className={clsx(classes.btn, "mr-8")}>
+                        <Icon>chevron_left</Icon> <span className="transition ease-in-out duration-700 ">Retour</span>
+                    </Button>
+
+                </Paper>
+            </div>
+        );
+    }
 
     function hadnleDownload(fiche) {
 

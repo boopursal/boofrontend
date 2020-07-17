@@ -64,8 +64,8 @@ function ZonesDialog(props) {
 
     useEffect(() => {
         if (zones.error && (zones.error.firstName || zones.error.lastName || zones.error.adresse1 || zones.error.adresse2
-             || zones.error.codepostal || zones.error.phone || zones.error.email || zones.error.pays)) {
-            
+            || zones.error.codepostal || zones.error.phone || zones.error.email || zones.error.pays)) {
+
             formRef.current.updateInputsWithError({
                 ...zones.error
             });
@@ -135,14 +135,12 @@ function ZonesDialog(props) {
         setIsFormValid(true);
     }
 
-
     function handleUploadChange(e) {
         const file = e.target.files[0];
         if (!file) {
             return;
         }
         dispatch(Actions.uploadImage(file));
-
     }
 
     return (
@@ -337,7 +335,7 @@ function ZonesDialog(props) {
                         />
                     </div>
 
-                   
+
                     {zonesDialog.type === 'new' ?
                         (
                             <div>
@@ -393,10 +391,7 @@ function ZonesDialog(props) {
                             name="pays"
                             className="MuiFormControl-fullWidth MuiTextField-root mb-24"
                             value={
-
                                 form.pays
-
-
                             }
                             onChange={(value) => handleChipChange(value, 'pays')}
                             placeholder="Sélectionner multiple pays"
@@ -448,7 +443,7 @@ function ZonesDialog(props) {
                                 Modifier
                             {zones.loading && <CircularProgress size={24} />}
 
-                        </Button>
+                            </Button>
                             <IconButton
                                 onClick={() => dispatch(Actions.openDialog({
                                     children: (

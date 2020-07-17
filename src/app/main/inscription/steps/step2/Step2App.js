@@ -283,7 +283,7 @@ function Step2App(props) {
                                                                 shrink: true
                                                             },
                                                             variant: 'outlined',
-                                                            required: 'required'
+                                                            required: true
                                                         }}
 
                                                         className="mb-16"
@@ -306,7 +306,7 @@ function Step2App(props) {
                                                                 shrink: true
                                                             },
                                                             variant: 'outlined',
-                                                            required: 'required'
+                                                            required: true
                                                         }}
                                                         className="mb-16"
                                                         options={villes}
@@ -410,7 +410,7 @@ function Step2App(props) {
                                                                 shrink: true
                                                             },
                                                             variant: 'outlined',
-                                                            required: 'required'
+                                                            required: true
                                                         }}
                                                         className="mb-16"
                                                         options={currencies}

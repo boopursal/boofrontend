@@ -10,6 +10,18 @@ const initialState = {
     deleteReqInProgress: false,
     attachement: null,
     attachement_deleted: null,
+    secteurs: [],
+    loadingSousSecteursAdmin: false,
+    sousSecteursAdmin: [],
+    suggestionsDialog: {
+        type: 'new',
+        props: {
+            open: false
+        },
+        data: null
+    },
+    requestSaveProduit: false,
+    produit: null
 };
 
 const demandeReducer = function (state = initialState, action) {
@@ -48,6 +60,22 @@ const demandeReducer = function (state = initialState, action) {
 
                 };
             }
+        case Actions.REQUEST_SAVE_PRODUIT:
+            {
+                return {
+                    ...state,
+                    requestSaveProduit: true
+
+                };
+            }
+        case Actions.SAVE_PRODUIT:
+            {
+                return {
+                    ...state,
+                    requestSaveProduit: false,
+                    produit: action.payload
+                };
+            }
         case Actions.UPLOAD_ATTACHEMENT:
             {
                 return {
@@ -74,13 +102,63 @@ const demandeReducer = function (state = initialState, action) {
 
                 };
             }
+        case Actions.OPEN_SUGGESTION_DIALOG:
+            {
+                return {
+                    ...state,
+                    suggestionsDialog: {
+                        type: 'edit',
+                        props: {
+                            open: true
+                        },
+                        data: action.data
+                    }
+                };
+            }
+        case Actions.CLOSE_SUGGESTION_DIALOG:
+            {
+                return {
+                    ...state,
+                    suggestionsDialog: {
+                        type: 'edit',
+                        props: {
+                            open: false
+                        },
+                        data: null
+                    }
+                };
+            }
+        case Actions.REQUEST_SOUS_SECTEUR_ADMIN:
+            {
+                return {
+                    ...state,
+                    sousSecteursAdmin: [],
+                    loadingSousSecteursAdmin: true,
+
+                }
+            }
+        case Actions.GET_SECTEURS:
+            {
+                return {
+                    ...state,
+                    secteurs: action.payload['hydra:member'],
+                };
+            }
+        case Actions.GET_SOUS_SECTEUR_ADMIN:
+            {
+                return {
+                    ...state,
+                    sousSecteursAdmin: action.payload['hydra:member'],
+                    loadingSousSecteursAdmin: false
+                };
+            }
         case Actions.GET_SOUS_SECTEUR:
             {
                 return {
                     ...state,
                     sousSecteurs: action.payload,
                     loading: false,
-                    
+
 
                 };
             }

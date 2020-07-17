@@ -88,52 +88,12 @@ function SousSecteursList(props) {
                         filterable: true,
                     },
                     {
-                        Header: "Activité parent",
-                        className: "font-bold",
-                        filterable: true,
-                        accessor: "parent",
-                        Cell: row => (row.original.parent ? row.original.parent.name : '')
-                    },
-                    {
                         Header: "Secteur",
                         accessor: "secteur.name",
                         filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
                                 {row.original.secteur ? row.original.secteur.name : ''}
-                            </div>
-                        )
-                    },
-
-                    {
-                        Header: "Nbr Fournisseurs",
-                        sortable: false,
-                        className: "font-bold",
-                        Cell: row => (
-                            <div className="flex items-center">
-                                <HtmlTooltip
-                                    title={
-                                        <React.Fragment>
-
-                                            {
-                                                Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length === 0 ? 'Il n\'y aucun Fournisseur' :
-                                                    <ul>
-                                                        {
-                                                            _.map(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del'), function (value, key) {
-                                                                return <li key={key}> {value.firstName + ' ' + value.lastName} </li>;
-                                                            })
-                                                        }
-                                                    </ul>
-                                            }
-
-                                        </React.Fragment>
-                                    }
-                                >
-                                    <Button onClick={(ev) => { ev.stopPropagation(); }} >
-                                        {Object.keys(_.pullAllBy(row.original.fournisseurs, [{ 'del': true }], 'del')).length}
-                                    </Button>
-                                </HtmlTooltip>
-
                             </div>
                         )
                     },

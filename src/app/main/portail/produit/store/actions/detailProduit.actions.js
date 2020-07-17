@@ -7,16 +7,17 @@ export const REQUEST_PRODUIT = '[DETAIL PRODUIT APP] REQUEST_PRODUIT';
 export const REQUEST_PRODUITS_SIMILAIRES = '[DETAIL PRODUIT APP] REQUEST_PRODUITS_SIMILAIRES';
 export const GET_PRODUIT = '[DETAIL PRODUIT APP] GET_PRODUIT';
 export const GET_PRODUITS_SIMILAIRES = '[DETAIL PRODUIT APP] GET_PRODUITS_SIMILAIRES';
-export const OPEN_NEW_DEMANDE_DEVIS_DIALOG = '[DEMANDE_DEVIS APP] OPEN NEW DEMANDE_DEVIS DIALOG';
-export const CLOSE_NEW_DEMANDE_DEVIS_DIALOG = '[DEMANDE_DEVIS APP] CLOSE NEW DEMANDE_DEVIS DIALOG';
+export const OPEN_NEW_DEMANDE_DEVIS_DIALOG = '[DETAIL PRODUIT APP] OPEN NEW DEMANDE_DEVIS DIALOG';
+export const CLOSE_NEW_DEMANDE_DEVIS_DIALOG = '[DETAIL PRODUIT APP] CLOSE NEW DEMANDE_DEVIS DIALOG';
 
-export const REQUEST_SAVE = '[DEMANDE_DEVIS APP] REQUEST SAVE';
-export const SAVE_DEMANDE_DEVIS = '[DEMANDE_DEVIS APP] SAVE DEMANDE_DEVIS';
-export const SAVE_ERROR = '[DEMANDE_DEVIS APP] SAVE ERROR';
-export const REQUEST_UPDATE_PRODUIT = '[DEMANDE_DEVIS APP] REQUEST_UPDATE_PRODUIT';
-export const GET_UPDATE_PRODUIT = '[DEMANDE_DEVIS APP] GET_UPDATE_PRODUIT';
+export const REQUEST_SAVE = '[DETAIL PRODUIT APP] REQUEST SAVE';
+export const SAVE_DEMANDE_DEVIS = '[DETAIL PRODUIT APP] SAVE DEMANDE_DEVIS';
+export const SAVE_ERROR = '[DETAIL PRODUIT APP] SAVE ERROR';
+export const SAVE_ERROR_GET = '[DETAIL PRODUIT APP] SAVE ERROR GET';
+export const REQUEST_UPDATE_PRODUIT = '[DETAIL PRODUIT APP] REQUEST_UPDATE_PRODUIT';
+export const GET_UPDATE_PRODUIT = '[DETAIL PRODUIT APP] GET_UPDATE_PRODUIT';
 
-export const CLEAN_ERROR = '[DEMANDE_DEVIS APP] CLEAN_ERROR';
+export const CLEAN_ERROR = '[DETAIL PRODUIT APP] CLEAN_ERROR';
 
 export function cleanUp() {
 
@@ -58,10 +59,11 @@ export function getProduit(id) {
             }
 
         }
-
-
-
-        );
+        ).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR_GET,
+            })
+        });
     }
 
 }
@@ -79,7 +81,7 @@ export function updateVuPhoneProduit(id) {
                 type: GET_UPDATE_PRODUIT,
                 payload: response.data
             })
-           
+
 
         }
 
@@ -91,27 +93,25 @@ export function updateVuPhoneProduit(id) {
 }
 
 
-export function openNewDemandeDevisDialog(id)
-{
+export function openNewDemandeDevisDialog(id) {
     return {
         type: OPEN_NEW_DEMANDE_DEVIS_DIALOG,
         id
     }
 }
 
-export function closeNewDemandeDevisDialog()
-{
+export function closeNewDemandeDevisDialog() {
     return {
         type: CLOSE_NEW_DEMANDE_DEVIS_DIALOG
     }
 }
 
-export function addDemandeDevis(data,produit) {
+export function addDemandeDevis(data, produit) {
 
-    if(data.quantity){
+    if (data.quantity) {
         data.quantity = parseInt(data.quantity)
     }
-    data.produit=produit;
+    data.produit = produit;
     const request = agent.post(`/api/demande_devis`, data);
 
     return (dispatch) => {
@@ -147,8 +147,8 @@ export function getFile(fiche) {
         url: `/fiche_technique/${fiche.id}`,
         method: 'GET',
         responseType: 'blob', // important
-      }
-      );
+    }
+    );
 
     return (dispatch) => {
 

@@ -380,7 +380,7 @@ export function updateSocieteInfo(data, id_fournisseur) {
 
     let putData = {
         ...data,
-        ice: data.pays.label !== 'Maroc' && null,
+        ice: data.pays.label !== 'Maroc' ? null : data.ice,
         pays: data.pays.value,
         ville: data.ville.value,
         codepostal: data.codepostal ? parseInt(data.codepostal) : null,

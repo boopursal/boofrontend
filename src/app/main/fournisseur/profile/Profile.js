@@ -458,13 +458,13 @@ function Profile(props) {
                                                             variant="outlined"
                                                             validations={{
                                                                 matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
-                                                                minLength: 4,
-                                                                maxLength: 20
+                                                                minLength: 2,
+                                                                maxLength: 40
 
                                                             }}
                                                             validationErrors={{
-                                                                minLength: 'Raison sociale doit dépasser 4 caractères alphanumériques',
-                                                                maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
+                                                                minLength: 'Raison sociale doit dépasser 2 caractères alphanumériques',
+                                                                maxLength: 'Raison sociale ne peut dépasser 40 caractères alphanumériques',
                                                                 matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
                                                             }}
                                                             required
@@ -608,7 +608,7 @@ function Profile(props) {
                                                                 shrink: true
                                                             },
                                                             variant: 'outlined',
-                                                            required: 'required'
+                                                            required: true
                                                         }}
 
                                                         className="mt-20"
@@ -681,7 +681,7 @@ function Profile(props) {
                                                                 shrink: true
                                                             },
                                                             variant: 'outlined',
-                                                            required: 'required'
+                                                            required: true
                                                         }}
                                                         className=""
                                                         options={Villes}

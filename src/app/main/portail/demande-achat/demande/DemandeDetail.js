@@ -1,6 +1,6 @@
 import React from 'react';
-import { Grid, Card, CardContent, Typography, Icon, Chip } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Card, CardContent, Typography, Icon, Chip, Button, Paper } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import ContentLoader from "react-content-loader"
@@ -8,12 +8,28 @@ import * as Actions from '../store/actions';
 import { Helmet } from "react-helmet";
 import moment from 'moment';
 import _ from '@lodash';
+import { Link } from 'react-router-dom';
 import { InlineShareButtons } from 'sharethis-reactjs';
+
+const ColorButton = withStyles((theme) => ({
+    root: {
+        color: 'white',
+        backgroundColor: theme.palette.primary.main,
+        '&:hover': {
+            backgroundColor: 'white',
+            color: theme.palette.primary.main,
+        },
+    },
+}))(Button);
+
 const useStyles = makeStyles(theme => ({
     root: {
         minWidth: 275,
         borderTop: '2px solid ' + theme.palette.secondary.main
 
+    },
+    img: {
+        width: '70%'
     },
     progress: {
         margin: theme.spacing(2),
@@ -55,7 +71,7 @@ function DemandeDetail(props) {
     const dispatch = useDispatch();
     const classes = useStyles();
     const demande = useSelector(({ demandesAchat }) => demandesAchat.demande);
-
+    const user = useSelector(({ auth }) => auth.user);
     /*
         if ( !Demande.data )
         {
@@ -72,6 +88,31 @@ function DemandeDetail(props) {
             );
         }
     */
+
+    if (demande.data.length === 0 && !demande.loading) {
+        return (
+            <div className="w-full max-w-2xl mx-auto   min-h-md">
+                <Helmet>
+                    <title>Demande d'achat introuvable</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                    <meta name="googlebot" content="noindex" />
+                </Helmet>
+
+                <Paper className="p-32 w-full my-6 text-center">
+                    <img className={classes.img} alt="product not found" src="assets/images/product_not_found.jpg" />
+                    <Typography variant="h6" className="mb-16 uppercase" >
+
+                        Oups! Nous n'avons pas pu trouver cette demande d'achat
+                </Typography>
+
+                    <Button variant="outlined" size="small" color="secondary" onClick={() => props.history.goBack()} className={clsx(classes.btn, "mr-8")}>
+                        <Icon>chevron_left</Icon> <span className="transition ease-in-out duration-700 ">Retour</span>
+                    </Button>
+
+                </Paper>
+            </div>
+        );
+    }
 
     function handleDownload(fiche) {
 
@@ -179,6 +220,18 @@ function DemandeDetail(props) {
                                                     </div>
                                                 </div>
 
+
+
+                                                {
+                                                    (user.role === 'ROLE_FOURNISSEUR' || user.role.length === 0)
+                                                    &&
+                                                    <div className="my-16 p-12 bg-gray-200 text-center " >
+                                                        <ColorButton variant="outlined" component={Link} to={"/demandes_prix/" + demande.data.id}>
+                                                            Répondre à cette demande
+                                                        </ColorButton>
+                                                    </div>
+
+                                                }
 
                                                 <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16" >
                                                     Description

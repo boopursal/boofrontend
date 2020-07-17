@@ -549,13 +549,13 @@ function Fournisseur(props) {
                                                         variant="outlined"
                                                         validations={{
                                                             matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
-                                                            minLength: 4,
-                                                            maxLength: 20
+                                                            minLength: 2,
+                                                            maxLength: 40
 
                                                         }}
                                                         validationErrors={{
-                                                            minLength: 'Raison sociale doit dépasser 4 caractères alphanumériques',
-                                                            maxLength: 'Raison sociale ne peut dépasser 20 caractères alphanumériques',
+                                                            minLength: 'Raison sociale doit dépasser 2 caractères alphanumériques',
+                                                            maxLength: 'Raison sociale ne peut dépasser 40 caractères alphanumériques',
                                                             matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
                                                         }}
                                                         required
@@ -603,7 +603,6 @@ function Fournisseur(props) {
                                                                 onChange={handleChange}
                                                                 label="ICE"
                                                                 autoComplete="ice"
-
                                                                 validations={{
                                                                     minLength: 15,
                                                                     maxLength: 15,
@@ -1010,7 +1009,7 @@ function Fournisseur(props) {
                                                                     shrink: true
                                                                 },
                                                                 variant: 'outlined',
-                                                                required: 'required'
+                                                                required: true
                                                             }}
                                                             isLoading={fournisseur.loadingSecteurs}
                                                             options={fournisseur.secteurs}
@@ -1079,7 +1078,7 @@ function Fournisseur(props) {
                                                                     shrink: true
                                                                 },
                                                                 variant: 'outlined',
-                                                                required: 'required',
+                                                                required: true,
                                                                 fullWidth: 'fullWidth'
 
                                                             }}
@@ -1353,7 +1352,7 @@ function Fournisseur(props) {
                                                     alt={form.societe} />
                                                 :
                                                 <img className="max-w-none w-auto h-full"
-                                                    src="assets/images/avatars/fournisseur.jpg"
+                                                    src="assets/images/avatars/profile.jpg"
                                                     alt={form.societe} />}
                                         </div>
 

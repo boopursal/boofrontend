@@ -56,7 +56,7 @@ function CommercialsList(props) {
         return (
             <div className="flex flex-1 items-center justify-center h-full">
                 <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas de commercials!
+                    Il n'y a pas de commerciaux!
                 </Typography>
             </div>
         );

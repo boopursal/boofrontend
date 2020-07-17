@@ -3,9 +3,12 @@ import FuseUtils from '@fuse/FuseUtils';
 import { showMessage } from 'app/store/actions/fuse';
 import _ from '@lodash';
 import * as Actions from '@fuse/components/FuseNavigation/store/actions';
+import moment from 'moment';
 
 export const REQUEST_ACHETEUR = '[ACHETEURS ADMIN APP] REQUEST ACHETEUR';
 export const GET_ACHETEUR = '[ACHETEURS ADMIN APP] GET ACHETEUR';
+export const REQUEST_ACHETEUR_DEMANDES = '[ACHETEURS ADMIN APP] REQUEST ACHETEUR DEMANDES';
+export const GET_ACHETEUR_DEMANDES = '[ACHETEURS ADMIN APP] GET ACHETEUR DEMANDES';
 export const GET_PAYS = '[ACHETEURS ADMIN APP] GET PAYS';
 export const GET_VILLES = '[ACHETEURS ADMIN APP] GET VILLES';
 export const REQUEST_PAYS = '[ACHETEURS ADMIN APP] REQUEST PAYS';
@@ -24,9 +27,16 @@ export const UPLOAD_AVATAR = '[ACHETEURS ADMIN APP] UPLOAD AVATAR';
 export const UPLOAD_REQUEST = '[ACHETEURS ADMIN APP] UPLOAD REQUEST';
 export const UPLOAD_ERROR = '[ACHETEURS ADMIN APP] UPLOAD ERROR';
 
+export const SET_PARAMETRES_DATA = '[ACHETEURS ADMIN APP] SET PARAMETRES DATA';
 
 export const CLEAN_UP_ACHETEUR = '[ACHETEUR ADMIN APP] CLEAN_UP_ACHETEUR';
 
+export function setParametresData(parametres) {
+    return {
+        type: SET_PARAMETRES_DATA,
+        parametres
+    }
+}
 
 export function cleanUpAcheteur() {
 
@@ -55,6 +65,53 @@ export function getAcheteur(id_acheteur) {
 
             dispatch({
                 type: GET_ACHETEUR,
+                payload: response.data
+            })
+        });
+
+    }
+
+}
+
+export function getDemandesByAcheteur(id_acheteur, parametres) {
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map(function (item, i) {
+            if (item.value) {
+                if (item.id === 'created' || item.id === 'dateExpiration') {
+                    search += '&' + item.id + '[after]=' + item.value
+                } else if (item.id === 'statut') {
+                    if (item.value === '0') {
+                        search += `&statut=0&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '1') {
+                        search += `&statut=1&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '2') {
+                        search += `&statut=2&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                    else if (item.value === '3') {
+                        search += `&dateExpiration[strictly_before]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
+                    }
+                }
+                else {
+                    search += '&' + item.id + '=' + item.value
+                }
+            }
+        });
+    }
+
+    const request = agent.get(`/api/acheteurs/${id_acheteur}/demandes?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_ACHETEUR_DEMANDES,
+        });
+        return request.then((response) => {
+
+            dispatch({
+                type: GET_ACHETEUR_DEMANDES,
                 payload: response.data
             })
         });
@@ -180,7 +237,7 @@ export function updateSocieteInfo(data, id_acheteur) {
 
     let putData = {
         ...data,
-        ice: data.pays.label !== 'Maroc' && null,
+        ice: data.pays.label !== 'Maroc' ? null : data.ice,
         pays: data.pays.value,
         ville: data.ville.value,
         secteur: data.secteur.value,

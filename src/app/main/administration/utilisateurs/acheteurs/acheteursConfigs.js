@@ -9,6 +9,10 @@ export const acheteursConfigs = {
     auth: authRoles.admin,
     routes: [
         {
+            path: '/users/acheteur/show/:acheteurId/',
+            component: React.lazy(() => import('./acheteur/AcheteurDetails'))
+        },
+        {
             path: '/users/acheteurs/:acheteurId/',
             component: React.lazy(() => import('./acheteur/Acheteur'))
         },

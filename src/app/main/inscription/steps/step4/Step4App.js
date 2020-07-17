@@ -287,7 +287,7 @@ function Step4App(props) {
                                                                 shrink: true
                                                             },
                                                             variant: 'outlined',
-                                                            required: 'required'
+                                                            required: true
                                                         }}
                                                         className="mb-16"
                                                         options={step4.secteurs}
@@ -309,7 +309,7 @@ function Step4App(props) {
                                                                 shrink: true
                                                             },
                                                             variant: 'outlined',
-                                                            required: 'required'
+                                                            required: true
                                                         }}
                                                         className="mb-16"
                                                         options={currencies}
@@ -363,7 +363,7 @@ function Step4App(props) {
                                                                 shrink: true
                                                             },
                                                             variant: 'outlined',
-                                                            required: 'required'
+                                                            required: true
                                                         }}
 
                                                         className="mb-16"
@@ -386,7 +386,7 @@ function Step4App(props) {
                                                                 shrink: true
                                                             },
                                                             variant: 'outlined',
-                                                            required: 'required'
+                                                            required: true
                                                         }}
                                                         className="mb-16"
                                                         options={villes}

@@ -131,7 +131,7 @@ export function saveFournisseurGange(id_fournisseur, id_demande) {
 
 }
 
-export function saveDemande(data, history, categories, vider) {
+export function saveDemande(data, history, categories, suggestions, vider) {
 
     var postData =
         {
@@ -142,6 +142,7 @@ export function saveDemande(data, history, categories, vider) {
             attachements: _.map(data.attachements, function (value, key) {
                 return value['@id'];
             }),
+            autreCategories: suggestions.length > 0 ? _.join(_.map(suggestions), ', ') : null,
             budget: data.budget && parseFloat(data.budget)
         }
 
@@ -179,7 +180,7 @@ export function saveDemande(data, history, categories, vider) {
 
 
 
-export function putDemande(data, url, history, categories, updated, updateExpiration, annulation) {
+export function putDemande(data, url, history, categories, suggestions, updated, updateExpiration, annulation) {
     var putData =
         {
             ...data,
@@ -190,6 +191,7 @@ export function putDemande(data, url, history, categories, updated, updateExpira
                 return value['@id'];
             }),
             budget: data.budget && parseFloat(data.budget),
+            autreCategories: suggestions.length > 0 ? _.join(_.map(suggestions), ', ') : null,
             updated,
             updateExpiration,
             annulation

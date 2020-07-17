@@ -33,6 +33,13 @@ const initialState = {
 
 const fournisseurReducer = function (state = initialState, action) {
     switch (action.type) {
+        case Actions.SAVE_ERROR_GET:
+            {
+                return {
+                    ...state,
+                    loading: false
+                }
+            }
         case Actions.CLEAN_UP:
             {
                 return {

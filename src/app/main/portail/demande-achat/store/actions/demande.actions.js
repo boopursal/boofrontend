@@ -6,6 +6,7 @@ export const GET_DEMANDE = '[DEMANDE ACHAT PORTAIL APP] GET_DEMANDE';
 export const CLEAN_ERROR = '[DEMANDE ACHAT PORTAIL APP] CLEAN_ERROR';
 export const GET_ATTACHEMENT = '[DEMANDE ACHAT PORTAIL APP] GET_ATTACHEMENT';
 export const REQUEST_ATTACHEMENT = '[DEMANDE ACHAT PORTAIL APP] REQUEST_ATTACHEMENT';
+export const SAVE_ERROR = '[DEMANDE ACHAT PORTAIL APP] SAVE_ERROR';
 
 export function cleanUpDemande() {
 
@@ -28,7 +29,11 @@ export function getDemande(id) {
                 payload: response.data
             })
         }
-        );
+        ).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR,
+            })
+        });
     }
 
 }
@@ -53,7 +58,7 @@ export function getFile(fiche) {
             link.setAttribute('download', fiche.url); //or any other extension
             document.body.appendChild(link);
             link.click();
-           return dispatch({
+            return dispatch({
                 type: GET_ATTACHEMENT,
             });
         }

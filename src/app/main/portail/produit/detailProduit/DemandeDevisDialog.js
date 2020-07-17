@@ -150,12 +150,12 @@ function DemandeDevisDialog(props) {
                             variant="outlined"
                             validations={{
                                 matchRegexp: /^[a-z]|([a-z][0-9])|([0-9][a-z])|([a-z][0-9][a-z])+$/i,
-                                minLength: 3,
+                                minLength: 2,
                                 maxLength: 50
 
                             }}
                             validationErrors={{
-                                minLength: 'Raison sociale doit dépasser 3 caractères alphanumériques',
+                                minLength: 'Raison sociale doit dépasser 2 caractères alphanumériques',
                                 maxLength: 'Raison sociale ne peut dépasser 50 caractères alphanumériques',
                                 matchRegexp: 'Raison sociale doit contenir des caractères alphanumériques'
                             }}
