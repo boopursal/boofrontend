@@ -12,11 +12,12 @@ function Demandes() {
 
     const dispatch = useDispatch();
     const parametres = useSelector(({ demandesApp }) => demandesApp.demandes.parametres);
+    const user = useSelector(({ auth }) => auth.user);
 
 
     useEffect(() => {
-        dispatch(Actions.getDemandes(parametres));
-    }, [dispatch, parametres]);
+        dispatch(Actions.getDemandes(parametres,user.id));
+    }, [dispatch, parametres,user.id]);
 
     return (
         <>

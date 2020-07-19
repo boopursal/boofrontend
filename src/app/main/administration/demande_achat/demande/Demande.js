@@ -711,14 +711,17 @@ function Demande(props) {
                                                     </RadioGroupFormsy>
 
                                                 </Grid>
-                                                <Grid item xs={12} sm={3}>
+                                                <Grid item xs={12} sm={3} className="flex flex-col">
                                                     <CheckboxFormsy
                                                         name="sendEmail"
                                                         disabled={form.statut !== 1 || !form.isPublic}
                                                         onChange={(e) => handleCheckBoxChange(e, 'sendEmail')}
-                                                        label="Alerter Fournisseurs"
+                                                        label={"Alerter Fournisseurs"}
                                                         value={form.sendEmail}
                                                     />
+                                                    {
+                                                        form.diffusionsdemandes.length && <span style={{color:'red'}}> ( déjà diffusée ) </span>
+                                                    }
                                                 </Grid>
                                                 <Grid item xs={12} sm={3}>
                                                     <CheckboxFormsy

@@ -38,10 +38,10 @@ const App = () => {
                                 <FuseTheme>
                                     <FuseLayout />
                                     <CookieConsent
-                                        location="bottom"
+                                        location="top"
                                         buttonText="J'accepte"
                                         cookieName="Les Achats Indsutriels Cookies "
-                                        style={{ background: "#2B373B" }}
+                                        style={{ background: "rgba(0,0,0,0.7)" }}
                                         buttonStyle={{ color: "#fff", background: "#f48d35", fontSize: "13px" }}
                                         expires={150}
                                     >

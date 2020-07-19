@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Popper, Chip, Grid, Avatar, MenuItem, ListItemText } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Popper, Chip, Grid, Avatar, MenuItem, ListItemText, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFormsy, SelectFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
@@ -18,6 +18,8 @@ import Autosuggest from 'react-autosuggest';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Highlighter from "react-highlight-words";
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -145,6 +147,16 @@ function Profile(props) {
     const [tabValue, setTabValue] = useState(parseInt(tab) ? parseInt(tab) : 0);
     const { form, handleChange, setForm } = useForm(null);
 
+    const [values, setValues] = useState({
+        showPassword: false,
+    });
+    const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
     //GET INFO SOCIETE
     useEffect(() => {
@@ -807,12 +819,12 @@ function Profile(props) {
                                                                 {searchCategories.noSuggestions && (
                                                                     <Typography className="px-16 py-12">
                                                                         Aucun résultat..
-                                                                </Typography>
+                                                                    </Typography>
                                                                 )}
                                                                 {searchCategories.loading && (
                                                                     <div className="px-16 py-12 text-center">
                                                                         <CircularProgress color="secondary" /> <br /> Chargement ...
-                                                                </div>
+                                                                    </div>
                                                                 )}
                                                             </Paper>
                                                         </div>
@@ -1053,7 +1065,7 @@ function Profile(props) {
 
                                         <TextFieldFormsy
                                             className="mb-16"
-                                            type="password"
+                                            type={values.showPassword ? 'text' : 'password'}
                                             name="oldPassword"
                                             label="Mot de passe actuel"
                                             validations={{
@@ -1063,7 +1075,15 @@ function Profile(props) {
                                                 minLength: 'La longueur minimale des caractères est de 6'
                                             }}
                                             InputProps={{
-                                                endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                                                endAdornment: <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                    >
+                                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                    </IconButton>
+                                                </InputAdornment>
                                             }}
                                             variant="outlined"
                                             required
@@ -1071,7 +1091,7 @@ function Profile(props) {
 
                                         <TextFieldFormsy
                                             className="mb-16"
-                                            type="password"
+                                            type={values.showPassword ? 'text' : 'password'}
                                             name="newPassword"
                                             label="Nouveau mot de passe"
                                             validations={{
@@ -1084,7 +1104,15 @@ function Profile(props) {
                                                 matchRegexp: 'Le mot de passe doit être de 6 caractères minimum et contenir un lettre majuscules et des lettres minuscules et au moins un chiffre'
                                             }}
                                             InputProps={{
-                                                endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                                                endAdornment: <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                    >
+                                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                    </IconButton>
+                                                </InputAdornment>
                                             }}
                                             variant="outlined"
                                             required
@@ -1092,7 +1120,7 @@ function Profile(props) {
 
                                         <TextFieldFormsy
                                             className="mb-16"
-                                            type="password"
+                                            type={values.showPassword ? 'text' : 'password'}
                                             name="newConfirmpassword"
                                             label="Confirmer le mot de passe"
                                             validations="equalsField:newPassword"
@@ -1100,7 +1128,15 @@ function Profile(props) {
                                                 equalsField: 'Passwords do not match'
                                             }}
                                             InputProps={{
-                                                endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                                                endAdornment: <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                    >
+                                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                    </IconButton>
+                                                </InputAdornment>
                                             }}
                                             variant="outlined"
                                             required

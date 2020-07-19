@@ -34,6 +34,30 @@ const ColorButton = withStyles((theme) => ({
     },
 }))(Button);
 
+const RedButton = withStyles((theme) => ({
+    root: {
+      color: red[500],
+      borderColor:red[500],
+      '&:hover': {
+        backgroundColor: red[700],
+        color: 'white',
+
+      },
+    },
+  }))(Button);
+
+  const GreenButton = withStyles((theme) => ({
+    root: {
+      color: green[500],
+      borderColor:green[500],
+      '&:hover': {
+        backgroundColor: green[700],
+        color: 'white',
+
+      },
+    },
+  }))(Button);
+
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -455,13 +479,58 @@ function Demande(props) {
                                 </div>
                                 <div>
 
+                                {
+                                        moment(demande.data.dateExpiration) >= moment() && demande.data.statut
+                                        &&
+                                        <GreenButton
+                                            className="mr-4"
+                                            variant="outlined"
+                                            disabled={!isFormValid || demande.loading || !categories.length || demande.data.statut === 3}
+                                            onClick={(ev) => {
+                                                ev.stopPropagation();
+                                                dispatch(Actions.openDialog({
+                                                    children: (
+                                                        <React.Fragment>
+                                                            <DialogTitle id="alert-dialog-title">Atteinte de Quotas</DialogTitle>
+                                                            <DialogContent>
+                                                                <DialogContentText id="alert-dialog-description">
+                                                                    Voulez vous vraiment arrêter cette demande ?
+                                                            </DialogContentText>
+                                                            </DialogContent>
+                                                            <DialogActions>
+                                                                <Button variant="outlined" onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                    Non
+                                                            </Button>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    color="secondary"
+                                                                    onClick={(ev) => {
+                                                                        handleSubmit(true);
+                                                                        dispatch(Actions.closeDialog())
+                                                                    }}
+                                                                    autoFocus>
+                                                                    Oui
+                                                        </Button>
+
+                                                            </DialogActions>
+                                                        </React.Fragment>
+                                                    )
+                                                }))
+                                            }}
+                                        >
+                                            
+                                            <span className="hidden sm:flex">atteinte de quotas</span>
+                                        <span className="flex sm:hidden"><Icon>assignment_turned_in</Icon></span>
+                                    {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                        </GreenButton>
+                                    }
+
                                     {
                                         moment(demande.data.dateExpiration) >= moment() && demande.data.statut
                                         &&
-                                        <Button
+                                        <RedButton
                                             className="mr-4"
                                             variant="outlined"
-                                            color="secondary"
                                             disabled={!isFormValid || demande.loading || !categories.length || demande.data.statut === 3}
                                             onClick={(ev) => {
                                                 ev.stopPropagation();
@@ -495,9 +564,11 @@ function Demande(props) {
                                                 }))
                                             }}
                                         >
-                                            annuler la demande
+                                            
+                                            <span className="hidden sm:flex">annuler la demande</span>
+                                        <span className="flex sm:hidden"><Icon>close</Icon></span>
                                     {demande.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                        </Button>
+                                        </RedButton>
                                     }
                                     <Button
                                         className="whitespace-no-wrap"

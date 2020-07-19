@@ -169,6 +169,9 @@ function Demande(props) {
                                             <div className="text-16 sm:text-20 truncate">
                                                 {demande.data.reference ? 'RFQ-' + demande.data.reference : 'Nouvelle Demande'}
                                                 {
+                                                    demande.data.statut === 3 ?
+                                                    <Chip className={classes.chip2} label="Adjugée" />
+                                                    :
                                                     moment(demande.data.dateExpiration) >= moment()
                                                         ?
                                                         demande.data.statut === 0
@@ -183,6 +186,8 @@ function Demande(props) {
                                                         <Chip className={classes.chip} label="Expirée" />
                                                 }
                                                 {
+                                                    demande.data.statut === 3 ? ''
+                                                    :
                                                     moment(demande.data.dateExpiration) >= moment()
                                                         ?
 
@@ -216,6 +221,7 @@ function Demande(props) {
                                                     <Chip className={classes.chip3} label={"Déjà vu, première visite le " + moment(demande.visit.created).format('DD/MM/YYYY')} />
                                                     :
                                                     (
+                                                        demande.data.statut === 3 ? '' :
                                                         moment(demande.data.dateExpiration) >= moment()
                                                             ?
                                                             (

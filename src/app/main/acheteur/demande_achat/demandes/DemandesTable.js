@@ -124,6 +124,8 @@ function DemandesTable(props) {
                             <div className="flex items-center">
 
                                 {
+                                    row.original.statut === 3 ?
+                                    <Chip className={classes.chip2} label="Adjugé" />:
                                     moment(row.original.dateExpiration) >= moment()
                                         ?
                                         row.original.statut === 0
@@ -151,7 +153,8 @@ function DemandesTable(props) {
                                 <option value="0">En attente</option>
                                 <option value="1">En cours</option>
                                 <option value="2">Refusée</option>
-                                <option value="3">Expirée</option>
+                                <option value="3">Adjugée</option>
+                                <option value="4">Expirée</option>
                             </select>
 
                     },

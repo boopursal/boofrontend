@@ -7,6 +7,8 @@ import { TextFieldFormsy, FuseUtils } from '@fuse';
 import Formsy from 'formsy-react';
 import _ from '@lodash';
 import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const defaultFormState = {
     firstName: '',
@@ -34,6 +36,17 @@ function ZonesDialog(props) {
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
 
+    const [values, setValues] = useState({
+        showPassword: false,
+    });
+
+    const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
     const initDialog = useCallback(
         () => {
@@ -343,7 +356,7 @@ function ZonesDialog(props) {
 
                                     <TextFieldFormsy
                                         className="mb-24"
-                                        type="password"
+                                        type={values.showPassword ? 'text' : 'password'}
                                         name="password"
                                         label="Mot de passe"
                                         onChange={handleChange}
@@ -354,7 +367,15 @@ function ZonesDialog(props) {
                                             minLength: 'La longueur minimale des caractères est de 6'
                                         }}
                                         InputProps={{
-                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                                            endAdornment: <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                >
+                                                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
                                         }}
                                         variant="outlined"
                                         required
@@ -366,7 +387,7 @@ function ZonesDialog(props) {
                                     <TextFieldFormsy
                                         className="mb-24"
                                         id="confirmpassword"
-                                        type="password"
+                                        type={values.showPassword ? 'text' : 'password'}
                                         name="confirmpassword"
                                         label="Confirmer mot de passe"
                                         validations="equalsField:password"
@@ -375,7 +396,15 @@ function ZonesDialog(props) {
                                             equalsField: 'Passwords not identique'
                                         }}
                                         InputProps={{
-                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                                            endAdornment: <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                >
+                                                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
                                         }}
                                         variant="outlined"
                                         fullWidth

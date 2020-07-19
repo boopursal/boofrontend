@@ -111,16 +111,6 @@ function DemandesTable(props) {
         <FuseAnimate animation="transition.slideUpIn" delay={300}>
             <ReactTable
                 className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
-                getTrProps={(state, rowInfo, column) => {
-                    return {
-                        className: "h-64 cursor-pointer",
-                        onClick: (e, handleOriginal) => {
-                            if (rowInfo) {
-                                props.history.push('/demandes_prix/' + rowInfo.original.id);
-                            }
-                        }
-                    }
-                }}
                 getTheadProps={(state, rowInfo, column) => {
                     return {
                         className: "h-64 font-bold",
@@ -152,20 +142,26 @@ function DemandesTable(props) {
                         Header: "Visibilité",
                         accessor: "historiques",
                         width: 64,
-                        filterable: false,
+                        filterable: true,
+                        Filter: ({ filter, onChange }) =>
+                            <select
+                                onChange={event => onChange(event.target.value)}
+                                style={{ width: "100%" }}
+                                value={filter ? filter.value : ""}
+                            >
+                                <option value="">Tous</option>
+                                <option value="1">Lu</option>
+                                <option value="2">Non lu</option>
+                            </select>,
                         Cell: row =>
                             row.original.historiques.length > 0 && _.findKey(row.original.historiques, function (o) { return o.fournisseur.id === user.id; })
                                 ?
                                 <Tooltip title="Lu" >
-                                    <IconButton className="text-green text-20">
-                                        <Icon>remove_red_eye</Icon>
-                                    </IconButton>
+                                    <Icon className="text-green text-20">remove_red_eye</Icon>
                                 </Tooltip>
                                 :
                                 <Tooltip title="Non lu" >
-                                    <IconButton className="text-orange text-20">
-                                        <Icon>remove_red_eye</Icon>
-                                    </IconButton>
+                                    <Icon className="text-orange text-20">remove_red_eye</Icon>
                                 </Tooltip>
 
                     },
@@ -276,18 +272,20 @@ function DemandesTable(props) {
                             <div className="flex items-center">
 
                                 {
-                                    moment(row.original.dateExpiration) >= moment()
-                                        ?
-                                        row.original.statut === 0
+                                    row.original.statut === 3 ?
+                                        <Chip className={classes.chip2} label="Adjugé" /> :
+                                        moment(row.original.dateExpiration) >= moment()
                                             ?
-                                            <Chip className={classes.chipOrange} label="En attente" />
-                                            :
-                                            (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                            row.original.statut === 0
+                                                ?
+                                                <Chip className={classes.chipOrange} label="En attente" />
                                                 :
-                                                <Chip className={classes.chip} label="Refusée" />
-                                            )
-                                        :
-                                        <Chip className={classes.chip} label="Expirée" />
+                                                (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                                    :
+                                                    <Chip className={classes.chip} label="Refusée" />
+                                                )
+                                            :
+                                            <Chip className={classes.chip} label="Expirée" />
 
                                 }
 
@@ -301,7 +299,8 @@ function DemandesTable(props) {
                             >
                                 <option value="">Tous</option>
                                 <option value="1">En cours</option>
-                                <option value="3">Expirée</option>
+                                <option value="3">Adugée</option>
+                                <option value="4">Expirée</option>
                             </select>
 
                     },
@@ -312,7 +311,7 @@ function DemandesTable(props) {
                         Cell: row => (
                             <div className="flex items-center">
                                 <Tooltip title="Détails" >
-                                    <IconButton className="text-teal text-20">
+                                    <IconButton className="text-teal text-20" onClick={() => props.history.push('/demandes_prix/' + row.original.id)} >
                                         <Icon>remove_red_eye</Icon>
                                     </IconButton>
                                 </Tooltip>
@@ -343,7 +342,7 @@ function DemandesTable(props) {
                     parametres.search = filtered;
                     fn(parametres);
                 }}
-                noDataText="Aucune demande en cours pour l'instant"
+                noDataText="Aucune demande d'achat trouvée"
                 loadingText='Chargement...'
                 ofText='sur'
             />

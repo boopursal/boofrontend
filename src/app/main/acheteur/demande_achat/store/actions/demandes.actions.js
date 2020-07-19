@@ -37,6 +37,9 @@ export function getDemandes(id_acheteur, parametres) {
                         search += `&statut=2&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
                     }
                     else if (item.value === '3') {
+                        search += `&statut=3`;
+                    }
+                    else if (item.value === '4') {
                         search += `&dateExpiration[strictly_before]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
                     }
                 }

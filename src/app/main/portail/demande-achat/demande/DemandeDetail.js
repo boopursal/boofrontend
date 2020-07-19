@@ -304,7 +304,7 @@ function DemandeDetail(props) {
                                     <Grid item xs={12} sm={3}>
 
                                         <div className="w-full mb-16 border border-teal-darkest bg-teal-lighter font-bold text-teal text-center text-lg rounded-lg py-32 px-6">
-                                            <Typography className="uppercase" component="h6" >
+                                            <Typography className="uppercase font-bold" component="h6" >
                                                 budget
                                             </Typography>
                                             {demande.data.budget ?
@@ -315,7 +315,7 @@ function DemandeDetail(props) {
                                                 ) +
                                                 (demande.data.currency ? ' ' + demande.data.currency.name + ' HT' : '')
                                                 :
-                                                <span className="capitalize">à consulter</span>
+                                                <small>Veuillez contacter l'Acheteur</small>
                                             }
                                         </div>
                                         <div className="w-full mb-16 border border-gray-darkest bg-gray-light font-bold text-gray text-center text-md rounded-lg py-32 px-6">

@@ -10,7 +10,7 @@ export const ERRORS = '[DEMANDES FOURNISSEUR APP] ERRORS';
 export const ERROR_404 = '[DEMANDES FOURNISSEUR APP] ERROR_404';
 export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES FOURNISSEUR APP] SET DEMANDES SEARCH TEXT';
 
-export function getDemandes(parametres) {
+export function getDemandes(parametres,id_frs) {
     var search = '';
     if (parametres.search.length > 0) {
         parametres.search.map(function (item, i) {
@@ -22,8 +22,20 @@ export function getDemandes(parametres) {
                         search += `&statut=1&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
                     }
                     else if (item.value === '3') {
+                        search += `&statut=3}`;
+                    }
+                    else if (item.value === '4') {
                         search += `&dateExpiration[strictly_before]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
                     }
+                }
+                else if (item.id === 'historiques') {
+                    if (item.value === '1') {
+                        search += `&historiques.fournisseur.id=${id_frs}`;
+                    }
+                    else if (item.value === '2') {
+                        search += `&historiques.fournisseur=${id_frs}`;
+                    }
+                    
                 }
                 else {
                     search += '&' + item.id + '=' + item.value
