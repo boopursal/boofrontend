@@ -18,7 +18,6 @@ const jss = create({
     plugins: [...jssPreset().plugins, jssExtend()],
     insertionPoint: document.getElementById('jss-insertion-point'),
 });
-
 const generateClassName = createGenerateClassName();
 
 const App = () => {
@@ -40,9 +39,10 @@ const App = () => {
                                     <CookieConsent
                                         location="top"
                                         buttonText="J'accepte"
+                                        buttonClasses="uppercase font-bold rounded-full"
                                         cookieName="Les Achats Indsutriels Cookies "
                                         style={{ background: "rgba(0,0,0,0.7)" }}
-                                        buttonStyle={{ color: "#fff", background: "#f48d35", fontSize: "13px" }}
+                                        buttonStyle={{ color: "#fff", background: "#f48d35", fontSize: "13px", borderRaduis: '50px' }}
                                         expires={150}
                                     >
                                         En poursuivant votre navigation sur ce site, vous acceptez l’utilisation de cookies pour nous permettre de réaliser des statistiques de visites.

@@ -211,7 +211,8 @@ function DemandeDetail(props) {
                                                                 //url: 'https://www.sharethis.com', // (defaults to current url)
                                                                 // image: 'https://bit.ly/2CMhCMC',  // (defaults to og:image or twitter:image)
                                                                 description: demande.data.description,       // (defaults to og:description or twitter:description)
-                                                                title: demande.data.titre,            // (defaults to og:title or twitter:title)
+                                                                title: demande.data.titre, // (defaults to og:title or twitter:title)
+                                                                quote: demande.data.titre
                                                                 //message: 'custom email text',     // (only for email sharing)
                                                                 //subject: 'custom email subject',  // (only for email sharing)
                                                                 //username: 'custom twitter handle' // (only for twitter sharing)
@@ -245,7 +246,7 @@ function DemandeDetail(props) {
                                                 </Typography>
 
                                                 <div className="my-16 p-12 bg-gray-300 uppercase font-bold text-16">
-                                                    Cette demande fait parti de famille de ce produit
+                                                    Cette demande fait partie de famille de ce produit
                                                 </div>
                                                 {
                                                     demande.data.categories &&

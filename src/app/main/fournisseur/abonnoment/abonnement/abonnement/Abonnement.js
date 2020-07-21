@@ -629,7 +629,7 @@ function Abonnement(props) {
 
                                                     <div className="max-w-320">
 
-                                                        <Typography color="textSecondary">3F Industrie</Typography>
+                                                        <Typography color="textSecondary">7E-Sky</Typography>
 
 
                                                         <Typography color="textSecondary">

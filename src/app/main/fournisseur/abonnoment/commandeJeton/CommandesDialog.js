@@ -141,15 +141,13 @@ function CommandesDialog(props) {
 
                     <br />
                     <Typography variant="caption" color="inherit">
-                        <strong className="uppercase">3F industrie</strong><br />
+                        <strong className="uppercase">7E-Sky</strong><br />
                         ATTIJARIWAFA BANK<br />
                         CENTRE D'AFFAIRE CASA PORTE D'ANFA<br />
                         Casablanca, Maroc<br />
-                        <strong className="uppercase"> RIB : 007 780 000 4095 00000 254 292</strong>
+                        <strong className="uppercase"> RIB : 007 780 0004095000002798 03</strong> <br />
+                        <strong className="uppercase"> IBAN : MA64 007 780 0004095000002798 03</strong>
                     </Typography>
-
-
-
                 </DialogContent>
 
                 {CommandesDialog.type === 'new' ? (

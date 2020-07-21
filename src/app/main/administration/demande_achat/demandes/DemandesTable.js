@@ -9,6 +9,7 @@ import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
 import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -138,6 +139,22 @@ function DemandesTable(props) {
                             ,
                         },
                         {
+                            Header: "Acheteur",
+                            accessor: "acheteur.societe",
+                            className: "font-bold",
+                            filterable: true,
+                            Cell: row => (
+                                <Tooltip title={row.original.acheteur.societe}>
+                                    <Link target="_blank" to={'/users/acheteur/show/' + row.original.acheteur.id} onClick={(ev) => ev.stopPropagation()}>
+                                        {_.capitalize(_.truncate(row.original.acheteur.societe, {
+                                            'length': 15,
+                                            'separator': ' '
+                                        }))}
+                                    </Link>
+                                </Tooltip>
+                            )
+                        },
+                        {
                             Header: "Titre",
                             accessor: "titre",
                             filterable: true,
@@ -149,31 +166,6 @@ function DemandesTable(props) {
                                     }))}
                                 </div>
                             )
-                        },
-                        {
-                            Header: "Budget",
-                            accessor: "budget",
-                            filterable: true,
-                            Cell: row =>
-                                (
-                                    parseFloat(row.original.budget).toLocaleString(
-                                        'fr', // leave undefined to use the browser's locale,
-                                        // or use a string like 'en-US' to override it.
-                                        { minimumFractionDigits: 2 }
-                                    ) + ' ' + (row.original.currency ? row.original.currency.name : '')
-
-                                )
-                        },
-                        {
-                            Header: "Activités",
-                            accessor: "categories.name",
-                            filterable: true,
-                            Cell: row =>
-                                _.truncate(_.join(_.map(row.original.categories, 'name'), ', '), {
-                                    'length': 36,
-                                    'separator': ' '
-                                })
-
                         },
                         {
                             Header: "Date de création",
@@ -237,20 +229,20 @@ function DemandesTable(props) {
 
                                     {
                                         row.original.statut === 3 ?
-                                        <Chip className={classes.chip2} label="Adjugé" />
-                                        :
-                                        moment(row.original.dateExpiration) >= moment()
-                                            ?
-                                            row.original.statut === 0
-                                                ?
-                                                <Chip className={classes.chipOrange} label="En attente" />
-                                                :
-                                                (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
-                                                    :
-                                                    <Chip className={classes.chip} label="Refusée" />
-                                                )
+                                            <Chip className={classes.chip2} label="Adjugé" />
                                             :
-                                            <Chip className={classes.chip} label="Expiré" />
+                                            moment(row.original.dateExpiration) >= moment()
+                                                ?
+                                                row.original.statut === 0
+                                                    ?
+                                                    <Chip className={classes.chipOrange} label="En attente" />
+                                                    :
+                                                    (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                                        :
+                                                        <Chip className={classes.chip} label="Refusée" />
+                                                    )
+                                                :
+                                                <Chip className={classes.chip} label="Expiré" />
 
                                     }
 

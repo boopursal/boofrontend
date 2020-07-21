@@ -720,7 +720,7 @@ function Demande(props) {
                                                         value={form.sendEmail}
                                                     />
                                                     {
-                                                        form.diffusionsdemandes.length && <span style={{color:'red'}}> ( déjà diffusée ) </span>
+                                                        form.diffusionsdemandes.length && <span style={{ color: 'red' }}> ( déjà diffusée ) </span>
                                                     }
                                                 </Grid>
                                                 <Grid item xs={12} sm={3}>
@@ -1149,15 +1149,17 @@ function Demande(props) {
                                 {tabValue === 3 && (
                                     <div className="w-full flex flex-col">
 
-
                                         <FuseAnimate animation="transition.slideUpIn" delay={300}>
-
                                             <ReactTable
-
                                                 className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
                                                 data={form.diffusionsdemandes}
                                                 columns={[
-
+                                                    {
+                                                        Header: "Code frs",
+                                                        className: "font-bold",
+                                                        id: "codeClient",
+                                                        accessor: f => f.fournisseur.codeClient
+                                                    },
                                                     {
                                                         Header: "Scoiété",
                                                         className: "font-bold",
@@ -1171,19 +1173,19 @@ function Demande(props) {
                                                     },
                                                     {
                                                         Header: "Téléphone",
-                                                        className: "font-bold",
                                                         id: "fs",
                                                         accessor: f => f.fournisseur.phone,
                                                     },
-
+                                                    {
+                                                        Header: "Email",
+                                                        id: "fe",
+                                                        accessor: f => f.fournisseur.email,
+                                                    },
                                                     {
                                                         Header: "Date de diffusion",
                                                         id: "dateDiffusion",
                                                         accessor: d => moment(d.dateDiffusion).format('DD/MM/YYYY HH:mm'),
                                                     },
-
-
-
                                                 ]}
                                                 defaultPageSize={10}
                                                 ofText='sur'

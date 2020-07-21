@@ -102,66 +102,97 @@ function RegisterPage(props) {
                                             <div>
                                                 <Typography variant="h6" className="mt-16 mb-16 uppercase text-center">Création de compte <strong>FOURNISSEUR</strong></Typography>
 
-                                                <Typography variant="subtitle1" className="text-center">L'inscription sur notre site est gratuite ainsi que la réception des demandes de prix. <br />
-                                                    Afin de recevoir le maximum d'alertes, veuillez choisir le maximum de produits pour lesquelles vous souhaitez recevoir de demandes.
+                                                <Typography variant="subtitle1" color="textSecondary" className="text-justify">
+                                                    Créez un compte fournisseur <strong className="uppercase">gratuitement</strong> vous permet de toucher un grand nombre de vos futurs clients en un temps record.
                                                 </Typography>
                                                 <List >
-                                                    <ListItem>
+                                                    <ListItem classes={{
+                                                        root: 'pl-0'
+                                                    }}>
                                                         <ListItemAvatar>
                                                             <Avatar className={classes.green}>
-                                                                <Icon>email</Icon>
+                                                                <Icon >local_mall</Icon>
                                                             </Avatar>
                                                         </ListItemAvatar>
-                                                        <ListItemText primary="Recevez des demandes" />
+                                                        <ListItemText
+                                                            className="text-justify"
+                                                            primary="Que vous soyez novice sur internet ou expert en e-commerce, nous vous aidons à augmenter vos prospects"
+                                                        />
                                                     </ListItem>
-                                                    <ListItem>
+                                                    <ListItem classes={{
+                                                        root: 'pl-0'
+                                                    }}>
                                                         <ListItemAvatar>
                                                             <Avatar className={classes.green}>
-                                                                <Icon>group_work</Icon>
+                                                                <Icon >people_outline</Icon>
                                                             </Avatar>
                                                         </ListItemAvatar>
-                                                        <ListItemText primary="Découvrez votre prospect" />
+                                                        <ListItemText
+                                                            className="text-justify"
+                                                            primary="Élargissez votre réseau de clients avec de nouveaux acheteurs au niveau local, national et international"
+                                                        />
                                                     </ListItem>
-                                                    <ListItem>
+                                                    <ListItem classes={{
+                                                        root: 'pl-0'
+                                                    }}>
                                                         <ListItemAvatar>
                                                             <Avatar className={classes.green}>
-                                                                <Icon>contact_phone</Icon>
+                                                                <Icon >remove_red_eye</Icon>
                                                             </Avatar>
                                                         </ListItemAvatar>
-                                                        <ListItemText primary="Contactez directement votre prospect" />
+                                                        <ListItemText
+                                                            className="text-justify"
+                                                            primary="Profitez de notre large audience. Plus de 200.000 acheteurs potentiels nous visitent chaque jour"
+                                                        />
                                                     </ListItem>
                                                 </List>
+
                                             </div>
                                             :
                                             <div>
                                                 <Typography variant="h6" className="mt-16 mb-16 uppercase text-center">Création de compte <strong>acheteur</strong></Typography>
-
-                                                <Typography variant="subtitle1" className="text-center">Inscrivez-vous en tant qu'ACHETEUR. Vous pouvez vous inscrire en même temps en tant que FOURNISSEUR, dans ce cas vous devez vous déconnecter et vous inscrire en cliquant sur le lien FOURNISSEUR.
-                                            </Typography>
-                                                <List >
-                                                    <ListItem>
+                                                <Typography variant="subtitle1" color="textSecondary" className="text-justify" >
+                                                    Créez un compte acheteur <strong className="uppercase">gratuitement</strong> vous permet d'avoir un pouvoir négociateur puissant, garanti et très important.
+                                                </Typography>
+                                                <List>
+                                                    <ListItem classes={{
+                                                        root: 'pl-0'
+                                                    }}>
                                                         <ListItemAvatar>
                                                             <Avatar className={classes.green}>
-                                                                <Icon>launch</Icon>
+                                                                <Icon >star_border</Icon>
                                                             </Avatar>
                                                         </ListItemAvatar>
-                                                        <ListItemText primary="Lancez des demandes" />
+                                                        <ListItemText
+                                                            className="text-justify"
+                                                            primary="Que vous ayez un service d'achat développé ou pas encore, vous serez contacté par les meilleurs fournisseurs."
+                                                        />
                                                     </ListItem>
-                                                    <ListItem>
+                                                    <ListItem classes={{
+                                                        root: 'pl-0'
+                                                    }}>
                                                         <ListItemAvatar>
                                                             <Avatar className={classes.green}>
-                                                                <Icon>email</Icon>
+                                                                <Icon >list_alt</Icon>
                                                             </Avatar>
                                                         </ListItemAvatar>
-                                                        <ListItemText primary="Recevez des offres" />
+                                                        <ListItemText
+                                                            className="text-justify"
+                                                            primary="Construisez votre panel fournisseurs ( Shortlist ) personnalisé que ce soit par produit ou service."
+                                                        />
                                                     </ListItem>
-                                                    <ListItem>
+                                                    <ListItem classes={{
+                                                        root: 'pl-0'
+                                                    }}>
                                                         <ListItemAvatar>
                                                             <Avatar className={classes.green}>
-                                                                <Icon>compare_arrows</Icon>
+                                                                <Icon >timeline</Icon>
                                                             </Avatar>
                                                         </ListItemAvatar>
-                                                        <ListItemText primary="Comparez et décidez" />
+                                                        <ListItemText
+                                                            className="text-justify"
+                                                            primary="Augmentez votre valeur ajoutée en employant moins de temps à la recherche des fournisseurs."
+                                                        />
                                                     </ListItem>
                                                 </List>
                                             </div>
