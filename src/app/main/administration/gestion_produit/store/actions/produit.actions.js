@@ -21,6 +21,22 @@ export const GET_SOUS_SECTEUR = '[PRODUIT APP] GET SOUS SECTEUR';
 export const REQUEST_SECTEUR = '[PRODUIT APP] REQUEST SECTEUR';
 export const GET_SECTEUR = '[PRODUIT APP] GET SECTEUR';
 
+
+export const REQUEST_ADD_SECTEUR = '[PRODUIT APP] REQUEST ADD SECTEUR';
+export const SAVE_ADD_SECTEUR = '[PRODUIT APP] SAVE_ADD_SECTEUR';
+export const SAVE_ERROR_ADD_SECTEUR = '[PRODUIT APP] SAVE_ERROR_ADD_SECTEUR';
+export const CLEAN_UP_SECTEUR = '[ACHETEURS ADMIN APP] CLEAN_UP_SECTEUR'
+
+export const REQUEST_ADD_SOUS_SECTEUR = '[PRODUIT APP] REQUEST ADD SOUS SECTEUR';
+export const SAVE_ADD_SOUS_SECTEUR = '[PRODUIT APP] SAVE ADD SOUS SECTEUR';
+export const SAVE_ERROR_ADD_SOUS_SECTEUR = '[PRODUIT APP] SAVE ERROR ADD SOUS SECTEUR';
+export const CLEAN_UP_SOUS_SECTEUR = '[ACHETEURS ADMIN APP] CLEAN UP SOUS SECTEUR'
+
+export const REQUEST_ADD_CATEGORIE = '[PRODUIT APP] REQUEST ADD CATEGORIE';
+export const SAVE_ADD_CATEGORIE = '[PRODUIT APP] SAVE ADD CATEGORIE';
+export const SAVE_ERROR_ADD_CATEGORIE = '[PRODUIT APP] SAVE ERROR ADD CATEGORIE';
+export const CLEAN_UP_CATEGORIE = '[ACHETEURS ADMIN APP] CLEAN UP CATEGORIE'
+
 export const REQUEST_CATEGORIE = '[PRODUIT APP] REQUEST CATEGORIE';
 export const GET_CATEGORIE = '[PRODUIT APP] GET CATEGORIE';
 
@@ -83,6 +99,61 @@ export function getSecteurs() {
     }
 
 }
+export function addSecteur(name, produit_id) {
+
+    let data = {
+        name,
+    }
+
+    const request = agent.post(`/api/secteurs`, data);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_ADD_SECTEUR,
+        });
+
+        return request.then((response) => {
+            dispatch(getSecteurs());
+            let data = {
+                secteur: response.data['@id'],
+                autreSecteur: null
+            }
+            const request2 = agent.put(`/api/produits/${produit_id}`, data);
+            return request2.then((response) => {
+
+                dispatch({
+                    type: SAVE_ADD_SECTEUR,
+                    payload: response.data
+
+                });
+            });
+        }).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR_ADD_SECTEUR,
+            });
+            dispatch(
+                showMessage({
+                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                        return value;
+                    }),//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }));
+        });;
+
+    }
+
+}
+export function cleanUpAddedSecteur() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_SECTEUR,
+    });
+}
 
 export function getSousSecteurs(url) {
     const request = agent.get(`${url}/sous_secteurs?pagination=false&props[]=id&props[]=name`);
@@ -101,6 +172,63 @@ export function getSousSecteurs(url) {
     }
 
 }
+export function addSousSecteur(name, secteur, produit_id) {
+
+    let data = {
+        name,
+        secteur
+    }
+
+    const request = agent.post(`/api/sous_secteurs`, data);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_ADD_SOUS_SECTEUR,
+        });
+
+        return request.then((response) => {
+            dispatch(getSousSecteurs(secteur));
+            let data = {
+                sousSecteurs: response.data['@id'],
+                autreActivite: null
+            }
+            const request2 = agent.put(`/api/produits/${produit_id}`, data);
+            return request2.then((response) => {
+
+                dispatch({
+                    type: SAVE_ADD_SOUS_SECTEUR,
+                    payload: response.data
+
+                });
+            });
+        }).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR_ADD_SOUS_SECTEUR,
+            });
+            dispatch(
+                showMessage({
+                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                        return value;
+                    }),//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }));
+        });;
+
+    }
+
+}
+export function cleanUpAddedSousSecteur() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_SOUS_SECTEUR,
+    });
+}
+
 
 export function getCategories(url) {
     const request = agent.get(`${url}/categories?pagination=false&props[]=id&props[]=name`);
@@ -119,6 +247,63 @@ export function getCategories(url) {
     }
 
 }
+export function addCategorie(name, sousSecteur, produit_id) {
+
+    let data = {
+        name,
+        sousSecteurs: [sousSecteur]
+    }
+
+    const request = agent.post(`/api/categories`, data);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_ADD_CATEGORIE,
+        });
+
+        return request.then((response) => {
+            dispatch(getCategories(sousSecteur));
+            let data = {
+                categorie: response.data['@id'],
+                autreProduit: null
+            }
+            const request2 = agent.put(`/api/produits/${produit_id}`, data);
+            return request2.then((response) => {
+
+                dispatch({
+                    type: SAVE_ADD_CATEGORIE,
+                    payload: response.data
+
+                });
+            });
+        }).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR_ADD_CATEGORIE,
+            });
+            dispatch(
+                showMessage({
+                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                        return value;
+                    }),//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }));
+        });;
+
+    }
+
+}
+export function cleanUpAddedCategorie() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_CATEGORIE,
+    });
+}
+
 
 export function getProduit(params) {
     const request = agent.get(`/api/produits/${params}`);
@@ -145,11 +330,11 @@ export function getProduit(params) {
 
 }
 
-export function saveProduit(data,secteur,sousSecteur,categorie) {
+export function saveProduit(data, secteur, sousSecteur, categorie) {
     if (data.pu) {
         data.pu = parseFloat(data.pu);
     }
-    data.sousSecteurs =sousSecteur.value;
+    data.sousSecteurs = sousSecteur.value;
     data.secteur = secteur.value;
 
     if (categorie) {
@@ -169,7 +354,7 @@ export function saveProduit(data,secteur,sousSecteur,categorie) {
     if (data.featuredImageId) {
         data.featuredImageId = data.featuredImageId["@id"];
     }
-    
+
     const request = agent.post('/api/produits', data);
 
     return (dispatch) => {
@@ -195,12 +380,12 @@ export function saveProduit(data,secteur,sousSecteur,categorie) {
 
 }
 
-export function putProduit(data, url,secteur,sousSecteur,categorie) {
+export function putProduit(data, url, secteur, sousSecteur, categorie) {
 
     if (data.pu) {
         data.pu = parseFloat(data.pu);
     }
-    data.sousSecteurs =sousSecteur.value;
+    data.sousSecteurs = sousSecteur.value;
     data.secteur = secteur.value;
 
     if (categorie) {

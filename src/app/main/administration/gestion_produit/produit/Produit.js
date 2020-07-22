@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, Tab, Tabs, Icon, Typography, TextField, LinearProgress, Grid, CircularProgress, IconButton, Tooltip } from '@material-ui/core';
+import { Button, Tab, Tabs, Icon, Typography, TextField, LinearProgress, Grid, CircularProgress, IconButton, Tooltip, InputAdornment } from '@material-ui/core';
 import { red, orange } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, CheckboxFormsy } from '@fuse';
@@ -118,15 +118,16 @@ function Produit(props) {
     const [categorie, setCategorie] = useState(null);
     const [videoId, setVideoId] = useState('');
     const [showErrorVideo, setShowErrorVideo] = useState(false);
+
     const opts = {
         width: '460',
         playerVars: { // https://developers.google.com/youtube/player_parameters
-          showinfo: 0,          
-          fs: 0,
-          modestbranding: 1,
-          rel: 0,
+            showinfo: 0,
+            fs: 0,
+            modestbranding: 1,
+            rel: 0,
         }
-      };
+    };
     // Effect upload fiche technique
     useEffect(() => {
 
@@ -147,12 +148,12 @@ function Produit(props) {
             setForm(_.set({ ...form }, "videos", videoId));
             setShowErrorVideo(false);
 
-        }else if (produit.videoExist === 2) {
+        } else if (produit.videoExist === 2) {
             setForm(_.set({ ...form }, "videos", null));
             setShowErrorVideo(true);
 
         }
-        produit.videoExist=0;
+        produit.videoExist = 0;
 
     }, [form, setForm, produit.videoExist]);
 
@@ -239,6 +240,53 @@ function Produit(props) {
 
     }, [dispatch, props.match.params]);
 
+    // SECTEUR ADDED SUCCESS
+    useEffect(() => {
+        if (produit.data && produit.secteurAdded) {
+            setForm({ ...produit.data });
+            setSecteur({
+                value: produit.data.secteur['@id'],
+                label: produit.data.secteur.name
+            })
+            return () => {
+                dispatch(Actions.cleanUpAddedSecteur())
+            }
+        }
+
+    }, [form, produit.secteurAdded, produit.data, setForm]);
+
+    // ACTIVITE ADDED SUCCESS
+    useEffect(() => {
+        if (produit.data && produit.sousSecteurAdded) {
+            setForm({ ...produit.data });
+            setSousSecteur({
+                value: produit.data.sousSecteurs['@id'],
+                label: produit.data.sousSecteurs.name
+            })
+            return () => {
+                dispatch(Actions.cleanUpAddedSousSecteur())
+            }
+        }
+
+    }, [form, produit.sousSecteurAdded, produit.data, setForm]);
+
+
+    // CATEGORIE ADDED SUCCESS
+    useEffect(() => {
+        if (produit.data && produit.CategorieAdded) {
+            setForm({ ...produit.data });
+            setCategorie({
+                value: produit.data.categorie['@id'],
+                label: produit.data.categorie.name
+            })
+            return () => {
+                dispatch(Actions.cleanUpAddedCategorie())
+            }
+        }
+
+    }, [form, produit.CategorieAdded, produit.data, setForm]);
+
+
     useEffect(() => {
         if (
             (produit.data && !form) ||
@@ -271,11 +319,7 @@ function Produit(props) {
                 })
 
             }
-
             setForm({ ...produit.data });
-
-
-
         }
     }, [form, produit.data, setForm, dispatch]);
 
@@ -305,29 +349,27 @@ function Produit(props) {
         dispatch(Actions.uploadFiche(file));
     }
 
-
-
     function handleChipChange(value, name) {
-        //setForm(_.set({...form}, name, value.map(item => item.value)));
+        setForm(_.set({ ...form }, name, value));
+
         if (name === 'secteur') {
             if (value.value) {
-                dispatch(Actions.getSousSecteurs(value.value));
                 setCategorie(null)
                 setSousSecteur(null)
+                dispatch(Actions.getSousSecteurs(value.value));
                 setSecteur(value)
             }
         }
         if (name === 'sousSecteurs') {
             if (value.value) {
-                dispatch(Actions.getCategories(value.value));
                 setCategorie(null)
-                setSousSecteur(value)
 
+                dispatch(Actions.getCategories(value.value));
+                setSousSecteur(value)
             }
         }
         if (name === 'categorie') {
             setCategorie(value)
-
         }
 
     }
@@ -346,8 +388,6 @@ function Produit(props) {
 
     function handleSubmit(form) {
         //event.preventDefault();
-
-
         const params = props.match.params;
         const { produitId } = params;
 
@@ -482,7 +522,7 @@ function Produit(props) {
 
                                                     id="secteur"
                                                     name="secteur"
-                                                    className="MuiFormControl-fullWidth MuiTextField-root mb-24"
+                                                    className="MuiFormControl-fullWidth MuiTextField-root "
                                                     value={
                                                         secteur
                                                     }
@@ -499,6 +539,46 @@ function Produit(props) {
                                                     fullWidth
                                                     required
                                                 />
+                                                {
+                                                    (secteur.label === 'Autre' || secteur.label === 'autre') &&
+                                                    <TextFieldFormsy
+                                                        className="mt-16 w-full"
+                                                        type="text"
+                                                        name="autreSecteur"
+                                                        value={form.autreSecteur}
+                                                        onChange={handleChange}
+                                                        label="Autre Secteur"
+                                                        validations={{
+                                                            minLength: 2,
+                                                            maxLength: 50,
+
+                                                        }}
+                                                        validationErrors={{
+                                                            minLength: 'La longueur minimale de caractère est 2',
+                                                            maxLength: 'La longueur maximale de caractère est 50',
+                                                        }}
+                                                        InputProps={{
+                                                            endAdornment:
+                                                                produit.loadingAddSecteur ?
+                                                                    <CircularProgress color="secondary" />
+                                                                    :
+                                                                    (<InputAdornment position="end">
+                                                                        <IconButton
+                                                                            color="secondary"
+                                                                            disabled={!form.autreSecteur}
+                                                                            onClick={(ev) =>
+                                                                                dispatch(Actions.addSecteur(form.autreSecteur, form.id))
+                                                                            }
+                                                                        >
+                                                                            <Icon>add_circle</Icon>
+                                                                        </IconButton>
+                                                                    </InputAdornment>)
+                                                        }}
+                                                        variant="outlined"
+                                                        required
+                                                    />
+
+                                                }
                                             </Grid>
 
                                             <Grid item xs={12} sm={4}>
@@ -523,6 +603,45 @@ function Produit(props) {
                                                     fullWidth
                                                     required
                                                 />
+                                                {
+                                                    (sousSecteur && (sousSecteur.label === 'Autre' || sousSecteur.label === 'autre')) &&
+                                                    <TextFieldFormsy
+                                                        className="mt-16 w-full"
+                                                        type="text"
+                                                        name="autreActivite"
+                                                        value={form.autreActivite}
+                                                        onChange={handleChange}
+                                                        label="Autre Activité"
+                                                        validations={{
+                                                            minLength: 2,
+                                                            maxLength: 50,
+
+                                                        }}
+                                                        validationErrors={{
+                                                            minLength: 'La longueur minimale de caractère est 2',
+                                                            maxLength: 'La longueur maximale de caractère est 50',
+                                                        }}
+                                                        variant="outlined"
+                                                        InputProps={{
+                                                            endAdornment:
+                                                                produit.loadingAddSousSecteur ?
+                                                                    <CircularProgress color="secondary" />
+                                                                    :
+                                                                    (<InputAdornment position="end">
+                                                                        <IconButton
+                                                                            color="secondary"
+                                                                            disabled={!form.autreActivite || (secteur.label === 'Autre' || secteur.label === 'autre')}
+                                                                            onClick={(ev) =>
+                                                                                dispatch(Actions.addSousSecteur(form.autreActivite, secteur.value, form.id))
+                                                                            }
+                                                                        >
+                                                                            <Icon>add_circle</Icon>
+                                                                        </IconButton>
+                                                                    </InputAdornment>)
+                                                        }}
+                                                        required
+                                                    />
+                                                }
                                             </Grid>
 
                                             <Grid item xs={12} sm={4}>
@@ -546,6 +665,45 @@ function Produit(props) {
                                                     options={produit.categories}
                                                     fullWidth
                                                 />
+                                                {
+                                                    (categorie && (categorie.label === 'Autre' || categorie.label === 'autre')) &&
+
+                                                    <TextFieldFormsy
+                                                        className="mt-16 w-full"
+                                                        type="text"
+                                                        name="autreProduit"
+                                                        value={form.autreProduit}
+                                                        onChange={handleChange}
+                                                        label="Autre Produit"
+                                                        validations={{
+                                                            minLength: 2,
+                                                            maxLength: 50,
+                                                        }}
+                                                        validationErrors={{
+                                                            minLength: 'La longueur minimale de caractère est 2',
+                                                            maxLength: 'La longueur maximale de caractère est 50',
+                                                        }}
+                                                        variant="outlined"
+                                                        required
+                                                        InputProps={{
+                                                            endAdornment:
+                                                                produit.loadingAddCategorie ?
+                                                                    <CircularProgress color="secondary" />
+                                                                    :
+                                                                    (<InputAdornment position="end">
+                                                                        <IconButton
+                                                                            color="secondary"
+                                                                            disabled={!form.autreProduit || (sousSecteur.label === 'Autre' || sousSecteur.label === 'autre')}
+                                                                            onClick={(ev) =>
+                                                                                dispatch(Actions.addCategorie(form.autreProduit, sousSecteur.value, form.id))
+                                                                            }
+                                                                        >
+                                                                            <Icon>add_circle</Icon>
+                                                                        </IconButton>
+                                                                    </InputAdornment>)
+                                                        }}
+                                                    />
+                                                }
                                             </Grid>
                                         </Grid>
 
@@ -566,6 +724,7 @@ function Produit(props) {
                                                         minLength: 'La longueur minimale des caractères est de 6'
                                                     }}
 
+                                                    className="mt-16"
                                                     required
                                                     fullWidth
                                                 />

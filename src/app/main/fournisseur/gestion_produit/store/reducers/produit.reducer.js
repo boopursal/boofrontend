@@ -14,12 +14,9 @@ const initialState = {
     categories: [],
     fiche: null,
     ficheReqInProgress: false,
-    loadingSuggestion: false,
     loadingSecteurs: false,
     loadingSousSecteurs: false,
     loadingCategories: false,
-    successActivite: false,
-    errorActivite: false,
     loadingRechercheVideo: false,
     videoExist: 0,
 
@@ -179,7 +176,7 @@ const produitReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    sousSecteurs: action.payload['hydra:member'],
+                    sousSecteurs: [...action.payload['hydra:member'], { '@id': '/api/sous_secteurs/97', name: 'Autre' }],
                     loadingSousSecteurs: false
                 };
             }
@@ -188,7 +185,7 @@ const produitReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    categories: action.payload['hydra:member'],
+                    categories: [...action.payload['hydra:member'], { '@id': '/api/categories/378', name: 'Autre' }],
                     loadingCategories: false
 
                 };
@@ -239,29 +236,7 @@ const produitReducer = function (state = initialState, action) {
 
                 };
             }
-        case Actions.REQUEST_SUGGESTION:
-            {
-                return {
-                    ...state,
-                    loadingSuggestion: true,
-                }
-            }
-        case Actions.SAVE_SUGGESTION:
-            {
-                return {
-                    ...state,
-                    successActivite: true,
-                    loadingSuggestion: false,
-                };
-            }
-        case Actions.SAVE_ERROR_SUGGESTION:
-            {
-                return {
-                    ...state,
-                    errorActivite: true,
-                    loadingSuggestion: false,
-                };
-            }
+
         default:
             {
                 return state;

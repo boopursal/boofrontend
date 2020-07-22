@@ -16,12 +16,114 @@ const initialState = {
     ficheReqInProgress: false,
     loadingRechercheVideo: false,
     videoExist: 0,
+    loadingAddSecteur: false,
+    secteurAdded: false,
+    loadingAddSousSecteur: false,
+    sousSecteurAdded: false,
+    loadingAddCategorie: false,
+    CategorieAdded: false,
 
 };
 
 const produitReducer = function (state = initialState, action) {
     switch (action.type) {
 
+        case Actions.REQUEST_ADD_CATEGORIE:
+            {
+                return {
+                    ...state,
+                    loadingAddCategorie: true,
+                }
+            }
+
+        case Actions.SAVE_ADD_CATEGORIE:
+            {
+                return {
+                    ...state,
+                    loadingAddCategorie: false,
+                    data: action.payload,
+                    CategorieAdded: true,
+                }
+            }
+        case Actions.SAVE_ERROR_ADD_CATEGORIE:
+            {
+                return {
+                    ...state,
+                    loadingAddCategorie: false,
+                }
+            }
+        case Actions.CLEAN_UP_CATEGORIE:
+            {
+                return {
+                    ...state,
+                    CategorieAdded: false,
+                }
+            }
+
+
+        case Actions.REQUEST_ADD_SOUS_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingAddSousSecteur: true,
+                }
+            }
+
+        case Actions.SAVE_ADD_SOUS_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingAddSousSecteur: false,
+                    data: action.payload,
+                    sousSecteurAdded: true,
+                }
+            }
+        case Actions.SAVE_ERROR_ADD_SOUS_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingAddSousSecteur: false,
+                }
+            }
+        case Actions.CLEAN_UP_SOUS_SECTEUR:
+            {
+                return {
+                    ...state,
+                    sousSecteurAdded: false,
+                }
+            }
+
+        case Actions.REQUEST_ADD_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingAddSecteur: true,
+                }
+            }
+
+        case Actions.SAVE_ADD_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingAddSecteur: false,
+                    data: action.payload,
+                    secteurAdded: true,
+                }
+            }
+        case Actions.SAVE_ERROR_ADD_SECTEUR:
+            {
+                return {
+                    ...state,
+                    loadingAddSecteur: false,
+                }
+            }
+        case Actions.CLEAN_UP_SECTEUR:
+            {
+                return {
+                    ...state,
+                    secteurAdded: false,
+                }
+            }
         case Actions.REQUEST_VIDEO:
             {
                 return {
@@ -39,7 +141,7 @@ const produitReducer = function (state = initialState, action) {
 
                 }
             }
-        case Actions.REQUEST_SECTEUR:
+
         case Actions.REQUEST_PRODUIT:
         case Actions.REQUEST_SAVE:
             {
@@ -49,6 +151,7 @@ const produitReducer = function (state = initialState, action) {
 
                 }
             }
+
         case Actions.REQUEST_SOUS_SECTEUR:
             {
                 return {
@@ -147,7 +250,7 @@ const produitReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    sousSecteurs: action.payload['hydra:member'],
+                    sousSecteurs: [...action.payload['hydra:member'], { '@id': '/api/sous_secteurs/97', name: 'Autre' }],
 
 
                 };
@@ -156,7 +259,7 @@ const produitReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    categories: action.payload['hydra:member'],
+                    categories: [...action.payload['hydra:member'], { '@id': '/api/categories/378', name: 'Autre' }],
 
 
                 };

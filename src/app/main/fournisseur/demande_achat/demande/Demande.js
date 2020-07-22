@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, Tooltip, Divider, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Grid, Tooltip, Divider, DialogTitle, DialogContent, DialogContentText, DialogActions, Chip, CircularProgress } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
@@ -12,7 +12,6 @@ import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import Formsy from 'formsy-react';
 import moment from 'moment';
-import Chip from '@material-ui/core/Chip';
 
 const LightTooltip = withStyles(theme => ({
     tooltip: {
@@ -31,7 +30,11 @@ const useStyles = makeStyles(theme => ({
             marginTop: theme.spacing(2),
         },
     },
-
+    chips: {
+        flex: 1,
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
     demandeImageFeaturedStar: {
         position: 'absolute',
         top: 0,
@@ -127,6 +130,7 @@ function Demande(props) {
         const { demandeId } = params;
         dispatch(Actions.getDemande(demandeId));
         dispatch(Actions.getVisiteDemande(user.id, demandeId));
+        dispatch(Actions.getProduitsFrs(user.id));
 
         return () => {
             dispatch(Actions.cleanUp())
@@ -134,7 +138,12 @@ function Demande(props) {
 
     }, [dispatch, props.match.params, user.id]);
 
-
+    function handleAddProduit(id_produit) {
+        let nvproduits = _.map(demande.produits, function (value, key) {
+            return value['@id'];
+        })
+        dispatch(Actions.addProduit(id_produit, demande.produits, user.id));
+    }
 
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
@@ -170,30 +179,30 @@ function Demande(props) {
                                                 {demande.data.reference ? 'RFQ-' + demande.data.reference : 'Nouvelle Demande'}
                                                 {
                                                     demande.data.statut === 3 ?
-                                                    <Chip className={classes.chip2} label="Adjugée" />
-                                                    :
-                                                    moment(demande.data.dateExpiration) >= moment()
-                                                        ?
-                                                        demande.data.statut === 0
-                                                            ?
-                                                            <Chip className={classes.chipOrange} label="En attente" />
-                                                            :
-                                                            (demande.data.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
-                                                                :
-                                                                <Chip className={classes.chip} label="Refusée" />
-                                                            )
+                                                        <Chip className={classes.chip2} label="Adjugée" />
                                                         :
-                                                        <Chip className={classes.chip} label="Expirée" />
+                                                        moment(demande.data.dateExpiration) >= moment()
+                                                            ?
+                                                            demande.data.statut === 0
+                                                                ?
+                                                                <Chip className={classes.chipOrange} label="En attente" />
+                                                                :
+                                                                (demande.data.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                                                    :
+                                                                    <Chip className={classes.chip} label="Refusée" />
+                                                                )
+                                                            :
+                                                            <Chip className={classes.chip} label="Expirée" />
                                                 }
                                                 {
                                                     demande.data.statut === 3 ? ''
-                                                    :
-                                                    moment(demande.data.dateExpiration) >= moment()
-                                                        ?
-
-                                                        <Chip className={classes.chip2} label={moment(demande.data.dateExpiration).diff(moment(), 'days') === 0 ? moment(demande.data.dateExpiration).diff(moment(), 'hours') + ' h' : moment(demande.data.dateExpiration).diff(moment(), 'days') + ' j'} />
                                                         :
-                                                        <Chip className={classes.chip} label={moment(demande.data.dateExpiration).diff(moment(), 'days') === 0 ? moment(demande.data.dateExpiration).diff(moment(), 'hours') + ' h' : moment(demande.data.dateExpiration).diff(moment(), 'days') + ' j'} />
+                                                        moment(demande.data.dateExpiration) >= moment()
+                                                            ?
+
+                                                            <Chip className={classes.chip2} label={moment(demande.data.dateExpiration).diff(moment(), 'days') === 0 ? moment(demande.data.dateExpiration).diff(moment(), 'hours') + ' h' : moment(demande.data.dateExpiration).diff(moment(), 'days') + ' j'} />
+                                                            :
+                                                            <Chip className={classes.chip} label={moment(demande.data.dateExpiration).diff(moment(), 'days') === 0 ? moment(demande.data.dateExpiration).diff(moment(), 'hours') + ' h' : moment(demande.data.dateExpiration).diff(moment(), 'days') + ' j'} />
 
                                                 }
                                             </div>
@@ -222,56 +231,56 @@ function Demande(props) {
                                                     :
                                                     (
                                                         demande.data.statut === 3 ? '' :
-                                                        moment(demande.data.dateExpiration) >= moment()
-                                                            ?
-                                                            (
+                                                            moment(demande.data.dateExpiration) >= moment()
+                                                                ?
+                                                                (
 
-                                                                <Button
-                                                                    className="whitespace-no-wrap bg-orange"
-                                                                    variant="contained"
-                                                                    onClick={(ev) => {
-                                                                        dispatch(Actions.openDialog({
-                                                                            children: (
-                                                                                <React.Fragment>
-                                                                                    <DialogTitle id="alert-dialog-title">Confirmation</DialogTitle>
-                                                                                    <DialogContent>
-                                                                                        <DialogContentText id="alert-dialog-description">
-                                                                                            {
+                                                                    <Button
+                                                                        className="whitespace-no-wrap bg-orange"
+                                                                        variant="contained"
+                                                                        onClick={(ev) => {
+                                                                            dispatch(Actions.openDialog({
+                                                                                children: (
+                                                                                    <React.Fragment>
+                                                                                        <DialogTitle id="alert-dialog-title">Confirmation</DialogTitle>
+                                                                                        <DialogContent>
+                                                                                            <DialogContentText id="alert-dialog-description">
+                                                                                                {
+                                                                                                    user.jetons > 0
+                                                                                                        ? 'Avertissement! vous allez être débité d´un jeton !'
+                                                                                                        : 'Votre solde de jetons ne vous permet pas de consulter cette demande.'
+                                                                                                }
+                                                                                            </DialogContentText>
+                                                                                        </DialogContent>
+                                                                                        <DialogActions>
+                                                                                            <Button onClick={() => dispatch(Actions.closeDialog())} variant="outlined" color="primary">
+                                                                                                Pas maintenant
+                                                                                        </Button>
+                                                                                            <Button onClick={(ev) => {
                                                                                                 user.jetons > 0
-                                                                                                    ? 'Avertissement! vous allez être débité d´un jeton !'
-                                                                                                    : 'Votre solde de jetons ne vous permet pas de consulter cette demande.'
-                                                                                            }
-                                                                                        </DialogContentText>
-                                                                                    </DialogContent>
-                                                                                    <DialogActions>
-                                                                                        <Button onClick={() => dispatch(Actions.closeDialog())} variant="outlined" color="primary">
-                                                                                            Pas maintenant
-                                                                                        </Button>
-                                                                                        <Button onClick={(ev) => {
-                                                                                            user.jetons > 0
-                                                                                                ?
-                                                                                                dispatch(Actions.addVisiteDemande(user.id, demande.data))
-                                                                                                :
-                                                                                                props.history.push('/abonnement/commandes/true')
-                                                                                            dispatch(Actions.closeDialog())
-                                                                                        }}
-                                                                                            color="secondary"
-                                                                                            variant="contained"
-                                                                                        >
-                                                                                            {user.jetons ? 'Continuer' : 'Commander jetons'}
-                                                                                        </Button>
-                                                                                    </DialogActions>
-                                                                                </React.Fragment>
-                                                                            )
-                                                                        }))
-                                                                    }}
-                                                                >
-                                                                    Voir le profil de l'acheteur
+                                                                                                    ?
+                                                                                                    dispatch(Actions.addVisiteDemande(user.id, demande.data))
+                                                                                                    :
+                                                                                                    props.history.push('/abonnement/commandes/true')
+                                                                                                dispatch(Actions.closeDialog())
+                                                                                            }}
+                                                                                                color="secondary"
+                                                                                                variant="contained"
+                                                                                            >
+                                                                                                {user.jetons ? 'Continuer' : 'Commander jetons'}
+                                                                                            </Button>
+                                                                                        </DialogActions>
+                                                                                    </React.Fragment>
+                                                                                )
+                                                                            }))
+                                                                        }}
+                                                                    >
+                                                                        Voir le profil de l'acheteur
                                                             </Button>
 
-                                                            )
-                                                            :
-                                                            ''
+                                                                )
+                                                                :
+                                                                ''
 
                                                     )
                                             )}
@@ -421,17 +430,36 @@ function Demande(props) {
                                         <Grid container spacing={3} >
 
                                             <Grid item xs={12} sm={12}>
-                                                <TextFieldFormsy
-                                                    className="mb-24"
-                                                    label="Produits"
-                                                    id="categories"
-                                                    name="categories"
-                                                    value={_.join(_.map(demande.data.categories, 'name'), ', ')}
-                                                    InputProps={{
-                                                        readOnly: true,
-                                                    }}
-                                                    fullWidth
-                                                />
+                                                <div className={clsx(classes.chips)}>
+                                                    {
+                                                        demande.data.categories && demande.produits && demande.data.categories.length > 0 &&
+                                                        demande.data.categories.map((item, index) => (
+                                                            _.find(demande.produits, function (d) { return d['@id'] === item['@id'] }) ?
+                                                                <Chip
+                                                                    key={index}
+                                                                    label={item.name}
+                                                                    className="mb-16 mr-8"
+                                                                    fontSize="small"
+
+                                                                />
+                                                                :
+                                                                <Chip
+                                                                    key={index}
+                                                                    label={item.name}
+                                                                    className="mb-16 mr-8"
+                                                                    onDelete={() => handleAddProduit(item['@id'])}
+                                                                    deleteIcon={
+                                                                        demande.requestAddProduit ?
+                                                                            <CircularProgress size={20} color="secondary" />
+                                                                            :
+                                                                            <Tooltip title="Ajouter à mes produits">
+                                                                                <Icon>add_circle</Icon>
+                                                                            </Tooltip>}
+                                                                />
+                                                        ))
+                                                    }
+                                                </div>
+
                                             </Grid>
 
                                         </Grid>

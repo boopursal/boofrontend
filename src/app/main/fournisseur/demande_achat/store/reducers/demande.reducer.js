@@ -5,7 +5,9 @@ const initialState = {
     error: null,
     loading: false,
     attachement: null,
-    visit: null
+    visit: null,
+    produits: null,
+    requestAddProduit: false
 };
 
 const demandeReducer = function (state = initialState, action) {
@@ -18,6 +20,25 @@ const demandeReducer = function (state = initialState, action) {
                     ...state,
                     loading: true,
 
+
+                }
+            }
+        case Actions.REQUEST_ADD_PRODUIT:
+            {
+                return {
+                    ...state,
+                    requestAddProduit: true,
+
+
+                }
+            }
+        case Actions.PRODUITS_ADDED:
+            {
+                return {
+                    ...state,
+                    requestAddProduit: true,
+
+
                 }
             }
         case Actions.CLEAN_UP:
@@ -29,7 +50,15 @@ const demandeReducer = function (state = initialState, action) {
                     loading: false,
                     attachement: null,
                     error: null,
+                    produits: null
 
+                };
+            }
+        case Actions.GET_PRODUITS_FRS:
+            {
+                return {
+                    ...state,
+                    produits: action.payload,
 
                 };
             }

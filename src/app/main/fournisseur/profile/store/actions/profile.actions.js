@@ -54,7 +54,7 @@ export function getPays() {
         });
 
     }
-    
+
 
 }
 
@@ -104,8 +104,8 @@ export function updateSocieteInfo(data, id_fournisseur) {
     if (data.pays.label !== 'Maroc') {
         data.ice = null;
     }
-    data.pays =  data.pays.value;
-    data.ville =  data.ville.value;
+    data.pays = data.pays.value;
+    data.ville = data.ville.value;
 
     if (data.codepostal === null) {
         delete data.codepostal;
@@ -147,14 +147,16 @@ export function updateSocieteInfo(data, id_fournisseur) {
 
 }
 
-export function updateSocieteSousSecteurs(categories, id_fournisseur) {
+export function updateSocieteSousSecteurs(categories, produitsSuggestion, id_fournisseur) {
 
-    var putData={
+    var putData = {
         categories: _.map(categories, function (value, key) {
             return value['@id'];
-        })
+        }),
+        autreCategories: produitsSuggestion.length > 0 ? _.join(produitsSuggestion, ', ') : null
+
     }
-    
+
     return (dispatch, getState) => {
 
         const request = agent.put(`/api/fournisseurs/${id_fournisseur}`, putData);

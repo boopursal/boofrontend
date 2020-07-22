@@ -10,6 +10,8 @@ export const REQUEST_DEMANDE = '[DEMANDE ADMIN APP] REQUEST DEMANDE';
 export const GET_DEMANDE = '[DEMANDE ADMIN APP] GET DEMANDE';
 export const REQUEST_SAVE = '[DEMANDE ADMIN APP] REQUEST SAVE';
 export const REDIRECT_SUCCESS = '[DEMANDE ADMIN APP] REDIRECT SUCCESS';
+export const REQUEST_DEMANDE_FOURNISSEURS = '[ DEMANDE ADMIN APP] REQUEST DEMANDE FOURNISSEURS';
+export const GET_DEMANDE_FOURNISSEURS = '[ DEMANDE ADMIN APP] GET DEMANDEFOURNISSEURS';
 
 
 export const SAVE_DEMANDE = '[DEMANDE ADMIN APP] SAVE DEMANDE';
@@ -178,6 +180,26 @@ export function getDemande(params) {
 
 }
 
+
+// Récuperer les fournisseurs qui sont participer a cette demande 
+export function getFournisseurParticipe(id_demande) {
+    const request = agent.get(`/api/demande_achats/${id_demande}/visites`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_DEMANDE_FOURNISSEURS,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_DEMANDE_FOURNISSEURS,
+                payload: response.data
+            })
+
+
+        });
+    }
+
+}
 
 
 export function putDemande(data, sousSecteurs, suggestions, motif, id, history, categories) {

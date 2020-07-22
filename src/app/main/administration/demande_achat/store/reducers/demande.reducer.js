@@ -4,6 +4,7 @@ const initialState = {
     data: null,
     error: null,
     sousSecteurs: null,
+    fournisseurs: [],
     motifs: null,
     loading: false,
     attachementReqInProgress: false,
@@ -35,6 +36,21 @@ const demandeReducer = function (state = initialState, action) {
                     ...state,
                     loading: true,
 
+                }
+            }
+        case Actions.REQUEST_DEMANDE_FOURNISSEURS:
+            {
+                return {
+                    ...state,
+                    loadingFrs: true,
+                }
+            }
+        case Actions.GET_DEMANDE_FOURNISSEURS:
+            {
+                return {
+                    ...state,
+                    fournisseurs: action.payload['hydra:member'],
+                    loadingFrs: false,
                 }
             }
         case Actions.CLEAN_UP_DEMANDE:

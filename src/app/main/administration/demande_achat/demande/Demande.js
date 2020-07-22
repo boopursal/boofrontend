@@ -28,6 +28,25 @@ const useStyles = makeStyles(theme => ({
             marginTop: theme.spacing(2),
         },
     },
+    chip2: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#4caf50',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
+    },
+    chipOrange: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#ff9800',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
+
+    },
     chips: {
         flex: 1,
         display: 'flex',
@@ -155,6 +174,7 @@ function Demande(props) {
             }
             else {
                 dispatch(Actions.getDemande(demandeId));
+                dispatch(Actions.getFournisseurParticipe(demandeId));
             }
             dispatch(Actions.getMotifs());
             dispatch(Actions.getSecteurs());
@@ -421,6 +441,14 @@ function Demande(props) {
                             {form && form.diffusionsdemandes.length > 0 ?
                                 <Tab className="h-64 normal-case" label={"Diffuser (" + form.diffusionsdemandes.length + " fois)"} />
                                 : ''}
+                            {demande && demande.fournisseurs.length > 0 && !demande.data.isAnonyme ?
+                                <Tab className={clsx("h-64 normal-case text-orange", demande.data.statut === 3 ? "text-green" : "text-orange")} label=
+                                    {
+                                        demande.data && demande.data && demande.data.statut === 3 ?
+                                            'Adjugée' :
+                                            demande.fournisseurs.length + " fournisseur(s) participant(s)"
+                                    } />
+                                : ''}
 
                         </Tabs>
 
@@ -634,7 +662,6 @@ function Demande(props) {
                                                             onClick={(ev) => {
                                                                 dispatch(Actions.openSuggestionDialog({ name: item }))
                                                             }}
-
                                                             onDelete={(ev) => {
                                                                 ev.stopPropagation();
                                                                 dispatch(Actions.openDialog({
@@ -662,7 +689,6 @@ function Demande(props) {
                                                                     )
                                                                 }))
                                                             }}
-
                                                             className="mt-8 mr-8"
                                                         />
                                                     ))
@@ -1161,7 +1187,7 @@ function Demande(props) {
                                                         accessor: f => f.fournisseur.codeClient
                                                     },
                                                     {
-                                                        Header: "Scoiété",
+                                                        Header: "Société",
                                                         className: "font-bold",
                                                         id: "fournisseur",
                                                         accessor: f => <Link target="_blank" to={'/users/fournisseurs/' + f.fournisseur.id}> {f.fournisseur.societe}</Link>,
@@ -1197,6 +1223,81 @@ function Demande(props) {
 
                                     </div>
                                 )}
+                                {tabValue === 4 && (
+                                    <div className="w-full flex flex-col">
+                                        {
+                                            <div>
+
+
+                                                <div className="flex flex-1 items-center justify-between mb-10">
+                                                    <Typography variant="h6" className={clsx("mb-8 ml-2", classes.titre)}>
+                                                        Fournisseurs participants ( {demande.fournisseurs.length} )
+                                                    </Typography>
+
+                                                    <div>
+                                                        {
+                                                            demande.data && demande.data.statut === 3 ?
+                                                                <Chip className={classes.chip2} label={'Adjugée par : ' + (demande.data.fournisseurGagne ? demande.data.fournisseurGagne.societe : "Fournisseur hors site")} />
+                                                                :
+                                                                <Chip className={classes.chipOrange} label='En cours' />
+                                                        }
+
+                                                    </div>
+
+                                                </div>
+                                                <ReactTable
+                                                    className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
+                                                    data={demande.fournisseurs}
+
+                                                    columns={[
+
+
+                                                        {
+                                                            Header: "Code frs",
+                                                            className: "font-bold",
+                                                            id: "codeClient",
+                                                            accessor: f => f.fournisseur.codeClient
+                                                        },
+                                                        {
+                                                            Header: "Société",
+                                                            className: "font-bold",
+                                                            id: "fournisseur",
+                                                            accessor: f => <Link target="_blank" to={'/users/fournisseurs/' + f.fournisseur.id}> {f.fournisseur.societe}</Link>,
+                                                        },
+                                                        {
+                                                            Header: "NOM & Prénom",
+                                                            id: "fz",
+                                                            accessor: f => f.fournisseur.firstName + ' ' + f.fournisseur.lastName,
+                                                        },
+                                                        {
+                                                            Header: "Téléphone",
+                                                            id: "fs",
+                                                            accessor: f => f.fournisseur.phone,
+                                                        },
+                                                        {
+                                                            Header: "Email",
+                                                            id: "fe",
+                                                            accessor: f => f.fournisseur.email,
+                                                        },
+                                                        {
+                                                            Header: "Date",
+                                                            id: "dateDiffusion",
+                                                            accessor: d => moment(d.created).format('DD/MM/YYYY HH:mm'),
+                                                        },
+
+
+                                                    ]}
+                                                    defaultPageSize={demande.fournisseurs.length < 10 ? demande.fournisseurs.length : 10}
+                                                    ofText='sur'
+                                                />
+                                            </div>
+
+
+                                        }
+
+                                    </div>
+                                )}
+
 
                             </div>
                         )

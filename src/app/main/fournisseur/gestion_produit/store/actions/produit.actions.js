@@ -51,9 +51,6 @@ export const REQUEST_VIDEO = '[PRODUIT FOURNISSEUR APP] REQUEST_VIDEO';
 export const GET_VIDEO = '[PRODUIT FOURNISSEUR APP] GET_VIDEO';
 
 
-export const REQUEST_SUGGESTION = '[PRODUIT FOURNISSEUR APP] REQUEST_SUGGESTION';
-export const SAVE_SUGGESTION = '[PRODUIT FOURNISSEUR APP] SAVE_SUGGESTION';
-export const SAVE_ERROR_SUGGESTION = '[PRODUIT FOURNISSEUR APP] SAVE_ERROR_SUGGESTION';
 
 
 export function getActivitesAbonnementByFournisseur(params) {
@@ -177,6 +174,7 @@ export function saveProduit(data, secteur, sousSecteur, categorie, abonnee) {
     const postData = {
         ...data,
         pu: data.pu ? parseFloat(data.pu) : 0,
+        secteur: secteur && secteur.value,
         sousSecteurs: sousSecteur && sousSecteur.value,
         categorie: categorie && categorie.value,
         images: data.images && _.map(data.images, function (value, key) {
@@ -217,6 +215,7 @@ export function putProduit(data, url, secteur, sousSecteur, categorie) {
     const putData = {
         ...data,
         pu: data.pu ? parseFloat(data.pu) : 0,
+        secteur: secteur && secteur.value,
         sousSecteurs: sousSecteur && sousSecteur.value,
         categorie: categorie && categorie.value,
         images: data.images && _.map(data.images, function (value, key) {
@@ -225,7 +224,6 @@ export function putProduit(data, url, secteur, sousSecteur, categorie) {
         ficheTechnique: data.ficheTechnique && data.ficheTechnique["@id"],
         featuredImageId: data.featuredImageId && data.featuredImageId["@id"],
     }
-    putData.secteur && delete putData.secteur;
 
     const request = agent.put(`/api/produits/${url}`, putData);
 
@@ -391,56 +389,6 @@ export function uploadFiche(file) {
     };
 }
 
-export function AddSuggestionSecteur(secteur, sousSecteur, categorie, id_user) {
-    return (dispatch) => {
-
-        if (sousSecteur && categorie) {
-            var data = {
-                secteur,
-                sousSecteur,
-                categorie,
-                user: `/api/fournisseurs/${id_user}`,
-                pageSuggestion: "Ajout produit par fournisseur"
-            };
-        }
-
-        else {
-            dispatch({
-                type: SAVE_ERROR_SUGGESTION
-            });
-            dispatch(showMessage({
-                message: 'Tout d\'abord, vous devez choisir une activité!', anchorOrigin: {
-                    vertical: 'top',//top bottom
-                    horizontal: 'right'//left center right
-                },
-                variant: 'error'
-            }))
-            return;
-        }
-
-
-        const request = agent.post(`/api/suggestion_secteurs`, data);
-        dispatch({
-            type: REQUEST_SUGGESTION,
-        });
-        return request.then((response) =>
-
-            Promise.all([
-                dispatch({
-                    type: SAVE_SUGGESTION
-                }),
-                dispatch(showMessage({
-                    message: 'Votre suggestion a bien été enregistré, un mail vous sera envoyé dès la validation de votre suggestion, nous vous remercions pour votre confiance!', anchorOrigin: {
-                        vertical: 'top',//top bottom
-                        horizontal: 'right'//left center right
-                    },
-                    variant: 'success'
-                }))
-            ])
-        );
-    };
-
-}
 
 export function newProduit() {
     const data = {

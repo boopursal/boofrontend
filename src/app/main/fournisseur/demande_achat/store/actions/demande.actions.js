@@ -3,12 +3,16 @@ import agent from 'agent';
 import { showMessage } from 'app/store/actions/fuse';
 import { getTokenFournisseur } from 'app/auth/store/actions/user.actions';
 import * as Actions from '@fuse/components/FuseNavigation/store/actions';
+import _ from '@lodash';
 
 export const REQUEST_VISITE_DEMANDE = '[DEMANDE FOURNISSEUR APP] REQUEST_VISITE_DEMANDE';
+export const REQUEST_ADD_PRODUIT = '[DEMANDE FOURNISSEUR APP] REQUEST_ADD_PRODUIT';
+export const PRODUITS_ADDED = '[DEMANDE FOURNISSEUR APP] PRODUITS_ADDED';
 export const GET_VISITE_DEMANDE = '[DEMANDE FOURNISSEUR APP] GET_VISITE_DEMANDE';
 
 export const REQUEST_DEMANDE = '[DEMANDE FOURNISSEUR APP] REQUEST DEMANDE';
 export const GET_DEMANDE = '[DEMANDE FOURNISSEUR APP] GET DEMANDE';
+export const GET_PRODUITS_FRS = '[DEMANDE FOURNISSEUR APP] GET PRODUITS FRS';
 
 export const SAVE_ERROR = '[DEMANDE FOURNISSEUR APP] SAVE ERROR';
 
@@ -35,6 +39,55 @@ export function getDemande(params) {
             return dispatch({
                 type: GET_DEMANDE,
                 payload: response.data
+            })
+        }
+
+        );
+    }
+
+}
+
+export function addProduit(id_produit, produits, id) {
+    let nvproduits = _.map(produits, function (value, key) {
+        return value['@id'];
+    })
+    let putData = {
+        categories: [...nvproduits, id_produit]
+    }
+
+    const request = agent.put(`/api/fournisseurs/${id}`, putData);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_ADD_PRODUIT,
+        });
+        return request.then((response) => {
+            dispatch(getProduitsFrs(id));
+            return dispatch(showMessage({
+                message: 'Bien ajouté!', anchorOrigin: {
+                    vertical: 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'
+            }))
+            dispatch({
+                type: PRODUITS_ADDED,
+            });
+        }
+
+        );
+    }
+
+}
+
+export function getProduitsFrs(fournisseur_id) {
+    const request = agent.get(`/api/fournisseurs/${fournisseur_id}/categories`);
+
+    return (dispatch) => {
+        return request.then((response) => {
+            dispatch({
+                type: GET_PRODUITS_FRS,
+                payload: response.data['hydra:member']
             })
         }
 

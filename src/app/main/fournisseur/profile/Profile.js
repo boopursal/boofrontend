@@ -114,7 +114,6 @@ function renderInputComponent(inputProps) {
                     input: classes.input,
                 },
             }}
-            required
             {...other}
         />
     );
@@ -143,6 +142,7 @@ function Profile(props) {
     const [ville, setVille] = useState(false);
     const [pays, setPays] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
+    const [produitsSuggestion, setProduitsSuggestion] = React.useState([]);
 
     const [tabValue, setTabValue] = useState(parseInt(tab) ? parseInt(tab) : 0);
     const { form, handleChange, setForm } = useForm(null);
@@ -243,6 +243,11 @@ function Profile(props) {
                 value: profile.data.pays['@id'],
                 label: profile.data.pays.name,
             });
+            console.log(profile.data.autreCategories)
+            console.log(_.split(profile.data.autreCategories, ','))
+            if (profile.data.autreCategories) {
+                setProduitsSuggestion(_.split(profile.data.autreCategories, ','))
+            }
 
 
         }
@@ -308,7 +313,7 @@ function Profile(props) {
     }
 
     function handleSubmitSousSecteurs() {
-        dispatch(Actions.updateSocieteSousSecteurs(categories, form.id));
+        dispatch(Actions.updateSocieteSousSecteurs(categories, produitsSuggestion, form.id));
     }
 
     function handleSubmitInfoPerso(model) {
@@ -324,6 +329,22 @@ function Profile(props) {
     function showSearch() {
         dispatch(Actions.showSearch());
         document.addEventListener("keydown", escFunction, false);
+    }
+
+    function addProduitSuggestion(event) {
+        if (!_.find(produitsSuggestion, searchCategories.searchText)) {
+            setProduitsSuggestion([...produitsSuggestion, searchCategories.searchText])
+            hideSearch();
+            dispatch(Actions.cleanUp());
+        }
+    }
+    function escProduitSuggestion(event) {
+        hideSearch();
+        dispatch(Actions.cleanUp());
+    }
+
+    function handleDeleteProduit(value) {
+        setProduitsSuggestion(_.reject(produitsSuggestion, function (item) { return item === value; }))
     }
 
     function escFunction(event) {
@@ -342,13 +363,11 @@ function Profile(props) {
 
 
     function handleSuggestionsFetchRequested({ value, reason }) {
-        console.log(reason)
         if (reason === 'input-changed') {
             value && value.trim().length > 1 && dispatch(Actions.loadSuggestions(value.trim()));
-            // Fake an AJAX call
         }
-
     }
+
     function handleSuggestionsClearRequested() {
         //dispatch(Actions.hideSearch());
 
@@ -780,7 +799,6 @@ function Profile(props) {
                                                     //hideSearch();
                                                     popperNode.current.focus();
                                                 }}
-                                                required
                                                 inputProps={{
                                                     classes,
                                                     label: 'Produits',
@@ -818,7 +836,9 @@ function Profile(props) {
                                                                 {options.children}
                                                                 {searchCategories.noSuggestions && (
                                                                     <Typography className="px-16 py-12">
-                                                                        Aucun résultat..
+                                                                        Ce produit n'existe pas encore sur notre base de données. <br />
+                                                                        Ajouter ce produit <Button size="small" onClick={addProduitSuggestion} variant="contained" color="secondary">oui</Button> <Button size="small" onClick={escProduitSuggestion} variant="outlined" color="primary">non</Button>
+
                                                                     </Typography>
                                                                 )}
                                                                 {searchCategories.loading && (
@@ -832,6 +852,11 @@ function Profile(props) {
                                                 )}
                                             />
                                         </div>
+                                        {
+                                            categories && categories.length > 0 &&
+
+                                            <Typography paragraph className="mt-8 mb-2 font-bold">Produit(s) sélectioné(s)</Typography>
+                                        }
                                         <div className={clsx(classes.chips)}>
                                             {
                                                 categories && categories.length > 0 &&
@@ -840,6 +865,31 @@ function Profile(props) {
                                                         key={index}
                                                         label={item.name}
                                                         onDelete={() => handleDelete(item.id)}
+                                                        className="mt-8 mr-8"
+                                                    />
+                                                ))
+
+
+                                            }
+                                        </div>
+                                        {
+                                            produitsSuggestion && produitsSuggestion.length > 0 &&
+                                            <>
+                                                <Typography paragraph className="mt-8 mb-2 font-bold">Produit(s) suggéré(s)</Typography>
+                                                <Typography variant="caption" className="">Ce produit sera activé une fois validé par administrateur, Merci.</Typography>
+
+                                            </>
+                                        }
+                                        <div className={clsx(classes.chips)}>
+
+                                            {
+                                                produitsSuggestion && produitsSuggestion.length > 0 &&
+                                                produitsSuggestion.map((item) => (
+                                                    <Chip
+                                                        key={item}
+                                                        color="secondary"
+                                                        label={item}
+                                                        onDelete={() => handleDeleteProduit(item)}
                                                         className="mt-8 mr-8"
                                                     />
                                                 ))

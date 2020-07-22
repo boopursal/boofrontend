@@ -124,22 +124,21 @@ function Produit(props) {
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
     const { form, handleChange, setForm } = useForm(null);
-    const [open, setOpen] = useState(false);
     const [abonnee, setAbonnee] = useState(false);
     const [enable, setEnable] = useState(true);
     const [expired, setExpired] = useState(false);
     const [days, setDays] = useState(0);
     const [videoId, setVideoId] = useState('');
     const [showErrorVideo, setShowErrorVideo] = useState(false);
+    const [showAutreSecteur, setShowAutreSecteur] = useState(false);
+    const [showAutreActivite, setShowAutreActivite] = useState(false);
+    const [showAutreProduit, setShowAutreProduit] = useState(false);
 
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
     const [secteur, setSecteur] = useState(null);
     const [sousSecteur, setSousSecteur] = useState(null);
     const [categorie, setCategorie] = useState(null);
-    const [secteurSuggester, setSecteurSuggester] = useState('');
-    const [activiteSuggester, setActiviteSuggester] = useState('');
-    const [categorieSuggester, setCategorieSuggester] = useState('');
     const opts = {
         width: '460',
         playerVars: { // https://developers.google.com/youtube/player_parameters
@@ -222,27 +221,7 @@ function Produit(props) {
 
     }, [form, setForm, produit.fiche, dispatch]);
 
-    useEffect(() => {
-        if (produit.successActivite) {
-            setOpen(false);
-            produit.successActivite = false;
-        }
-    }, [produit.successActivite, setOpen]);
 
-    useEffect(() => {
-        if (produit.errorActivite) {
-            setOpen(false);
-            produit.errorActivite = false;
-        }
-    }, [produit.errorActivite, setOpen]);
-
-    function handleClickOpen() {
-        setOpen(true);
-    }
-
-    function handleClose() {
-        setOpen(false);
-    }
     // Effect upload images
     useEffect(() => {
 
@@ -306,14 +285,15 @@ function Produit(props) {
             (produit.data && !form) ||
             (produit.data && form && produit.data.id !== form.id)
         ) {
-
-
             if (produit.data.secteur) {
                 dispatch(Actions.getSousSecteurs(produit.data.secteur['@id']));
                 setSecteur({
                     value: produit.data.secteur['@id'],
                     label: produit.data.secteur.name
                 })
+                if (produit.data.secteur.name === 'autre' || produit.data.secteur.name === 'Autre') {
+                    setShowAutreSecteur(true)
+                }
             }
 
             if (produit.data.sousSecteurs) {
@@ -322,6 +302,9 @@ function Produit(props) {
                     value: produit.data.sousSecteurs['@id'],
                     label: produit.data.sousSecteurs.name
                 })
+                if (produit.data.sousSecteurs.name === 'autre' || produit.data.sousSecteurs.name === 'Autre') {
+                    setShowAutreActivite(true)
+                }
 
             }
             if (produit.data.categorie) {
@@ -329,13 +312,12 @@ function Produit(props) {
                     value: produit.data.categorie['@id'],
                     label: produit.data.categorie.name
                 })
+                if (produit.data.categorie.name === 'autre' || produit.data.categorie.name === 'Autre') {
+                    setShowAutreProduit(true)
+                }
 
             }
-
             setForm({ ...produit.data });
-
-
-
         }
     }, [form, produit.data, setForm]);
 
@@ -368,12 +350,22 @@ function Produit(props) {
                 setCategorie(null)
                 setSousSecteur(null)
                 setSecteur(value)
+                setShowAutreActivite(false)
+                setShowAutreProduit(false)
+                if (value.label === 'autre' || value.label === 'Autre') {
+                    setShowAutreSecteur(true)
+                } else {
+                    setShowAutreSecteur(false)
+                    setForm(_.set({ ...form }, 'autreSecteur', null));
+                }
+                /*
                 if (value.label === 'autre' || value.label === 'Autre') {
                     setSecteurSuggester('')
                 } else {
                     setSecteurSuggester(value.label)
                 }
                 setActiviteSuggester('')
+                */
             }
         }
         if (name === 'sousSecteurs') {
@@ -381,16 +373,29 @@ function Produit(props) {
                 dispatch(Actions.getCategories(value.value));
                 setCategorie(null)
                 setSousSecteur(value)
+                setShowAutreProduit(false)
                 if (value.label === 'autre' || value.label === 'Autre') {
+                    setShowAutreActivite(true)
+                } else {
+                    setShowAutreActivite(false)
+                    setForm(_.set({ ...form }, 'autreActivite', null));
+                }
+                /*if (value.label === 'autre' || value.label === 'Autre') {
                     setActiviteSuggester('')
                 } else {
                     setActiviteSuggester(value.label)
-                }
+                }*/
 
             }
         }
         if (name === 'categorie') {
             setCategorie(value)
+            if (value.label === 'autre' || value.label === 'Autre') {
+                setShowAutreProduit(true)
+            } else {
+                setShowAutreProduit(false)
+                setForm(_.set({ ...form }, 'autreProduit', null));
+            }
 
         }
 
@@ -410,11 +415,8 @@ function Produit(props) {
 
     function handleSubmit(form) {
         //event.preventDefault();
-
-
         const params = props.match.params;
         const { produitId } = params;
-        let secteur = null;
 
         if (produitId === 'new') {
             dispatch(Actions.saveProduit(form, secteur, sousSecteur, categorie, abonnee));
@@ -423,19 +425,6 @@ function Produit(props) {
 
             dispatch(Actions.putProduit(form, form.id, secteur, sousSecteur, categorie));
         }
-
-    }
-
-    function handleSubmitActivites() {
-
-        let secteur = '';
-        if (abonnee)
-            if (sousSecteur) {
-                secteur = _.filter(abonnement.sousSecteurs, { 'name': sousSecteur.label });
-                secteur && setSecteurSuggester(secteur[0].secteur.name)
-            }
-
-        dispatch(Actions.AddSuggestionSecteur(secteurSuggester, activiteSuggester, categorieSuggester, user.id));
 
     }
 
@@ -702,6 +691,30 @@ function Produit(props) {
                                                     fullWidth
                                                     required
                                                 />
+                                                {
+                                                    showAutreSecteur ?
+                                                        <TextFieldFormsy
+                                                            className="mt-16 w-full"
+                                                            type="text"
+                                                            name="autreSecteur"
+                                                            value={form.autreSecteur}
+                                                            onChange={handleChange}
+                                                            label="Autre Secteur"
+                                                            validations={{
+                                                                minLength: 2,
+                                                                maxLength: 50,
+
+                                                            }}
+                                                            validationErrors={{
+                                                                minLength: 'La longueur minimale de caractère est 2',
+                                                                maxLength: 'La longueur maximale de caractère est 50',
+                                                            }}
+                                                            variant="outlined"
+                                                            required
+                                                        />
+                                                        :
+                                                        ''
+                                                }
                                             </Grid>
                                         }
 
@@ -729,6 +742,30 @@ function Produit(props) {
                                                 fullWidth
                                                 required
                                             />
+                                            {
+                                                showAutreActivite ?
+                                                    <TextFieldFormsy
+                                                        className="mt-16 w-full"
+                                                        type="text"
+                                                        name="autreActivite"
+                                                        value={form.autreActivite}
+                                                        onChange={handleChange}
+                                                        label="Autre Activité"
+                                                        validations={{
+                                                            minLength: 2,
+                                                            maxLength: 50,
+
+                                                        }}
+                                                        validationErrors={{
+                                                            minLength: 'La longueur minimale de caractère est 2',
+                                                            maxLength: 'La longueur maximale de caractère est 50',
+                                                        }}
+                                                        variant="outlined"
+                                                        required
+                                                    />
+                                                    :
+                                                    ''
+                                            }
                                         </Grid>
 
                                         <Grid item xs={12} sm={4}>
@@ -753,96 +790,29 @@ function Produit(props) {
                                                 options={produit.categories}
                                                 fullWidth
                                             />
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={abonnee ? 4 : 12} className={clsx(!abonnee && classes.pad)}>
-                                            <Typography className={clsx(abonnee && "mt-4", "flex items-center")} variant="caption">
-                                                <Icon className="mr-2">info</Icon> Si votre secteur, activité ou produit n´existent pas, veuillez nous les envoyer en cliquant&ensp;
-
-                                                <Button variant="contained" onClick={handleClickOpen} size="small" color="secondary" className={classes.margin}>
-                                                    ICI
-                                                </Button>
-                                            </Typography>
-                                            <div
-
-                                                className={clsx(abonnee && "mt-4")}
-                                            >
-
-
-                                                <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                                                    <DialogTitle id="form-dialog-title">Suggestions secteur d'activité</DialogTitle>
-                                                    <DialogContent>
-
-                                                        <Grid container spacing={3} >
-                                                            {
-                                                                !abonnee &&
-                                                                <Grid item xs={12}>
-                                                                    <TextField
-                                                                        className="mt-8"
-                                                                        error={secteurSuggester.length <= 2}
-                                                                        required
-                                                                        label="Secteur"
-                                                                        autoFocus
-                                                                        value={secteurSuggester}
-                                                                        id="secteurSuggester"
-                                                                        name="secteurSuggester"
-                                                                        onChange={(event) => setSecteurSuggester(event.target.value)}
-                                                                        variant="outlined"
-                                                                        fullWidth
-                                                                        helperText={secteurSuggester.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
-                                                                    />
-                                                                </Grid>
-                                                            }
-
-                                                            <Grid item xs={12}>
-                                                                <TextField
-                                                                    className="mt-8"
-                                                                    error={activiteSuggester.length <= 2}
-                                                                    required
-                                                                    label="Activité"
-                                                                    autoFocus
-                                                                    value={activiteSuggester}
-                                                                    id="activiteSuggester"
-                                                                    name="activiteSuggester"
-                                                                    onChange={(event) => setActiviteSuggester(event.target.value)}
-                                                                    variant="outlined"
-                                                                    fullWidth
-                                                                    helperText={activiteSuggester.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField
-                                                                    className="mt-8 mb-16"
-                                                                    error={categorieSuggester.length <= 2}
-                                                                    required
-                                                                    label="Produit"
-                                                                    autoFocus
-                                                                    value={categorieSuggester}
-                                                                    id="categorieSuggester"
-                                                                    name="categorieSuggester"
-                                                                    onChange={(event) => setCategorieSuggester(event.target.value)}
-                                                                    variant="outlined"
-                                                                    fullWidth
-                                                                    helperText={categorieSuggester.length <= 2 ? 'Ce champ doit contenir au moins 3 caractères' : ''}
-                                                                />
-                                                            </Grid>
-
-                                                        </Grid>
-                                                    </DialogContent>
-                                                    <Divider />
-                                                    <DialogActions>
-                                                        <Button onClick={handleClose} variant="outlined" color="primary">
-                                                            Annuler
-                                                            </Button>
-                                                        <Button onClick={handleSubmitActivites} variant="contained" color="secondary"
-                                                            disabled={produit.loadingSuggestion || categorieSuggester.length < 2}
-                                                        >
-                                                            Sauvegarder
-                                                                {produit.loadingSuggestion && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                                        </Button>
-                                                    </DialogActions>
-                                                </Dialog>
-                                            </div>
+                                            {
+                                                showAutreProduit ?
+                                                    <TextFieldFormsy
+                                                        className="mt-16 w-full"
+                                                        type="text"
+                                                        name="autreProduit"
+                                                        value={form.autreProduit}
+                                                        onChange={handleChange}
+                                                        label="Autre Produit"
+                                                        validations={{
+                                                            minLength: 2,
+                                                            maxLength: 50,
+                                                        }}
+                                                        validationErrors={{
+                                                            minLength: 'La longueur minimale de caractère est 2',
+                                                            maxLength: 'La longueur maximale de caractère est 50',
+                                                        }}
+                                                        variant="outlined"
+                                                        required
+                                                    />
+                                                    :
+                                                    ''
+                                            }
                                         </Grid>
                                     </Grid>
 
@@ -852,6 +822,7 @@ function Produit(props) {
                                             <TextFieldFormsy
                                                 label="Titre"
                                                 id="titre"
+                                                className="mt-16"
                                                 name="titre"
                                                 value={form.titre}
                                                 onChange={handleChange}
