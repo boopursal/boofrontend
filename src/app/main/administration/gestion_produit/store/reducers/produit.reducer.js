@@ -250,7 +250,7 @@ const produitReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    sousSecteurs: [...action.payload['hydra:member'], { '@id': '/api/sous_secteurs/97', name: 'Autre' }],
+                    sousSecteurs: [...action.payload['hydra:member'], { '@id': '/api/sous_secteurs/98', name: 'Autre' }],
 
 
                 };
@@ -259,7 +259,7 @@ const produitReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    categories: [...action.payload['hydra:member'], { '@id': '/api/categories/378', name: 'Autre' }],
+                    categories: [...action.payload['hydra:member'], { '@id': '/api/categories/382', name: 'Autre' }],
 
 
                 };
