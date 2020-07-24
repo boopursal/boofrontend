@@ -19,6 +19,9 @@ import Link2 from '@material-ui/core/Link';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import YouTube from 'react-youtube';
 import ContentLoader from 'react-content-loader';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
+
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -134,6 +137,10 @@ function Produit(props) {
     const [showAutreActivite, setShowAutreActivite] = useState(false);
     const [showAutreProduit, setShowAutreProduit] = useState(false);
 
+    const [photoIndex, setPhotoIndex] = useState(0);
+    const [isOpen, setIsOpen] = useState(false);
+    const [images, setImages] = useState([]);
+
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
     const [secteur, setSecteur] = useState(null);
@@ -171,6 +178,52 @@ function Produit(props) {
             dispatch(Actions.cleanUpProduct())
         }
     }, [dispatch, produitId]);
+
+    useEffect(() => {
+        if (
+            (produit.data && !form) ||
+            (produit.data && form && produit.data.id !== form.id)
+        ) {
+            if (produit.data.secteur) {
+                dispatch(Actions.getSousSecteurs(produit.data.secteur['@id']));
+                setSecteur({
+                    value: produit.data.secteur['@id'],
+                    label: produit.data.secteur.name
+                })
+                if (produit.data.secteur.name === 'autre' || produit.data.secteur.name === 'Autre') {
+                    setShowAutreSecteur(true)
+                }
+            }
+            if (produit.data.images) {
+                setImages(produit.data.images.map(item => FuseUtils.getUrl() + item.url));
+            }
+
+            if (produit.data.sousSecteurs) {
+                dispatch(Actions.getCategories(produit.data.sousSecteurs['@id']));
+                setSousSecteur({
+                    value: produit.data.sousSecteurs['@id'],
+                    label: produit.data.sousSecteurs.name
+                })
+                if (produit.data.sousSecteurs.name === 'autre' || produit.data.sousSecteurs.name === 'Autre') {
+                    setShowAutreActivite(true)
+                }
+            }
+
+            if (produit.data.categorie) {
+                setCategorie({
+                    value: produit.data.categorie['@id'],
+                    label: produit.data.categorie.name
+                })
+                if (produit.data.categorie.name === 'autre' || produit.data.categorie.name === 'Autre') {
+                    setShowAutreProduit(true)
+                }
+
+            }
+            setForm({ ...produit.data });
+        }
+    }, [form, produit.data, setForm]);
+
+
 
     useEffect(() => {
 
@@ -221,7 +274,6 @@ function Produit(props) {
 
     }, [form, setForm, produit.fiche, dispatch]);
 
-
     // Effect upload images
     useEffect(() => {
 
@@ -230,12 +282,34 @@ function Produit(props) {
                 produit.image,
                 ...form.images
             ]));
+            if (produit.data.images) {
+                setImages([...images, FuseUtils.getUrl() + produit.image.url]);
+            }
         }
         return () => {
             dispatch(Actions.cleanImage())
         }
 
     }, [form, setForm, produit.image, dispatch]);
+
+    // Effect delete image & fiche technique
+    useEffect(() => {
+        if (produit.image_deleted) {
+
+            if (produit.image_deleted['@type'] === "ImageProduit") {
+                setForm(_.set({ ...form }, 'images', _.pullAllBy(form.images, [{ 'id': produit.image_deleted.id }], 'id')));
+                setImages(_.reject(images, function (i) { return i === FuseUtils.getUrl() + produit.image_deleted.url }))
+            }
+            else {
+                setForm(_.set({ ...form }, "ficheTechnique", null))
+            }
+
+        }
+        return () => {
+            dispatch(Actions.cleanDeleteImage())
+        }
+    }, [produit.image_deleted]);
+
 
     // Effect handle errors
     useEffect(() => {
@@ -264,62 +338,7 @@ function Produit(props) {
         }
     }, [produit.success, dispatch]);
 
-    // Effect delete image & fiche technique
-    useEffect(() => {
-        if (produit.image_deleted) {
-            if (produit.image_deleted['@type'] === "ImageProduit") {
-                setForm(_.set({ ...form }, 'images', _.pullAllBy(form.images, [{ 'id': produit.image_deleted.id }], 'id')));
-            }
-            else {
-                setForm(_.set({ ...form }, "ficheTechnique", null))
-            }
-            // 
-        }
-        return () => {
-            dispatch(Actions.cleanDeleteImage())
-        }
-    }, [produit.image_deleted]);
 
-    useEffect(() => {
-        if (
-            (produit.data && !form) ||
-            (produit.data && form && produit.data.id !== form.id)
-        ) {
-            if (produit.data.secteur) {
-                dispatch(Actions.getSousSecteurs(produit.data.secteur['@id']));
-                setSecteur({
-                    value: produit.data.secteur['@id'],
-                    label: produit.data.secteur.name
-                })
-                if (produit.data.secteur.name === 'autre' || produit.data.secteur.name === 'Autre') {
-                    setShowAutreSecteur(true)
-                }
-            }
-
-            if (produit.data.sousSecteurs) {
-                dispatch(Actions.getCategories(produit.data.sousSecteurs['@id']));
-                setSousSecteur({
-                    value: produit.data.sousSecteurs['@id'],
-                    label: produit.data.sousSecteurs.name
-                })
-                if (produit.data.sousSecteurs.name === 'autre' || produit.data.sousSecteurs.name === 'Autre') {
-                    setShowAutreActivite(true)
-                }
-
-            }
-            if (produit.data.categorie) {
-                setCategorie({
-                    value: produit.data.categorie['@id'],
-                    label: produit.data.categorie.name
-                })
-                if (produit.data.categorie.name === 'autre' || produit.data.categorie.name === 'Autre') {
-                    setShowAutreProduit(true)
-                }
-
-            }
-            setForm({ ...produit.data });
-        }
-    }, [form, produit.data, setForm]);
 
 
     function handleChangeTab(event, tabValue) {
@@ -942,7 +961,10 @@ function Produit(props) {
                                                     (media.id === (form.featuredImageId ? form.featuredImageId.id : null)) && 'featured')
                                             }
                                             key={media.id}
-                                            onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
+                                            onClick={() => {
+                                                setIsOpen(true)
+                                            }}
+                                        //                                            onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
                                         >
                                             <Tooltip title="Image en vedette" >
                                                 <IconButton className={classes.produitImageFeaturedStar}
@@ -980,6 +1002,20 @@ function Produit(props) {
                                                 </Typography>
                                         </Grid>
                                     </Grid>
+                                    {isOpen && (
+                                        <Lightbox
+                                            mainSrc={images[photoIndex]}
+                                            nextSrc={images[(photoIndex + 1) % images.length]}
+                                            prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+                                            onCloseRequest={() => setIsOpen(false)}
+                                            onMovePrevRequest={() =>
+                                                setPhotoIndex((photoIndex + images.length - 1) % images.length)
+                                            }
+                                            onMoveNextRequest={() =>
+                                                setPhotoIndex((photoIndex + 1) % images.length)
+                                            }
+                                        />
+                                    )}
                                 </div>
 
                             </div>

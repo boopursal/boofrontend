@@ -60,23 +60,12 @@ function FournisseursTable(props) {
                 <ReactTable
 
                     className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
-                    getTrProps={(state, rowInfo, column) => {
-                        return {
-                            className: "h-64 cursor-pointer",
-                            onClick: (e, handleOriginal) => {
-                                if (rowInfo) {
-                                    props.history.push('/users/fournisseurs/' + rowInfo.original.id);
-                                }
-                            }
-                        }
-                    }}
                     getTheadProps={(state, rowInfo, column) => {
                         return {
                             className: "h-64",
 
                         }
                     }}
-
                     data={filteredData}
                     columns={[
                         {
@@ -267,6 +256,34 @@ function FournisseursTable(props) {
 
 
                         },
+                        {
+                            Header: "",
+                            Cell: row => (
+                                <div className="flex items-center">
+
+                                    <Tooltip title="Détails"
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            props.history.push('/users/fournisseur/show/' + row.original.id);
+                                        }} >
+                                        <IconButton className="text-teal text-20">
+                                            <Icon>remove_red_eye</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Editer"
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            props.history.push('/users/fournisseurs/' + row.original.id);
+                                        }} >
+                                        <IconButton className="text-orange text-20">
+                                            <Icon>edit</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+
+                                </div>
+                            )
+                        },
+
                     ]}
                     manual
 

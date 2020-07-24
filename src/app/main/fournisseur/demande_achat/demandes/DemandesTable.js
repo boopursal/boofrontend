@@ -114,13 +114,10 @@ function DemandesTable(props) {
                 getTheadProps={(state, rowInfo, column) => {
                     return {
                         className: "h-64 font-bold",
-
                     }
                 }}
-
                 data={filteredData}
                 columns={[
-
                     {
                         Header: "Référence",
                         className: "font-bold",
@@ -226,7 +223,6 @@ function DemandesTable(props) {
                                 }}
                             />
                     },
-
                     {
                         Header: "Échéance",
                         minWidth: 125,
@@ -236,19 +232,14 @@ function DemandesTable(props) {
                             <div className="flex items-center">
                                 {
                                     moment(row.original.dateExpiration).format('DD/MM/YYYY')
-
                                 }
-
                                 {
                                     moment(row.original.dateExpiration) >= moment()
                                         ?
-
                                         <Chip className={classes.chip2} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
                                         :
                                         <Chip className={classes.chip} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
-
                                 }
-
                             </div>
                         ),
                         Filter: ({ filter, onChange }) =>
@@ -270,23 +261,22 @@ function DemandesTable(props) {
                         filterable: true,
                         Cell: row => (
                             <div className="flex items-center">
-
                                 {
                                     row.original.statut === 3 ?
-                                        <Chip className={classes.chip2} label="Adjugé" /> :
+                                        <Chip className={classes.chip2} label="Adjugée" /> :
                                         moment(row.original.dateExpiration) >= moment()
                                             ?
                                             row.original.statut === 0
                                                 ?
                                                 <Chip className={classes.chipOrange} label="En attente" />
                                                 :
-                                                (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                                (row.original.statut === 1 ?
+                                                    <Chip className={classes.chip2} label="En cours" />
                                                     :
                                                     <Chip className={classes.chip} label="Refusée" />
                                                 )
                                             :
                                             <Chip className={classes.chip} label="Expirée" />
-
                                 }
 
                             </div>
@@ -302,10 +292,7 @@ function DemandesTable(props) {
                                 <option value="3">Adugée</option>
                                 <option value="4">Expirée</option>
                             </select>
-
                     },
-
-
                     {
                         Header: "",
                         Cell: row => (
@@ -320,7 +307,6 @@ function DemandesTable(props) {
                     }
                 ]}
                 manual
-
                 defaultSortDesc={true}
                 pages={pageCount}
                 defaultPageSize={10}
@@ -330,7 +316,6 @@ function DemandesTable(props) {
                     parametres.page = pageIndex + 1;
                     dispatch(Actions.setParametresData(parametres))
                 }}
-
                 onSortedChange={(newSorted, column, shiftKey) => {
                     parametres.page = 1;
                     parametres.filter.id = newSorted[0].id;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Chip, Tooltip, IconButton, Icon, TextField } from '@material-ui/core';
+import { Chip, Tooltip, IconButton, Icon, TextField, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -9,6 +9,7 @@ import FuseUtils from '@fuse/FuseUtils';
 import ReactTable from "react-table";
 import { makeStyles } from '@material-ui/core/styles';
 import _ from '@lodash';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -74,12 +75,9 @@ function ProduitsTable(props) {
         }
     }, [produits, searchText]);
 
-
-
     if (!filteredData) {
         return null;
     }
-
 
     const run = (parametres) =>
         dispatch(Actions.setParametresData(parametres))
@@ -127,6 +125,18 @@ function ProduitsTable(props) {
                         sortable: false,
                         filterable: false,
 
+                    },
+                    {
+                        Header: "Fournisseur",
+                        className: "font-bold ",
+                        filterable: true,
+                        accessor: "fournisseur",
+                        Cell: row =>
+                            <Tooltip title="Détails du fournisseur">
+                                <Link target="_blank" to={'/users/fournisseur/show/' + row.original.fournisseur.id} onClick={(ev) => ev.stopPropagation()}>
+                                    {row.original.fournisseur.societe && row.original.fournisseur.societe}
+                                </Link>
+                            </Tooltip>
                     },
                     {
                         Header: "Ref",
@@ -214,15 +224,14 @@ function ProduitsTable(props) {
                         Cell: row => row.original.secteur ? row.original.secteur.name : 'N/A'
                     },
                     {
-                        Header: "Sous-secteur",
+                        Header: "Activité",
                         className: "font-bold",
                         filterable: true,
                         accessor: "sousSecteurs.name",
                         Cell: row => row.original.sousSecteurs ? row.original.sousSecteurs.name : 'N/A'
                     },
-
                     {
-                        Header: "Catégorie",
+                        Header: "Produit",
                         className: "font-bold",
                         filterable: true,
                         accessor: "categorie.name",
@@ -244,9 +253,6 @@ function ProduitsTable(props) {
                                 }}
                             />,
                     },
-
-
-
                     {
                         Header: "",
                         Cell: row => (
@@ -256,7 +262,30 @@ function ProduitsTable(props) {
                                     <IconButton className="text-red text-20"
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            dispatch(Actions.removeProduit(row.original, parametres));
+                                            dispatch(Actions.openDialog({
+                                                children: (
+                                                    <React.Fragment>
+                                                        <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText id="alert-dialog-description">
+                                                                Voulez vous vraiment supprimer ce produit ?
+                                                        </DialogContentText>
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button variant="contained" onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                Non
+                                                            </Button>
+                                                            <Button onClick={(ev) => {
+                                                                dispatch(Actions.removeProduit(row.original, parametres));
+                                                                dispatch(Actions.closeDialog())
+                                                            }} color="primary" autoFocus>
+                                                                Oui
+                                                            </Button>
+
+                                                        </DialogActions>
+                                                    </React.Fragment>
+                                                )
+                                            }))
                                         }}
                                     >
                                         <Icon>delete</Icon>
@@ -271,7 +300,6 @@ function ProduitsTable(props) {
 
                             </div>
                         )
-
                     }
                 ]}
                 manual
@@ -283,7 +311,6 @@ function ProduitsTable(props) {
                     parametres.page = pageIndex + 1;
                     dispatch(Actions.setParametresData(parametres))
                 }}
-
                 onSortedChange={(newSorted, column, shiftKey) => {
                     parametres.page = 1;
                     parametres.filter.id = newSorted[0].id;

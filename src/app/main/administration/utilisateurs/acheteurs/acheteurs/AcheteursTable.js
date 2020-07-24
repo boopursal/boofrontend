@@ -56,18 +56,7 @@ function AcheteursTable(props) {
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
 
                 <ReactTable
-
                     className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
-                    getTrProps={(state, rowInfo, column) => {
-                        return {
-                            className: "h-64 cursor-pointer",
-                            onClick: (e, handleOriginal) => {
-                                if (rowInfo) {
-                                    props.history.push('/users/acheteurs/' + rowInfo.original.id);
-                                }
-                            }
-                        }
-                    }}
                     getTheadProps={(state, rowInfo, column) => {
                         return {
                             className: "h-64",
@@ -246,6 +235,15 @@ function AcheteursTable(props) {
                                         }} >
                                         <IconButton className="text-teal text-20">
                                             <Icon>remove_red_eye</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Editer"
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            props.history.push('/users/acheteurs/' + row.original.id);
+                                        }} >
+                                        <IconButton className="text-orange text-20">
+                                            <Icon>edit</Icon>
                                         </IconButton>
                                     </Tooltip>
 

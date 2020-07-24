@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Card, CircularProgress, CardContent, Typography, Icon, Avatar, Button, Chip, Divider, ListItem, ListItemAvatar, ListItemText, Paper, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from "react-slick";
@@ -15,7 +15,8 @@ import * as Actions from '../store/actions';
 import { Helmet } from "react-helmet";
 import { InlineShareButtons } from 'sharethis-reactjs';
 import _ from '@lodash';
-
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 function SampleNextArrow(props) {
     const { style, onClick } = props;
@@ -28,7 +29,6 @@ function SampleNextArrow(props) {
         </IconButton>
     );
 }
-
 function SamplePrevArrow(props) {
     const { style, onClick } = props;
     return (
@@ -117,7 +117,6 @@ const useStylesBootstrap = makeStyles(theme => ({
         margin: '8px 0',
     },
 }));
-
 function BootstrapTooltip(props) {
     const { arrow, ...classes } = useStylesBootstrap();
     const [arrowRef, setArrowRef] = React.useState(null);
@@ -145,7 +144,6 @@ function BootstrapTooltip(props) {
         />
     );
 }
-
 BootstrapTooltip.propTypes = {
     title: PropTypes.node,
 };
@@ -246,6 +244,11 @@ function DetailProduit(props) {
     const dispatch = useDispatch();
     const classes = useStyles();
     const produit = useSelector(({ produitsApp }) => produitsApp.detailProduit);
+
+    const [photoIndex, setPhotoIndex] = useState(0);
+    const [isOpen, setIsOpen] = useState(false);
+    const [images, setImages] = useState([]);
+
     const opts = {
         width: '100%',
         playerVars: { // https://developers.google.com/youtube/player_parameters
@@ -321,6 +324,16 @@ function DetailProduit(props) {
         prevArrow: <SamplePrevArrow />
     };
 
+    useEffect(() => {
+
+        if (produit.data) {
+            if (produit.data.images) {
+                setImages(produit.data.images.map(item => FuseUtils.getUrl() + item.url));
+            }
+        }
+
+    }, [produit.data]);
+
     if (produit.data.length === 0 && !produit.loading) {
         return (
             <div className="w-full max-w-2xl mx-auto   min-h-md">
@@ -347,10 +360,7 @@ function DetailProduit(props) {
     }
 
     function hadnleDownload(fiche) {
-
         dispatch(Actions.getFile(fiche))
-
-        // window.open(FuseUtils.getUrl() + fiche.url);
 
     }
 
@@ -358,7 +368,6 @@ function DetailProduit(props) {
         <>
             {
                 produit.data &&
-
                 <Helmet>
                     <title>{_.truncate(produit.data.titre + ' | ' + (produit.data.fournisseur && produit.data.fournisseur.societe), { 'length': 70, 'separator': ' ' })}</title>
                     <meta name="description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
@@ -368,9 +377,7 @@ function DetailProduit(props) {
                     <meta property="twitter:description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
                 </Helmet>
             }
-
             <Grid container className={clsx(classes.grid, "max-w-2xl mx-auto py-48 sm:px-16 items-start")}>
-
                 {
                     produit.loading ?
                         <Grid item xs={12} sm={12}>
@@ -415,7 +422,6 @@ function DetailProduit(props) {
                                                             {produit.data.reference && 'Réf.' + produit.data.reference}
                                                         </Typography>
                                                     </div>
-
                                                     <Typography className={classes.price} className="uppercase" color="secondary" >
                                                         {
                                                             produit.data.pu ?
@@ -430,7 +436,6 @@ function DetailProduit(props) {
                                                                 'à consulter'
                                                         }
                                                     </Typography>
-
                                                 </div>
                                                 <div className="p-28">
 
@@ -439,12 +444,15 @@ function DetailProduit(props) {
                                                             produit.data.images && produit.data.images.length > 0 ?
                                                                 produit.data.images.map((item, index) => (
                                                                     <div key={index} className="flex items-center ">
-                                                                        <img src={FuseUtils.getUrl() + item.url} className="m-auto" />
+                                                                        <img src={FuseUtils.getUrl() + item.url} style={{ cursor: 'pointer' }} alt={produit.data.titre} className="m-auto" onClick={() => {
+                                                                            setIsOpen(true)
+                                                                            setPhotoIndex(index)
+                                                                        }} />
                                                                     </div>
                                                                 ))
                                                                 :
                                                                 <div className="justify-center">
-                                                                    <img src="assets/images/ecommerce/product-placeholder.jpg" />
+                                                                    <img src="assets/images/ecommerce/product-placeholder.jpg" alt='Product not found img' />
                                                                 </div>
 
                                                         }
@@ -541,37 +549,38 @@ function DetailProduit(props) {
                                         <div className="flex justify-end items-center mt-16">
                                             <div className="mr-8 font-bold">Partager sur :</div>
                                             <div >
-                                                <InlineShareButtons
-                                                    config={{
-                                                        alignment: 'center',  // alignment of buttons (left, center, right)
-                                                        color: 'social',      // set the color of buttons (social, white)
-                                                        enabled: true,        // show/hide buttons (true, false)
-                                                        font_size: 16,        // font size for the buttons
-                                                        labels: 'null',        // button labels (cta, counts, null)
-                                                        language: 'fr',       // which language to use (see LANGUAGES)
-                                                        networks: [           // which networks to include (see SHARING NETWORKS)
-                                                            'linkedin',
-                                                            'facebook',
-                                                            'twitter',
-                                                            'email',
-                                                            'messenger',
-                                                            'whatsapp'
-                                                        ],
-                                                        padding: 8,          // padding within buttons (INTEGER)
-                                                        radius: 4,            // the corner radius on each button (INTEGER)
-                                                        show_total: false,
-                                                        size: 30,             // the size of each button (INTEGER)
+                                                <InlineShareButtons config={{
+                                                    alignment: 'center',  // alignment of buttons (left, center, right)
+                                                    color: 'social',      // set the color of buttons (social, white)
+                                                    enabled: true,        // show/hide buttons (true, false)
+                                                    font_size: 16,        // font size for the buttons
+                                                    labels: 'null',        // button labels (cta, counts, null)
+                                                    language: 'fr',       // which language to use (see LANGUAGES)
+                                                    networks: [           // which networks to include (see SHARING NETWORKS)
+                                                        'linkedin',
+                                                        'facebook',
+                                                        'twitter',
+                                                        'email',
+                                                        'messenger',
+                                                        'whatsapp'
+                                                    ],
+                                                    padding: 8,          // padding within buttons (INTEGER)
+                                                    radius: 4,            // the corner radius on each button (INTEGER)
+                                                    show_total: false,
+                                                    size: 30,             // the size of each button (INTEGER)
 
-                                                        // OPTIONAL PARAMETERS
-                                                        // url: 'https://www.sharethis.com', // (defaults to current url)
-                                                        image: produit.data.featuredImageId &&
-                                                            FuseUtils.getUrl() + produit.data.featuredImageId.url,  // (defaults to og:image or twitter:image)
-                                                        description: produit.data.description,       // (defaults to og:description or twitter:description)
-                                                        title: `${produit.data.titre} | Les Achats Industriels`,            // (defaults to og:title or twitter:title)
-                                                        //message: 'custom email text',     // (only for email sharing)
-                                                        //subject: 'custom email subject',  // (only for email sharing)
-                                                        //username: 'custom twitter handle' // (only for twitter sharing)
-                                                    }}
+                                                    // OPTIONAL PARAMETERS
+                                                    // url: 'https://www.sharethis.com', // (defaults to current url)
+                                                    image: produit.data.featuredImageId &&
+                                                        FuseUtils.getUrl() + produit.data.featuredImageId.url,  // (defaults to og:image or twitter:image)
+                                                    description: produit.data.description,       // (defaults to og:description or twitter:description)
+                                                    title: `${produit.data.titre} | Les Achats Industriels`,            // (defaults to og:title or twitter:title)
+                                                    quote: produit.data.titre
+
+                                                    //message: 'custom email text',     // (only for email sharing)
+                                                    //subject: 'custom email subject',  // (only for email sharing)
+                                                    //username: 'custom twitter handle' // (only for twitter sharing)
+                                                }}
                                                 />
                                             </div>
                                         </div>
@@ -660,15 +669,25 @@ function DetailProduit(props) {
                                         </Card>
 
                                     </Grid>
+                                    {isOpen && (
+                                        <Lightbox
+                                            mainSrc={images[photoIndex]}
+                                            nextSrc={images[(photoIndex + 1) % images.length]}
+                                            prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+                                            onCloseRequest={() => setIsOpen(false)}
+                                            onMovePrevRequest={() =>
+                                                setPhotoIndex((photoIndex + images.length - 1) % images.length)
+                                            }
+                                            onMoveNextRequest={() =>
+                                                setPhotoIndex((photoIndex + 1) % images.length)
+                                            }
+                                        />
+                                    )}
                                 </>
                             )
                         )
                 }
-
-
             </Grid>
-
-
             <Grid container className="max-w-2xl mx-auto pb-48">
                 <Grid item sm={12}>
                     {
@@ -729,7 +748,6 @@ function DetailProduit(props) {
                                 </Slider>
                             </div>
                     }
-
                 </Grid>
             </Grid>
         </>

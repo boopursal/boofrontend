@@ -1,4 +1,5 @@
 import * as Actions from '../actions';
+import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     pays: null,
@@ -19,12 +20,107 @@ const initialState = {
     loadingSousSecteurs: false,
     secteurs: [],
     sousSecteurs: [],
-    produit: null
+    produit: null,
+
+    //PRODUITS FRS
+    produits: [],
+    pageCount: null,
+    totalItems: 0,
+    loadingProduits: false,
+    parametres: {
+        page: 1,
+        reference: '',
+        search: [],
+        filter: {
+            id: 'created',
+            direction: 'desc'
+        }
+    },
+
+    //ABONNEMENT
+    abonnements: [],
+    totalItemsAb: 0,
+    loadingAb: false,
+
+    //JETONS
+    jetons: [],
+    totalItemsJt: 0,
+    loadingJt: false,
+
+    //BLACK LISTES
+    blacklistes: [],
+    totalItemsBl: 0,
+    loadingBl: false,
 
 };
 
 const fournisseurReducer = function (state = initialState, action) {
     switch (action.type) {
+        case Actions.REQUEST_BLACKLISTES:
+            {
+                return {
+                    ...state,
+                    loadingBl: true
+                };
+            }
+        case Actions.GET_BLACKLISTES:
+            {
+                return {
+                    ...state,
+                    blacklistes: action.payload['hydra:member'],
+                    totalItemsBl: action.payload['hydra:totalItems'],
+                    loadingBl: false
+                };
+            }
+        case Actions.REQUEST_JETONS:
+            {
+                return {
+                    ...state,
+                    loadingJt: true
+                };
+            }
+        case Actions.GET_JETONS:
+            {
+                return {
+                    ...state,
+                    jetons: action.payload['hydra:member'],
+                    totalItemsJt: action.payload['hydra:totalItems'],
+                    loadingJt: false
+                };
+            }
+        case Actions.REQUEST_ABONNEMENTS:
+            {
+                return {
+                    ...state,
+                    loadingAb: true
+                };
+            }
+        case Actions.GET_ABONNEMENTS:
+            {
+                return {
+                    ...state,
+                    abonnements: action.payload['hydra:member'],
+                    totalItemsAb: action.payload['hydra:totalItems'],
+                    loadingAb: false
+                };
+            }
+        case Actions.REQUEST_PRODUITS:
+            {
+                return {
+                    ...state,
+                    loadingProduits: true
+                };
+            }
+        case Actions.GET_PRODUITS:
+            {
+                return {
+                    ...state,
+                    produits: action.payload['hydra:member'],
+                    pageCount: FuseUtils.hydraPageCount(action.payload),
+                    totalItems: action.payload['hydra:totalItems'],
+                    loadingProduits: false
+                };
+            }
         case Actions.REQUEST_ADD_PRODUIT:
             {
                 return {
@@ -240,6 +336,22 @@ const fournisseurReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     fournisseurReqInProgress: false
+
+                };
+            }
+        case Actions.SET_PARAMETRES_DETAIL:
+            {
+                return {
+                    ...state,
+                    parametres: {
+                        page: action.parametres.page,
+                        search: action.parametres.search,
+                        reference: action.parametres.reference,
+                        filter: {
+                            id: action.parametres.filter.id,
+                            direction: action.parametres.filter.direction
+                        }
+                    }
 
                 };
             }

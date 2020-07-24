@@ -18,6 +18,8 @@ import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
 import Link2 from '@material-ui/core/Link';
 import YouTube from 'react-youtube';
 import ContentLoader from 'react-content-loader';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -119,6 +121,11 @@ function Produit(props) {
     const [videoId, setVideoId] = useState('');
     const [showErrorVideo, setShowErrorVideo] = useState(false);
 
+    const [photoIndex, setPhotoIndex] = useState(0);
+    const [isOpen, setIsOpen] = useState(false);
+    const [images, setImages] = useState([]);
+
+
     const opts = {
         width: '460',
         playerVars: { // https://developers.google.com/youtube/player_parameters
@@ -157,23 +164,6 @@ function Produit(props) {
 
     }, [form, setForm, produit.videoExist]);
 
-
-    // Effect upload images
-    useEffect(() => {
-
-        if (produit.image) {
-            setForm(_.set({ ...form }, 'images', [
-                produit.image,
-                ...form.images
-            ]));
-        }
-        return () => {
-            dispatch(Actions.cleanImage())
-        }
-
-    }, [form, setForm, produit.image, dispatch]);
-
-
     // Effect Get Secteurs
     useEffect(() => {
         dispatch(Actions.getSecteurs());
@@ -206,11 +196,28 @@ function Produit(props) {
         }
     }, [produit.success, dispatch]);
 
+    // Effect upload images
+    useEffect(() => {
+
+        if (produit.image) {
+            setForm(_.set({ ...form }, 'images', [
+                produit.image,
+                ...form.images
+            ]));
+            setImages([...images, FuseUtils.getUrl() + produit.image.url]);
+        }
+        return () => {
+            dispatch(Actions.cleanImage())
+        }
+
+    }, [form, setForm, produit.image, dispatch]);
     // Effect delete image & fiche technique
     useEffect(() => {
         if (produit.image_deleted) {
             if (produit.image_deleted['@type'] === "ImageProduit") {
                 setForm(_.set({ ...form }, 'images', _.pullAllBy(form.images, [{ 'id': produit.image_deleted.id }], 'id')));
+                setImages(_.reject(images, function (i) { return i === FuseUtils.getUrl() + produit.image_deleted.url }))
+
             }
             else {
                 setForm(_.set({ ...form }, "ficheTechnique", null))
@@ -228,16 +235,9 @@ function Produit(props) {
         function updateProduitState() {
             const params = props.match.params;
             const { produitId } = params;
-
-
             dispatch(Actions.getProduit(produitId));
-
-
         }
-
         updateProduitState();
-
-
     }, [dispatch, props.match.params]);
 
     // SECTEUR ADDED SUCCESS
@@ -311,6 +311,10 @@ function Produit(props) {
                 })
 
             }
+            if (produit.data.images) {
+                setImages(produit.data.images.map(item => FuseUtils.getUrl() + item.url));
+            }
+
             if (produit.data.categorie) {
 
                 setCategorie({
@@ -328,7 +332,6 @@ function Produit(props) {
     }
 
     function handleCheckBoxChange(e, name) {
-
         setForm(_.set({ ...form }, name, e.target.checked));
     }
 
@@ -354,16 +357,12 @@ function Produit(props) {
 
         if (name === 'secteur') {
             if (value.value) {
-                setCategorie(null)
-                setSousSecteur(null)
                 dispatch(Actions.getSousSecteurs(value.value));
                 setSecteur(value)
             }
         }
         if (name === 'sousSecteurs') {
             if (value.value) {
-                setCategorie(null)
-
                 dispatch(Actions.getCategories(value.value));
                 setSousSecteur(value)
             }
@@ -850,7 +849,10 @@ function Produit(props) {
                                                         (media.id === (form.featuredImageId ? form.featuredImageId.id : null)) && 'featured')
                                                 }
                                                 key={media.id}
-                                                onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
+                                                onClick={() => {
+                                                    setIsOpen(true)
+                                                }}
+                                            //onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
                                             >
                                                 <Tooltip title="Image en vedette" >
                                                     <IconButton className={classes.produitImageFeaturedStar}
@@ -875,7 +877,20 @@ function Produit(props) {
                                                 <img className="max-w-none w-auto h-full"
                                                     src={FuseUtils.getUrl() + media.url}
                                                     alt="produit" />
-
+                                                {isOpen && (
+                                                    <Lightbox
+                                                        mainSrc={images[photoIndex]}
+                                                        nextSrc={images[(photoIndex + 1) % images.length]}
+                                                        prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+                                                        onCloseRequest={() => setIsOpen(false)}
+                                                        onMovePrevRequest={() =>
+                                                            setPhotoIndex((photoIndex + images.length - 1) % images.length)
+                                                        }
+                                                        onMoveNextRequest={() =>
+                                                            setPhotoIndex((photoIndex + 1) % images.length)
+                                                        }
+                                                    />
+                                                )}
 
                                             </div>
                                         ))}

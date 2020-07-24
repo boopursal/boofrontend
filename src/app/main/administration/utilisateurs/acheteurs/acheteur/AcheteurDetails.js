@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar, MenuItem, IconButton } from '@material-ui/core';
+import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar, MenuItem, IconButton, Chip, TextField, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFormsy, SelectFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
@@ -14,6 +14,8 @@ import green from '@material-ui/core/colors/green';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
+import ReactTable from "react-table";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,39 +24,35 @@ const useStyles = makeStyles(theme => ({
             marginTop: theme.spacing(2),
         },
     },
-    buttonProgress: {
-        color: green[500],
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
-        marginLeft: -12,
-    },
-    acheteurImageUpload: {
-        transitionProperty: 'box-shadow',
-        transitionDuration: theme.transitions.duration.short,
-        transitionTimingFunction: theme.transitions.easing.easeInOut,
-    },
+    chip: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#ef5350',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
 
-    acheteurImageItem: {
-        transitionProperty: 'box-shadow',
-        transitionDuration: theme.transitions.duration.short,
-        transitionTimingFunction: theme.transitions.easing.easeInOut,
-        '&:hover': {
-            '& $acheteurImageFeaturedStar': {
-                opacity: .8
-            }
-        },
-        '&.featured': {
-            pointerEvents: 'none',
-            boxShadow: theme.shadows[3],
-            '& $acheteurImageFeaturedStar': {
-                opacity: 1
-            },
-            '&:hover $acheteurImageFeaturedStar': {
-                opacity: 1
-            }
-        }
+
+    },
+    chip2: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#4caf50',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
+    },
+    chipOrange: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#ff9800',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
+
     },
 }));
 
@@ -72,6 +70,7 @@ function AcheteurDetails(props) {
 
         function updateAcheteurState() {
             dispatch(Actions.getAcheteur(acheteurId));
+            dispatch(Actions.getBlackListByAcheteur(acheteurId))
         }
 
         updateAcheteurState();
@@ -85,13 +84,15 @@ function AcheteurDetails(props) {
             dispatch(Actions.getDemandesByAcheteur(acheteurId, acheteur.parametres));
     }, [dispatch, acheteur.parametres, acheteurId]);
 
+
+
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
     }
 
     //dispatch from function filter
     const run = (parametres) => (
-        dispatch(Actions.setParametresData(parametres))
+        dispatch(Actions.setParametresDetail(parametres))
     )
 
     //call run function
@@ -158,6 +159,16 @@ function AcheteurDetails(props) {
                             classes={{ root: "w-full h-64" }}
                         >
                             <Tab className="h-64 normal-case" label="Infos société" />
+                            <Tab className="h-64 normal-case" label={"Demandes d'achats" +
+                                (acheteur.loadingDmd ?
+                                    '( chargement... )' :
+                                    acheteur.totalItems > 100 ?
+                                        '( +99 )' : '( ' + acheteur.totalItems + ' )')} />
+                            <Tab className="h-64 normal-case" label={"Blacklistes " +
+                                (acheteur.loadingBL ?
+                                    '( chargement... )' :
+                                    acheteur.totalItemsBl > 100 ?
+                                        '( +99 )' : '( ' + acheteur.totalItemsBl + ' )')} />
                         </Tabs>)
                     :
                     <div className={classes.root}>
@@ -432,6 +443,236 @@ function AcheteurDetails(props) {
 
                                 </Grid>
                             </Formsy>
+                        )
+                        }
+                        {tabValue === 1 && (
+                            <ReactTable
+                                className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
+                                getTheadProps={(state, rowInfo, column) => {
+                                    return {
+                                        className: "h-64",
+
+                                    }
+                                }}
+                                data={acheteur.demandes}
+                                columns={[
+
+                                    {
+                                        Header: "Référence",
+                                        className: "font-bold justify-center",
+                                        filterable: true,
+                                        accessor: "reference",
+                                        Cell: row => (
+                                            <Tooltip title="Voir la demande">
+                                                <Link target="_blank" to={'/demandes_admin/' + row.original.id} onClick={(ev) => ev.stopPropagation()}>
+                                                    {row.original.reference ? 'RFQ-' + row.original.reference : 'En attente'}
+                                                </Link>
+                                            </Tooltip>
+                                        ),
+                                        Filter: ({ filter, onChange }) =>
+                                            <TextField
+                                                onChange={event => onChange(event.target.value)}
+                                                style={{ width: "100%" }}
+                                                value={filter ? filter.value : ""}
+                                                InputProps={{
+                                                    startAdornment: <InputAdornment position="start">RFQ-</InputAdornment>,
+                                                }}
+                                            />
+                                        ,
+                                    },
+
+                                    {
+                                        Header: "Titre",
+                                        accessor: "titre",
+                                        className: "justify-center",
+                                        filterable: true,
+                                        Cell: row => (
+                                            <div className="flex items-center">
+                                                {_.capitalize(_.truncate(row.original.titre, {
+                                                    'length': 15,
+                                                    'separator': ' '
+                                                }))}
+                                            </div>
+                                        )
+                                    },
+                                    {
+                                        Header: "Date de création",
+                                        accessor: "created",
+                                        className: "justify-center",
+                                        filterable: true,
+                                        Cell: row => moment(row.original.created).format('DD/MM/YYYY'),
+                                        Filter: ({ filter, onChange }) =>
+                                            <TextField
+                                                onChange={event => onChange(event.target.value)}
+                                                style={{ width: "100%" }}
+                                                value={filter ? filter.value : ""}
+                                                type="date"
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            />,
+                                    },
+                                    {
+                                        Header: "Échéance",
+                                        minWidth: 125,
+                                        className: "justify-center",
+                                        filterable: true,
+                                        accessor: "dateExpiration",
+                                        Cell: row => (
+                                            <div className="flex items-center">
+                                                {
+                                                    moment(row.original.dateExpiration).format('DD/MM/YYYY')
+                                                }
+                                                {
+                                                    moment(row.original.dateExpiration) >= moment()
+                                                        ?
+                                                        <Chip className={classes.chip2} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
+                                                        :
+                                                        <Chip className={classes.chip} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
+                                                }
+                                            </div>
+                                        ),
+                                        Filter: ({ filter, onChange }) =>
+                                            <TextField
+                                                onChange={event => onChange(event.target.value)}
+                                                style={{ width: "100%" }}
+                                                value={filter ? filter.value : ""}
+                                                type="date"
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            />,
+                                    },
+                                    {
+                                        Header: "Statut",
+                                        accessor: "statut",
+                                        className: "justify-center",
+                                        filterable: true,
+                                        sortable: false,
+                                        Cell: row => (
+                                            <div className="flex items-center">
+
+                                                {
+                                                    row.original.statut === 3 ?
+                                                        <Chip className={classes.chip2} label="Adjugée" />
+                                                        :
+                                                        moment(row.original.dateExpiration) >= moment()
+                                                            ?
+                                                            row.original.statut === 0
+                                                                ?
+                                                                <Chip className={classes.chipOrange} label="En attente" />
+                                                                :
+                                                                (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                                                    :
+                                                                    <Chip className={classes.chip} label="Refusée" />
+                                                                )
+                                                            :
+                                                            <Chip className={classes.chip} label="Expirée" />
+
+                                                }
+
+                                            </div>
+                                        )
+                                        ,
+                                        Filter: ({ filter, onChange }) =>
+                                            <select
+                                                onChange={event => onChange(event.target.value)}
+                                                style={{ width: "100%" }}
+                                                value={filter ? filter.value : ""}
+                                            >
+                                                <option value="">Tous</option>
+                                                <option value="0">En attente</option>
+                                                <option value="1">En cours</option>
+                                                <option value="2">Refusée</option>
+                                                <option value="3">Adjugée</option>
+                                                <option value="4">Expirée</option>
+                                            </select>,
+
+                                    },
+
+                                ]}
+                                manual
+                                loading={acheteur.loadingDmd}
+                                pages={acheteur.pageCount}
+                                defaultPageSize={10}
+                                showPageSizeOptions={false}
+                                onPageChange={(pageIndex) => {
+                                    acheteur.parametres.page = pageIndex + 1;
+                                    dispatch(Actions.setParametresData(acheteur.parametres))
+                                }}
+
+                                onSortedChange={(newSorted, column, shiftKey) => {
+                                    acheteur.parametres.page = 1;
+                                    acheteur.parametres.filter.id = newSorted[0].id;
+                                    acheteur.parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
+                                    dispatch(Actions.setParametresData(acheteur.parametres))
+                                }}
+                                onFilteredChange={filtered => {
+                                    acheteur.parametres.page = 1;
+                                    acheteur.parametres.search = filtered;
+                                    fn(acheteur.parametres);
+                                }}
+                                noDataText="Aucune demande trouvée"
+                                loadingText='Chargement...'
+                                ofText='sur'
+                            />
+                        )
+                        }
+                        {tabValue === 2 && (
+                            <ReactTable
+                                className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
+                                getTheadProps={(state, rowInfo, column) => {
+                                    return {
+                                        className: "h-64 font-bold",
+                                    }
+                                }}
+                                data={acheteur.blacklistes}
+                                columns={[
+                                    {
+                                        Header: "Fournisseur",
+                                        className: "font-bold justify-center",
+                                        filterable: true,
+                                        accessor: "fournisseur",
+                                        Cell: row =>
+                                            <Tooltip title="Détails du fournisseur">
+                                                <Link target="_blank" to={'/users/fournisseur/show/' + row.original.fournisseur.id} onClick={(ev) => ev.stopPropagation()}>
+                                                    {row.original.fournisseur.societe && row.original.fournisseur.societe}
+                                                </Link>
+                                            </Tooltip>
+                                    },
+                                    {
+                                        Header: "Raison",
+                                        accessor: "raison",
+                                        filterable: true,
+                                        className: "justify-center",
+                                    },
+                                    {
+                                        Header: "Date de Blackliste",
+                                        className: "justify-center",
+                                        id: "created",
+                                        accessor: d => moment(d.created).format('DD/MM/YYYY HH:mm'),
+                                    },
+                                    {
+                                        Header: "Date de Déblackliste",
+                                        className: "justify-center",
+                                        id: "deblacklister",
+                                        accessor: d => d.deblacklister ? moment(d.deblacklister).format('DD/MM/YYYY HH:mm') : '',
+                                    },
+                                    {
+                                        className: "justify-center",
+                                        Header: "Etat",
+                                        accessor: "etat",
+                                        Cell: row =>
+                                            row.original.etat ?
+                                                'Blacklisté' :
+                                                'Retiré'
+                                    },
+                                ]}
+                                defaultPageSize={10}
+                                loading={acheteur.loadingBL}
+                                noDataText="Aucun fournisseur blacklisté"
+                                ofText='sur'
+                            />
                         )
                         }
                     </div>

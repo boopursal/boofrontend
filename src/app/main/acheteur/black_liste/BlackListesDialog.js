@@ -84,7 +84,6 @@ function renderInputComponent(inputProps) {
                     input: classes.input,
                 },
             }}
-            required
             {...other}
         />
     );

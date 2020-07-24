@@ -35,12 +35,33 @@ export const UPLOAD_AVATAR = '[FOURNISSEURS ADMIN APP] UPLOAD AVATAR';
 export const UPLOAD_REQUEST = '[FOURNISSEURS ADMIN APP] UPLOAD REQUEST';
 export const UPLOAD_ERROR = '[FOURNISSEURS ADMIN APP] UPLOAD ERROR';
 
-
 export const REQUEST_SECTEUR = '[FOURNISSEURS ADMIN APP] REQUEST SECTEUR';
 export const GET_SECTEUR = '[FOURNISSEURS ADMIN APP] GET SECTEUR';
 
+export const REQUEST_PRODUITS = '[FOURNISSEURS ADMIN APP] REQUEST PRODUITS';
+export const GET_PRODUITS = '[FOURNISSEURS ADMIN APP] GET PRODUITS';
+
+export const REQUEST_ABONNEMENTS = '[FOURNISSEURS ADMIN APP] REQUEST ABONNEMENTS';
+export const GET_ABONNEMENTS = '[FOURNISSEURS ADMIN APP] GET ABONNEMENTS';
+
+export const REQUEST_JETONS = '[FOURNISSEURS ADMIN APP] REQUEST JETONS';
+export const GET_JETONS = '[FOURNISSEURS ADMIN APP] GET JETONS';
+
+export const REQUEST_BLACKLISTES = '[FOURNISSEURS ADMIN APP] REQUEST BLACKLISTES';
+export const GET_BLACKLISTES = '[FOURNISSEURS ADMIN APP] GET BLACKLISTES';
+
 export const CLEAN_UP_FOURNISSEUR = '[FOURNISSEUR ADMIN APP] CLEAN_UP_FOURNISSEUR';
 
+export const SET_PARAMETRES_DETAIL = '[FOURNISSEUR ADMIN APP] SET PARAMETRES DETAIL';
+
+export const CLEAN_UP_ACHETEUR = '[ACHETEUR ADMIN APP] CLEAN_UP_ACHETEUR';
+
+export function setParametresDetail(parametres) {
+    return {
+        type: SET_PARAMETRES_DETAIL,
+        parametres
+    }
+}
 
 export function cleanUpFournisseur() {
 
@@ -73,6 +94,86 @@ export function getFournisseur(id_fournisseur) {
     }
 
 }
+
+export function getProduitsByFrs(id, parametres) {
+    var search = '';
+    if (parametres.search.length > 0) {
+        parametres.search.map((item) => (
+            item.value && (
+                item.id === 'created' ? (search += '&' + item.id + '[after]=' + item.value) : (search += '&' + item.id + '=' + item.value))
+        ));
+    }
+    const request = agent.get(`/api/fournisseurs/${id}/produits?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_PRODUITS,
+        });
+        return request.then((response) =>
+            dispatch({
+                type: GET_PRODUITS,
+                payload: response.data
+            })
+        );
+    }
+
+}
+
+export function getAbonnements(id) {
+
+    const request = agent.get(`/api/fournisseurs/${id}/abonnements?pagination=false&order[expired]=desc`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_ABONNEMENTS,
+        });
+        return request.then((response) =>
+            dispatch({
+                type: GET_ABONNEMENTS,
+                payload: response.data
+            })
+        );
+    }
+
+}
+
+export function getJetons(id) {
+
+    const request = agent.get(`/api/fournisseurs/${id}/jetons?pagination=false&order[created]=desc`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_JETONS,
+        });
+        return request.then((response) =>
+            dispatch({
+                type: GET_JETONS,
+                payload: response.data
+            })
+        );
+    }
+
+}
+
+
+export function getBlackListes(id) {
+
+    const request = agent.get(`/api/fournisseurs/${id}/blacklistes?order[created]=desc`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_BLACKLISTES,
+        });
+        return request.then((response) =>
+            dispatch({
+                type: GET_BLACKLISTES,
+                payload: response.data
+            })
+        );
+    }
+
+}
+
 
 export function addSecteur(name) {
     const data = {

@@ -88,7 +88,7 @@ function BlackListesList(props) {
                     {
                         Header: "Date de Déblackliste",
                         id: "deblacklister",
-                        accessor: d => moment(d.deblacklister).format('DD/MM/YYYY HH:mm'),
+                        accessor: d => d.deblacklister ? moment(d.deblacklister).format('DD/MM/YYYY HH:mm') : '',
                     },
                     {
                         Header: "Etat",
@@ -96,7 +96,7 @@ function BlackListesList(props) {
                         Cell: row =>
                             row.original.etat ?
                                 (
-                                    <Tooltip title="Blacklister">
+                                    <Tooltip title="Blacklisté">
                                         <IconButton className="text-red text-20" onClick={(ev) => {
                                             ev.stopPropagation();
                                             dispatch(Actions.removeBlackListe(row.original, false, user.id))
@@ -107,7 +107,7 @@ function BlackListesList(props) {
                                     </Tooltip>
                                 ) :
                                 (
-                                    <Tooltip title="Déblacklister">
+                                    <Tooltip title="Déblacklisté">
                                         <IconButton className="text-green text-20" onClick={(ev) => {
                                             ev.stopPropagation();
                                             dispatch(Actions.removeBlackListe(row.original, true, user.id))
@@ -121,7 +121,7 @@ function BlackListesList(props) {
                 ]}
                 defaultPageSize={10}
 
-                noDataText="No BlackListe found"
+                noDataText="Aucun fournisseur blacklisté"
                 ofText='sur'
             />
         </FuseAnimate>

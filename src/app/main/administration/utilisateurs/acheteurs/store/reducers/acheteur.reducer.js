@@ -1,18 +1,25 @@
 import * as Actions from '../actions';
+import FuseUtils from '@fuse/FuseUtils';
 
 const initialState = {
     pays: null,
     secteurs: null,
     loading: false,
-    requestFournisseur: false,
+    requestAcheteur: false,
     villes: null,
     error: null,
     data: null,
+
     acheteurReqInProgress: false,
     avatar: null,
     acheteur_deleted: null,
     loadingAddVille: false,
     villeAdded: false,
+    //DEMANDE D'ACHAT ACHETEUR
+    demandes: [],
+    totalItems: 0,
+    pageCount: null,
+    loadingDmd: false,
     parametres: {
         page: 1,
         search: [],
@@ -22,10 +29,47 @@ const initialState = {
             direction: 'desc'
         }
     },
+    //BLACK LISTE ACHETEUR
+    blacklistes: [],
+    totalItemsBl: 0,
+    loadingBL: false,
 };
 
 const acheteurReducer = function (state = initialState, action) {
     switch (action.type) {
+        case Actions.REQUEST_ACHETEUR_BL:
+            {
+                return {
+                    ...state,
+                    loadingBL: true
+                };
+            }
+        case Actions.GET_ACHETEUR_BL:
+            {
+                return {
+                    ...state,
+                    totalItemsBl: action.payload['hydra:totalItems'],
+                    blacklistes: action.payload['hydra:member'],
+                    loadingBL: false
+                };
+            }
+        case Actions.REQUEST_ACHETEUR_DEMANDES:
+            {
+                return {
+                    ...state,
+                    loadingDmd: true
+                };
+            }
+        case Actions.GET_ACHETEUR_DEMANDES:
+            {
+                return {
+                    ...state,
+                    demandes: action.payload['hydra:member'],
+                    totalItems: action.payload['hydra:totalItems'],
+                    pageCount: FuseUtils.hydraPageCount(action.payload),
+                    loadingDmd: false
+                };
+            }
         case Actions.REQUEST_ADD_VILLE:
             {
                 return {
@@ -63,7 +107,7 @@ const acheteurReducer = function (state = initialState, action) {
                     pays: null,
                     secteurs: null,
                     loading: false,
-                    requestFournisseur: false,
+                    requestAcheteur: false,
                     villes: null,
                     error: null,
                     data: null,
@@ -84,7 +128,7 @@ const acheteurReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    requestFournisseur: true,
+                    requestAcheteur: true,
                 };
             }
         case Actions.REQUEST_VILLES:
@@ -100,7 +144,7 @@ const acheteurReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     data: action.payload,
-                    requestFournisseur: false,
+                    requestAcheteur: false,
                     error: null
 
 
@@ -176,7 +220,7 @@ const acheteurReducer = function (state = initialState, action) {
 
                 };
             }
-        case Actions.SET_PARAMETRES_DATA:
+        case Actions.SET_PARAMETRES_DETAIL:
             {
                 return {
                     ...state,

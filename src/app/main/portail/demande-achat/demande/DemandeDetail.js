@@ -198,8 +198,8 @@ function DemandeDetail(props) {
                                                                 networks: [           // which networks to include (see SHARING NETWORKS)
                                                                     'linkedin',
                                                                     'twitter',
-                                                                    'email',
                                                                     'facebook',
+                                                                    'email',
 
                                                                 ],
                                                                 padding: 8,          // padding within buttons (INTEGER)

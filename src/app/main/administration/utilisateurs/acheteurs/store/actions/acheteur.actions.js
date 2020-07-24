@@ -7,8 +7,14 @@ import moment from 'moment';
 
 export const REQUEST_ACHETEUR = '[ACHETEURS ADMIN APP] REQUEST ACHETEUR';
 export const GET_ACHETEUR = '[ACHETEURS ADMIN APP] GET ACHETEUR';
+
 export const REQUEST_ACHETEUR_DEMANDES = '[ACHETEURS ADMIN APP] REQUEST ACHETEUR DEMANDES';
 export const GET_ACHETEUR_DEMANDES = '[ACHETEURS ADMIN APP] GET ACHETEUR DEMANDES';
+
+//BLACKLISTE
+export const REQUEST_ACHETEUR_BL = '[ACHETEURS ADMIN APP] REQUEST ACHETEUR BL';
+export const GET_ACHETEUR_BL = '[ACHETEURS ADMIN APP] GET ACHETEUR BL';
+
 export const GET_PAYS = '[ACHETEURS ADMIN APP] GET PAYS';
 export const GET_VILLES = '[ACHETEURS ADMIN APP] GET VILLES';
 export const REQUEST_PAYS = '[ACHETEURS ADMIN APP] REQUEST PAYS';
@@ -27,13 +33,13 @@ export const UPLOAD_AVATAR = '[ACHETEURS ADMIN APP] UPLOAD AVATAR';
 export const UPLOAD_REQUEST = '[ACHETEURS ADMIN APP] UPLOAD REQUEST';
 export const UPLOAD_ERROR = '[ACHETEURS ADMIN APP] UPLOAD ERROR';
 
-export const SET_PARAMETRES_DATA = '[ACHETEURS ADMIN APP] SET PARAMETRES DATA';
+export const SET_PARAMETRES_DETAIL = '[ACHETEURS ADMIN APP] SET PARAMETRES DETAIL';
 
 export const CLEAN_UP_ACHETEUR = '[ACHETEUR ADMIN APP] CLEAN_UP_ACHETEUR';
 
-export function setParametresData(parametres) {
+export function setParametresDetail(parametres) {
     return {
-        type: SET_PARAMETRES_DATA,
+        type: SET_PARAMETRES_DETAIL,
         parametres
     }
 }
@@ -73,6 +79,27 @@ export function getAcheteur(id_acheteur) {
 
 }
 
+export function getBlackListByAcheteur(id_acheteur) {
+
+    const request = agent.get(`/api/acheteurs/${id_acheteur}/blacklistes`);
+
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_ACHETEUR_BL,
+        });
+        return request.then((response) => {
+
+            dispatch({
+                type: GET_ACHETEUR_BL,
+                payload: response.data
+            })
+        });
+
+    }
+
+}
+
 export function getDemandesByAcheteur(id_acheteur, parametres) {
     var search = '';
     if (parametres.search.length > 0) {
@@ -91,6 +118,9 @@ export function getDemandesByAcheteur(id_acheteur, parametres) {
                         search += `&statut=2&dateExpiration[strictly_after]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
                     }
                     else if (item.value === '3') {
+                        search += `&statut=3`;
+                    }
+                    else if (item.value === '4') {
                         search += `&dateExpiration[strictly_before]=${moment().format('YYYY-MM-DDTHH:mm:ss')}`;
                     }
                 }
@@ -213,7 +243,6 @@ export function addVille(name, pays_id, acheteur_id) {
 
 }
 
-
 export function getSecteurs() {
     const request = agent.get(`/api/secteurs?pagination=false&props[]=id&props[]=name`);
 
@@ -229,8 +258,6 @@ export function getSecteurs() {
     }
 
 }
-
-
 
 export function updateSocieteInfo(data, id_acheteur) {
 

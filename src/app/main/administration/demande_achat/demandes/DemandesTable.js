@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip, TextField, InputAdornment } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField, InputAdornment, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -99,7 +99,6 @@ function DemandesTable(props) {
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
 
                 <ReactTable
-
                     className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
                     getTrProps={(state, rowInfo, column) => {
                         return {
@@ -117,7 +116,6 @@ function DemandesTable(props) {
 
                         }
                     }}
-
                     data={filteredData}
                     columns={[
 
@@ -229,7 +227,7 @@ function DemandesTable(props) {
 
                                     {
                                         row.original.statut === 3 ?
-                                            <Chip className={classes.chip2} label="Adjugé" />
+                                            <Chip className={classes.chip2} label="Adjugée" />
                                             :
                                             moment(row.original.dateExpiration) >= moment()
                                                 ?
@@ -242,7 +240,7 @@ function DemandesTable(props) {
                                                         <Chip className={classes.chip} label="Refusée" />
                                                     )
                                                 :
-                                                <Chip className={classes.chip} label="Expiré" />
+                                                <Chip className={classes.chip} label="Expirée" />
 
                                     }
 
@@ -264,7 +262,6 @@ function DemandesTable(props) {
                                 </select>
 
                         },
-
                         {
                             Header: "Publiée",
                             accessor: "isPublic",
@@ -304,12 +301,7 @@ function DemandesTable(props) {
                                     <option value="true">Publiée</option>
                                     <option value="false">Privée</option>
                                 </select>
-
-
-
-
                         },
-
                         {
                             Header: "",
                             Cell: row => (
@@ -320,8 +312,32 @@ function DemandesTable(props) {
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeDemande(row.original, parametres));
+                                                        dispatch(Actions.openDialog({
+                                                            children: (
+                                                                <React.Fragment>
+                                                                    <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                                                    <DialogContent>
+                                                                        <DialogContentText id="alert-dialog-description">
+                                                                            Voulez vous vraiment supprimer cette demande ?
+                                                                        </DialogContentText>
+                                                                    </DialogContent>
+                                                                    <DialogActions>
+                                                                        <Button variant="contained" onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                            Non
+                                                                        </Button>
+                                                                        <Button onClick={(ev) => {
+                                                                            dispatch(Actions.removeDemande(row.original, parametres));
+                                                                            dispatch(Actions.closeDialog())
+                                                                        }} color="primary" autoFocus>
+                                                                            Oui
+                                                                        </Button>
+
+                                                                    </DialogActions>
+                                                                </React.Fragment>
+                                                            )
+                                                        }))
                                                     }}
+
                                                 >
                                                     <Icon>delete</Icon>
                                                 </IconButton>
