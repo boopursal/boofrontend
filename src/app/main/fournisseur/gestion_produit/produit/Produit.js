@@ -661,7 +661,7 @@ function Produit(props) {
                                         <Typography variant="caption" className="items-center">
                                             Détails du produit
                                             {
-                                                !abonnee && <Chip className={countFreeImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - countFreeImages) + ' image(s) à utilisé'} />
+                                                !abonnee && <Chip className={countFreeImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - countFreeImages) + ' image(s) à utiliser'} />
                                             }
                                         </Typography>
                                     </FuseAnimate>
@@ -792,7 +792,7 @@ function Produit(props) {
                                                     sousSecteur
                                                 }
                                                 onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                                placeholder="Sélectionner une activitéé"
+                                                placeholder="Sélectionner une activité"
                                                 textFieldProps={{
                                                     label: 'Activités',
                                                     InputLabelProps: {

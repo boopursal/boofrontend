@@ -62,7 +62,7 @@ function ProduitsHeader(props) {
 
                 {
                     !loading ?
-                        (!abonnee && <Chip className={nbImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - nbImages) + ' image(s) à utilisé'} />)
+                        (!abonnee && <Chip className={nbImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - nbImages) + ' image(s) à utiliser'} />)
                         : ''
                 }
             </div>
