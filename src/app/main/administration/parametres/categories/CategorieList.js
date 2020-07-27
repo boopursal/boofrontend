@@ -47,8 +47,8 @@ function CategorieList(props) {
         return null;
     }
 
-     //dispatch from function filter
-     const run = (parametres) => (
+    //dispatch from function filter
+    const run = (parametres) => (
         dispatch(Actions.setParametresData(parametres))
     )
 
@@ -174,7 +174,6 @@ function CategorieList(props) {
                     dispatch(Actions.setParametresData(parametres))
                 }}
                 onFilteredChange={filtered => {
-                    console.log(filtered)
                     parametres.page = 1;
                     parametres.search = filtered;
                     fn(parametres);

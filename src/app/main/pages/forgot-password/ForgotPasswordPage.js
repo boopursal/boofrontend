@@ -51,7 +51,6 @@ function ForgotPasswordPage(props) {
     }
 
     function handleSubmit(model) {
-        console.log(model)
         dispatch(Actions.forgotPassword(model, props.history));
         disableButton();
     }

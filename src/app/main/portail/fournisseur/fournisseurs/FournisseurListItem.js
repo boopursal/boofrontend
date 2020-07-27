@@ -33,16 +33,14 @@ const styles = theme => ({
         maxWidth: '100%',
     },
     image: {
-        width: 145,
-        borderWidth: 6,
-        borderStyle: 'solid',
-        borderColor: theme.palette.secondary.main,
+        width: 150,
+        height: 150,
     },
     img: {
         margin: 'auto',
         display: 'block',
         maxWidth: '100%',
-        maxHeight: '100%',
+        maxHeight: '150px',
     },
 });
 
@@ -109,8 +107,8 @@ function FournisseurListItem(props) {
                                     <Paper className={classes.paper} key={index}>
                                         <Grid container spacing={2}>
                                             <Grid item>
-                                                <ButtonBase className={clsx(classes.image, 'rounded-full')} component={Link} to={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`}>
-                                                    <img className={clsx(classes.img, 'rounded-full')} alt={fournisseur.societe} src={
+                                                <ButtonBase className={clsx(classes.image)} component={Link} to={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`}>
+                                                    <img className={clsx(classes.img)} alt={fournisseur.societe} src={
                                                         fournisseur.avatar ?
                                                             FuseUtils.getUrl() + fournisseur.avatar.url
                                                             :

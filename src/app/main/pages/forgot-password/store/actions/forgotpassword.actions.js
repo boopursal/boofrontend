@@ -13,7 +13,6 @@ export function forgotPassword(data, history) {
         });
         const request = agent.post(`/api/request-forgot`, data);
         return request.then((response) => {
-            console.log('okkkkkkk')
             dispatch({
                 type: SUCCESS_RESET,
             });

@@ -243,8 +243,6 @@ function Profile(props) {
                 value: profile.data.pays['@id'],
                 label: profile.data.pays.name,
             });
-            console.log(profile.data.autreCategories)
-            console.log(_.split(profile.data.autreCategories, ','))
             if (profile.data.autreCategories) {
                 setProduitsSuggestion(_.split(profile.data.autreCategories, ','))
             }

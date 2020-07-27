@@ -164,7 +164,7 @@ function DemandeListItem(props) {
                                                                     // or use a string like 'en-US' to override it.
                                                                     { minimumFractionDigits: 2 }
                                                                 ) + (demande.currency ? ' ' + demande.currency.name : '')
-                                                                : 'A consulter'
+                                                                : 'Prix à  consulter'
                                                         }
                                                     </Typography>
 

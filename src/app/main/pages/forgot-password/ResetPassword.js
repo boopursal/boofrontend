@@ -80,7 +80,6 @@ function ResetPassword(props) {
     }
 
     function handleSubmit(model) {
-        console.log(model)
         dispatch(Actions.resetPassword(model, token, props.history));
         disableButton();
     }

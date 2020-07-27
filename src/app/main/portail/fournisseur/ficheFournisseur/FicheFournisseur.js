@@ -96,7 +96,10 @@ const useStyles = makeStyles(theme => ({
         pointerEvents: 'none'
     },
     img: {
-        width: '70%'
+        margin: 'auto',
+        display: 'block',
+        maxWidth: '100%',
+        maxHeight: '150px',
     },
     grid: {
         [theme.breakpoints.down('xs')]: {
@@ -191,7 +194,11 @@ function FicheFournisseur(props) {
                                 <Grid item xs={12} sm={2} >
                                     {
                                         data.avatar ?
-                                            <Avatar alt={data.societe} src={FuseUtils.getUrl() + data.avatar.url} className={clsx(classes.bigAvatar, 'bg-white')} />
+                                            <div style={{
+                                                width: 150, height: 150
+                                            }}>
+                                                <img className={clsx(classes.img, 'bg-white rounded-lg')} alt={data.societe} src={FuseUtils.getUrl() + data.avatar.url} />
+                                            </div>
                                             :
                                             <Avatar alt={data.societe} className={clsx(classes.bigAvatar, 'uppercase text-48 font-bold')} >
                                                 {data.societe ? data.societe[0] + data.societe[1] : ''}

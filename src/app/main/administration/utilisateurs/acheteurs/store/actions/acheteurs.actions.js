@@ -14,7 +14,6 @@ export function getAcheteurs(parametres) {
                 item.id === 'created' ? (search += '&' + item.id + '[after]=' + item.value) :(search += '&' + item.id + '=' + item.value))
         ));
     }
-    console.log(search)
     const request = agent.get(`/api/acheteurs?page=${parametres.page}${search}&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {

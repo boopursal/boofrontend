@@ -32,7 +32,8 @@ const styles = theme => ({
         maxWidth: '100%',
     },
     image: {
-        width: 218,
+        width: 180,
+        height: 150,
     },
     img: {
         margin: 'auto',
@@ -188,7 +189,7 @@ function ProduitListItem(props) {
                                                                         // or use a string like 'en-US' to override it.
                                                                         { minimumFractionDigits: 2 }
                                                                     ) + (produit.currency ? ' ' + produit.currency.name : '')
-                                                                    : 'A consulter'}
+                                                                    : 'Prix à consulter'}
                                                         </Typography>
                                                         {
                                                             produit['@id'] &&

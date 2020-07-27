@@ -159,11 +159,11 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(2),
     },
     title: {
-        fontSize: 30,
+        fontSize: 20,
         textTransform: 'capitalize'
     },
     price: {
-        fontSize: 20,
+        fontSize: 15,
         position: 'relative',
         paddingRight: 20
     },
@@ -433,7 +433,7 @@ function DetailProduit(props) {
                                                                 (produit.data.currency && ' ' + produit.data.currency.name) +
                                                                 ' HT'
                                                                 :
-                                                                'à consulter'
+                                                                'prix à consulter'
                                                         }
                                                     </Typography>
                                                 </div>
@@ -589,10 +589,9 @@ function DetailProduit(props) {
                                     </Grid>
                                     <Grid item xs={12} sm={4} className="sticky top-0">
 
-
                                         <Card className={clsx("", classes.root)} >
                                             <div className="p-20 bg-gray-400 uppercase relative text-center font-bold text-16 ">
-                                                Contactez le vendeur
+                                                Mini-site
                                                 <Icon className={classes.businessIcon}>business</Icon>
                                                 <Icon className={classes.businessDownIcon}>arrow_drop_down</Icon>
                                             </div>

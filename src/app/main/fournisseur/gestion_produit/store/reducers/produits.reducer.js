@@ -69,8 +69,6 @@ const produitsReducer = function (state = initialState, action) {
 
         case Actions.GET_FREE_PRODUITS:
             {
-                console.log(_.sumBy(action.payload['hydra:member'],
-                    function (o) { return o.images.length; }))
                 return {
                     ...state,
                     freeProduits: action.payload['hydra:member'],

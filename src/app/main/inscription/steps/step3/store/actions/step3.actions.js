@@ -40,7 +40,6 @@ export function setStep3(data, fournisseur_id, history) {
     data.step = 3;
 
 
-    console.log(data)
     return (dispatch, getState) => {
 
         const request = agent.put(`/api/fournisseurs/${fournisseur_id}`, data);

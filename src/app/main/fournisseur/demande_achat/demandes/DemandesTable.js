@@ -139,17 +139,17 @@ function DemandesTable(props) {
                         Header: "Visibilité",
                         accessor: "historiques",
                         width: 64,
-                        filterable: true,
-                        Filter: ({ filter, onChange }) =>
-                            <select
-                                onChange={event => onChange(event.target.value)}
-                                style={{ width: "100%" }}
-                                value={filter ? filter.value : ""}
-                            >
-                                <option value="">Tous</option>
-                                <option value="1">Lu</option>
-                                <option value="2">Non lu</option>
-                            </select>,
+                        filterable: false,
+                        /*  Filter: ({ filter, onChange }) =>
+                              <select
+                                  onChange={event => onChange(event.target.value)}
+                                  style={{ width: "100%" }}
+                                  value={filter ? filter.value : ""}
+                              >
+                                  <option value="">Tous</option>
+                                  <option value="1">Lu</option>
+                                  <option value="2">Non lu</option>
+                              </select>,*/
                         Cell: row =>
                             row.original.historiques.length > 0 && _.findKey(row.original.historiques, function (o) { return o.fournisseur.id === user.id; })
                                 ?
