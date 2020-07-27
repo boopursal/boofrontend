@@ -152,6 +152,7 @@ function ProduitsTable(props) {
                     {
                         Header: "Statut",
                         accessor: "isValid",
+                        className: "justify-center ",
                         sortable: false,
                         filterable: true,
                         Cell: row => (
@@ -169,7 +170,7 @@ function ProduitsTable(props) {
                                 }
                                 {
                                     row.original.isSelect ?
-                                        <Chip className={classes.chip2} label="Produit de la semaine" />
+                                        <Chip className={classes.chip2} label="Focus produit" />
                                         : ''
                                 }
 
@@ -188,7 +189,22 @@ function ProduitsTable(props) {
 
                     },
                     {
+                        Header: "Images",
+                        className: "justify-center ",
+                        accessor: "images",
+                        sortable: false,
+                        filterable: false,
+                        Cell: row => (
+                            <div className="flex items-center">
+                                {row.original.images.length}
+                            </div>
+                        ),
+
+
+                    },
+                    {
                         Header: "Ref",
+                        className: "justify-center ",
                         accessor: "reference",
                         filterable: true,
                     },
@@ -197,60 +213,16 @@ function ProduitsTable(props) {
                         accessor: "titre",
                         filterable: true,
                     },
-
-                    {
-                        Header: "Description",
-                        accessor: "description",
-                        filterable: true,
-                        Cell: row => (
-                            <div className="flex items-center">
-                                {_.capitalize(_.truncate(row.original.description, {
-                                    'length': 15,
-                                    'separator': ' '
-                                }))}
-                            </div>
-                        )
-                    },
-                    {
-                        Header: "PU",
-                        className: "font-bold",
-                        filterable: true,
-                        accessor: "pu",
-                        Cell: row => (
-                            <div className="flex items-center">
-                                {
-                                    row.original.pu.toLocaleString(
-                                        undefined, // leave undefined to use the browser's locale,
-                                        // or use a string like 'en-US' to override it.
-                                        { minimumFractionDigits: 2 }
-                                    ) + ' ' + user.data.currency}
-                            </div>
-                        )
-                    },
-                    {
-                        Header: "Secteur",
-                        className: "font-bold",
-                        filterable: true,
-                        accessor: "secteur.name",
-                        Cell: row => row.original.secteur ? row.original.secteur.name : 'N/A',
-                    },
-                    {
-                        Header: "Activité",
-                        className: "font-bold",
-                        filterable: true,
-                        accessor: "sousSecteurs.name",
-                        Cell: row => row.original.sousSecteurs ? row.original.sousSecteurs.name : 'N/A'
-                    },
-
                     {
                         Header: "Produit",
-                        className: "font-bold",
+                        className: "justify-center ",
                         filterable: true,
                         accessor: "categorie.name",
                         Cell: row => row.original.categorie ? row.original.categorie.name : 'N/A'
                     },
                     {
                         Header: "Date de création",
+                        className: "justify-center ",
                         filterable: true,
                         accessor: "created",
                         Cell: row => moment(row.original.created).format('DD/MM/YYYY'),

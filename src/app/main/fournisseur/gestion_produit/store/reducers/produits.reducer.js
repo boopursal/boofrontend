@@ -1,9 +1,11 @@
 import * as Actions from '../actions';
 import FuseUtils from '@fuse/FuseUtils';
+import _ from '@lodash';
 
 const initialState = {
     data: [],
     freeProduits: [],
+    nbImages: 0,
     pageCount: null,
     loading: false,
     loadingFree: false,
@@ -32,7 +34,8 @@ const produitsReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    loading: true
+                    loading: true,
+                    nbImages: 0,
 
                 };
             }
@@ -49,6 +52,8 @@ const produitsReducer = function (state = initialState, action) {
                     ...state,
                     data: action.payload['hydra:member'],
                     pageCount: FuseUtils.hydraPageCount(action.payload),
+                    nbImages: _.sumBy(action.payload['hydra:member'],
+                        function (o) { return o.images.length; }),
                     loading: false
                 };
             }
@@ -56,17 +61,22 @@ const produitsReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    loadingFree: true
+                    loadingFree: true,
+                    nbImages: 0
 
                 };
             }
 
         case Actions.GET_FREE_PRODUITS:
             {
+                console.log(_.sumBy(action.payload['hydra:member'],
+                    function (o) { return o.images.length; }))
                 return {
                     ...state,
                     freeProduits: action.payload['hydra:member'],
-                    loadingFree : false
+                    nbImages: _.sumBy(action.payload['hydra:member'],
+                        function (o) { return o.images.length; }),
+                    loadingFree: false
                 };
             }
         case Actions.SET_PRODUITS_SEARCH_TEXT:

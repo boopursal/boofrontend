@@ -1071,7 +1071,7 @@ function Fournisseur(props) {
                                                                 sousSecteur
                                                             }
                                                             onChange={(value) => handleChipSuggestionChange(value, 'sousSecteurs')}
-                                                            placeholder="Sélectionner une avtivité"
+                                                            placeholder="Sélectionner une activitéé"
                                                             textFieldProps={{
                                                                 label: 'Activités',
                                                                 InputLabelProps: {

@@ -48,7 +48,7 @@ export function getProduits(id_fournisseur,parametres)
 export function getFreeProduits(id_fournisseur)
 {
    
-    const request = agent.get(`/api/fournisseurs/${id_fournisseur}/produits?free=true&props[]=id`);
+    const request = agent.get(`/api/fournisseurs/${id_fournisseur}/produits?free=true&props[]=id&props[]=images`);
 
     return (dispatch) =>{
         dispatch({

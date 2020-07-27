@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Card, CardContent, Grow, Button, Tab, Tabs, Icon, Typography, Grid, CircularProgress, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Divider, TextField } from '@material-ui/core';
+import { Chip, Card, CardContent, Grow, Button, Tab, Tabs, Icon, Typography, Grid, CircularProgress, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Divider, TextField } from '@material-ui/core';
 import { red, orange } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
@@ -40,6 +40,25 @@ const useStyles = makeStyles(theme => ({
         left: '50%',
         marginTop: -12,
         marginLeft: -12,
+    },
+    chip1: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#e3342f',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
+    },
+
+    chip2: {
+        marginLeft: theme.spacing(1),
+        padding: 2,
+        background: '#4caf50',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '11px',
+        height: 20
     },
     pad: {
         padding: '0px 12px 12px 12px!important',
@@ -119,7 +138,7 @@ function Produit(props) {
     const user = useSelector(({ auth }) => auth.user);
     const abonnement = useSelector(({ auth }) => auth.user.abonnement);
     const loadingAbonnement = useSelector(({ auth }) => auth.user.loadingAbonnement);
-    const freeProduits = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.freeProduits);
+    const nbImages = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.nbImages);
     const loadingFree = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.loadingFree);
     const params = props.match.params;
     const { produitId } = params;
@@ -146,6 +165,8 @@ function Produit(props) {
     const [secteur, setSecteur] = useState(null);
     const [sousSecteur, setSousSecteur] = useState(null);
     const [categorie, setCategorie] = useState(null);
+    const [countFreeImages, setCountFreeImages] = useState(0);
+
     const opts = {
         width: '460',
         playerVars: { // https://developers.google.com/youtube/player_parameters
@@ -155,6 +176,8 @@ function Produit(props) {
             rel: 0,
         }
     };
+
+
     useEffect(() => {
         if (user) {
             dispatch(Actions.getFreeProduits(user.id));
@@ -178,6 +201,15 @@ function Produit(props) {
             dispatch(Actions.cleanUpProduct())
         }
     }, [dispatch, produitId]);
+
+    // Effect Video 
+    useEffect(() => {
+
+        if (nbImages) {
+            setCountFreeImages(nbImages);
+        }
+
+    }, [nbImages]);
 
     useEffect(() => {
         if (
@@ -285,6 +317,7 @@ function Produit(props) {
             if (produit.data.images) {
                 setImages([...images, FuseUtils.getUrl() + produit.image.url]);
             }
+            setCountFreeImages(countFreeImages + 1);
         }
         return () => {
             dispatch(Actions.cleanImage())
@@ -299,6 +332,7 @@ function Produit(props) {
             if (produit.image_deleted['@type'] === "ImageProduit") {
                 setForm(_.set({ ...form }, 'images', _.pullAllBy(form.images, [{ 'id': produit.image_deleted.id }], 'id')));
                 setImages(_.reject(images, function (i) { return i === FuseUtils.getUrl() + produit.image_deleted.url }))
+                setCountFreeImages(countFreeImages - 1);
             }
             else {
                 setForm(_.set({ ...form }, "ficheTechnique", null))
@@ -455,7 +489,7 @@ function Produit(props) {
             </div>
         );
     }
-    if (!abonnee && ((freeProduits.length >= 5 && produitId === 'new') || (produit.data && !produit.data.free && produitId !== 'new'))) {
+    if (!abonnee && ((nbImages === 5 && produitId === 'new') || (produit.data && !produit.data.free && produitId !== 'new'))) {
         if (!enable) {
             return (
                 <div className={clsx(classes.root2, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
@@ -512,7 +546,7 @@ function Produit(props) {
                 </div>
             )
         }
-        if (freeProduits.length >= 5 && produitId === 'new') {
+        if (nbImages === 5 && produitId === 'new') {
             return (
                 <div className={clsx(classes.root2, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
 
@@ -525,8 +559,8 @@ function Produit(props) {
                                 <CardContent className="flex flex-col items-center justify-center text-center p-48">
 
                                     <Typography variant="h4" className="mb-16 text-red">
-                                        Vous avez atteint le nombre gratuit de produits
-                                </Typography>
+                                        Vous avez atteint le nombre gratuit des images
+                                    </Typography>
 
                                     <Typography color="textSecondary" className="mb-40">
                                         Pour ajouter vos produits vous devez avoir un pack d'abonnement,
@@ -536,7 +570,10 @@ function Produit(props) {
                                     <Button component={Link} to="/offres/commande/new" className="whitespace-no-wrap" color="secondary" variant="contained">
                                         <span className="">Commander abonnement</span>
                                     </Button>
-
+                                    <Typography className="mt-16 normal-case flex items-center sm:mb-12" component={Link} role="button" to="/produits" color="inherit">
+                                        <Icon className="mr-4 text-20">arrow_back</Icon>
+                                        Retour
+                                    </Typography>
                                 </CardContent>
 
                             </Card>
@@ -569,6 +606,10 @@ function Produit(props) {
                                 <Button component={Link} to="/offres/commande/new" className="whitespace-no-wrap" color="secondary" variant="contained">
                                     <span className="">Commander abonnement</span>
                                 </Button>
+                                <Typography className="mt-16 normal-case flex items-center sm:mb-12" component={Link} role="button" to="/produits" color="inherit">
+                                    <Icon className="mr-4 text-20">arrow_back</Icon>
+                                    Retour
+                                    </Typography>
 
                             </CardContent>
 
@@ -617,7 +658,12 @@ function Produit(props) {
                                         </Typography>
                                     </FuseAnimate>
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                        <Typography variant="caption">Détails du produit</Typography>
+                                        <Typography variant="caption" className="items-center">
+                                            Détails du produit
+                                            {
+                                                !abonnee && <Chip className={countFreeImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - countFreeImages) + ' image(s) à utilisé'} />
+                                            }
+                                        </Typography>
                                     </FuseAnimate>
                                 </div>
                             </div>
@@ -746,7 +792,7 @@ function Produit(props) {
                                                     sousSecteur
                                                 }
                                                 onChange={(value) => handleChipChange(value, 'sousSecteurs')}
-                                                placeholder="Sélectionner une avtivité"
+                                                placeholder="Sélectionner une activitéé"
                                                 textFieldProps={{
                                                     label: 'Activités',
                                                     InputLabelProps: {
@@ -939,7 +985,7 @@ function Produit(props) {
                                             clsx(
                                                 classes.produitImageUpload,
                                                 "flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5",
-                                                (form.images.length === 5) && 'hidden'
+                                                ((form.images.length === 5) || (!abonnee && countFreeImages === 5)) && 'hidden'
                                             )}
                                     >
                                         {

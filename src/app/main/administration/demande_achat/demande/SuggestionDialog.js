@@ -154,7 +154,7 @@ function SuggestionDialog(props) {
                             value={sousSecteur}
                             className="MuiFormControl-fullWidth MuiTextField-root  mb-24"
                             onChange={(value) => handleChipChange(value, 'sousSecteur')}
-                            placeholder="Sélectionner une avtivité"
+                            placeholder="Sélectionner une activité"
                             textFieldProps={{
                                 label: 'Activités',
                                 InputLabelProps: {
