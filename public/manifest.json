@@ -1,27 +1,27 @@
 {
-  "short_name": "Les Achats Industriels",
-  "name": "Les Achats Industriels",
+  "short_name": "Lesachatsindustriels.com",
+  "name": "Lesachatsindustriels.com",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon",
-      "128": "favicon.ico"
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/assets/images/logos/maskable_icon.png",
+      "sizes": "295x295",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/images/logos/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
   "start_url": ".",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff",
-  "manifest_version": 2,
-  "version": "1",
-  "permissions": [],
-  "app": {
-    "background": {
-      "scripts": [
-        "background.js"
-      ]
-    }
-  },
-  "minimum_chrome_version": "28"
+  "theme_color": "#50e3c2",
+  "background_color": "#ffffff"
 }
