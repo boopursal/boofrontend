@@ -844,7 +844,7 @@ function Consultation(props) {
                                                     value={consultation.data.demande.acheteur.description}
                                                     label="Présentation"
                                                     multiline
-                                                    rows="2"
+                                                    rows="8"
                                                     InputProps={{
                                                         readOnly: true,
                                                     }}

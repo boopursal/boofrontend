@@ -1159,7 +1159,7 @@ function Demande(props) {
                                                     value={form.acheteur.description}
                                                     label="Présentation"
                                                     multiline
-                                                    rows="2"
+                                                    rows="8"
                                                     InputProps={{
                                                         readOnly: true,
                                                     }}

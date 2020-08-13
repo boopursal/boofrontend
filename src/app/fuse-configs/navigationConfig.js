@@ -27,17 +27,43 @@ const navigationConfig = [
     {
         'id': 'demandes-devis',
         'title': 'Demandes de devis',
-        'auth': authRoles.admin,
-        'type': 'item',
+        'type': 'collapse',
         'icon': 'inbox',
-        'url': '/demandes_devis',
-        'badge': {
-            'title': 'demandes-devis',
-            'bg': 'rgb(255, 111, 0)',
-            'fg': '#FFFFFF',
-            'count': 0
-        }
+        'children': [
+
+            {
+                'id': 'traite-devis',
+                'title': 'Traitées',
+                'auth': authRoles.admin,
+                'type': 'item',
+                'url': '/dv_traite',
+
+            },
+            {
+                'id': 'ntraite-devis',
+                'title': 'Non traitées',
+                'auth': authRoles.admin,
+                'type': 'item',
+                'url': '/dv_ntraite',
+                'badge': {
+                    'title': 'demandes-devis',
+                    'bg': 'rgb(255, 111, 0)',
+                    'fg': '#FFFFFF',
+                    'count': 0
+                }
+
+            },
+            {
+                'id': 'corbeille-devis',
+                'title': 'Corbeille',
+                'auth': authRoles.admin,
+                'type': 'item',
+                'url': '/demandesdevis/corbeille',
+            },
+
+        ]
     },
+
     {
         'id': 'message-fournisseur',
         'title': 'Destination Fournisseur',
@@ -349,6 +375,7 @@ const navigationConfig = [
         'icon': 'dashboard',
         'url': '/dashboard'
     },
+
     {
         'id': 'demandes-acheteur',
         'title': 'Demandes de devis',
@@ -456,7 +483,7 @@ const navigationConfig = [
 
             {
                 'id': 'product-devis',
-                'title': 'Demandes de devis',
+                'title': 'Demandes en ligne',
                 'auth': authRoles.fournisseur,
                 'type': 'item',
                 'url': '/product_devis',
@@ -495,13 +522,29 @@ const navigationConfig = [
         'url': '/user/profile'
     },
     {
-        'id': 'personnels-component',
-        'title': 'Personnels',
+        'id': 'gc-fournisseur',
+        'title': 'Gestion commerciale',
         'auth': authRoles.fournisseur,
-        'type': 'item',
-        'icon': 'group',
-        'url': '/fournisseur/personnel',
+        'type': 'collapse',
+        'icon': 'assessment',
+        'children': [
+            {
+                'id': 'suivi-component',
+                'title': "Suivi d'Agance / Service",
+                'auth': authRoles.fournisseur,
+                'type': 'item',
+                'url': '/suivi',
+            },
+            {
+                'id': 'personnels-component',
+                'title': "Création d'Agance / Service",
+                'auth': authRoles.fournisseur,
+                'type': 'item',
+                'url': '/fournisseur/personnel',
+            },
+        ]
     },
+
     {
 
         'id': 'abonnement',

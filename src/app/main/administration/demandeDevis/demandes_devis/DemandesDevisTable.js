@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Chip, Tooltip, TextField } from '@material-ui/core';
+import { Icon, IconButton, Chip, Tooltip, TextField, DialogTitle, DialogContent, DialogActions, DialogContentText, Button } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
@@ -201,53 +201,41 @@ function DemandesDevisTable(props) {
                                     }}
                                 />,
                         },
-
-                        {
-                            Header: "Statut",
-                            accessor: "statut",
-                            filterable: true,
-                            Cell: row => (
-                                <div className="flex items-center">
-
-                                    {
-
-                                        row.original.statut === false
-                                            ?
-                                            <Chip className={classes.chipOrange} label="En attente" />
-                                            :
-                                            <Chip className={classes.chip2} label="Validée" />
-
-
-                                    }
-
-                                </div>
-                            ),
-                            Filter: ({ filter, onChange }) =>
-                                <select
-                                    onChange={event => onChange(event.target.value)}
-                                    style={{ width: "100%" }}
-                                    value={filter ? filter.value : ""}
-                                >
-                                    <option value="">Tous</option>
-                                    <option value="true">Validée</option>
-                                    <option value="false">En attente</option>
-                                </select>
-
-
-                        },
-
-
                         {
                             Header: "",
                             Cell: row => (
                                 <div className="flex items-center">
                                     {
                                         row.original.statut !== 1 ?
+
                                             <Tooltip title="Supprimer" >
                                                 <IconButton className="text-red text-20"
                                                     onClick={(ev) => {
                                                         ev.stopPropagation();
-                                                        dispatch(Actions.removeDemande(row.original, parametres));
+                                                        dispatch(Actions.openDialog({
+                                                            children: (
+                                                                <React.Fragment>
+                                                                    <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                                                    <DialogContent>
+                                                                        <DialogContentText id="alert-dialog-description">
+                                                                            Voulez vous vraiment supprimer cette demande ?
+                                                                            </DialogContentText>
+                                                                    </DialogContent>
+                                                                    <DialogActions>
+                                                                        <Button variant="contained" onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                            Non
+                                                                        </Button>
+                                                                        <Button onClick={(ev) => {
+                                                                            dispatch(Actions.removeDemande(row.original, parametres));
+                                                                            dispatch(Actions.closeDialog())
+                                                                        }} color="primary" autoFocus>
+                                                                            Oui
+                                                                        </Button>
+
+                                                                    </DialogActions>
+                                                                </React.Fragment>
+                                                            )
+                                                        }))
                                                     }}
                                                 >
                                                     <Icon>delete</Icon>
@@ -277,6 +265,7 @@ function DemandesDevisTable(props) {
 
                     defaultSortDesc={true}
                     pages={pageCount}
+                    page={parametres.page - 1}
                     defaultPageSize={10}
                     loading={loading}
                     showPageSizeOptions={false}

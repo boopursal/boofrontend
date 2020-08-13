@@ -6,14 +6,16 @@ import { newsConfig } from './news/newsConfig';
 import { faqsConfig } from './faqs/faqsConfig';
 import { parcourirSecteursConfig } from './parcourir-secteurs/parcourirSecteursConfig';
 import { ConditionsConfig } from './conditions/ConditionsConfig';
+import { TarifsConfig } from './tarifs/TarifsConfig';
 
 export const PortailConfig = [
-       ProduitConfig,    
-       FournisseurConfig,    
-       IndexConfig,
-       demandeAchatConfig,
-       newsConfig,
-       parcourirSecteursConfig,
-       faqsConfig,
-       ConditionsConfig
+    ProduitConfig,
+    FournisseurConfig,
+    IndexConfig,
+    demandeAchatConfig,
+    newsConfig,
+    parcourirSecteursConfig,
+    faqsConfig,
+    ConditionsConfig,
+    TarifsConfig
 ];

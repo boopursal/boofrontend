@@ -1328,7 +1328,7 @@ function Commande(props) {
                                                     value={commande.data.fournisseur.description}
                                                     label="Présentation"
                                                     multiline
-                                                    rows="2"
+                                                    rows="8"
                                                     InputProps={{
                                                         readOnly: true,
                                                     }}

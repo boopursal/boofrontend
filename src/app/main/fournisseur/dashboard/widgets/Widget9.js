@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {  Table, TableHead, TableCell, TableRow, Typography, Paper, TableBody, Select } from '@material-ui/core';
+import { Table, TableHead, TableCell, TableRow, Typography, Paper, TableBody, Select } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions'
 import ContentLoader from 'react-content-loader'
@@ -58,17 +58,17 @@ function Widget9(props) {
         <>
             {
                 widgets.loadingPersonnelPotentiels === false
-                   
+
                     ?
-                   
+
                     <Paper className="w-full rounded-8 shadow-none border-1">
                         <div className="flex items-center justify-between px-16 h-64 border-b-1">
-                            <Typography className="text-24">Le suivi du personnel</Typography>
+                            <Typography className="text-24">Le suivi de l'année {currentRange}</Typography>
 
                             <div className="flex">
                                 <Typography className="text-11 font-500 rounded-4 text-white bg-blue px-8 py-4">
 
-                                    {widgets.personnelPotentiels.length + " Personnel(s)"}
+                                    {widgets.personnelPotentiels.length + " Agance(s) / Service(s)"}
 
                                 </Typography>
                                 <Select
@@ -102,7 +102,7 @@ function Widget9(props) {
 
                                             className="whitespace-no-wrap"
                                         >
-                                            NOM & Prénom
+                                            Agence / Service, NOM & Prénom
                                     </TableCell>
                                         <TableCell
 
@@ -155,7 +155,7 @@ function Widget9(props) {
                                                     scope="row"
                                                     className="truncate font-600 font-bold"
                                                 >
-                                                    {row.personnel.name}
+                                                    {row.personnel.agence}, {row.personnel.name}
                                                 </TableCell>
                                                 <TableCell
                                                     component="th"
@@ -274,7 +274,7 @@ function Widget9(props) {
                                                                                     className={parseInt(currentMonth) === index + 1 ? 'bg-orange truncate font-bold text-white' : 'truncate text-blue'}
                                                                                 >
                                                                                     {
-                                                                                        parseInt(currentMonth) < index + 1  && currentYear === currentRange ?
+                                                                                        parseInt(currentMonth) < index + 1 && currentYear === currentRange ?
                                                                                             '' :
                                                                                             r + ' ' + user.data.currency
                                                                                     }

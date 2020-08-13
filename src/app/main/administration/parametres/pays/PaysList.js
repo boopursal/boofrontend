@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton,  DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
+import { Icon, IconButton, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
@@ -15,7 +15,7 @@ function PaysList(props) {
 
     // const selectedPaysIds = useSelector(({paysApp}) => paysApp.pays.selectedPaysIds);
     const searchText = useSelector(({ paysApp }) => paysApp.pays.searchText);
-    
+
     const [filteredData, setFilteredData] = useState(null);
 
     useEffect(() => {
@@ -38,10 +38,10 @@ function PaysList(props) {
         return null;
     }
 
-    
 
-      //dispatch from function filter
-      const run = (parametres) => (
+
+    //dispatch from function filter
+    const run = (parametres) => (
         dispatch(Actions.setParametresData(parametres))
     )
 
@@ -248,6 +248,7 @@ function PaysList(props) {
                 ]}
                 manual
                 pages={pageCount}
+                page={parametres.page - 1}
                 defaultPageSize={10}
                 loading={loading}
                 showPageSizeOptions={false}
@@ -262,7 +263,7 @@ function PaysList(props) {
                     parametres.filter.direction = newSorted[0].desc ? 'desc' : 'asc';
                     dispatch(Actions.setParametresData(parametres))
                 }}
-                 onFilteredChange={filtered => {
+                onFilteredChange={filtered => {
                     parametres.page = 1;
                     parametres.search = filtered;
                     fn(parametres);

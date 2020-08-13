@@ -448,7 +448,7 @@ function FournisseurDetails(props) {
                                             value={fournisseur.data.description}
                                             label="Présentation"
                                             multiline
-                                            rows="2"
+                                            rows="10"
                                             InputProps={{
                                                 readOnly: true,
                                             }}

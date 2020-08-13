@@ -141,7 +141,7 @@ function CommandesDialog(props) {
 
                     <br />
                     <Typography variant="caption" color="inherit">
-                        <strong className="uppercase">7E-Sky</strong><br />
+                        <strong className="uppercase">7e-Sky</strong><br />
                         ATTIJARIWAFA BANK<br />
                         CENTRE D'AFFAIRE CASA PORTE D'ANFA<br />
                         Casablanca, Maroc<br />

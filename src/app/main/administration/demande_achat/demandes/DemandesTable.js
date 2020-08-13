@@ -364,6 +364,8 @@ function DemandesTable(props) {
                     ]}
                     manual
                     pages={pageCount}
+                    page={parametres.page - 1}
+
                     defaultPageSize={10}
                     loading={loading}
                     showPageSizeOptions={false}

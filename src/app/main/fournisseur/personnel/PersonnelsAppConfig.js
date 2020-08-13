@@ -1,5 +1,5 @@
 import React from 'react';
-import {authRoles} from 'app/auth';
+import { authRoles } from 'app/auth';
 
 export const PersonnelsAppConfig = {
     settings: {
@@ -7,11 +7,15 @@ export const PersonnelsAppConfig = {
             config: {}
         }
     },
-    auth    : authRoles.fournisseur,
-    routes  : [
+    auth: authRoles.fournisseur,
+    routes: [
         {
-            path     : '/fournisseur/personnel',
+            path: '/fournisseur/personnel',
             component: React.lazy(() => import('./PersonnelsApp'))
+        },
+        {
+            path: '/suivi',
+            component: React.lazy(() => import('./SuiviPersonnel'))
         }
     ]
 };

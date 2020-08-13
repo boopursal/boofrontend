@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, Tabs, Tab, Typography, Paper, Avatar, Icon, CardContent, Button, CircularProgress } from '@material-ui/core';
+import { Grid, Card, Tabs, Tab, Typography, Paper, Avatar, Icon, CardContent, Button, CircularProgress, Input, InputAdornment, IconButton, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { FuseAnimate, FuseUtils } from '@fuse';
@@ -11,7 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import _ from '@lodash';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { InlineShareButtons } from 'sharethis-reactjs';
-
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { showMessage } from 'app/store/actions/fuse';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -295,7 +296,7 @@ function FicheFournisseur(props) {
                                             data.id &&
                                             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                                                 <Button size="large" onClick={ev => dispatch(Actions.openNewContactFournisseurDialog(data.id))} className="whitespace-no-wrap upercase mb-8 mt-2 w-full items-center" color="primary" variant="contained">
-                                                    <Icon className='mr-2'>email</Icon>Envoyez un message
+                                                    <Icon className='mr-2'>email</Icon>Envoyer un message
                                                 </Button>
                                             </FuseAnimate>
                                         }
@@ -321,12 +322,48 @@ function FicheFournisseur(props) {
                                                                 onClick={ev => dispatch(Actions.updateVuPhoneFournisseur(data.id))}
                                                                 // onClick={ev => dispatch(Actions.openNewVillesDialog())} 
                                                                 className="whitespace-no-wrap upercase w-full" variant="outlined">
-                                                                Affichez le téléphone
-                                                                        </Button>
+                                                                Afficher le téléphone
+                                                            </Button>
                                                         </FuseAnimate>
                                                 )
 
                                         }
+
+
+                                        <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                                            <Input
+                                                id="url"
+                                                value={window.location.href}
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        <CopyToClipboard text={window.location.href}
+                                                            onCopy={() =>
+                                                                dispatch(showMessage({
+                                                                    message: 'URL copiée avec succès', anchorOrigin: {
+                                                                        vertical: 'top',//top bottom
+                                                                        horizontal: 'right'//left center right
+                                                                    },
+                                                                    variant: 'success'
+                                                                }))}>
+                                                            <Tooltip title="Copier l'URL dans le presse-papier" placement="top">
+                                                                <IconButton aria-label="copy" color="primary">
+                                                                    <Icon>file_copy</Icon>
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                        </CopyToClipboard>
+                                                    </InputAdornment>
+                                                }
+                                                inputProps={{
+                                                    'aria-label': 'url',
+                                                }}
+                                                className="text-11 mt-16"
+                                                label="Copier l'url de votre société"
+                                                fullWidth
+                                            />
+                                        </FuseAnimate>
+
+
+
                                         <div className="flex justify-end items-center mt-16">
                                             <div className="mr-8 font-bold">Partager sur :</div>
                                             <div >
@@ -340,9 +377,9 @@ function FicheFournisseur(props) {
                                                         language: 'fr',       // which language to use (see LANGUAGES)
                                                         networks: [           // which networks to include (see SHARING NETWORKS)
                                                             'linkedin',
-                                                            'facebook',
                                                             'twitter',
                                                             'email',
+                                                            'facebook',
                                                             'messenger',
                                                             'whatsapp'
                                                         ],

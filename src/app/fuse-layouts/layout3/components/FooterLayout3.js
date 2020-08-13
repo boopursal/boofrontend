@@ -74,6 +74,10 @@ function FooterLayout3(props) {
                                     <Link component="true" to="/entreprises" className="ml-0 text-blue">Tous les fournisseurs</Link>
 
                                 </li>
+                                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                    <Link component="true" to="/tarifs/fournisseur" className="ml-0 text-blue">Tarifs</Link>
+
+                                </li>
                             </ul>
                         </Grid>
                     </Grid>
@@ -86,6 +90,8 @@ function FooterLayout3(props) {
                                 <Link component="true" to="/conditions" className="ml-0 text-blue">Conditions Générales</Link>
                                 &ensp;|&ensp;
                                 <Link component="true" to="/faqs" className="text-blue">FAQ</Link>
+                                &ensp;|&ensp;
+                                <Link component="true" to="/tarifs/fournisseur" className="text-blue">Tarifs</Link>
 
                             </div>
                         </Grid>

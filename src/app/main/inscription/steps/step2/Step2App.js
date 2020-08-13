@@ -541,7 +541,7 @@ function Step2App(props) {
 
                                                 variant="outlined"
                                                 multiline
-                                                rows="4"
+                                                rows="8"
 
                                             />
                                             <Typography variant="caption" className="flex items-center mb-16">

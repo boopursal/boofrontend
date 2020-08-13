@@ -238,7 +238,7 @@ function AbonnementsTable(props) {
                         Cell: row => (
                             <div className="flex items-center">
                                 {
-                                   (moment(row.original.expired) >= moment() ||!row.original.expired) &&
+                                    (moment(row.original.expired) >= moment() || !row.original.expired) &&
                                     <Tooltip title="Editer" >
                                         <IconButton className="text-orange text-20"
                                             onClick={() =>
@@ -259,7 +259,7 @@ function AbonnementsTable(props) {
                                         <Tooltip title="Renouveler" >
                                             <IconButton
                                                 onClick={() => {
-                                                    props.history.push('/admin/offres/renouvellement/' + row.original.id+'/1');
+                                                    props.history.push('/admin/offres/renouvellement/' + row.original.id + '/1');
                                                 }} className="text-teal text-20">
                                                 <Icon>autorenew</Icon>
                                             </IconButton>
@@ -272,12 +272,12 @@ function AbonnementsTable(props) {
                                     row.original.statut === true
                                     &&
                                     (
-                                        moment(row.original.expired) < moment() 
+                                        moment(row.original.expired) < moment()
                                         &&
                                         <Tooltip title="Dupliquer" >
                                             <IconButton
                                                 onClick={() => {
-                                                    props.history.push('/admin/offres/renouvellement/' + row.original.id+'/2');
+                                                    props.history.push('/admin/offres/renouvellement/' + row.original.id + '/2');
                                                 }} className="text-green-700 text-20">
                                                 <Icon>file_copy</Icon>
                                             </IconButton>
@@ -291,6 +291,7 @@ function AbonnementsTable(props) {
                 ]}
                 manual
                 pages={pageCount}
+                page={parametres.page - 1}
                 defaultPageSize={10}
                 loading={loading}
                 showPageSizeOptions={false}

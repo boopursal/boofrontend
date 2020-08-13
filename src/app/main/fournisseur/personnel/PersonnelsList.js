@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
+import { Icon, IconButton, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip, Avatar } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
@@ -39,7 +39,7 @@ function PersonnelsList(props) {
         return (
             <div className="flex flex-1 items-center justify-center h-full">
                 <Typography color="textSecondary" variant="h5">
-                    Il n'y a pas de personnels!
+                    Il n'y a pas d'Agence / Service!
                 </Typography>
             </div>
         );
@@ -51,28 +51,41 @@ function PersonnelsList(props) {
 
             <ReactTable
                 className="-striped -highlight h-full sm:rounded-16 overflow-hidden"
-                getTrProps={(state, rowInfo, column) => {
-                    return {
-                        className: "cursor-pointer",
-                        onClick: (e, handleOriginal) => {
-                            if (rowInfo) {
-                                dispatch(Actions.openEditPersonnelsDialog(rowInfo.original));
-                            }
-                        }
-                    }
-                }}
                 data={filteredData}
                 columns={[
 
+                    {
+                        Header: "",
+                        Cell: row =>
 
+                            row.original.avatar ?
+                                <Avatar className="mr-8" alt={row.original.firstName} src={FuseUtils.getUrl() + row.original.avatar.url} />
+                                :
+                                <Avatar className="mr-8" alt={row.original.firstName} src="assets/images/avatars/images.png" />
 
+                        ,
+                        className: "justify-center",
+                        width: 64,
+                        sortable: false
+                    },
+                    {
+                        Header: "Agence/Service",
+                        accessor: "agence",
+                        filterable: true,
+                        Cell: row => row.original.agence ? row.original.agence : ''
+                    },
                     {
                         Header: "NOM & Prénom",
                         accessor: "name",
                         filterable: true,
                         Cell: row => row.original.name ? row.original.name : ''
                     },
-
+                    {
+                        Header: "Ville",
+                        accessor: "ville",
+                        filterable: true,
+                        Cell: row => row.original.ville ? row.original.ville : ''
+                    },
                     {
                         Header: "Email",
                         accessor: "email",
@@ -97,41 +110,55 @@ function PersonnelsList(props) {
 
                     {
                         Header: "",
-                        width: 64,
+                        width: 128,
                         Cell: row => (
                             <div className="flex items-center">
-
-                                <IconButton className="text-red text-20"
-                                    onClick={(ev) => {
-                                        ev.stopPropagation();
-                                        dispatch(Actions.openDialog({
-                                            children: (
-                                                <React.Fragment>
-                                                    <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
-                                                    <DialogContent>
-                                                        <DialogContentText id="alert-dialog-description">
-                                                            Voulez vous vraiment supprimer cet enregistrement ?
+                                <Tooltip title="Editer">
+                                    <IconButton className="text-orange text-20"
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            dispatch(Actions.openEditPersonnelsDialog(row.original));
+                                        }}
+                                    >
+                                        <Icon>edit</Icon>
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Supprimer" >
+                                    <IconButton className="text-red text-20"
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            dispatch(Actions.openDialog({
+                                                children: (
+                                                    <React.Fragment>
+                                                        <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText id="alert-dialog-description">
+                                                                Voulez vous vraiment supprimer cet enregistrement ?
                                                     </DialogContentText>
-                                                    </DialogContent>
-                                                    <DialogActions>
-                                                        <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
-                                                            Non
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                Non
                                                     </Button>
-                                                        <Button onClick={(ev) => {
-                                                            dispatch(Actions.removePersonnel(row.original, user.id));
-                                                            dispatch(Actions.closeDialog())
-                                                        }} color="primary" autoFocus>
-                                                            Oui
+                                                            <Button onClick={(ev) => {
+                                                                dispatch(Actions.removePersonnel(row.original, user.id));
+                                                                dispatch(Actions.closeDialog())
+                                                            }} color="primary" autoFocus>
+                                                                Oui
                                                     </Button>
-                                                    </DialogActions>
-                                                </React.Fragment>
-                                            )
-                                        }))
-                                    }}
-                                >
-                                    <Icon>delete</Icon>
-                                </IconButton>
+                                                        </DialogActions>
+                                                    </React.Fragment>
+                                                )
+                                            }))
+                                        }}
+                                    >
+                                        <Icon>delete</Icon>
+                                    </IconButton>
+                                </Tooltip>
+
+
                             </div>
+
 
                         )
                     }

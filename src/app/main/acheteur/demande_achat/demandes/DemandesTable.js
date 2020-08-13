@@ -125,19 +125,19 @@ function DemandesTable(props) {
 
                                 {
                                     row.original.statut === 3 ?
-                                    <Chip className={classes.chip2} label="Adjugé" />:
-                                    moment(row.original.dateExpiration) >= moment()
-                                        ?
-                                        row.original.statut === 0
+                                        <Chip className={classes.chip2} label="Adjugé" /> :
+                                        moment(row.original.dateExpiration) >= moment()
                                             ?
-                                            <Chip className={classes.chipOrange} label="En attente" />
-                                            :
-                                            (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                            row.original.statut === 0
+                                                ?
+                                                <Chip className={classes.chipOrange} label="En attente" />
                                                 :
-                                                <Chip className={classes.chip} label="Refusée" />
-                                            )
-                                        :
-                                        <Chip className={classes.chip} label="Expiré" />
+                                                (row.original.statut === 1 ? <Chip className={classes.chip2} label="En cours" />
+                                                    :
+                                                    <Chip className={classes.chip} label="Refusée" />
+                                                )
+                                            :
+                                            <Chip className={classes.chip} label="Expiré" />
 
                                 }
 
@@ -384,6 +384,7 @@ function DemandesTable(props) {
 
                 defaultSortDesc={true}
                 pages={pageCount}
+                page={parametres.page - 1}
                 defaultPageSize={10}
                 loading={loading}
                 showPageSizeOptions={false}

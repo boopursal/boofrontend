@@ -21,6 +21,7 @@ class Auth extends Component {
         jwtService.on('onAutoLogin', () => {
 
             this.props.showMessage({ message: 'Reconnexion ...' });
+            // this.props.setUserData({ role: "login", data: {} });
 
             /**
              * Sign in and retrieve user data from Api
@@ -36,6 +37,7 @@ class Auth extends Component {
                     //this.props.showMessage({ message: 'Logged in with JWT' });
                 })
                 .catch(error => {
+                    //this.props.setUserData({ role: [], data: {} });
                     this.props.showMessage({ message: error });
                 })
         });

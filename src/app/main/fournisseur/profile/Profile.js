@@ -744,7 +744,7 @@ function Profile(props) {
 
                                                         variant="outlined"
                                                         multiline
-                                                        rows="6"
+                                                        rows="8"
 
                                                     />
 

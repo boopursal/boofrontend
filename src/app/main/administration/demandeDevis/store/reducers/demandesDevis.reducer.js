@@ -24,6 +24,13 @@ const initialState = {
 
 const demandesDevisReducer = function (state = initialState, action) {
     switch (action.type) {
+        case Actions.CLEAN_UP:
+            {
+                return {
+                    ...initialState
+
+                };
+            }
         case Actions.REQUEST_DEMANDES:
             {
                 return {
@@ -41,6 +48,7 @@ const demandesDevisReducer = function (state = initialState, action) {
                     loading: false
                 };
             }
+
         case Actions.SET_DEMANDES_SEARCH_TEXT:
             {
                 return {

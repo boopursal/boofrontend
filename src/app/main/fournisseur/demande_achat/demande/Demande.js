@@ -1043,7 +1043,7 @@ function Demande(props) {
                                                             value=" "
                                                             label="Présentation"
                                                             multiline
-                                                            rows="2"
+                                                            rows="8"
                                                             InputProps={{
                                                                 readOnly: true,
                                                             }}

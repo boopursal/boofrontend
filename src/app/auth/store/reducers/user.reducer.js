@@ -5,7 +5,7 @@ const initialState = {
     data: {
         'displayName': 'Votre compte',
         'photoURL': null,
-        'email': 'johndoe@withinpixels.com',
+        'email': 'johndoe@test.com',
         shortcuts: [
             'calendar',
             'mail',

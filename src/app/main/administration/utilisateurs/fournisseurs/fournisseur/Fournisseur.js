@@ -820,7 +820,7 @@ function Fournisseur(props) {
 
                                                     variant="outlined"
                                                     multiline
-                                                    rows="2"
+                                                    rows="8"
 
                                                 />
 

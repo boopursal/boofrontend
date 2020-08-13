@@ -1,24 +1,28 @@
-import React, {useEffect, useCallback, useRef, useState} from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText} from '@material-ui/core';
-import {useForm} from '@fuse/hooks';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText, Avatar, CircularProgress } from '@material-ui/core';
+import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {TextFieldFormsy} from '@fuse';
+import { useDispatch, useSelector } from 'react-redux';
+import { TextFieldFormsy, FuseUtils } from '@fuse';
 import Formsy from 'formsy-react';
+import _ from '@lodash';
 
 const defaultFormState = {
-    name    : '',
+    name: '',
     phone: '',
     email: '',
+    agence: '',
+    ville: ''
 };
 
-function PersonnelsDialog(props)
-{
+function PersonnelsDialog(props) {
     const dispatch = useDispatch();
-    const personnelsDialog = useSelector(({personnelsApp}) => personnelsApp.personnels.personnelsDialog);
-    const user = useSelector(({auth}) => auth.user);
+    const personnelsDialog = useSelector(({ personnelsApp }) => personnelsApp.personnels.personnelsDialog);
+    const imageReqInProgress = useSelector(({ personnelsApp }) => personnelsApp.personnels.imageReqInProgress);
+    const avatar = useSelector(({ personnelsApp }) => personnelsApp.personnels.avatar);
+    const user = useSelector(({ auth }) => auth.user);
 
-    const {form, handleChange, setForm} = useForm(defaultFormState);
+    const { form, handleChange, setForm } = useForm(defaultFormState);
 
 
     const [isFormValid, setIsFormValid] = useState(false);
@@ -30,16 +34,14 @@ function PersonnelsDialog(props)
             /**
              * Dialog type: 'edit'
              */
-            if ( personnelsDialog.type === 'edit' && personnelsDialog.data )
-            {
-                setForm({...personnelsDialog.data});
+            if (personnelsDialog.type === 'edit' && personnelsDialog.data) {
+                setForm({ ...personnelsDialog.data });
             }
 
             /**
              * Dialog type: 'new'
              */
-            if ( personnelsDialog.type === 'new' )
-            {
+            if (personnelsDialog.type === 'new') {
                 setForm({
                     ...personnelsDialog.data,
                     ...defaultFormState
@@ -53,51 +55,61 @@ function PersonnelsDialog(props)
         /**
          * After Dialog Open
          */
-        if ( personnelsDialog.props.open )
-        {
+        if (personnelsDialog.props.open) {
             initDialog();
         }
 
     }, [personnelsDialog.props.open, initDialog]);
 
+    useEffect(() => {
 
-    function closeComposeDialog()
-    {
+        if (avatar) {
+            setForm(_.set({ ...form }, 'avatar', avatar));
+        } else {
+            setForm(_.set({ ...form }, 'avatar', null));
+        }
+
+    }, [avatar]);
+
+    function closeComposeDialog() {
         personnelsDialog.type === 'edit' ? dispatch(Actions.closeEditPersonnelsDialog()) : dispatch(Actions.closeNewPersonnelsDialog());
     }
 
-   
 
-    function handleSubmit(event)
-    {
+
+    function handleSubmit(event) {
         //event.preventDefault();
-        if ( personnelsDialog.type === 'new' )
-        {
-            dispatch(Actions.addPersonnel(form,user.id));
+        if (personnelsDialog.type === 'new') {
+            dispatch(Actions.addPersonnel(form, user.id));
         }
-        else
-        {
-            dispatch(Actions.updatePersonnel(form,user.id));
+        else {
+            dispatch(Actions.updatePersonnel(form, user.id));
         }
         closeComposeDialog();
     }
 
-    function handleRemove()
-    {
-        dispatch(Actions.removePersonnel(form,user.id));
+    function handleRemove() {
+        dispatch(Actions.removePersonnel(form, user.id));
         dispatch(Actions.closeDialog())
         closeComposeDialog();
     }
 
 
-    function disableButton()
-    {
+    function disableButton() {
         setIsFormValid(false);
     }
 
-    function enableButton()
-    {
+    function enableButton() {
         setIsFormValid(true);
+    }
+
+    function handleUploadChange(e) {
+        const file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+        dispatch(Actions.uploadImage(file));
+
     }
 
     return (
@@ -114,24 +126,68 @@ function PersonnelsDialog(props)
             <AppBar position="static" elevation={1}>
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {personnelsDialog.type === 'new' ? 'Nouveau Personnel' : 'Editer Personnel'}
+                        {personnelsDialog.type === 'new' ? 'Nouvelle Agence / Service' : form.name}
                     </Typography>
                 </Toolbar>
-               
+
+                <div className="flex flex-col items-center justify-center pb-24">
+                    {imageReqInProgress ?
+                        <Avatar className="">
+                            <CircularProgress size={24} />
+                        </Avatar>
+                        :
+                        <div className="flex  items-center">
+                            <Avatar className="w-96 h-96 mr-16" alt="contact avatar" src={form.avatar ? FuseUtils.getUrl() + form.avatar.url : "assets/images/avatars/images.png"} />
+                            <input
+                                accept="image/*"
+                                id="button-file"
+                                type="file"
+                                onChange={handleUploadChange}
+                            />
+                        </div>
+                    }
+                    {personnelsDialog.type === 'edit' && (
+
+                        <Typography variant="h6" color="inherit" className="pt-8">
+                            {form.name}
+                        </Typography>
+
+
+                    )}
+                </div>
             </AppBar>
-            <Formsy 
-            onValidSubmit={handleSubmit}
-            onValid={enableButton}
-            onInvalid={disableButton}
-            ref={formRef}
-            className="flex flex-col overflow-hidden">
-                <DialogContent classes={{root: "p-24"}}>
+            <Formsy
+                onValidSubmit={handleSubmit}
+                onValid={enableButton}
+                onInvalid={disableButton}
+                ref={formRef}
+                className="flex flex-col overflow-hidden">
+                <DialogContent classes={{ root: "p-24" }}>
                     <div className="flex">
-                        
+
+                        <TextFieldFormsy
+                            className="mb-24"
+                            label="Agence ou service"
+                            autoFocus
+                            id="agence"
+                            name="agence"
+                            value={form.agence}
+                            onChange={handleChange}
+                            variant="outlined"
+                            validations={{
+                                minLength: 2
+                            }}
+                            validationErrors={{
+                                minLength: 'Min character length is 2'
+                            }}
+                            fullWidth
+                        />
+                    </div>
+                    <div className="flex">
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="Nom et Prénom"
-                            autoFocus
                             id="name"
                             name="name"
                             value={form.name}
@@ -147,10 +203,28 @@ function PersonnelsDialog(props)
                             fullWidth
                         />
                     </div>
-
-                   
                     <div className="flex">
-                        
+                        <TextFieldFormsy
+                            className="mb-24"
+                            label="Ville"
+                            id="ville"
+                            name="ville"
+                            value={form.ville}
+                            onChange={handleChange}
+                            variant="outlined"
+                            validations={{
+                                minLength: 2
+                            }}
+                            validationErrors={{
+                                minLength: 'Min character length is 2'
+                            }}
+                            fullWidth
+                        />
+                    </div>
+
+
+                    <div className="flex">
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="Téléphone"
@@ -172,7 +246,7 @@ function PersonnelsDialog(props)
                         />
                     </div>
                     <div className="flex">
-                        
+
                         <TextFieldFormsy
                             className="mb-24"
                             label="E-mail"
@@ -183,14 +257,14 @@ function PersonnelsDialog(props)
                             variant="outlined"
                             validations="isEmail"
                             validationErrors={{
-                                isEmail:"This is not a valid email"
+                                isEmail: "This is not a valid email"
                             }}
                             required
                             fullWidth
                         />
                     </div>
 
-                   
+
                 </DialogContent>
 
                 {personnelsDialog.type === 'new' ? (
@@ -205,43 +279,43 @@ function PersonnelsDialog(props)
                         </Button>
                     </DialogActions>
                 ) : (
-                    <DialogActions className="justify-between pl-16">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={!isFormValid}
-                        >
-                            Modifier
+                        <DialogActions className="justify-between pl-16">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={!isFormValid}
+                            >
+                                Modifier
                         </Button>
-                        <IconButton
-                            onClick={()=> dispatch(Actions.openDialog({
-                                children: (
-                                    <React.Fragment>
-                                        <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                            Voulez vous vraiment supprimer cet enregistrement ?
+                            <IconButton
+                                onClick={() => dispatch(Actions.openDialog({
+                                    children: (
+                                        <React.Fragment>
+                                            <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    Voulez vous vraiment supprimer cet enregistrement ?
                                             </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
-                                                Non
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                    Non
                                             </Button>
-                                            <Button onClick={handleRemove} color="primary" autoFocus>
-                                                Oui
+                                                <Button onClick={handleRemove} color="primary" autoFocus>
+                                                    Oui
                                             </Button>
-                                        </DialogActions>
-                                    </React.Fragment>
-                                     )
-                                 }))}
-                            
-                            
-                        >
-                            <Icon>delete</Icon>
-                        </IconButton>
-                    </DialogActions>
-                )}
+                                            </DialogActions>
+                                        </React.Fragment>
+                                    )
+                                }))}
+
+
+                            >
+                                <Icon>delete</Icon>
+                            </IconButton>
+                        </DialogActions>
+                    )}
             </Formsy>
         </Dialog>
     );

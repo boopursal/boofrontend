@@ -1723,7 +1723,7 @@ function Abonnement(props) {
                                                         value={fournisseur.description}
                                                         label="Présentation"
                                                         multiline
-                                                        rows="2"
+                                                        rows="8"
                                                         InputProps={{
                                                             readOnly: true,
                                                         }}

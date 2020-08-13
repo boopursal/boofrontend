@@ -11,9 +11,9 @@ export const SET_PARAMETRES_DATA = '[DEMANDES DEVIS FOURNISSEUR APP] SET PARAMET
 export const GET_DEMANDES = '[DEMANDES DEVIS FOURNISSEUR APP] GET DEMANDES';
 export const SET_DEMANDES_SEARCH_TEXT = '[DEMANDES DEVIS FOURNISSEUR APP] SET DEMANDES SEARCH TEXT';
 
-export function getDemandes(parametres,id) {
+export function getDemandes(parametres, id) {
     var message = parametres.message ? `=${parametres.message}` : '';
-    const request = agent.get(`/api/fournisseurs/${id}/demandes?page=${parametres.page}&message${message}&statut=1&order[${parametres.filter.id}]=${parametres.filter.direction}`);
+    const request = agent.get(`/api/fournisseurs/${id}/demandes?page=${parametres.page}&del=false&message${message}&statut=1&order[${parametres.filter.id}]=${parametres.filter.direction}`);
 
     return (dispatch) => {
         dispatch({
@@ -28,9 +28,9 @@ export function getDemandes(parametres,id) {
     }
 
 }
-export function removeDemande(demande, parametres,id) {
+export function removeDemande(demande, parametres, id) {
 
-    let Updatedemande = { del: true}
+    let Updatedemande = { del: true }
     return (dispatch, getState) => {
 
 
@@ -49,7 +49,7 @@ export function removeDemande(demande, parametres,id) {
                     },
                     variant: 'success'
                 }))
-            ]).then(() => dispatch(getDemandes(parametres,id)))
+            ]).then(() => dispatch(getDemandes(parametres, id)))
         );
     };
 }

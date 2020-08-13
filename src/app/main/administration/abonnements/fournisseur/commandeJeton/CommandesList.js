@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton,  DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Chip, TextField } from '@material-ui/core';
+import { Icon, IconButton, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Chip, TextField } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
@@ -217,6 +217,7 @@ function CommandesList(props) {
                 manual
                 defaultSortDesc={true}
                 pages={pageCount}
+                page={parametres.page - 1}
                 defaultPageSize={10}
                 loading={loading}
                 showPageSizeOptions={false}

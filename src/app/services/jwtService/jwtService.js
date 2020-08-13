@@ -88,7 +88,6 @@ class jwtService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
             agent.get('api/currentUser')
                 .then(response => {
-
                     if (response.data.user) {
                         this.setSession(response.data.token);
                         resolve(response.data.user);
