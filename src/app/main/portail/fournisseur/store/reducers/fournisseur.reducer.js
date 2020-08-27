@@ -108,6 +108,14 @@ const fournisseurReducer = function (state = initialState, action) {
 
                 };
             }
+        case Actions.CLEAN_UP_FRS:
+            {
+                return {
+                    ...state,
+                    data: []
+
+                };
+            }
         case Actions.SAVE_MESSAGE:
             {
                 return {
@@ -125,6 +133,14 @@ const fournisseurReducer = function (state = initialState, action) {
 
                 };
             }
+        case Actions.CLEAN_UP_PD_AP:
+            {
+                return {
+                    ...state,
+                    produitsApercu: []
+
+                };
+            }
         case Actions.GET_FOURNISSEUR_PRODUITS:
             {
                 return {
@@ -133,6 +149,16 @@ const fournisseurReducer = function (state = initialState, action) {
                     produits: action.payload['hydra:member'],
                     pageCount: FuseUtils.hydraPageCount(action.payload),
                     totalItems: action.payload['hydra:totalItems'],
+
+                };
+            }
+        case Actions.CLEAN_UP_PDS:
+            {
+                return {
+                    ...state,
+                    produits: [],
+                    totalItems: null,
+                    pageCount: null,
 
                 };
             }

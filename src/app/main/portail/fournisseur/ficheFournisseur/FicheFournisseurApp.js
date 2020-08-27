@@ -46,24 +46,46 @@ function FicheFournisseurApp(props) {
     const parametres = useSelector(({ fournisseursApp }) => fournisseursApp.fournisseur.parametres);
     const params = props.match.params;
     const { id, tab } = params;
+
     useEffect(() => {
         function updateFournisseurState() {
             dispatch(Actions.getFournisseur(id));
         }
         updateFournisseurState();
+        return () => {
+            dispatch(Actions.cleanUpFrs())
+        }
     }, [dispatch, id]);
 
     useEffect(() => {
 
+        if (tab) {
+            return;
+        }
         function updateFournisseurState() {
-            if (!tab) {
-                dispatch(Actions.getFournisseurProduitsApercu(id));
-            } else {
-                dispatch(Actions.getFournisseurProduits(id, parametres));
-            }
-
+            dispatch(Actions.getFournisseurProduitsApercu(id));
         }
         updateFournisseurState();
+
+        return () => {
+            dispatch(Actions.cleanUpPrdApercu())
+        }
+    }, [dispatch, tab, id]);
+
+    useEffect(() => {
+        console.log(tab)
+        if (!tab) {
+            return;
+        }
+        console.log(tab)
+
+        function updateFournisseurState() {
+            dispatch(Actions.getFournisseurProduits(id, parametres));
+        }
+        updateFournisseurState();
+        return () => {
+            dispatch(Actions.cleanUpPrds())
+        }
     }, [dispatch, tab, id, parametres]);
 
 

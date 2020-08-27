@@ -46,7 +46,7 @@ function HeaderSecteurs(props) {
                     </Link>
 
                     <span className="text-white">
-                        {_.capitalize('Tous les secteurs d’activité')}
+                        {_.capitalize('Tous les secteurs d’activités')}
                     </span>
 
 

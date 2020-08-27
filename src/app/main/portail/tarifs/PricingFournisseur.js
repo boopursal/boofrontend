@@ -6,11 +6,6 @@ import clsx from 'clsx';
 import { green, red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
-    header: {
-        height: 400,
-        background: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
-        color: 'white'
-    },
     badge: {
         backgroundColor: theme.palette.error.main,
         color: theme.palette.getContrastText(theme.palette.error.main)
@@ -26,33 +21,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function PricingFournisseur() {
+function PricingFournisseur(props) {
     const classes = useStyles();
-
+    const { currency } = props;
     return (
         <div>
-
-            <div className={clsx(classes.header, "flex")}>
-
-                <div className="p-24 w-full max-w-2xl mx-auto">
-
-                    <div className="text-center my-40 mx-24">
-
-                        <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
-                            <Typography variant="h1" color="inherit" className="font-bold uppercase text-24 sm:text-32 md:text-44 ">
-                                Tarifs Fournisseur
-                            </Typography>
-                        </FuseAnimate>
-
-                        <FuseAnimate duration={400} delay={600}>
-                            <Typography variant="subtitle1" color="inherit" className="opacity-75 mt-16 text-13 sm:text-18 mx-auto max-w-512">
-                                Votre place de marché <span className=" italic font-bold uppercase">B2B</span> la plus adabté a vos besoin avec une tarification simple et abordable. Vous pouvez toujours essayer
-                                 pour un plan gratuit!
-                            </Typography>
-                        </FuseAnimate>
-                    </div>
-                </div>
-            </div>
 
             <div className="-mt-160 mb-24">
 
@@ -241,7 +214,7 @@ function PricingFournisseur() {
                                         <div className="text-black uppercase font-extrabold pt-16 text-24">FREE</div>
                                         <div className="flex justify-center mt-12 text-black">
                                             <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                                                MAD
+                                                {currency === 0 ? 'MAD' : '$'}
                                             </span>
                                             <span className=" uppercase font-extrabold text-32">
                                                 00<span className="text-10">,00</span>
@@ -299,7 +272,7 @@ function PricingFournisseur() {
                                                     classes={{
                                                         primary: "font-bold text-10 sm:text-12 md:text-14 lg:text-15 "
                                                     }}
-                                                    primary="Illimité"
+                                                    primary="illimité"
 
                                                 />
                                             </ListItem>
@@ -355,7 +328,7 @@ function PricingFournisseur() {
                                                     classes={{
                                                         primary: "font-bold text-10 sm:text-12 md:text-14 lg:text-15"
                                                     }}
-                                                    primary="Illimité"
+                                                    primary="illimité"
 
                                                 />
                                             </ListItem>
@@ -451,10 +424,12 @@ function PricingFournisseur() {
                                         <div className="text-black uppercase font-extrabold pt-16 text-24">CLASSIC</div>
                                         <div className="flex justify-center mt-12 text-black">
                                             <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                                                MAD
+                                                {currency === 0 ? 'MAD' : '$'}
                                             </span>
                                             <span className=" uppercase font-extrabold text-32">
-                                                250<span className="text-10">,00 / mois HT</span>
+                                                {currency === 0 ? '250' : '25'}
+                                                <span className="text-10">,00 / mois
+                                            {currency === 0 && ' HT'}</span>
                                             </span>
 
                                         </div>
@@ -509,7 +484,7 @@ function PricingFournisseur() {
                                                     classes={{
                                                         primary: "font-bold text-10 sm:text-12 md:text-14 lg:text-15 "
                                                     }}
-                                                    primary="Illimité"
+                                                    primary="illimité"
 
                                                 />
                                             </ListItem>
@@ -565,7 +540,7 @@ function PricingFournisseur() {
                                                     classes={{
                                                         primary: "font-bold text-10 sm:text-12 md:text-14 lg:text-15"
                                                     }}
-                                                    primary="Illimité"
+                                                    primary="illimité"
 
                                                 />
                                             </ListItem>
@@ -660,10 +635,12 @@ function PricingFournisseur() {
                                         <div className="text-black uppercase font-extrabold pt-16 text-24">BUSINESS</div>
                                         <div className="flex justify-center mt-12 text-black">
                                             <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                                                MAD
+                                                {currency === 0 ? 'MAD' : '$'}
                                             </span>
                                             <span className=" uppercase font-extrabold text-32">
-                                                350<span className="text-10">,00 / mois HT</span>
+                                                {currency === 0 ? '350' : '35'}
+                                                <span className="text-10">,00 / mois
+                                            {currency === 0 && ' HT'}</span>
                                             </span>
 
                                         </div>
@@ -718,7 +695,7 @@ function PricingFournisseur() {
                                                     classes={{
                                                         primary: "font-bold text-10 sm:text-12 md:text-14 lg:text-15 "
                                                     }}
-                                                    primary="Illimité"
+                                                    primary="illimité"
 
                                                 />
                                             </ListItem>
@@ -772,7 +749,7 @@ function PricingFournisseur() {
                                                     classes={{
                                                         primary: "font-bold text-10 sm:text-12 md:text-14 lg:text-15"
                                                     }}
-                                                    primary="Illimité"
+                                                    primary="illimité"
 
                                                 />
                                             </ListItem>
@@ -868,10 +845,12 @@ function PricingFournisseur() {
                                         <div className="text-black uppercase font-extrabold pt-16 text-24">GOLD</div>
                                         <div className="flex justify-center mt-12 text-black">
                                             <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                                                MAD
+                                                {currency === 0 ? 'MAD' : '$'}
                                             </span>
                                             <span className=" uppercase font-extrabold text-32">
-                                                450<span className="text-10">,00 / mois HT</span>
+                                                {currency === 0 ? '450' : '45'}
+                                                <span className="text-10">,00 / mois
+                                            {currency === 0 && ' HT'}</span>
                                             </span>
 
                                         </div>
@@ -926,7 +905,7 @@ function PricingFournisseur() {
                                                     classes={{
                                                         primary: "font-bold text-10 sm:text-12 md:text-14 lg:text-15 "
                                                     }}
-                                                    primary="Illimité"
+                                                    primary="illimité"
 
                                                 />
                                             </ListItem>
@@ -980,7 +959,7 @@ function PricingFournisseur() {
                                                     classes={{
                                                         primary: "font-bold text-10 sm:text-12 md:text-14 lg:text-15"
                                                     }}
-                                                    primary="Illimité"
+                                                    primary="illimité"
 
                                                 />
                                             </ListItem>

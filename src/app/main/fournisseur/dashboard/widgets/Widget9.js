@@ -68,7 +68,7 @@ function Widget9(props) {
                             <div className="flex">
                                 <Typography className="text-11 font-500 rounded-4 text-white bg-blue px-8 py-4">
 
-                                    {widgets.personnelPotentiels.length + " Agance(s) / Service(s)"}
+                                    {widgets.personnelPotentiels.length + " Agence(s) / Service(s)"}
 
                                 </Typography>
                                 <Select

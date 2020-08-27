@@ -126,6 +126,7 @@ function ProduitListItem(props) {
                                                             {_.capitalize(_.truncate(produit.description, {
                                                                 'length': 70
                                                             }))}
+                                                            <Link to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} className="ml-2 text-blue" >Voir détails</Link>
                                                         </Typography>
                                                         <Typography variant="body2" className="mb-8" color="textSecondary">
                                                             Réf: {produit.reference}

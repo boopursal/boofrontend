@@ -356,7 +356,7 @@ function Step4App(props) {
                                                         value={
                                                             form.pays
                                                         }
-                                                        placeholder="Sélectionner une pays"
+                                                        placeholder="Sélectionner un pays"
                                                         textFieldProps={{
                                                             label: 'Pays',
                                                             InputLabelProps: {

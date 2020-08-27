@@ -122,6 +122,9 @@ function FicheFournisseur(props) {
     useEffect(() => {
         if (tab === 'produits') {
             setValue(1);
+        } else {
+            setValue(0);
+
         }
     }, [tab, setValue]);
 

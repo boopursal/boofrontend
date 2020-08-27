@@ -31,7 +31,7 @@ function FooterLayout3(props) {
                             </Typography>
                             <ul className="list-reset mb-6 p-0">
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0  ">
-                                    <Link component="true" to="/register" className="ml-0 text-blue">Inscrivez-vous comme Acheteur</Link>
+                                    <Link component="true" to="/register/2" className="ml-0 text-blue">Inscrivez-vous comme Acheteur</Link>
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                     <Link component="true" to="/vente-produits" className="ml-0 text-blue">Voir produits</Link>
@@ -49,7 +49,7 @@ function FooterLayout3(props) {
                             </Typography>
                             <ul className="list-reset mb-6 p-0">
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/register" className="ml-0 text-blue">Inscrivez-vous comme Fournisseur</Link>
+                                    <Link component="true" to="/register/1" className="ml-0 text-blue">Inscrivez-vous comme Fournisseur</Link>
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                     <Link component="true" to="/conditions" className="ml-0 text-blue">Comment publier sur LesAchatsIndustriels</Link>
@@ -75,7 +75,7 @@ function FooterLayout3(props) {
 
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/tarifs/fournisseur" className="ml-0 text-blue">Tarifs</Link>
+                                    <Link component="true" to="/tarifs/plans" className="ml-0 text-blue">Tarifs</Link>
 
                                 </li>
                             </ul>
@@ -91,7 +91,7 @@ function FooterLayout3(props) {
                                 &ensp;|&ensp;
                                 <Link component="true" to="/faqs" className="text-blue">FAQ</Link>
                                 &ensp;|&ensp;
-                                <Link component="true" to="/tarifs/fournisseur" className="text-blue">Tarifs</Link>
+                                <Link component="true" to="/tarifs/plans" className="text-blue">Tarifs</Link>
 
                             </div>
                         </Grid>

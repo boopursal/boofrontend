@@ -1208,10 +1208,10 @@ function Fournisseur(props) {
                                                 onChange={handleChange}
                                                 label="Nom"
                                                 validations={{
-                                                    minLength: 4
+                                                    minLength: 3
                                                 }}
                                                 validationErrors={{
-                                                    minLength: 'La longueur minimale de caractère est 4'
+                                                    minLength: 'La longueur minimale de caractère est 3'
                                                 }}
                                                 InputProps={{
                                                     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -1230,10 +1230,10 @@ function Fournisseur(props) {
                                                 name="firstName"
                                                 label="Prénom"
                                                 validations={{
-                                                    minLength: 4
+                                                    minLength: 3
                                                 }}
                                                 validationErrors={{
-                                                    minLength: 'La longueur minimale de caractère est 4'
+                                                    minLength: 'La longueur minimale de caractère est 3'
                                                 }}
                                                 InputProps={{
                                                     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">person</Icon></InputAdornment>
@@ -1248,9 +1248,6 @@ function Fournisseur(props) {
                                     <Divider />
 
                                     <Grid container spacing={3} className="mt-5">
-
-
-
                                         <Grid item xs={12} sm={6}>
                                             <TextFieldFormsy
                                                 className="mb-16"
@@ -1271,14 +1268,6 @@ function Fournisseur(props) {
                                                 type="text"
                                                 name="phone"
                                                 label="Téléphone"
-                                                validations={{
-                                                    minLength: 10,
-                                                    maxLength: 13,
-                                                }}
-                                                validationErrors={{
-                                                    minLength: 'La longueur minimale de caractère est 10',
-                                                    maxLength: 'La longueur maximale de caractère est 13'
-                                                }}
                                                 InputProps={{
                                                     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">local_phone</Icon></InputAdornment>
                                                 }}
@@ -1289,8 +1278,6 @@ function Fournisseur(props) {
                                         </Grid>
 
                                     </Grid>
-
-
 
                                     <Button
                                         type="submit"

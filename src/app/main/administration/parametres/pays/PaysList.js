@@ -268,7 +268,7 @@ function PaysList(props) {
                     parametres.search = filtered;
                     fn(parametres);
                 }}
-                noDataText="Aucune pays trouvée"
+                noDataText="Aucun pays trouvé"
                 loadingText='Chargement...'
                 ofText='sur'
             />

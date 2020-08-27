@@ -69,7 +69,7 @@ function SuiviPersonnel(props) {
                         scrollButtons="off"
                         className="w-full border-b-1 px-24"
                     >
-                        <Tab className="text-14 font-600 normal-case" label="Agance / Service" />
+                        <Tab className="text-14 font-600 normal-case" label="Agence / Service" />
                         <Tab className="text-14 font-600 normal-case" label="Résumé du budget" />
                     </Tabs>
                 }

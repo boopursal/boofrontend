@@ -72,7 +72,6 @@ const useStyles = makeStyles(theme => ({
             }
         },
         '&.featured': {
-            pointerEvents: 'none',
             boxShadow: theme.shadows[3],
             '& $produitImageFeaturedStar': {
                 opacity: 1
@@ -81,6 +80,16 @@ const useStyles = makeStyles(theme => ({
                 opacity: 1
             }
         }
+        , '&.featured': {
+            boxShadow: theme.shadows[3],
+            '& $produitImageFeaturedStar': {
+                opacity: 1
+            },
+            '&:hover $produitImageFeaturedStar': {
+                opacity: 1
+            }
+        }
+
     },
 
     error: {
@@ -107,12 +116,9 @@ function Produit(props) {
 
     const dispatch = useDispatch();
     const produit = useSelector(({ produitsApp }) => produitsApp.produit);
-
-
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
     const { form, handleChange, setForm } = useForm(null);
-
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
     const [secteur, setSecteur] = useState(null);
@@ -865,9 +871,14 @@ function Produit(props) {
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip title="Supprimer" >
-                                                    <IconButton className={classes.produitImageFeaturedStar2}
+                                                    <IconButton className={clsx(
+                                                        classes.produitImageFeaturedStar2,
+                                                        (media.id === (form.featuredImageId ? form.featuredImageId.id : null)) && 'hidden')
+
+                                                    }
                                                         onClick={(ev) => {
                                                             ev.stopPropagation();
+
                                                             dispatch(Actions.deleteMedia(media));
                                                         }}
                                                     >

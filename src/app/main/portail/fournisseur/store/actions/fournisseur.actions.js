@@ -20,6 +20,10 @@ export const OPEN_NEW_CONTACT_FOURNISSEUR_DIALOG = '[DETAIL FOURNISSEUR APP] OPE
 export const CLOSE_NEW_CONTACT_FOURNISSEUR_DIALOG = '[DETAIL FOURNISSEUR APP] CLOSE NEW CONTACT FOURNISSEUR DIALOG';
 export const REQUEST_SAVE = '[DETAIL FOURNISSEUR APP] REQUEST SAVE';
 export const SAVE_MESSAGE = '[DETAIL FOURNISSEUR APP] SAVE MESSAGE';
+export const CLEAN_UP_FRS = '[DETAIL FOURNISSEUR APP] CLEAN_UP_FRS';
+export const CLEAN_UP_PD_AP = '[DETAIL FOURNISSEUR APP] CLEAN_UP_PD_AP';
+export const CLEAN_UP_PDS = '[DETAIL FOURNISSEUR APP] CLEAN_UP_PDS';
+
 
 export function cleanUp() {
 
@@ -27,6 +31,28 @@ export function cleanUp() {
         type: CLEAN_UP,
     });
 }
+
+export function cleanUpFrs() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_FRS,
+    });
+}
+
+export function cleanUpPrdApercu() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_PD_AP,
+    });
+}
+
+export function cleanUpPrds() {
+
+    return (dispatch) => dispatch({
+        type: CLEAN_UP_PDS,
+    });
+}
+
 export function cleanError() {
 
     return (dispatch) => dispatch({

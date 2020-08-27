@@ -28,13 +28,13 @@ const useStyles = makeStyles(theme => ({
             marginBottom: 10
         },
         border: '1px solid #ccc',
-        borderRadius:10
+        borderRadius: 10
 
     },
     mainAvatar: {
         margin: theme.spacing(1.25, 1.25, 1.25, 0),
         color: '#fff',
-        
+
         backgroundColor: theme.palette.primary.main,
     },
 
@@ -82,7 +82,7 @@ function Navigation(props) {
                 categoriesNav.secteurs &&
                 <div className="px-16 py-20 text-right">
                     <Link2 component={Link} to={`/annuaire-entreprises`} className="">
-                        Tous les secteurs d’activité >
+                        Tous les secteurs d’activités >
                     </Link2>
                 </div>
             }

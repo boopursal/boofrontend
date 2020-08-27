@@ -93,10 +93,10 @@ function Secteurs(props) {
         <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
             {
                 <Helmet>
-                    <title>{'Tous les secteurs d’activité | Les Achats Industriels'}</title>
-                    <meta name="description" content='Tous les secteurs d’activité | Les Achats Industriels' />
-                    <meta property="og:title" content='Tous les secteurs d’activité | Les Achats Industriels' />
-                    <meta property="og:description" content='Tous les secteurs d’activité | Les Achats Industriels' />
+                    <title>{'Tous les secteurs d’activités | Les Achats Industriels'}</title>
+                    <meta name="description" content='Tous les secteurs d’activités | Les Achats Industriels' />
+                    <meta property="og:title" content='Tous les secteurs d’activités | Les Achats Industriels' />
+                    <meta property="og:description" content='Tous les secteurs d’activités | Les Achats Industriels' />
                 </Helmet>
             }
             <div

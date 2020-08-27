@@ -530,14 +530,14 @@ const navigationConfig = [
         'children': [
             {
                 'id': 'suivi-component',
-                'title': "Suivi d'Agance / Service",
+                'title': "Suivi d'Agence / Service",
                 'auth': authRoles.fournisseur,
                 'type': 'item',
                 'url': '/suivi',
             },
             {
                 'id': 'personnels-component',
-                'title': "Création d'Agance / Service",
+                'title': "Création d'Agence / Service",
                 'auth': authRoles.fournisseur,
                 'type': 'item',
                 'url': '/fournisseur/personnel',
@@ -548,7 +548,7 @@ const navigationConfig = [
     {
 
         'id': 'abonnement',
-        'title': 'Les achats industriels',
+        'title': 'Les Achats Industriels',
         'type': 'collapse',
         'auth': authRoles.fournisseur,
         'icon': 'cloud',
