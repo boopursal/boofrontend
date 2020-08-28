@@ -15,8 +15,11 @@ function Produits() {
     const parametres = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.parametres);
 
     useEffect(() => {
-        if (user) {
-            dispatch(Actions.getProduits(user.id, parametres));
+        if (!user)
+            return
+        dispatch(Actions.getProduits(user.id, parametres));
+        return () => {
+            dispatch(Actions.cleanUp())
         }
     }, [dispatch, parametres, user]);
 
@@ -24,7 +27,7 @@ function Produits() {
     return (
         <>
             <Helmet>
-                <title>Mes produits | Les Achats Industriels</title>
+                <title>Mes produits / services | Les Achats Industriels</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <meta name="googlebot" content="noindex" />
             </Helmet>

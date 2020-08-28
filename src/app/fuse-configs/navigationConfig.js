@@ -458,14 +458,14 @@ const navigationConfig = [
     },
     {
         'id': 'produits-fournisseur',
-        'title': 'Produits',
+        'title': 'Produits / Services',
         'auth': authRoles.fournisseur,
         'type': 'collapse',
         'icon': 'local_offer',
         'children': [
             {
                 'id': 'nv_produit',
-                'title': 'Nouveau produit',
+                'title': 'Nouveau produit / service',
                 'auth': authRoles.fournisseur,
                 'exact': true,
                 'type': 'item',
@@ -474,7 +474,7 @@ const navigationConfig = [
             },
             {
                 'id': 'mes_produits',
-                'title': 'Liste des produits',
+                'title': 'Liste des produits / services',
                 'auth': authRoles.fournisseur,
                 'exact': true,
                 'type': 'item',

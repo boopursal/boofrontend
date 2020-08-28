@@ -193,7 +193,7 @@ export function saveProduit(data, secteur, sousSecteur, categorie, abonnee) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Produit enregistré' }));
+            dispatch(showMessage({ message: 'Produit / Service bien enregistré' }));
 
             return dispatch({
                 type: SAVE_PRODUIT,
@@ -233,7 +233,7 @@ export function putProduit(data, url, secteur, sousSecteur, categorie) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Produit Modifié' }));
+            dispatch(showMessage({ message: 'Produit / Service bien modifié' }));
 
             return dispatch({
                 type: SAVE_PRODUIT,

@@ -506,7 +506,7 @@ function Produit(props) {
                                     </Typography>
 
                                     <Typography color="textSecondary" className="mb-40">
-                                        Pour le réactivité nous vous prions de nous contacter sur l'adresse mail suivante <strong>administrateur@lesachatsindustriesl.com</strong>
+                                        Pour le réactiviter nous vous prions de nous contacter sur l'adresse mail suivante <strong>administrateur@lesachatsindustriesl.com</strong>
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -595,7 +595,7 @@ function Produit(props) {
                             <CardContent className="flex flex-col items-center justify-center text-center p-48">
 
                                 <Typography variant="h4" className="mb-16 text-red">
-                                    Reserver à nos abonnés
+                                    Reservé à nos abonnés
                                 </Typography>
 
                                 <Typography color="textSecondary" className="mb-40">
@@ -654,12 +654,12 @@ function Produit(props) {
                                 <div className="flex flex-col min-w-0">
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography className="text-16 sm:text-20 truncate">
-                                            {form.reference ? form.reference : 'Nouveau produit'}
+                                            {form.reference ? form.reference : 'Nouveau produit / service'}
                                         </Typography>
                                     </FuseAnimate>
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography variant="caption" className="items-center">
-                                            Détails du produit
+                                            Détails du produit / service
                                             {
                                                 !abonnee && <Chip className={countFreeImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - countFreeImages) + ' image(s) à utiliser'} />
                                             }

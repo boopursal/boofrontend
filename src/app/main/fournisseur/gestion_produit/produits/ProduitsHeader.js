@@ -56,7 +56,7 @@ function ProduitsHeader(props) {
                         <Icon className="text-32 mr-0 sm:mr-12">shopping_cart</Icon>
                     </FuseAnimate>
                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                        <Typography className="hidden sm:flex" variant="h6">Vos produits</Typography>
+                        <Typography className="hidden sm:flex" variant="h6">Vos Produits / Services</Typography>
                     </FuseAnimate>
                 </div>
 
@@ -74,7 +74,7 @@ function ProduitsHeader(props) {
             </div>
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <Button component={Link} to="/produits/new" className="whitespace-no-wrap" variant="contained">
-                    <span className="hidden sm:flex">Ajouter nouveau produit</span>
+                    <span className="hidden sm:flex">Ajouter nouveau produit / service</span>
                     <span className="flex sm:hidden">New</span>
                 </Button>
             </FuseAnimate>
