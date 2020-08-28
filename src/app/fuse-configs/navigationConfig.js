@@ -27,6 +27,7 @@ const navigationConfig = [
     {
         'id': 'demandes-devis',
         'title': 'Demandes de devis',
+        'auth': authRoles.admin,
         'type': 'collapse',
         'icon': 'inbox',
         'children': [
