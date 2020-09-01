@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, InputAdornment, Icon, Grid, MenuItem, IconButton } from '@material-ui/core';
+import { Button, InputAdornment, Icon, Grid, MenuItem, IconButton, Dialog, DialogTitle, DialogContent, Divider, DialogActions } from '@material-ui/core';
 import { TextFieldFormsy, SelectFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import * as authActions from 'app/auth/store/actions';
@@ -51,6 +51,8 @@ function FournisseurTab(props) {
     const dispatch = useDispatch();
     const register = useSelector(({ auth }) => auth.register);
     const [recaptcha, setRecaptcha] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [parentErreur, setParentErreur] = useState(null);
 
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
@@ -72,6 +74,17 @@ function FournisseurTab(props) {
             });
             disableButton();
         }
+        if (register.error && (register.error.Erreur)) {
+            setParentErreur(register.error.Erreur)
+            setOpen(true);
+            formRef.current.updateInputsWithError({
+                societe : 'Cette société est déjà existe'
+            });
+            disableButton();
+        }
+        return () => {
+            dispatch(authActions.cleanUpErrors())
+        }
     }, [register.error]);
 
     function disableButton() {
@@ -81,7 +94,9 @@ function FournisseurTab(props) {
     function enableButton() {
         setIsFormValid(true);
     }
-
+    function handleClose() {
+        setOpen(false);
+    }
     function handleSubmit(model) {
         dispatch(authActions.submitRegisterFournisseur(model, props.history));
     }
@@ -98,6 +113,22 @@ function FournisseurTab(props) {
                 <meta name="description" content="L'inscription sur notre site est gratuite ainsi que la réception des demandes de prix.
 Afin de recevoir le maximum d'alertes, veuillez choisir le maximum de produits pour lesquelles vous souhaitez recevoir de demandes." />
             </Helmet>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-parent-existe">
+                <DialogTitle id="dialog-parent-existe" className="uppercase">inscription a échoué </DialogTitle>
+                <DialogContent className="mb-12 font-600">
+                    {parentErreur ? parentErreur : 'Une erreur est survenue veuillez réessayer plus tard'}
+                </DialogContent>
+                <Divider />
+                <DialogActions>
+                    <Button
+                        onClick={handleClose}
+                        variant="contained"
+                        color="secondary"
+                    >
+                        Ok
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <Formsy
                 onValidSubmit={handleSubmit}
                 onValid={enableButton}

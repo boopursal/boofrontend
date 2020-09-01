@@ -30,14 +30,14 @@ function TarifDetail(props) {
 
                         <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
                             <Typography variant="h1" color="inherit" className="font-bold uppercase text-24 sm:text-32 md:text-44 ">
-                                Tarifs Fournisseur
+                                Tarif Fournisseur
                         </Typography>
                         </FuseAnimate>
 
                         <FuseAnimate duration={400} delay={600}>
                             <Typography variant="subtitle1" color="inherit" className="opacity-75 mt-16 text-13 sm:text-18 mx-auto max-w-512">
-                                Votre place de marché <span className=" italic font-bold uppercase">B2B</span> la plus adapté a vos besoin avec une tarification simple et abordable.
-                                 <br /> Vous pouvez toujours essayer pour un plan gratuit!
+                                Votre place de marché <span className=" italic font-bold uppercase">B2B</span> la plus adapté à vos besoin avec une tarification simple et abordable.
+                                 <br /> Vous pouvez toujours essayer un plan gratuit!
                             </Typography>
                         </FuseAnimate>
                         <FuseAnimateGroup
@@ -52,9 +52,9 @@ function TarifDetail(props) {
                                 onClick={() => handleChangeCurrency(0)}>
                                 MAD
                             </Button>
-                            <Button color="secondary" 
-                            onClick={() => handleChangeCurrency(1)} 
-                            variant={currency === 0 ? "outlined" : "contained"} >
+                            <Button color="secondary"
+                                onClick={() => handleChangeCurrency(1)}
+                                variant={currency === 0 ? "outlined" : "contained"} >
                                 $
                             </Button>
                         </FuseAnimateGroup>
