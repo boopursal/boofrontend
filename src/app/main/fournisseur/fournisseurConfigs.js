@@ -7,6 +7,7 @@ import { AbonnementsConfigs } from "./abonnoment/AbonnementsConfigs";
 import { DashboardAppConfig } from "./dashboard/DashboardAppConfig";
 import { demandeDevisConfigs } from "./demandeDevis/demandeDevisConfigs";
 import { messagesConfigs } from "./messages/messagesConfigs";
+import { childsConfigs } from "./childs/childsConfigs";
 
 
 export const fournisseurConfigs = [
@@ -18,5 +19,6 @@ export const fournisseurConfigs = [
     consultationConfigs,
     PersonnelsAppConfig,
     DashboardAppConfig,
+    childsConfigs,
     ...AbonnementsConfigs
 ];

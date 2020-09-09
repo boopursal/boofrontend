@@ -41,7 +41,7 @@ function PricingAcheteur(props) {
 
                         <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
                             <Typography variant="h1" color="inherit" className="font-bold uppercase text-24 sm:text-32 md:text-44 ">
-                                Tarifs Acheteur
+                                Tarif Acheteur
                             </Typography>
                         </FuseAnimate>
 

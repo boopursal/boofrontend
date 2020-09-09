@@ -71,6 +71,7 @@ function DemandeListItem(props) {
         document.querySelector('.st').scrollTop = 0;
         dispatch(Actions.setParametresData(parametres))
     }
+
     return (
         <div className={classes.root}>
             {
@@ -94,10 +95,9 @@ function DemandeListItem(props) {
                     )
                     :
                     (
-                        <FuseAnimateGroup
-                            enter={{
-                                animation: "transition.slideUpBigIn"
-                            }}
+                        <FuseAnimateGroup enter={{
+                            animation: "transition.slideUpBigIn"
+                        }}
                         >
                             {
                                 demandes && demandes.map((demande, index) => (
@@ -164,7 +164,7 @@ function DemandeListItem(props) {
                                                                     // or use a string like 'en-US' to override it.
                                                                     { minimumFractionDigits: 2 }
                                                                 ) + (demande.currency ? ' ' + demande.currency.name : '')
-                                                                : 'Prix à  consulter'
+                                                                : 'Prix sur demande'
                                                         }
                                                     </Typography>
 
@@ -206,12 +206,9 @@ function DemandeListItem(props) {
                                     </Grid>
                                 )
                             }
-
                         </FuseAnimateGroup>
-
                     )
             }
-
         </div>
     );
 }

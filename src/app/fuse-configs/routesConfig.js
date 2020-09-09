@@ -1,11 +1,11 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom';
-import {FuseUtils} from '@fuse';
-import {ExampleConfig} from 'app/main/example/ExampleConfig';
+import { Redirect } from 'react-router-dom';
+import { FuseUtils } from '@fuse';
+import { ExampleConfig } from 'app/main/example/ExampleConfig';
 import _ from '@lodash';
-import {authRoles} from 'app/auth';
+import { authRoles } from 'app/auth';
 import { LoginConfig } from '../main/login/LoginConfig';
-import {pagesConfigs} from 'app/main/pages/pagesConfigs';
+import { pagesConfigs } from 'app/main/pages/pagesConfigs';
 import { administrateurConfigs } from '../main/administration/administrateurConfigs';
 import { RegisterPageConfig } from '../main/inscription/RegisterPageConfig';
 import { acheteurConfigs } from '../main/acheteur/acheteurConfigs';
@@ -13,9 +13,8 @@ import { fournisseurConfigs } from '../main/fournisseur/fournisseurConfigs';
 import { PortailConfig } from '../main/portail/PortailConfig';
 import { DashboardConfigs } from '../main/dashboard/DashboardConfigs';
 
-function setAdminAuth(configs)
-{
-    return configs.map(config => _.merge({}, config, {auth: authRoles.admin}))
+function setAdminAuth(configs) {
+    return configs.map(config => _.merge({}, config, { auth: authRoles.admin }))
 }
 const routeConfigs = [
     ...setAdminAuth([
@@ -23,11 +22,11 @@ const routeConfigs = [
     ]),
     ...acheteurConfigs,
     ...fournisseurConfigs,
-    ExampleConfig,
     ...pagesConfigs,
     ...RegisterPageConfig,
-    LoginConfig,
     ...PortailConfig,
+    ExampleConfig,
+    LoginConfig,
     DashboardConfigs
 ];
 
@@ -39,7 +38,7 @@ const routes = [
         component: () => <Redirect to="/login"/>
     },*/
     {
-        component: () => <Redirect to="/pages/errors/error-404"/>
+        component: () => <Redirect to="/pages/errors/error-404" />
     }
 ];
 

@@ -1,25 +1,24 @@
-import React, {useEffect, useCallback, useRef, useState} from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar,  DialogTitle, DialogContentText} from '@material-ui/core';
-import {useForm} from '@fuse/hooks';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, DialogTitle, DialogContentText } from '@material-ui/core';
+import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {TextFieldFormsy} from '@fuse';
+import { useDispatch, useSelector } from 'react-redux';
+import { TextFieldFormsy } from '@fuse';
 import Formsy from 'formsy-react';
 import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
 import _ from '@lodash';
 const defaultFormState = {
-    name    : '',
-    pays : ''
+    name: '',
+    pays: ''
 };
 
-function VillesDialog(props)
-{
+function VillesDialog(props) {
     const dispatch = useDispatch();
-    const VillesDialog = useSelector(({villesApp}) => villesApp.villes.villesDialog);
-    const Pays = useSelector(({villesApp}) => villesApp.villes.pays);
+    const VillesDialog = useSelector(({ villesApp }) => villesApp.villes.villesDialog);
+    const Pays = useSelector(({ villesApp }) => villesApp.villes.pays);
     const parametres = useSelector(({ villesApp }) => villesApp.villes.parametres);
-   
-    const {form, handleChange, setForm} = useForm(defaultFormState);
+
+    const { form, handleChange, setForm } = useForm(defaultFormState);
 
 
     const [isFormValid, setIsFormValid] = useState(false);
@@ -31,21 +30,19 @@ function VillesDialog(props)
             /**
              * Dialog type: 'edit'
              */
-            if ( VillesDialog.type === 'edit' && VillesDialog.data )
-            {
-               let pays={
+            if (VillesDialog.type === 'edit' && VillesDialog.data) {
+                let pays = {
                     value: VillesDialog.data.pays['@id'],
                     label: VillesDialog.data.pays.name,
                 };
-                setForm({...VillesDialog.data});
-                setForm(_.set({...VillesDialog.data}, 'pays', pays));
+                setForm({ ...VillesDialog.data });
+                setForm(_.set({ ...VillesDialog.data }, 'pays', pays));
             }
 
             /**
              * Dialog type: 'new'
              */
-            if ( VillesDialog.type === 'new' )
-            {
+            if (VillesDialog.type === 'new') {
                 setForm({
                     ...defaultFormState,
                     ...VillesDialog.data,
@@ -59,56 +56,47 @@ function VillesDialog(props)
         /**
          * After Dialog Open
          */
-        if ( VillesDialog.props.open )
-        {
+        if (VillesDialog.props.open) {
             initDialog();
         }
 
     }, [VillesDialog.props.open, initDialog]);
 
-    
 
-    function closeComposeDialog()
-    {
+
+    function closeComposeDialog() {
         VillesDialog.type === 'edit' ? dispatch(Actions.closeEditVillesDialog()) : dispatch(Actions.closeNewVillesDialog());
     }
 
-    
 
-    function handleSubmit(event)
-    {
+
+    function handleSubmit(event) {
         //event.preventDefault();
-        if ( VillesDialog.type === 'new' )
-        {
-            dispatch(Actions.addVille(form,parametres));
+        if (VillesDialog.type === 'new') {
+            dispatch(Actions.addVille(form, parametres));
         }
-        else
-        {
-            dispatch(Actions.updateVille(form,parametres));
+        else {
+            dispatch(Actions.updateVille(form, parametres));
         }
         closeComposeDialog();
     }
 
-    function handleRemove()
-    {
-        
+    function handleRemove() {
+
         dispatch(Actions.removeVille(form));
         dispatch(Actions.closeDialog())
         closeComposeDialog();
     }
-    function handleChipChange(value, name)
-    {
+    function handleChipChange(value, name) {
         //setForm(_.set({...form}, name, value.map(item => item.value)));
-        setForm(_.set({...form}, name, value));
+        setForm(_.set({ ...form }, name, value));
     }
 
-    function disableButton()
-    {
+    function disableButton() {
         setIsFormValid(false);
     }
 
-    function enableButton()
-    {
+    function enableButton() {
         setIsFormValid(true);
     }
 
@@ -129,15 +117,15 @@ function VillesDialog(props)
                         {VillesDialog.type === 'new' ? 'Nouvelle Ville' : 'Editer Ville'}
                     </Typography>
                 </Toolbar>
-                
+
             </AppBar>
-            <Formsy 
-            onValidSubmit={handleSubmit}
-            onValid={enableButton}
-            onInvalid={disableButton}
-            ref={formRef}
-            className="flex flex-col overflow-hidden">
-                <DialogContent classes={{root: "p-24"}}>
+            <Formsy
+                onValidSubmit={handleSubmit}
+                onValid={enableButton}
+                onInvalid={disableButton}
+                ref={formRef}
+                className="flex flex-col overflow-hidden">
+                <DialogContent classes={{ root: "p-24" }}>
                     <div className="flex">
                         <div className="min-w-48 pt-20">
                             <Icon color="action">location_city</Icon>
@@ -145,7 +133,7 @@ function VillesDialog(props)
 
                         <TextFieldFormsy
                             className="mb-24"
-                            label="Name"
+                            label="Nom"
                             autoFocus
                             id="name"
                             name="name"
@@ -169,24 +157,24 @@ function VillesDialog(props)
                         </div>
 
                         <SelectReactFormsy
-                            
+
                             id="pays"
                             name="pays"
                             className="MuiFormControl-fullWidth MuiTextField-root mb-24"
                             value={
-                                
-                                    form.pays
-                                    
-                                
+
+                                form.pays
+
+
                             }
                             onChange={(value) => handleChipChange(value, 'pays')}
                             placeholder="Sélectionner un pays"
                             textFieldProps={{
-                                label          : 'Pays',
+                                label: 'Pays',
                                 InputLabelProps: {
                                     shrink: true
                                 },
-                                variant        : 'outlined'
+                                variant: 'outlined'
                             }}
                             options={Pays}
                             fullWidth
@@ -194,7 +182,7 @@ function VillesDialog(props)
                         />
                     </div>
 
-                 
+
                 </DialogContent>
 
                 {VillesDialog.type === 'new' ? (
@@ -209,61 +197,61 @@ function VillesDialog(props)
                         </Button>
                     </DialogActions>
                 ) : (
-                    <DialogActions className="justify-between pl-16">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={!isFormValid}
-                        >
-                            Modifier
+                        <DialogActions className="justify-between pl-16">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={!isFormValid}
+                            >
+                                Modifier
                         </Button>
-                        <IconButton
-                            onClick={()=> dispatch(Actions.openDialog({
-                                children: (
-                                    <React.Fragment>
-                                        <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                            {
-                                                        (Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0  && Object.keys(_.pullAllBy(form.commercials, [{ 'del': true }], 'del')).length === 0 ) ? 
-                                                        'Voulez vous vraiment supprimer cet enregistrement ?'
-                                                        :
-                                                        'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
+                            <IconButton
+                                onClick={() => dispatch(Actions.openDialog({
+                                    children: (
+                                        <React.Fragment>
+                                            <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    {
+                                                        (Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0 && Object.keys(_.pullAllBy(form.commercials, [{ 'del': true }], 'del')).length === 0) ?
+                                                            'Voulez vous vraiment supprimer cet enregistrement ?'
+                                                            :
+                                                            'Vous ne pouvez pas supprimer cet enregistrement, car il est en relation avec d\'autre(s) objet(s) !'
                                                     }
-                                            </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={()=> dispatch(Actions.closeDialog())} color="primary">
-                                                Non
+                                                </DialogContentText>
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                    Non
                                             </Button>
-                                            {
-                                                (
-                                                    Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0 
-                                                    && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0 
-                                                    && Object.keys(_.pullAllBy(form.commercials, [{ 'del': true }], 'del')).length === 0 
-                                                ) 
-                                                ? 
-                                                <Button onClick={handleRemove} color="primary" autoFocus>
-                                                    Oui
+                                                {
+                                                    (
+                                                        Object.keys(_.pullAllBy(form.fournisseurs, [{ 'del': true }], 'del')).length === 0
+                                                        && Object.keys(_.pullAllBy(form.acheteurs, [{ 'del': true }], 'del')).length === 0
+                                                        && Object.keys(_.pullAllBy(form.commercials, [{ 'del': true }], 'del')).length === 0
+                                                    )
+                                                        ?
+                                                        <Button onClick={handleRemove} color="primary" autoFocus>
+                                                            Oui
                                                 </Button>
-                                                :
-                                                <Button disabled  color="primary" autoFocus>
-                                                    Oui
+                                                        :
+                                                        <Button disabled color="primary" autoFocus>
+                                                            Oui
                                                 </Button>
-                                            }
-                                           
-                                        </DialogActions>
-                                    </React.Fragment>
-                                     )
-                                 }))}
-                            
-                            
-                        >
-                            <Icon>delete</Icon>
-                        </IconButton>
-                    </DialogActions>
-                )}
+                                                }
+
+                                            </DialogActions>
+                                        </React.Fragment>
+                                    )
+                                }))}
+
+
+                            >
+                                <Icon>delete</Icon>
+                            </IconButton>
+                        </DialogActions>
+                    )}
             </Formsy>
         </Dialog>
     );

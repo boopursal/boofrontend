@@ -86,6 +86,13 @@ const useStyles = makeStyles(theme => ({
     select: {
         zIndex: 999,
     },
+
+    warning: {
+        backgroundColor: "#f4993f4f",
+        border: "1px solid #f79c3f",
+        borderRadius: "7px"
+
+    },
     produitImageItem: {
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
@@ -179,9 +186,10 @@ function Produit(props) {
 
 
     useEffect(() => {
-        if (user) {
-            dispatch(Actions.getFreeProduits(user.id));
+        if (!user.id) {
+            return;
         }
+        dispatch(Actions.getFreeProduits(user));
     }, [dispatch, user]);
 
     useEffect(() => {
@@ -424,6 +432,10 @@ function Produit(props) {
         if (name === 'sousSecteurs') {
             if (value.value) {
                 dispatch(Actions.getCategories(value.value));
+                const id_activite = value.value.split("/");
+                if (id_activite.length > 2) {
+                    dispatch(Actions.checkIfActiviteUsedByCollegue(id_activite[id_activite.length - 1]));
+                }
                 setCategorie(null)
                 setSousSecteur(value)
                 setShowAutreProduit(false)
@@ -506,7 +518,7 @@ function Produit(props) {
                                     </Typography>
 
                                     <Typography color="textSecondary" className="mb-40">
-                                        Pour le réactivité nous vous prions de nous contacter sur l'adresse mail suivante <strong>administrateur@lesachatsindustriesl.com</strong>
+                                        Pour le réactiviter nous vous prions de nous contacter sur l'adresse mail suivante <strong>administrateur@lesachatsindustriesl.com</strong>
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -595,7 +607,7 @@ function Produit(props) {
                             <CardContent className="flex flex-col items-center justify-center text-center p-48">
 
                                 <Typography variant="h4" className="mb-16 text-red">
-                                    Reserver à nos abonnés
+                                    Reservé à nos abonnés
                                 </Typography>
 
                                 <Typography color="textSecondary" className="mb-40">
@@ -620,7 +632,6 @@ function Produit(props) {
             </div>
         );
     }
-
     return (
         <FusePageCarded
             classes={{
@@ -654,12 +665,12 @@ function Produit(props) {
                                 <div className="flex flex-col min-w-0">
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography className="text-16 sm:text-20 truncate">
-                                            {form.reference ? form.reference : 'Nouveau produit'}
+                                            {form.reference ? form.reference : 'Nouveau produit / service'}
                                         </Typography>
                                     </FuseAnimate>
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography variant="caption" className="items-center">
-                                            Détails du produit
+                                            Détails du produit / service
                                             {
                                                 !abonnee && <Chip className={countFreeImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - countFreeImages) + ' image(s) à utiliser'} />
                                             }
@@ -730,11 +741,19 @@ function Produit(props) {
                                     className="flex flex-col ">
 
                                     <Grid container spacing={3} className={clsx(abonnee && "mb-24")}>
+
+                                        {
+                                            (!produit.checking && produit.exist) &&
+                                            <Grid item xs={12}>
+                                                <Typography variant="caption" className={clsx("font-bold uppercase flex items-center text-orange p-16", classes.warning)} >
+                                                    <Icon className="mr-2">warning</Icon>AVERTISSEMENT! un de vos collègues utilise déjà l'activité que vous avez choisie.
+                                                </Typography>
+                                            </Grid>
+                                        }
                                         {
                                             !abonnee &&
                                             <Grid item xs={12} sm={4}>
                                                 <SelectReactFormsy
-
                                                     id="secteur"
                                                     name="secteur"
                                                     className="MuiFormControl-fullWidth MuiTextField-root"
@@ -782,7 +801,6 @@ function Produit(props) {
                                                 }
                                             </Grid>
                                         }
-
                                         <Grid item xs={12} sm={4}>
                                             <SelectReactFormsy
                                                 id="sousSecteurs"
@@ -832,7 +850,6 @@ function Produit(props) {
                                                     ''
                                             }
                                         </Grid>
-
                                         <Grid item xs={12} sm={4}>
                                             <SelectReactFormsy
                                                 id="categorie"
@@ -898,7 +915,6 @@ function Produit(props) {
                                                 validationErrors={{
                                                     minLength: 'La longueur minimale des caractères est de 6'
                                                 }}
-
                                                 required
                                                 fullWidth
                                             />
@@ -918,7 +934,6 @@ function Produit(props) {
                                                 validationErrors={{
                                                     minLength: 'Min character length is 4'
                                                 }}
-
                                                 required
                                                 fullWidth
                                             />
@@ -941,9 +956,6 @@ function Produit(props) {
 
                                     </Grid>
 
-
-
-
                                     <TextFieldFormsy
                                         className="mb-16  w-full"
                                         type="text"
@@ -962,7 +974,6 @@ function Produit(props) {
                                         variant="outlined"
                                         multiline
                                         rows="4"
-
                                     />
 
                                 </Formsy>
@@ -1224,9 +1235,6 @@ function Produit(props) {
                                 </Grid>
                             </Grid>
                         )}
-
-
-
                     </div>
                 )
             }

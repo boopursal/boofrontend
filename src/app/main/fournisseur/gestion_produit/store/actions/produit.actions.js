@@ -50,6 +50,8 @@ export const GET_FOURNISSEUR = '[PRODUIT FOURNISSEUR APP] GET_FOURNISSEUR';
 export const REQUEST_VIDEO = '[PRODUIT FOURNISSEUR APP] REQUEST_VIDEO';
 export const GET_VIDEO = '[PRODUIT FOURNISSEUR APP] GET_VIDEO';
 
+export const REQUEST_CHECK = '[PRODUIT FOURNISSEUR APP] REQUEST_CHECK';
+export const GET_CHECK = '[PRODUIT FOURNISSEUR APP] GET_CHECK';
 
 
 
@@ -144,6 +146,27 @@ export function getCategories(url) {
 
 }
 
+
+export function checkIfActiviteUsedByCollegue(activite) {
+
+
+    const request = agent.get(`api/check_activite_used?activite=${activite}`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_CHECK,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_CHECK,
+                payload: response.data
+            })
+        });
+
+    }
+
+}
+
 export function getProduit(params) {
     const request = agent.get(`/api/produits/${params}`);
 
@@ -193,7 +216,7 @@ export function saveProduit(data, secteur, sousSecteur, categorie, abonnee) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Produit enregistré' }));
+            dispatch(showMessage({ message: 'Produit / Service bien enregistré' }));
 
             return dispatch({
                 type: SAVE_PRODUIT,
@@ -233,7 +256,7 @@ export function putProduit(data, url, secteur, sousSecteur, categorie) {
         });
         return request.then((response) => {
 
-            dispatch(showMessage({ message: 'Produit Modifié' }));
+            dispatch(showMessage({ message: 'Produit / Service bien modifié' }));
 
             return dispatch({
                 type: SAVE_PRODUIT,

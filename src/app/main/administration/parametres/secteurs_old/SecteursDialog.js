@@ -124,7 +124,7 @@ function SecteursDialog(props) {
 
                         <TextFieldFormsy
                             className="mb-24"
-                            label="Name"
+                            label="Nom"
                             autoFocus
                             id="name"
                             name="name"
@@ -187,7 +187,7 @@ function SecteursDialog(props) {
 
                                                 {
                                                     Object.keys(_.pullAllBy(form.sousSecteurs, [{ 'del': true }], 'del')).length === 0 ?
-                                                        <Button  onClick={handleRemove} color="primary" autoFocus>
+                                                        <Button onClick={handleRemove} color="primary" autoFocus>
                                                             Oui
                                                         </Button>
                                                         :

@@ -73,11 +73,9 @@ function FicheFournisseurApp(props) {
     }, [dispatch, tab, id]);
 
     useEffect(() => {
-        console.log(tab)
         if (!tab) {
             return;
         }
-        console.log(tab)
 
         function updateFournisseurState() {
             dispatch(Actions.getFournisseurProduits(id, parametres));

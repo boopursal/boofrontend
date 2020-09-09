@@ -124,7 +124,7 @@ function PaysDialog(props) {
 
                         <TextFieldFormsy
                             className="mb-24"
-                            label="Name"
+                            label="Nom"
                             autoFocus
                             id="name"
                             name="name"

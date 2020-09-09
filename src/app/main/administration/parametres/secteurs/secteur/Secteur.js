@@ -35,7 +35,6 @@ const useStyles = makeStyles(theme => ({
         transitionDuration: theme.transitions.duration.short,
         transitionTimingFunction: theme.transitions.easing.easeInOut,
     },
-
     profileImageItem: {
         transitionProperty: 'box-shadow',
         transitionDuration: theme.transitions.duration.short,
@@ -55,7 +54,7 @@ const useStyles = makeStyles(theme => ({
                 opacity: 1
             }
         }
-    },
+    }
 }));
 
 function Secteur(props) {
@@ -66,7 +65,6 @@ function Secteur(props) {
     const formRef = useRef(null);
     const [tabValue, setTabValue] = useState(0);
     const { form, handleChange, setForm } = useForm(null);
-
 
     useEffect(() => {
         function updateSecteurstate() {
@@ -123,7 +121,7 @@ function Secteur(props) {
         setTabValue(tabValue);
     }
 
-    // UPLOAD TDR
+    // UPLOAD 
     function handleUploadSecteurChange(e) {
         const file = e.target.files[0];
         if (!file) {
@@ -137,17 +135,15 @@ function Secteur(props) {
 
         const params = props.match.params;
         const { secteurId } = params;
+
         if (secteurId === 'new') {
             dispatch(Actions.saveSecteur(form, props.history));
         }
         else {
-
             dispatch(Actions.updateSecteur(form, props.history));
         }
         //  dispatch(Actions.updateUserInfo(model, form.id));
     }
-
-
 
     return (
         <FusePageCarded

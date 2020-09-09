@@ -321,7 +321,7 @@ export function newDemande() {
         isPublic: false,
         isAnonyme: false,
         categories: null,
-        budget: null,
+        budget: 0,
         motifRejet: '',
         statut: null,
         attachements: [],

@@ -44,7 +44,7 @@ function PricingFournisseur(props) {
                                                 classes={{
                                                     primary: "font-bold text-10 sm:text-12 md:text-14 lg:text-15"
                                                 }}
-                                                primary="Présentions de Produits / Services"
+                                                primary="Présentations de Produits / Services"
 
                                             />
                                         </ListItem>

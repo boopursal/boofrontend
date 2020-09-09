@@ -189,7 +189,7 @@ function ProduitListItem(props) {
                                                                         // or use a string like 'en-US' to override it.
                                                                         { minimumFractionDigits: 2 }
                                                                     ) + (produit.currency ? ' ' + produit.currency.name : '')
-                                                                    : 'Prix à consulter'}
+                                                                    : 'Prix sur demande'}
                                                         </Typography>
                                                         {
                                                             produit['@id'] &&
