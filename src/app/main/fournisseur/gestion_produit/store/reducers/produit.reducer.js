@@ -19,12 +19,27 @@ const initialState = {
     loadingCategories: false,
     loadingRechercheVideo: false,
     videoExist: 0,
-
+    checking: false,
+    exist: false,
 };
 
 const produitReducer = function (state = initialState, action) {
     switch (action.type) {
-
+        case Actions.REQUEST_CHECK:
+            {
+                return {
+                    ...state,
+                    checking: true,
+                };
+            }
+        case Actions.GET_CHECK:
+            {
+                return {
+                    ...state,
+                    checking: false,
+                    exist: action.payload ? action.payload.exist : false,
+                };
+            }
         case Actions.REQUEST_PRODUIT:
         case Actions.REQUEST_SAVE:
             {

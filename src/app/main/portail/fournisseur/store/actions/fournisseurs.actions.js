@@ -51,14 +51,11 @@ export function getFournisseurs(params, pays, parametres, ville, q) {
         parametre += `&societeLower=${q}`
     }
 
-
-
-
     if (parametre) {
         parametre = '&' + parametre;
     }
     let order = _.split(parametres.filter.id, '-');
-    const request = agent.get(`/api/fournisseurs?page=${parametres.page}&isactif=true&isComplet=true&itemsPerPage=${parametres.itemsPerPage}&order[${order[0]}]=${order[1]}` + (parametre ? parametre : ''));
+    const request = agent.get(`/api/fournisseurs?page=${parametres.page}&exists[parent]=false&isactif=true&isComplet=true&itemsPerPage=${parametres.itemsPerPage}&order[${order[0]}]=${order[1]}` + (parametre ? parametre : ''));
 
     return (dispatch) => {
         dispatch({

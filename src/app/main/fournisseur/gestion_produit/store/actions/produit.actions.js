@@ -50,6 +50,8 @@ export const GET_FOURNISSEUR = '[PRODUIT FOURNISSEUR APP] GET_FOURNISSEUR';
 export const REQUEST_VIDEO = '[PRODUIT FOURNISSEUR APP] REQUEST_VIDEO';
 export const GET_VIDEO = '[PRODUIT FOURNISSEUR APP] GET_VIDEO';
 
+export const REQUEST_CHECK = '[PRODUIT FOURNISSEUR APP] REQUEST_CHECK';
+export const GET_CHECK = '[PRODUIT FOURNISSEUR APP] GET_CHECK';
 
 
 
@@ -136,6 +138,27 @@ export function getCategories(url) {
         return request.then((response) => {
             dispatch({
                 type: GET_CATEGORIE,
+                payload: response.data
+            })
+        });
+
+    }
+
+}
+
+
+export function checkIfActiviteUsedByCollegue(activite) {
+
+
+    const request = agent.get(`api/check_activite_used?activite=${activite}`);
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_CHECK,
+        });
+        return request.then((response) => {
+            dispatch({
+                type: GET_CHECK,
                 payload: response.data
             })
         });

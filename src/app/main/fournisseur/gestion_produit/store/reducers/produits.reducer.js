@@ -27,7 +27,25 @@ const produitsReducer = function (state = initialState, action) {
         case Actions.CLEAN_UP:
             {
                 return {
-                    ...initialState,
+                    ...state,
+                    data: [],
+                    parametres: {
+                        page: 1,
+                        search: [],
+                        description: '',
+                        filter: {
+                            id: 'created',
+                            direction: 'desc'
+                        }
+                    },
+                };
+            }
+        case Actions.CLEAN_UP_FREE:
+            {
+                return {
+                    ...state,
+                    freeProduits: [],
+                    nbImages: 0,
                 };
             }
         case Actions.REQUEST_PRODUITS:
@@ -35,7 +53,6 @@ const produitsReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: true,
-                    nbImages: 0,
 
                 };
             }
@@ -52,8 +69,6 @@ const produitsReducer = function (state = initialState, action) {
                     ...state,
                     data: action.payload['hydra:member'],
                     pageCount: FuseUtils.hydraPageCount(action.payload),
-                    nbImages: _.sumBy(action.payload['hydra:member'],
-                        function (o) { return o.images.length; }),
                     loading: false
                 };
             }
@@ -71,9 +86,8 @@ const produitsReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    freeProduits: action.payload['hydra:member'],
-                    nbImages: _.sumBy(action.payload['hydra:member'],
-                        function (o) { return o.images.length; }),
+                    freeProduits: action.payload,
+                    nbImages: parseInt(action.payload),
                     loadingFree: false
                 };
             }

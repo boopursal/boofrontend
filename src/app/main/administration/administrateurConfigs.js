@@ -6,12 +6,14 @@ import { demandeDevisConfigs } from "./demandeDevis/demandeDevisConfigs";
 import { produitConfigs } from "./gestion_produit/produitConfigs";
 import { portailConfigs } from "./portail/portailConfigs";
 import { contactFournisseurConfigs } from "./contactFournisseur/contactFournisseurConfigs";
+import { compteProvisoireConfigs } from "./compteProvisoire/compteProvisoireConfigs";
 
 export const administrateurConfigs = [
     ...parametresConfigs,
     ...utilisateursConfigs,
     ...abonnementsConfigs,
     ...portailConfigs,
+    ...compteProvisoireConfigs,
     demandeDevisConfigs,
     demandeConfigs,
     produitConfigs,

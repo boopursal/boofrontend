@@ -34,6 +34,7 @@ function ProduitsHeader(props) {
     const nbImages = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.nbImages);
     const classes = useStyles(props);
     const loading = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.loading);
+    const loadingFree = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.loadingFree);
 
 
     useEffect(() => {
@@ -61,9 +62,11 @@ function ProduitsHeader(props) {
                 </div>
 
                 {
-                    !loading ?
-                        (!abonnee && <Chip className={nbImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - nbImages) + ' image(s) à utiliser'} />)
-                        : ''
+
+                    !abonnee &&
+                    (!loadingFree ?
+                        <Chip className={nbImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - nbImages) + ' image(s) à utiliser'} />
+                        : 'Chargement...')
                 }
             </div>
 

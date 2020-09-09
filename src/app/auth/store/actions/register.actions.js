@@ -27,6 +27,7 @@ export function submitRegisterFournisseur(newFournisseur, history) {
                 dispatch({
                     type: REGISTER_SUCCESS
                 }),
+                console.log(response),
                 history.push('/mail-confirm')
             ])
         ).catch((error) => {

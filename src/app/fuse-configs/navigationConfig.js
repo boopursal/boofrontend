@@ -25,23 +25,21 @@ const navigationConfig = [
         }
     },
     {
-        'id': 'demandes-devis',
+        'id': 'demandes-devis-admin',
         'title': 'Demandes de devis',
         'auth': authRoles.admin,
         'type': 'collapse',
         'icon': 'inbox',
         'children': [
-
             {
                 'id': 'traite-devis',
                 'title': 'Traitées',
                 'auth': authRoles.admin,
                 'type': 'item',
                 'url': '/dv_traite',
-
             },
             {
-                'id': 'ntraite-devis',
+                'id': 'demandes-devis',
                 'title': 'Non traitées',
                 'auth': authRoles.admin,
                 'type': 'item',
@@ -109,18 +107,47 @@ const navigationConfig = [
         }
     },
     {
-        'id': 'fournisseurs-admin',
+        'id': 'fournisseurs-collaps',
         'title': 'Fournisseurs',
         'auth': authRoles.admin,
-        'type': 'item',
+        'type': 'collapse',
         'icon': 'supervisor_account',
-        'url': '/users/fournisseurs',
         'badge': {
-            'title': 'fournisseurs-admin',
+            'title': 'fournisseurs-collaps',
             'bg': 'rgb(255, 111, 0)',
             'fg': '#FFFFFF',
             'count': 0
         },
+        'children': [
+            {
+                'id': 'fournisseurs-admin',
+                'title': 'Liste',
+                'auth': authRoles.admin,
+                'type': 'item',
+                'icon': 'supervisor_account',
+                'url': '/users/fournisseurs',
+                'badge': {
+                    'title': 'fournisseurs-admin',
+                    'bg': 'rgb(255, 111, 0)',
+                    'fg': '#FFFFFF',
+                    'count': 0
+                },
+            },
+            {
+                'id': 'fournisseurs-provisoire',
+                'title': 'Fournisseurs provisoire',
+                'auth': authRoles.admin,
+                'type': 'item',
+                'icon': 'supervisor_account',
+                'url': '/provisoire_founrisseur',
+                'badge': {
+                    'title': 'fournisseurs-provisoire',
+                    'bg': 'rgb(255, 111, 0)',
+                    'fg': '#FFFFFF',
+                    'count': 0
+                },
+            },
+        ]
     },
     {
         'id': 'utilisateurs',
@@ -545,7 +572,20 @@ const navigationConfig = [
             },
         ]
     },
-
+    {
+        'id': 'fournisseurs-tentatives',
+        'title': "Tentative d'inscription",
+        'auth': authRoles.fournisseur,
+        'type': 'item',
+        'icon': 'vpn_key',
+        'url': '/tentatives',
+        'badge': {
+            'title': 'fournisseurs-tentatives',
+            'bg': 'rgb(255, 111, 0)',
+            'fg': '#FFFFFF',
+            'count': 0
+        }
+    },
     {
 
         'id': 'abonnement',

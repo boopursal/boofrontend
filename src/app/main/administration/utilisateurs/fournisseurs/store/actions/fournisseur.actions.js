@@ -405,6 +405,7 @@ export function addVille(name, pays_id, fournisseur_id) {
             const request2 = agent.put(`/api/fournisseurs/${fournisseur_id}`, data);
             return request2.then((response) => {
                 dispatch(Actions.getCountForBadge('fournisseurs-admin'));
+                dispatch(Actions.getCountForBadge('fournisseurs-collaps'));
                 dispatch({
                     type: UPDATE_FOURNISSEUR,
                     payload: response.data
@@ -451,6 +452,8 @@ export function viderAutreCategories(id_fournisseur) {
                 payload: response.data
             });
             dispatch(Actions.getCountForBadge('fournisseurs-admin'));
+            dispatch(Actions.getCountForBadge('fournisseurs-collaps'));
+
         }).catch((error) => {
             dispatch({
                 type: SAVE_ERROR,

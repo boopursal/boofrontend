@@ -84,6 +84,7 @@ function ProduitsTable(props) {
         if (produits) {
             setFilteredData(getFilteredArray(produits, searchText));
         }
+
     }, [produits, searchText]);
 
 
@@ -263,7 +264,7 @@ function ProduitsTable(props) {
                                                             </Button>
                                                             <Button
                                                                 onClick={(ev) => {
-                                                                    dispatch(Actions.removeProduit(row.original, parametres, user.id))
+                                                                    dispatch(Actions.removeProduit(row.original, parametres, user))
                                                                     dispatch(Actions.closeDialog())
                                                                 }}
                                                                 color="primary"

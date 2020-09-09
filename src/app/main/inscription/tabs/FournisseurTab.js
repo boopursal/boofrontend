@@ -75,12 +75,11 @@ function FournisseurTab(props) {
             disableButton();
         }
         if (register.error && (register.error.Erreur)) {
-            setParentErreur(register.error.Erreur)
-            setOpen(true);
-            formRef.current.updateInputsWithError({
-                societe : 'Cette société est déjà existe'
-            });
-            disableButton();
+            if(register.error.Erreur.includes("existe déjà")){
+                setParentErreur(register.error.Erreur)
+                setOpen(true);
+                disableButton();
+            }
         }
         return () => {
             dispatch(authActions.cleanUpErrors())
@@ -114,9 +113,12 @@ function FournisseurTab(props) {
 Afin de recevoir le maximum d'alertes, veuillez choisir le maximum de produits pour lesquelles vous souhaitez recevoir de demandes." />
             </Helmet>
             <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-parent-existe">
-                <DialogTitle id="dialog-parent-existe" className="uppercase">inscription a échoué </DialogTitle>
+                <DialogTitle id="dialog-parent-existe" className="uppercase">inscription mise en attente </DialogTitle>
                 <DialogContent className="mb-12 font-600">
-                    {parentErreur ? parentErreur : 'Une erreur est survenue veuillez réessayer plus tard'}
+                    {parentErreur ? parentErreur : 'Une erreur est survenue veuillez réessayer plus tard.'}
+                    <p className="mt-16">
+                    {parentErreur && "Si ce compte ne vous appartient pas, merci de nous contacter sur l'adresse mail suivante: adherent@lesachatsindustriels.com"}
+                     </p>
                 </DialogContent>
                 <Divider />
                 <DialogActions>

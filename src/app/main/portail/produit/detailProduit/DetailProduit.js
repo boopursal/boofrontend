@@ -433,7 +433,7 @@ function DetailProduit(props) {
                                                                 (produit.data.currency && ' ' + produit.data.currency.name) +
                                                                 ' HT'
                                                                 :
-                                                                'prix à consulter'
+                                                                'Prix sur demande'
                                                         }
                                                     </Typography>
                                                 </div>
@@ -598,7 +598,14 @@ function DetailProduit(props) {
                                             <CardContent>
                                                 <BootstrapTooltip placement="top" title="Voir la page entreprise">
                                                     <Grid container spacing={2}
-                                                        component={Link} to={produit.data.fournisseur && `/entreprise/${produit.data.fournisseur.id}-${produit.data.fournisseur.slug}`}
+                                                        component={Link}
+                                                        to={
+                                                            produit.data.fournisseur && (
+                                                                produit.data.fournisseur.parent ?
+                                                                    `/entreprise/${produit.data.fournisseur.parent.id}-${produit.data.fournisseur.parent.slug}`
+                                                                    :
+                                                                    `/entreprise/${produit.data.fournisseur.id}-${produit.data.fournisseur.slug}`
+                                                            )}
                                                         className={clsx(classes.vendeur, "items-center my-1")}>
                                                         <Grid item xs={4} sm={4}>
                                                             {

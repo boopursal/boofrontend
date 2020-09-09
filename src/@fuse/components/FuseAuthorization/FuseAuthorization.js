@@ -51,7 +51,6 @@ class FuseAuthorization extends Component {
         const { pathname, state } = location;
 
         let redirectPath = '';
-        console.log(userRole)
 
         if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_ACHETEUR' || userRole === 'ROLE_FOURNISSEUR') {
 
