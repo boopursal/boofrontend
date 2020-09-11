@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FusePageCarded } from '@fuse';
 import withReducer from 'app/store/withReducer';
 import AbonnementsTable from './AbonnementsTable';
@@ -7,7 +7,7 @@ import reducer from '../store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import { Helmet } from "react-helmet";
-import { Tab,Tabs } from '@material-ui/core';
+import { Tab, Tabs } from '@material-ui/core';
 import CommandesTable from './CommandesTable';
 
 function Abonnements() {
@@ -17,11 +17,18 @@ function Abonnements() {
     const [tabValue, setTabValue] = useState(0);
 
     useEffect(() => {
-        if (user){
-            dispatch(Actions.getAbonnements(user.id));
-            dispatch(Actions.getCommandes(user.id));
+        if (!user.id) {
+            return;
         }
-    }, [dispatch,  user]);
+        dispatch(Actions.getAbonnements(user.id));
+
+    }, [dispatch, user]);
+    useEffect(() => {
+        if (!user.id) {
+            return;
+        }
+        dispatch(Actions.getCommandes(user.id));
+    }, [dispatch, user]);
 
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);

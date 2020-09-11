@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Chip, Card, CardContent, Grow, Button, Tab, Tabs, Icon, Typography, Grid, CircularProgress, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Divider, TextField } from '@material-ui/core';
+import { Chip, Card, CardContent, Grow, Button, Tab, Tabs, Icon, Typography, Grid, CircularProgress, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Divider, TextField, Box } from '@material-ui/core';
 import { red, orange } from '@material-ui/core/colors';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, withStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
@@ -21,6 +21,21 @@ import YouTube from 'react-youtube';
 import ContentLoader from 'react-content-loader';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
+const BorderLinearProgress = withStyles((theme) => ({
+    root: {
+        height: 10,
+        borderRadius: 5,
+    },
+    colorPrimary: {
+        backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+    },
+    bar: {
+        borderRadius: 5,
+        backgroundColor: '#1a90ff',
+    },
+}))(LinearProgress);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -149,7 +164,6 @@ function Produit(props) {
     const loadingFree = useSelector(({ produitsFournisseursApp }) => produitsFournisseursApp.produits.loadingFree);
     const params = props.match.params;
     const { produitId } = params;
-
     const [isFormValid, setIsFormValid] = useState(false);
     const formRef = useRef(null);
     const { form, handleChange, setForm } = useForm(null);
@@ -162,11 +176,9 @@ function Produit(props) {
     const [showAutreSecteur, setShowAutreSecteur] = useState(false);
     const [showAutreActivite, setShowAutreActivite] = useState(false);
     const [showAutreProduit, setShowAutreProduit] = useState(false);
-
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const [images, setImages] = useState([]);
-
     const classes = useStyles(props);
     const [tabValue, setTabValue] = useState(0);
     const [secteur, setSecteur] = useState(null);
@@ -183,7 +195,6 @@ function Produit(props) {
             rel: 0,
         }
     };
-
 
     useEffect(() => {
         if (!user.id) {
@@ -263,25 +274,24 @@ function Produit(props) {
         }
     }, [form, produit.data, setForm]);
 
-
-
+    // Effect abonnement
     useEffect(() => {
-
-        if (abonnement) {
-            if (!abonnement.statut) {
-                //desactivé par admin
-                setEnable(false)
-            }
-            let days = moment(abonnement.expired).diff(moment(), 'days');
-            if (days <= 0) {
-                // abonnement expiré
-                setDays(days);
-                setExpired(true);
-            }
-            if (abonnement.statut && days > 0) {
-                //abonnement en cours
-                setAbonnee(true);
-            }
+        if (!abonnement)
+            return;
+        if (!abonnement.statut) {
+            //desactivé par admin
+            setEnable(false)
+            return
+        }
+        let days = moment(abonnement.expired).diff(moment(), 'days');
+        if (days <= 0) {
+            // abonnement expiré
+            setDays(days);
+            setExpired(true);
+        }
+        if (abonnement.statut && days > 0) {
+            //abonnement en cours
+            setAbonnee(true);
         }
     }, [abonnement]);
 
@@ -352,7 +362,6 @@ function Produit(props) {
         }
     }, [produit.image_deleted]);
 
-
     // Effect handle errors
     useEffect(() => {
         if (produit.error && (produit.error.reference || produit.error.titre || produit.error.description || produit.error.pu || produit.error.secteur || produit.error.sousSecteurs)) {
@@ -379,9 +388,6 @@ function Produit(props) {
             props.history.push('/produits');
         }
     }, [produit.success, dispatch]);
-
-
-
 
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
@@ -501,7 +507,8 @@ function Produit(props) {
             </div>
         );
     }
-    if (!abonnee && ((nbImages === 5 && produitId === 'new') || (produit.data && !produit.data.free && produitId !== 'new'))) {
+    if (!abonnee &&
+        ((nbImages === 5 && produitId === 'new') || (produit.data && !produit.data.free && produitId !== 'new'))) {
         if (!enable) {
             return (
                 <div className={clsx(classes.root2, "flex flex-col flex-auto flex-shrink-0 items-center justify-center p-32")}>
@@ -632,6 +639,7 @@ function Produit(props) {
             </div>
         );
     }
+
     return (
         <FusePageCarded
             classes={{
@@ -672,7 +680,25 @@ function Produit(props) {
                                         <Typography variant="caption" className="items-center">
                                             Détails du produit / service
                                             {
-                                                !abonnee && <Chip className={countFreeImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - countFreeImages) + ' image(s) à utiliser'} />
+                                                !abonnee &&
+                                                (!loadingFree ?
+                                                    <Box display="flex" alignItems="center">
+                                                        <Box minWidth={35}>
+                                                            <Icon>image</Icon>
+                                                        </Box>
+                                                        <Box width="100%" mr={1}>
+                                                            <BorderLinearProgress variant="determinate" value={(countFreeImages / 5) * 100} />
+                                                        </Box>
+                                                        <Box minWidth={35}>
+                                                            <Typography variant="body2" color="textSecondary">
+                                                                {`${countFreeImages}/5`}
+                                                            </Typography>
+                                                        </Box>
+                                                    </Box>
+                                                    : 'Chargement...')
+
+
+                                                //<Chip className={countFreeImages === 5 ? classes.chip1 : classes.chip2} label={'PACK OFFERT : il vous reste ' + (5 - countFreeImages) + ' image(s) à utiliser'} />
                                             }
                                         </Typography>
                                     </FuseAnimate>
@@ -726,7 +752,6 @@ function Produit(props) {
                     />
 
                 </Tabs>
-
             }
             content={
                 form && (
