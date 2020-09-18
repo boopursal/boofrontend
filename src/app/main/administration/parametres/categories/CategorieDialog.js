@@ -140,12 +140,7 @@ function CategoriesDialog(props) {
                             id="sousSecteurs"
                             name="sousSecteurs"
                             className="MuiFormControl-fullWidth MuiTextField-root mb-24"
-                            value={
-
-                                form.sousSecteurs
-
-
-                            }
+                            value={form.sousSecteurs}
                             onChange={(value) => handleChipChange(value, 'sousSecteurs')}
                             placeholder="Sélectionner..."
                             textFieldProps={{

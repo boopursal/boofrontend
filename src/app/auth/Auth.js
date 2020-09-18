@@ -20,7 +20,8 @@ class Auth extends Component {
     jwtCheck = () => {
         jwtService.on('onAutoLogin', () => {
 
-            this.props.showMessage({ message: 'Reconnexion ...' });
+           // this.props.showMessage({ message: 'Reconnexion ...' });
+            this.props.requestReLogin();
             // this.props.setUserData({ role: "login", data: {} });
 
             /**
@@ -29,6 +30,8 @@ class Auth extends Component {
             jwtService.signInWithToken()
                 .then(user => {
                     this.props.setUserData(user);
+                    this.props.successReLogin();
+
                     /* ============= TOKENS & Abonnement FOURNISSEURS ============*/
                     if (user.role === 'ROLE_FOURNISSEUR') {
                         this.props.getTokenFournisseur();
@@ -39,6 +42,8 @@ class Auth extends Component {
                 .catch(error => {
                     //this.props.setUserData({ role: [], data: {} });
                     this.props.showMessage({ message: error });
+                    this.props.errorReLogin(error);
+
                 })
         });
 
@@ -72,7 +77,10 @@ function mapDispatchToProps(dispatch) {
         getTokenFournisseur: userActions.getTokenFournisseur,
         getAbonnementFournisseur: userActions.getAbonnementFournisseur,
         showMessage: Actions.showMessage,
-        hideMessage: Actions.hideMessage
+        hideMessage: Actions.hideMessage,
+        requestReLogin: userActions.requestReLogin,
+        successReLogin: userActions.successReLogin,
+        errorReLogin: userActions.errorReLogin
     },
         dispatch);
 }

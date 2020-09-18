@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import { Card, CardActionArea, CardContent, CardActions, Button, CardMedia, Chip, Icon } from '@material-ui/core';
 import _ from '@lodash';
 import moment from 'moment';
-import { NavLinkAdapter } from '@fuse';
 import { FuseUtils } from '@fuse';
 
 const useStyles = makeStyles(theme => ({
@@ -30,8 +29,8 @@ export default function News(props) {
 
     return (
         <Card className={classes.card}>
-            <CardActionArea component={NavLinkAdapter}
-                to={`/actualite/${news.id}-${news.slug}`}>
+            <CardActionArea component="a"
+                href={`/actualite/${news.id}-${news.slug}`}>
                 <CardMedia
                     className={classes.mediaNews}
                     image={(news.image && FuseUtils.getUrl() + news.image.url)}
@@ -61,8 +60,8 @@ export default function News(props) {
                     onDelete={props.onDelete}
                 />
 
-                <Button size="small" color="primary" component={NavLinkAdapter}
-                    to={`/actualite/${news.id}-${news.slug}`} >
+                <Button size="small" color="primary" component="a"
+                                                        href={`/actualite/${news.id}-${news.slug}`} >
                     Lire la suite
                 </Button>
             </CardActions>

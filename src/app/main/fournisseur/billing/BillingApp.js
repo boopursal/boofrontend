@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Tab, Tabs, Typography } from '@material-ui/core';
 import { FusePageSimple } from '@fuse';
 import { makeStyles } from '@material-ui/styles';
@@ -7,7 +7,9 @@ import withReducer from 'app/store/withReducer';
 import reducer from './store/reducers';
 import MonAbonnement from './tabs/MonAbonnement';
 import Packs from './tabs/Packs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import CommandeDialog from './tabs/CommandeDialog';
+import * as Actions from './store/actions';
 
 const useStyles = makeStyles(theme => ({
     content: {
@@ -20,14 +22,48 @@ const useStyles = makeStyles(theme => ({
 function BillingApp(props) {
 
     const classes = useStyles(props);
+    const dispatch = useDispatch();
+    
     const pageLayout = useRef(null);
     const [tabValue, setTabValue] = useState(0);
     const user = useSelector(({ auth }) => auth.user);
+    const params = props.match.params;
+    const { tab } = params;
+    const abonnement = useSelector(({ auth }) => auth.user.abonnement);
+
+    useEffect(() => {
+        if (!tab) {
+            return;
+        }
+        switch (tab) {
+            case "pack":
+                return setTabValue(2);
+            case "renew":
+                return handleRenew();
+            default:
+                return setTabValue(0);
+        }
+    }, [tab, setTabValue]);
 
     function handleChangeTab(event, tabValue) {
         setTabValue(tabValue);
     }
 
+    function handleRenew() {
+        if (!abonnement) {
+            return;
+        }
+        const data = {
+            offre: abonnement.offre,
+            sousSecteurs: abonnement.sousSecteurs,
+            mode: abonnement.mode,
+            duree: abonnement.duree,
+            type: true,
+            suggestions: [],
+            renew: true
+        };
+        dispatch(Actions.openEditCommandeDialog(data));
+    }
     return (
         <>
             <Helmet>
@@ -77,6 +113,7 @@ function BillingApp(props) {
                 }
                 ref={pageLayout}
             />
+            <CommandeDialog currency={user.data ? user.data.currency : 'MAD'} />
         </>
     );
 }

@@ -1,12 +1,13 @@
 import React from 'react'
 import { Card, CardContent, Typography, Icon } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
-import { FuseAnimate } from '@fuse';
+import { FuseAnimate, FuseSplashScreen } from '@fuse';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import JWTLoginTab from './tabs/JWTLoginTab';
 import { makeStyles } from '@material-ui/styles';
 import { Helmet } from "react-helmet";
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -17,6 +18,12 @@ const useStyles = makeStyles(theme => ({
 
 function Login() {
     const classes = useStyles();
+    const login = useSelector(({ auth }) => auth.login);
+
+    if (login.relogin) {
+        return <FuseSplashScreen />
+    }
+
     return (
         <div className={clsx(classes.root, "flex flex-col flex-1 flex-shrink-0 p-24 md:flex-row md:p-0")}>
             <Helmet>

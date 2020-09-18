@@ -107,7 +107,9 @@ function FournisseurListItem(props) {
                                     <Paper className={classes.paper} key={index}>
                                         <Grid container spacing={2}>
                                             <Grid item>
-                                                <ButtonBase className={clsx(classes.image)} component={Link} to={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`}>
+                                                <ButtonBase className={clsx(classes.image)}
+                                                    component="a"
+                                                    href={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`}>
                                                     <img className={clsx(classes.img)} alt={fournisseur.societe} src={
                                                         fournisseur.avatar ?
                                                             FuseUtils.getUrl() + fournisseur.avatar.url
@@ -119,7 +121,9 @@ function FournisseurListItem(props) {
                                             <Grid item xs={12} sm container>
                                                 <Grid item xs container direction="column" spacing={2}>
                                                     <Grid item xs>
-                                                        <Typography component={Link} to={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`} className="uppercase" variant="h6">
+                                                        <Typography
+                                                            component="a"
+                                                            href={fournisseur && `/entreprise/${fournisseur.id}-${fournisseur.slug}`} className="uppercase" variant="h6">
 
                                                             {fournisseur.societe}
                                                         </Typography>

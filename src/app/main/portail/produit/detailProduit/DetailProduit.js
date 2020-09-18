@@ -375,6 +375,13 @@ function DetailProduit(props) {
                     <meta property="og:description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
                     <meta property="twitter:title" content={_.truncate(produit.data.titre + ' | ' + (produit.data.fournisseur && produit.data.fournisseur.societe), { 'length': 70, 'separator': ' ' })} />
                     <meta property="twitter:description" content={_.truncate(produit.data.description, { 'length': 160, 'separator': ' ' })} />
+                    {
+                        produit.data.featuredImageId &&
+                        <meta property="og:image" content={FuseUtils.getUrl() + produit.data.featuredImageId.url} />
+
+
+                    }
+
                 </Helmet>
             }
             <Grid container className={clsx(classes.grid, "max-w-2xl mx-auto py-48 sm:px-16 items-start")}>

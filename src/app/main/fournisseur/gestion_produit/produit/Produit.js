@@ -525,7 +525,7 @@ function Produit(props) {
                                     </Typography>
 
                                     <Typography color="textSecondary" className="mb-40">
-                                        Pour le réactiviter nous vous prions de nous contacter sur l'adresse mail suivante <strong>administrateur@lesachatsindustriesl.com</strong>
+                                        Pour le réactiviter nous vous prions de nous contacter sur l'adresse mail suivante <strong>administrateur@lesachatsindustriels.com</strong>
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -553,7 +553,7 @@ function Produit(props) {
                                         Pour le renouveler, vous pouvez ajouter une commande en cliquant sur le bouton suivant
                                     </Typography>
 
-                                    <Button component={Link} to={`/renouveler/${abonnement.id}`} className="whitespace-no-wrap" color="secondary" variant="contained">
+                                    <Button component={Link} to={`/billing/renew`} className="whitespace-no-wrap" color="secondary" variant="contained">
                                         <span className="">Renouveler l'abonnement</span>
                                     </Button>
 
@@ -586,7 +586,7 @@ function Produit(props) {
                                         pour consulter les offres d'abonnements cliquer sur le bouton suivant
                                 </Typography>
 
-                                    <Button component={Link} to="/offres/commande/new" className="whitespace-no-wrap" color="secondary" variant="contained">
+                                    <Button component={Link} to="/billing/pack" className="whitespace-no-wrap" color="secondary" variant="contained">
                                         <span className="">Commander abonnement</span>
                                     </Button>
                                     <Typography className="mt-16 normal-case flex items-center sm:mb-12" component={Link} role="button" to="/produits" color="inherit">
@@ -622,7 +622,7 @@ function Produit(props) {
                                     pour consulter les offres d'abonnements cliquer sur le bouton suivant
                                 </Typography>
 
-                                <Button component={Link} to="/offres/commande/new" className="whitespace-no-wrap" color="secondary" variant="contained">
+                                <Button component={Link} to="/billing/pack" className="whitespace-no-wrap" color="secondary" variant="contained">
                                     <span className="">Commander abonnement</span>
                                 </Button>
                                 <Typography className="mt-16 normal-case flex items-center sm:mb-12" component={Link} role="button" to="/produits" color="inherit">

@@ -106,7 +106,9 @@ function ProduitListItem(props) {
                                         <Paper className={classes.paper} key={index}>
                                             <Grid container spacing={2}>
                                                 <Grid item >
-                                                    <ButtonBase className={classes.image} component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`}>
+                                                    <ButtonBase className={classes.image}
+                                                        component="a"
+                                                        href={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`}>
                                                         <img className={classes.img} alt={produit.titre} src={
                                                             produit.featuredImageId ?
                                                                 FuseUtils.getUrl() + produit.featuredImageId.url
@@ -118,14 +120,16 @@ function ProduitListItem(props) {
                                                 <Grid item xs={12} sm container>
                                                     <Grid item xs container direction="column" spacing={2}>
                                                         <Grid item xs>
-                                                            <Typography gutterBottom component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} variant="h6">
+                                                            <Typography gutterBottom component="a"
+                                                                href={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} variant="h6">
                                                                 {produit.titre}
                                                             </Typography>
                                                             <Typography variant="body2" gutterBottom>
                                                                 {_.capitalize(_.truncate(produit.description, {
                                                                     'length': 70
                                                                 }))}
-                                                                <Link to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} className="ml-2 text-blue" >Voir détails</Link>
+                                                                <Link component="a"
+                                                                    href={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} className="ml-2 text-blue" >Voir détails</Link>
                                                             </Typography>
                                                             <Typography variant="body2" className="mb-8" color="textSecondary">
                                                                 Réf: {produit.reference}

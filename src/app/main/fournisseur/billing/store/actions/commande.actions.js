@@ -2,6 +2,7 @@
 import agent from 'agent';
 import { showMessage } from 'app/store/actions/fuse';
 import _ from '@lodash';
+import { FuseUtils } from '@fuse';
 
 
 export const REQUEST_COMMANDE = '[COMMANDE AB FRS APP] REQUEST COMMANDE';
@@ -27,11 +28,16 @@ export const REQUEST_SAVE = '[COMMANDE AB FRS APP] REQUEST SAVE';
 export const SAVE_COMMANDE = '[COMMANDE AB FRS APP] SAVE COMMANDE';
 export const SAVE_SUGGESTION = '[COMMANDE AB FRS APP] SAVE_SUGGESTION';
 export const SAVE_ERROR = '[COMMANDE AB FRS APP] SAVE ERROR';
+
+export const REQUEST_PAIEMENT = '[COMMANDE AB FRS APP] REQUEST_PAIEMENT';
 export const GET_PAIEMENT = '[COMMANDE AB FRS APP] GET_PAIEMENT';
 
 export const CLEAN_UP = '[COMMANDE AB FRS APP] CLEAN_UP';
 
-
+export const OPEN_NEW_COMMANDE_DIALOG = '[COMMANDE AB FRS APP] OPEN NEW COMMANDE DIALOG';
+export const CLOSE_NEW_COMMANDE_DIALOG = '[COMMANDE AB FRS APP] CLOSE NEW COMMANDE DIALOG';
+export const OPEN_EDIT_COMMANDE_DIALOG = '[COMMANDE AB FRS APP] OPEN EDIT COMMANDE DIALOG';
+export const CLOSE_EDIT_COMMANDE_DIALOG = '[COMMANDE AB FRS APP] CLOSE EDIT COMMANDE DIALOG';
 
 export function cleanUp() {
 
@@ -40,17 +46,89 @@ export function cleanUp() {
     });
 }
 
-export function updateCommande(data, sousSecteurs, offre, mode, duree) {
+export function openNewCommandeDialog(offre) {
+    return {
+        type: OPEN_NEW_COMMANDE_DIALOG,
+        data: { offre }
+    }
+}
 
+export function closeNewCommandeDialog() {
+    return {
+        type: CLOSE_NEW_COMMANDE_DIALOG
+    }
+}
+
+export function openEditCommandeDialog(data) {
+    return {
+        type: OPEN_EDIT_COMMANDE_DIALOG,
+        data
+    }
+}
+
+export function closeEditCommandeDialog() {
+    return {
+        type: CLOSE_EDIT_COMMANDE_DIALOG
+    }
+}
+
+export function RenewAbonnementCommande(data) {
+
+    var postData = {
+        ...data,
+        offre: data.offre['@id'],
+        sousSecteurs: _.map(data.sousSecteurs, function (value, key) {
+            return value.value;
+        }),
+        mode: data.mode,
+        duree: data.duree['@id'],
+        suggestions: data.suggestions
+    }
+    const request = agent.post('/api/demande_abonnements', postData);
+
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_SAVE,
+        });
+        return request.then((response) => {
+            return dispatch({
+                type: SAVE_COMMANDE,
+                payload: response.data
+            })
+        }
+        ).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR,
+            });
+            dispatch(
+                showMessage({
+                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                        return value + ' ';
+                    }),//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
+        });
+    }
+
+}
+
+export function updateCommande(data) {
 
     var putData = {
         ...data,
-        offre: offre['@id'],
-        sousSecteurs: _.map(sousSecteurs, function (value, key) {
+        offre: data.offre['@id'],
+        sousSecteurs: _.map(data.sousSecteurs, function (value, key) {
             return value.value;
         }),
-        mode: mode,
-        duree: duree['@id'],
+        mode: data.mode,
+        duree: data.duree['@id'],
+        suggestions: data.suggestions
     }
     const request = agent.put(data['@id'], putData);
 
@@ -59,28 +137,42 @@ export function updateCommande(data, sousSecteurs, offre, mode, duree) {
             type: REQUEST_SAVE,
         });
         return request.then((response) => {
-
-            dispatch(showMessage({ message: 'Commande modifiée avec succès' }));
-
             return dispatch({
                 type: SAVE_COMMANDE,
                 payload: response.data
             })
         }
-        );
+        ).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR,
+            });
+            dispatch(
+                showMessage({
+                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                        return value + ' ';
+                    }),//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical: 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'error'//success error info warning null
+                }))
+        });
     }
 
 }
 
-export function saveCommande(data, sousSecteurs, offre, mode, duree) {
+export function saveCommande(data) {
 
     var postData = {
-        offre: offre['@id'],
-        sousSecteurs: _.map(sousSecteurs, function (value, key) {
+        offre: data.offre['@id'],
+        sousSecteurs: _.map(data.sousSecteurs, function (value, key) {
             return value.value;
         }),
-        mode: mode,
-        duree: duree['@id'],
+        mode: data.mode,
+        duree: data.duree['@id'],
+        suggestions: data.suggestions
     }
     const request = agent.post('/api/demande_abonnements', postData);
 
@@ -89,55 +181,31 @@ export function saveCommande(data, sousSecteurs, offre, mode, duree) {
             type: REQUEST_SAVE,
         });
         return request.then((response) => {
-
-            dispatch(showMessage({ message: 'Votre commande a bien été enregistrée, un mail vous sera envoyé dès la validation de votre commande, nous vous remercions pour votre confiance!' }));
-
             return dispatch({
                 type: SAVE_COMMANDE,
                 payload: response.data
             })
         }
-        );
-    }
-
-}
-/*
-export function updateSocieteSousSecteurs(sousSecteurs, id_fournisseur) {
-    let data={};
-    if (sousSecteurs.length > 0 && id_fournisseur)
-    data.sousSecteurs = sousSecteurs.map((item => {return item.value}));
-    else{
-        return;
-    }
-    return (dispatch, getState) => {
-
-        const request = agent.put(`/api/fournisseurs/${id_fournisseur}`, data);
-        dispatch({
-            type: REQUEST_SUGGESTION,
-        });
-        return request.then((response) =>
-
-            Promise.all([
-                dispatch({
-                    type: GET_FOURNISSEUR,
-                    payload: response.data
-                }),
-                dispatch({
-                    type: SAVE_SUGGESTION
-                }),
-                dispatch(showMessage({
-                    message: 'Activités bien modifié!', anchorOrigin: {
+        ).catch((error) => {
+            dispatch({
+                type: SAVE_ERROR,
+            });
+            dispatch(
+                showMessage({
+                    message: _.map(FuseUtils.parseApiErrors(error), function (value, key) {
+                        return value + ' ';
+                    }),//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
                         vertical: 'top',//top bottom
                         horizontal: 'right'//left center right
                     },
-                    variant: 'success'
+                    variant: 'error'//success error info warning null
                 }))
-            ])
-        );
-    };
+        });
+    }
 
 }
-*/
 
 export function AddSuggestionSecteur(secteur, sousSecteur, id_user) {
     let data = {};
@@ -235,7 +303,9 @@ export function getPaiements() {
     const request = agent.get(`/api/paiements`);
 
     return (dispatch) => {
-
+        dispatch({
+            type: REQUEST_PAIEMENT,
+        });
         return request.then((response) => {
             dispatch({
                 type: GET_PAIEMENT,
@@ -282,8 +352,8 @@ export function getOffres() {
 
 }
 
-export function getCommande(params) {
-    const request = agent.get(`/api/demande_abonnements/${params}`);
+export function getCommande(id) {
+    const request = agent.get(`/api/fournisseurs/${id}/demande_abonnements?itemsPerPage=1&statut=false&order[created]=desc`);
 
     return (dispatch) => {
         dispatch({
@@ -292,7 +362,7 @@ export function getCommande(params) {
         return request.then((response) => {
             return dispatch({
                 type: GET_COMMANDE,
-                payload: response.data
+                payload: response.data['hydra:member'][0]
             })
         }
 

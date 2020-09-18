@@ -2,6 +2,7 @@ import * as Actions from '../actions';
 
 const initialState = {
     data: null,
+    loadingC: false,
     offres: null,
     fournisseur: null,
     loadingSecteurs: false,
@@ -16,28 +17,32 @@ const initialState = {
     paiements: null,
     durees: null,
     loadingOffres: false,
-    loadingDuree: false
+    loadingDuree: false,
+    loadingP: false,
+    commandeDialog: {
+        type: 'new',
+        props: {
+            open: false
+        },
+        data: null
+    },
+
 };
 
 const commandeReducer = function (state = initialState, action) {
     switch (action.type) {
 
-        case Actions.REQUEST_COMMANDE:
         case Actions.REQUEST_FOURNISSEUR:
         case Actions.REQUEST_SAVE:
             {
                 return {
                     ...state,
                     loading: true,
+                    success: false,
                 }
             }
-        case Actions.REQUEST_OFFRES:
-            {
-                return {
-                    ...state,
-                    loadingOffres: true,
-                }
-            }
+
+
         //Secteurs    
         case Actions.REQUEST_SECTEURS:
             {
@@ -67,17 +72,26 @@ const commandeReducer = function (state = initialState, action) {
             {
                 return {
                     ...state,
-                    sousSecteurs: action.payload,
+                    sousSecteurs: [...action.payload, { '@id': '/api/sous_secteurs/98', name: 'Autre' }],
                     loadingSS: false,
 
                 };
             }
         // Mode paiement   
+        case Actions.REQUEST_PAIEMENT:
+            {
+                return {
+                    ...state,
+                    loadingP: true,
+                }
+            }
         case Actions.GET_PAIEMENT:
             {
                 return {
                     ...state,
-                    paiements: action.payload
+                    paiements: action.payload,
+                    loadingP: false,
+
                 };
             }
         // Durée
@@ -114,12 +128,19 @@ const commandeReducer = function (state = initialState, action) {
                 };
             }
         // Commande    
+        case Actions.REQUEST_COMMANDE:
+            {
+                return {
+                    ...state,
+                    loadingC: true,
+                }
+            }
         case Actions.GET_COMMANDE:
             {
                 return {
                     ...state,
                     data: action.payload,
-                    loading: false,
+                    loadingC: false,
 
                 };
             }
@@ -128,13 +149,17 @@ const commandeReducer = function (state = initialState, action) {
                 return {
                     ...state,
                     loading: false,
-                    success: true
+                    success: true,
+                    data: action.payload
                 };
             }
         case Actions.CLEAN_UP:
             {
                 return {
-                    initialState,
+                    ...state,
+                    success: false,
+                    data: null,
+                    error: null
 
                 };
             }
@@ -149,6 +174,13 @@ const commandeReducer = function (state = initialState, action) {
                 };
             }
         // Offres    
+        case Actions.REQUEST_OFFRES:
+            {
+                return {
+                    ...state,
+                    loadingOffres: true,
+                }
+            }
         case Actions.GET_OFFRES:
             {
                 return {
@@ -166,6 +198,58 @@ const commandeReducer = function (state = initialState, action) {
                     error: action.payload,
                     loading: false,
 
+                };
+            }
+        case Actions.OPEN_NEW_COMMANDE_DIALOG:
+            {
+                return {
+                    ...state,
+                    commandeDialog: {
+                        type: 'new',
+                        props: {
+                            open: true
+                        },
+                        data: action.data
+                    }
+                };
+            }
+        case Actions.CLOSE_NEW_COMMANDE_DIALOG:
+            {
+                return {
+                    ...state,
+                    commandeDialog: {
+                        type: 'new',
+                        props: {
+                            open: false
+                        },
+                        data: null
+                    }
+                };
+            }
+        case Actions.OPEN_EDIT_COMMANDE_DIALOG:
+            {
+                return {
+                    ...state,
+                    commandeDialog: {
+                        type: 'edit',
+                        props: {
+                            open: true
+                        },
+                        data: action.data
+                    }
+                };
+            }
+        case Actions.CLOSE_EDIT_COMMANDE_DIALOG:
+            {
+                return {
+                    ...state,
+                    commandeDialog: {
+                        type: 'edit',
+                        props: {
+                            open: false
+                        },
+                        data: null
+                    }
                 };
             }
         default:

@@ -6,7 +6,6 @@ import { Card, CardActionArea, CardContent, CardMedia, Chip, Icon } from '@mater
 //import ReactHtmlParser from 'react-html-parser';
 import _ from '@lodash';
 import { FuseUtils } from '@fuse';
-import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     mediaProduit: {
@@ -29,7 +28,7 @@ export default function Produit(props) {
     const { produit } = props;
     return (
         <Card className={classes.card}>
-            <CardActionArea component={Link} to={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} >
+            <CardActionArea component="a" href={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`} >
                 <CardMedia
                     className={classes.mediaProduit}
                     image={produit.featuredImageId ?
