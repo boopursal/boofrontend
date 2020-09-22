@@ -595,24 +595,33 @@ const navigationConfig = [
         'icon': 'cloud',
         'children': [
             {
+                'id': 'billing-frs',
+                'title': 'Facturation',
+                'type': 'item',
+                'icon': 'cloud',
+                'auth': authRoles.fournisseur,
+                exact: true,
+                'url': '/billing',
+            },
+            /* 
+            {
                 'id': 'offre-abonnement',
                 'title': 'Abonnement',
                 'type': 'item',
                 'icon': 'cloud',
                 'auth': authRoles.fournisseur,
-
                 exact: true,
                 'url': '/abonnement',
             },
-            /* {
-                 'id': 'offre-commandes',
-                 'title': 'Vos commandes',
-                 'type': 'item',
-                 'auth': authRoles.fournisseur,
- 
-                 'icon': 'format_list_bulleted',
-                 'url': '/offres/commande',
-             },*/
+            {
+                'id': 'offre-commandes',
+                'title': 'Vos commandes',
+                'type': 'item',
+                'auth': authRoles.fournisseur,
+                'icon': 'format_list_bulleted',
+                'url': '/offres/commande',
+            },
+            */
             {
                 'id': 'fr-commandes',
                 'title': 'Jetons',
