@@ -208,13 +208,11 @@ function CommandesTable(props) {
                             <div className="flex items-center">
 
                                 {
-
                                     row.original.type === false
                                         ?
                                         <Chip className={classes.blue} label="Nouvelle" />
                                         :
                                         <Chip className={classes.chip2} label="Renouvellement" />
-
 
                                 }
 

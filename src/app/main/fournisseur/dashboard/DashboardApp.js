@@ -97,7 +97,7 @@ function DashboardApp(props) {
                                                     {
                                                         moment(abonnement.expired).diff(moment(), 'month', true) <= 1 &&
                                                         <div className="flex justify-center mt-2">
-                                                            <Button component={Link} to={`/renouveler/${abonnement.id}`} size="small" color="secondary" variant="contained">
+                                                            <Button component={Link} to={`/billing/renew`} size="small" color="secondary" variant="contained">
                                                                 <span className="hidden sm:flex">Renouveler l'abonnement</span>
                                                                 <span className="flex sm:hidden">Renouveler</span>
                                                             </Button>
@@ -112,7 +112,7 @@ function DashboardApp(props) {
                                                         Votre abonnement a expiré depuis {moment().diff(abonnement.expired, 'days')} jour(s) !
                                                     </div>
                                                     <div className="flex justify-center mt-2">
-                                                        <Button component={Link} to={`/renouveler/${abonnement.id}`} size="small" color="secondary" variant="contained">
+                                                        <Button component={Link} to={`/billing/renew`} size="small" color="secondary" variant="contained">
                                                             <span className="hidden sm:flex">Renouveler l'abonnement</span>
                                                             <span className="flex sm:hidden">Renouveler</span>
                                                         </Button>

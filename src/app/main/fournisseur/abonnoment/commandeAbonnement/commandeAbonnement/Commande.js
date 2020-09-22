@@ -140,14 +140,18 @@ function Commande(props) {
     const classes = useStyles(props);
 
     useEffect(() => {
-        dispatch(Actions.getOffres());
+        if(!user.id)
+        return;
+
         dispatch(Actions.getFournisseurSousSecteurs(user.id));
-        //dispatch(Actions.getSousSecteurs());
+    }, [dispatch, user.id]);
+
+    useEffect(() => {
+        dispatch(Actions.getOffres());
         dispatch(Actions.getSecteurs());
         dispatch(Actions.getPaiements());
         dispatch(Actions.getDurees());
-    }, [dispatch, user.id]);
-
+    }, [dispatch]);
     // Effect redirection and clean state
     useEffect(() => {
         if (commande.success) {

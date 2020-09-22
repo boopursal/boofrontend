@@ -80,16 +80,6 @@ const useStyles = makeStyles(theme => ({
                 opacity: 1
             }
         }
-        , '&.featured': {
-            boxShadow: theme.shadows[3],
-            '& $produitImageFeaturedStar': {
-                opacity: 1
-            },
-            '&:hover $produitImageFeaturedStar': {
-                opacity: 1
-            }
-        }
-
     },
 
     error: {

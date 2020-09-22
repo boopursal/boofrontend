@@ -5,7 +5,6 @@ import clsx from 'clsx';
 import _ from '@lodash';
 import moment from 'moment';
 import 'moment/locale/fr';
-import { NavLinkAdapter } from '@fuse';
 const useStyles = makeStyles({
     todoItem: {
         '&.completed': {
@@ -23,8 +22,8 @@ function DemandeAchatsListItem(props) {
         <ListItem
             className={clsx(classes.todoItem, "border-solid border-b-1 py-16  px-0 sm:px-8")}
             dense={true}
-            component={NavLinkAdapter}
-            to={`/demandes-achat/${props.demande.id}-${props.demande.slug}`}
+            component="a"
+            href={`/demandes-achat/${props.demande.id}-${props.demande.slug}`}
             button
         >
 

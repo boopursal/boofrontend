@@ -88,6 +88,10 @@ function NewDetail(props) {
                     <meta property="og:description" content={_.truncate(actualite.data.apercu, { 'length': 160, 'separator': ' ' })} />
                     <meta property="twitter:title" content={_.truncate(actualite.data.titre, { 'length': 70, 'separator': ' ' })} />
                     <meta property="twitter:description" content={_.truncate(actualite.data.apercu, { 'length': 160, 'separator': ' ' })} />
+                    {
+                        actualite.data.image &&
+                        <meta property="og:image" content={FuseUtils.getUrl() + actualite.data.image.url} />
+                    }
                 </Helmet>
 
             }

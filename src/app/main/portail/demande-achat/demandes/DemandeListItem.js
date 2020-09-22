@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FuseAnimateGroup } from '@fuse';
 import _ from '@lodash';
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
 import { Chip, Icon, IconButton, Select } from '@material-ui/core';
 import ContentLoader from "react-content-loader"
 import * as Actions from '../store/actions';
@@ -110,7 +109,10 @@ function DemandeListItem(props) {
                                             <Grid item xs={12} sm container>
                                                 <Grid item xs container direction="column" spacing={2}>
                                                     <Grid item xs>
-                                                        <Typography component={Link} to={demande && `/demandes-achat/${demande.id}-${demande.slug}`} variant="h6">
+                                                        <Typography
+                                                            component="a"
+                                                            href={demande && `/demandes-achat/${demande.id}-${demande.slug}`}
+                                                            variant="h6">
 
                                                             {demande.titre}
                                                         </Typography>

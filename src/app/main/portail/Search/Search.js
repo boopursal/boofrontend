@@ -11,57 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Highlighter from "react-highlight-words";
 import history from '@history';
 
-function renderInputComponent(inputProps) {
-    const {
-        variant,
-        classes, inputRef = () => {
-        }, ref, ...other
-    } = inputProps;
-    return (
-        <div className="w-full relative">
-            {variant === "basic" ? (
-                // Outlined
-                <React.Fragment>
-                    <TextField
-                        fullWidth
-                        InputProps={{
-                            inputRef: node => {
-                                ref(node);
-                                inputRef(node);
-                            },
-                            classes: {
-                                input: clsx(classes.input, "py-0 px-16 h-48 pr-48"),
-                                notchedOutline: "rounded-8"
-                            }
-                        }}
-                        variant="outlined"
-                        {...other}
-                    />
-                    <Icon className="absolute top-0 right-0 h-48 w-48 p-12 pointer-events-none" color="action">search</Icon>
-                </React.Fragment>
-            )
-                :
-                (
-                    // Standard
-                    <TextField
-                        fullWidth
-                        InputProps={{
-                            disableUnderline: true,
-                            inputRef: node => {
-                                ref(node);
-                                inputRef(node);
-                            },
-                            classes: {
-                                input: clsx(classes.input, "py-0 px-16 h-64")
-                            }
-                        }}
-                        variant="standard"
-                        {...other}
-                    />
-                )}
-        </div>
-    );
-}
+
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
     // console.log('===========================Render Suggestions===============================')
@@ -252,6 +202,62 @@ function Search(props) {
         ) && hideSearch();
     }
 
+    function renderInputComponent(inputProps) {
+        const {
+            variant,
+            classes, inputRef = () => {
+            }, ref, ...other
+        } = inputProps;
+        return (
+            <div className="w-full relative">
+                {variant === "basic" ? (
+                    // Outlined
+                    <React.Fragment>
+                        <TextField
+                            fullWidth
+                            InputProps={{
+                                inputRef: node => {
+                                    ref(node);
+                                    inputRef(node);
+                                },
+                                classes: {
+                                    input: clsx(classes.input, "py-0 px-16 h-48 pr-48"),
+                                    notchedOutline: "rounded-8"
+                                }
+                            }}
+                            variant="outlined"
+                            {...other}
+                        />
+                        {globalSearch.loading ? (
+                            <CircularProgress color="secondary" className="absolute top-0 right-0 h-48 w-48 p-12 pointer-events-none" />
+                        )
+                            :
+                            <Icon className="absolute top-0 right-0 h-48 w-48 p-12 pointer-events-none" color="action">search</Icon>
+                        }
+                    </React.Fragment>
+                )
+                    :
+                    (
+                        // Standard
+                        <TextField
+                            fullWidth
+                            InputProps={{
+                                disableUnderline: true,
+                                inputRef: node => {
+                                    ref(node);
+                                    inputRef(node);
+                                },
+                                classes: {
+                                    input: clsx(classes.input, "py-0 px-16 h-64")
+                                }
+                            }}
+                            variant="standard"
+                            {...other}
+                        />
+                    )}
+            </div>
+        );
+    }
     const autosuggestProps = {
         renderInputComponent,
         highlightFirstSuggestion: true,
@@ -310,11 +316,7 @@ function Search(props) {
                                                     Aucun résultat..
                                                 </Typography>
                                             )}
-                                            {globalSearch.loading && (
-                                                <div className="px-16 py-12 text-center">
-                                                    <CircularProgress color="secondary" /> <br /> Chargement ...
-                                                </div>
-                                            )}
+
                                         </Paper>
                                     </div>
                                 </Popper>
