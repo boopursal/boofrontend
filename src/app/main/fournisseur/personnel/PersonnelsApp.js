@@ -68,7 +68,7 @@ function PersonnelsApp(props) {
     const handleClose = () => {
         props.history.push('/dashboard');
     };
-    if (!abonnee || !abonnement.offre.hasCommercial) {
+    if (!abonnee || (abonnement && !abonnement.offre.hasCommercial)) {
         if (!enable) {
             return (
                 <Dialog
@@ -116,7 +116,7 @@ function PersonnelsApp(props) {
                             Pour le renouveler, vous pouvez ajouter une commande en cliquant sur le bouton suivant
                                     </Typography>
 
-                        <Button component={Link} to={`/billing`} className="whitespace-no-wrap" color="secondary" variant="contained">
+                        <Button component={Link} to={`/billing/renew`} className="whitespace-no-wrap" color="secondary" variant="contained">
                             <span className="">Renouveler l'abonnement</span>
                         </Button>
                     </DialogContent>
@@ -130,7 +130,7 @@ function PersonnelsApp(props) {
             )
         }
 
-        if (!abonnement.offre.hasCommercial) {
+        if (abonnement && !abonnement.offre.hasCommercial) {
             return (
                 <Dialog
                     open={true}
@@ -178,9 +178,9 @@ function PersonnelsApp(props) {
                         </Typography>
 
                     <Typography color="textSecondary" className="mb-16">
-                        Pour ajouter vos produits vous devez avoir un pack d'abonnement,
-                                    pour consulter les offres d'abonnements cliquer sur le bouton suivant
-
+                    Ce service n'est pas accessible par votre Pack d'abonnement,
+                            nous vous invitons à mettre à niveau votre Pack d'abonnement pour bénéficier de cette fonctionnalité.
+                        
                                  </Typography>
 
                     <Button component={Link} to={`/billing/pack`} className="whitespace-no-wrap" color="secondary" variant="contained">
