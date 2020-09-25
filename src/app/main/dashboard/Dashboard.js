@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import DashboardApp from '../fournisseur/dashboard/DashboardApp';
 import DashboardAppAcheteur from '../acheteur/dashboard/DashboardApp';
 import { Typography } from '@material-ui/core';
+import DashboardAdmin from '../administration/dashboard/DashboardAdmin';
 
 function Dashboard(props) {
 
@@ -23,11 +24,7 @@ function Dashboard(props) {
 
     if (user.role === 'ROLE_ADMIN') {
         return (
-            <div className="flex flex-1 items-center justify-center h-full">
-                <Typography color="textSecondary" variant="h5">
-                    Bienvenue ADMINISTRATEUR
-                </Typography>
-            </div>
+            <DashboardAdmin />
         )
     }
 

@@ -88,6 +88,11 @@ class FuseUtils {
         //return "http://192.168.11.124:8000";
         //return "http://192.168.1.124:8000";
     }
+    static getMonths() {
+        return ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        //return "http://192.168.11.124:8000";
+        //return "http://192.168.1.124:8000";
+    }
 
     static hydraPageCount(collection) {
         if (!collection['hydra:view']) {
