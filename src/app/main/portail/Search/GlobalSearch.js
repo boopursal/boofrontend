@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FuseAnimate, FuseAnimateGroup, FuseUtils } from '@fuse';
-import { ClickAwayListener, Paper, Icon, Input, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider, Typography, ListItemSecondaryAction, IconButton, CardActions } from '@material-ui/core';
+import { FuseAnimate, FuseAnimateGroup, URL_SITE } from '@fuse';
+import { ClickAwayListener, Paper, Icon, Input, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider,  ListItemSecondaryAction } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import reducer from './store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
@@ -165,7 +165,7 @@ function GlobalSearch(props) {
                                                                                         <ListItemAvatar>
                                                                                             {
                                                                                                 produit.featuredImageId ?
-                                                                                                    <Avatar alt={produit.titre} src={FuseUtils.getUrl() + produit.featuredImageId.url} />
+                                                                                                    <Avatar alt={produit.titre} src={URL_SITE + produit.featuredImageId.url} />
                                                                                                     :
                                                                                                     <Avatar alt={produit.titre} src="assets/images/ecommerce/product-placeholder.jpg" />
                                                                                             }

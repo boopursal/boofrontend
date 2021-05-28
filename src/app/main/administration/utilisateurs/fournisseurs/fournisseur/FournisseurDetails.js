@@ -1,18 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Button, Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar, MenuItem, IconButton, Chip, TextField, Tooltip } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import {  Tab, Tabs, InputAdornment, Icon, Typography, Divider, Grid, Avatar,  IconButton, Chip, TextField, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFormsy, SelectFormsy } from '@fuse';
-import { useForm } from '@fuse/hooks';
+import { FuseAnimate, FusePageCarded, URL_SITE, TextFieldFormsy,  } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import _ from '@lodash';
 import Formsy from 'formsy-react';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import green from '@material-ui/core/colors/green';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import ReactTable from "react-table";
@@ -130,7 +126,7 @@ function FournisseurDetails(props) {
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     {fournisseur.data.avatar ?
                                         (
-                                            <Avatar className="w-32 sm:w-48 mr-8 sm:mr-16 rounded" alt="user photo" src={FuseUtils.getUrl() + fournisseur.data.avatar.url} />
+                                            <Avatar className="w-32 sm:w-48 mr-8 sm:mr-16 rounded" alt="user photo" src={URL_SITE + fournisseur.data.avatar.url} />
                                         )
                                         :
                                         (
@@ -477,7 +473,7 @@ function FournisseurDetails(props) {
                                         accessor: "featuredImageId",
                                         Cell: row => (
                                             row.original.featuredImageId ? (
-                                                <img className="w-full block rounded" src={FuseUtils.getUrl() + row.original.featuredImageId.url} alt={row.original.reference} />
+                                                <img className="w-full block rounded" src={URL_SITE + row.original.featuredImageId.url} alt={row.original.reference} />
                                             ) : (
                                                     <img className="w-full block rounded" src="assets/images/ecommerce/product-image-placeholder.png" alt={row.original.reference} />
                                                 )

@@ -11,12 +11,11 @@ import {
   DialogActions,
   Button,
 } from "@material-ui/core";
-import { FuseAnimate } from "@fuse";
+import { FuseAnimate, URL_SITE, FuseUtils } from "@fuse";
 import { withRouter } from "react-router-dom";
 import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import FuseUtils from "@fuse/FuseUtils";
 import ReactTable from "react-table";
 import _ from "@lodash";
 
@@ -84,7 +83,7 @@ function FournisseursTable(props) {
                   <Avatar
                     className="mr-8"
                     alt={row.original.firstName}
-                    src={FuseUtils.getUrl() + row.original.avatar.url}
+                    src={URL_SITE + row.original.avatar.url}
                   />
                 ) : (
                   <Avatar

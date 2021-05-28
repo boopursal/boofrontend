@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Icon, Typography, LinearProgress, Grid, Tabs, Tab, FormControlLabel, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Divider, Radio, Table, TableHead, TableRow, TableCell, TableBody, Chip } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, SelectReactFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, SelectReactFormsy,LOCAL_CURRENCY,LOCAL_TVA } from '@fuse';
 import { Link } from 'react-router-dom';
 import Link2 from '@material-ui/core/Link';
 import _ from '@lodash';
@@ -205,22 +205,22 @@ function Commande(props) {
             if (commande.data.duree) {
                 setDuree(commande.data.duree);
                 if (commande.data.offre) {
-                    if (commande.data.fournisseur.currency.name === 'MAD') {
+                    if (commande.data.fournisseur.currency.name === LOCAL_CURRENCY) {
                         let ht = commande.data.offre.prixMad * commande.data.duree.name;
                         setPrixht(ht)
 
                         if (commande.data.duree.remise) {
                             let remis = ht * commande.data.duree.remise / 100;
                             let netHt = ht - remis;
-                            let tva = netHt * 0.2;
+                            let tva = netHt * LOCAL_TVA;
                             setRemise(remis)
                             setPrixhtNet(netHt)
                             setTva(tva)
                             setPrixTTC(netHt + tva)
 
                         } else {
-                            let tva = ht * 0.2;
-                            setTva(ht * 0.2)
+                            let tva = ht * LOCAL_TVA;
+                            setTva(ht * LOCAL_TVA)
                             setPrixTTC(ht + tva)
                         }
                     }
@@ -230,7 +230,7 @@ function Commande(props) {
                         if (commande.data.duree.remise) {
                             let remis = ht * commande.data.duree.remise / 100;
                             let netHt = ht - remis;
-                            //let tva = netHt * 0.2;
+                            //let tva = netHt * LOCAL_TVA;
                             setRemise(remis)
                             setPrixhtNet(netHt)
                             //setTva(tva)
@@ -238,8 +238,8 @@ function Commande(props) {
                             setPrixTTC(netHt)
 
                         } else {
-                            //let tva = ht * 0.2;
-                            //setTva(ht * 0.2)
+                            //let tva = ht * LOCAL_TVA;
+                            //setTva(ht * LOCAL_TVA)
                             //setPrixTTC(ht + tva)
                             setPrixTTC(ht)
                         }
@@ -275,22 +275,22 @@ function Commande(props) {
         ) {
             setDuree(commande.durees[0]);
             if (offre) {
-                if (user.data.currency === 'MAD') {
+                if (user.data.currency === LOCAL_CURRENCY) {
                     let ht = offre.prixMad * commande.durees[0].name;
                     setPrixht(ht)
 
                     if (commande.durees[0].remise) {
                         let remis = ht * commande.durees[0].remise / 100;
                         let netHt = ht - remis;
-                        let tva = netHt * 0.2;
+                        let tva = netHt * LOCAL_TVA;
                         setRemise(remis)
                         setPrixhtNet(netHt)
                         setTva(tva)
                         setPrixTTC(netHt + tva)
 
                     } else {
-                        let tva = ht * 0.2;
-                        setTva(ht * 0.2)
+                        let tva = ht * LOCAL_TVA;
+                        setTva(ht * LOCAL_TVA)
                         setPrixTTC(ht + tva)
                     }
 
@@ -302,7 +302,7 @@ function Commande(props) {
                     if (commande.durees[0].remise) {
                         let remis = ht * commande.durees[0].remise / 100;
                         let netHt = ht - remis;
-                        //let tva = netHt * 0.2;
+                        //let tva = netHt * LOCAL_TVA;
 
                         setRemise(remis)
                         setPrixhtNet(netHt)
@@ -311,8 +311,8 @@ function Commande(props) {
                         setPrixTTC(netHt)
 
                     } else {
-                        //let tva = ht * 0.2;
-                        //setTva(ht * 0.2)
+                        //let tva = ht * LOCAL_TVA;
+                        //setTva(ht * LOCAL_TVA)
                         //setPrixTTC(ht + tva)
                         setPrixTTC(ht)
                     }
@@ -338,14 +338,14 @@ function Commande(props) {
 
     function handleChangeDuree(item) {
         setDuree(item);
-        if (user.data.currency === 'MAD') {
+        if (user.data.currency === LOCAL_CURRENCY) {
             let ht = offre.prixMad * item.name;
             setPrixht(ht)
 
             if (item.remise) {
                 let remis = ht * item.remise / 100;
                 let netHt = ht - remis;
-                let tva = netHt * 0.2;
+                let tva = netHt * LOCAL_TVA;
                 setRemise(remis)
                 setPrixhtNet(netHt)
                 setTva(tva)
@@ -353,7 +353,7 @@ function Commande(props) {
 
             } else {
                 let netHt = ht;
-                let tva = netHt * 0.2;
+                let tva = netHt * LOCAL_TVA;
                 setTva(tva)
                 setPrixhtNet(netHt)
                 setPrixTTC(netHt + tva)
@@ -367,7 +367,7 @@ function Commande(props) {
             if (item.remise) {
                 let remis = ht * item.remise / 100;
                 let netHt = ht - remis;
-                // let tva = netHt * 0.2;
+                // let tva = netHt * LOCAL_TVA;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
@@ -377,7 +377,7 @@ function Commande(props) {
 
             } else {
                 let netHt = ht;
-                //let tva = netHt * 0.2;
+                //let tva = netHt * LOCAL_TVA;
                 //setTva(tva)
                 setPrixhtNet(netHt)
                 //setPrixTTC(netHt + tva)
@@ -393,14 +393,14 @@ function Commande(props) {
             setSousSecteurs(_.slice(sousSecteurs, 0, item.nbActivite));
         }
 
-        if (user.data.currency === 'MAD') {
+        if (user.data.currency === LOCAL_CURRENCY) {
             let ht = item.prixMad * duree.name;
             setPrixht(ht)
 
             if (duree.remise) {
                 let remis = ht * duree.remise / 100;
                 let netHt = ht - remis;
-                let tva = netHt * 0.2;
+                let tva = netHt * LOCAL_TVA;
                 setRemise(remis)
                 setPrixhtNet(netHt)
                 setTva(tva)
@@ -408,7 +408,7 @@ function Commande(props) {
 
             } else {
                 let netHt = ht;
-                let tva = netHt * 0.2;
+                let tva = netHt * LOCAL_TVA;
                 setTva(tva)
                 setPrixhtNet(netHt)
                 setPrixTTC(netHt + tva)
@@ -422,7 +422,7 @@ function Commande(props) {
             if (duree.remise) {
                 let remis = ht * duree.remise / 100;
                 let netHt = ht - remis;
-                //let tva = netHt * 0.2;
+                //let tva = netHt * LOCAL_TVA;
 
                 setRemise(remis)
                 setPrixhtNet(netHt)
@@ -432,7 +432,7 @@ function Commande(props) {
 
             } else {
                 let netHt = ht;
-                //let tva = netHt * 0.2;
+                //let tva = netHt * LOCAL_TVA;
                 //setTva(tva)
                 setPrixhtNet(netHt)
                 //setPrixTTC(netHt + tva)
@@ -624,12 +624,12 @@ function Commande(props) {
                                                                                     />
                                                                                 }
                                                                                 label={
-                                                                                    commande.fournisseur.currency.name === 'MAD' ?
+                                                                                    commande.fournisseur.currency.name === LOCAL_CURRENCY ?
                                                                                         parseFloat(item.prixMad).toLocaleString(
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.
                                                                                             { minimumFractionDigits: 2 }
-                                                                                        ) + ' MAD HT / mois' :
+                                                                                        ) + LOCAL_CURRENCY+' HT / mois' :
                                                                                         parseFloat(item.prixEur).toLocaleString(
                                                                                             'fr', // leave undefined to use the browser's locale,
                                                                                             // or use a string like 'en-US' to override it.

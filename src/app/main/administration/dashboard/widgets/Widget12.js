@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Typography, CircularProgress } from "@material-ui/core";
 import { Line } from "react-chartjs-2";
 import { useTheme } from "@material-ui/styles";
-import { FuseUtils } from "@fuse";
+import { MONTHS } from "@fuse/Constants";
 import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -47,7 +47,7 @@ function Widget12(props) {
         <Typography className="relative h-200 sm:h-320 sm:pb-16">
           <Line
             data={{
-              labels: FuseUtils.getMonths(),
+              labels: MONTHS,
               datasets: widget12.data.datasets.map((obj, index) => {
                 const palette =
                   theme.palette[index === 0 ? "secondary" : "primary"];

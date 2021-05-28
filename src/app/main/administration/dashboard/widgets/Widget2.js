@@ -4,7 +4,7 @@ import { Line } from "react-chartjs-2";
 import { useTheme } from "@material-ui/styles";
 import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { FuseUtils } from "@fuse";
+import { MONTHS, LOCAL_CURRENCY } from "@fuse/Constants";
 
 function Widget2(props) {
   const theme = useTheme();
@@ -41,7 +41,7 @@ function Widget2(props) {
         )}
         {widget2.data && (
           <Typography className="text-24 font-300 mt-8">
-            {financial(widget2.data.value)} MAD
+            {financial(widget2.data.value) + " " + LOCAL_CURRENCY}
           </Typography>
         )}
       </div>
@@ -49,7 +49,7 @@ function Widget2(props) {
         <div className="h-96 w-100-p">
           <Line
             data={{
-              labels: FuseUtils.getMonths(),
+              labels: MONTHS,
               datasets: [
                 {
                   borderColor: theme.palette.secondary.main,

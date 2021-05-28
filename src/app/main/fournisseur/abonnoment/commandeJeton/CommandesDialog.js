@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, Typography, Toolbar, AppB
 import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { RadioGroupFormsy } from '@fuse';
+import { RadioGroupFormsy,LOCAL_CURRENCY } from '@fuse';
 import Formsy from 'formsy-react';
 import _ from '@lodash';
 
@@ -124,10 +124,10 @@ function CommandesDialog(props) {
                             required
                             onChange={handleRadioChange}
                         >
-                            <FormControlLabel value="5" checked={form.nbrJeton === 5} control={<Radio />} label={!user.data.currency || user.data.currency === 'MAD' ? "5 ( 500,00 Dhs )" : "5 ( 50,00 €/$   ) "}
+                            <FormControlLabel value="5" checked={form.nbrJeton === 5} control={<Radio />} label={!user.data.currency || user.data.currency === LOCAL_CURRENCY ? "5 ( 500,00 Dhs )" : "5 ( 50,00 €/$   ) "}
                             />
-                            <FormControlLabel value="10" checked={form.nbrJeton === 10} control={<Radio />} label={!user.data.currency || user.data.currency === 'MAD' ? "10 ( 1000,00 Dhs )" : "10 ( 100,00 €/$   ) "} />
-                            <FormControlLabel value="20" checked={form.nbrJeton === 20} control={<Radio />} label={!user.data.currency || user.data.currency === 'MAD' ? "20 ( 2000,00 Dhs )" : "20 ( 200,00 €/$   ) "} />
+                            <FormControlLabel value="10" checked={form.nbrJeton === 10} control={<Radio />} label={!user.data.currency || user.data.currency === LOCAL_CURRENCY ? "10 ( 1000,00 Dhs )" : "10 ( 100,00 €/$   ) "} />
+                            <FormControlLabel value="20" checked={form.nbrJeton === 20} control={<Radio />} label={!user.data.currency || user.data.currency === LOCAL_CURRENCY ? "20 ( 2000,00 Dhs )" : "20 ( 200,00 €/$   ) "} />
 
                         </RadioGroupFormsy>
 

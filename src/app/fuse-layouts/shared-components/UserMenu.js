@@ -14,7 +14,8 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import * as authActions from "app/auth/store/actions";
 import { Link } from "react-router-dom";
-import { FuseUtils } from "@fuse";
+import { URL_SITE } from "@fuse";
+
 import clsx from "clsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -131,7 +132,7 @@ function UserMenu(props) {
               <Avatar
                 className=""
                 alt="user photo"
-                src={FuseUtils.getUrl() + user.data.photoURL}
+                src={URL_SITE + user.data.photoURL}
               />
             ) : (
               <Avatar className="">

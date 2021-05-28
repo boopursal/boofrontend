@@ -3,7 +3,7 @@ import { Card, Typography, CircularProgress } from "@material-ui/core";
 import { Line } from "react-chartjs-2";
 import { useTheme } from "@material-ui/styles";
 import { useSelector } from "react-redux";
-import { FuseUtils } from "@fuse";
+import { MONTHS, LOCAL_CURRENCY } from "@fuse/Constants";
 
 function Widget3(props) {
   const theme = useTheme();
@@ -19,7 +19,7 @@ function Widget3(props) {
 
     setTotal(widget1.data.value + widget2.data.value);
     setDataSet(
-      widget1.data.dataset.map(function(num, idx) {
+      widget1.data.dataset.map(function (num, idx) {
         return num + widget2.data.dataset[idx];
       })
     );
@@ -44,7 +44,7 @@ function Widget3(props) {
         )}
         {widget1.data && widget2.data && (
           <Typography className="text-24 font-300 mt-8">
-            {financial(total)} MAD
+            {financial(total) + " " + LOCAL_CURRENCY}
           </Typography>
         )}
       </div>
@@ -52,19 +52,19 @@ function Widget3(props) {
         <div className="h-96 w-100-p">
           <Line
             data={{
-              labels: FuseUtils.getMonths(),
+              labels: MONTHS,
               datasets: [
                 {
                   borderColor: theme.palette.secondary.main,
                   data: dataSet,
-                  fill: false
-                }
-              ]
+                  fill: false,
+                },
+              ],
             }}
             options={{
               spanGaps: false,
               legend: {
-                display: false
+                display: false,
               },
               maintainAspectRatio: false,
               elements: {
@@ -72,25 +72,25 @@ function Widget3(props) {
                   radius: 2,
                   borderWidth: 1,
                   hoverRadius: 2,
-                  hoverBorderWidth: 1
+                  hoverBorderWidth: 1,
                 },
                 line: {
-                  tension: 0
-                }
+                  tension: 0,
+                },
               },
               layout: {
                 padding: {
                   top: 24,
                   left: 16,
                   right: 16,
-                  bottom: 16
-                }
+                  bottom: 16,
+                },
               },
               scales: {
                 xAxes: [
                   {
-                    display: false
-                  }
+                    display: false,
+                  },
                 ],
                 yAxes: [
                   {
@@ -98,10 +98,10 @@ function Widget3(props) {
                     ticks: {
                       // min: 100,
                       // max: 500
-                    }
-                  }
-                ]
-              }
+                    },
+                  },
+                ],
+              },
             }}
           />
         </div>

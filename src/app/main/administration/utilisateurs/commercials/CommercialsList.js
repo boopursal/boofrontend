@@ -10,7 +10,7 @@ import {
   Button,
   Avatar,
 } from "@material-ui/core";
-import { FuseUtils, FuseAnimate } from "@fuse";
+import { FuseUtils, FuseAnimate, URL_SITE } from "@fuse";
 import { useDispatch, useSelector } from "react-redux";
 import Tooltip from "@material-ui/core/Tooltip";
 import ReactTable from "react-table";
@@ -98,7 +98,7 @@ function CommercialsList(props) {
                 <Avatar
                   className="mr-8"
                   alt={row.original.firstName}
-                  src={FuseUtils.getUrl() + row.original.avatar.url}
+                  src={URL_SITE + row.original.avatar.url}
                 />
               ) : (
                 <Avatar

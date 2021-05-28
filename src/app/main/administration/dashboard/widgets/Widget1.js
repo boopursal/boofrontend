@@ -4,7 +4,7 @@ import { Line } from "react-chartjs-2";
 import { useTheme } from "@material-ui/styles";
 import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { FuseUtils } from "@fuse";
+import { MONTHS, LOCAL_CURRENCY } from "@fuse/Constants";
 
 function Widget1(props) {
   const theme = useTheme();
@@ -42,7 +42,7 @@ function Widget1(props) {
         )}
         {widget1.data && (
           <Typography className="text-24 font-300 mt-8">
-            {financial(widget1.data.value)} MAD
+            {financial(widget1.data.value) + " " + LOCAL_CURRENCY}
           </Typography>
         )}
       </div>
@@ -50,19 +50,19 @@ function Widget1(props) {
         <div className="h-96 w-100-p">
           <Line
             data={{
-              labels: FuseUtils.getMonths(),
+              labels: MONTHS,
               datasets: [
                 {
                   borderColor: theme.palette.secondary.main,
                   data: widget1.data.dataset,
-                  fill: false
-                }
-              ]
+                  fill: false,
+                },
+              ],
             }}
             options={{
               spanGaps: false,
               legend: {
-                display: false
+                display: false,
               },
               maintainAspectRatio: false,
               elements: {
@@ -70,25 +70,25 @@ function Widget1(props) {
                   radius: 2,
                   borderWidth: 1,
                   hoverRadius: 2,
-                  hoverBorderWidth: 1
+                  hoverBorderWidth: 1,
                 },
                 line: {
-                  tension: 0
-                }
+                  tension: 0,
+                },
               },
               layout: {
                 padding: {
                   top: 24,
                   left: 16,
                   right: 16,
-                  bottom: 16
-                }
+                  bottom: 16,
+                },
               },
               scales: {
                 xAxes: [
                   {
-                    display: false
-                  }
+                    display: false,
+                  },
                 ],
                 yAxes: [
                   {
@@ -96,10 +96,10 @@ function Widget1(props) {
                     ticks: {
                       // min: 100,
                       // max: 500
-                    }
-                  }
-                ]
-              }
+                    },
+                  },
+                ],
+              },
             }}
           />
         </div>

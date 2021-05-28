@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Button, Tab, Tabs, InputAdornment, Icon, Typography, LinearProgress, Popper, Chip, Grid, CircularProgress, IconButton, Tooltip, FormControlLabel, Radio, MenuItem, ListItemText, DialogTitle, DialogContent, DialogActions, DialogContentText, Divider } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, DatePickerFormsy, CheckboxFormsy, RadioGroupFormsy, SelectReactFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, URL_SITE, TextFieldFormsy, DatePickerFormsy, CheckboxFormsy, RadioGroupFormsy, SelectReactFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -879,7 +879,7 @@ function Demande(props) {
                                                             "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
                                                     }
                                                     key={media.id}
-                                                    onClick={() => window.open(FuseUtils.getUrl() + media.url, "_blank")}
+                                                    onClick={() => window.open(URL_SITE + media.url, "_blank")}
                                                 >
                                                     <Tooltip title="Supprimer" >
                                                         <IconButton className={classes.demandeImageFeaturedStar}
@@ -894,7 +894,7 @@ function Demande(props) {
 
                                                     {_.split(media.type, '/', 1)[0] === 'image' ?
                                                         <img className="max-w-none w-auto h-full"
-                                                            src={FuseUtils.getUrl() + media.url}
+                                                            src={URL_SITE + media.url}
                                                             alt="demande" />
                                                         :
                                                         <Icon color="secondary" style={{ fontSize: 80 }}>insert_drive_file</Icon>

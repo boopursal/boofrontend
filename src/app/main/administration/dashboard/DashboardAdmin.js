@@ -15,6 +15,7 @@ import withReducer from "app/store/withReducer";
 import reducer from "./store/reducers";
 import { Typography, Select, Divider } from "@material-ui/core";
 import moment from "moment";
+import { Helmet } from "react-helmet";
 
 function DashboardAdmin() {
   const [currentRange, setCurrentRange] = useState(moment().format("Y"));
@@ -24,6 +25,11 @@ function DashboardAdmin() {
 
   return (
     <div className="w-full">
+      <Helmet>
+        <title>Dashboard | Les Achats Industriels</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <meta name="googlebot" content="noindex" />
+      </Helmet>
       <FuseAnimate animation="transition.slideUpIn" delay={200}>
         <div className="flex flex-col md:flex-row sm:p-8 container">
           <div className="flex flex-1 flex-col min-w-0">

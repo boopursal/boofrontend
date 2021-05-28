@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Tab, Tabs, Typography } from '@material-ui/core';
-import { FusePageSimple } from '@fuse';
+import { FusePageSimple,LOCAL_CURRENCY } from '@fuse';
 import { makeStyles } from '@material-ui/styles';
 import { Helmet } from "react-helmet";
 import withReducer from 'app/store/withReducer';
@@ -106,14 +106,14 @@ function BillingApp(props) {
                             <MonAbonnement />
                         )}
                         {tabValue === 2 && (
-                            <Packs currency={user.data ? user.data.currency : 'MAD'} />
+                            <Packs currency={user.data ? user.data.currency : LOCAL_CURRENCY} />
                         )}
 
                     </div>
                 }
                 ref={pageLayout}
             />
-            <CommandeDialog currency={user.data ? user.data.currency : 'MAD'} />
+            <CommandeDialog currency={user.data ? user.data.currency : LOCAL_CURRENCY} />
         </>
     );
 }

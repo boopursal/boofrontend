@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Tab, Tabs, InputAdornment, ListItemText, Popper, Icon, Typography, Divider, Grid, Avatar, MenuItem, Chip, IconButton, DialogTitle, DialogContent, DialogActions, Dialog } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils, TextFieldFormsy, SelectReactFormsy, SelectFormsy } from '@fuse';
+import { FuseAnimate, FusePageCarded, URL_SITE, TextFieldFormsy, SelectReactFormsy, SelectFormsy } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
@@ -440,7 +440,7 @@ function Fournisseur(props) {
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     {form.avatar ?
                                         (
-                                            <Avatar className="w-32 sm:w-48 mr-8 sm:mr-16 rounded" alt="user photo" src={FuseUtils.getUrl() + form.avatar.url} />
+                                            <Avatar className="w-32 sm:w-48 mr-8 sm:mr-16 rounded" alt="user photo" src={URL_SITE + form.avatar.url} />
                                         )
                                         :
                                         (
@@ -1331,11 +1331,11 @@ function Fournisseur(props) {
                                                     classes.fournisseurImageItem,
                                                     "flex items-center cursor-pointer justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden  shadow-1 hover:shadow-5")
                                             }
-                                            onClick={form.avatar ? () => window.open(FuseUtils.getUrl() + form.avatar.url, "_blank") : ''}
+                                            onClick={form.avatar ? () => window.open(URL_SITE + form.avatar.url, "_blank") : ''}
                                         >
                                             {form.avatar ?
                                                 <img className="max-w-none w-auto h-full"
-                                                    src={FuseUtils.getUrl() + form.avatar.url}
+                                                    src={URL_SITE + form.avatar.url}
                                                     alt={form.societe} />
                                                 :
                                                 <img className="max-w-none w-auto h-full"

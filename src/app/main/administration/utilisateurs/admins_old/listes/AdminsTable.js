@@ -7,14 +7,14 @@ import {
   TablePagination,
   TableRow,
 } from "@material-ui/core";
-import { FuseScrollbars } from "@fuse";
+import { FuseScrollbars, URL_SITE } from "@fuse";
 import { withRouter } from "react-router-dom";
 import _ from "@lodash";
 import AdminsTableHead from "./AdminsTableHead";
 import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import FuseUtils from "@fuse/FuseUtils";
+
 function AdminsTable(props) {
   const dispatch = useDispatch();
   const admins = useSelector(({ adminsApp }) => adminsApp.admins.data);
@@ -131,7 +131,7 @@ function AdminsTable(props) {
                       {n.avatar ? (
                         <img
                           className="w-full block rounded"
-                          src={FuseUtils.getUrl() + n.avatar.url}
+                          src={URL_SITE + n.avatar.url}
                           alt={n.name}
                         />
                       ) : (
