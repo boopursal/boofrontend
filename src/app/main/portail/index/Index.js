@@ -410,7 +410,7 @@ function Index(props) {
               "flex flex-wrap content-center"
             )}
           >
-            <div className="text-center font-bold w-full">
+            <div className="text-center font-bold ">
               <Link2
                 component={Link}
                 to={`https://www.3findustrie.com`}
@@ -430,7 +430,7 @@ function Index(props) {
               "flex flex-wrap content-center"
             )}
           >
-            <div className="text-center font-bold w-full">
+            <div className="text-center font-bold">
               <Link2
                 component={Link}
                 to={`https://www.3findustrie.com`}
