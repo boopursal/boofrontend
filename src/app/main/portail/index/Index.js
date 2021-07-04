@@ -180,7 +180,6 @@ const useStyles = makeStyles((theme) => ({
   },
   bannerLeadeboard: {
     height: 90,
-    width: 728,
     margin: "auto",
   },
   bannerMeduim: {
