@@ -410,9 +410,9 @@ function Index(props) {
             )}
           >
             <div className="text-center font-bold ">
-              <Link2
-                component={Link}
-                href={`https://www.3findustrie.com`}
+              <a
+                href="https://www.3findustrie.com/"
+                rel="noopener noreferrer"
                 target="_blank"
               >
                 <img
@@ -420,7 +420,7 @@ function Index(props) {
                   src="assets/images/banners/banner2.jpeg"
                   alt="3fi banner 2"
                 />
-              </Link2>
+              </a>
             </div>
           </div>
           <div
@@ -430,9 +430,9 @@ function Index(props) {
             )}
           >
             <div className="text-center font-bold">
-              <Link2
-                component={Link}
-                href={`https://www.3findustrie.com`}
+              <a
+                href="https://www.3findustrie.com/"
+                rel="noopener noreferrer"
                 target="_blank"
               >
                 <img
@@ -440,7 +440,7 @@ function Index(props) {
                   src="assets/images/banners/banner3.png"
                   alt="3fi banner 2"
                 />
-              </Link2>
+              </a>
             </div>
           </div>
         </Grid>
@@ -535,9 +535,9 @@ function Index(props) {
           "flex flex-wrap content-center"
         )}
       >
-        <Link2
-          component={Link}
-          href={`https://www.3findustrie.com`}
+        <a
+          href="https://www.3findustrie.com/"
+          rel="noopener noreferrer"
           target="_blank"
         >
           <img
@@ -545,7 +545,7 @@ function Index(props) {
             src="assets/images/banners/3fi_banner.png"
             alt="3fi banner"
           />
-        </Link2>
+        </a>
       </div>
       {/*===================DECOUVREZ LES SHA=================**/}
       <div
