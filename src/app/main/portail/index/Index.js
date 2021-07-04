@@ -182,7 +182,6 @@ const useStyles = makeStyles((theme) => ({
     height: 90,
     width: 728,
     margin: "auto",
-    backgroundColor: "#ccc",
   },
   bannerMeduim: {
     height: 250,
@@ -339,11 +338,11 @@ function Index(props) {
         </div>
       </div>
 
-      <Categories categories={portail.categories} />
       {/**===================CATEGORIES & RFQs=================**/}
+      <Categories categories={portail.categories} />
 
       <Grid container className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
-        <Grid item sm={8} xs={12}>
+        <Grid item sm={9} xs={12}>
           <div className={classes.demo}>
             <ListItem>
               <ListItemAvatar>
@@ -404,14 +403,26 @@ function Index(props) {
             )}
           </div>
         </Grid>
-        <Grid item sm={4} xs={12} className="flex flex-col justify-between  ">
+        <Grid item sm={3} xs={12} className="flex flex-col justify-between  ">
           <div
             className={clsx(
               classes.bannerMeduim,
               "flex flex-wrap content-center"
             )}
           >
-            <div className="text-center font-bold w-full">ADS</div>
+            <div className="text-center font-bold w-full">
+              <Link2
+                component={Link}
+                to={`https://www.3findustrie.com`}
+                target="_blank"
+              >
+                <img
+                  className=""
+                  src="assets/images/banners/banner2.jpeg"
+                  alt="3fi banner 2"
+                />
+              </Link2>
+            </div>
           </div>
           <div
             className={clsx(
@@ -419,7 +430,19 @@ function Index(props) {
               "flex flex-wrap content-center"
             )}
           >
-            <div className="text-center font-bold w-full">ADS</div>
+            <div className="text-center font-bold w-full">
+              <Link2
+                component={Link}
+                to={`https://www.3findustrie.com`}
+                target="_blank"
+              >
+                <img
+                  className=""
+                  src="assets/images/banners/banner3.png"
+                  alt="3fi banner 2"
+                />
+              </Link2>
+            </div>
           </div>
         </Grid>
       </Grid>
@@ -513,7 +536,13 @@ function Index(props) {
           "flex flex-wrap content-center"
         )}
       >
-        <div className="text-center font-bold w-full">ADS</div>
+        <a href="https://www.3findustrie.com" targer="_blank">
+          <img
+            className=""
+            src="assets/images/banners/3fi_banner.png"
+            alt="3fi banner"
+          />
+        </a>
       </div>
       {/*===================DECOUVREZ LES SHA=================**/}
       <div
