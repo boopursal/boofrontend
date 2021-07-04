@@ -341,7 +341,7 @@ function Index(props) {
       <Categories categories={portail.categories} />
 
       <Grid container className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
-        <Grid item sm={9} xs={12}>
+        <Grid item sm={8} xs={12}>
           <div className={classes.demo}>
             <ListItem>
               <ListItemAvatar>
@@ -402,7 +402,7 @@ function Index(props) {
             )}
           </div>
         </Grid>
-        <Grid item sm={3} xs={12} className="flex flex-col justify-between  ">
+        <Grid item sm={4} xs={12} className="flex flex-col justify-between  ">
           <div
             className={clsx(
               classes.bannerMeduim,
