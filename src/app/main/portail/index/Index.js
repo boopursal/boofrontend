@@ -187,7 +187,6 @@ const useStyles = makeStyles((theme) => ({
     height: 250,
     width: 300,
     margin: "auto",
-    backgroundColor: "#ccc",
   },
 }));
 
@@ -413,7 +412,7 @@ function Index(props) {
             <div className="text-center font-bold ">
               <Link2
                 component={Link}
-                to={`https://www.3findustrie.com`}
+                href={`https://www.3findustrie.com`}
                 target="_blank"
               >
                 <img
@@ -433,7 +432,7 @@ function Index(props) {
             <div className="text-center font-bold">
               <Link2
                 component={Link}
-                to={`https://www.3findustrie.com`}
+                href={`https://www.3findustrie.com`}
                 target="_blank"
               >
                 <img
@@ -536,13 +535,17 @@ function Index(props) {
           "flex flex-wrap content-center"
         )}
       >
-        <a href="https://www.3findustrie.com" targer="_blank">
+        <Link2
+          component={Link}
+          href={`https://www.3findustrie.com`}
+          target="_blank"
+        >
           <img
             className=""
             src="assets/images/banners/3fi_banner.png"
             alt="3fi banner"
           />
-        </a>
+        </Link2>
       </div>
       {/*===================DECOUVREZ LES SHA=================**/}
       <div
