@@ -552,8 +552,8 @@ function Produit(props) {
                           fullWidth
                           required
                         />
-                        {(secteur?.label === "Autre" ||
-                          secteur?.label === "autre") && (
+                        {(secteur && (secteur.label === "Autre" ||
+                          secteur.label === "autre")) && (
                           <TextFieldFormsy
                             className="mt-16 w-full"
                             type="text"
