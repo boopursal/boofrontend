@@ -437,7 +437,7 @@ function Index(props) {
               >
                 <img
                   className=""
-                  src="assets/images/banners/banner3.png"
+                  src="assets/images/banners/banner3.gif"
                   alt="3fi banner 2"
                 />
               </a>
