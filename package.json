@@ -1,6 +1,7 @@
 {
     "name": "les-achats-industriels",
     "version": "3.0.0",
+    "homepage": "https://7e-sky.github.io/repofrontend",
     "private": true,
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^16.0.0",
@@ -93,6 +94,8 @@
         "webpack-bundle-analyzer": "3.3.2"
     },
     "scripts": {
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build",
         "start": "yarn run tailwind && react-scripts start",
         "build": "yarn run tailwind && node ./purge-tailwindcss.js && cross-env GENERATE_SOURCEMAP=false react-scripts build",
         "tailwind": "./node_modules/.bin/tailwind build ./src/styles/tailwind.base.css -c ./tailwind.js -o ./src/styles/tailwind.css",
