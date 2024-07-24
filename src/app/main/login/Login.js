@@ -44,7 +44,7 @@ function Login() {
 
                 <FuseAnimate delay={400}>
                     <Typography variant="subtitle1" color="inherit" className="max-w-512 mt-16">
-                        LA PLACE DE MARCHE B TO B N° 1 AU MAROC, DES ACHETEURS ET FOURNISSEURS AVERTIS.
+                        LA PLACE DE MARCHE B TO B DES ACHETEURS ET FOURNISSEURS AVERTIS.
                     </Typography>
                 </FuseAnimate>
 

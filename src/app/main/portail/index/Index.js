@@ -437,7 +437,7 @@ function Index(props) {
               >
                 <img
                   className=""
-                  src="assets/images/banners/banner3.gif"
+                  src="assets/images/banners/banner3.png"
                   alt="3fi banner 2"
                 />
               </a>
@@ -536,7 +536,7 @@ function Index(props) {
         )}
       >
         <a
-          href="https://www.3findustrie.com/"
+          href="https://www.preventica-africa.com/"
           rel="noopener noreferrer"
           target="_blank"
         >

@@ -142,7 +142,7 @@ function ProduitsTable(props) {
             sortable: false,
             filterable: false,
           },
-          /* {
+          {
             Header: "Fournisseur",
             className: "font-bold ",
             filterable: true,
@@ -159,7 +159,7 @@ function ProduitsTable(props) {
                 </Link>
               </Tooltip>
             ),
-          }, */
+          },
           {
             Header: "Ref",
             accessor: "reference",

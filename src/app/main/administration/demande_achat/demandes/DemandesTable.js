@@ -136,7 +136,22 @@ function DemandesTable(props) {
                                 />
                             ,
                         },
-                    
+                        {
+                            Header: "Acheteur",
+                            accessor: "acheteur.societe",
+                            className: "font-bold",
+                            filterable: true,
+                            Cell: row => (
+                                <Tooltip title={row.original.acheteur.societe}>
+                                    <Link target="_blank" to={'/users/acheteur/show/' + row.original.acheteur.id} onClick={(ev) => ev.stopPropagation()}>
+                                        {_.capitalize(_.truncate(row.original.acheteur.societe, {
+                                            'length': 15,
+                                            'separator': ' '
+                                        }))}
+                                    </Link>
+                                </Tooltip>
+                            )
+                        },
                         {
                             Header: "Titre",
                             accessor: "titre",
