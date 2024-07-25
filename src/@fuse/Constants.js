@@ -1,4 +1,4 @@
-export const URL_SITE = "https://git.3findustrie.com";
+export const URL_SITE = "https://dev.3findustrie.com";
 export const FRONT_URL = "https://www.ha.lesachatsindustriels.com";
 export const LOCAL_CURRENCY = "MAD";
 export const LOCAL_TVA = 0.2;
