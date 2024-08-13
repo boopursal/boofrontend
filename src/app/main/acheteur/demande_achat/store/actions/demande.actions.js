@@ -34,6 +34,13 @@ export const REQUEST_SAVE_FOURNISSEUR =
   "[ DEMANDE ACHETEUR APP] REQUEST_SAVE_FOURNISSEUR";
 export const SAVE_FOURNISSEUR = "[ DEMANDE ACHETEUR APP] SAVE_FOURNISSEUR";
 
+export const CLEAR_SEARCH_CATEGORIES = "[ DEMANDE ACHETEUR APP] CLEAR_SEARCH_CATEGORIES";
+
+export function clearSearchCategories() {
+    return {
+        type: CLEAR_SEARCH_CATEGORIES
+    };
+}
 export function cleanUpDemande() {
   return (dispatch) =>
     dispatch({
