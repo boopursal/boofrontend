@@ -53,6 +53,7 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Highlighter from "react-highlight-words";
 import { Helmet } from "react-helmet";
+// Importez l'action clearSearchCategories
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -242,7 +243,8 @@ function Demande(props) {
   const formRef = useRef(null);
   
   const { form, handleChange, setForm } = useForm(null);
-
+  
+  
   const classes = useStyles(props);
   const [tabValue, setTabValue] = useState(0);
   const params = props.match.params;
@@ -508,7 +510,22 @@ function Demande(props) {
       event.preventDefault();
     }
   };
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    const newValue = name === 'titre' ? capitalizeFirstLetter(value) : value;
+    setForm({ ...form, [name]: newValue });
+  };
+ // Fonction pour mettre en majuscule la première lettre
+ const capitalizeFirstLetter = (value) => {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+};
 
+const resetFields = () => {
+  setCategories([]);
+  setSuggestions([]);
+  dispatch(Actions.setGlobalSearchText(""));
+  dispatch(Actions.clearSearchCategories());
+};
   function handleSubmit(vider = false) {
     const params = props.match.params;
     const { demandeId } = params;
@@ -531,6 +548,8 @@ function Demande(props) {
         )
       );
     }
+    // Vider le champ de recherche après soumission
+    dispatch(Actions.clearSearchCategories());
   }
 
   return (
@@ -912,12 +931,12 @@ function Demande(props) {
                         <Grid item xs={12} sm={7}>
                           <TextFieldFormsy
                             className="mb-24"
-                            label="Designation"
+                            label="Description du besoin"
                             autoFocus
                             id="titre"
                             name="titre"
                             value={form.titre}
-                            onChange={handleChange}
+                            onChange={handleInputChange}
                             variant="outlined"
                             validations={{
                               minLength: 4,
@@ -1230,7 +1249,8 @@ function Demande(props) {
                             - Attention seules les demandes sérieuses (pas de
                             projets étudiants) seront validées.
                             <br />
-                          </Typography>
+                          </Typography> 
+                          
                         </Grid>
                         <Grid
                           item
