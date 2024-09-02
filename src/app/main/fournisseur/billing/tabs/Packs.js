@@ -278,6 +278,7 @@ function Packs(props) {
                     />
                   </ListItem>
                 </List>
+                <Grid item xs={12} className="h-160"></Grid>
               </Grid>
             </Grid>
             <Grid item xs={6} sm={6} md={8} container spacing={1}>
@@ -308,6 +309,7 @@ function Packs(props) {
                     </span>
                   </div>
                 </Grid>
+                
                 <Grid item xs={12}>
                   <List className={classes.root}>
                     <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
@@ -480,7 +482,31 @@ function Packs(props) {
                       />
                     </ListItem>
                   </List>
+                  <Grid
+                  item
+                  xs={12}
+                  style={{
+                    background:
+                      "linear-gradient(to top left, #ddd 10%, #ddd 30%, #fff 60%, #fff 60%)",
+                    borderRadius: "20px 20px 0 0",
+                    border: "1px solid #ddd",
+                  }}
+                  className="text-center h-160 "
+                >
+                  <div className="text-black uppercase font-extrabold pt-16 text-24">
+                    FREE
+                  </div>
+                  <div className="flex justify-center mt-12 text-black">
+                    <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
+                      {currency === LOCAL_CURRENCY ? LOCAL_CURRENCY : "$"}
+                    </span>
+                    <span className=" uppercase font-extrabold text-32">
+                      00<span className="text-10">,00</span>
+                    </span>
+                  </div>
                 </Grid>
+                </Grid>
+               
               </Grid>
               {
                 // FIN FREE
@@ -788,14 +814,56 @@ function Packs(props) {
                           </ListItem>
                         </List>
                       </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        style={{
+                          background:
+                            "linear-gradient(to top left, #ddd 10%, #ddd 30%, #fff 60%, #fff 60%)",
+                          borderRadius: "20px 20px 0 0",
+                          border: "1px solid #ddd",
+                        }}
+                        className="text-center h-160 "
+                      >
+                        <div className="text-green uppercase font-extrabold pt-16 text-16">
+                          {item.name}
+                        </div>
+                        <div className="flex justify-center mt-12 text-green">
+                          <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
+                            {currency === LOCAL_CURRENCY ? LOCAL_CURRENCY : "$"}
+                          </span>
+                          <span className=" uppercase font-extrabold text-32 md:text-24">
+                            {currency === LOCAL_CURRENCY
+                              ? item.prixMad
+                              : item.prixEur}
+                            <span className="text-10">
+                              ,00 / mois
+                              {currency === LOCAL_CURRENCY && " HT"}
+                            </span>
+                          </span>
+                        </div>
+                        <div className="mt-6">
+                          <Button
+                            variant="contained"
+                            onClick={() => handleSelectOffre(item)}
+                            color="secondary"
+                          >
+                            {" "}
+                            sélectionner
+                          </Button>
+                        </div>
+                      </Grid>
                     </Grid>
                   ))
               }
+              
             </Grid>
           </Grid>
+          
         </div>
       </div>
     </div>
+    
   );
 }
 
