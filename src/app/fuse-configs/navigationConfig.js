@@ -469,7 +469,7 @@ const navigationConfig = [
   },
   {
     id: "acheteurs-tentatives",
-    title: "Acheteur(s) essai de s'inscrire",
+    title: "Demande d'inscription",
     auth: authRoles.acheteur,
     type: "item",
     icon: "vpn_key",
@@ -601,7 +601,7 @@ const navigationConfig = [
   },
   {
     id: "fournisseurs-tentatives",
-    title: "Tentative d'inscription",
+    title: "Demande d'inscription",
     auth: authRoles.fournisseur,
     type: "item",
     icon: "vpn_key",
