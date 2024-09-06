@@ -71,7 +71,7 @@ function TeamsApp(props) {
 
 
     
-   /*  if (!abonnee || (abonnement && !abonnement.offre.hasCommercial)) {
+    if (!abonnee || (abonnement && !abonnement.offre.hasCommercial)) {
         if (!enable) {
             return (
                 <Dialog
@@ -186,9 +186,15 @@ function TeamsApp(props) {
                         
                                  </Typography>
 
-                    <Button component={Link} to={`/billing/pack`} className="whitespace-no-wrap" color="secondary" variant="contained">
+                    <Button component={Link} to={`/dashboard`} className="whitespace-no-wrap" color="secondary" variant="contained">
                         <span className="">Commander abonnement</span>
                     </Button>
+                    <Typography variant="h6" className="my-16">
+  <a href="mailto:administrateur@lesachatsindustriesl.com" className="flex items-center space-x-2">
+    <i className="fas fa-envelope"></i>
+    <span>administrateur@lesachatsindustriesl.com</span>
+  </a>
+</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
@@ -200,7 +206,7 @@ function TeamsApp(props) {
 
         );
     }
- */
+ 
     return (
         <React.Fragment>
             <Helmet>
