@@ -481,6 +481,24 @@ const navigationConfig = [
       count: 0,
     },
   },
+    {
+    //id: "demandes-suggestions",
+    title: "Demande de suggestions",
+    auth: authRoles.acheteur,
+    icon: "apps",
+    type: "collapse",
+    children: [
+      {
+      id: "demande_sugg",
+        title: "Nouvelle suggestion",
+        auth: authRoles.acheteur,
+        exact: true,
+        type: "item",
+        url: "/acheteur/suggetion",
+      },
+      
+    ],
+  },
   /** FIN ACHETEUR Navigations */
 
   /** FOURNISSEUR Navigations */
