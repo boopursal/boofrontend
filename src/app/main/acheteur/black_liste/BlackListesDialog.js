@@ -16,7 +16,7 @@ import Highlighter from "react-highlight-words";
 
 const defaultFormState = {
     raison: '',
-    fournisseur: '',
+   fournisseur: '', // ou '' si le champ est requis mais peut être vide
     fournisseurEx:'',
     email: '',
     pays: '',
@@ -383,7 +383,6 @@ useEffect(() => {
                                     setForm(_.set({ ...form }, 'fournisseur', suggestion['@id']))
                                     hideSearch();
                                 }}
-                                required
                                 inputProps={{
                                     classes,
                                     label: 'Fournisseur',
@@ -538,13 +537,7 @@ useEffect(() => {
                 </select>
             )}
 
-            {/* Afficher la sélection actuelle */}
-            {selectedPays && selectedVille && (
-                <div>
-                    <p>Pays sélectionné : {selectedPays}</p>
-                    <p>Ville sélectionnée : {selectedVille}</p>
-                </div>
-            )}
+           
         </div>
         <div className="flex" style={{ marginTop: '-15px' }}>
                 {/* Afficher la zone de texte correspondante au pays sélectionné */}
@@ -639,7 +632,7 @@ useEffect(() => {
                             variant="contained"
                             color="primary"
                             type="submit"
-                            disabled={!isFormValid || !fournisseur || loading}
+                            disabled={!isFormValid || loading}
                         >
                             Ajouter
                             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}

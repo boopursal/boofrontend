@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, IconButton, Typography, Tooltip } from '@material-ui/core';
+//import { Icon, IconButton, Typography, Tooltip } from '@material-ui/core';
+import { Icon, IconButton,Typography, Chip, Tooltip, TextField, InputAdornment, DialogTitle, DialogContent, DialogActions, DialogContentText, Button } from '@material-ui/core';
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
@@ -73,7 +74,7 @@ function BlackListesList(props) {
                         filterable: true,
                         id: "fournisseur",
                         accessor: f => f.fournisseur.societe,
-                    },
+                    }, 
                     {
                         Header: "Raison",
                         accessor: "raison",
@@ -95,26 +96,93 @@ function BlackListesList(props) {
                         accessor: "etat",
                         Cell: row =>
                             row.original.etat ?
-                                (
+                                (  
+                                    
+                                    
                                     <Tooltip title="Blacklisté">
-                                        <IconButton className="text-red text-20" onClick={(ev) => {
+                                      
+                                            <IconButton className="text-red text-20"
+                                                onClick={(ev) => {
+                                                    ev.stopPropagation();
+                                                    dispatch(Actions.openDialog({
+                                                        children: (
+                                                            <React.Fragment>
+                                                                <DialogTitle id="alert-dialog-title">Blacklisté</DialogTitle>
+                                                                <DialogContent>
+                                                                    <DialogContentText id="alert-dialog-description">
+                                                                        Voulez vous vraiment blacklisté ce Fournisseur ?
+                                                                    </DialogContentText>
+                                                                </DialogContent>
+                                                                <DialogActions>
+                                                                    <Button variant="outlined" onClick={() => dispatch(Actions.closeDialog())} color="success">
+                                                                        Non
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        color="secondary"
+                                                                        onClick={(ev) => {
+                                                                            dispatch(Actions.removeBlackListe(row.original, false, user.id));
+                                                                            dispatch(Actions.closeDialog())
+                                                                        }}
+                                                                        autoFocus>
+                                                                        Oui
+                                                                    </Button>
+                                                                </DialogActions>
+                                                            </React.Fragment>
+                                                        )
+                                                    }))
+                                                }}
+                                            >
+                                                <Icon>remove_circle</Icon>
+                                            </IconButton>
+                                        
+                                        {/* <IconButton className="text-red text-20" onClick={(ev) => {
                                             ev.stopPropagation();
                                             dispatch(Actions.removeBlackListe(row.original, false, user.id))
 
                                         }}>
                                             <Icon>remove_circle</Icon>
-                                        </IconButton>
+                                        </IconButton> */}
                                     </Tooltip>
                                 ) :
+                                
                                 (
                                     <Tooltip title="Déblacklisté">
-                                        <IconButton className="text-green text-20" onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            dispatch(Actions.removeBlackListe(row.original, true, user.id))
-
-                                        }} >
-                                            <Icon>check_circle</Icon>
-                                        </IconButton>
+                                        <IconButton className="text-red text-20"
+                                                onClick={(ev) => {
+                                                    ev.stopPropagation();
+                                                    dispatch(Actions.openDialog({
+                                                        children: (
+                                                            <React.Fragment>
+                                                                <DialogTitle id="alert-dialog-title">Déblacklisté</DialogTitle>
+                                                                <DialogContent>
+                                                                    <DialogContentText id="alert-dialog-description">
+                                                                        Voulez vous vraiment déblacklisté ce Fournisseur ?
+                                                                    </DialogContentText>
+                                                                </DialogContent>
+                                                                <DialogActions>
+                                                                    <Button variant="outlined" onClick={() => dispatch(Actions.closeDialog())} color="primary">
+                                                                        Non
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        color="secondary"
+                                                                        onClick={(ev) => {
+                                                                            dispatch(Actions.removeBlackListe(row.original, true, user.id));
+                                                                            dispatch(Actions.closeDialog())
+                                                                        }}
+                                                                        autoFocus>
+                                                                        Oui
+                                                                    </Button>
+                                                                </DialogActions>
+                                                            </React.Fragment>
+                                                        )
+                                                    }))
+                                                }}
+                                            >
+                                                <Icon>check_circle</Icon>
+                                            </IconButton>
+                                       
                                     </Tooltip>
                                 )
                     },
