@@ -536,7 +536,7 @@ function Index(props) {
         )}
       >
         <a
-          href="https://www.preventica-africa.com/"
+          href="https://www.3findustrie.com/"
           rel="noopener noreferrer"
           target="_blank"
         >
