@@ -53,8 +53,8 @@ const CustomForm = ({ status, message, onValidated }) => {
 };
 
 export default function Newsletter() {
-    const url = "https://lesachatsindustriels.us4.list-manage.com/subscribe/post?u=f32aaf1c3e01b891b2db4b37a&id=fee05cc375";
-
+    //const url = "https://lesachatsindustriels.us4.list-manage.com/subscribe/post?u=f32aaf1c3e01b891b2db4b37a&id=fee05cc375";
+    const url="";
     return (
         <MailchimpSubscribe
             url={url}
