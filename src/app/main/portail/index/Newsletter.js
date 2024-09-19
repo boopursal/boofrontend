@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MailchimpSubscribe from "react-mailchimp-subscribe";
 import { Grid, Button, Icon, Paper, Typography } from '@material-ui/core';
 
 const CustomForm = ({ status, message, onValidated }) => {
+    const [timeoutError, setTimeoutError] = useState(false);
     let email;
 
     const submit = () => {
         if (email && email.value.indexOf("@") > -1) {
+            setTimeoutError(false); // Réinitialiser l'erreur de timeout
             onValidated({ EMAIL: email.value });
+            setTimeout(() => {
+                if (status === "sending") {
+                    setTimeoutError(true);
+                }
+            }, 10000); // 10 secondes
         } else {
             alert("Veuillez entrer une adresse e-mail valide.");
         }
@@ -15,6 +22,7 @@ const CustomForm = ({ status, message, onValidated }) => {
 
     return (
         <div style={{ display: "inline-block", width: '100%' }}>
+            {timeoutError && <div style={{ color: "red" }}>Erreur : L'envoi a expiré. Veuillez réessayer.</div>}
             {status === "sending" && <div style={{ color: "blue" }}>Envoi en cours...</div>}
             {status === "error" && (
                 <div style={{ color: "red" }} dangerouslySetInnerHTML={{ __html: message }} />
@@ -60,5 +68,3 @@ export default function Newsletter() {
         />
     );
 }
-
-// Reste de ton composant
