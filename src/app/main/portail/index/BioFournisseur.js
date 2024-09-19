@@ -99,7 +99,7 @@ export default function BioFournisseur(props) {
                     </CardContent>
                 </div>
                 <Hidden xsDown>
-                    <CardMedia className={classes.cardMedia} image='https://source.unsplash.com/collection/11353394' title='Inscrivez-vous' />
+                    <CardMedia className={classes.cardMedia} image='assets/images/banners/BioFournisseur.jpg' title='Inscrivez-vous' />
                 </Hidden>
             </Card>
         </CardActionArea>
