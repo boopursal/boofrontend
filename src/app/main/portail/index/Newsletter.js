@@ -23,7 +23,7 @@ const CustomForm = ({ status, message, onValidated }) => {
     return (
         <div style={{ display: "inline-block", width: '100%' }}>
             {timeoutError && <div style={{ color: "red" }}>Erreur : L'envoi a expiré. Veuillez réessayer.</div>}
-            {status === "sending" && <div style={{ color: "blue" }}>Envoi en cours...</div>}
+            {status === "sending" && <div style={{ color: "blue" }}>Mail envoyé avec succès</div>}
             {status === "error" && (
                 <div style={{ color: "red" }} dangerouslySetInnerHTML={{ __html: message }} />
             )}
