@@ -499,6 +499,25 @@ const navigationConfig = [
       
     ],
   },
+  {
+    id: "facturation",
+    title: "Abonnements",
+    type: "collapse",
+    auth: authRoles.acheteur,
+    icon: "cloud",
+    children: [
+      {
+        id: "facturation-ach",
+        title: "Facturation",
+        type: "item",
+        icon: "cloud",
+        auth: authRoles.acheteur,
+        exact: true,
+        url: "/facturation",
+      },
+      
+    ],
+  },
   /** FIN ACHETEUR Navigations */
 
   /** FOURNISSEUR Navigations */
