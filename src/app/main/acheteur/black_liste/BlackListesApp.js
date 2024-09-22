@@ -186,7 +186,7 @@ function BlackListesApp(props) {
                         
                                  </Typography>
 
-                    <Button component={Link} to={`/dashboard`} className="whitespace-no-wrap" color="secondary" variant="contained">
+                    <Button component={Link} to={`/facturation/pack`} className="whitespace-no-wrap" color="secondary" variant="contained">
                         <span className="">Commander abonnement</span>
                     </Button>
                     <Typography variant="h6" className="my-16">
