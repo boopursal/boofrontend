@@ -62,7 +62,7 @@ a[role=button] {
 }
 
 /* Medium Devices, Desktops Only */
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 992px) {
     ::-webkit-scrollbar {
         width: 12px;
         height: 12px;
