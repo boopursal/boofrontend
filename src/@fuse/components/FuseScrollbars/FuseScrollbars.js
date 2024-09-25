@@ -21,7 +21,11 @@ const handlerNameByEvent = {
     'ps-y-reach-start': 'onYReachStart',
     'ps-y-reach-end': 'onYReachEnd',
     'ps-x-reach-start': 'onXReachStart',
-    'ps-x-reach-end': 'onXReachEnd'
+    'ps-x-reach-end': 'onXReachEnd',
+    // Ajoutez les événements tactiles
+    'touchstart': 'onTouchStart',
+    'touchmove': 'onTouchMove',
+    'touchend': 'onTouchEnd'
 };
 Object.freeze(handlerNameByEvent);
 
