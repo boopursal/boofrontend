@@ -22,14 +22,14 @@ const handlerNameByEvent = {
     'ps-y-reach-end': 'onYReachEnd',
     'ps-x-reach-start': 'onXReachStart',
     'ps-x-reach-end': 'onXReachEnd',
-    // Ajoutez les événements tactiles
+    // Ajout des événements tactiles
     'touchstart': 'onTouchStart',
     'touchmove': 'onTouchMove',
     'touchend': 'onTouchEnd'
 };
 Object.freeze(handlerNameByEvent);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {}
 }));
 
@@ -44,7 +44,13 @@ const FuseScrollbars = React.forwardRef(function FuseScrollbars(props, ref) {
         Object.keys(handlerNameByEvent).forEach((key) => {
             const callback = props[handlerNameByEvent[key]];
             if (callback) {
-                const handler = () => callback(ref.current);
+                const handler = (event) => {
+                    // Prévenir le comportement par défaut pour les événements tactiles
+                    if (event.type.startsWith('touch')) {
+                        event.preventDefault();
+                    }
+                    callback(ref.current, event);
+                };
                 handlerByEvent.current.set(key, handler);
                 ref.current.addEventListener(key, handler, false);
             }
@@ -62,15 +68,17 @@ const FuseScrollbars = React.forwardRef(function FuseScrollbars(props, ref) {
 
     const destroyPs = useCallback(() => {
         unHookUpEvents();
-        if (!ps.current) return;
-        ps.current.destroy();
-        ps.current = null;
+        if (ps.current) {
+            ps.current.destroy();
+            ps.current = null;
+        }
     }, [unHookUpEvents]);
 
     const createPs = useCallback(() => {
-        if (isMobile || !ref.current || ps.current) return;
-        ps.current = new PerfectScrollbar(ref.current, props.option);
-        hookUpEvents();
+        if (!isMobile && ref.current && !ps.current) {
+            ps.current = new PerfectScrollbar(ref.current, props.option);
+            hookUpEvents();
+        }
     }, [hookUpEvents, props.option, ref]);
 
     useEffect(() => {
@@ -80,7 +88,11 @@ const FuseScrollbars = React.forwardRef(function FuseScrollbars(props, ref) {
     });
 
     useEffect(() => {
-        customScrollbars ? createPs() : destroyPs();
+        if (customScrollbars) {
+            createPs();
+        } else {
+            destroyPs();
+        }
     }, [createPs, customScrollbars, destroyPs]);
 
     useEffect(() => {
