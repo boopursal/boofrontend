@@ -10,7 +10,7 @@ html {
     background-color: #262933;
 }
 
-body {
+/* body {
     font-size: 12px;
     line-height: 1.4;
 }
@@ -20,7 +20,7 @@ html, body, #root {
     height: 100%;
     overflow: hidden;
     position: relative;
-}
+} */
 
 h1, .h1 {
     font-size: 24px;
