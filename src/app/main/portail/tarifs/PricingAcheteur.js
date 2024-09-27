@@ -211,7 +211,7 @@ function PricingAcheteur(props) {
                     </div>
                     <div className="flex justify-center mt-12 text-black">
                       <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                        {currency === 0 ? LOCAL_CURRENCY : "$"}
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
                       </span>
                       <span className=" uppercase font-extrabold text-32">
                         00<span className="text-10">,00</span>
@@ -340,7 +340,6 @@ function PricingAcheteur(props) {
                 </Grid>
                 {
                   // FIN FREE
-                  
                 }
               </Grid>
             </Grid>

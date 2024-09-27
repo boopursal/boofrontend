@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 function TarifDetail(props) {
   const classes = useStyles();
-  const [currency, setCurrency] = useState(0);
+  const [currency, setCurrency] = useState(1);
   function handleChangeCurrency(currencyValue) {
     setCurrency(currencyValue);
   }
@@ -51,7 +51,7 @@ function TarifDetail(props) {
                 Votre place de marché{" "}
                 <span className=" italic font-bold uppercase">B2B</span> la plus
                 adapté à vos besoin avec une tarification simple et abordable.
-                <br /> Vous pouvez toujours essayer un plan gratuit! 
+                <br /> Vous pouvez toujours essayer un plan gratuit!
               </Typography>
             </FuseAnimate>
             <FuseAnimateGroup
@@ -62,6 +62,15 @@ function TarifDetail(props) {
               delay={600}
               className="mt-16"
             >
+              
+              <Button
+                color="secondary"
+                className="mr-16"
+                onClick={() => handleChangeCurrency(1)}
+                variant={currency === 0 ? "outlined" : "contained"}
+              >
+                €
+              </Button>
               <Button
                 variant={currency === 0 ? "contained" : "outlined"}
                 color="secondary"
@@ -69,13 +78,6 @@ function TarifDetail(props) {
                 onClick={() => handleChangeCurrency(0)}
               >
                 {LOCAL_CURRENCY}
-              </Button>
-              <Button
-                color="secondary"
-                onClick={() => handleChangeCurrency(1)}
-                variant={currency === 0 ? "outlined" : "contained"}
-              >
-                $
               </Button>
             </FuseAnimateGroup>
           </div>
