@@ -46,6 +46,19 @@ function PricingFournisseur(props) {
                           primary:
                             "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
                         }}
+                        primary="Activités"
+                      />
+                    </ListItem>
+                    <Divider component="li" />
+                    <ListItem
+                      classes={{ root: "h-60 sm:h-56 " }}
+                      alignItems="flex-start"
+                    >
+                      <ListItemText
+                        classes={{
+                          primary:
+                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                        }}
                         primary="Présentations de Produits / Services"
                       />
                     </ListItem>
@@ -101,19 +114,7 @@ function PricingFournisseur(props) {
                         primary="Réception des demandes par produit exposé"
                       />
                     </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Activités"
-                      />
-                    </ListItem>
+                   
                     <Divider component="li" />
                     <ListItem
                       classes={{ root: "h-60 sm:h-56 " }}
@@ -268,7 +269,7 @@ function PricingFournisseur(props) {
                     </div>
                     <div className="flex justify-center mt-12 text-black">
                       <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                        {currency === 0 ? LOCAL_CURRENCY : "$"}
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
                       </span>
                       <span className=" uppercase font-extrabold text-32">
                         00<span className="text-10">,00</span>
@@ -277,6 +278,16 @@ function PricingFournisseur(props) {
                   </Grid>
                   <Grid item xs={12}>
                     <List className={classes.root}>
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary="1 activité"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
                       <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
                         <ListItemText
                           justify="center"
@@ -331,16 +342,7 @@ function PricingFournisseur(props) {
                           primary="illimité"
                         />
                       </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary="Limité par Nbr. produits"
-                        />
-                      </ListItem>
+                     
                       <Divider component="li" />
                       <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
                         <ListItemText
@@ -493,7 +495,7 @@ function PricingFournisseur(props) {
                     </div>
                     <div className="flex justify-center mt-12 text-black">
                       <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                        {currency === 0 ? LOCAL_CURRENCY : "$"}
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
                       </span>
                       <span className=" uppercase font-extrabold text-32">
                         {currency === 0 ? "250" : "25"}
@@ -506,6 +508,17 @@ function PricingFournisseur(props) {
                   </Grid>
                   <Grid item xs={12}>
                     <List className={classes.root}>
+                    
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary="3 activités"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
                       <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
                         <ListItemText
                           justify="center"
@@ -560,16 +573,7 @@ function PricingFournisseur(props) {
                           primary="illimité"
                         />
                       </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary="Jusqu'à 3 activités"
-                        />
-                      </ListItem>
+                      
                       <Divider component="li" />
                       <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
                         <ListItemText
@@ -720,7 +724,7 @@ function PricingFournisseur(props) {
                     </div>
                     <div className="flex justify-center mt-12 text-black">
                       <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                        {currency === 0 ? LOCAL_CURRENCY : "$"}
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
                       </span>
                       <span className=" uppercase font-extrabold text-32">
                         {currency === 0 ? "350" : "35"}
@@ -733,6 +737,17 @@ function PricingFournisseur(props) {
                   </Grid>
                   <Grid item xs={12}>
                     <List className={classes.root}>
+                    
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary="5 activités"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
                       <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
                         <ListItemText
                           justify="center"
@@ -785,16 +800,6 @@ function PricingFournisseur(props) {
                               "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
                           }}
                           primary="illimité"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary="Jusqu'à 5 activités"
                         />
                       </ListItem>
                       <Divider component="li" />
@@ -953,7 +958,7 @@ function PricingFournisseur(props) {
                     </div>
                     <div className="flex justify-center mt-12 text-black">
                       <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                        {currency === 0 ? LOCAL_CURRENCY : "$"}
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
                       </span>
                       <span className=" uppercase font-extrabold text-32">
                         {currency === 0 ? "450" : "45"}
@@ -966,6 +971,16 @@ function PricingFournisseur(props) {
                   </Grid>
                   <Grid item xs={12}>
                     <List className={classes.root}>
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary="10 activités"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
                       <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
                         <ListItemText
                           justify="center"
@@ -1020,16 +1035,7 @@ function PricingFournisseur(props) {
                           primary="illimité"
                         />
                       </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary="Jusqu'à 10 activités"
-                        />
-                      </ListItem>
+                      
                       <Divider component="li" />
                       <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
                         <ListItemText
@@ -1139,7 +1145,7 @@ function PricingFournisseur(props) {
                             primary:
                               "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
                           }}
-                          primary="2 produit (3 mois)"
+                          primary="2 produits (1 mois)"
                         />
                       </ListItem>
                       <Divider component="li" />
@@ -1149,7 +1155,7 @@ function PricingFournisseur(props) {
                             primary:
                               "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
                           }}
-                          primary="1 bannière (6 mois)"
+                          primary="1 bannière (3 mois)"
                         />
                       </ListItem>
                     </List>
