@@ -135,9 +135,9 @@ function MonAbonnement() {
                                 Mon Pack
                             </Typography>
                             <Tooltip title="Modifier votre pack" >
-                                <Link to="/billing/pack" className="">
+                                {/* <Link to="/billing/pack" className="">
                                     <Icon className="text-orange">edit</Icon>
-                                </Link>
+                                </Link> */}
                             </Tooltip>
                         </div>
                         <Divider />
