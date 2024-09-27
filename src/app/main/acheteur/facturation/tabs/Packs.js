@@ -68,11 +68,11 @@ function Packs(props) {
     <div>
       <div className="p-24 ">
         <div className="w-full max-w-2xl mx-auto">
-          <Grid container>
-            <Grid item xs={6} sm={6} md={4} container>
-              <Grid item xs={12} className="h-160"></Grid>
-              <Grid item xs={12}>
-              <List className={classes.root}>
+        <Grid container>
+              <Grid item xs={6} sm={6} md={4} container>
+                <Grid item xs={12} className="h-160"></Grid>
+                <Grid item xs={12}>
+                  <List className={classes.root}>
                     <ListItem classes={{ root: "h-60 sm:h-56 " }}>
                       <ListItemText
                         classes={{
@@ -171,7 +171,7 @@ function Packs(props) {
                           primary:
                             "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
                         }}
-                        primary="Directeur des achats "
+                        primary="Sous-compte Acheteur ***"
                       />
                     </ListItem>
                     <Divider component="li" />
@@ -197,255 +197,55 @@ function Packs(props) {
                           primary:
                             "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
                         }}
-                        primary="Suggestion"
+                        primary="Critère sélection fournisseur"
+                      />
+                    </ListItem>
+                    <Divider component="li" />
+                    <ListItem
+                      classes={{ root: "h-60 sm:h-56 " }}
+                      alignItems="flex-start"
+                    >
+                      <ListItemText
+                        classes={{
+                          primary:
+                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                        }}
+                        primary="Critère sélection produit"
                       />
                     </ListItem>
                   </List>
-                <Grid item xs={12} className="h-160"></Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={6} sm={6} md={8} container spacing={1}>
-              {
-                // FREE
-              }
-              <Grid item xs={12} sm={6} md={3} container>
-                <Grid
-                  item
-                  xs={12}
-                  style={{
-                    background:
-                      "linear-gradient(to top left, #ddd 10%, #ddd 30%, #fff 60%, #fff 60%)",
-                    borderRadius: "20px 20px 0 0",
-                    border: "1px solid #ddd",
-                  }}
-                  className="text-center h-160 "
-                >
-                  <div className="text-black uppercase font-extrabold pt-16 text-24">
-                    FREE
-                  </div>
-                  <div className="flex justify-center mt-12 text-black">
-                    <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                      {currency === LOCAL_CURRENCY ? LOCAL_CURRENCY : "$"}
-                    </span>
-                    <span className=" uppercase font-extrabold text-32">
-                      00<span className="text-10">,00</span>
-                    </span>
-                  </div>
                 </Grid>
-                
-                <Grid item xs={12}>
-                <List className={classes.root}>
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          justify="center"
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary="illimité"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary="illimité"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                          secondary="( Nous contacter )"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                          secondary="( Nous contacter)"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                          secondary="( Nous contacter)"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                          secondary="( Nous contacter )"
-                        />
-                      </ListItem>
-                    </List>
+              </Grid>
+              <Grid item xs={6} sm={6} md={8} container spacing={1}>
+                {
+                  // FREE
+                }
+                <Grid item xs={12} sm={6} md={4} container>
                   <Grid
-                  item
-                  xs={12}
-                  style={{
-                    background:
-                      "linear-gradient(to top left, #ddd 10%, #ddd 30%, #fff 60%, #fff 60%)",
-                    borderRadius: "20px 20px 0 0",
-                    border: "1px solid #ddd",
-                  }}
-                  className="text-center h-160 "
-                >
-                  <div className="text-black uppercase font-extrabold pt-16 text-24">
-                    FREE
-                  </div>
-                  <div className="flex justify-center mt-12 text-black">
-                    <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                      {currency === LOCAL_CURRENCY ? LOCAL_CURRENCY : "$"}
-                    </span>
-                    <span className=" uppercase font-extrabold text-32">
-                      00<span className="text-10">,00</span>
-                    </span>
-                  </div>
-                </Grid>
-                </Grid>
-               
-              </Grid>
-              {
-                // FIN FREE
-              }
-              {
-                // PACKs PAYANT
-                commande.offres &&
-                  commande.offres.map((item, index) => (
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={3}
-                      key={item.id}
-                      className="flex hidden sm:block md:block lg:block "
-                    >
-                      <Grid
-                        item
-                        xs={12}
-                        style={{
-                          background:
-                            "linear-gradient(to top left, #ddd 10%, #ddd 30%, #fff 60%, #fff 60%)",
-                          borderRadius: "20px 20px 0 0",
-                          border: "1px solid #ddd",
-                        }}
-                        className="text-center h-160 "
-                      >
-                        <div className="text-green uppercase font-extrabold pt-16 text-16">
-                          {item.name}
-                        </div>
-                        <div className="flex justify-center mt-12 text-green">
-                          <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                            {currency === LOCAL_CURRENCY ? LOCAL_CURRENCY : "$"}
-                          </span>
-                          <span className=" uppercase font-extrabold text-32 md:text-24">
-                            {currency === LOCAL_CURRENCY
-                              ? item.prixMad
-                              : item.prixEur}
-                            <span className="text-10">
-                              ,00 / mois
-                              {currency === LOCAL_CURRENCY && " HT"}
-                            </span>
-                          </span>
-                        </div>
-                        <div className="mt-6">
-                          <Button
-                            variant="contained"
-                            onClick={() => handleSelectOffre(item)}
-                            color="secondary"
-                          >
-                            {" "}
-                            sélectionner
-                          </Button>
-                        </div>
-                      </Grid>
-                      <Grid item xs={12}>
-                      <List className={classes.root}>
+                    item
+                    xs={12}
+                    style={{
+                      background:
+                        "linear-gradient(to top left, #feb2b2 10%, #feb2b2 30%, #e53e3e 60%, #e53e3e 60%)",
+                      borderRadius: "20px 20px 0 0",
+                      border: "1px solid #f56565",
+                    }}
+                    className="text-center h-160 "
+                  >
+                    <div className="text-black uppercase font-extrabold pt-16 text-24">
+                      FREE
+                    </div>
+                    <div className="flex justify-center mt-12 text-black">
+                      <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
+                      </span>
+                      <span className=" uppercase font-extrabold text-32">
+                        00<span className="text-10">,00</span>
+                      </span>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <List className={classes.root}>
                       <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
                         <ListItemText
                           justify="center"
@@ -532,7 +332,7 @@ function Packs(props) {
                           primary={
                             <Icon style={{ color: red[500] }}>close</Icon>
                           }
-                          secondary="( Nous contacter )"
+                          
                         />
                       </ListItem>
                       <Divider component="li" />
@@ -545,7 +345,7 @@ function Packs(props) {
                           primary={
                             <Icon style={{ color: red[500] }}>close</Icon>
                           }
-                          secondary="( Nous contacter )"
+                         
                         />
                       </ListItem>
                       <Divider component="li" />
@@ -558,7 +358,7 @@ function Packs(props) {
                           primary={
                             <Icon style={{ color: red[500] }}>close</Icon>
                           }
-                          secondary="( Nous contacter )"
+                          
                         />
                       </ListItem>
                       <Divider component="li" />
@@ -571,56 +371,396 @@ function Packs(props) {
                           primary={
                             <Icon style={{ color: red[500] }}>close</Icon>
                           }
-                          secondary="( Nous contacter )"
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: red[500] }}>close</Icon>
+                          }
+                          
                         />
                       </ListItem>
                     </List>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
-                        style={{
-                          background:
-                            "linear-gradient(to top left, #ddd 10%, #ddd 30%, #fff 60%, #fff 60%)",
-                          borderRadius: "20px 20px 0 0",
-                          border: "1px solid #ddd",
-                        }}
-                        className="text-center h-160 "
-                      >
-                        <div className="text-green uppercase font-extrabold pt-16 text-16">
-                          {item.name}
-                        </div>
-                        <div className="flex justify-center mt-12 text-green">
-                          <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                            {currency === LOCAL_CURRENCY ? LOCAL_CURRENCY : "$"}
-                          </span>
-                          <span className=" uppercase font-extrabold text-32 md:text-24">
-                            {currency === LOCAL_CURRENCY
-                              ? item.prixMad
-                              : item.prixEur}
-                            <span className="text-10">
-                              ,00 / mois
-                              {currency === LOCAL_CURRENCY && " HT"}
-                            </span>
-                          </span>
-                        </div>
-                        <div className="mt-6">
-                          <Button
-                            variant="contained"
-                            onClick={() => handleSelectOffre(item)}
-                            color="secondary"
-                          >
-                            {" "}
-                            sélectionner
-                          </Button>
-                        </div>
-                      </Grid>
-                    </Grid>
-                  ))
-              }
+                  </Grid>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} container>
+                <Grid
+                    item
+                    xs={12}
+                    style={{
+                      background:
+                        "linear-gradient(to top left, #90cdf4 10%, #90cdf4 30%, #3182ce 60%, #3182ce 60%)",
+                      borderRadius: "20px 20px 0 0",
+                      border: "1px solid #3182ce",
+                    }}
+                    className="text-center h-160 "
+                  >
+                    <div className="text-black uppercase font-extrabold pt-16 text-24">
+                      ACHETEUR PRO
+                    </div>
+                    <div className="flex justify-center mt-12 text-black">
+                      <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
+                      </span>
+                      <span className=" uppercase font-extrabold text-32">
+                        {currency === 0 ? "375" : "38"}
+                        <span className="text-10">
+                          ,00 / mois
+                          {currency === 0 && " HT"}
+                        </span>
+                      </span>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <List className={classes.root}>
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          justify="center"
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary="illimité"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary="illimité"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: red[500] }}>close</Icon>
+                          }
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: red[500] }}>close</Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                    </List>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} container>
+                  {/* GOLD */}
+                <Grid
+                    item
+                    xs={12}
+                    style={{
+                      background:
+                        "linear-gradient(to top left, #faf089 10%, #faf089 30%, #d69e2e 60%, #d69e2e 60%)",
+                      borderRadius: "20px 20px 0 0",
+                      border: "1px solid #d69e2e",
+                    }}
+                    className="text-center h-160 "
+                  >
+                    <div className="text-black uppercase font-extrabold pt-16 text-24">
+                      ACHETEUR PRO PLUS
+                    </div>
+                    <div className="flex justify-center mt-12 text-black">
+                      <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
+                      </span>
+                      <span className=" uppercase font-extrabold text-32">
+                        {currency === 0 ? "500" : "50"}
+                        <span className="text-10">
+                          ,00 / mois
+                          {currency === 0 && " HT"}
+                        </span>
+                      </span>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <List className={classes.root}>
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          justify="center"
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary="illimité"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary="illimité"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                    </List>
+                  </Grid>
+                </Grid>
+                {
+                  // FIN FREE
+                }
+              </Grid>
               
             </Grid>
-          </Grid>
           
         </div>
       </div>
