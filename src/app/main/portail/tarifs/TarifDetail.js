@@ -51,7 +51,7 @@ function TarifDetail(props) {
                 Votre place de marché{" "}
                 <span className=" italic font-bold uppercase">B2B</span> la plus
                 adapté à vos besoin avec une tarification simple et abordable.
-                <br /> Vous pouvez toujours essayer un plan gratuit!
+                <br /> Vous pouvez toujours essayer un plan gratuit! 
               </Typography>
             </FuseAnimate>
             <FuseAnimateGroup

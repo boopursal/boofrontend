@@ -1157,6 +1157,7 @@ function PricingFournisseur(props) {
                 </Grid>
                 {
                   // FIN GLOD
+                  
                 }
               </Grid>
             </Grid>

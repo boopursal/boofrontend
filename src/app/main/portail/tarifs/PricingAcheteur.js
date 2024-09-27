@@ -340,6 +340,7 @@ function PricingAcheteur(props) {
                 </Grid>
                 {
                   // FIN FREE
+                  
                 }
               </Grid>
             </Grid>
