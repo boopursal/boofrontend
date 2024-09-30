@@ -215,6 +215,32 @@ function PricingAcheteur(props) {
                             <Icon className="ml-4 text-20">help_outline   </Icon>
                       </Tooltip>
                     </ListItem>
+                    <Divider component="li" />
+                    <ListItem
+                      classes={{ root: "h-60 sm:h-56 " }}
+                      alignItems="flex-start"
+                    >
+                      <ListItemText
+                        classes={{
+                          primary:
+                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                        }}
+                        primary="Critère sélection fournisseur"
+                      />
+                    </ListItem>
+                    <Divider component="li" />
+                    <ListItem
+                      classes={{ root: "h-60 sm:h-56 " }}
+                      alignItems="flex-start"
+                    >
+                      <ListItemText
+                        classes={{
+                          primary:
+                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                        }}
+                        primary="Critère sélection produit"
+                      />
+                    </ListItem>
                   </List>
                 </Grid>
               </Grid>
@@ -222,7 +248,7 @@ function PricingAcheteur(props) {
                 {
                   // FREE
                 }
-                <Grid item xs={12} sm={6} md={6} container>
+                <Grid item xs={12} sm={6} md={4} container>
                   <Grid
                     item
                     xs={12}
@@ -334,7 +360,7 @@ function PricingAcheteur(props) {
                           primary={
                             <Icon style={{ color: red[500] }}>close</Icon>
                           }
-                          secondary="( Nous contacter )"
+                          
                         />
                       </ListItem>
                       <Divider component="li" />
@@ -347,7 +373,7 @@ function PricingAcheteur(props) {
                           primary={
                             <Icon style={{ color: red[500] }}>close</Icon>
                           }
-                          secondary="( A venir )"
+                         
                         />
                       </ListItem>
                       <Divider component="li" />
@@ -360,7 +386,398 @@ function PricingAcheteur(props) {
                           primary={
                             <Icon style={{ color: red[500] }}>close</Icon>
                           }
-                          secondary="( Nous contacter )"
+                          
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: red[500] }}>close</Icon>
+                          }
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: red[500] }}>close</Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                    </List>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} container>
+                <Grid
+                    item
+                    xs={12}
+                    style={{
+                      background:
+                        "linear-gradient(to top left, #90cdf4 10%, #90cdf4 30%, #3182ce 60%, #3182ce 60%)",
+                      borderRadius: "20px 20px 0 0",
+                      border: "1px solid #3182ce",
+                    }}
+                    className="text-center h-160 "
+                  >
+                    <div className="text-black uppercase font-extrabold pt-16 text-24">
+                      ACHETEUR PRO
+                    </div>
+                    <div className="flex justify-center mt-12 text-black">
+                      <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
+                      </span>
+                      <span className=" uppercase font-extrabold text-32">
+                        {currency === 0 ? "375" : "38"}
+                        <span className="text-10">
+                          ,00 / mois
+                          {currency === 0 && " HT"}
+                        </span>
+                      </span>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <List className={classes.root}>
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          justify="center"
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary="illimité"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary="illimité"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: red[500] }}>close</Icon>
+                          }
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: red[500] }}>close</Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                    </List>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} container>
+                  {/* GOLD */}
+                <Grid
+                    item
+                    xs={12}
+                    style={{
+                      background:
+                        "linear-gradient(to top left, #faf089 10%, #faf089 30%, #d69e2e 60%, #d69e2e 60%)",
+                      borderRadius: "20px 20px 0 0",
+                      border: "1px solid #d69e2e",
+                    }}
+                    className="text-center h-160 "
+                  >
+                    <div className="text-black uppercase font-extrabold pt-16 text-24">
+                      ACHETEUR PRO PLUS
+                    </div>
+                    <div className="flex justify-center mt-12 text-black">
+                      <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
+                      </span>
+                      <span className=" uppercase font-extrabold text-32">
+                        {currency === 0 ? "500" : "50"}
+                        <span className="text-10">
+                          ,00 / mois
+                          {currency === 0 && " HT"}
+                        </span>
+                      </span>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <List className={classes.root}>
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          justify="center"
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary="illimité"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary="illimité"
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                         
+                        />
+                      </ListItem>
+                      <Divider component="li" />
+                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
+                        <ListItemText
+                          classes={{
+                            primary:
+                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
+                          }}
+                          primary={
+                            <Icon style={{ color: green[500] }}>
+                              check_circle
+                            </Icon>
+                          }
+                          
                         />
                       </ListItem>
                     </List>
@@ -370,6 +787,7 @@ function PricingAcheteur(props) {
                   // FIN FREE
                 }
               </Grid>
+              
             </Grid>
           </FuseAnimate>
           <div className="flex flex-col mt-8">
