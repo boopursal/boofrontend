@@ -82,6 +82,13 @@ function PricingAcheteur(props) {
                         }}
                         primary="Publication des demandes de devis ( RFQ )"
                       />
+                      <Tooltip
+                            placement="top"
+                            title="La publication des demandes de devis (RFQ: Request for Quotation) consiste à solliciter des propositions de fournisseurs pour des biens ou services spécifiques afin de comparer les offres et choisir le meilleur fournisseur."
+                            aria-label="anonyme"
+                          >
+                            <Icon className="ml-4 text-20">help_outline   </Icon>
+                          </Tooltip>
                     </ListItem>
                     <Divider component="li" />
                     <ListItem
