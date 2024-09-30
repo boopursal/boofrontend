@@ -133,6 +133,13 @@ function PricingAcheteur(props) {
                         }}
                         primary="Voir le nombre de Fournisseurs Intéressés * "
                       />
+                         <Tooltip
+                            placement="top"
+                            title="* Les Fournisseurs qui ont acheté votre Profil pour vous contacter."
+                            aria-label="anonyme"
+                          >
+                            <Icon className="ml-4 text-20">help_outline   </Icon>
+                          </Tooltip>
                     </ListItem>
                     <Divider component="li" />
                     <ListItem
@@ -146,6 +153,13 @@ function PricingAcheteur(props) {
                         }}
                         primary="Compte anonyme **"
                       />
+                       <Tooltip
+                            placement="top"
+                            title="** Le compte anonyme vous libère de gérer vos achats et les fournisseurs ne sauront pas votre identité. Un pourcentage payant sera défini en commun accord pour chaque RFQ."
+                            aria-label="anonyme"
+                          >
+                            <Icon className="ml-4 text-20">help_outline   </Icon>
+                          </Tooltip>
                     </ListItem>
                     <Divider component="li" />
                     <ListItem
@@ -173,6 +187,13 @@ function PricingAcheteur(props) {
                         }}
                         primary="Sous-compte Acheteur ***"
                       />
+                      <Tooltip
+                            placement="top"
+                            title="*** Le Sous Compte acheteur vous permet d'inviter vos collègues ou collaborateurs afin d'optimiser l'efficacité et d'organiser le service d'achat par famille ou par produit."
+                            aria-label="anonyme"
+                          >
+                            <Icon className="ml-4 text-20">help_outline   </Icon>
+                          </Tooltip>
                     </ListItem>
                     <Divider component="li" />
                     <ListItem
@@ -186,6 +207,13 @@ function PricingAcheteur(props) {
                         }}
                         primary="Blackliste"
                       />
+                      <Tooltip
+                            placement="top"
+                            title="Blacklisté vous permez de blacklisté les fournisseurs indisirables "
+                            aria-label="anonyme"
+                          >
+                            <Icon className="ml-4 text-20">help_outline   </Icon>
+                      </Tooltip>
                     </ListItem>
                   </List>
                 </Grid>
@@ -211,7 +239,7 @@ function PricingAcheteur(props) {
                     </div>
                     <div className="flex justify-center mt-12 text-black">
                       <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                        {currency === 0 ? LOCAL_CURRENCY : "$"}
+                        {currency === 0 ? LOCAL_CURRENCY : "€"}
                       </span>
                       <span className=" uppercase font-extrabold text-32">
                         00<span className="text-10">,00</span>
