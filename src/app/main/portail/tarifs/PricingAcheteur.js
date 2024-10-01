@@ -181,6 +181,13 @@ function PricingAcheteur(props) {
                         }}
                         primary="Voir le nombre de diffusions de la ( RFQ )"
                       />
+                      <Tooltip
+                            placement="top"
+                            title="Voir le nombre de diffusions de la RFQ consiste à analyser combien de fois une demande de devis a été partagée ou envoyée à des fournisseurs potentiels."
+                            aria-label="anonyme"
+                          >
+                            <Icon className="ml-4 text-20">help_outline   </Icon>
+                          </Tooltip>
                     </ListItem>
 
                     <Divider component="li" />
