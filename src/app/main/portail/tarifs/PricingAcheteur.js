@@ -242,6 +242,13 @@ function PricingAcheteur(props) {
                         }}
                         primary="Critère sélection fournisseur"
                       />
+                      <Tooltip
+                            placement="top"
+                            title="Lors de sa demande d'achat, l'acheteur peut établir des critères de sélection des fournisseurs pour chaque société, tels que le capital, le chiffre d'affaires ou la proximité géographique..."
+                            aria-label="anonyme"
+                          >
+                            <Icon className="ml-4 text-20">help_outline   </Icon>
+                          </Tooltip>
                     </ListItem>
                     <Divider component="li" />
                     <ListItem
@@ -255,6 +262,13 @@ function PricingAcheteur(props) {
                         }}
                         primary="Critère sélection produit"
                       />
+                      <Tooltip
+                            placement="top"
+                            title="Lors de sa demande d'achat, l'acheteur peut définir des critères de sélection des fournisseurs basés sur le fabricant, le distributeur, la marque, la certification et le prix pour chaque produit."
+                            aria-label="anonyme"
+                          >
+                            <Icon className="ml-4 text-20">help_outline   </Icon>
+                          </Tooltip>
                     </ListItem>
                   </List>
                 </Grid>
