@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Popper, ClickAwayListener, MenuItem, Icon, IconButton, ListItemText, Paper, TextField, Tooltip, Typography, ListItemSecondaryAction } from '@material-ui/core';
+import React, { useRef, useEffect } from 'react';
+import { Popper, ClickAwayListener, MenuItem, Icon, IconButton, ListItemText, Paper, TextField, Tooltip, Typography, ListItemSecondaryAction, Avatar, ListItemAvatar, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import Autosuggest from 'react-autosuggest';
@@ -10,92 +10,8 @@ import withReducer from 'app/store/withReducer';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Highlighter from "react-highlight-words";
 import history from '@history';
+import FuseUtils from '@fuse/FuseUtils';
 
-
-
-function renderSuggestion(suggestion, { query, isHighlighted }) {
-    // console.log('===========================Render Suggestions===============================')
-    //console.log(suggestion)
-    let result = '';
-    //let img = '';
-    if (suggestion.societe) {
-        result = suggestion.societe;
-        //    img = <Avatar >{suggestion.societe[0]}</Avatar>
-    }
-    else if (suggestion.titre) {
-        result = suggestion.titre
-        /* suggestion.featuredImageId ?
-             img = <Avatar alt={suggestion.titre} src={FuseUtils.getUrl() + suggestion.featuredImageId.url} />
-             :
-             img = <Avatar alt={suggestion.titre} src="assets/images/ecommerce/product-placeholder.jpg" />
- */
-    }
-    else if (suggestion.name) {
-        result = suggestion.name
-        // img = <Avatar >{suggestion.name[0]}</Avatar>
-    }
-    else if (suggestion.autreFrs) {
-        result = suggestion.autreFrs
-    }
-    else if (suggestion.autreProduits) {
-        result = suggestion.autreProduits
-    }
-
-    return (
-        <MenuItem selected={isHighlighted} component="div" dense={true}>
-            <ListItemText
-                className="pl-0"
-                primary={
-                    <Highlighter
-                        highlightClassName="YourHighlightClass"
-                        searchWords={[query]}
-                        autoEscape={true}
-                        textToHighlight={result}
-                    />
-                }
-            />
-            <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="more">
-                    <Icon className="text-16 arrow-icon">chevron_right</Icon>
-                </IconButton>
-            </ListItemSecondaryAction>
-        </MenuItem>
-
-    );
-}
-
-function getSuggestionValue(suggestion) {
-    let result = '';
-    if (suggestion.societe) {
-        result = suggestion.societe
-    }
-    else if (suggestion.titre) {
-        result = suggestion.titre
-    }
-    else if (suggestion.name) {
-        result = suggestion.name
-    }
-    else if (suggestion.autreFrs) {
-        result = suggestion.autreFrs
-    }
-    else if (suggestion.autreProduits) {
-        result = suggestion.autreProduits
-    }
-    return result;
-}
-function getSectionSuggestions(section) {
-
-    return section.suggestions;
-}
-function renderSectionTitle(section) {
-
-    if (section.suggestions.length === 0) {
-        return
-    }
-    return (
-        <Typography variant="h6" className="py-4 px-8 bg-gray-300">{section.title}</Typography>
-    );
-}
 const useStyles = makeStyles(theme => ({
     root: {},
     container: {
@@ -124,15 +40,124 @@ const useStyles = makeStyles(theme => ({
         '&:focus': {
             backgroundColor: theme.palette.background.paper
         }
-    }
+    },
+    suggestionsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        padding: theme.spacing(2),
+    },
+    suggestionSection: {
+        flex: '1 1 33.33%',
+        maxWidth: '33.33%',
+        padding: theme.spacing(1),
+        '& > div': {
+            maxHeight: '400px',
+            overflowY: 'auto',
+        },
+    },
+    sectionTitle: {
+        padding: theme.spacing(1, 2),
+        backgroundColor: theme.palette.grey[200],
+        fontWeight: 'bold',
+    },
+    suggestion: {
+        padding: theme.spacing(1, 2),
+        '&:hover': {
+            backgroundColor: theme.palette.action.hover,
+        },
+    },
 }));
+
+function renderSectionTitle(section, classes) {
+    if (section.suggestions.length === 0) {
+        return null;
+    }
+    return (
+        <Typography variant="subtitle1" className={classes.sectionTitle}>{section.title}</Typography>
+    );
+}
+
+function renderSuggestion(suggestion, { query, isHighlighted }, classes) {
+    let result = '';
+    let img = null;
+    if (suggestion.societe) {
+        result = suggestion.societe;
+        img = <Avatar>{suggestion.societe[0]}</Avatar>
+    }
+    else if (suggestion.titre) {
+        result = suggestion.titre
+        img = suggestion.featuredImageId
+            ? <Avatar alt={suggestion.titre} src={FuseUtils.getUrl() + suggestion.featuredImageId.url} />
+            : <Avatar alt={suggestion.titre} src="assets/images/ecommerce/product-placeholder.jpg" />
+    }
+    else if (suggestion.name) {
+        result = suggestion.name
+        img = <Avatar>{suggestion.name[0]}</Avatar>
+    }
+    else if (suggestion.autreFrs) {
+        result = suggestion.autreFrs
+    }
+    else if (suggestion.autreProduits) {
+        result = suggestion.autreProduits
+    }
+
+    return (
+        <div className={classes.suggestion}>
+            <Grid container alignItems="center" spacing={2}>
+                {img && <Grid item>{img}</Grid>}
+                <Grid item xs>
+                    <Typography>
+                        <Highlighter
+                            highlightClassName="YourHighlightClass"
+                            searchWords={[query]}
+                            autoEscape={true}
+                            textToHighlight={result}
+                        />
+                    </Typography>
+                </Grid>
+                <Grid item>
+                    <IconButton size="small">
+                        <Icon fontSize="small">chevron_right</Icon>
+                    </IconButton>
+                </Grid>
+            </Grid>
+        </div>
+    );
+}
+
+function getSuggestionValue(suggestion) {
+    let result = '';
+    if (suggestion.societe) {
+        result = suggestion.societe
+    }
+    else if (suggestion.titre) {
+        result = suggestion.titre
+    }
+    else if (suggestion.name) {
+        result = suggestion.name
+    }
+    else if (suggestion.autreFrs) {
+        result = suggestion.autreFrs
+    }
+    else if (suggestion.autreProduits) {
+        result = suggestion.autreProduits
+    }
+    return result;
+}
+function getSectionSuggestions(section) {
+
+    return section.suggestions;
+}
 
 function Search(props) {
     const globalSearch = useSelector(({ globalSearchApp }) => globalSearchApp.globalSearch);
-    const classes = useStyles(props);
+    const classes = useStyles();
     const suggestionsNode = useRef(null);
     const popperNode = useRef(null);
     const dispatch = useDispatch();
+    //const globalSearch = useSelector(state => state.globalSearchApp.globalSearch);
 
     function showSearch() {
         dispatch(Actions.showSearch());
@@ -148,9 +173,9 @@ function Search(props) {
         if (event.keyCode === 27) {
             hideSearch();
         }
-        /*  if (event.keyCode === 13) {
+          if (event.keyCode === 13) {
               event.target.value && history.push(`/vente-produits?q=${event.target.value}`);
-          }*/
+          }
     }
 
     function handleSuggestionsFetchRequested({ value }) {
@@ -258,6 +283,42 @@ function Search(props) {
             </div>
         );
     }
+    const renderSuggestionsContainer = ({ containerProps, children }) => {
+        return (
+            <Popper
+                anchorEl={popperNode.current}
+                open={Boolean(children) || globalSearch.noSuggestions || globalSearch.loading}
+                popperOptions={{ positionFixed: true }}
+                className="z-9999"
+                style={{ width: '100%', maxWidth: '1200px' }}
+            >
+                <Paper
+                    elevation={4}
+                    square
+                    {...containerProps}
+                >
+                    <Grid container className={classes.suggestionsContainer}>
+                        {React.Children.map(children, (child, index) => (
+                            <Grid item className={classes.suggestionSection} key={index}>
+                                {child}
+                            </Grid>
+                        ))}
+                    </Grid>
+                    {globalSearch.noSuggestions && (
+                        <Typography className="px-16 py-12">
+                            Aucun résultat..
+                        </Typography>
+                    )}
+                    {globalSearch.loading && (
+                        <div className="px-16 py-12 text-center">
+                            <CircularProgress color="secondary" /> <br /> Chargement ...
+                        </div>
+                    )}
+                </Paper>
+            </Popper>
+        );
+    };
+   
     const autosuggestProps = {
         renderInputComponent,
         highlightFirstSuggestion: true,
@@ -266,11 +327,18 @@ function Search(props) {
         onSuggestionsFetchRequested: handleSuggestionsFetchRequested,
         onSuggestionsClearRequested: handleSuggestionsClearRequested,
         onSuggestionSelected: handleSuggestionSelected,
-        renderSectionTitle: renderSectionTitle,
+        renderSectionTitle: (section) => renderSectionTitle(section, classes),
         getSectionSuggestions: getSectionSuggestions,
         getSuggestionValue,
-        renderSuggestion
+        renderSuggestion: (suggestion, params) => renderSuggestion(suggestion, params, classes),
+        renderSuggestionsContainer: renderSuggestionsContainer,
     };
+
+    useEffect(() => {
+        const hasResults = globalSearch.suggestions.length > 0 || globalSearch.noSuggestions;
+        console.log('Calling onResultsVisibilityChange with:', hasResults);
+        props.onResultsVisibilityChange(hasResults);
+    }, [globalSearch.suggestions, globalSearch.noSuggestions]);
 
     switch (props.variant) {
         case 'basic':
@@ -283,7 +351,7 @@ function Search(props) {
                                 variant: props.variant,
                                 classes,
                                 placeholder: 'Rechercher un produit, une activité, un fournisseur',
-                                value: globalSearch.searchText,
+                                value: globalSearch.searchText || '',
                                 onChange: handleChange,
                                 onFocus: showSearch,
                                 InputLabelProps: {
@@ -296,31 +364,6 @@ function Search(props) {
                                 suggestionsList: classes.suggestionsList,
                                 suggestion: classes.suggestion
                             }}
-                            renderSuggestionsContainer={options => (
-                                <Popper
-                                    anchorEl={popperNode.current}
-                                    open={Boolean(options.children) || globalSearch.noSuggestions || globalSearch.loading}
-                                    popperOptions={{ positionFixed: true }}
-                                    className="z-9999"
-                                >
-                                    <div ref={suggestionsNode}>
-                                        <Paper
-                                            elevation={1}
-                                            square
-                                            {...options.containerProps}
-                                            style={{ width: popperNode.current ? popperNode.current.clientWidth : null }}
-                                        >
-                                            {options.children}
-                                            {globalSearch.noSuggestions && (
-                                                <Typography className="px-16 py-12">
-                                                    Aucun résultat..
-                                                </Typography>
-                                            )}
-
-                                        </Paper>
-                                    </div>
-                                </Popper>
-                            )}
                         />
                     </div>
                 )
@@ -329,13 +372,11 @@ function Search(props) {
             {
                 return (
                     <div className={clsx(classes.root, "flex", props.className)}>
-
                         <Tooltip title="Click to search" placement="bottom">
                             <div onClick={showSearch}>
                                 {props.trigger}
                             </div>
                         </Tooltip>
-
                         {globalSearch.opened && (
                             <ClickAwayListener onClickAway={handleClickAway}>
                                 <Paper
@@ -348,7 +389,7 @@ function Search(props) {
                                             inputProps={{
                                                 classes,
                                                 placeholder: 'Rechercher un produit, une activité, un fournisseur',
-                                                value: globalSearch.searchText,
+                                                value: globalSearch.searchText || '',
                                                 onChange: handleChange,
                                                 InputLabelProps: {
                                                     shrink: true
@@ -360,35 +401,6 @@ function Search(props) {
                                                 suggestionsList: classes.suggestionsList,
                                                 suggestion: classes.suggestion
                                             }}
-                                            renderSuggestionsContainer={options => (
-                                                <Popper
-                                                    anchorEl={popperNode.current}
-                                                    open={Boolean(options.children) || globalSearch.noSuggestions || globalSearch.loading}
-                                                    popperOptions={{ positionFixed: true }}
-                                                    className="z-9999"
-                                                >
-                                                    <div ref={suggestionsNode}>
-                                                        <Paper
-                                                            elevation={1}
-                                                            square
-                                                            {...options.containerProps}
-                                                            style={{ width: popperNode.current ? popperNode.current.clientWidth : null }}
-                                                        >
-                                                            {options.children}
-                                                            {globalSearch.noSuggestions && (
-                                                                <Typography className="px-16 py-12">
-                                                                    Aucun résultat..
-                                                                </Typography>
-                                                            )}
-                                                            {globalSearch.loading && (
-                                                                <div className="px-16 py-12 text-center">
-                                                                    <CircularProgress color="secondary" /> <br /> Chargement ...
-                                                                </div>
-                                                            )}
-                                                        </Paper>
-                                                    </div>
-                                                </Popper>
-                                            )}
                                         />
                                         <IconButton onClick={hideSearch} className="mx-8">
                                             <Icon>close</Icon>

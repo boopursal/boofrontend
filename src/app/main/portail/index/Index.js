@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Icon,
   Typography,
@@ -188,7 +188,10 @@ const useStyles = makeStyles((theme) => ({
     width: 300,
     margin: "auto",
   },
-}));
+  categoriesWithTopMargin: {
+    marginTop: '21%',
+  },
+})); 
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
@@ -201,6 +204,7 @@ function generate(element) {
 function Index(props) {
   const dispatch = useDispatch();
   const classes = useStyles(props);
+  const [searchResultsVisible, setSearchResultsVisible] = useState(false);
   const title = "Les Achats Industriels | Place de marché B2B";
   const description =
     "Les Achats Industriels Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce";
@@ -294,6 +298,10 @@ function Index(props) {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log('Search results visible:', searchResultsVisible);
+  }, [searchResultsVisible]);
+
   return (
     <div
       className={clsx(
@@ -332,13 +340,20 @@ function Index(props) {
             </Typography>
           </FuseAnimate>
           <div className="md:w-md xs:w-auto m-auto bg-white rounded-8">
-            <Search className="" variant="basic" />
+            <Search 
+              className="" 
+              variant="basic" 
+              onResultsVisibilityChange={setSearchResultsVisible}
+            />
           </div>
         </div>
       </div>
 
       {/**===================CATEGORIES & RFQs=================**/}
-      <Categories categories={portail.categories} />
+      <div style={searchResultsVisible ? { marginTop: '21%' } : {}}>
+        <Categories categories={portail.categories} />
+      </div>
+      
 
       <Grid container className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
         <Grid item sm={8} xs={12}>
