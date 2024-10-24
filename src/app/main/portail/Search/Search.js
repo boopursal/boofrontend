@@ -337,8 +337,14 @@ function Search(props) {
     useEffect(() => {
         const hasResults = globalSearch.suggestions.length > 0 || globalSearch.noSuggestions;
         console.log('Calling onResultsVisibilityChange with:', hasResults);
-        props.onResultsVisibilityChange(hasResults);
+        
+        if (typeof props.onResultsVisibilityChange === 'function') {
+            props.onResultsVisibilityChange(hasResults);
+        } else {
+            console.error('onResultsVisibilityChange is not a function');
+        }
     }, [globalSearch.suggestions, globalSearch.noSuggestions]);
+    
 
     switch (props.variant) {
         case 'basic':
