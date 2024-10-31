@@ -1,49 +1,74 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FuseAnimate, FuseAnimateGroup, URL_SITE } from '@fuse';
-import { ClickAwayListener, Paper, Icon, Input, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider,  ListItemSecondaryAction } from '@material-ui/core';
+import { FuseAnimate, FuseAnimateGroup } from '@fuse';
+import { ClickAwayListener, Paper, Icon, Input, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import reducer from './store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './store/actions';
 import withReducer from 'app/store/withReducer';
-import _ from '@lodash';
 import Highlighter from "react-highlight-words";
 import ContentLoader from 'react-content-loader';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
-
     root: {
         width: '100%',
         backgroundColor: theme.palette.background.paper,
         overflow: 'auto',
         height: 200,
-        border: '1px solid #ccc',
-        padding: 0
+        padding: theme.spacing(2),
+        borderRadius: theme.shape.borderRadius,
     },
-    cat: {
+    searchResults: {
         width: '100%',
-        backgroundColor: '#edf2f7',
-        height: 200,
-        paddingTop: 20,
-        fontWeight: 'bold',
-        borderTop: '1px solid #ccc',
-        borderLeft: '1px solid #ccc',
-        borderBottom: '1px solid #ccc'
+        overflowX: 'auto',
     },
-    inline: {
-        display: 'inline',
+    sectionsContainer: {
+        padding: theme.spacing(2),
+        minHeight: 300,
+        margin: 0,
     },
+    sectionWrapper: {
+        height: '100%',
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: theme.shape.borderRadius,
+        boxShadow: theme.shadows[2],
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'all 0.2s ease-in-out',
+        '&:hover': {
+            boxShadow: theme.shadows[4],
+            transform: 'translateY(-2px)'
+        }
+    },
+    sectionContent: {
+        flex: 1,
+        padding: theme.spacing(2),
+        backgroundColor: theme.palette.background.paper,
+        overflowY: 'auto',
+        minHeight: 200,
+        maxHeight: 400,
+    },
+    noResults: {
+        padding: theme.spacing(2),
+        color: theme.palette.text.secondary,
+        textAlign: 'center',
+        minHeight: 200,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 }));
 
 function GlobalSearch(props) {
-
     const dispatch = useDispatch();
     const [onSearch, setOnSearch] = useState(false);
     const classes = useStyles(props);
     const globalSearch = useSelector(({ globalSearchApp }) => globalSearchApp.globalSearch);
     const ResultsNode = useRef(null);
+
     useEffect(() => {
         if (globalSearch.searchText.length > 1 && onSearch) {
             dispatch(Actions.showSearch());
@@ -63,12 +88,10 @@ function GlobalSearch(props) {
                 clearTimeout(timer);
                 dispatch(Actions.cleanUp())
             };
-
         }
         else {
             dispatch(Actions.hideSearch());
         }
-
     }, [globalSearch.searchText, onSearch, dispatch]);
 
     function handleClickAway(event) {
@@ -82,13 +105,153 @@ function GlobalSearch(props) {
         dispatch(Actions.hideSearch())
     }
 
+    const renderSearchResults = () => {
+        const sections = [
+            {
+                title: 'Fournisseurs',
+                content: globalSearch.fournisseurs,
+                loading: globalSearch.loadingFournisseurs,
+                renderItem: (item) => (
+                    <ListItem
+                        component={Link}
+                        to={`/entreprise/${item.id}-${item.slug}`}
+                        onClick={() => { hideSearch(); setOnSearch(false) }}
+                        button
+                    >
+                        <ListItemText
+                            primary={
+                                <Highlighter
+                                    highlightClassName="YourHighlightClass"
+                                    searchWords={[globalSearch.searchText]}
+                                    autoEscape={true}
+                                    textToHighlight={item.societe}
+                                />
+                            }
+                        />
+                    </ListItem>
+                )
+            },
+            {
+                title: 'Produits',
+                content: globalSearch.produits,
+                loading: globalSearch.loadingProduits,
+                renderItem: (item) => (
+                    <ListItem
+                        component={Link}
+                        to={`/detail-produit/${item.sec}/${item.soussec}/${item.id}-${item.slug}`}
+                        onClick={() => { hideSearch(); setOnSearch(false) }}
+                        button
+                    >
+                        <ListItemText
+                            primary={
+                                <Highlighter
+                                    highlightClassName="YourHighlightClass"
+                                    searchWords={[globalSearch.searchText]}
+                                    autoEscape={true}
+                                    textToHighlight={item.titre}
+                                />
+                            }
+                        />
+                    </ListItem>
+                )
+            },
+            {
+                title: 'Activités',
+                content: globalSearch.activites,
+                loading: globalSearch.loadingActivites,
+                renderItem: (item) => (
+                    <ListItem
+                        component={Link}
+                        to={`/vente-produits?activite=${item.slug}`}
+                        onClick={() => { hideSearch(); setOnSearch(false) }}
+                        button
+                    >
+                        <ListItemText
+                            primary={
+                                <Highlighter
+                                    highlightClassName="YourHighlightClass"
+                                    searchWords={[globalSearch.searchText]}
+                                    autoEscape={true}
+                                    textToHighlight={item.name}
+                                />
+                            }
+                        />
+                    </ListItem>
+                )
+            },
+            {
+                title: 'Actualités',
+                content: globalSearch.actualites,
+                loading: globalSearch.loadingActualites,
+                renderItem: (item) => (
+                    <ListItem
+                        component={Link}
+                        to={`/actualite/${item.id}-${item.slug}`}
+                        onClick={() => { hideSearch(); setOnSearch(false) }}
+                        button
+                    >
+                        <ListItemText
+                            primary={
+                                <Highlighter
+                                    highlightClassName="YourHighlightClass"
+                                    searchWords={[globalSearch.searchText]}
+                                    autoEscape={true}
+                                    textToHighlight={item.titre}
+                                />
+                            }
+                        />
+                    </ListItem>
+                )
+            }
+        ];
+
+        return (
+            <div className={classes.searchResults}>
+                <Grid container spacing={4} className={classes.sectionsContainer}>
+                    {sections.map((section, index) => (
+                        <Grid item xs={12} sm={6} md={3} key={index}>
+                            <div className={classes.sectionWrapper}>
+                                <div className={classes.sectionContent}>
+                                    {section.loading ? (
+                                        <ContentLoader
+                                            viewBox="0 0 400 100"
+                                            height={100}
+                                            width={400}
+                                            speed={2}
+                                        >
+                                            <circle cx="150" cy="86" r="8" />
+                                            <circle cx="194" cy="86" r="8" />
+                                            <circle cx="238" cy="86" r="8" />
+                                        </ContentLoader>
+                                    ) : (
+                                        <List className={classes.root}>
+                                            {section.content && section.content.length > 0 ? (
+                                                section.content.map((item, itemIndex) => (
+                                                    <React.Fragment key={itemIndex}>
+                                                        {section.renderItem(item)}
+                                                    </React.Fragment>
+                                                ))
+                                            ) : (
+                                                <Typography className={classes.noResults}>
+                                                    Aucun {section.title.toLowerCase().slice(0, -1)} trouvé
+                                                </Typography>
+                                            )}
+                                        </List>
+                                    )}
+                                </div>
+                            </div>
+                        </Grid>
+                    ))}
+                </Grid>
+            </div>
+        );
+    };
+
     return (
-        <div ref={ResultsNode} className={clsx("mx-auto w-full max-w-640 border border-gray-600 rounded-lg", props.className)} >
+        <div ref={ResultsNode} className={clsx("mx-auto w-full max-w-640 border border-gray-600 rounded-lg", props.className)}>
             <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
-                <Paper className="flex p-4 items-center w-full  rounded-lg" elevation={1}>
-
+                <Paper className="flex p-4 items-center w-full rounded-lg" elevation={1}>
                     <Icon className="mr-8 ml-8" color="action">search</Icon>
-
                     <Input
                         placeholder="Rechercher un produit, une activité, un fournisseur"
                         className="flex flex-1 h-44 focus:bg-gray"
@@ -110,278 +273,16 @@ function GlobalSearch(props) {
             {globalSearch.opened && (
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
-                        <div className="mx-auto w-full  z-999">
+                        <div className="mx-auto w-full z-999">
                             <Paper className="absolute shadow w-full z-9999" elevation={1}>
-                                {
-
-                                    <>
-                                        {
-
-                                            <Grid container spacing={2}>
-                                                <Grid item xs={2} style={{
-                                                    paddingRight: '0',
-                                                    paddingBottom: '0',
-                                                }}>
-                                                    <div className={classes.cat}>
-                                                        Produits
-                                                    </div>
-                                                </Grid>
-                                                <Grid item xs={10} style={{
-                                                    paddingLeft: '0',
-                                                    paddingBottom: '0',
-                                                }}>
-                                                    <List className={classes.root} dense={true}>
-                                                        {
-                                                            globalSearch.loadingProduits
-                                                                ?
-                                                                <ContentLoader
-                                                                    viewBox="0 0 400 100"
-                                                                    height={100}
-                                                                    width={400}
-                                                                    speed={2}
-                                                                >
-                                                                    <circle cx="150" cy="86" r="8" />
-                                                                    <circle cx="194" cy="86" r="8" />
-                                                                    <circle cx="238" cy="86" r="8" />
-                                                                </ContentLoader>
-                                                                :
-                                                                <FuseAnimateGroup
-                                                                    enter={{
-                                                                        animation: "transition.slideUpBigIn"
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        globalSearch.produits.length > 0 ?
-                                                                            globalSearch.produits.map((produit, index) => (
-
-                                                                                <React.Fragment key={index}>
-
-                                                                                    <ListItem
-                                                                                        component={Link}
-                                                                                        to={`/detail-produit/${produit.secteur ? produit.secteur.slug : ''}/${produit.sousSecteurs ? produit.sousSecteurs.slug : ''}/${produit.id}-${produit.slug}`}
-                                                                                        dense={true}
-                                                                                        onClick={() => { hideSearch(); setOnSearch(false) }}
-                                                                                        button alignItems="flex-start">
-                                                                                        <ListItemAvatar>
-                                                                                            {
-                                                                                                produit.featuredImageId ?
-                                                                                                    <Avatar alt={produit.titre} src={URL_SITE + produit.featuredImageId.url} />
-                                                                                                    :
-                                                                                                    <Avatar alt={produit.titre} src="assets/images/ecommerce/product-placeholder.jpg" />
-                                                                                            }
-                                                                                        </ListItemAvatar>
-                                                                                        <ListItemText primary={
-                                                                                            <Highlighter
-                                                                                                highlightClassName="YourHighlightClass"
-                                                                                                searchWords={[globalSearch.searchText]}
-                                                                                                autoEscape={true}
-                                                                                                textToHighlight={produit.titre}
-                                                                                            />}
-                                                                                            secondary={
-                                                                                                _.capitalize(_.truncate(produit.description, {
-                                                                                                    'length': 50
-                                                                                                }))
-                                                                                            } />
-                                                                                        <ListItemSecondaryAction>
-
-                                                                                            {
-                                                                                                produit.pu
-                                                                                                    ?
-                                                                                                    <span className="text-green">{produit.pu + ' ' + (produit.currency ? produit.currency.name : '') + ' HT'}</span>
-                                                                                                    : ''
-                                                                                            }
-
-                                                                                        </ListItemSecondaryAction>
-                                                                                    </ListItem>
-                                                                                    <Divider variant="inset" component="li" />
-                                                                                </React.Fragment>
-                                                                            ))
-                                                                            :
-                                                                            <ListItem
-                                                                                dense={true}
-                                                                                alignItems="flex-start">
-                                                                                <ListItemText primary={"Aucun résultat trouvré pour « " + globalSearch.searchText + " » par nom produit"}
-                                                                                />
-
-                                                                            </ListItem>
-                                                                    }
-
-                                                                </FuseAnimateGroup>
-                                                        }
-
-                                                    </List>
-                                                </Grid>
-
-                                            </Grid>
-
-                                        }
-                                        {
-
-                                            <Grid container spacing={2}>
-                                                <Grid item xs={2} style={{
-                                                    paddingRight: '0',
-                                                    paddingBottom: '0',
-                                                }}>
-                                                    <div className={classes.cat} style={{
-                                                        borderTop: '0',
-
-                                                    }}>
-                                                        Activités
-                                                                    </div>
-                                                </Grid>
-                                                <Grid item xs={10} style={{
-                                                    paddingLeft: '0',
-                                                    paddingBottom: '0',
-                                                }}>
-                                                    <List className={classes.root} style={{
-                                                        borderTop: '0',
-
-                                                    }} dense={true}>
-                                                        {!globalSearch.loadingActivites ?
-                                                            <FuseAnimateGroup
-                                                                enter={{
-                                                                    animation: "transition.slideUpBigIn"
-                                                                }}
-                                                            >
-                                                                {
-
-                                                                    globalSearch.activites.length > 0 ?
-                                                                        globalSearch.activites.map((activite, index) => (
-
-                                                                            <React.Fragment key={index}>
-                                                                                <ListItem
-                                                                                    component={Link}
-                                                                                    to={`/vente-produits/${activite.secteur ? activite.secteur.slug : ''}/${activite.slug}`}
-                                                                                    onClick={() => { hideSearch(); setOnSearch(false) }}
-                                                                                    dense={true}
-                                                                                    button>
-                                                                                    <ListItemText
-                                                                                        primary={<Highlighter
-                                                                                            highlightClassName="YourHighlightClass"
-                                                                                            searchWords={[globalSearch.searchText]}
-                                                                                            autoEscape={true}
-                                                                                            textToHighlight={activite.name}
-                                                                                        />}
-                                                                                    />
-                                                                                </ListItem>
-                                                                            </React.Fragment>
-                                                                        ))
-                                                                        :
-                                                                        <ListItem
-                                                                            dense={true}
-                                                                            alignItems="flex-start">
-
-                                                                            <ListItemText primary={"Aucun résultat trouvré pour « " + globalSearch.searchText + " » par nom d'activité"}
-                                                                            />
-
-                                                                        </ListItem>
-                                                                }
-                                                            </FuseAnimateGroup>
-                                                            : <ContentLoader
-                                                                viewBox="0 0 400 100"
-                                                                height={100}
-                                                                width={400}
-                                                                speed={2}
-                                                            >
-                                                                <circle cx="150" cy="86" r="8" />
-                                                                <circle cx="194" cy="86" r="8" />
-                                                                <circle cx="238" cy="86" r="8" />
-                                                            </ContentLoader>}
-                                                    </List>
-                                                </Grid>
-
-                                            </Grid>
-
-                                        }
-
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={2} style={{
-                                                paddingRight: '0',
-                                                paddingBottom: '0',
-                                            }}>
-                                                <div className={classes.cat} style={{
-                                                    borderTop: '0',
-
-                                                }}>
-                                                    Fournisseurs
-                                                            </div>
-                                            </Grid>
-                                            <Grid item xs={10} style={{
-                                                paddingLeft: '0',
-                                                paddingBottom: '0',
-                                            }}>
-                                                <List className={classes.root} style={{
-                                                    borderTop: '0',
-
-                                                }} dense={true}>
-                                                    {!globalSearch.loadingFournisseurs ?
-                                                        <FuseAnimateGroup
-                                                            enter={{
-                                                                animation: "transition.slideUpBigIn"
-                                                            }}
-                                                        >
-                                                            {
-
-                                                                globalSearch.fournisseurs.length > 0 ?
-                                                                    globalSearch.fournisseurs.map((fournisseur, index) => (
-
-                                                                        <React.Fragment key={index}>
-                                                                            <ListItem
-                                                                                component={Link} to={`/entreprise/${fournisseur.id}-${fournisseur.slug}`}
-                                                                                onClick={() => { hideSearch(); setOnSearch(false) }}
-                                                                                dense={true}
-                                                                                button>
-                                                                                <ListItemText
-                                                                                    primary={<Highlighter
-                                                                                        highlightClassName="YourHighlightClass"
-                                                                                        searchWords={[globalSearch.searchText]}
-                                                                                        autoEscape={true}
-                                                                                        textToHighlight={fournisseur.societe}
-                                                                                    />}
-                                                                                />
-                                                                            </ListItem>
-                                                                        </React.Fragment>
-                                                                    ))
-                                                                    :
-                                                                    <ListItem
-                                                                        dense={true}
-                                                                        alignItems="flex-start">
-                                                                        <ListItemText primary={"Aucun résultat trouvré pour « " + globalSearch.searchText + " » par nom fournisseur"}
-                                                                        />
-
-                                                                    </ListItem>
-                                                            }
-                                                        </FuseAnimateGroup>
-                                                        : <ContentLoader
-                                                            viewBox="0 0 400 100"
-                                                            height={100}
-                                                            width={400}
-                                                            speed={2}
-                                                        >
-                                                            <circle cx="150" cy="86" r="8" />
-                                                            <circle cx="194" cy="86" r="8" />
-                                                            <circle cx="238" cy="86" r="8" />
-                                                        </ContentLoader>}
-                                                </List>
-                                            </Grid>
-
-                                        </Grid>
-                                    </>
-
-
-                                }
-
-
+                                {renderSearchResults()}
                             </Paper>
                         </div>
                     </FuseAnimate>
-                </ClickAwayListener>)
-            }
+                </ClickAwayListener>
+            )}
         </div>
-    )
-
-
+    );
 }
 
 export default withReducer('globalSearchApp', reducer)(GlobalSearch);
-
