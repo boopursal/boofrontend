@@ -84,7 +84,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
-    // minHeight      : '100%',
     position: "relative",
     flex: "1 0 auto",
     height: "auto",
@@ -95,18 +94,41 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     background: theme.palette.primary.main,
-    color: theme.palette.getContrastText(theme.palette.primary.main),
-    position: "relative",
-    //marginBottom: theme.spacing(4),
-    backgroundImage:
-      "url(https://source.unsplash.com/collection/9456871/1600x900)",
+    position: 'relative',
+    backgroundImage: "url(https://source.unsplash.com/collection/9456871/1600x900)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
+    zIndex: 1,
+    height: 'auto',
+    minHeight: '288px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '16px',
+    paddingBottom: props => props.searchResultsVisible ? '100px' : '20px'
+  },
+  mainHeader: {
+    backgroundColor: "rgba(0,0,0,.7)",
+    width: '100%',
+    maxWidth: '800px',
+    margin: '0 auto',
+    borderRadius: 8,
+    padding: '20px',
+    zIndex: 2
+  },
+  searchContainer: {
+    position: 'relative',
+    zIndex: 3
+  },
+  searchResults: {
+    width: '100%',
+    maxWidth: '1200px',
+    margin: '20px auto',
+    zIndex: 2
   },
   middle: {
-    background:
-      "linear-gradient(to right, " +
+    background: "linear-gradient(to right, " +
       theme.palette.primary.dark +
       " 0%, " +
       theme.palette.primary.main +
@@ -129,9 +151,6 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid #ccc",
     borderRadius: 10,
   },
-  mainHeader: {
-    backgroundColor: "rgba(0,0,0,.7)",
-  },
   icon: {
     color: theme.palette.secondary.dark,
     padding: theme.spacing(0.5, 0, 0, 0),
@@ -140,7 +159,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     padding: theme.spacing(2, 2, 0, 2),
   },
-
   mainAvatar: {
     margin: theme.spacing(1.25, 1.25, 1.25, 0),
     color: "#fff",
@@ -187,11 +205,8 @@ const useStyles = makeStyles((theme) => ({
     height: 250,
     width: 300,
     margin: "auto",
-  },
-  categoriesWithTopMargin: {
-    marginTop: '21%',
-  },
-})); 
+  }
+}));
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
@@ -203,7 +218,6 @@ function generate(element) {
 
 function Index(props) {
   const dispatch = useDispatch();
-  const classes = useStyles(props);
   const [searchResultsVisible, setSearchResultsVisible] = useState(false);
   const title = "Les Achats Industriels | Place de marché B2B";
   const description =
@@ -269,6 +283,7 @@ function Index(props) {
       rel: 0,
     },
   };
+  const classes = useStyles({ searchResultsVisible });
 
   useEffect(() => {
     dispatch(Actions.getCategories());
@@ -320,15 +335,18 @@ function Index(props) {
       <div
         className={clsx(
           classes.header,
-          "relative flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24 h-256 sm:h-288"
+          "relative flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24",
+          {
+            'h-288': !searchResultsVisible,
+            'h-auto': searchResultsVisible
+          }
         )}
+        style={{ 
+          paddingBottom: searchResultsVisible ? '300px' : '16px',
+          marginBottom: searchResultsVisible ? '5px' : '0'
+        }}
       >
-        <div
-          className={clsx(
-            classes.mainHeader,
-            "items-center md:w-xl xs:w-auto z-999 px-8 py-20 rounded-lg"
-          )}
-        >
+        <div className={classes.mainHeader}>
           <FuseAnimate duration={400} delay={600}>
             <Typography
               variant="h1"
@@ -347,10 +365,18 @@ function Index(props) {
             />
           </div>
         </div>
+
+        {searchResultsVisible && (
+          <div className={classes.searchResults}>
+            <div style={{ marginBottom: '50px' }}>
+              Résultats de recherche...
+            </div>
+          </div>
+        )}
       </div>
 
       {/**===================CATEGORIES & RFQs=================**/}
-      <div style={searchResultsVisible ? { marginTop: '21%' } : {}}>
+      <div style={searchResultsVisible ? { marginTop: '2%' } : {}}>
         <Categories categories={portail.categories} />
       </div>
       
