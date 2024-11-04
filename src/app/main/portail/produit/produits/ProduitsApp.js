@@ -358,13 +358,17 @@ function ProduitsApp(props) {
                 </Grid>
             </div>
 
+           
             <Grid container
                 classes={{
                     'spacing-xs-2': classes.grid
                 }}
                 spacing={2}
                 className="max-w-2xl  mx-auto sm:px-16 pt-24 items-center">
-                <Grid item sm={8} xs={12}>
+                    
+                <Grid item sm={3} xs={12}>
+
+
                     <Typography variant="h1" className="text-24 font-bold">
                         {
                             produits.length > 0 ? 'Vente de produits ' + (
@@ -377,17 +381,36 @@ function ProduitsApp(props) {
                         }
 
                     </Typography>
+                    
                 </Grid>
-                <Grid item sm={4} xs={12} className="flex items-center justify-between ">
-                    <Typography className="text-13 mr-16">Voir résultats de:</Typography>
-                    <Button disabled size="small" className={classes.button}>
-                        Produits
-                    </Button>
-                    |
-                    <Button size="small" onClick={handleUrlFournisseurs} color="secondary" className={classes.button}>
-                        fournisseurs
-                    </Button>
+                <Grid item sm={9} xs={12} className="flex items-center justify-start">
+                <Typography variant="body1" className="text-13 mr-16" style={{ color: '#333', fontWeight: 'bold' }}>
+                             Voir résultats de :
+                        </Typography>
+                        <div className="flex items-center">
+                            <Button 
+                                disabled 
+                                size="small" 
+                                className={clsx(classes.button, "mr-2")} 
+                                variant="outlined" 
+                                style={{ borderColor: '#1976d2', color: '#1976d2' }} // Couleur du bouton "Produits"
+                            >
+                                Produits
+                            </Button>
+                            <span className="mx-2" style={{ color: '#1976d2' }}>|</span> {/* Couleur de la barre de séparation */}
+                            <Button 
+                                size="small" 
+                                onClick={handleUrlFournisseurs} 
+                                color="secondary" 
+                                className={classes.button} 
+                                variant="outlined" 
+                                style={{ borderColor: '#ff9800', color: '#ff9800' }} // Couleur orange pour le bouton "Fournisseurs"
+                            >
+                                Fournisseurs
+                            </Button>
+                        </div>
                 </Grid>
+                
             </Grid>
             <Grid container
                 classes={{

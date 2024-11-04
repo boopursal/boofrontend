@@ -338,42 +338,53 @@ function FournisseursApp(props) {
                     'spacing-xs-2': classes.grid
                 }}
                 className="max-w-2xl mx-auto sm:px-16 pt-24 items-center">
-                <Grid item sm={8} xs={12}>
+                <Grid item sm={3} xs={12}>
                     {
                         fournisseurs.length > 0 &&
-                        <Typography variant="h1" className="text-24 font-bold">
+                        <Typography variant="h1" className="text-24 font-bold" style={{ color: '#333' }}>
                             {'Fournisseurs ' + (getPath(fournisseurs)) + (pays ? _.capitalize(fournisseurs[0].pays && ' au ' + fournisseurs[0].pays.name) : '')
-                            }
-                        </Typography>
-                    }
-
-                </Grid>
-                <Grid item sm={4} xs={12} className="flex items-center justify-between ">
-                    <Typography className="text-13 mr-16">Voir résultats de:</Typography>
-                    <Button onClick={handleUrlProduits} color="secondary" size="small" >
-                        Produits
-                    </Button>
-                    |
-                    <Button size="small" disabled >
-                        fournisseurs
-                    </Button>
-                </Grid>
+                        }
+                    </Typography>
+                }
             </Grid>
-            <Grid container spacing={2}
-                classes={{
-                    'spacing-xs-2': classes.grid
-                }}
-                className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
-
-                <Grid item sm={4} md={3} xs={12} className="sticky top-0 order-last sm:order-first">
-                    <SideBareSearch  {...props} />
-                </Grid>
-                <Grid item sm={8} md={9} xs={12}>
-                    <ContentList />
-                </Grid>
+            <Grid item sm={9} xs={12} className="flex items-center justify-start">
+                <Typography className="text-13 mr-16" style={{ color: '#333', fontWeight: 'bold' }}>
+                    Voir résultats de:
+                </Typography>
+                <Button 
+                    onClick={handleUrlProduits} 
+                    size="small" 
+                    variant="outlined" 
+                    style={{ borderColor: '#ff9800', color: '#ff9800' }} // Couleur orange pour le bouton "Produits"
+                >
+                    Produits
+                </Button>
+                <span className="mx-2" style={{ color: '#1976d2' }}>|</span>
+                <Button 
+                   size="small" 
+                   disabled 
+                   variant="outlined" 
+                   style={{ borderColor: '#1976d2', color: '#1976d2' }} // Couleur orange pour le bouton "Fournisseurs"
+                >
+                    Fournisseurs
+                </Button>
             </Grid>
-            <ContactFournisseurDialog />
-        </div>
+        </Grid>
+        <Grid container spacing={2}
+            classes={{
+                'spacing-xs-2': classes.grid
+            }}
+            className="max-w-2xl mx-auto py-24 sm:px-16 items-start">
+
+            <Grid item sm={4} md={3} xs={12} className="sticky top-0 order-last sm:order-first">
+                <SideBareSearch  {...props} />
+            </Grid>
+            <Grid item sm={8} md={9} xs={12}>
+                <ContentList />
+            </Grid>
+        </Grid>
+        <ContactFournisseurDialog />
+    </div>
 
 
     )
