@@ -78,6 +78,10 @@ function FooterLayout3(props) {
                                     <Link component="true" to="/tarifs/plans" className="ml-0 text-blue">Tarifs</Link>
 
                                 </li>
+                                <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                    <Link component="true" to="/actualites" className="ml-0 text-blue">Actualites</Link>
+
+                                </li>
                             </ul>
                         </Grid>
                     </Grid>
