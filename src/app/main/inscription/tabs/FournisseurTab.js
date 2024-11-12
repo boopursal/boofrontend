@@ -400,7 +400,7 @@ Afin de recevoir le maximum d'alertes, veuillez choisir le maximum de produits p
         </Grid>
         <div className="flex justify-center">
           <ReCAPTCHA
-            sitekey="6LdJmucUAAAAAPdVMcYK_a_7z4OxePNUj2HYT-pj"
+            sitekey="6Leni3wqAAAAAGoXprU8lFebY3IAK-H6xIY2IXsc"
             onChange={onChange}
           />
         </div>
