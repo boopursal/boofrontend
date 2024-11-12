@@ -320,7 +320,7 @@ function AcheteurTab(props) {
                 </Grid>
                 <div className="flex justify-center">
                     <ReCAPTCHA
-                        sitekey="6Ld4NHwqAAAAAFmYLZCnptnuSc8IKv4hBVb9kAY_"
+                        sitekey="6LcimHwqAAAAAJgTB0sktkfNzYXWJFDndJIXOC_N"
                         onChange={onChange}
                     />
                 </div>
