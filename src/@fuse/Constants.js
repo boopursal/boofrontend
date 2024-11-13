@@ -1,4 +1,4 @@
-export const URL_SITE = "https://api.boopursal.com";
+export const URL_SITE = "https://it.3findustrie.com";
 export const FRONT_URL = "https://www.boopursal.com";
 export const LOCAL_CURRENCY = "MAD";
 export const LOCAL_TVA = 0.2;
