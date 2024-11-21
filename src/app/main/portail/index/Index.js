@@ -740,7 +740,7 @@ function Index(props) {
               className="text-white text-24 uppercase mb-2"
             >
               Newsletters{" "}
-              <span className="font-extrabold"> Les Achats Industriels</span>
+              <span className="font-extrabold"> Boopursal</span>
             </Typography>
             <Typography className="text-white opacity-75">
               Inscrivez-vous pour recevoir les newsletters dans votre boîte
