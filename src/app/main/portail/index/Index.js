@@ -219,9 +219,9 @@ function generate(element) {
 function Index(props) {
   const dispatch = useDispatch();
   const [searchResultsVisible, setSearchResultsVisible] = useState(false);
-  const title = "Les Achats Industriels | Place de marché B2B";
+  const title = "Boopursal | Place de marché B2B";
   const description =
-    "Les Achats Industriels Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce";
+    "Boopursal Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce";
   const portail = useSelector(({ IndexApp }) => IndexApp.poratilIndex);
   const settings = {
     speed: 500,
@@ -353,7 +353,7 @@ function Index(props) {
               component="h1"
               className="sm:text-18 uppercase leading-normal text-13 font-bold mb-16 text-white mx-auto max-w-xl"
             >
-              Les Achats Industriels, c'est la communauté de +1000 sociétés,
+              Boopursal, c'est la communauté de +1000 sociétés,
               Acheteurs et Fournisseurs
             </Typography>
           </FuseAnimate>
