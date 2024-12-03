@@ -513,7 +513,7 @@ function Index(props) {
                     FOCUS PRODUITS
                   </Typography>
                 }
-                secondary="Un extrait des catalogues B2B des fournisseurs et fabricants présents sur Les Achats Industriels."
+                secondary="Un extrait des catalogues B2B des fournisseurs et fabricants présents sur Boopursal."
               />
               <ListItemSecondaryAction
                 classes={{
