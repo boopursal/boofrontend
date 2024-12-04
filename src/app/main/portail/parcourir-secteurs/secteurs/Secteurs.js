@@ -108,7 +108,7 @@ function Secteurs(props) {
                 </Grid>
             </div>
             <Grid container className={clsx(classes.grid, " max-w-2xl mx-auto py-8  sm:px-16 ")}>
-                <Grid item sm={8} xs={12}>
+                <Grid item sm={12} xs={12}>
                     <Paper variant="outlined" className={clsx(classes.paper, 'p-32 my-16')}>
 
                         <Typography className={classes.title} component="h1" color="primary">
@@ -136,7 +136,7 @@ function Secteurs(props) {
                                     <>
                                         {
                                             generate(
-                                                <Grid item sm={6} xs={12}>
+                                                <Grid item sm={4} xs={12}>
                                                     <ContentLoader
                                                         speed={2}
                                                         width={300}
@@ -164,7 +164,7 @@ function Secteurs(props) {
                                     (
 
                                         filteredData && filteredData.map((item, index) => (
-                                            <Grid item sm={6} xs={12} key={index}>
+                                            <Grid item sm={4} xs={12} key={index}>
 
                                                 <CardSecteur {...props} secteur={item} />
                                             </Grid>
@@ -176,11 +176,12 @@ function Secteurs(props) {
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={4} className="sticky top-0">
-                    <Paper className="w-full h-200 p-32 mt-16 text-center">
+               {/*  <Grid item xs={12} sm={4} className="sticky top-0">
+                     <Paper className="w-full h-200 p-32 mt-16 text-center">
                         Ads
-                    </Paper>
-                </Grid>
+                    </Paper> 
+                </Grid> 
+                */}
             </Grid>
         </div >
 

@@ -4,23 +4,17 @@ import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
-import {
-  List,
-  ListItem,
-  Icon,
-  ListItemText,
-  Button,
-  Divider,
-} from "@material-ui/core";
+import { Icon, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { URL_SITE } from "@fuse/Constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
+    display: 'flex',
+    flexDirection: 'column', // S'assurer que les éléments sont bien disposés en colonne
   },
   media: {
     height: 0,
@@ -31,11 +25,21 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 16,
   },
   btn: {
-    fontSize: 11,
-    padding: "0px 8px",
+    padding: '10px 20px', // Ajouter un peu de padding pour rendre le bouton plus large
+    textTransform: 'none', // Ne pas forcer la majuscule du texte
+    borderRadius: '4px',   // Adoucir les bords du bouton
+    boxShadow: 'none',     // Désactiver l'ombre
+    fontWeight: 'bold',    // Mettre le texte en gras pour plus de visibilité
   },
-  content: {
-    minHeight: 156,
+  cardActions: {
+    display: 'flex',
+    justifyContent: 'center',  // Centrer horizontalement
+    alignItems: 'center',      // Centrer verticalement si nécessaire
+    width: '100%',
+    padding: theme.spacing(1),  // Ajouter un peu de padding pour l'espacement
+  },
+  icon: {
+    marginLeft: '8px', // Espace entre le texte et l'icône
   },
 }));
 
@@ -61,38 +65,7 @@ export default function RecipeReviewCard(props) {
         }
         title={secteur.name}
       />
-      <CardContent className={clsx(classes.content, "p-0")}>
-        <List dense={true}>
-          {secteur.sousSecteurs &&
-            secteur.sousSecteurs.map((sousSecteur, i) => (
-              <React.Fragment key={i}>
-                <ListItem
-                  button
-                  component="a"
-                  href={`/vente-produits/${secteur.slug}/${sousSecteur.slug}`}
-                >
-                  <Icon className="text-16 arrow-icon">
-                    keyboard_arrow_right
-                  </Icon>
-                  <ListItemText
-                    disableTypography
-                    primary={
-                      <Typography
-                        type="body2"
-                        className="normal-case"
-                        style={{ fontSize: 12 }}
-                      >
-                        {sousSecteur.name + " (" + sousSecteur.count + ")"}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-                <Divider component="li" />
-              </React.Fragment>
-            ))}
-        </List>
-      </CardContent>
-      <CardActions disableSpacing>
+      <CardActions className={classes.cardActions} disableSpacing>
         <Button
           size="small"
           color="secondary"
@@ -101,8 +74,8 @@ export default function RecipeReviewCard(props) {
           className={clsx(classes.btn)}
           variant="outlined"
         >
-          VOIR TOUT LE SECTEUR{" "}
-          <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon>
+          VOIR TOUT LE SECTEUR
+          <Icon className={clsx(classes.icon)}>keyboard_arrow_right</Icon>
         </Button>
       </CardActions>
     </Card>
