@@ -52,7 +52,7 @@ function FooterLayout3(props) {
                                     <Link component="true" to="/register/1" className="ml-0 text-blue">Inscrivez-vous comme Fournisseur</Link>
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/conditions" className="ml-0 text-blue">Comment publier sur LesAchatsIndustriels</Link>
+                                    <Link component="true" to="/conditions" className="ml-0 text-blue">Comment publier sur Boopursal</Link>
 
                                 </li>
 

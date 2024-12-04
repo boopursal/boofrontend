@@ -112,7 +112,7 @@ function Secteurs(props) {
                     <Paper variant="outlined" className={clsx(classes.paper, 'p-32 my-16')}>
 
                         <Typography className={classes.title} component="h1" color="primary">
-                            Découvrez <span className="font-bold">Les Achats Industriels</span> à travers ses secteurs d'activités
+                            Découvrez <span className="font-bold">Boopursal</span> à travers ses secteurs d'activités
                         </Typography>
                         <Paper className="flex items-center w-full mb-16 px-8 py-4 rounded-8" elevation={1}>
                             <Icon className="mr-8" color="action">search</Icon>
