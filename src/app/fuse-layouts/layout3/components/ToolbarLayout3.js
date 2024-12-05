@@ -43,7 +43,7 @@ function ToolbarLayout3(props) {
           {/* <div className="flex flex-shrink items-center">
             <PSecteurs />
           </div> */}
-          
+          <Hidden mdDown>
           <Typography className="uppercase font-bold ml-24"color="primary">
             <div className="flex justify-center space-x-4">
               <Link 
@@ -77,7 +77,7 @@ function ToolbarLayout3(props) {
               
             </div>
           </Typography>
-
+          </Hidden>
             
           
           
