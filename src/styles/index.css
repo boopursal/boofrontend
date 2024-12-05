@@ -61,6 +61,24 @@ a[role=button] {
     text-decoration: none;
 }
 
+.link-button {
+    color: #274A9A; /* Couleur de texte par défaut */
+    padding: 0.5rem 1rem; /* Padding */
+    border-radius: 0.5rem; /* Coins arrondis */
+    text-decoration: none; /* Pas de soulignement par défaut */
+    background-color: transparent; /* Fond transparent par défaut */
+    transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Transition douce */
+    display: inline-block; /* Pour que le padding fonctionne correctement */
+  }
+  
+  .link-button:hover {
+    background-color: #F48D35; /* Couleur de fond au survol */
+    color: white; /* Couleur du texte au survol */
+    transform: scale(1.05); /* Légère augmentation de la taille au survol */
+    text-decoration: none !important; /* Pas de soulignement au survol, avec !important */
+  }
+
+
 /* Medium Devices, Desktops Only */
 @media only screen and (min-width: 992px) {
     ::-webkit-scrollbar {

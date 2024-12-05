@@ -9,12 +9,15 @@ import UserMenu from "app/fuse-layouts/shared-components/UserMenu";
 import history from "@history";
 import Search from "../../../main/portail/Search/Search";
 import PSecteurs from "app/fuse-layouts/shared-components/PSecteurs";
+import { Link } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   separator: {
     width: 1,
     height: 64,
     backgroundColor: theme.palette.divider,
   },
+  
 }));
 
 function ToolbarLayout3(props) {
@@ -37,37 +40,63 @@ function ToolbarLayout3(props) {
               <LogoPortail />
             </div>
           </Hidden>
-          <div className="flex flex-shrink items-center">
+          {/* <div className="flex flex-shrink items-center">
             <PSecteurs />
-          </div>
+          </div> */}
+          
+          <Typography className="uppercase font-bold ml-24"color="primary">
+            <div className="flex justify-center space-x-4">
+              <Link 
+                component="true" 
+                to="/annuaire-entreprises" 
+                className="link-button"
+              >
+                Parcourir les Secteurs
+              </Link>
+              <Link 
+                component="true" 
+                to="/vente-produits" 
+                className="link-button"
+              >
+                Produits
+              </Link>
+              <Link 
+                component="true" 
+                to="/tarifs/plans" 
+                className="link-button"
+              >
+                Tarifs
+              </Link>
+              <Link 
+                component="true" 
+                to="/actualites" 
+                className="link-button"
+              >
+                Actualités
+              </Link>
+              
+            </div>
+          </Typography>
 
-          <div className="flex flex-1">
-            <Hidden xsDown>
-              {history.location && history.location.pathname === "/" ? (
-                ""
-              ) : (
-                <Search className="mx-16 lg:mx-24" variant="basic" />
-              )}
-            </Hidden>
-          </div>
-
-          <div className="flex">
-            <Hidden smUp>
-              {history.location && history.location.pathname === "/" ? (
-                ""
-              ) : (
-                <Search />
-              )}
-
-              <div className={classes.separator} />
-            </Hidden>
+            
+          
+          
+          <div className={clsx("flex flex-shrink-0 items-center justify-start" , "ml-72")}> {/* Ajoutez justify-start pour aligner à gauche */}
             <UserMenu />
-
-            <Hidden mdDown>
-              <div className={classes.separator} />
-            </Hidden>
           </div>
         </Toolbar>
+        <div className="flex flex-1 justify-center"> {/* Justifiez le contenu au centre si nécessaire */}
+                   <Hidden xsDown>
+                      {history.location && history.location.pathname === "/" ? (
+                        ""
+                      ) : (
+                        <div className="w-1/2"> {/* Réduisez la largeur ici */}
+                          <Search className="mx-8 lg:mx-16" variant="basic" />
+                        </div>
+                      )}
+                    </Hidden>
+          </div>
+       <br></br>
       </AppBar>
     </ThemeProvider>
   );

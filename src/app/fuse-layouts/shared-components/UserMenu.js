@@ -15,6 +15,8 @@ import { useSelector, useDispatch } from "react-redux";
 import * as authActions from "app/auth/store/actions";
 import { Link } from "react-router-dom";
 import { URL_SITE } from "@fuse";
+import LockIcon from '@material-ui/icons/Lock';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import clsx from "clsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -66,13 +68,13 @@ function UserMenu(props) {
             </Hidden>
             <Link
               to="/abonnement/commandes/true"
-              className="ml-2 text-blue  font-bold  uppercase"
+              className="ml-2 text-blue font-bold uppercase"
             >
               Charger
             </Link>
           </div>
         ) : (
-          <div className="flex  items-center px-8 py-4 mr-8 ">
+          <div className="flex items-center px-8 py-4 mr-8 ">
             <CircularProgress color="secondary" />
           </div>
         )
@@ -86,16 +88,21 @@ function UserMenu(props) {
             component={Link}
             to="/login"
             size="small"
+            variant="contained"
+            color="primary"
             className="mr-2 h-40"
+            startIcon={<LockIcon />}
           >
-            se connecter
+            Se connecter
           </Button>
           <Button
+            component={Link}
+            to="/register"
             size="small"
             variant="outlined"
             color="primary"
-            className=" h-40"
-            onClick={userMenuClick2}
+            className="h-40"
+            startIcon={<PersonAddIcon />}
           >
             Inscrivez-vous
           </Button>
