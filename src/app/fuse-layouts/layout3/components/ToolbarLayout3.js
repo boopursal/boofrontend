@@ -79,6 +79,11 @@ function ToolbarLayout3(props) {
           </Typography>
           </Hidden>
             
+          <Hidden smUp>
+                <PSecteurs />
+            
+              <div className={classes.separator} />
+          </Hidden>
           
           
           <div className={clsx("flex flex-shrink-0 items-center justify-start" , "ml-72")}> {/* Ajoutez justify-start pour aligner à gauche */}
