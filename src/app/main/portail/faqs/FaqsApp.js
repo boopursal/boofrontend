@@ -60,7 +60,7 @@ function FaqsApp(props) {
             <Helmet>
                 <title>FAQ | Les Achats Industriels</title>
                 <meta name="description" content='Questions fréquemment posées ' />
-                <meta property="og:title" content="FAQ | Les Achats Industriels" />
+                <meta property="og:title" content="FAQ | Boopursal" />
                 <meta property="og:description" content='' />
             </Helmet>
             <div

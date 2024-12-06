@@ -21,9 +21,9 @@ function ConditionsApp(props) {
     return (
         <React.Fragment>
             <Helmet>
-                <title>Conditions générales | Les Achats Industriels</title>
+                <title>Conditions générales | Boopursal</title>
                 <meta name="description" content='Conditions générales ' />
-                <meta property="og:title" content="Conditions générales | Les Achats Industriels" />
+                <meta property="og:title" content="Conditions générales | Boopursal" />
                 <meta property="og:description" content='' />
             </Helmet>
             <FusePageSimple
