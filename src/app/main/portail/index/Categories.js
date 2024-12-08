@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    width: 120, // Largeur fixe pour un design carré
-    height: 120, // Hauteur fixe pour un design carré
+    width: 140, // Largeur fixe pour un design carré
+    height: 140, // Hauteur fixe pour un design carré
     margin: theme.spacing(2), // Espacement entre les catégories
     textAlign: "center", // Centrer le texte
     borderRadius: 8, // Coins arrondis
@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   avatar: {
-    width: 80, // Taille de l'avatar augmentée
-    height: 80, // Taille de l'avatar augmentée
+    width: 100, // Taille de l'avatar augmentée
+    height: 100, // Taille de l'avatar augmentée
     marginBottom: theme.spacing(1), // Espacement en bas de l'avatar
   },
   categoryText: {
