@@ -95,7 +95,8 @@ const useStyles = makeStyles((theme) => ({
   header: {
     background: theme.palette.primary.main,
     position: 'relative',
-    backgroundImage: "url(https://source.unsplash.com/collection/9456871/1600x900)",
+    backgroundImage: "url(assets/images/backgrounds/dark-material-bg.jpg)",
+    //backgroundImage: "url(https://source.unsplash.com/collection/9456871/1600x900)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
