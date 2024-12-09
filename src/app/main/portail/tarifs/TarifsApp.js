@@ -63,7 +63,7 @@ function TarifsApp(props) {
       )}
     >
       <Helmet>
-        <title>Tarifs | Les Achats Industriels</title>
+        <title>Tarifs | Boopursal</title>
         <meta
           name="description"
           content="Tarifs abonnements et jetons pour les fournisseurs, et Acheteur"

@@ -58,7 +58,7 @@ function FaqsApp(props) {
     return (
         <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
             <Helmet>
-                <title>FAQ | Les Achats Industriels</title>
+                <title>FAQ | Boopursal</title>
                 <meta name="description" content='Questions fréquemment posées ' />
                 <meta property="og:title" content="FAQ | Boopursal" />
                 <meta property="og:description" content='' />

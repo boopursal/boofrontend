@@ -27,7 +27,7 @@ function FooterLayout3(props) {
                         </Grid>
                         <Grid item xs={12} sm={3} >
                             <Typography className="uppercase md:mb-10 font-bold" color="primary">
-                                Acheter
+                            Booster l'achat
                             </Typography>
                             <ul className="list-reset mb-6 p-0">
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0  ">
@@ -45,7 +45,7 @@ function FooterLayout3(props) {
                         </Grid>
                         <Grid item xs={12} sm={3} >
                             <Typography className="uppercase md:mb-10 font-bold" color="primary">
-                                Vendre
+                            Booster la vente
                             </Typography>
                             <ul className="list-reset mb-6 p-0">
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">

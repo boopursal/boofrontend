@@ -96,13 +96,11 @@ function UserMenu(props) {
             Se connecter
           </Button>
           <Button
-            component={Link}
-            to="/register"
             size="small"
             variant="outlined"
             color="primary"
-            className="h-40"
-            startIcon={<PersonAddIcon />}
+            className=" h-40"
+            onClick={userMenuClick2}
           >
             Inscrivez-vous
           </Button>
