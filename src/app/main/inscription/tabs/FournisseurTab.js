@@ -131,7 +131,7 @@ function FournisseurTab(props) {
   return (
     <div className="w-full">
       <Helmet>
-        <title>Inscription Fournisseur | Les Achats Industriels</title>
+        <title>Inscription Fournisseur | Boopursal</title>
         <meta
           name="description"
           content="L'inscription sur notre site est gratuite ainsi que la réception des demandes de prix.

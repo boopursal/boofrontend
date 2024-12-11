@@ -111,7 +111,7 @@ function AcheteurTab(props) {
 
         <div className="w-full">
             <Helmet>
-                <title>Inscription Acheteur | Les Achats Industriels</title>
+                <title>Inscription Acheteur | Boopursal</title>
                 <meta name="description" content="Inscrivez-vous en tant qu'ACHETEUR. Vous pouvez vous inscrire en même temps en tant que FOURNISSEUR, dans ce cas vous devez vous déconnecter et vous inscrire en cliquant sur le lien FOURNISSEUR." />
             </Helmet>
             <Formsy
