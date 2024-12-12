@@ -117,7 +117,7 @@ const Import = () => {
     formData.append('file', yourFile);
 
     try {
-      const response = await agent.post('http://localhost:8000/api/send-emails', formData, {
+      const response = await agent.post('/api/send-emails', formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
