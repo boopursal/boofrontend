@@ -77,7 +77,7 @@ const Import = () => {
       const newFournisseurs = [];
 
       rows.forEach(row => {
-        const [nom, adresse, telephone] = row.split(',');
+        const [nom, adresse, telephone] = row.split(';');
         if (nom && adresse && telephone) {
           newFournisseurs.push({ nom, adresse, telephone });
         }
