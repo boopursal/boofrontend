@@ -12,10 +12,3 @@
     Access-Control-Allow-Headers = "Content-Type, Authorization"
     Access-Control-Allow-Credentials = "true"
     Access-Control-Max-Age = "3600"
-
-[build]
-  command = "yarn build"  # Remplace par ta commande de build spécifique
-  publish = "build"       # Répertoire de publication
-
-[context.production.environment]
-  YARN_ENABLED = "true"    # Utiliser Yarn pour installer les dépendances
