@@ -210,7 +210,7 @@ Mme;Martin;Marie;456 avenue Test;0987654321;marie.martin@example.com`;
                             className={`cursor-pointer flex flex-col items-center ${isUploading ? 'opacity-50' : ''}`}
                         >
                             <div className="bg-gray-100 p-4 rounded-full mb-4">
-                                <Upload className="w-8 h-8 text-gray-600" />
+                               {/*  <Upload className="w-8 h-8 text-gray-600" /> */}
                             </div>
                             <span className="text-xl font-medium text-gray-700 mb-2">
                                 {isUploading ? 'Importation en cours...' : 'Déposez votre fichier CSV ici'}
@@ -254,7 +254,7 @@ Mme;Martin;Marie;456 avenue Test;0987654321;marie.martin@example.com`;
                 <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
                     <div className="flex items-start space-x-4">
                         <div className="bg-gray-100 p-3 rounded-lg">
-                            <HelpCircle className="text-gray-600 w-5 h-5" />
+                         {/*    <HelpCircle className="text-gray-600 w-5 h-5" /> */}
                         </div>
                         <div className="flex-1">
                             <h3 className="text-xl font-bold text-gray-800 mb-4">
