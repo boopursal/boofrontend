@@ -697,6 +697,22 @@ const navigationConfig = [
       },
     ],
   },
+  {
+    id: 'import-section',
+    title: 'Import',
+    type: 'group',
+    auth: authRoles.acheteur,
+    children: [
+        {
+            id: 'import-fournisseurs',
+            title: 'Import Fournisseurs',
+            type: 'item',
+            icon: 'cloud_upload',
+            url: '/ac/import',
+            auth: authRoles.acheteur
+        }
+    ]
+  }, 
   /** FIN FOURNISSEUR Navigations */
 ];
 
