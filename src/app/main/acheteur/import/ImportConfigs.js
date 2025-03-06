@@ -1,15 +1,21 @@
 import React from 'react';
+import CSVUpload from './CSVUpload';
 import { authRoles } from 'app/auth';
 
-export const ImportConfigs = {
-    settings: {
-        layout: {}
-    },
-    auth: authRoles.acheteur, // Ou tout autre rôle approprié pour l'importation
-    routes: [
-        {
-            path: '/ac/import', // Chemin pour accéder à la page d'importation
-            component: React.lazy(() => import('./Import')) // Composant Import
-        },
-    ]
+const ImportConfigs = () => {
+    return (
+        <div className="import-container">
+            <CSVUpload />
+        </div>
+    );
 };
+
+// Configuration de la route
+ImportConfigs.settings = {
+    layout: {}
+};
+
+ImportConfigs.auth = authRoles.acheteur;
+
+// Export simple sans HOC
+export default ImportConfigs;
