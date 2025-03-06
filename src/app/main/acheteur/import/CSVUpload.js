@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import agent from 'agent';
-import { Upload, HelpCircle } from 'lucide-react';
+//import { Upload, HelpCircle } from 'lucide-react';
 import jwtService from 'app/services/jwtService';
 
 const CSVUpload = () => {
