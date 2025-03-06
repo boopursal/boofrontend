@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import agent from 'agent';
-import { Upload, HelpCircle } from 'lucide-react';
+//import { Upload, HelpCircle } from 'lucide-react';
 import jwtService from 'app/services/jwtService';
 
 const CSVUpload = () => {
@@ -210,7 +210,9 @@ Mme;Martin;Marie;456 avenue Test;0987654321;marie.martin@example.com`;
                             className={`cursor-pointer flex flex-col items-center ${isUploading ? 'opacity-50' : ''}`}
                         >
                             <div className="bg-gray-100 p-4 rounded-full mb-4">
-                                <Upload className="w-8 h-8 text-gray-600" />
+                            <svg className="lucide lucide-upload" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M12 3v12M9 10l3 3 3-3" />
+        </svg>
                             </div>
                             <span className="text-xl font-medium text-gray-700 mb-2">
                                 {isUploading ? 'Importation en cours...' : 'Déposez votre fichier CSV ici'}
@@ -254,7 +256,9 @@ Mme;Martin;Marie;456 avenue Test;0987654321;marie.martin@example.com`;
                 <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
                     <div className="flex items-start space-x-4">
                         <div className="bg-gray-100 p-3 rounded-lg">
-                            <HelpCircle className="text-gray-600 w-5 h-5" />
+                        <svg className="lucide lucide-help-circle" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2a10 10 0 1 1-10 10A10 10 0 0 1 12 2zm0 4c-1.5 0-2.6.5-3.5 1.4-.9.9-1.4 2.1-1.4 3.5s.5 2.6 1.4 3.5C9.4 14.5 10.5 15 12 15s2.6-.5 3.5-1.4c.9-.9 1.4-2.1 1.4-3.5s-.5-2.6-1.4-3.5C14.6 6.5 13.5 6 12 6zm0 6c-.8 0-1.5-.3-2.1-.9-.6-.6-.9-1.3-.9-2.1 0-.8.3-1.5.9-2.1C10.5 5.3 11.2 5 12 5c.8 0 1.5.3 2.1.9.6.6.9 1.3.9 2.1 0 .8-.3 1.5-.9 2.1C13.5 11.7 12.8 12 12 12z" />
+        </svg>
                         </div>
                         <div className="flex-1">
                             <h3 className="text-xl font-bold text-gray-800 mb-4">
