@@ -429,7 +429,7 @@ function Step3App(props) {
                         Tapez un mot clé, utilisez des termes génériques (ex:
                         Chariot élévateur).{" "}
                       </li>
-                      <li>Choisissez au moins un produit de votre activité.</li>
+                      <li>Choisissez au moins un produit ou un service de votre activité.</li>
                     </ul>
                     <Autosuggest
                       {...autosuggestProps}
