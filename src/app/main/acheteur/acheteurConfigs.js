@@ -7,6 +7,7 @@ import ImportConfigs from "./import/ImportConfigs";
 import { TeamsAppConfig } from "./Directeur_achat/TeamsAppConfig";
 import { childsConfigs } from "./childs/childsConfigs";
 import { FacturationAppConfig } from "./facturation/FacturationAppConfig";
+import { SuggestionsAppConfig } from "./Demande_suggetion/SuggestionsAppConfig";
 import { authRoles } from 'app/auth';
 
 // Créer la configuration des routes d'acheteur
@@ -26,7 +27,8 @@ const AcheteurConfigsObject = {
         ...TeamsAppConfig.routes,
         ...childsConfigs.routes,
         ...DashboardAppConfig.routes,
-        ...FacturationAppConfig.routes
+        ...FacturationAppConfig.routes,
+        ...SuggestionsAppConfig.routes
 
     ]
 };
@@ -40,5 +42,6 @@ export const acheteurConfigs = [
     TeamsAppConfig,
     childsConfigs,
     DashboardAppConfig,
+    SuggestionsAppConfig,
     FacturationAppConfig
 ];
