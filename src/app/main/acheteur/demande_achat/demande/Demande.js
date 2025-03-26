@@ -53,7 +53,6 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Highlighter from "react-highlight-words";
 import { Helmet } from "react-helmet";
-// Importez l'action clearSearchCategories
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -65,6 +64,8 @@ const ColorButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
+
 
 const RedButton = withStyles((theme) => ({
   root: {
@@ -243,8 +244,7 @@ function Demande(props) {
   const formRef = useRef(null);
   
   const { form, handleChange, setForm } = useForm(null);
-  
-  
+
   const classes = useStyles(props);
   const [tabValue, setTabValue] = useState(0);
   const params = props.match.params;
@@ -510,22 +510,7 @@ function Demande(props) {
       event.preventDefault();
     }
   };
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    const newValue = name === 'titre' ? capitalizeFirstLetter(value) : value;
-    setForm({ ...form, [name]: newValue });
-  };
- // Fonction pour mettre en majuscule la première lettre
- const capitalizeFirstLetter = (value) => {
-  return value.charAt(0).toUpperCase() + value.slice(1);
-};
 
-const resetFields = () => {
-  setCategories([]);
-  setSuggestions([]);
-  dispatch(Actions.setGlobalSearchText(""));
-  dispatch(Actions.clearSearchCategories());
-};
   function handleSubmit(vider = false) {
     const params = props.match.params;
     const { demandeId } = params;
@@ -548,9 +533,92 @@ const resetFields = () => {
         )
       );
     }
-    // Vider le champ de recherche après soumission
-    dispatch(Actions.clearSearchCategories());
   }
+// Define the calculateRemainingTime function above your component
+const [countdownData, setCountdownData] = useState([]); // Liste des données des demandes
+const [isTimerActive, setIsTimerActive] = useState(true); // Pour vérifier l'activation du timer
+const [intervalId, setIntervalId] = useState(null); // Stocker l'ID de l'intervalle
+
+// 📌 Fonction pour calculer le temps restant
+const calculateRemainingTime = (dateExpiration) => {
+  if (!dateExpiration) return { timeLeft: 'Date invalide', className: 'error-class' };
+
+  const endDate = moment(dateExpiration);
+  const remainingTime = endDate.diff(moment(), 'seconds'); // Calcul dynamique du temps restant en secondes
+
+  console.log("Temps restant pour:", dateExpiration, "=>", remainingTime);
+
+  if (remainingTime <= 0) {
+    return { timeLeft: 'Expiré', className: 'expired-class' };
+  }
+
+  const days = Math.floor(remainingTime / (3600 * 24));
+  const hours = Math.floor((remainingTime % (3600 * 24)) / 3600);
+  const minutes = Math.floor((remainingTime % 3600) / 60);
+  const seconds = remainingTime % 60;
+
+  return {
+    timeLeft: `${days}j ${hours}h ${minutes}m ${seconds}s`,
+    className: 'countdown-class',
+  };
+};
+
+// ⚡ Initialisation des données
+useEffect(() => {
+  console.log("Données de demande initialisées:", demande);
+
+  if (demande && demande.data) {
+    const newData = Array.isArray(demande.data) ? demande.data : [demande.data];
+    setCountdownData(newData.map((item) => ({
+      ...item,
+      ...calculateRemainingTime(item.dateExpiration),
+    })));
+  } else {
+    console.log("Aucune donnée de demande disponible");
+  }
+}, [demande]); // ⚡ L'effet se déclenche uniquement lorsque `demande` change
+
+// 🔄 Mise à jour du compteur chaque seconde
+useEffect(() => {
+  if (!isTimerActive || countdownData.length === 0) {
+    console.log("Timer désactivé ou pas de données disponibles.");
+    return; // Si pas de données ou timer pas activé, ne pas démarrer l'intervalle
+  }
+
+  // Si un intervalle existe déjà, ne pas en recréer un nouveau
+  if (intervalId) {
+    console.log("L'intervalle existe déjà. Pas de redémarrage.");
+    return;
+  }
+
+  console.log('Intervalle démarré');
+  const interval = setInterval(() => {
+    console.log("Mise à jour du timer à chaque seconde...");
+    setCountdownData((prevData) => {
+      return prevData.map((item) => ({
+        ...item,
+        ...calculateRemainingTime(item.dateExpiration), // Calcul dynamique à chaque seconde
+      }));
+    });
+  }, 1000); // Mise à jour toutes les secondes
+
+  setIntervalId(interval); // Stocker l'ID de l'intervalle
+
+  // Nettoyage de l'intervalle à la destruction du composant
+  return () => {
+    console.log('Nettoyage de l\'intervalle');
+    clearInterval(interval);
+    setIntervalId(null); // Réinitialiser l'ID de l'intervalle après nettoyage
+  };
+}, [isTimerActive, countdownData]); // Écoute seulement `isTimerActive` et `countdownData` pour démarrer l'intervalle
+
+
+
+
+// Then the component code
+const Demande = () => {
+  // Your component logic here...
+};
 
   return (
     <>
@@ -586,6 +654,7 @@ const resetFields = () => {
                         <Icon className="mr-4 text-20">arrow_back</Icon>
                         Retour
                       </Typography>
+                      
                     </FuseAnimate>
 
                     <div className="flex items-center max-w-full">
@@ -747,6 +816,7 @@ const resetFields = () => {
                           )}
                         </RedButton>
                       )} */}
+                     
                     <Button
                       className="whitespace-no-wrap"
                       variant="contained"
@@ -760,6 +830,7 @@ const resetFields = () => {
                       onClick={() => handleSubmit(false)}
                     >
                       <span className="hidden sm:flex">Sauvegarder</span>
+                      
                       <span className="flex sm:hidden">
                         <Icon>save</Icon>
                       </span>
@@ -770,6 +841,7 @@ const resetFields = () => {
                         />
                       )}
                     </Button>
+                    
                     {demandeId === "new" && (
                       <Button
                         className="ml-8"
@@ -826,7 +898,7 @@ const resetFields = () => {
                     : "Pièce(s) jointe(s)"
                 }
               />
-
+             
               {demande &&
               demande.fournisseurs.length > 0 &&
               !demande.data.isAnonyme ? (
@@ -914,6 +986,27 @@ const resetFields = () => {
                         {form.statut === 1 && (
                           <Grid item xs={12}>
                             <Typography
+  variant="caption"
+  className="uppercase font-bold mb-16 flex items-center justify-center"
+  style={{
+    color: '#FFFFFF', // Blanc pour le texte
+    fontSize: '14px',
+    fontWeight: 'bold',
+    backgroundColor: '#4CAF50', // Vert vif pour attirer l'attention
+    padding: '8px 12px', // Plus de padding pour plus d'espace
+    borderRadius: '20px', // Coins arrondis pour un effet moderne
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)', // Légère ombre pour donner du relief
+    display: 'inline-flex', // Empêche de prendre toute la largeur
+    alignItems: 'center',
+    justifyContent: 'center', // Centrage horizontal
+    textAlign: 'center', // Centrage du texte
+    maxWidth: '200px', // Définit une largeur maximale
+    width: 'auto', // Laisse l'élément s'ajuster à son contenu
+  }}
+>
+  <Icon style={{ marginRight: '8px' }}>timer</Icon>&ensp;{calculateRemainingTime(form.dateExpiration).timeLeft}
+</Typography>
+                            <Typography
                               variant="caption"
                               className="font-bold flex items-center"
                               color="secondary"
@@ -924,6 +1017,11 @@ const resetFields = () => {
                               demande sera remis à l'état initial "En attente"
                               pour la validation de l'administrateur.
                             </Typography>
+                            
+
+
+
+
                           </Grid>
                         )}
                       </Grid>
@@ -931,12 +1029,12 @@ const resetFields = () => {
                         <Grid item xs={12} sm={7}>
                           <TextFieldFormsy
                             className="mb-24"
-                            label="Description du besoin"
+                            label="Designation"
                             autoFocus
                             id="titre"
                             name="titre"
                             value={form.titre}
-                            onChange={handleInputChange}
+                            onChange={handleChange}
                             variant="outlined"
                             validations={{
                               minLength: 4,
@@ -977,29 +1075,41 @@ const resetFields = () => {
                       
 
                       <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                          <DatePickerFormsy
-                            label="Date d'expiration"
-                            id="dateExpiration"
-                            name="dateExpiration"
-                            value={form.dateExpiration}
-                            onChange={(value) =>
-                              handleDateChange(value, "dateExpiration")
-                            }
-                            variant="outlined"
-                            required
-                            fullWidth
-                          />
-                          {updateExpiration && interval && (
-                            <Typography
-                              variant="caption"
-                              className="uppercase font-bold mb-16 flex items-center"
-                              color="secondary"
-                            >
-                              <Icon>info</Icon>&ensp;{interval}
-                            </Typography>
-                          )}
-                        </Grid>
+                      <Grid item xs={12} sm={6}>
+  <DatePickerFormsy
+    label="Date d'expiration"
+    id="dateExpiration"
+    name="dateExpiration"
+    value={form.dateExpiration}
+    onChange={(value) =>
+      handleDateChange(value, "dateExpiration")
+    }
+    variant="outlined"
+    required
+    fullWidth
+  />
+  
+  {updateExpiration && interval && (
+    <Typography
+      variant="caption"
+      className="uppercase font-bold mb-16 flex items-center"
+      color="secondary"
+    >
+      <Icon>info</Icon>&ensp;{interval}
+    </Typography>
+  )}
+
+  {form.dateExpiration && (
+    <Typography
+      variant="caption"
+      className="uppercase font-bold mb-16 flex items-center"
+      color="secondary"
+    >
+       
+    </Typography>
+  )}
+</Grid>
+
 
                         <Grid item xs={12} sm={6}>
                           <TextFieldFormsy
@@ -1249,8 +1359,7 @@ const resetFields = () => {
                             - Attention seules les demandes sérieuses (pas de
                             projets étudiants) seront validées.
                             <br />
-                          </Typography> 
-                          
+                          </Typography>
                         </Grid>
                         <Grid
                           item
@@ -1472,7 +1581,12 @@ const resetFields = () => {
                       </div>
                     </div>
                   )}
-                  {tabValue === 2 && (
+                    {/* {tabValue === 2 && (
+  <Typography variant="h6" className="p-16">
+    Temps restant : {calculateRemainingTime()}
+  </Typography>
+)} */}
+                  {tabValue === 3 && (
                     <div className="w-full flex flex-col">
                       {demande.data &&
                       demande.data.statut === 3 &&
@@ -1519,6 +1633,7 @@ const resetFields = () => {
                                       <Typography className="truncate">
                                         {"RFQ-" + demande.data.reference}
                                       </Typography>
+                                      
                                     </div>
                                   </td>
                                   <td>

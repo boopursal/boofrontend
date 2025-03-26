@@ -57,10 +57,10 @@ function DemandesTable(props) {
     const pageCount = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.pageCount);
     const parametres = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.parametres);
     const user = useSelector(({ auth }) => auth.user);
-
     const searchText = useSelector(({ demandesAcheteurApp }) => demandesAcheteurApp.demandes.searchText);
 
     const [filteredData, setFilteredData] = useState(null);
+    const [countdownData, setCountdownData] = useState([]);
 
     useEffect(() => {
         function getFilteredArray(entities, searchText) {
@@ -73,24 +73,58 @@ function DemandesTable(props) {
 
         if (demandes) {
             setFilteredData(getFilteredArray(demandes, searchText));
+            setCountdownData(getFilteredArray(demandes, searchText)); // Ajout des données pour le compte à rebours
         }
     }, [demandes, searchText]);
 
+    // Fonction pour calculer le temps restant
+    const calculateRemainingTime = (dateExpiration) => {
+        const endDate = moment(dateExpiration);
+        const remainingTime = endDate.diff(moment(), 'seconds'); // Temps restant en secondes
 
+        if (remainingTime <= 0) {
+            return { timeLeft: 'Expiré', className: classes.chip };
+        }
 
+        const days = Math.floor(remainingTime / (3600 * 24));
+        const hours = Math.floor((remainingTime % (3600 * 24)) / 3600);
+        const minutes = Math.floor((remainingTime % 3600) / 60);
+        const seconds = remainingTime % 60;
+
+        return {
+            timeLeft: `${days}j ${hours}h ${minutes}m ${seconds}s`,
+            className: classes.chipOrange
+        };
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCountdownData((prevData) =>
+                prevData.map((item) => ({
+                    ...item,
+                    timeLeft: calculateRemainingTime(item.dateExpiration).timeLeft,
+                }))
+            );
+        }, 1000); // Mise à jour toutes les secondes
+
+        return () => clearInterval(interval); // Nettoyage de l'intervalle lors de la destruction du composant
+    }, []);
+
+    // Si les données filtrées ne sont pas disponibles
     if (!filteredData) {
         return null;
     }
 
-    //dispatch from function filter
-    const run = (parametres) => (
-        dispatch(Actions.setParametresData(parametres))
-    )
-
-    //call run function
-    const fn =
-        _.debounce(run, 1000);
-
+    const getExpirationLabel = (dateExpiration) => {
+        const remainingDays = moment(dateExpiration).diff(moment(), 'days');
+        if (remainingDays > 7) {
+            return { label: `${remainingDays} jours`, className: classes.chip2 };
+        } else if (remainingDays > 0) {
+            return { label: `${remainingDays} jours`, className: classes.chipOrange };
+        } else {
+            return { label: "Expiré", className: classes.chip };
+        }
+    };
 
     return (
         <FuseAnimate animation="transition.slideUpIn" delay={300}>
@@ -268,36 +302,16 @@ function DemandesTable(props) {
                         accessor: "dateExpiration",
                         filterable: true,
                         minWidth: 125,
-                        Cell: row => (
-                            <div className="flex items-center">
-                                {
-                                    moment(row.original.dateExpiration).format('DD/MM/YYYY')
-
-                                }
-
-                                {
-                                    moment(row.original.dateExpiration) >= moment()
-                                        ?
-
-                                        <Chip className={classes.chip2} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
-                                        :
-                                        <Chip className={classes.chip} label={moment(row.original.dateExpiration).diff(moment(), 'days') === 0 ? moment(row.original.dateExpiration).diff(moment(), 'hours') + ' h' : moment(row.original.dateExpiration).diff(moment(), 'days') + ' j'} />
-
-                                }
-
+                        Cell: row => {
+                            const { timeLeft, className } = calculateRemainingTime(row.original.dateExpiration);
+                            return (
+                                <div className="flex flex-col items-center">
+                                <span>{moment(row.original.dateExpiration).format('DD/MM/YYYY')}</span>
+                                <Chip className={className} label={timeLeft} />
                             </div>
-                        ),
-                        Filter: ({ filter, onChange }) =>
-                            <TextField
-                                onChange={event => onChange(event.target.value)}
-                                style={{ width: "100%" }}
-                                value={filter ? filter.value : ""}
-                                type="date"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />,
-
+                            
+                            );
+                        }
                     },
                     {
                         Header: "Date de création",
@@ -402,7 +416,7 @@ function DemandesTable(props) {
                 onFilteredChange={filtered => {
                     parametres.page = 1;
                     parametres.search = filtered;
-                    fn(parametres);
+                    //fn(parametres);
                 }}
                 noDataText="Aucune demande trouvée"
                 loadingText='Chargement...'
