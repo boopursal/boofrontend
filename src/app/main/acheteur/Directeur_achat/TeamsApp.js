@@ -192,7 +192,7 @@ function TeamsApp(props) {
                     <Typography variant="h6" className="my-16">
   <a href="mailto:administrateur@lesachatsindustriesl.com" className="flex items-center space-x-2">
     <i className="fas fa-envelope"></i>
-    <span>administrateur@lesachatsindustriesl.com</span>
+    <span>administrateur@boopursal.com</span>
   </a>
 </Typography>
                 </DialogContent>
