@@ -11,11 +11,17 @@ import {
   CircularProgress,
   Popper,
   Chip,
+  Checkbox,
   IconButton,
   Tooltip,
+  RadioGroup,
   SnackbarContent,
   ListItemText,
+  Select,
   FormControlLabel,
+  FormControl,
+  InputLabel,
+  FormGroup,
   Radio,
   Dialog,
   DialogTitle,
@@ -578,42 +584,173 @@ useEffect(() => {
   }
 }, [demande]); // ⚡ L'effet se déclenche uniquement lorsque `demande` change
 
-// 🔄 Mise à jour du compteur chaque seconde
-useEffect(() => {
-  if (!isTimerActive || countdownData.length === 0) {
-    console.log("Timer désactivé ou pas de données disponibles.");
-    return; // Si pas de données ou timer pas activé, ne pas démarrer l'intervalle
-  }
 
-  // Si un intervalle existe déjà, ne pas en recréer un nouveau
-  if (intervalId) {
-    console.log("L'intervalle existe déjà. Pas de redémarrage.");
-    return;
-  }
-
-  console.log('Intervalle démarré');
-  const interval = setInterval(() => {
-    console.log("Mise à jour du timer à chaque seconde...");
-    setCountdownData((prevData) => {
-      return prevData.map((item) => ({
-        ...item,
-        ...calculateRemainingTime(item.dateExpiration), // Calcul dynamique à chaque seconde
-      }));
-    });
-  }, 1000); // Mise à jour toutes les secondes
-
-  setIntervalId(interval); // Stocker l'ID de l'intervalle
-
-  // Nettoyage de l'intervalle à la destruction du composant
-  return () => {
-    console.log('Nettoyage de l\'intervalle');
-    clearInterval(interval);
-    setIntervalId(null); // Réinitialiser l'ID de l'intervalle après nettoyage
-  };
-}, [isTimerActive, countdownData]); // Écoute seulement `isTimerActive` et `countdownData` pour démarrer l'intervalle
+const [selectedCountries, setSelectedCountries] = useState([]);
+const [openDialog, setOpenDialog] = useState(false);
+const [selectedRadio, setSelectedRadio] = useState("1");
+const [searchTerm, setSearchTerm] = useState("");
+const [formData, setFormData] = useState({ statut: 0, localisation: null, countries: [] });
 
 
 
+// Liste des pays (exemple)
+const countries = [
+  {
+    continent: "Afrique",
+    community: null,
+    countries: [
+      "Algérie", "Angola", "Bénin", "Botswana", "Burkina Faso", "Burundi",
+      "Cameroun", "Cap-Vert", "République Centrafricaine", "Tchad", "Comores",
+      "République Démocratique du Congo", "Djibouti", "Égypte", "Érythrée",
+      "Eswatini", "Éthiopie", "Gabon", "Gambie", "Ghana", "Guinée", "Guinée-Bissau",
+      "Côte d'Ivoire", "Kenya", "Lesotho", "Liberia", "Libye", "Madagascar",
+      "Malawi", "Mali", "Mauritanie", "Maurice", "Maroc", "Mozambique", "Namibie",
+      "Niger", "Nigéria", "Rwanda", "Sao Tomé-et-Principe", "Sénégal",
+      "Seychelles", "Sierra Leone", "Somalie", "Afrique du Sud", "Soudan",
+      "Tanzanie", "Togo", "Tunisie", "Ouganda", "Zambie", "Zimbabwe"
+    ],
+  },
+  {
+    continent: "Amérique",
+    community: "Amérique du Nord",
+    countries: ["Canada", "États-Unis", "Mexique"],
+  },
+  {
+    continent: "Amérique",
+    community: "Amérique Centrale",
+    countries: [
+      "Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras",
+      "Nicaragua", "Panama"
+    ],
+  },
+  {
+    continent: "Amérique",
+    community: "Amérique du Sud",
+    countries: [
+      "Argentine", "Bolivie", "Brésil", "Chili", "Colombie", "Équateur",
+      "Guyana", "Paraguay", "Pérou", "Suriname", "Uruguay", "Venezuela"
+    ],
+  },
+  {
+    continent: "Asie",
+    community: "Asie de l'Est",
+    countries: [
+      "Chine", "Japon", "Mongolie", "Corée du Nord", "Corée du Sud", "Taïwan"
+    ],
+  },
+  {
+    continent: "Asie",
+    community: "Asie du Sud",
+    countries: [
+      "Afghanistan", "Bangladesh", "Bhoutan", "Inde", "Iran", "Maldives",
+      "Népal", "Pakistan", "Sri Lanka"
+    ],
+  },
+  {
+    continent: "Asie",
+    community: "Asie du Sud-Est",
+    countries: [
+      "Brunei", "Cambodge", "Indonésie", "Laos", "Malaisie", "Birmanie",
+      "Philippines", "Singapour", "Thaïlande", "Timor oriental", "Vietnam"
+    ],
+  },
+  {
+    continent: "Asie",
+    community: "Asie Centrale",
+    countries: [
+      "Kazakhstan", "Kirghizistan", "Tadjikistan", "Turkménistan", "Ouzbékistan"
+    ],
+  },
+  {
+    continent: "Europe",
+    community: "Union Européenne",
+    countries: [
+      "Allemagne", "Autriche", "Belgique", "Bulgarie", "Chypre", "Croatie",
+      "Danemark", "Espagne", "Estonie", "Finlande", "France", "Grèce",
+      "Hongrie", "Irlande", "Italie", "Lettonie", "Lituanie", "Luxembourg",
+      "Malte", "Pays-Bas", "Pologne", "Portugal", "République tchèque",
+      "Roumanie", "Slovaquie", "Slovénie", "Suède"
+    ],
+  },
+  {
+    continent: "Europe",
+    community: "Europe non-UE",
+    countries: [
+      "Albanie", "Andorre", "Biélorussie", "Bosnie-Herzégovine", "Islande",
+      "Liechtenstein", "Macédoine du Nord", "Moldavie", "Monaco", "Monténégro",
+      "Norvège", "Royaume-Uni", "Russie", "Saint-Marin", "Serbie", "Suisse",
+      "Ukraine", "Vatican"
+    ],
+  },
+  {
+    continent: "Océanie",
+    community: null,
+    countries: [
+      "Australie", "Fidji", "Kiribati", "Îles Marshall", "Micronésie", "Nauru",
+      "Nouvelle-Zélande", "Palaos", "Papouasie-Nouvelle-Guinée", "Samoa",
+      "Îles Salomon", "Tonga", "Tuvalu", "Vanuatu"
+    ],
+  },
+];
+
+
+// Ouvrir/Fermer la popup
+const handleOpenDialog = () => setOpenDialog(true);
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+  setFormData((prevData) => ({
+    ...prevData,
+    countries: selectedCountries, // Sauvegarde les pays sélectionnés
+  }));
+};
+// Gestion du changement de radio
+const handleLocalisationChange = (event) => {
+  const value = parseInt(event.target.value, 10); // Convertir en nombre
+  setFormData((prevFormData) => ({
+    ...prevFormData,
+    localisation: value,
+    countries: value === 3 ? selectedCountries : [], // Sauvegarde les pays si "Internationale"
+  }));
+
+  if (value === 3) setOpenDialog(true); // Ouvre le popup pour sélectionner les pays
+};
+
+
+
+
+
+// Sélectionner/Désélectionner un pays
+const handleCountryCheck = (event) => {
+  const { value, checked } = event.target;
+
+  // Mise à jour de la liste des pays sélectionnés
+  setSelectedCountries((prevCountries) => {
+    const updatedCountries = checked
+      ? [...prevCountries, value]
+      : prevCountries.filter((country) => country !== value);
+
+    // Mise à jour de formData avec la liste des pays
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      countries: updatedCountries,
+    }));
+
+    return updatedCountries;
+  });
+};
+
+
+// Filtrer les pays en fonction de la recherche
+const filteredCountries = countries.flatMap((continent) =>
+  continent.countries.filter((country) =>
+    country.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+);
+
+// Valider la sélection et fermer la popup
+const handleValidateSelection = () => {
+  handleCloseDialog();
+};
 
 // Then the component code
 const Demande = () => {
@@ -1279,14 +1416,15 @@ const Demande = () => {
                     </Grid>
                      
                       <Grid container spacing={3} className="flex items-center">
-                        <Grid item xs={12} sm={4}>
-                          <RadioGroupFormsy
+                        
+                      <Grid item xs={12} sm={4}>
+                      <RadioGroupFormsy
                             className="inline"
                             name="statut"
                             label="Diffuser à l'échelle"
                             onChange={handleRadioChange}
-                          >
-                            <FormControlLabel
+                          >              
+                      <FormControlLabel
                               value="2"
                               disabled={form.statut === 1}
                               checked={form.localisation === 2}
@@ -1298,7 +1436,12 @@ const Demande = () => {
                               disabled={form.statut === 1}
                               checked={form.localisation === 3}
                               control={<Radio />}
-                              label="Internationale"
+                              onChange={handleLocalisationChange}
+                              label={
+                                <span>
+      Internationale {formData.countries.length > 0 ? `(${formData.countries.join(", ")})` : ""}
+    </span>
+                              } 
                             />
                             <FormControlLabel
                               value="1"
@@ -1307,8 +1450,63 @@ const Demande = () => {
                               control={<Radio />}
                               label="Les deux"
                             />
-                          </RadioGroupFormsy>
-                        </Grid>
+                            </RadioGroupFormsy>
+  {/* Sélection de l'échelle */}
+
+  {/* <RadioGroup name="statut" value={selectedRadio} onChange={handleLocalisationChange}>
+   
+    <FormControlLabel 
+      value="3" 
+      disabled={form.statut === 1} 
+      checked={form.localisation === 3}
+      control={<Radio />} 
+      label={
+        <span>
+          Internationale {selectedCountries.length > 0 && `(${selectedCountries.join(", ")})`}
+        </span>
+      } 
+    />
+  
+  </RadioGroup> */}
+
+  {/* Popup pour sélectionner les pays */}
+  <Dialog open={openDialog} onClose={handleCloseDialog}>
+  <DialogTitle>Choisissez les pays</DialogTitle>
+  <DialogContent>
+    {/* Barre de recherche */}
+    <TextField
+      fullWidth
+      label="Rechercher un pays..."
+      variant="outlined"
+      onChange={(e) => setSearchTerm(e.target.value)}
+    />
+    
+    <FormGroup>
+      {countries
+        .flatMap((continent) => continent.countries)
+        .filter((country) => country.toLowerCase().includes(searchTerm.toLowerCase()))
+        .map((country) => (
+          <FormControlLabel
+            key={country}
+            control={
+              <Checkbox
+                checked={selectedCountries.includes(country)}
+                onChange={handleCountryCheck}
+                value={country}
+              />
+            }
+            label={country}
+          />
+        ))}
+    </FormGroup>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseDialog} color="secondary">Annuler</Button>
+    <Button onClick={handleCloseDialog} color="primary">Valider</Button>
+  </DialogActions>
+</Dialog>
+</Grid>
+
                         <Grid item xs={12} sm={4} className="flex items-center">
                           <CheckboxFormsy
                             name="isPublic"
