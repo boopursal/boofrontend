@@ -9,6 +9,8 @@ const CSVUpload = () => {
     const [csvData, setCsvData] = useState(null);
     const [savedFournisseurs, setSavedFournisseurs] = useState([]);
     const [importedFournisseurs, setImportedFournisseurs] = useState([]);
+    const [activeTab, setActiveTab] = useState('import'); // Onglet actif
+    
 
     useEffect(() => {
         if (!jwtService.getAccessToken()) {
@@ -158,11 +160,13 @@ const CSVUpload = () => {
             }
         })
         .then((response) => {
+            console.log(response.data);
             if (response.data && response.data.data) {
                 const formattedData = response.data.data.map(item => ({
                     id: item.id,
                     nom: item.nom,
                     email: item.email,
+                    telephone: item.telephone,
                     tempPassword: item.tempPassword
                 }));
                 setImportedFournisseurs(formattedData);
@@ -174,9 +178,9 @@ const CSVUpload = () => {
     };
 
     const downloadExample = () => {
-        const csvContent = `Civilite;Nom;Prenom;Adresse;Telephone;Email
-M.;Dupont;Jean;123 rue Example;0123456789;jean.dupont@example.com
-Mme;Martin;Marie;456 avenue Test;0987654321;marie.martin@example.com`;
+        const csvContent = `Civilite;Nom;Prenom;Adresse;Pays;Telephone;Email;Société;Secteur d'activité;Produit;Service
+M.;Dupont;Jean;123 rue Example;Maroc;0123456789;jean.dupont@example.com;Maroc aviation;Aeromautique;;Audite
+Mme;Martin;Marie;456 avenue Test;;0987654321;marie.martin@example.com;FerAcier Maroc;Métallique;Tôle;`;
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
@@ -186,9 +190,77 @@ Mme;Martin;Marie;456 avenue Test;0987654321;marie.martin@example.com`;
         URL.revokeObjectURL(link.href);
     };
 
+    // Initialisation des états pour la pagination
+    const [currentPage, setCurrentPage] = useState(1); // Page actuelle
+    const itemsPerPage = 10; // Nombre d'éléments par page
+
+    // Calcul des indices pour les éléments à afficher
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = importedFournisseurs.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Gestion de la pagination (Précédent/Suivant)
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < Math.ceil(importedFournisseurs.length / itemsPerPage)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+   
+    const [currentCsvPage, setCurrentCsvPage] = useState(1); // Page actuelle pour csvData
+const csvItemsPerPage = 10; // Nombre d'éléments à afficher par page
+
+// Calcul des indices pour les éléments à afficher pour csvData
+const indexOfLastCsvItem = currentCsvPage * csvItemsPerPage;
+const indexOfFirstCsvItem = indexOfLastCsvItem - csvItemsPerPage;
+const currentCsvItems = csvData && Array.isArray(csvData) 
+    ? csvData.slice(indexOfFirstCsvItem, indexOfLastCsvItem)
+    : [];
+
+// Gestion de la pagination (Précédent/Suivant) pour csvData
+const handleCsvPrevPage = () => {
+    if (currentCsvPage > 1) {
+        setCurrentCsvPage(currentCsvPage - 1);
+    }
+};
+
+const handleCsvNextPage = () => {
+    if (currentCsvPage < Math.ceil(csvData.length / csvItemsPerPage)) {
+        setCurrentCsvPage(currentCsvPage + 1);
+    }
+};
+
+
+    
+    
+    
     return (
         <div className="flex flex-col items-center bg-gray-50 pt-8">
             <div className="w-full max-w-2xl space-y-6">
+                {/* Onglets */}
+                <div className="flex border-b border-gray-300 mb-6">
+                    <button
+                        onClick={() => setActiveTab('import')}
+                        className={`py-2 px-4 text-xl font-medium ${activeTab === 'import' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'}`}
+                    >
+                        Importer
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('fournisseurs')}
+                        className={`py-2 px-4 text-xl font-medium ${activeTab === 'fournisseurs' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'}`}
+                    >
+                        Fournisseurs Importés
+                    </button>
+                </div>
+
+                {/* Contenu de l'onglet Importer */}
+                {activeTab === 'import' && (
+                     <div>
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-gray-800 mb-2">Import de Fournisseurs</h2>
                     <p className="text-gray-600 text-lg">Importez votre liste de fournisseurs au format CSV</p>
@@ -250,9 +322,16 @@ Mme;Martin;Marie;456 avenue Test;0987654321;marie.martin@example.com`;
                                 </>
                             )}
                         </button>
-                    </div>
-                </div>
+                       
 
+                    </div>
+                    <div className="flex items-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-3 mt-2 rounded">
+  <span className="text-xl mr-2">⚠️</span>
+  <span><strong> Avant importation, merci de bien vérifier que votre fichier ne contient pas de doublons.</strong></span>
+</div>
+
+                </div>
+               
                 <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
                     <div className="flex items-start space-x-4">
                         <div className="bg-gray-100 p-3 rounded-lg">
@@ -264,135 +343,137 @@ Mme;Martin;Marie;456 avenue Test;0987654321;marie.martin@example.com`;
                             <h3 className="text-xl font-bold text-gray-800 mb-4">
                                 Format du fichier CSV
                             </h3>
-                            <div className="space-y-4">
-                                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                                    <h4 className="font-semibold text-gray-700 mb-3">En-têtes requis</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        <span className="px-4 py-2 bg-white rounded-full text-base font-medium text-gray-700 shadow-sm">Civilite</span>
-                                        <span className="px-4 py-2 bg-white rounded-full text-base font-medium text-gray-700 shadow-sm">Nom</span>
-                                        <span className="px-4 py-2 bg-white rounded-full text-base font-medium text-gray-700 shadow-sm">Prenom</span>
-                                        <span className="px-4 py-2 bg-white rounded-full text-base font-medium text-gray-700 shadow-sm">Adresse</span>
-                                        <span className="px-4 py-2 bg-white rounded-full text-base font-medium text-gray-700 shadow-sm">Telephone</span>
-                                        <span className="px-4 py-2 bg-white rounded-full text-base font-medium text-gray-700 shadow-sm">Email</span>
-                                    </div>
-                                </div>
-                                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
-                                    <h4 className="font-semibold text-gray-700 mb-3">Exemple de format</h4>
-                                    <div className="bg-white p-3 rounded-lg font-mono text-sm">
-                                        Civilite;Nom;Prenom;Adresse;Telephone;Email<br/>
-                                        M.;Dupont;Jean;123 rue Example;0123456789;jean.dupont@example.com<br/>
-                                        Mme;Martin;Marie;456 avenue Test;0987654321;marie.martin@example.com
-                                    </div>
-                                </div>
-                                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
-                                    <h4 className="font-semibold text-gray-700 mb-3">Notes importantes</h4>
-                                    <ul className="space-y-2 text-base text-gray-600">
-                                        <li className="flex items-center">
-                                            <span className="mr-2 text-gray-400">•</span>
-                                            Civilite : Utiliser "M." ou "Mme"
-                                        </li>
-                                        <li className="flex items-center">
-                                            <span className="mr-2 text-gray-400">•</span>
-                                            Email : Doit être unique et valide
-                                        </li>
-                                        <li className="flex items-center">
-                                            <span className="mr-2 text-gray-400">•</span>
-                                            Téléphone : Format international recommandé (+XXX)
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <div className="w-full max-w-4xl text-center">
+    <img src="https://www.3findustrie.com/wp-content/uploads/2025/03/imp.png" alt="Logo" className="w-[600px] h-[400px]" />
+</div>
                         </div>
+                       
                     </div>
-                </div>
-
-                {csvData && csvData.length > 0 && (
-                    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
-                        <h3 className="text-xl font-bold text-gray-800 mb-4">
-                            Aperçu des données ({csvData.length} lignes)
-                        </h3>
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        {Object.keys(csvData[0]).map((header, index) => (
-                                            <th
-                                                key={index}
-                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                            >
-                                                {header}
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {csvData.slice(0, 5).map((row, rowIndex) => (
-                                        <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                            {Object.values(row).map((value, cellIndex) => (
-                                                <td
-                                                    key={cellIndex}
-                                                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                                                >
-                                                    {value}
-                                                </td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            {csvData.length > 5 && (
-                                <div className="mt-2 text-sm text-gray-500 text-center">
-                                    ... et {csvData.length - 5} autres lignes
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )}
-
-                {importedFournisseurs.length > 0 && (
-                    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md mt-6 w-full max-w-2xl">
-                        <h3 className="text-xl font-bold text-gray-800 mb-4">
-                            Fournisseurs importés ({importedFournisseurs.length})
-                        </h3>
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mot de passe temporaire</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {importedFournisseurs.map((fournisseur, index) => (
-                                        <tr key={fournisseur.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{fournisseur.nom}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{fournisseur.email}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                <span className="font-mono bg-gray-100 px-2 py-1 rounded">
-                                                    {fournisseur.tempPassword}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                            <p className="text-yellow-800">
-                                <strong>Important :</strong> Veuillez communiquer ces informations de connexion aux fournisseurs. 
-                                Ils devront changer leur mot de passe lors de leur première connexion.
-                            </p>
-                        </div>
-                    </div>
-                )}
-
-                <button
+                    <button
                     onClick={downloadExample}
                     className="mt-2 text-blue-600 hover:text-blue-800 underline"
                 >
                     Télécharger un fichier d'exemple
                 </button>
+                </div> 
+                
+
+                {csvData && csvData.length > 0 && (
+    <div>
+        <div className="overflow-x-auto shadow-md ring-1 ring-gray-300 rounded-lg">
+        <h3 className="text-xl font-bold text-gray-500 mb-4">
+        Aperçu des données  ({csvData.length}lignes)
+                      
+                  </h3>
+            <table className="min-w-full divide-y divide-gray-200 table-auto">
+                <thead className="bg-gray-100 text-xs text-gray-600">
+                    <tr>
+                        {Object.keys(csvData[0]).map((header, index) => (
+                            <th
+                                key={index}
+                                className="px-2 py-2 text-left font-medium tracking-wider text-gray-700 uppercase border-b"
+                            >
+                                {header}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody className="text-xs text-gray-600">
+                    {currentCsvItems.map((row, rowIndex) => (
+                        <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                            {Object.values(row).map((value, cellIndex) => (
+                                <td key={cellIndex} className="px-2 py-2 text-left whitespace-nowrap border-b">
+                                    {value}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {csvData.length > csvItemsPerPage && (
+                <div className="mt-2 text-xs text-gray-500 text-center">
+                    ... et {csvData.length - currentCsvItems.length} autres lignes
+                </div>
+            )}
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="mt-4 flex justify-center space-x-2">
+            <button
+                onClick={handleCsvPrevPage}
+                disabled={currentCsvPage === 1}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+            >
+                Précédent
+            </button>
+
+            <span className="text-sm">
+                Page {currentCsvPage} de {Math.ceil(csvData.length / csvItemsPerPage)}
+            </span>
+
+            <button
+                onClick={handleCsvNextPage}
+                disabled={currentCsvPage === Math.ceil(csvData.length / csvItemsPerPage)}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+            >
+                Suivant
+            </button>
+        </div>
+    </div>
+)}
+
+            </div>
+                )}
+
+{activeTab === 'fournisseurs' && (
+                  <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md mt-6 w-full max-w-2xl">
+                  <h3 className="text-xl font-bold text-gray-500 mb-4">
+                      Fournisseurs importés ({importedFournisseurs.length})
+                  </h3>
+                  <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-300 border-separate border-spacing-0">
+                          <thead className="bg-gray-50">
+                              <tr>
+                                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">Nom</th>
+                                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">Téléphone</th>
+                                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">Email</th>
+                              </tr>
+                          </thead>
+                          <tbody className="bg-white">
+                              {currentItems.map((fournisseur, index) => (
+                                  <tr key={fournisseur.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                      <td className="px-4 py-2 text-sm text-gray-500 border-t border-gray-200">{fournisseur.nom}</td>
+                                      <td className="px-4 py-2 text-sm text-gray-500 border-t border-gray-200">{fournisseur.telephone}</td>
+                                      <td className="px-4 py-2 text-sm text-gray-500 border-t border-gray-200">{fournisseur.email}</td>
+                                  </tr>
+                              ))}
+                          </tbody>
+                      </table>
+                  </div>
+              
+                  {/* Pagination */}
+                  <div className="flex justify-between mt-4">
+                      <button
+                          onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                          disabled={currentPage === 1}
+                          className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors duration-300"
+                      >
+                          Précédent
+                      </button>
+                      <button
+                          onClick={() => setCurrentPage(currentPage < Math.ceil(importedFournisseurs.length / itemsPerPage) ? currentPage + 1 : currentPage)}
+                          disabled={currentPage === Math.ceil(importedFournisseurs.length / itemsPerPage)}
+                          className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors duration-300"
+                      >
+                          Suivant
+                      </button>
+                  </div>
+              </div>
+              
+              
+                 
+                )}
+                
             </div>
         </div>
     );
