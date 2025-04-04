@@ -25,10 +25,18 @@ import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(theme => ({
     card: {
-        minWidth: 675,
-        maxWidth: 675,
-
-    },
+        maxWidth: 900,
+        padding: "20px",
+        height: "auto",
+      },
+      chips: {
+        flex: 1,
+        display: "flex",
+        flexWrap: "wrap",
+      },
+      select: {
+        zIndex: 999,
+      },
     root: {
         background: 'radial-gradient(' + darken(theme.palette.primary.dark, 0.5) + ' 0%, ' + theme.palette.primary.dark + ' 80%)',
         color: theme.palette.primary.contrastText
