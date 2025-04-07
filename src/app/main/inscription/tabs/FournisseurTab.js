@@ -152,7 +152,7 @@ Afin de recevoir le maximum d'alertes, veuillez choisir le maximum de produits p
             : "Une erreur est survenue veuillez réessayer plus tard."}
           <p className="mt-16">
             {parentErreur &&
-              "Si ce compte ne vous appartient pas, merci de nous contacter sur l'adresse mail suivante: adherent@lesachatsindustriels.com"}
+              "Si ce compte ne vous appartient pas, merci de nous contacter sur l'adresse mail suivante: adherent@boopursal.com"}
           </p>
         </DialogContent>
         <Divider />
