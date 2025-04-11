@@ -1,6 +1,5 @@
 import * as Actions from '../actions';
 
-
 const initialState = {
     data: null,
     fournisseurs: [],
@@ -12,8 +11,6 @@ const initialState = {
     attachement: null,
     attachement_deleted: null,
     new: false,
-    searchText: '',
-    searchCategories: [],
     requestSaveFrs: false,
 };
 
@@ -60,12 +57,6 @@ const demandeReducer = function (state = initialState, action) {
                     loadingFrs: false,
                 }
             }
-            case Actions.CLEAR_SEARCH_CATEGORIES:
-                return {
-                    ...state,
-                    searchText: '',
-                    searchCategories: []
-                }
         case Actions.CLEAN_UP_DEMANDE:
             {
                 return {
