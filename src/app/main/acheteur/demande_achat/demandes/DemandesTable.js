@@ -234,6 +234,50 @@ function DemandesTable(props) {
 
                     },
                     {
+                        Header: "Diffuser à l'échelle",
+                        filterable: true,
+                        accessor: "localisation",
+                        Cell: row => {
+                            const localisation = row.original.localisation;
+                    
+                            if (localisation === "Tout le monde") {
+                                return <span>Tous les pays</span>;  // Affiche "Tous les pays" si localisation est "Tout le monde"
+                            }
+                    
+                            if (localisation === "2") {
+                                return <span>Locale</span>;  // Affiche "Locale" si localisation est 2
+                            }
+                    
+                            if (!localisation) {
+                                return <span>Zone Internationale</span>;  // Affiche "Zone Internationale" si localisation est vide
+                            }
+                    
+                            // Si localisation contient des codes pays, afficher les drapeaux
+                            return localisation ? (
+                                <div className="flex items-center">
+                                    {localisation.split(",").map((code, index) => (
+                                        <img
+                                            key={code}
+                                            src={`https://flagcdn.com/w40/${code.toLowerCase()}.png`}
+                                            alt={code}
+                                            className="mr-2 last:mr-0"
+                                            style={{ width: "20px", height: "15px", borderRadius: "2px" }}
+                                        />
+                                    ))}
+                                </div>
+                            ) : "Non spécifié"; // Affiche "Non spécifié" si aucune localisation n'est définie
+                        }
+                    }
+                    
+                    ,
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    {
                         Header: "Budget",
                         filterable: true,
                         accessor: "budget",
