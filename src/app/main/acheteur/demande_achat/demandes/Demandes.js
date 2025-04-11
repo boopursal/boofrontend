@@ -29,7 +29,7 @@ function Demandes()
     return (
         <>
           <Helmet>
-                <title>Demandes Achats | Les Achats Industriels</title>
+                <title>Demandes Achats | Boopursal</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <meta name="googlebot" content="noindex" />
             </Helmet>
