@@ -34,13 +34,6 @@ export const REQUEST_SAVE_FOURNISSEUR =
   "[ DEMANDE ACHETEUR APP] REQUEST_SAVE_FOURNISSEUR";
 export const SAVE_FOURNISSEUR = "[ DEMANDE ACHETEUR APP] SAVE_FOURNISSEUR";
 
-export const CLEAR_SEARCH_CATEGORIES = "[ DEMANDE ACHETEUR APP] CLEAR_SEARCH_CATEGORIES";
-
-export function clearSearchCategories() {
-    return {
-        type: CLEAR_SEARCH_CATEGORIES
-    };
-}
 export function cleanUpDemande() {
   return (dispatch) =>
     dispatch({
@@ -132,25 +125,48 @@ export function saveFournisseurGange(id_fournisseur, id_demande) {
 }
 
 export function saveDemande(data, history, categories, suggestions, vider) {
-  var postData = {
+  // Vérification et transformation des données
+  const categoriesArray = Array.isArray(categories) ? categories.map(value => value["@id"]) : [];
+  const attachementsArray = Array.isArray(data.attachements) ? data.attachements.map(value => value["@id"]) : [];
+  const suggestionsString = suggestions.length > 0 ? suggestions.map(s => s).join(", ") : null;
+  const budgetValue = data.budget ? parseFloat(data.budget) : null;
+  const countriesArray = Array.isArray(data.countries) ? data.countries : [];
+
+  // Création de l'objet postData
+  const postData = {
     ...data,
-    categories: _.map(categories, function (value, key) {
-      return value["@id"];
-    }),
-    attachements: _.map(data.attachements, function (value, key) {
-      return value["@id"];
-    }),
-    autreCategories:
-      suggestions.length > 0 ? _.join(_.map(suggestions), ", ") : null,
-    budget: data.budget && parseFloat(data.budget),
+    categories: categoriesArray,
+    attachements: attachementsArray,
+    autreCategories: suggestionsString,
+    budget: budgetValue,
+    countries: countriesArray, // Assurer que les pays sont bien envoyés
   };
 
+  console.log("📥 Data received:", data);
+  console.log("🔍 Pays sélectionnés :", countriesArray, `(${countriesArray.length} éléments)`);
+
+  // Gestion de la localisation
+  if (data.localisation === 3) {  // Internationale
+    postData.localisation = countriesArray.length > 0
+      ? countriesArray.map(c => (typeof c === "string" ? c : c.code)).join(",")
+      : "Tout le monde";
+  } else if (data.localisation === 4) { // Zone géographique
+    postData.localisation = data.zone || "";
+  } else {
+    postData.localisation = data.localisation ? String(data.localisation) : "";
+  }
+
+  console.log("📤 Localisation envoyée :", postData.localisation);
+  console.log("🧐 data.countries reçu dans saveDemande :", data.countries);
+  console.log("🧐 Data reçu dans saveDemande :", data);
+  console.log("🔍 Pays reçus dans saveDemande :", postData.countries);
+
+  // Requête API
   const request = agent.post("/api/demande_achats", postData);
 
   return (dispatch) => {
-    dispatch({
-      type: REQUEST_SAVE,
-    });
+    dispatch({ type: REQUEST_SAVE });
+
     return request
       .then((response) => {
         dispatch(showMessage({ message: "Demande enregistrée" }));
@@ -159,9 +175,7 @@ export function saveDemande(data, history, categories, suggestions, vider) {
           history.push("/demandes");
         } else {
           dispatch(newDemande());
-          dispatch({
-            type: NEW_DEMANDE,
-          });
+          dispatch({ type: NEW_DEMANDE });
         }
       })
       .catch((error) => {
@@ -172,6 +186,10 @@ export function saveDemande(data, history, categories, suggestions, vider) {
       });
   };
 }
+
+
+
+
 
 export function putDemande(
   data,
