@@ -475,8 +475,9 @@ function Step3App(props) {
                             searchCategories.noSuggestions ||
                             searchCategories.loading
                           }
-                          popperOptions={{ positionFixed: true }}
-                          className="z-9999 mb-8 h-200 overflow-auto"
+                          placement="bottom-start"
+                          popperOptions={{ positionFixed: false }}
+                          className="z-9999"
                         >
                           <div ref={suggestionsNode}>
                             <Paper
