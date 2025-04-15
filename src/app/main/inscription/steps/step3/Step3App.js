@@ -429,7 +429,7 @@ function Step3App(props) {
                         Tapez un mot clé, utilisez des termes génériques (ex:
                         Chariot élévateur).{" "}
                       </li>
-                      <li>Choisissez au moins un produit ou un service de votre activité.</li>
+                      <li>Choisissez au moins un produit de votre activité.</li>
                     </ul>
                     <Autosuggest
                       {...autosuggestProps}
@@ -450,6 +450,11 @@ function Step3App(props) {
                       inputProps={{
                         classes,
                         label: "Produits",
+                        inputRef: (node) => {
+                          if (popperNode) {
+                            popperNode.current = node;
+                          }
+                        },
                         placeholder: "ex: Chariot élévateur",
                         value: searchCategories.searchText,
                         variant: "outlined",
@@ -475,9 +480,9 @@ function Step3App(props) {
                             searchCategories.noSuggestions ||
                             searchCategories.loading
                           }
-                          placement="bottom-start"
-                          popperOptions={{ positionFixed: false }}
-                          className="z-9999"
+                          placement="bottom-start" // 👈 Ajoute ceci
+  popperOptions={{ positionFixed: false }} // 👈 ou retire cette ligne si pas nécessaire
+  className="z-9999"
                         >
                           <div ref={suggestionsNode}>
                             <Paper
