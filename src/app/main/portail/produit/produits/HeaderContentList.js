@@ -30,7 +30,7 @@ function HeaderContentList(props) {
         <div className="flex justify-between">
             <div>
                 {
-                    loading ? '' : <Chip label={totalItems + ' produit(s) trouvé(s)'} color="primary" className={classes.chip} />
+                    loading ? '' : <Chip label={totalItems + ' produit(s) / service(s) trouvé(s)'} color="primary" className={classes.chip} />
                 }
 
             </div>
