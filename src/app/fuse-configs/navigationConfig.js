@@ -652,7 +652,7 @@ const navigationConfig = [
   },
   {
     id: "abonnement",
-    title: "Les Achats Industriels",
+    title: "Boopursal",
     type: "collapse",
     auth: authRoles.fournisseur,
     icon: "cloud",
