@@ -9,6 +9,7 @@ import {
   ListItemAvatar,
   Avatar,
   Button,
+  Chip,
   ListItemSecondaryAction,
   IconButton,
 } from "@material-ui/core";
@@ -34,7 +35,8 @@ import { Helmet } from "react-helmet";
 import Navigation from "../categories/Navigation";
 import Link2 from "@material-ui/core/Link";
 import Categories from "./Categories";
-
+import moment from 'moment';
+import 'moment/locale/fr';
 function SampleNextArrow(props) {
   const { style, onClick } = props;
   return (
@@ -206,7 +208,52 @@ const useStyles = makeStyles((theme) => ({
     height: 250,
     width: 300,
     margin: "auto",
-  }
+  },
+  categoriesWithTopMargin: {
+    marginTop: '21%',
+  },
+  section: {
+    backgroundColor: '#f4f6f8',
+    padding: theme.spacing(2),
+    borderRadius: 12,
+    boxShadow: '0 3px 10px rgba(0,0,0,0.05)',
+  },
+  headerIcon: {
+    backgroundColor: '#1976d2',
+    color: '#fff',
+  },
+  listItem: {
+    borderBottom: '1px solid #e0e0e0',
+    padding: '12px 0',
+  },
+  details: {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '0.9rem',
+    color: '#555',
+    marginTop: 4,
+  },
+  chip: {
+    marginLeft: 8,
+    backgroundColor: '#e3f2fd',
+    color: '#1976d2',
+    fontWeight: 500,
+    fontSize: '0.8rem',
+  },
+  link: {
+    textDecoration: 'none',
+    color: '#1976d2',
+    fontWeight: 500,
+  },
+  listItem: {
+    padding: '16px 0',
+    borderBottom: '1px solid #eee',
+  },
+  details: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: 4,
+  },
 }));
 
 function generate(element) {
@@ -383,67 +430,135 @@ function Index(props) {
       
 
       <Grid container className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
-        <Grid item sm={8} xs={12}>
-          <div className={classes.demo}>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar className={classes.mainAvatar}>
-                  <Icon>featured_play_list</Icon>
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <Typography
-                    variant="h2"
-                    component="h2"
-                    className="text-20 font-bold xs:text-11 mb-1"
-                  >
-                    DERNIÈRES DEMANDES DE DEVIS
-                  </Typography>
-                }
-              />
-            </ListItem>
+      <Grid item sm={8} xs={12}>
+  <div className={classes.section}>
+    <ListItem>
+      <ListItemAvatar>
+        <Avatar className={classes.headerIcon}>
+          <Icon>featured_play_list</Icon>
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={
+          <Typography variant="h5" style={{ fontWeight: 700 }}>
+            DERNIÈRES DEMANDES DE DEVIS
+          </Typography>
+        }
+      />
+    </ListItem>
 
-            <List className="p-0 w-full">
-              {portail.loading ? (
-                generate(
-                  <ContentLoader
-                    speed={2}
-                    width={400}
-                    height={60}
-                    viewBox="0 0 400 100"
-                  >
-                    <rect x="1" y="2" rx="3" ry="3" width="54" height="6" />
-                    <rect x="1" y="20" rx="3" ry="3" width="200" height="6" />
-                    <rect x="1" y="35" rx="9" ry="9" width="79" height="15" />
-                    <rect x="88" y="35" rx="9" ry="9" width="79" height="15" />
-                    <circle cx="373" cy="21" r="11" />
-                    <rect x="1" y="57" rx="0" ry="0" width="390" height="2" />
-                  </ContentLoader>
-                )
-              ) : (
-                <FuseAnimateGroup
-                  enter={{
-                    animation: "transition.slideUpBigIn",
-                  }}
+    <List>
+      {portail.loading ? (
+        <ContentLoader speed={2} width={400} height={60} viewBox="0 0 400 100">
+          <rect x="1" y="2" rx="3" ry="3" width="54" height="6" />
+          <rect x="1" y="20" rx="3" ry="3" width="200" height="6" />
+          <rect x="1" y="35" rx="9" ry="9" width="79" height="15" />
+          <rect x="88" y="35" rx="9" ry="9" width="79" height="15" />
+          <circle cx="373" cy="21" r="11" />
+          <rect x="1" y="57" rx="0" ry="0" width="390" height="2" />
+        </ContentLoader>
+      ) : (
+        <FuseAnimateGroup enter={{ animation: 'transition.slideUpBigIn' }}>
+          {portail.data &&
+            portail.data.map((item, index) => {
+              const countryMapping = {
+                "États-Unis": "us",
+                "Allemagne": "de",
+                "France": "fr",
+                "Maroc": "ma",
+                "Espagne": "es",
+                "Italie": "it",
+                "Royaume-Uni": "gb",
+              };
+              const code = countryMapping[item.pays] || null;
+
+              return (
+                <Link
+                  key={index}
+                  to={`/demandes-achat/${item.id}-${item.slug}`}  // URL dynamique avec la référence de la demande
+                  style={{ textDecoration: 'none' }}  // Enlever la décoration du lien
                 >
-                  {portail.data &&
-                    portail.data.map((item, index) => (
-                      <DemandeAchatsListItem demande={item} key={index} />
-                    ))}
-                </FuseAnimateGroup>
-              )}
-            </List>
+                  <div
+                    style={{
+                      backgroundColor: '#f9f9f9',
+                      borderRadius: 12,
+                      padding: 16,
+                      marginBottom: 20,
+                      boxShadow: '0px 2px 8px rgba(0,0,0,0.05)',
+                    }}
+                  >
+                    <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
+                      RFQ-{item.reference}
+                    </Typography>
 
-            {portail.data && (
-              <div className="px-16 py-16 text-right">
-                <Link2 component={Link} to={`/demandes-achats`}>
-                  Toutes les demandes de devis &rarr;
-                </Link2>
-              </div>
-            )}
-          </div>
-        </Grid>
+                    <Typography variant="subtitle1" style={{ fontWeight: 600, marginBottom: 8 }}>
+                      {item.titre}
+                    </Typography>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                      <Icon fontSize="small" style={{ color: '#616161' }}>description</Icon>
+                      <Typography variant="body2" color="textSecondary">
+                        {item.description.length > 100 ? item.description.slice(0, 100) + '…' : item.description}
+                      </Typography>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                      <Icon fontSize="small" style={{ color: '#616161' }}>access_time</Icon>
+                      <Typography variant="body2" color="textSecondary">
+                        Créée {moment(item.created).fromNow()}
+                      </Typography>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                      <Icon fontSize="small" style={{ color: '#616161' }}>hourglass_empty</Icon>
+                      <Typography variant="body2" color="textSecondary">
+                        Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}
+                      </Typography>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                      <Icon fontSize="small" style={{ color: '#616161' }}>public</Icon>
+                      <Typography variant="body2" color="textSecondary">
+                        {item.ville}, {item.pays}
+                      </Typography>
+                      {code && (
+                        <Avatar
+                          src={`https://flagcdn.com/w40/${code}.png`}
+                          alt={item.pays}
+                          style={{ width: 20, height: 20, borderRadius: '50%' }}
+                        />
+                      )}
+                    </div>
+                    {/* Bouton "Voir plus" */}
+<div style={{ textAlign: 'right', marginTop: 16 }}>
+  <Button
+    size="small"
+    color="primary"
+    endIcon={<Icon fontSize="small">arrow_forward</Icon>}
+    style={{ fontWeight: 600, textTransform: 'none' }}
+  >
+    Voir plus
+  </Button>
+</div>
+
+                  </div>
+                </Link>
+                
+              );
+            })}
+        </FuseAnimateGroup>
+      )}
+    </List>
+
+    {portail.data && (
+      <div style={{ textAlign: 'right', marginTop: 16 }}>
+        <Link className={classes.link} to="/demandes-achats">
+          Toutes les demandes de devis &rarr;
+        </Link>
+      </div>
+    )}
+  </div>
+</Grid>
         <Grid item sm={4} xs={12} className="flex flex-col justify-between  ">
           <div
             className={clsx(
