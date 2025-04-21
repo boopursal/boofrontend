@@ -736,7 +736,7 @@ function Index(props) {
           </Grid>
         </Grid>
 
-        <Icon className={classes.headerIcon}>school</Icon>
+        
       </div>
 
       {/** 
