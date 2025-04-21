@@ -487,14 +487,10 @@ function Index(props) {
                       boxShadow: '0px 2px 8px rgba(0,0,0,0.05)',
                     }}
                   >
-                    <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
-                      RFQ-{item.reference}
+                     <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
+                      [ RFQ-{item.reference} ] {item.titre}
                     </Typography>
-
-                    <Typography variant="subtitle1" style={{ fontWeight: 600, marginBottom: 8 }}>
-                      {item.titre}
-                    </Typography>
-
+                    
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
                       <Icon fontSize="small" style={{ color: '#616161' }}>description</Icon>
                       <Typography variant="body2" color="textSecondary">
@@ -736,7 +732,7 @@ function Index(props) {
           </Grid>
         </Grid>
 
-        
+        <Icon className={classes.headerIcon}>school</Icon>
       </div>
 
       {/** 
@@ -874,7 +870,7 @@ function Index(props) {
           </Grid>
         </Grid>
 
-        <Icon className={classes.headerIcon}>school</Icon>
+       
       </div>
     </div>
   );
