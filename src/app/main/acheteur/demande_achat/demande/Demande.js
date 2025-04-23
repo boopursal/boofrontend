@@ -1616,8 +1616,8 @@ const Demande = () => {
     label="Locale"
   />
 
-  {/* Option Internationale */}
-  <FormControlLabel
+   {/* Option Internationale */}
+   <FormControlLabel
     value="3"
     disabled={form.statut === 1}
     checked={form.localisation === 3}  // Si la localisation est un tableau et inclut 3, cochez l'option Internationale
@@ -1626,22 +1626,28 @@ const Demande = () => {
     label={
       <span>
         Internationale
-        {Array.isArray(form.localisation) && form.localisation.length > 0 && (
-          <>
-            {" ("}
-            {form.localisation.map((countryCode, index) => (
-              <span key={countryCode || index} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <img
-                  src={`https://flagcdn.com/w40/${typeof countryCode === 'string' ? countryCode.toLowerCase() : countryCode}.png`}
-                  alt={countryCode}
-                  style={{ width: "20px", height: "15px", borderRadius: "2px" }}
-                />
-                {countryCode}
-              </span>
-            ))}
-            {")"}
-          </>
-        )}
+        {Array.isArray(form.localisation) &&
+  form.localisation.some(code => typeof code === "string") && (
+    <>
+      {" ("}
+      {form.localisation
+        .filter(code => typeof code === "string")
+        .map((countryCode, index) => (
+          <span
+            key={countryCode || index}
+            style={{ display: "flex", alignItems: "center", gap: "8px" }}
+          >
+            <img
+              src={`https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`}
+              alt={countryCode}
+              style={{ width: "20px", height: "15px", borderRadius: "2px" }}
+            />
+            {countryCode}
+          </span>
+        ))}
+      {")"}
+    </>
+)}
       </span>
     }
   />
