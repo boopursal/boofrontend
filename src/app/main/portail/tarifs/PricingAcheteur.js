@@ -1,21 +1,31 @@
 import React from "react";
 import {
-  Typography,
   Grid,
-  ListItem,
   List,
+  ListItem,
   ListItemText,
+  Tabs,
+  Tab,
   Divider,
-  Tooltip,
-  Icon,
+  Typography,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { FuseAnimate, LOCAL_CURRENCY } from "@fuse";
 import clsx from "clsx";
-import { green, red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
-  header: {
+  root: {
+    width: "100%",
+    //backgroundColor: theme.palette.background.paper,
+    border: "2px solid #f48d35",
+    borderRadius: 20,
+    marginTop: "-94px",
+    [theme.breakpoints.down("sm")]: {
+      marginTop: 0, // 👈 Annulé sur mobile
+    },
+  },
+  header1: {
     height: 300,
     background:
       "linear-gradient(to right, " +
@@ -25,28 +35,194 @@ const useStyles = makeStyles((theme) => ({
       " 100%)",
     color: "white",
   },
-  badge: {
-    backgroundColor: theme.palette.error.main,
-    color: theme.palette.getContrastText(theme.palette.error.main),
+  tabPanel: {
+    padding: theme.spacing(2),
   },
-  price: {
-    backgroundColor: theme.palette.primary[600],
-    //color: theme.palette.getContrastText(theme.palette.primary[600])
+  header: {
+    padding: theme.spacing(2),
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: "1.1rem",
+    letterSpacing: "0.5px",
   },
-  root: {
-    width: "100%",
-    backgroundColor: theme.palette.background.paper,
-    border: "1px solid #ddd",
+  featureItem: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
-}));
+  featureLabel: {
+    fontWeight: "500",
+    color: theme.palette.text.secondary,
+  },
+  featureValue: {
+    fontWeight: "bold",
+    color: theme.palette.text.primary,
+  },
+  freeHeader: {
+    background:
+                        "linear-gradient(to top left, #feb2b2 10%, #feb2b2 30%, #e53e3e 60%, #e53e3e 60%)",
+                      borderRadius: "20px 20px 0 0",
+                      border: "1px solid #f56565",
+  },
+  classicHeader: {
+    background:
+                        "linear-gradient(to top left, #9ae6b4 10%, #9ae6b4 30%, #38a169 60%, #38a169 60%)",
+                      borderRadius: "20px 20px 0 0",
+                      border: "1px solid #38a169",
+  },
+  businessHeader: {
+    background:
+                        "linear-gradient(to top left, #90cdf4 10%, #90cdf4 30%, #3182ce 60%, #3182ce 60%)",
+                      borderRadius: "20px 20px 0 0",
+                      border: "1px solid #3182ce",
+  },
+  goldHeader: {
+    background:
+    "linear-gradient(to top left, #faf089 10%, #faf089 30%, #d69e2e 60%, #d69e2e 60%)",
+  borderRadius: "20px 20px 0 0",
+  border: "1px solid #d69e2e",
+  },
+  
+    pageWrapper: {
+      paddingLeft: theme.spacing(32), // 32px
+      paddingRight: theme.spacing(32),
+     
+    },
+ 
+    
+  }));
+  
 
-function PricingAcheteur(props) {
-  const classes = useStyles();
-  const { currency } = props;
+const plans = [
+    {
+      name: "FREE",
+      price: "€00.00",
+      headerClass: "freeHeader",
+      features: [
+        { label: "Publication des demandes de devis ( RFQ )", value: "illimité" },
+        { label: "Réception des devis", value: "illimité" },
+        { label: "Voir les profils des Fournisseurs", value: "✔" },
+        { label: "Voir les catalogues des Fournisseurs", value: "✔" },
+        { label: "Voir le nombre de Fournisseurs Intéressés *", value: "✔" },
+        { label: "Compte anonyme **", value: "✔" },
+        { label: "Voir le nombre de diffusions de la ( RFQ )", value: "✗" },
+        { label: "Sous-compte Acheteur ***", value: "✗" },
+        { label: "Blackliste", value: "✗" },
+        { label: "Critère sélection fournisseur", value: "✗" },
+        { label: "Critère sélection produit", value: "✗" },
+          ],
+    },
+    {
+      name: "ACHETEUR PRO",
+      price: "€38.00",
+      headerClass: "classicHeader",
+      features: [
+        { label: "Publication des demandes de devis ( RFQ )", value: "illimité" },
+        { label: "Réception des devis", value: "illimité" },
+        { label: "Voir les profils des Fournisseurs", value: "✔" },
+        { label: "Voir les catalogues des Fournisseurs", value: "✔" },
+        { label: "Voir le nombre de Fournisseurs Intéressés *", value: "✔" },
+        { label: "Compte anonyme **", value: "✔" },
+        { label: "Voir le nombre de diffusions de la ( RFQ )", value: "✔" },
+        { label: "Sous-compte Acheteur ***", value: "✔" },
+        { label: "Blackliste", value: "✔" },
+        { label: "Critère sélection fournisseur", value: "✗" },
+        { label: "Critère sélection produit", value: "✗" },
+      ],
+    },
+     {
+      name: "ACHETEUR PRO PLUS",
+      price: "€50.00",
+      headerClass: "goldHeader",
+      features: [
+        { label: "Publication des demandes de devis ( RFQ )", value: "illimité" },
+        { label: "Réception des devis", value: "illimité" },
+        { label: "Voir les profils des Fournisseurs", value: "✔" },
+        { label: "Voir les catalogues des Fournisseurs", value: "✔" },
+        { label: "Voir le nombre de Fournisseurs Intéressés *", value: "✔" },
+        { label: "Compte anonyme **", value: "✔" },
+        { label: "Voir le nombre de diffusions de la ( RFQ )", value: "✔" },
+        { label: "Sous-compte Acheteur ***", value: "✔" },
+        { label: "Blackliste", value: "✔" },
+        { label: "Critère sélection fournisseur", value: "✔" },
+        { label: "Critère sélection produit", value: "✔" },
+      ],
+    },
+  ];
+  
 
-  return (
-    <div>
-      <div className={clsx(classes.header, "flex")}>
+const PricingAcheteur = (props) => {
+    const classes = useStyles();
+    const { currency } = props;
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const [selectedTab, setSelectedTab] = React.useState(0);
+  
+    const handleTabChange = (event, newValue) => {
+      setSelectedTab(newValue);
+    };
+  
+    const renderPlanDetails = (plan) => (
+ 
+        
+      <div className={classes.root}>
+       
+
+       <div className={`${classes.header} ${classes[plan.headerClass]}`}>
+    <div className="text-black uppercase font-extrabold pt-16 text-[24px]">
+      {plan.name}
+    </div>
+    
+
+    
+  
+
+    
+    <div className="flex justify-center mt-12 text-black">
+      <span className="uppercase text-[10px] sm:text-[12px] md:text-[14px] lg:text-[15px]">
+        {currency === 0 ? LOCAL_CURRENCY : "€"}
+      </span>
+      <span className="uppercase font-extrabold text-[32px] ml-1">
+        {currency === 0
+          ? Math.round(parseFloat(plan.price.replace("€", "")) * 10)
+          : plan.price.replace("€", "").split(".")[0]}
+        <span className="text-[10px]">
+          ,{currency === 0 ? "00" : plan.price.split(".")[1] || "00"} / mois
+          {currency === 0 && " HT"}
+        </span>
+      </span>
+    </div>
+  
+  
+  </div>
+        <List disablePadding>
+          {plan.features.map((item, index) => (
+            <ListItem key={index} className={classes.featureItem}>
+              <Grid container>
+                <Grid item xs={6}>
+                  <ListItemText
+                    primary={item.label}
+                    className={classes.featureLabel}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <ListItemText
+                    primary={item.value}
+                    className={classes.featureValue}
+                  />
+                </Grid>
+              </Grid>
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    );
+  
+    if (isMobile) {
+        
+      return (
+        <>
+        <div className={clsx(classes.header1, "flex")}>
         <div className="p-24 w-full max-w-2xl mx-auto">
           <div className="text-center my-40 mx-24">
             <FuseAnimate
@@ -65,760 +241,20 @@ function PricingAcheteur(props) {
           </div>
         </div>
       </div>
-
-      <div className="-mt-160 mb-24">
-        <div className="w-full max-w-2xl mx-auto">
-          <FuseAnimate duration={400} delay={800}>
-            <Grid container>
-              <Grid item xs={6} sm={6} md={4} container>
-                <Grid item xs={12} className="h-160"></Grid>
-                <Grid item xs={12}>
-                  <List className={classes.root}>
-                    <ListItem classes={{ root: "h-60 sm:h-56 " }}>
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Publication des demandes de devis ( RFQ )"
-                      />
-                      <Tooltip
-                            placement="top"
-                            title="La publication des demandes de devis (RFQ: Request for Quotation) consiste à solliciter des propositions de fournisseurs pour des biens ou services spécifiques afin de comparer les offres et choisir le meilleur fournisseur."
-                            aria-label="anonyme"
-                          >
-                            <Icon className="ml-4 text-20">help_outline   </Icon>
-                          </Tooltip>
-                    </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Réception des devis"
-                      />
-                    </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Voir les profils des Fournisseurs"
-                      />
-                    </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56" }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Voir les catalogues des Fournisseurs"
-                      />
-                    </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Voir le nombre de Fournisseurs Intéressés * "
-                      />
-                         <Tooltip
-                            placement="top"
-                            title="* Les Fournisseurs qui ont acheté votre Profil pour vous contacter."
-                            aria-label="anonyme"
-                          >
-                            <Icon className="ml-4 text-20">help_outline   </Icon>
-                          </Tooltip>
-                    </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Compte anonyme **"
-                      />
-                       <Tooltip
-                            placement="top"
-                            title="** Le compte anonyme vous libère de gérer vos achats et les fournisseurs ne sauront pas votre identité. Un pourcentage payant sera défini en commun accord pour chaque RFQ."
-                            aria-label="anonyme"
-                          >
-                            <Icon className="ml-4 text-20">help_outline   </Icon>
-                          </Tooltip>
-                    </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Voir le nombre de diffusions de la ( RFQ )"
-                      />
-                      <Tooltip
-                            placement="top"
-                            title="Voir le nombre de diffusions de la RFQ consiste à analyser combien de fois une demande de devis a été partagée ou envoyée à des fournisseurs potentiels."
-                            aria-label="anonyme"
-                          >
-                            <Icon className="ml-4 text-20">help_outline   </Icon>
-                          </Tooltip>
-                    </ListItem>
-
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Sous-compte Acheteur ***"
-                      />
-                      <Tooltip
-                            placement="top"
-                            title="*** Le Sous Compte acheteur vous permet d'inviter vos collègues ou collaborateurs afin d'optimiser l'efficacité et d'organiser le service d'achat par famille ou par produit."
-                            aria-label="anonyme"
-                          >
-                            <Icon className="ml-4 text-20">help_outline   </Icon>
-                          </Tooltip>
-                    </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Blackliste"
-                      />
-                      <Tooltip
-                            placement="top"
-                            title="Blacklisté vous permez de blacklisté les fournisseurs indisirables "
-                            aria-label="anonyme"
-                          >
-                            <Icon className="ml-4 text-20">help_outline   </Icon>
-                      </Tooltip>
-                    </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Critère sélection fournisseur"
-                      />
-                      <Tooltip
-                            placement="top"
-                            title="Lors de sa demande d'achat, l'acheteur peut établir des critères de sélection des fournisseurs pour chaque société, tels que le capital, le chiffre d'affaires ou la proximité géographique..."
-                            aria-label="anonyme"
-                          >
-                            <Icon className="ml-4 text-20">help_outline   </Icon>
-                          </Tooltip>
-                    </ListItem>
-                    <Divider component="li" />
-                    <ListItem
-                      classes={{ root: "h-60 sm:h-56 " }}
-                      alignItems="flex-start"
-                    >
-                      <ListItemText
-                        classes={{
-                          primary:
-                            "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                        }}
-                        primary="Critère sélection produit"
-                      />
-                      <Tooltip
-                            placement="top"
-                            title="Lors de sa demande d'achat, l'acheteur peut définir des critères de sélection des fournisseurs basés sur le fabricant, le distributeur, la marque, la certification et le prix pour chaque produit."
-                            aria-label="anonyme"
-                          >
-                            <Icon className="ml-4 text-20">help_outline   </Icon>
-                          </Tooltip>
-                    </ListItem>
-                  </List>
-                </Grid>
-              </Grid>
-              <Grid item xs={6} sm={6} md={8} container spacing={1}>
-                {
-                  // FREE
-                }
-                <Grid item xs={12} sm={6} md={4} container>
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      background:
-                        "linear-gradient(to top left, #feb2b2 10%, #feb2b2 30%, #e53e3e 60%, #e53e3e 60%)",
-                      borderRadius: "20px 20px 0 0",
-                      border: "1px solid #f56565",
-                    }}
-                    className="text-center h-160 "
-                  >
-                    <div className="text-black uppercase font-extrabold pt-16 text-24">
-                      FREE
-                    </div>
-                    <div className="flex justify-center mt-12 text-black">
-                      <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                        {currency === 0 ? LOCAL_CURRENCY : "€"}
-                      </span>
-                      <span className=" uppercase font-extrabold text-32">
-                        00<span className="text-10">,00</span>
-                      </span>
-                    </div>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <List className={classes.root}>
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          justify="center"
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary="illimité"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary="illimité"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                          
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                         
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                          
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                         
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                          
-                        />
-                      </ListItem>
-                    </List>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} container>
-                <Grid
-                    item
-                    xs={12}
-                    style={{
-                      background:
-                        "linear-gradient(to top left, #90cdf4 10%, #90cdf4 30%, #3182ce 60%, #3182ce 60%)",
-                      borderRadius: "20px 20px 0 0",
-                      border: "1px solid #3182ce",
-                    }}
-                    className="text-center h-160 "
-                  >
-                    <div className="text-black uppercase font-extrabold pt-16 text-24">
-                      ACHETEUR PRO
-                    </div>
-                    <div className="flex justify-center mt-12 text-black">
-                      <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                        {currency === 0 ? LOCAL_CURRENCY : "€"}
-                      </span>
-                      <span className=" uppercase font-extrabold text-32">
-                        {currency === 0 ? "375" : "38"}
-                        <span className="text-10">
-                          ,00 / mois
-                          {currency === 0 && " HT"}
-                        </span>
-                      </span>
-                    </div>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <List className={classes.root}>
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          justify="center"
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary="illimité"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary="illimité"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                          
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                         
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                          
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                         
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: red[500] }}>close</Icon>
-                          }
-                          
-                        />
-                      </ListItem>
-                    </List>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} container>
-                  {/* GOLD */}
-                <Grid
-                    item
-                    xs={12}
-                    style={{
-                      background:
-                        "linear-gradient(to top left, #faf089 10%, #faf089 30%, #d69e2e 60%, #d69e2e 60%)",
-                      borderRadius: "20px 20px 0 0",
-                      border: "1px solid #d69e2e",
-                    }}
-                    className="text-center h-160 "
-                  >
-                    <div className="text-black uppercase font-extrabold pt-16 text-24">
-                      ACHETEUR PRO PLUS
-                    </div>
-                    <div className="flex justify-center mt-12 text-black">
-                      <span className=" uppercase text-10 sm:text-12 md:text-14 lg:text-15">
-                        {currency === 0 ? LOCAL_CURRENCY : "€"}
-                      </span>
-                      <span className=" uppercase font-extrabold text-32">
-                        {currency === 0 ? "500" : "50"}
-                        <span className="text-10">
-                          ,00 / mois
-                          {currency === 0 && " HT"}
-                        </span>
-                      </span>
-                    </div>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <List className={classes.root}>
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          justify="center"
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary="illimité"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary="illimité"
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15 ",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                          
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                         
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                          
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                         
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                      <ListItem classes={{ root: "h-60 sm:h-56 text-center" }}>
-                        <ListItemText
-                          classes={{
-                            primary:
-                              "font-bold text-10 sm:text-12 md:text-14 lg:text-15",
-                          }}
-                          primary={
-                            <Icon style={{ color: green[500] }}>
-                              check_circle
-                            </Icon>
-                          }
-                          
-                        />
-                      </ListItem>
-                    </List>
-                  </Grid>
-                </Grid>
-                {
-                  // FIN FREE
-                }
-              </Grid>
-              
-            </Grid>
-          </FuseAnimate>
+          <Tabs
+            value={selectedTab}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            indicatorColor="primary"
+            textColor="primary"
+          >
+            {plans.map((plan, index) => (
+              <Tab label={plan.name} key={index} />
+            ))}
+          </Tabs>
+          <Divider />
+          <div className={classes.tabPanel}>{renderPlanDetails(plans[selectedTab])}</div>
           <div className="flex flex-col mt-8">
             <Typography variant="caption">
               * Les Fournisseurs qui ont acheté votre Profil pour vous
@@ -834,10 +270,60 @@ function PricingAcheteur(props) {
               collaborateurs pour plus d'efficacité.
             </Typography>
           </div>
+        </>
+      );
+    }
+  
+    return (
+        
+      <div>
+         <div className={clsx(classes.header1, "flex")}>
+        <div className="p-24 w-full max-w-2xl mx-auto">
+          <div className="text-center my-40 mx-24">
+            <FuseAnimate
+              animation="transition.slideUpIn"
+              duration={400}
+              delay={100}
+            >
+              <Typography
+                variant="h1"
+                color="inherit"
+                className="font-bold uppercase text-24 sm:text-32 md:text-44 "
+              >
+                Tarif Acheteur
+              </Typography>
+            </FuseAnimate>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+       <div className={classes.pageWrapper}>
+    <Grid container spacing={2}>
+      {plans.map((plan, index) => (
+        <Grid item xs={12} sm={6} md={4} key={index}>
+          {renderPlanDetails(plan)}
+        </Grid>
+      ))}
+    </Grid>
+    <div className="flex flex-col mt-8">
+            <Typography variant="caption">
+              * Les Fournisseurs qui ont acheté votre Profil pour vous
+              contacter.
+            </Typography>
+            <Typography variant="caption">
+              ** Le compte anonyme vous libère de gérer vos achats et les
+              fournisseurs ne sauront pas votre identité. Un pourcentage payant
+              sera défini en commun accord pour chaque RFQ.
+            </Typography>
+            <Typography variant="caption">
+              *** Sous Compte acheteur vous permet d'ajouter vos collègues ou
+              collaborateurs pour plus d'efficacité.
+            </Typography>
+          </div>
+  </div>
+  </div>
+    );
+    
+  };
+  
 
 export default PricingAcheteur;
