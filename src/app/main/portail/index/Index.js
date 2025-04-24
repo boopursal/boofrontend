@@ -429,8 +429,43 @@ function Index(props) {
       </div>
       
 
-      <Grid container className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
-      <Grid item sm={8} xs={12}>
+      <Grid container style={{ maxWidth: '1690px', margin: '0 auto', width: '100%' }}className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
+      <Grid item sm={3} xs={12} className="flex flex-col justify-between  ">
+    
+          <div
+            className={clsx(
+              classes.bannerMeduim,
+              "flex flex-wrap content-center"
+            )}
+          >
+            <div className="text-center font-bold">
+            <a
+                href="https://www.combilift.ma/"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <img
+                  className=""
+                  src="assets/images/banners/Web-Banner-Material-handling-450-x-90.gif"
+                  alt="3fi banner 2"
+                />
+              </a>
+             
+              <a
+                href="https://www.combilift.ma/"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <img
+                  className=""
+                  src="assets/images/banners/Steel-Australia-900X300-PX.gif"
+                  alt="3fi banner 2"
+                />
+              </a>
+            </div>
+          </div>
+        </Grid>
+      <Grid item sm={6} xs={12}>
   <div className={classes.section}>
     <ListItem>
       <ListItemAvatar>
@@ -487,10 +522,10 @@ function Index(props) {
                       boxShadow: '0px 2px 8px rgba(0,0,0,0.05)',
                     }}
                   >
-                     <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
+                    <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
                       [ RFQ-{item.reference} ] {item.titre}
                     </Typography>
-                    
+
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
                       <Icon fontSize="small" style={{ color: '#616161' }}>description</Icon>
                       <Typography variant="body2" color="textSecondary">
@@ -555,7 +590,9 @@ function Index(props) {
     )}
   </div>
 </Grid>
-        <Grid item sm={4} xs={12} className="flex flex-col justify-between  ">
+
+
+        <Grid item sm={3} xs={12} className="flex flex-col justify-between  ">
           <div
             className={clsx(
               classes.bannerMeduim,
@@ -575,13 +612,6 @@ function Index(props) {
                 />
               </a>
             </div>
-          </div>
-          <div
-            className={clsx(
-              classes.bannerMeduim,
-              "flex flex-wrap content-center"
-            )}
-          >
             <div className="text-center font-bold">
               <a
                 href="https://www.3findustrie.com/"
@@ -596,9 +626,9 @@ function Index(props) {
               </a>
             </div>
           </div>
+          
         </Grid>
       </Grid>
-
       {/** 
              ===================FOCUS PORDUCTS=================
             **/}
