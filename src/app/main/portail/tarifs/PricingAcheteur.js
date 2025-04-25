@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: "1.1rem",
+    fontSize: "2.0rem",
     letterSpacing: "0.5px",
   },
   featureItem: {
