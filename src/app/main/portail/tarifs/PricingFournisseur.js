@@ -7,21 +7,35 @@ import {
   Tabs,
   Tab,
   Divider,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { FuseAnimate, LOCAL_CURRENCY } from "@fuse";
+import clsx from "clsx";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     //backgroundColor: theme.palette.background.paper,
-    border: "2px solid #f48d35",
+    //border: "2px solid #ccc",
     borderRadius: 8,
     marginTop: "-94px",
     [theme.breakpoints.down("sm")]: {
       marginTop: 0, // 👈 Annulé sur mobile
     },
+  },
+  header1: {
+    height: 300,
+    background:
+      "linear-gradient(to right, " +
+      theme.palette.secondary.dark +
+      " 0%, " +
+      theme.palette.secondary.main +
+      " 100%)",
+    color: "white",
   },
   tabPanel: {
     padding: theme.spacing(2),
@@ -212,26 +226,49 @@ const PricingFournisseur = (props) => {
 
 
 </div>
-      <List disablePadding>
-        {plan.features.map((item, index) => (
-          <ListItem key={index} className={classes.featureItem}>
-            <Grid container>
-              <Grid item xs={6}>
-                <ListItemText
-                  primary={item.label}
-                  className={classes.featureLabel}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <ListItemText
-                  primary={item.value}
-                  className={classes.featureValue}
-                />
-              </Grid>
-            </Grid>
-          </ListItem>
-        ))}
-      </List>
+<Grid container spacing={0} style={{ border: '1px solid #ccc' }}>
+  {plan.features.map((item, index) => (
+    <React.Fragment key={index}>
+      <Grid
+        item
+        xs={6}
+        style={{
+          borderBottom: '1px solid #ccc',
+          borderRight: '1px solid #ccc',
+          padding: '8px',
+          fontWeight: 'bold',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        {item.label}
+      </Grid>
+      <Grid
+        item
+        xs={6}
+        style={{
+          borderBottom: '1px solid #ccc',
+          padding: '8px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color:
+            item.value === '✔'
+              ? 'green'
+              : item.value === '✗'
+              ? 'red'
+              : 'inherit',
+        }}
+      >
+        {item.value === '✔' ? '✅' : item.value === '✗' ? '❌' : item.value}
+      </Grid>
+    </React.Fragment>
+  ))}
+</Grid>
+
+
+
+
     </div>
   );
 
@@ -265,7 +302,10 @@ const PricingFournisseur = (props) => {
       </Grid>
     ))}
   </Grid>
+  
+     
 </div>
+
   );
 };
 
