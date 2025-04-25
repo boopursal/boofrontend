@@ -211,7 +211,7 @@ const PricingFournisseur = (props) => {
   
   <div className="flex justify-center mt-12 text-black">
     <span className="uppercase text-[10px] sm:text-[12px] md:text-[14px] lg:text-[15px]">
-      {currency === 0 ? LOCAL_CURRENCY : "€"}
+    {currency === 0 ? LOCAL_CURRENCY : currency === 1 ? "€" : "$"}
     </span>
     <span className="uppercase font-extrabold text-[32px] ml-1">
       {currency === 0
