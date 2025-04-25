@@ -48,24 +48,24 @@ function TarifDetail(props) {
   ];
 
   useEffect(() => {
-    // Utiliser l'IP dynamique de l'utilisateur
     fetch("https://ipapi.co/json/")
-      .then(response => response.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         const country = data.country_code;
-
+  
         if (country === "MA") {
-          setLocalCurrency("MAD");  // Maroc
+          setLocalCurrency("MAD");
         } else if (euroCountries.includes(country)) {
-          setLocalCurrency("€");   // Pays de la zone euro
+          setLocalCurrency("€");
         } else {
-          setLocalCurrency("$");   // Autres pays (USA par exemple)
+          setLocalCurrency("$");
         }
       })
       .catch(() => {
-        setLocalCurrency("€");   // En cas d'erreur, on définit l'euro par défaut
+        setLocalCurrency("€");
       });
   }, []);
+  
 
   function handleChangeCurrency(value) {
     setCurrency(value);
