@@ -84,8 +84,8 @@ const useStyles = makeStyles((theme) => ({
   },
   
     pageWrapper: {
-      paddingLeft: theme.spacing(32), // 32px
-      paddingRight: theme.spacing(32),
+      paddingLeft: theme.spacing(40), // 32px
+      paddingRight: theme.spacing(40),
      
     },
  
