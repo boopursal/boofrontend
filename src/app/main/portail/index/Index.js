@@ -440,7 +440,7 @@ function Index(props) {
           >
             <div className="text-center font-bold">
             <a
-                href="https://www.combilift.ma/"
+                href="http://www.combilift.ma/"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -452,7 +452,7 @@ function Index(props) {
               </a>
              
               <a
-                href="https://www.combilift.ma/"
+                href="http://www.combilift.ma/"
                 rel="noopener noreferrer"
                 target="_blank"
               >

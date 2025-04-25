@@ -11,7 +11,7 @@ import clsx from 'clsx';
 import ContentLoader from 'react-content-loader'
 import { Helmet } from "react-helmet";
 import { FuseUtils } from '@fuse';
-
+import { Link } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
@@ -163,13 +163,17 @@ function Secteurs(props) {
                                     :
                                     (
 
+                                        
                                         filteredData && filteredData.map((item, index) => (
                                             <Grid item sm={4} xs={12} key={index}>
-
+                                              <Link
+                                                to={`/annuaire-entreprises/${item.id}-${item.slug}`}
+                                                style={{ textDecoration: 'none' }}
+                                              >
                                                 <CardSecteur {...props} secteur={item} />
+                                              </Link>
                                             </Grid>
-
-                                        ))
+                                          ))
                                     )
                             }
 
