@@ -18,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     //backgroundColor: theme.palette.background.paper,
-    border: "2px solid #f48d35",
+    //border: "2px solid #f48d35",
     borderRadius: 20,
-    marginTop: "-94px",
+    marginTop: "-110px",
     [theme.breakpoints.down("sm")]: {
       marginTop: 0, // 👈 Annulé sur mobile
     },
@@ -195,26 +195,46 @@ const PricingAcheteur = (props) => {
   
   
   </div>
-        <List disablePadding>
-          {plan.features.map((item, index) => (
-            <ListItem key={index} className={classes.featureItem}>
-              <Grid container>
-                <Grid item xs={6}>
-                  <ListItemText
-                    primary={item.label}
-                    className={classes.featureLabel}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <ListItemText
-                    primary={item.value}
-                    className={classes.featureValue}
-                  />
-                </Grid>
-              </Grid>
-            </ListItem>
-          ))}
-        </List>
+  <Grid container spacing={0} style={{ border: '1px solid #ccc' }}>
+  {plan.features.map((item, index) => (
+    <React.Fragment key={index}>
+      <Grid
+        item
+        xs={6}
+        style={{
+          borderBottom: '1px solid #ccc',
+          borderRight: '1px solid #ccc',
+          padding: '8px',
+          fontWeight: 'bold',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        {item.label}
+      </Grid>
+      <Grid
+        item
+        xs={6}
+        style={{
+          borderBottom: '1px solid #ccc',
+          padding: '8px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color:
+            item.value === '✔'
+              ? 'green'
+              : item.value === '✗'
+              ? 'red'
+              : 'inherit',
+        }}
+      >
+        {item.value === '✔' ? '✅' : item.value === '✗' ? '❌' : item.value}
+      </Grid>
+    </React.Fragment>
+  ))}
+</Grid>
+
       </div>
     );
   
