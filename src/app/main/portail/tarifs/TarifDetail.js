@@ -55,17 +55,20 @@ function TarifDetail(props) {
   
         if (country === "MA") {
           setLocalCurrency("MAD");
+          setCurrency(0); // 0 = MAD
         } else if (euroCountries.includes(country)) {
           setLocalCurrency("€");
+          setCurrency(1); // 1 = €
         } else {
           setLocalCurrency("$");
+          setCurrency(2); // 2 = $
         }
       })
       .catch(() => {
-        setLocalCurrency("€");
+        setLocalCurrency("$"); // Erreur => Par défaut $
+        setCurrency(2); // 2 = $
       });
   }, []);
-  
 
   function handleChangeCurrency(value) {
     setCurrency(value);
