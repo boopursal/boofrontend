@@ -532,32 +532,28 @@ function Step4App(props) {
                                             {
                                                 showIce ?
                                                     <TextFieldFormsy
-                                                        className="mb-16  w-full"
-                                                        type="text"
-                                                        name="ice"
-                                                        value={form.ice}
-                                                        onChange={handleChange}
-                                                        label="ICE"
-                                                        autoComplete="ice"
-
-                                                        validations={{
-                                                            minLength: 15,
-                                                            maxLength: 15,
-                                                            isNumeric: "isNumeric",
-                                                            matchRegexp: /^(?!.*?(\w)\1{14}).*$/,
-
-                                                        }}
-                                                        validationErrors={{
-                                                            minLength: 'La longueur minimale de caractère est 15',
-                                                            maxLength: 'La longueur maximale de caractère est 15',
-                                                            isNumeric: 'Cette valeur doit être numérique. ',
-                                                            matchRegexp: 'ICE non valid. ',
-
-                                                        }}
-
-                                                        variant="outlined"
-                                                        required
-                                                    />
+                                                className="mb-16 w-full"
+                                                type="text"
+                                                name="ice"
+                                                value={form.ice}
+                                                onChange={handleChange}
+                                                label="ICE"
+                                                autoComplete="ice"
+                                                validations={{
+                                                  minLength: 15,
+                                                  maxLength: 15,
+                                                  isNumeric: true,  // Utiliser `true` pour valider les chiffres
+                                                  matchRegexp: /^[0-9]+$/,  // Valide uniquement les chiffres
+                                                }}
+                                                validationErrors={{
+                                                  minLength: 'La longueur minimale de caractère est 15',
+                                                  maxLength: 'La longueur maximale de caractère est 15',
+                                                  isNumeric: 'Cette valeur doit être numérique.',
+                                                  matchRegexp: 'Le code ICE doit contenir uniquement des chiffres.',
+                                                }}
+                                                variant="outlined"
+                                                required
+                                              />
                                                     :
                                                     ''
                                             }
