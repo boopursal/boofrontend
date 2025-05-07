@@ -5,10 +5,13 @@ import reducer from './store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { Card, Grid, CardContent, InputAdornment, Icon, Stepper, Step, StepLabel, Button, Typography } from '@material-ui/core';
+import {
+    Card, Grid, CardContent, InputAdornment, Icon,
+    Stepper, Step, StepLabel, Button, Typography
+} from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import { FuseAnimate } from '@fuse';
-import Formsy from 'formsy-react';
+import Formsy, { addValidationRule } from 'formsy-react'; // ✅ correct ici
 import { TextFieldFormsy } from '@fuse';
 import SelectReactFormsy from '@fuse/components/formsy/SelectReactFormsy';
 import StepConnector from '@material-ui/core/StepConnector';
@@ -20,6 +23,25 @@ import _ from '@lodash';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import { Helmet } from "react-helmet";
+
+
+addValidationRule('noSequentialOrRepeated', (values, value) => {
+    if (!value) return true;
+
+    // Interdire exactement 15 caractères numériques
+    if (!/^\d{15}$/.test(value)) return false;
+
+    // Interdire séquences croissantes
+    const sequential = '0123456789';
+    if (sequential.includes(value)) return false;
+
+    // Interdire répétition du même chiffre
+    const allSame = value.split('').every(char => char === value[0]);
+    if (allSame) return false;
+
+    return true;
+});
+
 
 /**=============== FOUNRISSEUR INFO SOCIETE ======================= */
 
@@ -494,7 +516,7 @@ function Step2App(props) {
 
                                             {
                                                 showIce ?
-                                                <TextFieldFormsy
+                                                                                    <TextFieldFormsy
                                                 className="mb-16 w-full"
                                                 type="text"
                                                 name="ice"
@@ -503,20 +525,14 @@ function Step2App(props) {
                                                 label="ICE"
                                                 autoComplete="ice"
                                                 validations={{
-                                                  minLength: 15,
-                                                  maxLength: 15,
-                                                  isNumeric: true,   // Utiliser `true` pour valider les chiffres
-                                                  matchRegexp: /^[0-9]+$/,  // Valide uniquement les chiffres
+                                                    noSequentialOrRepeated: true
                                                 }}
                                                 validationErrors={{
-                                                  minLength: 'La longueur minimale de caractère est 15',
-                                                  maxLength: 'La longueur maximale de caractère est 15',
-                                                  isNumeric: 'Cette valeur doit être numérique.Le code ICE doit contenir uniquement des chiffres.',
-                                                  matchRegexp: 'Le code ICE doit contenir uniquement des chiffres.',
+                                                    noSequentialOrRepeated: 'Le code ICE doit contenir exactement 15 chiffres, sans suite évidente (ex : 123456...) ni répétition (ex : 000000...).'
                                                 }}
                                                 variant="outlined"
                                                 required
-                                              />
+                                                />
                                                     :
                                                     ''
                                             }
