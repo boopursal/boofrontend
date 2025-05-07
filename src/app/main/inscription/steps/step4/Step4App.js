@@ -542,7 +542,7 @@ function Step4App(props) {
                                                 validations={{
                                                   minLength: 15,
                                                   maxLength: 15,
-                                                  isNumeric: true,  // Utiliser `true` pour valider les chiffres
+                                                  isNumeric: true,   // Utiliser `true` pour valider les chiffres
                                                   matchRegexp: /^[0-9]+$/,  // Valide uniquement les chiffres
                                                 }}
                                                 validationErrors={{
