@@ -527,7 +527,7 @@ function DetailProduit(props) {
                       </div>
                       <Typography
                         className={classes.price}
-                        className="uppercase"
+                        //className="uppercase"
                         color="secondary"
                       >
                         {produit.data.pu
@@ -805,7 +805,7 @@ function DetailProduit(props) {
                         </Button>
                       </FuseAnimate>
                     )}
-                    {produit.loadingsPhone ? (
+                    {/* {produit.loadingsPhone ? (
                       <Typography
                         variant="h6"
                         color="textPrimary"
@@ -845,7 +845,7 @@ function DetailProduit(props) {
                           Affichez le téléphone
                         </Button>
                       </FuseAnimate>
-                    )}
+                    )} */}
                   </CardContent>
                 </Card>
               </Grid>
