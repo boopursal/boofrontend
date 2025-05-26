@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Card, CardContent, Typography } from "@material-ui/core";
+import { Button,Link,Icon,Grid, Card, CardContent, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 import ContentLoader from "react-content-loader";
@@ -233,16 +233,27 @@ function NewDetail(props) {
                     />
 
                     {actualite.data.source && (
-                      <div className="mt-16">
+                      <div className="mt-16 flex items-center justify-between">
+                      <div>
                         Source :{" "}
                         <a
                           href={actualite.data.source}
                           target="_blank"
                           rel="noreferrer"
+                          className="text-blue-600 hover:underline"
                         >
                           {actualite.data.source}
                         </a>
                       </div>
+                    
+                      <a
+  href="/actualites"
+  className="whitespace-no-wrap border border-secondary text-secondary px-4 py-2 rounded hover:bg-secondary hover:text-black transition-all inline-flex items-center"
+>
+  Toute l'actualité
+  <span className="ml-4 arrow-icon material-icons">keyboard_arrow_right</span>
+</a>
+                    </div>
                     )}
                   </CardContent>
                 </Card>
