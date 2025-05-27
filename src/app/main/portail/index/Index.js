@@ -614,13 +614,13 @@ function Index(props) {
             </div>
             <div className="text-center font-bold">
               <a
-                href="https://www.3findustrie.com/"
+                href="https://www.mecalux.fr/"
                 rel="noopener noreferrer"
                 target="_blank"
               >
                 <img
                   className=""
-                  src="assets/images/banners/banner3.png"
+                  src="assets/images/banners/Mexalux.gif"
                   alt="3fi banner 2"
                 />
               </a>
@@ -749,7 +749,7 @@ function Index(props) {
               className="text-white text-24 uppercase mb-16"
             >
               Découvrez le service{" "}
-              <span className="font-extrabold">Les Achats Industriels</span>
+              <span className="font-extrabold">Boopursal</span>
             </Typography>
             <Typography className="text-white opacity-75">
               La place de marché N°1 au Maroc, qui permet aux Acheteurs et aux
