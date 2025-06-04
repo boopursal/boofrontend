@@ -289,6 +289,7 @@ function JetonsDialog(props) {
                             label="Nombre de jetons"
                             onChange={handleRadioChange}
                         >
+                            <FormControlLabel value="1" disabled={JetonsDialog.type === 'edit'} checked={form.nbrJeton === 1} control={<Radio />} label="1" />
                             <FormControlLabel value="5" disabled={JetonsDialog.type === 'edit'} checked={form.nbrJeton === 5} control={<Radio />} label="5" />
                             <FormControlLabel value="10" disabled={JetonsDialog.type === 'edit'} checked={form.nbrJeton === 10} control={<Radio />} label="10" />
                             <FormControlLabel value="20" disabled={JetonsDialog.type === 'edit'} checked={form.nbrJeton === 20} control={<Radio />} label="20" />
