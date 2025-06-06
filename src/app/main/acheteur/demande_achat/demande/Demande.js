@@ -59,6 +59,8 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Highlighter from "react-highlight-words";
 import { Helmet } from "react-helmet";
+const minExpirationDate = new Date();
+minExpirationDate.setDate(minExpirationDate.getDate() + 10); // ajoute 10 jours
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -427,9 +429,24 @@ function Demande(props) {
   }
 
   function handleDateChange(value, name) {
-    setForm(_.set({ ...form }, name, moment(value).format("YYYY-MM-DDTHH:mm")));
+    const selectedDate = moment(value);
+    const minDate = moment().add(10, 'days');
+  
+    if (selectedDate.isBefore(minDate, 'day')) {
+      alert("La date d'expiration doit être au minimum 10 jours après aujourd'hui.");
+      
+      // Marque le champ comme invalide
+      setDateError(true);
+  
+      // Vide la valeur
+      setForm(_.set({ ...form }, name, null));
+      return;
+    }
+  
+    // Date valide
+    setDateError(false);
+    setForm(_.set({ ...form }, name, selectedDate.format("YYYY-MM-DDTHH:mm")));
   }
-
   function disableButton() {
     setIsFormValid(false);
   }
@@ -1395,18 +1412,20 @@ const Demande = () => {
 
                       <Grid container spacing={3}>
                       <Grid item xs={12} sm={6}>
-  <DatePickerFormsy
-    label="Date d'expiration"
-    id="dateExpiration"
-    name="dateExpiration"
-    value={form.dateExpiration}
-    onChange={(value) =>
-      handleDateChange(value, "dateExpiration")
-    }
-    variant="outlined"
-    required
-    fullWidth
-  />
+                      <DatePickerFormsy
+  key={form.dateExpiration || "empty-date"}
+  label="Date d'expiration"
+  id="dateExpiration"
+  name="dateExpiration"
+  value={form.dateExpiration}
+  onChange={(value) => handleDateChange(value, "dateExpiration")}
+  variant="outlined"
+  required
+  fullWidth
+  minDate={new Date(new Date().setDate(new Date().getDate() + 10))}
+  error={dateError} // ← rouge si true
+  helperText={dateError ? "Veuillez choisir une date au moins 10 jours après aujourd'hui." : ""}
+/>
   
   {updateExpiration && interval && (
     <Typography
