@@ -259,6 +259,7 @@ function Demande(props) {
   const { demandeId } = params;
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [openSendDialog, setOpenSendDialog] = useState(false);
+  const [dateError, setDateError] = useState(false);
 
   useEffect(() => {
     function updateDemandeState() {
