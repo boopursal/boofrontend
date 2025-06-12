@@ -620,8 +620,8 @@ function Index(props) {
               >
                 <img
                   className=""
-                  src="assets/images/banners/Mexalux.gif"
-                  alt="3fi banner 2"
+                  src="assets/images/banners/Mecalux2025.png"
+                  alt="Mecalux"
                 />
               </a>
             </div>
