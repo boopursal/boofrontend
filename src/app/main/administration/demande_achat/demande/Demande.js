@@ -882,14 +882,47 @@ function Demande(props) {
                                                     onClick={() => window.open(URL_SITE + media.url, "_blank")}
                                                 >
                                                     <Tooltip title="Supprimer" >
-                                                        <IconButton className={classes.demandeImageFeaturedStar}
-                                                            onClick={(ev) => {
-                                                                ev.stopPropagation();
-                                                                dispatch(Actions.deleteMedia(media));
-                                                            }}
-                                                        >
-                                                            <Icon>delete</Icon>
-                                                        </IconButton>
+                                                    <IconButton
+          className="text-red text-20"
+          onClick={(ev) => {
+            ev.stopPropagation();
+            dispatch(
+              Actions.openDialog({
+                children: (
+                  <>
+                    <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Voulez-vous vraiment supprimer ce média ?
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        variant="contained"
+                        onClick={() => dispatch(Actions.closeDialog())}
+                        color="primary"
+                      >
+                        Non
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          dispatch(Actions.deleteMedia(media));
+                          dispatch(Actions.closeDialog());
+                        }}
+                        color="primary"
+                        autoFocus
+                      >
+                        Oui
+                      </Button>
+                    </DialogActions>
+                  </>
+                ),
+              })
+            );
+          }}
+        >
+          <Icon>delete</Icon>
+        </IconButton>
                                                     </Tooltip>
 
                                                     {_.split(media.type, '/', 1)[0] === 'image' ?

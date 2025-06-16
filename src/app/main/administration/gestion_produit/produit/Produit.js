@@ -12,6 +12,10 @@ import {
   IconButton,
   Tooltip,
   InputAdornment,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@material-ui/core";
 import { red, orange } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/styles";
@@ -896,22 +900,47 @@ function Produit(props) {
                             </IconButton>
                           </Tooltip>
                           <Tooltip title="Supprimer">
-                            <IconButton
-                              className={clsx(
-                                classes.produitImageFeaturedStar2,
-                                media.id ===
-                                  (form.featuredImageId
-                                    ? form.featuredImageId.id
-                                    : null) && "hidden"
-                              )}
-                              onClick={(ev) => {
-                                ev.stopPropagation();
-
-                                dispatch(Actions.deleteMedia(media));
-                              }}
-                            >
-                              <Icon>delete</Icon>
-                            </IconButton>
+                          <IconButton
+          className="text-red text-20"
+          onClick={(ev) => {
+            ev.stopPropagation();
+            dispatch(
+              Actions.openDialog({
+                children: (
+                  <>
+                    <DialogTitle id="alert-dialog-title">Suppression</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Voulez-vous vraiment supprimer ce média ?
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        variant="contained"
+                        onClick={() => dispatch(Actions.closeDialog())}
+                        color="primary"
+                      >
+                        Non
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          dispatch(Actions.deleteMedia(media));
+                          dispatch(Actions.closeDialog());
+                        }}
+                        color="primary"
+                        autoFocus
+                      >
+                        Oui
+                      </Button>
+                    </DialogActions>
+                  </>
+                ),
+              })
+            );
+          }}
+        >
+          <Icon>delete</Icon>
+        </IconButton>
                           </Tooltip>
                           <img
                             className="max-w-none w-auto h-full"
