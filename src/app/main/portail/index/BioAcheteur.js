@@ -14,7 +14,10 @@ const useStyles = makeStyles(theme => ({
 
     card: {
         display: 'flex',
-    },
+        flexDirection: 'row',
+        height: '100%',
+        width: '100%',
+      },
     cardDetails: {
         flex: 1,
     },

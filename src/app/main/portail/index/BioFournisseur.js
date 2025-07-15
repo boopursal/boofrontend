@@ -13,7 +13,10 @@ import { ListItem, ListItemAvatar, Avatar, List, ListItemText, Icon } from '@mat
 const useStyles = makeStyles(theme => ({
     card: {
         display: 'flex',
-    },
+        flexDirection: 'row',
+        height: '100%',
+        width: '100%',
+      },
     cardDetails: {
         flex: 1,
     },
