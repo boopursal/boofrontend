@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",           // prend toute la largeur du Grid item
-    maxWidth: 180,           // max largeur fixe pour garder un carré
+    maxWidth: 200,           // max largeur fixe pour garder un carré
     aspectRatio: "1 / 1",    // carré (support moderne)
     margin: theme.spacing(2, 1), // vertical 16px, horizontal 8px environ
     textAlign: "center",
@@ -41,9 +41,12 @@ function Categories(props) {
   const { categories } = props;
   const classes = useStyles();
 
+  // Limiter à 7 catégories affichées
+  const displayedCategories = categories.slice(0, 7);
+
   return categories.length ? (
     <Grid container justifyContent="center" className="p-5 sm:p-10">
-      {categories.map((cat, index) => (
+      {displayedCategories.map((cat, index) => (
         <Grid
           item
           xs={6}    // 2 colonnes sur mobile
@@ -66,6 +69,7 @@ function Categories(props) {
         </Grid>
       ))}
 
+      {/* Case "Tous les catégories" */}
       <Grid
         item
         xs={6}
