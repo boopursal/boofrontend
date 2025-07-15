@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",           // prend toute la largeur du Grid item
-    maxWidth: 200,           // max largeur fixe pour garder un carré
+    maxWidth: 180,           // max largeur fixe pour garder un carré
     aspectRatio: "1 / 1",    // carré (support moderne)
     margin: theme.spacing(2, 1), // vertical 16px, horizontal 8px environ
     textAlign: "center",
