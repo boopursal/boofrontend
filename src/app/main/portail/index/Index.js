@@ -262,9 +262,9 @@ function Index(props) {
   const dispatch = useDispatch();
   const classes = useStyles(props);
   const [searchResultsVisible, setSearchResultsVisible] = useState(false);
-  const title = "Les Achats Industriels | Place de marché B2B";
+  const title = "Boopursal | Place de marché B2B";
   const description =
-    "Les Achats Industriels Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce";
+    "Boopursal Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce";
   const portail = useSelector(({ IndexApp }) => IndexApp.poratilIndex);
   const settings = {
     speed: 500,
@@ -392,7 +392,7 @@ function Index(props) {
               component="h1"
               className="sm:text-18 uppercase leading-normal text-13 font-bold mb-16 text-white mx-auto max-w-xl"
             >
-              Les Achats Industriels, c'est la communauté de +1000 sociétés,
+              Boopursal, c'est la communauté de +1000 sociétés,
               Acheteurs et Fournisseurs
             </Typography>
           </FuseAnimate>
@@ -426,21 +426,7 @@ function Index(props) {
   style={{ maxWidth: 1690, margin: '0 auto', width: '100%', padding: '2rem 1rem' }}
   className="max-w-7xl mx-auto px-4 sm:px-8 py-12"
 >
-  {/* Bannière principale full width */}
-  <Grid item xs={12} className="flex justify-center">
-    <a
-      href="https://www.3findustrie.com/"
-      rel="noopener noreferrer"
-      target="_blank"
-      className="w-full max-w-screen-lg"
-    >
-      <img
-        src="assets/images/banners/Warehouse-international.gif"
-        alt="3fi banner 2"
-        className="w-full h-auto rounded-lg"
-      />
-    </a>
-  </Grid>
+  
 
   {/* Colonne gauche (banners) */}
   <Grid item xs={12} sm={4} md={3} className="flex flex-col space-y-6">
@@ -888,7 +874,7 @@ function Index(props) {
               className="text-white text-24 uppercase mb-2"
             >
               Newsletters{" "}
-              <span className="font-extrabold"> Les ASchats Industriels</span>
+              <span className="font-extrabold"> Boopursal</span>
             </Typography>
             <Typography className="text-white opacity-75">
               Inscrivez-vous pour recevoir les newsletters dans votre boîte
