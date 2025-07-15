@@ -423,212 +423,198 @@ function Index(props) {
         )}
       </div>
 
-      {/**===================CATEGORIES & RFQs=================**/}
-      <div style={searchResultsVisible ? { marginTop: '2%' } : {}}>
-        <Categories categories={portail.categories} />
-      </div>
-      
-
-      <Grid container style={{ maxWidth: '1690px', margin: '0 auto', width: '100%' }}className=" max-w-2xl mx-auto px-8 sm:px-16 py-24">
-      <Grid item sm={3} xs={12} className="flex flex-col justify-between  ">
-    
-          <div
-            className={clsx(
-              classes.bannerMeduim,
-              "flex flex-wrap content-center"
-            )}
-          >
-            <div className="text-center font-bold">
-            <a
-                href="http://www.combilift.ma/"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <img
-                  className=""
-                  src="assets/images/banners/Web-Banner-Material-handling-450-x-90.gif"
-                  alt="3fi banner 2"
-                />
-              </a>
-             
-              <a
-                href="http://www.combilift.ma/"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <img
-                  className=""
-                  src="assets/images/banners/Steel-Australia-900X300-PX.gif"
-                  alt="3fi banner 2"
-                />
-              </a>
-            </div>
-          </div>
-        </Grid>
-      <Grid item sm={6} xs={12}>
-  <div className={classes.section}>
-    <ListItem>
-      <ListItemAvatar>
-        <Avatar className={classes.headerIcon}>
-          <Icon>featured_play_list</Icon>
-        </Avatar>
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <Typography variant="h5" style={{ fontWeight: 700 }}>
-            DERNIÈRES DEMANDES DE DEVIS
-          </Typography>
-        }
-      />
-    </ListItem>
-
-    <List>
-      {portail.loading ? (
-        <ContentLoader speed={2} width={400} height={60} viewBox="0 0 400 100">
-          <rect x="1" y="2" rx="3" ry="3" width="54" height="6" />
-          <rect x="1" y="20" rx="3" ry="3" width="200" height="6" />
-          <rect x="1" y="35" rx="9" ry="9" width="79" height="15" />
-          <rect x="88" y="35" rx="9" ry="9" width="79" height="15" />
-          <circle cx="373" cy="21" r="11" />
-          <rect x="1" y="57" rx="0" ry="0" width="390" height="2" />
-        </ContentLoader>
-      ) : (
-        <FuseAnimateGroup enter={{ animation: 'transition.slideUpBigIn' }}>
-          {portail.data &&
-            portail.data.map((item, index) => {
-              const countryMapping = {
-                "États-Unis": "us",
-                "Allemagne": "de",
-                "France": "fr",
-                "Maroc": "ma",
-                "Espagne": "es",
-                "Italie": "it",
-                "Royaume-Uni": "gb",
-              };
-              const code = countryMapping[item.pays] || null;
-
-              return (
-                <Link
-                  key={index}
-                  to={`/demandes-achat/${item.id}-${item.slug}`}  // URL dynamique avec la référence de la demande
-                  style={{ textDecoration: 'none' }}  // Enlever la décoration du lien
-                >
-                  <div
-                    style={{
-                      backgroundColor: '#f9f9f9',
-                      borderRadius: 12,
-                      padding: 16,
-                      marginBottom: 20,
-                      boxShadow: '0px 2px 8px rgba(0,0,0,0.05)',
-                    }}
-                  >
-                    <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
-                      [ RFQ-{item.reference} ] {item.titre}
-                    </Typography>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                      <Icon fontSize="small" style={{ color: '#616161' }}>description</Icon>
-                      <Typography variant="body2" color="textSecondary">
-                        {item.description.length > 100 ? item.description.slice(0, 100) + '…' : item.description}
-                      </Typography>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                      <Icon fontSize="small" style={{ color: '#616161' }}>access_time</Icon>
-                      <Typography variant="body2" color="textSecondary">
-                        Créée {moment(item.created).fromNow()}
-                      </Typography>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                      <Icon fontSize="small" style={{ color: '#616161' }}>hourglass_empty</Icon>
-                      <Typography variant="body2" color="textSecondary">
-                        Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}
-                      </Typography>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                      <Icon fontSize="small" style={{ color: '#616161' }}>public</Icon>
-                      <Typography variant="body2" color="textSecondary">
-                        {item.ville}, {item.pays}
-                      </Typography>
-                      {code && (
-                        <Avatar
-                          src={`https://flagcdn.com/w40/${code}.png`}
-                          alt={item.pays}
-                          style={{ width: 20, height: 20, borderRadius: '50%' }}
-                        />
-                      )}
-                    </div>
-                    {/* Bouton "Voir plus" */}
-<div style={{ textAlign: 'right', marginTop: 16 }}>
-  <Button
-    size="small"
-    color="primary"
-    endIcon={<Icon fontSize="small">arrow_forward</Icon>}
-    style={{ fontWeight: 600, textTransform: 'none' }}
-  >
-    Voir plus
-  </Button>
+    {/**===================CATEGORIES & RFQs=================**/}
+<div style={{ marginTop: searchResultsVisible ? '2%' : undefined }}>
+  <Categories categories={portail.categories} />
 </div>
 
-                  </div>
-                </Link>
-                
-              );
-            })}
-        </FuseAnimateGroup>
+<Grid
+  container
+  spacing={3}
+  style={{ maxWidth: 1690, margin: '0 auto', width: '100%', padding: '2rem 1rem' }}
+  className="max-w-7xl mx-auto px-4 sm:px-8 py-12"
+>
+  {/* Colonne gauche */}
+  <Grid item xs={12} sm={4} md={3} className="flex flex-col space-y-6 justify-between">
+    <div
+      className={clsx(
+        classes.bannerMeduim,
+        "flex flex-wrap content-center"
       )}
-    </List>
+    >
+      <div className="text-center font-bold space-y-6 w-full">
+        <a href="http://www.combilift.ma/" target="_blank" rel="noopener noreferrer" className="block">
+          <img
+            src="assets/images/banners/Web-Banner-Material-handling-450-x-90.gif"
+            alt="3fi banner 2"
+            className="w-full h-auto rounded-md"
+          />
+        </a>
 
-    {portail.data && (
-      <div style={{ textAlign: 'right', marginTop: 16 }}>
-        <Link className={classes.link} to="/demandes-achats">
-          Toutes les demandes de devis &rarr;
-        </Link>
+        <a href="http://www.combilift.ma/" target="_blank" rel="noopener noreferrer" className="block">
+          <img
+            src="assets/images/banners/Steel-Australia-900X300-PX.gif"
+            alt="3fi banner 2"
+            className="w-full h-auto rounded-md"
+          />
+        </a>
       </div>
-    )}
-  </div>
+    </div>
+  </Grid>
+
+  {/* Centre - Dernières demandes */}
+  <Grid item xs={12} sm={8} md={6}>
+    <div className={classes.section}>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar className={classes.headerIcon}>
+            <Icon>featured_play_list</Icon>
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            <Typography variant="h5" style={{ fontWeight: 700 }}>
+              DERNIÈRES DEMANDES DE DEVIS
+            </Typography>
+          }
+        />
+      </ListItem>
+
+      <List>
+        {portail.loading ? (
+          <ContentLoader speed={2} width={400} height={60} viewBox="0 0 400 100">
+            <rect x="1" y="2" rx="3" ry="3" width="54" height="6" />
+            <rect x="1" y="20" rx="3" ry="3" width="200" height="6" />
+            <rect x="1" y="35" rx="9" ry="9" width="79" height="15" />
+            <rect x="88" y="35" rx="9" ry="9" width="79" height="15" />
+            <circle cx="373" cy="21" r="11" />
+            <rect x="1" y="57" rx="0" ry="0" width="390" height="2" />
+          </ContentLoader>
+        ) : (
+          <FuseAnimateGroup enter={{ animation: 'transition.slideUpBigIn' }}>
+            {portail.data &&
+              portail.data.map((item, index) => {
+                const countryMapping = {
+                  "États-Unis": "us",
+                  Allemagne: "de",
+                  France: "fr",
+                  Maroc: "ma",
+                  Espagne: "es",
+                  Italie: "it",
+                  "Royaume-Uni": "gb",
+                };
+                const code = countryMapping[item.pays] || null;
+
+                return (
+                  <Link
+                    key={index}
+                    to={`/demandes-achat/${item.id}-${item.slug}`}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <div
+                      style={{
+                        backgroundColor: '#f9f9f9',
+                        borderRadius: 12,
+                        padding: 16,
+                        marginBottom: 20,
+                        boxShadow: '0px 2px 8px rgba(0,0,0,0.05)',
+                      }}
+                    >
+                      <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
+                        [ RFQ-{item.reference} ] {item.titre}
+                      </Typography>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                        <Icon fontSize="small" style={{ color: '#616161' }}>description</Icon>
+                        <Typography variant="body2" color="textSecondary">
+                          {item.description.length > 100 ? item.description.slice(0, 100) + '…' : item.description}
+                        </Typography>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                        <Icon fontSize="small" style={{ color: '#616161' }}>access_time</Icon>
+                        <Typography variant="body2" color="textSecondary">
+                          Créée {moment(item.created).fromNow()}
+                        </Typography>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                        <Icon fontSize="small" style={{ color: '#616161' }}>hourglass_empty</Icon>
+                        <Typography variant="body2" color="textSecondary">
+                          Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}
+                        </Typography>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                        <Icon fontSize="small" style={{ color: '#616161' }}>public</Icon>
+                        <Typography variant="body2" color="textSecondary">
+                          {item.ville}, {item.pays}
+                        </Typography>
+                        {code && (
+                          <Avatar
+                            src={`https://flagcdn.com/w40/${code}.png`}
+                            alt={item.pays}
+                            style={{ width: 20, height: 20, borderRadius: '50%' }}
+                          />
+                        )}
+                      </div>
+
+                      <div style={{ textAlign: 'right', marginTop: 16 }}>
+                        <Button
+                          size="small"
+                          color="primary"
+                          endIcon={<Icon fontSize="small">arrow_forward</Icon>}
+                          style={{ fontWeight: 600, textTransform: 'none' }}
+                        >
+                          Voir plus
+                        </Button>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+          </FuseAnimateGroup>
+        )}
+      </List>
+
+      {portail.data && (
+        <div style={{ textAlign: 'right', marginTop: 16 }}>
+          <Link className={classes.link} to="/demandes-achats">
+            Toutes les demandes de devis &rarr;
+          </Link>
+        </div>
+      )}
+    </div>
+  </Grid>
+
+  {/* Colonne droite */}
+  <Grid item xs={12} sm={4} md={3} className="flex flex-col space-y-6 justify-between">
+    <div
+      className={clsx(
+        classes.bannerMeduim,
+        "flex flex-wrap content-center"
+      )}
+    >
+      <div className="text-center font-bold space-y-6 w-full">
+        <a href="https://www.3findustrie.com/" target="_blank" rel="noopener noreferrer" className="block">
+          <img
+            src="assets/images/banners/banner2.jpeg"
+            alt="3fi banner 2"
+            className="w-full h-auto rounded-md"
+          />
+        </a>
+        <a href="https://www.mecalux.fr/" target="_blank" rel="noopener noreferrer" className="block">
+          <img
+            src="assets/images/banners/Mecalux2025.png"
+            alt="Mecalux"
+            className="w-full h-auto rounded-md"
+          />
+        </a>
+      </div>
+    </div>
+  </Grid>
 </Grid>
 
-
-        <Grid item sm={3} xs={12} className="flex flex-col justify-between  ">
-          <div
-            className={clsx(
-              classes.bannerMeduim,
-              "flex flex-wrap content-center"
-            )}
-          >
-            <div className="text-center font-bold ">
-              <a
-                href="https://www.3findustrie.com/"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <img
-                  className=""
-                  src="assets/images/banners/banner2.jpeg"
-                  alt="3fi banner 2"
-                />
-              </a>
-            </div>
-            <div className="text-center font-bold">
-              <a
-                href="https://www.mecalux.fr/"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <img
-                  className=""
-                  src="assets/images/banners/Mecalux2025.png"
-                  alt="Mecalux"
-                />
-              </a>
-            </div>
-          </div>
-          
-        </Grid>
-      </Grid>
       {/** 
              ===================FOCUS PORDUCTS=================
             **/}
