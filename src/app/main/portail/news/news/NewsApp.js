@@ -109,7 +109,7 @@ function NewsApp(props) {
     return (
         <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, '  min-h-md')}>
             <Helmet>
-                <title>Toutes l'Actualité | Les Achats Industriels</title>
+                <title>Toutes l'Actualité | Boopursal</title>
                 <meta name="description" content='' />
             </Helmet>
             <div
@@ -142,7 +142,7 @@ function NewsApp(props) {
                 'spacing-xs-2': classes.grid
             }} spacing={2} className="max-w-2xl mx-auto sm:px-16 pt-24 items-center">
                 <Grid item sm={8} xs={8}>
-                    <Typography variant="h1" className="text-24 font-bold uppercase"> Les Achats Industriels | Actualités</Typography>
+                    <Typography variant="h1" className="text-24 font-bold uppercase"> Boopursal | Actualités</Typography>
                 </Grid>
                 <Grid item sm={4} xs={4}>
                     <TextField
