@@ -31,7 +31,7 @@ function FooterLayout3(props) {
                             </Typography>
                             <ul className="list-reset mb-6 p-0">
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0  ">
-                                    <Link component="true" to="/register/2" className="ml-0 text-blue">Inscrivez-vous comme Acheteur</Link>
+                                    <Link component="true" to="/register/2" className="ml-0 text-blue">Inscrivez-vous en tant qu'acheteur</Link>
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                     <Link component="true" to="/vente-produits" className="ml-0 text-blue">Voir produits</Link>
@@ -49,7 +49,7 @@ function FooterLayout3(props) {
                             </Typography>
                             <ul className="list-reset mb-6 p-0">
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                    <Link component="true" to="/register/1" className="ml-0 text-blue">Inscrivez-vous comme Fournisseur</Link>
+                                    <Link component="true" to="/register/1" className="ml-0 text-blue">Inscrivez-vous en tant que fournisseur</Link>
                                 </li>
                                 <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                     <Link component="true" to="/conditions" className="ml-0 text-blue">Comment publier sur Boopursal</Link>
