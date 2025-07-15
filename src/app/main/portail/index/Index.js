@@ -770,17 +770,33 @@ function Index(props) {
             **/}
       <Grid
   container
-  className="max-w-2xl mx-auto px-8 sm:px-16 py-24"
   spacing={2}
-  alignItems="stretch" // 👈 important pour forcer la même hauteur
+  className="max-w-2xl mx-auto px-8 sm:px-16 py-24"
+  alignItems="stretch"
 >
-  <Grid item sm={6} xs={12} className={classes.bioFournisseur} style={{ display: 'flex', flexDirection: 'column' }}>
-    <BioFournisseur />
+  <Grid
+    item
+    sm={6}
+    xs={12}
+    style={{ height: '100%' }}
+  >
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <BioFournisseur />
+    </div>
   </Grid>
-  <Grid item sm={6} xs={12} className={classes.bioAchteur} style={{ display: 'flex', flexDirection: 'column' }}>
-    <BioAcheteur />
+
+  <Grid
+    item
+    sm={6}
+    xs={12}
+    style={{ height: '100%' }}
+  >
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <BioAcheteur />
+    </div>
   </Grid>
 </Grid>
+
       {/** 
              ===================NEWS=================
             **/}
