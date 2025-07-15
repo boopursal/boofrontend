@@ -768,15 +768,19 @@ function Index(props) {
       {/** 
              ===================INSCRIPTION FOURNISSEUR=================
             **/}
-      <Grid container className="max-w-2xl mx-auto px-8 sm:px-16 py-24">
-        <Grid item sm={6} xs={12} className={classes.bioFournisseur}>
-          <BioFournisseur />
-        </Grid>
-        <Grid item sm={6} xs={12} className={classes.bioAchteur}>
-          <BioAcheteur />
-        </Grid>
-      </Grid>
-
+      <Grid
+  container
+  className="max-w-2xl mx-auto px-8 sm:px-16 py-24"
+  spacing={2}
+  alignItems="stretch" // 👈 important pour forcer la même hauteur
+>
+  <Grid item sm={6} xs={12} className={classes.bioFournisseur} style={{ display: 'flex', flexDirection: 'column' }}>
+    <BioFournisseur />
+  </Grid>
+  <Grid item sm={6} xs={12} className={classes.bioAchteur} style={{ display: 'flex', flexDirection: 'column' }}>
+    <BioAcheteur />
+  </Grid>
+</Grid>
       {/** 
              ===================NEWS=================
             **/}
