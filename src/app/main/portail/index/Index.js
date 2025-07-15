@@ -655,7 +655,7 @@ function Index(props) {
                     FOCUS PRODUITS
                   </Typography>
                 }
-                secondary="Un extrait des catalogues B2B des fournisseurs et fabricants présents sur Boopursal."
+                secondary="Un aperçu des catalogues produits B2B des fabricants et distributeurs présents sur Boopursal."
               />
               <ListItemSecondaryAction
                 classes={{
@@ -800,7 +800,7 @@ function Index(props) {
                     component="h2"
                     className="text-20 font-bold uppercase xs:text-11 mb-1"
                   >
-                    LES DERNIERS ARTICLES DE NEWS
+                    LES DERNIERS ARTICLES DE L'ACTUALITÉ
                   </Typography>
                 }
               />

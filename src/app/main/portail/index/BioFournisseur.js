@@ -50,7 +50,7 @@ export default function BioFournisseur(props) {
                             Vendre
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary" className="text-justify">
-                            Créez un compte fournisseur <strong className="uppercase">gratuitement</strong> vous permet de toucher un grand nombre de vos futurs clients en un temps record.
+                            Créer un compte fournisseur <strong className="uppercase">gratuitement</strong> vous permet de toucher un grand nombre de vos futurs clients en un temps record.
                         </Typography>
                         <List >
                             <ListItem classes={{
@@ -63,7 +63,7 @@ export default function BioFournisseur(props) {
                                 </ListItemAvatar>
                                 <ListItemText
                                     className="text-justify"
-                                    primary="Que vous soyez novice sur internet ou expert en e-commerce, nous vous aidons à augmenter vos prospects"
+                                    primary="Que vous soyez novices sur internets ou expert en e-commerce, Boopursal vous accompagne pour augmenter le nombre de vos clients"
                                 />
                             </ListItem>
                             <ListItem classes={{
@@ -89,7 +89,7 @@ export default function BioFournisseur(props) {
                                 </ListItemAvatar>
                                 <ListItemText
                                     className="text-justify"
-                                    primary="Profitez de notre large audience. Plus de 200.000 acheteurs potentiels nous visitent chaque jour"
+                                    primary="Profitez de la large audience de Boopursal. Plus de 200.000 acheteurs potentiels nous consultent quotidiennement"
                                 />
                             </ListItem>
                         </List>

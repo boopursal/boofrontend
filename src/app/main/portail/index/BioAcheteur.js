@@ -51,7 +51,7 @@ export default function BioAcheteur(props) {
                             Acheter
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary" className="text-justify" >
-                            Créez un compte acheteur <strong className="uppercase">gratuitement</strong> vous permet d'avoir un pouvoir négociateur puissant, garanti et très important.
+                            Créer un compte acheteur <strong className="uppercase">gratuitement</strong> vous permet d'avoir un pouvoir négociateur puissant, garanti et très important.
                         </Typography>
                         <List>
                             <ListItem classes={{
