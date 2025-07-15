@@ -35,8 +35,13 @@ import { Helmet } from "react-helmet";
 import Navigation from "../categories/Navigation";
 import Link2 from "@material-ui/core/Link";
 import Categories from "./Categories";
+
+import LocationOn from '@material-ui/icons/LocationOn';
+import Public from '@material-ui/icons/Public';
+import CalendarToday from '@material-ui/icons/CalendarToday';
 import moment from 'moment';
 import 'moment/locale/fr';
+
 function SampleNextArrow(props) {
   const { style, onClick } = props;
   return (
@@ -86,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
+    // minHeight      : '100%',
     position: "relative",
     flex: "1 0 auto",
     height: "auto",
@@ -96,42 +102,19 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     background: theme.palette.primary.main,
-    position: 'relative',
+    color: theme.palette.getContrastText(theme.palette.primary.main),
+    position: "relative",
+    //marginBottom: theme.spacing(4),
     backgroundImage: "url(assets/images/backgrounds/dark-material-bg.jpg)",
-    //backgroundImage: "url(https://source.unsplash.com/collection/9456871/1600x900)",
+
+      //"url(https://source.unsplash.com/collection/9456871/1600x900)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
-    zIndex: 1,
-    height: 'auto',
-    minHeight: '288px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '16px',
-    paddingBottom: props => props.searchResultsVisible ? '100px' : '20px'
-  },
-  mainHeader: {
-    backgroundColor: "rgba(0,0,0,.7)",
-    width: '100%',
-    maxWidth: '800px',
-    margin: '0 auto',
-    borderRadius: 8,
-    padding: '20px',
-    zIndex: 2
-  },
-  searchContainer: {
-    position: 'relative',
-    zIndex: 3
-  },
-  searchResults: {
-    width: '100%',
-    maxWidth: '1200px',
-    margin: '20px auto',
-    zIndex: 2
   },
   middle: {
-    background: "linear-gradient(to right, " +
+    background:
+      "linear-gradient(to right, " +
       theme.palette.primary.dark +
       " 0%, " +
       theme.palette.primary.main +
@@ -139,6 +122,13 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     marginBottom: theme.spacing(4),
   },
+  searchResults: {
+    width: '100%',
+    maxWidth: '1200px',
+    margin: '20px auto',
+    zIndex: 2
+  },
+
   headerIcon: {
     position: "absolute",
     top: -64,
@@ -154,6 +144,9 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid #ccc",
     borderRadius: 10,
   },
+  mainHeader: {
+    backgroundColor: "rgba(0,0,0,.7)",
+  },
   icon: {
     color: theme.palette.secondary.dark,
     padding: theme.spacing(0.5, 0, 0, 0),
@@ -162,6 +155,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     padding: theme.spacing(2, 2, 0, 2),
   },
+
   mainAvatar: {
     margin: theme.spacing(1.25, 1.25, 1.25, 0),
     color: "#fff",
@@ -254,7 +248,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginTop: 4,
   },
-}));
+})); 
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
@@ -266,10 +260,11 @@ function generate(element) {
 
 function Index(props) {
   const dispatch = useDispatch();
+  const classes = useStyles(props);
   const [searchResultsVisible, setSearchResultsVisible] = useState(false);
-  const title = "Boopursal | Place de marché B2B";
+  const title = "Les Achats Industriels | Place de marché B2B";
   const description =
-    "Boopursal Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce";
+    "Les Achats Industriels Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce";
   const portail = useSelector(({ IndexApp }) => IndexApp.poratilIndex);
   const settings = {
     speed: 500,
@@ -331,8 +326,7 @@ function Index(props) {
       rel: 0,
     },
   };
-  const classes = useStyles({ searchResultsVisible });
-
+  
   useEffect(() => {
     dispatch(Actions.getCategories());
     return () => {
@@ -383,25 +377,22 @@ function Index(props) {
       <div
         className={clsx(
           classes.header,
-          "relative flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24",
-          {
-            'h-288': !searchResultsVisible,
-            'h-auto': searchResultsVisible
-          }
+          "relative flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24 h-256 sm:h-288"
         )}
-        style={{ 
-          paddingBottom: searchResultsVisible ? '300px' : '16px',
-          marginBottom: searchResultsVisible ? '5px' : '0'
-        }}
       >
-        <div className={classes.mainHeader}>
+        <div
+          className={clsx(
+            classes.mainHeader,
+            "items-center md:w-xl xs:w-auto z-999 px-8 py-20 rounded-lg"
+          )}
+        >
           <FuseAnimate duration={400} delay={600}>
             <Typography
               variant="h1"
               component="h1"
               className="sm:text-18 uppercase leading-normal text-13 font-bold mb-16 text-white mx-auto max-w-xl"
             >
-              Boopursal, c'est la communauté de +1000 sociétés,
+              Les Achats Industriels, c'est la communauté de +1000 sociétés,
               Acheteurs et Fournisseurs
             </Typography>
           </FuseAnimate>
@@ -413,7 +404,6 @@ function Index(props) {
             />
           </div>
         </div>
-
         {searchResultsVisible && (
           <div className={classes.searchResults}>
             <div style={{ marginBottom: '50px' }}>
@@ -421,10 +411,12 @@ function Index(props) {
             </div>
           </div>
         )}
+
       </div>
 
-    {/**===================CATEGORIES & RFQs=================**/}
-<div style={{ marginTop: searchResultsVisible ? '2%' : undefined }}>
+      {/**===================CATEGORIES & RFQs=================**/}
+     {/**===================CATEGORIES & RFQs=================**/}
+<div style={{ marginTop: searchResultsVisible ? '21%' : undefined }}>
   <Categories categories={portail.categories} />
 </div>
 
@@ -434,32 +426,48 @@ function Index(props) {
   style={{ maxWidth: 1690, margin: '0 auto', width: '100%', padding: '2rem 1rem' }}
   className="max-w-7xl mx-auto px-4 sm:px-8 py-12"
 >
-  {/* Colonne gauche */}
-  <Grid item xs={12} sm={4} md={3} className="flex flex-col space-y-6 justify-between">
-    <div
-      className={clsx(
-        classes.bannerMeduim,
-        "flex flex-wrap content-center"
-      )}
+  {/* Bannière principale full width */}
+  <Grid item xs={12} className="flex justify-center">
+    <a
+      href="https://www.3findustrie.com/"
+      rel="noopener noreferrer"
+      target="_blank"
+      className="w-full max-w-screen-lg"
     >
-      <div className="text-center font-bold space-y-6 w-full">
-        <a href="http://www.combilift.ma/" target="_blank" rel="noopener noreferrer" className="block">
-          <img
-            src="assets/images/banners/Web-Banner-Material-handling-450-x-90.gif"
-            alt="3fi banner 2"
-            className="w-full h-auto rounded-md"
-          />
-        </a>
+      <img
+        src="assets/images/banners/Warehouse-international.gif"
+        alt="3fi banner 2"
+        className="w-full h-auto rounded-lg"
+      />
+    </a>
+  </Grid>
 
-        <a href="http://www.combilift.ma/" target="_blank" rel="noopener noreferrer" className="block">
-          <img
-            src="assets/images/banners/Steel-Australia-900X300-PX.gif"
-            alt="3fi banner 2"
-            className="w-full h-auto rounded-md"
-          />
-        </a>
-      </div>
-    </div>
+  {/* Colonne gauche (banners) */}
+  <Grid item xs={12} sm={4} md={3} className="flex flex-col space-y-6">
+    <a
+      href="https://www.3findustrie.com/"
+      rel="noopener noreferrer"
+      target="_blank"
+      className="block"
+    >
+      <img
+        src="assets/images/banners/Web-Banner-Material-handling-450-x-90.gif"
+        alt="3fi banner 1"
+        className="w-full h-auto rounded-md"
+      />
+    </a>
+    <a
+      href="https://www.3findustrie.com/"
+      rel="noopener noreferrer"
+      target="_blank"
+      className="block"
+    >
+      <img
+        src="assets/images/banners/Steel-Australia-900X300-PX.gif"
+        alt="3fi banner 2"
+        className="w-full h-auto rounded-md"
+      />
+    </a>
   </Grid>
 
   {/* Centre - Dernières demandes */}
@@ -508,8 +516,8 @@ function Index(props) {
                 return (
                   <Link
                     key={index}
-                    to={`/demandes-achat/${item.id}-${item.slug}`}
-                    style={{ textDecoration: 'none' }}
+                    to={`/demandes-achat/${item.id}-${item.slug}`} // URL dynamique avec la référence de la demande
+                    style={{ textDecoration: 'none' }} // Enlever la décoration du lien
                   >
                     <div
                       style={{
@@ -525,28 +533,38 @@ function Index(props) {
                       </Typography>
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                        <Icon fontSize="small" style={{ color: '#616161' }}>description</Icon>
+                        <Icon fontSize="small" style={{ color: '#616161' }}>
+                          description
+                        </Icon>
                         <Typography variant="body2" color="textSecondary">
-                          {item.description.length > 100 ? item.description.slice(0, 100) + '…' : item.description}
+                          {item.description.length > 100
+                            ? item.description.slice(0, 100) + '…'
+                            : item.description}
                         </Typography>
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                        <Icon fontSize="small" style={{ color: '#616161' }}>access_time</Icon>
+                        <Icon fontSize="small" style={{ color: '#616161' }}>
+                          access_time
+                        </Icon>
                         <Typography variant="body2" color="textSecondary">
                           Créée {moment(item.created).fromNow()}
                         </Typography>
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                        <Icon fontSize="small" style={{ color: '#616161' }}>hourglass_empty</Icon>
+                        <Icon fontSize="small" style={{ color: '#616161' }}>
+                          hourglass_empty
+                        </Icon>
                         <Typography variant="body2" color="textSecondary">
                           Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}
                         </Typography>
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                        <Icon fontSize="small" style={{ color: '#616161' }}>public</Icon>
+                        <Icon fontSize="small" style={{ color: '#616161' }}>
+                          public
+                        </Icon>
                         <Typography variant="body2" color="textSecondary">
                           {item.ville}, {item.pays}
                         </Typography>
@@ -558,7 +576,7 @@ function Index(props) {
                           />
                         )}
                       </div>
-
+                      {/* Bouton "Voir plus" */}
                       <div style={{ textAlign: 'right', marginTop: 16 }}>
                         <Button
                           size="small"
@@ -587,33 +605,25 @@ function Index(props) {
     </div>
   </Grid>
 
-  {/* Colonne droite */}
-  <Grid item xs={12} sm={4} md={3} className="flex flex-col space-y-6 justify-between">
-    <div
-      className={clsx(
-        classes.bannerMeduim,
-        "flex flex-wrap content-center"
-      )}
-    >
-      <div className="text-center font-bold space-y-6 w-full">
-        <a href="https://www.3findustrie.com/" target="_blank" rel="noopener noreferrer" className="block">
-          <img
-            src="assets/images/banners/banner2.jpeg"
-            alt="3fi banner 2"
-            className="w-full h-auto rounded-md"
-          />
-        </a>
-        <a href="https://www.mecalux.fr/" target="_blank" rel="noopener noreferrer" className="block">
-          <img
-            src="assets/images/banners/Mecalux2025.png"
-            alt="Mecalux"
-            className="w-full h-auto rounded-md"
-          />
-        </a>
-      </div>
-    </div>
+  {/* Colonne droite (banners) */}
+  <Grid item xs={12} sm={12} md={3} className="flex flex-col space-y-6">
+    <a href="https://www.3findustrie.com/" rel="noopener noreferrer" target="_blank" className="block">
+      <img
+        src="assets/images/banners/banner2.jpeg"
+        alt="3fi banner 2"
+        className="w-full h-auto rounded-md"
+      />
+    </a>
+    <a href="https://www.mecalux.fr/" rel="noopener noreferrer" target="_blank" className="block">
+      <img
+        src="assets/images/banners/Mecalux2025.png"
+        alt="3fi banner 2"
+        className="w-full h-auto rounded-md"
+      />
+    </a>
   </Grid>
 </Grid>
+
 
       {/** 
              ===================FOCUS PORDUCTS=================
@@ -641,7 +651,7 @@ function Index(props) {
                     FOCUS PRODUITS
                   </Typography>
                 }
-                secondary="Un aperçu des catalogues produits B2B des fabricants et distributeurs présents sur Boopursal."
+                secondary="Un extrait des catalogues B2B des fournisseurs et fabricants présents sur Les Achats Industriels."
               />
               <ListItemSecondaryAction
                 classes={{
@@ -735,7 +745,7 @@ function Index(props) {
               className="text-white text-24 uppercase mb-16"
             >
               Découvrez le service{" "}
-              <span className="font-extrabold">Boopursal</span>
+              <span className="font-extrabold">Les Achats Industriels</span>
             </Typography>
             <Typography className="text-white opacity-75">
               La place de marché N°1 au Maroc, qui permet aux Acheteurs et aux
@@ -770,6 +780,9 @@ function Index(props) {
   </Grid>
 </Grid>
 
+
+
+
       {/** 
              ===================NEWS=================
             **/}
@@ -793,7 +806,7 @@ function Index(props) {
                     component="h2"
                     className="text-20 font-bold uppercase xs:text-11 mb-1"
                   >
-                    LES DERNIERS ARTICLES DE L'ACTUALITÉ
+                    LES DERNIERS ARTICLES DE NEWS
                   </Typography>
                 }
               />
@@ -875,7 +888,7 @@ function Index(props) {
               className="text-white text-24 uppercase mb-2"
             >
               Newsletters{" "}
-              <span className="font-extrabold"> Boopursal</span>
+              <span className="font-extrabold"> Les ASchats Industriels</span>
             </Typography>
             <Typography className="text-white opacity-75">
               Inscrivez-vous pour recevoir les newsletters dans votre boîte
