@@ -17,10 +17,16 @@ import moment from "moment";
 import { URL_SITE } from "@fuse/Constants";
 
 const useStyles = makeStyles((theme) => ({
+  card: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%", // Pour que toutes les cards aient la même hauteur
+  },
   mediaNews: {
     height: 200,
     backgroundPosition: "center",
-    backgroundSize: "contain",
+    backgroundSize: "cover", // ✅ remplissage total et uniforme
+    backgroundRepeat: "no-repeat",
   },
   cardContent: {
     maxHeight: 80,
@@ -67,7 +73,6 @@ export default function News(props) {
           className="mr-4"
           onDelete={props.onDelete}
         />
-
         <Button
           size="small"
           color="primary"
