@@ -83,27 +83,27 @@ function NewsApp(props) {
     const handlePreviousClick = () => {
         news.parametres.page = Math.max(news.parametres.page - 1, 1);
         dispatch(Actions.setParametresData(news.parametres));
-        document.querySelector('.st').scrollTop = 0;
+        document.querySelector('.st')?.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleNextClick = () => {
         news.parametres.page = Math.min(news.parametres.page + 1, news.pageCount);
         dispatch(Actions.setParametresData(news.parametres));
-        document.querySelector('.st').scrollTop = 0;
+        document.querySelector('.st')?.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleChangeItems = (ev) => {
         news.parametres.page = 1;
         news.parametres.itemsPerPage = ev.target.value;
         dispatch(Actions.setParametresData(news.parametres));
-        document.querySelector('.st').scrollTop = 0;
+        document.querySelector('.st')?.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleTitreChange = (ev) => {
         news.parametres.page = 1;
         news.parametres.titre = ev.target.value;
         dispatch(Actions.setParametresData(news.parametres));
-        document.querySelector('.st').scrollTop = 0;
+        document.querySelector('.st')?.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
