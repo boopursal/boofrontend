@@ -1,7 +1,16 @@
 import React, { useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { makeStyles } from '@material-ui/styles';
-import { Typography, Grid, Breadcrumbs, Button, Icon, Select, IconButton, TextField } from '@material-ui/core';
+import {
+    Typography,
+    Grid,
+    Breadcrumbs,
+    Button,
+    Icon,
+    Select,
+    IconButton,
+    TextField
+} from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { FuseAnimate } from '@fuse';
 import clsx from 'clsx';
@@ -35,14 +44,6 @@ const useStyles = makeStyles(theme => ({
         background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
         position: 'relative',
         marginBottom: theme.spacing(4),
-    },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        right: 0,
-        left: 0,
-        backgroundColor: 'rgba(0,0,0,.3)',
     },
     breadcrumbs: {
         fontSize: 11,
@@ -79,31 +80,31 @@ function NewsApp(props) {
         return () => clearTimeout(timer);
     }, [dispatch, news.parametres]);
 
-    function handlePreviousClick() {
+    const handlePreviousClick = () => {
         news.parametres.page = Math.max(news.parametres.page - 1, 1);
         dispatch(Actions.setParametresData(news.parametres));
         document.querySelector('.st').scrollTop = 0;
-    }
+    };
 
-    function handleNextClick() {
+    const handleNextClick = () => {
         news.parametres.page = Math.min(news.parametres.page + 1, news.pageCount);
         dispatch(Actions.setParametresData(news.parametres));
         document.querySelector('.st').scrollTop = 0;
-    }
+    };
 
-    function handleChangeItems(ev) {
+    const handleChangeItems = (ev) => {
         news.parametres.page = 1;
         news.parametres.itemsPerPage = ev.target.value;
         dispatch(Actions.setParametresData(news.parametres));
         document.querySelector('.st').scrollTop = 0;
-    }
+    };
 
-    function handleTitreChange(ev) {
+    const handleTitreChange = (ev) => {
         news.parametres.page = 1;
         news.parametres.titre = ev.target.value;
         dispatch(Actions.setParametresData(news.parametres));
         document.querySelector('.st').scrollTop = 0;
-    }
+    };
 
     return (
         <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, 'min-h-md')}>
@@ -111,9 +112,10 @@ function NewsApp(props) {
                 <title>Toutes l'Actualité | Boopursal</title>
                 <meta name="description" content='' />
             </Helmet>
+
             <div className={clsx(classes.middle, 'mb-0 relative overflow-hidden flex flex-col flex-shrink-0')}>
                 <Grid container spacing={2} className="max-w-2xl mx-auto py-8 sm:px-16 items-center z-9999">
-                    <Grid item sm={12} xs={12}>
+                    <Grid item xs={12}>
                         <div className="flex items-center">
                             <Button variant="outlined" size="small" color="secondary" onClick={() => props.history.goBack()} className={clsx(classes.btn, 'mr-8')}>
                                 <Icon>chevron_left</Icon><span className="transition ease-in-out duration-700">Retour</span>
@@ -133,10 +135,10 @@ function NewsApp(props) {
             </div>
 
             <Grid container spacing={2} className="max-w-2xl mx-auto sm:px-16 pt-24 items-center">
-                <Grid item sm={8} xs={12}>
+                <Grid item xs={12} sm={8}>
                     <Typography variant="h1" className="text-24 font-bold uppercase">Boopursal | Actualités</Typography>
                 </Grid>
-                <Grid item sm={4} xs={12}>
+                <Grid item xs={12} sm={4}>
                     <TextField
                         label="Rechercher"
                         placeholder="Entrer un mot clé..."
@@ -155,9 +157,9 @@ function NewsApp(props) {
                 {news.loading ? (
                     generate(
                         <Grid item xs={12} sm={6} md={4} lg={3}>
-                            <ContentLoader speed={2} width={119} height={100} viewBox="0 0 119 100">
-                                <rect x="4" y="7" rx="0" ry="0" width="125" height="77" />
-                                <rect x="7" y="95" rx="3" ry="3" width="85" height="7" />
+                            <ContentLoader speed={2} width="100%" height={250} viewBox="0 0 400 250">
+                                <rect x="0" y="0" rx="10" ry="10" width="100%" height="160" />
+                                <rect x="0" y="170" rx="4" ry="4" width="80%" height="16" />
                             </ContentLoader>
                         </Grid>
                     )
