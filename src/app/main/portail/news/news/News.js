@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
   mediaNews: {
     height: 200,
     backgroundPosition: "center",
-    backgroundSize: "contain",
+    backgroundSize: "cover", // ✅ meilleure option pour uniformiser les tailles
+    backgroundRepeat: "no-repeat",
   },
   cardContent: {
     maxHeight: 102,
