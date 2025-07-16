@@ -84,7 +84,7 @@ function Categories(props) {
           <Icon>arrow_forward_ios</Icon>
         </Avatar>
         <Typography variant="subtitle1" className={classes.categoryText}>
-          Tous les catégories
+        Tous les secteurs d’activité
         </Typography>
       </Grid>
     </Grid>
