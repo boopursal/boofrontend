@@ -140,13 +140,14 @@ function ProduitListItem(props) {
                                 length: 70,
                               })
                             )}
-                            <Link
-                              component="a"
-                              href={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`}
+                           <Typography
+                               gutterBottom
+                               component="a"
+                               href={`/detail-produit/${produit.sousSecteurs.slug}/${produit.categorie.slug}/${produit.id}-${produit.slug}`}
                               className="ml-2 text-blue"
                             >
                               Voir détails
-                            </Link>
+                            </Typography>
                           </Typography>
                           <Typography
                             variant="body2"
