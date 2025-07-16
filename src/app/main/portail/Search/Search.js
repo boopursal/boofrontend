@@ -308,35 +308,35 @@ function Search(props) {
         event.preventDefault();
         event.stopPropagation();
         let url;
-        
+    
         if (!suggestion) return;
-
-        if (suggestion.societe) {
-            url = `/entreprise/${suggestion.id}-${suggestion.slug}`;
-        }
-        else if (suggestion.titre) {
+    
+        if (suggestion.type === 'actualite') {
             url = `/actualite/${suggestion.id}-${suggestion.slug}`;
+        } 
+        else if (suggestion.titre && suggestion.sousSecteurSlug && suggestion.categorieSlug) {
+            url = `/detail-produit/${suggestion.sousSecteurSlug}/${suggestion.categorieSlug}/${suggestion.id}-${suggestion.slug}`;
         }
+        else if (suggestion.societe) {
+            url = `/entreprise/${suggestion.id}-${suggestion.slug}`;
+        } 
         else if (suggestion.name) {
             url = `/vente-produits/${suggestion.sect}/${suggestion.slug}`;
         }
         else if (suggestion.autreFrs) {
             url = `/entreprises?q=${suggestion.value}`;
         }
-        else if (suggestion.autreProduits) {
+        else if (suggestion.autreProduits || suggestion.autreActivites) {
             url = `/vente-produits?q=${suggestion.value}`;
-        }
-        else if (suggestion.autreActivites) {
-            url = `/vente-produits?activite=${suggestion.value}`;
         }
         else if (suggestion.autreActualites) {
             url = `/actualites?q=${suggestion.value}`;
         }
-        
+    
         history.push(url);
         hideSearch();
     }
-
+    
     function handleSuggestionsClearRequested() {
         dispatch(Actions.clearSuggestions());
     }
