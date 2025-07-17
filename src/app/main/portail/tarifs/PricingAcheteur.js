@@ -277,17 +277,14 @@ const PricingAcheteur = (props) => {
           <div className={classes.tabPanel}>{renderPlanDetails(plans[selectedTab])}</div>
           <div className="flex flex-col mt-8">
             <Typography variant="caption">
-              * Les Fournisseurs qui ont acheté votre Profil pour vous
-              contacter.
+            * Les Fournisseurs qui ont acheté un jeton pour vous contacter.
             </Typography>
             <Typography variant="caption">
-              ** Le compte anonyme vous libère de gérer vos achats et les
-              fournisseurs ne sauront pas votre identité. Un pourcentage payant
-              sera défini en commun accord pour chaque RFQ.
+            ** Le compte anonyme vous libère de la gestion de vos achats et les fournisseurs ne peuvent pas connaître votre identité.
+             Une commission sera défi nie par commun accord pour chaque RFQ.
             </Typography>
             <Typography variant="caption">
-              *** Sous Compte acheteur vous permet d'ajouter vos collègues ou
-              collaborateurs pour plus d'efficacité.
+            *** Le Sous Compte acheteur vous permet d'ajouter vos collègues ou collaborateurs pour plus d'effi cacité.
             </Typography>
           </div>
         </>

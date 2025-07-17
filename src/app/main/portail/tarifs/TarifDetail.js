@@ -108,10 +108,10 @@ function TarifDetail(props) {
                 color="inherit"
                 className="opacity-75 mt-16 text-13 sm:text-18 mx-auto max-w-512"
               >
-                Votre place de marché{" "}
-                <span className=" italic font-bold uppercase">B2B</span> la plus
-                adaptée à vos besoins avec une tarification simple et abordable.
-                <br /> Vous pouvez toujours essayer un plan gratuit!
+                {" "}
+                <span className=" italic font-bold uppercase">Boopursal</span> la place de marché professionnelles, 
+                la plus adaptée à vos besoins avec une tarification 
+                transparente et abordable. N'hésitez pas à nous tester avec la formule gratuite !
               </Typography>
             </FuseAnimate>
 
