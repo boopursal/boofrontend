@@ -23,7 +23,7 @@ function Childs() {
     return (
         <>
             <Helmet>
-                <title>Tentatives d'inscriptions | Les Achats Industriels</title>
+                <title>Tentatives d'inscriptions | Boopursal</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <meta name="googlebot" content="noindex" />
             </Helmet>

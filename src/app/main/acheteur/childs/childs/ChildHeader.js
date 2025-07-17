@@ -10,7 +10,7 @@ function ChildHeader(props) {
             <div className="flex items-center">
 
                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                    <Typography className="hidden sm:flex" variant="h6">Liste d'essai de s'inscrire</Typography>
+                    <Typography className="hidden sm:flex" variant="h6">Liste des tentatives d’inscription</Typography>
                 </FuseAnimate>
             </div>
 
