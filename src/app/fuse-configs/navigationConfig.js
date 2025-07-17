@@ -451,7 +451,7 @@ const navigationConfig = [
     children: [
       {
         id: "teams",
-        title: "Suivi les acheteurs",
+        title: "Suivi des sous comptes acheteurs",
         auth: authRoles.acheteur,
         exact: true,
         type: "item",
@@ -459,7 +459,7 @@ const navigationConfig = [
       },
       {
         id: "team-acheteur",
-        title: "Création Acheteur / Master ",
+        title: "Gestion des profils acheteurs ",
         auth: authRoles.acheteur,
         exact: true,
         type: "item",
