@@ -190,7 +190,8 @@ function SideBareSearch(props) {
                                                     }}
                                                 >
                                                     {
-                                                        villes && villes.map((item, index) => (
+                                                        villes &&
+                                                        [...villes].sort((a, b) => a.name.localeCompare(b.name)).map((item, index) => (
                                                             <ListItem
                                                                 key={index}
                                                                 className={classes.nested}
@@ -223,7 +224,8 @@ function SideBareSearch(props) {
                                             }}
                                         >
                                             {
-                                                payss && payss.map((item, index) => (
+                                               payss &&
+                                               [...payss].sort((a, b) => a.name.localeCompare(b.name)).map((item, index) => (
                                                     <ListItem
                                                         key={index}
                                                         button
@@ -299,7 +301,8 @@ function SideBareSearch(props) {
                                                                     }}
                                                                 >
                                                                     {
-                                                                        categories && categories.map((item, index) => (
+                                                                       categories &&
+                                                                       [...categories].sort((a, b) => a.name.localeCompare(b.name)).map((item, index) => (
                                                                             <ListItem
                                                                                 key={index}
                                                                                 className={classes.nested2}
@@ -341,7 +344,8 @@ function SideBareSearch(props) {
                                                         }}
                                                     >
                                                         {
-                                                            activites && activites.map((item, index) => (
+                                                            activites &&
+                                                            [...activites].sort((a, b) => a.name.localeCompare(b.name)).map((item, index) => (
                                                                 <ListItem
                                                                     key={index}
                                                                     className={classes.nested}
@@ -376,7 +380,8 @@ function SideBareSearch(props) {
                                             }}
                                         >
                                             {
-                                                secteurs && secteurs.map((secteur, index) => (
+                                                secteurs &&
+                                                [...secteurs].sort((a, b) => a.name.localeCompare(b.name)).map((secteur, index) => (
                                                     <ListItem
                                                         key={index}
                                                         button
