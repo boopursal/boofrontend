@@ -60,7 +60,7 @@ function ChildTable(props) {
         return (
             <div className="flex flex-1 items-center justify-center h-full">
                 <Typography color="textSecondary" variant="h5">
-                    Aucune tentative trouvée
+                Aucune tentative d’inscription trouvée avec votre nom de domaine ou avec votre adresse mail
                 </Typography>
             </div>
         );

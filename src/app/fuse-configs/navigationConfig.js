@@ -638,7 +638,7 @@ const navigationConfig = [
   },
   {
     id: "fournisseurs-tentatives",
-    title: "Demande d'inscription",
+    title: "Tentatives d’inscription",
     auth: authRoles.fournisseur,
     type: "item",
     icon: "vpn_key",
