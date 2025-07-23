@@ -13,6 +13,7 @@ import { create } from 'jss';
 import { StylesProvider, jssPreset, createGenerateClassName } from '@material-ui/styles';
 import CookieConsent, { Cookies } from "react-cookie-consent";
 //import routesConfig from './fuse-configs/routesConfig'; // Assurez-vous que le chemin est correct
+import NavigationLoader from 'app/fuse-components/NavigationLoader';
 
 const jss = create({
     ...jssPreset(),
@@ -36,6 +37,7 @@ const App = () => {
                             <ScrollToTop />
                             <FuseAuthorization>
                                 <FuseTheme>
+                                <NavigationLoader />
                                     <FuseLayout />
                                     <CookieConsent
                                         location="top"

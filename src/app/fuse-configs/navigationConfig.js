@@ -715,5 +715,194 @@ const navigationConfig = [
   }, 
   /** FIN FOURNISSEUR Navigations */
 ];
+export const filterNavigationByUser = (navigation, user) => {
+  if (!user) return [];
+
+  const email = user.email || (user.data && user.data.email) || '';
+  const role = user.role || (user.data && user.data.role) || '';
+
+  // Cas spécial pour acheteur admin email
+  if (email === "acheteur-adm@boopursal.com") {
+    return navigation.filter(item =>
+      ["dashboard_aadmin", "demandes-admin"].includes(item.id)
+    );
+  }
+  if (email === "editeur-adm@boopursal.com") {
+    return [
+      {
+        id: "configurer",
+        title: "Configurer",
+        type: "group",
+        icon: "build",
+        children: [
+          {
+            id: "portail",
+            title: "Gestion du contenu",
+            type: "collapse",
+            icon: "apps",
+            children: [
+              {
+                id: "actualites-admin",
+                title: "Actualités",
+                type: "item",
+                icon: "ballot",
+                url: "/admin/actualites"
+              }
+            ]
+          }
+        ]
+      }
+    ];
+  }
+  if (email === "commercial-adm@boopursal.com") {
+    return [
+      {
+        id: "demandes-devis-admin",
+        title: "Demandes de devis",
+        auth: authRoles.admin,
+        type: "collapse",
+        icon: "inbox",
+        children: [
+          {
+            id: "traite-devis",
+            title: "Traitées",
+            auth: authRoles.admin,
+            type: "item",
+            url: "/dv_traite",
+          },
+          {
+            id: "demandes-devis",
+            title: "Non traitées",
+            auth: authRoles.admin,
+            type: "item",
+            url: "/dv_ntraite",
+            badge: {
+              title: "demandes-devis",
+              bg: "rgb(255, 111, 0)",
+              fg: "#FFFFFF",
+              count: 0,
+            },
+          },
+          {
+            id: "corbeille-devis",
+            title: "Corbeille",
+            auth: authRoles.admin,
+            type: "item",
+            url: "/demandesdevis/corbeille",
+          },
+        ],
+      },
+    
+      {
+        id: "message-fournisseur",
+        title: "Destination Fournisseur",
+        auth: authRoles.admin,
+        type: "item",
+        icon: "email",
+        url: "/contact_fournisseur",
+        badge: {
+          title: "message-fournisseur",
+          bg: "rgb(255, 111, 0)",
+          fg: "#FFFFFF",
+          count: 0,
+        },
+      },
+      {
+        id: "validation_produits",
+        title: "Validation des Produits",
+        auth: authRoles.admin,
+        type: "item",
+        icon: "shopping_cart",
+        url: "/products",
+        badge: {
+          title: "validation_produits",
+          bg: "rgb(255, 111, 0)",
+          fg: "#FFFFFF",
+          count: 0,
+        },
+      },
+      {
+        id: "acheteur-admin",
+        title: "Acheteurs",
+        auth: authRoles.admin,
+        type: "item",
+        icon: "supervisor_account",
+        url: "/users/acheteurs",
+        badge: {
+          title: "acheteur-admin",
+          bg: "rgb(255, 111, 0)",
+          fg: "#FFFFFF",
+          count: 0,
+        },
+      },
+      {
+        id: "fournisseurs-collaps",
+        title: "Fournisseurs",
+        auth: authRoles.admin,
+        type: "collapse",
+        icon: "supervisor_account",
+        badge: {
+          title: "fournisseurs-collaps",
+          bg: "rgb(255, 111, 0)",
+          fg: "#FFFFFF",
+          count: 0,
+        },
+        children: [
+          {
+            id: "fournisseurs-admin",
+            title: "Liste",
+            auth: authRoles.admin,
+            type: "item",
+            icon: "supervisor_account",
+            url: "/users/fournisseurs",
+            badge: {
+              title: "fournisseurs-admin",
+              bg: "rgb(255, 111, 0)",
+              fg: "#FFFFFF",
+              count: 0,
+            },
+          },
+          {
+            id: "fournisseurs-provisoire",
+            title: "Fournisseurs provisoire",
+            auth: authRoles.admin,
+            type: "item",
+            icon: "supervisor_account",
+            url: "/provisoire_founrisseur",
+            badge: {
+              title: "fournisseurs-provisoire",
+              bg: "rgb(255, 111, 0)",
+              fg: "#FFFFFF",
+              count: 0,
+            },
+          },
+        ],
+      },
+    ];
+  }
+  
+
+  // Fonction récursive pour filtrer selon le rôle
+  const filterItemsByRole = (items) => {
+    return items.reduce((acc, item) => {
+      // Vérifie si l'élément est autorisé pour ce rôle
+      const isAuthorized = !item.auth || item.auth.includes(role);
+
+      // S'il a des enfants, filtre aussi les enfants
+      if (item.children) {
+        const filteredChildren = filterItemsByRole(item.children);
+        if (filteredChildren.length > 0 && isAuthorized) {
+          acc.push({ ...item, children: filteredChildren });
+        }
+      } else if (isAuthorized) {
+        acc.push(item);
+      }
+
+      return acc;
+    }, []);
+  };
+
+  return filterItemsByRole(navigation);
+};
 
 export default navigationConfig;
