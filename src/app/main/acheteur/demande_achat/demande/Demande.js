@@ -1467,7 +1467,6 @@ const Demande = () => {
                               isNumeric: "Numeric value required",
                             }}
                             step="any"
-                            required
                             fullWidth
                           />
                         </Grid>
