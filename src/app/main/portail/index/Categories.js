@@ -42,7 +42,7 @@ function Categories(props) {
   const classes = useStyles();
 
   // Limiter à 7 catégories affichées
-  const displayedCategories = categories.slice(0, 7);
+  const displayedCategories = categories.slice(0, 6);
 
   return categories.length ? (
     <Grid container justifyContent="center" className="p-5 sm:p-10">
