@@ -741,7 +741,7 @@ function Index(props) {
 
       {/** SECTION VIDEO **/}
       <div className={clsx(classes.middle, classes.videoSection)}>
-        <Container maxWidth="xl" className={classes.mainContainer}>
+        {/* <Container maxWidth="xl" className={classes.mainContainer}>
           <Grid container spacing={4} alignItems="center" sx={{ py: { xs: 4, sm: 6, md: 8 } }}>
             <Grid item xs={12} md={7}>
               <Typography variant="h4" className="text-white uppercase mb-4 font-bold">
@@ -758,10 +758,8 @@ function Index(props) {
               <YouTube videoId="rv2v5pNCQb4" opts={opts} />
             </Grid>
           </Grid>
-        </Container>
-      </div>
-
-      {/** INSCRIPTION FOURNISSEUR/ACHETEUR **/}
+        </Container> */}
+ {/** INSCRIPTION FOURNISSEUR/ACHETEUR **/}
       <Container maxWidth="xl" className={classes.subscriptionSection}>
         <Grid container spacing={4} justifyContent="center" alignItems="stretch">
           <Grid item xs={12} md={6}>
