@@ -12,6 +12,8 @@ import {
   Chip,
   ListItemSecondaryAction,
   IconButton,
+  Container,
+  Box,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { FuseAnimate, FuseAnimateGroup } from "@fuse";
@@ -35,10 +37,6 @@ import { Helmet } from "react-helmet";
 import Navigation from "../categories/Navigation";
 import Link2 from "@material-ui/core/Link";
 import Categories from "./Categories";
-
-import LocationOn from '@material-ui/icons/LocationOn';
-import Public from '@material-ui/icons/Public';
-import CalendarToday from '@material-ui/icons/CalendarToday';
 import moment from 'moment';
 import 'moment/locale/fr';
 
@@ -53,9 +51,10 @@ function SampleNextArrow(props) {
         backgroundColor: "rgba(255,255,255,0.7)",
         border: "1px solid #bfbfbf",
         color: "#4a4a4a",
-        right: "-25px",
+        right: "-15px",
         position: "absolute",
         top: "50%",
+        zIndex: 1,
       }}
       onClick={onClick}
     >
@@ -72,11 +71,11 @@ function SamplePrevArrow(props) {
       style={{
         ...style,
         display: "block",
-        zIndex: "999",
+        zIndex: 1,
         backgroundColor: "rgba(255,255,255,0.7)",
         border: "1px solid #bfbfbf",
         color: "#4a4a4a",
-        left: "-25px",
+        left: "-15px",
         position: "absolute",
         top: "50%",
       }}
@@ -91,11 +90,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
-    // minHeight      : '100%',
     position: "relative",
     flex: "1 0 auto",
     height: "auto",
     backgroundColor: theme.palette.background.default,
+    width: '100%',
+    overflowX: 'hidden',
   },
   container: {
     listStyleType: "none",
@@ -104,23 +104,32 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.primary.main,
     color: theme.palette.getContrastText(theme.palette.primary.main),
     position: "relative",
-    //marginBottom: theme.spacing(4),
     backgroundImage: "url(assets/images/backgrounds/dark-material-bg.jpg)",
-
-      //"url(https://source.unsplash.com/collection/9456871/1600x900)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing(4, 2),
+    [theme.breakpoints.up('sm')]: {
+      padding: theme.spacing(6, 3),
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing(8, 4),
+    },
   },
   middle: {
-    background:
-      "linear-gradient(to right, " +
+    background: "linear-gradient(to right, " +
       theme.palette.primary.dark +
       " 0%, " +
       theme.palette.primary.main +
       " 100%)",
     position: "relative",
     marginBottom: theme.spacing(4),
+    width: '100%',
   },
   searchResults: {
     width: '100%',
@@ -128,7 +137,6 @@ const useStyles = makeStyles((theme) => ({
     margin: '20px auto',
     zIndex: 2
   },
-
   headerIcon: {
     position: "absolute",
     top: -64,
@@ -146,6 +154,14 @@ const useStyles = makeStyles((theme) => ({
   },
   mainHeader: {
     backgroundColor: "rgba(0,0,0,.7)",
+    width: '100%',
+    maxWidth: '800px',
+    margin: '0 auto',
+    borderRadius: 8,
+    padding: theme.spacing(3),
+    [theme.breakpoints.up('sm')]: {
+      padding: theme.spacing(4),
+    },
   },
   icon: {
     color: theme.palette.secondary.dark,
@@ -155,11 +171,13 @@ const useStyles = makeStyles((theme) => ({
   title: {
     padding: theme.spacing(2, 2, 0, 2),
   },
-
   mainAvatar: {
     margin: theme.spacing(1.25, 1.25, 1.25, 0),
     color: "#fff",
     backgroundColor: theme.palette.primary.main,
+    [theme.breakpoints.down('xs')]: {
+      margin: theme.spacing(1, 1, 1, 0),
+    },
   },
   card: {
     margin: 5,
@@ -182,26 +200,32 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   bioFournisseur: {
-    paddingRight: 16,
-    [theme.breakpoints.down("xs")]: {
+    paddingRight: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
       paddingRight: 0,
+      marginBottom: theme.spacing(3),
     },
   },
   bioAchteur: {
-    paddingLeft: 16,
-    [theme.breakpoints.down("xs")]: {
+    paddingLeft: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
       paddingLeft: 0,
     },
   },
   bannerLeadeboard: {
-    width: "80%",
-    height: "100%",
-    margin: "auto",
+    width: "100%",
+    maxWidth: "1200px",
+    height: "auto",
+    margin: "0 auto",
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1),
+    },
   },
   bannerMeduim: {
-    height: 250,
-    width: 300,
-    margin: "auto",
+    width: '100%',
+    height: 'auto',
+    margin: '0 auto',
   },
   categoriesWithTopMargin: {
     marginTop: '21%',
@@ -211,8 +235,12 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     borderRadius: 12,
     boxShadow: '0 3px 10px rgba(0,0,0,0.05)',
+    width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1.5),
+    },
   },
-  headerIcon: {
+  sectionHeaderIcon: {
     backgroundColor: '#1976d2',
     color: '#fff',
   },
@@ -239,16 +267,80 @@ const useStyles = makeStyles((theme) => ({
     color: '#1976d2',
     fontWeight: 500,
   },
-  listItem: {
-    padding: '16px 0',
-    borderBottom: '1px solid #eee',
+  mainContainer: {
+    width: '100%',
+    maxWidth: '1400px',
+    margin: '0 auto',
+    padding: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      padding: theme.spacing(3),
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing(4),
+    },
   },
-  details: {
-    display: 'flex',
-    alignItems: 'center',
-    marginTop: 4,
+  contentGrid: {
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+    },
   },
-})); 
+  bannerColumn: {
+    [theme.breakpoints.down('md')]: {
+      order: 3,
+      marginTop: theme.spacing(3),
+    },
+  },
+  centerColumn: {
+    [theme.breakpoints.down('md')]: {
+      order: 1,
+      marginBottom: theme.spacing(3),
+    },
+  },
+  sliderContainer: {
+    width: '100%',
+    padding: theme.spacing(0, 4),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(0, 2),
+    },
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(0, 1),
+    },
+  },
+  videoSection: {
+    width: '100%',
+    padding: theme.spacing(4, 0),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(3, 0),
+    },
+  },
+  subscriptionSection: {
+    width: '100%',
+    padding: theme.spacing(4, 2),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(3, 2),
+    },
+  },
+  newsGrid: {
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
+  },
+  bannerImage: {
+    width: '100%',
+    height: 'auto',
+    borderRadius: 8,
+    display: 'block',
+  },
+  responsiveSpacing: {
+    padding: theme.spacing(4, 2),
+    [theme.breakpoints.up('sm')]: {
+      padding: theme.spacing(6, 3),
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing(8, 4),
+    },
+  },
+}));
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
@@ -266,60 +358,56 @@ function Index(props) {
   const description =
     "Boopursal Site marchand et la place de marché b2b spécialisé dans le E-sourcing, E business, E marketing, Recherche de Fournisseur Acheteur ,Recever meilleure offre de prix,Site de vente en ligne, Boutique e commerce, Nouveaux clients, E marchands, Vente à distance, Logistique e commerce,E merchandising, Vente sur internet, Salon e commerce, Stratégie marketing, Solution e commerce";
   const portail = useSelector(({ IndexApp }) => IndexApp.poratilIndex);
+  
   const settings = {
     speed: 500,
-    slidesToScroll:
-      portail.produits && portail.produits.length < 4
-        ? portail.produits.length
-        : 4,
-    slidesToShow:
-      portail.produits && portail.produits.length < 4
-        ? portail.produits.length
-        : 4,
+    slidesToScroll: 4,
+    slidesToShow: 4,
     dots: false,
-    infinite: portail.produits && portail.produits.length > 3,
+    infinite: true,
     autoplay: true,
     autoplaySpeed: 5000,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
     responsive: [
       {
+        breakpoint: 1280,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+        }
+      },
+      {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
+        }
       },
       {
-        breakpoint: 600,
+        breakpoint: 768,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-          infinite: true,
-          dots: true,
           arrows: false,
-        },
+        }
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-          className: "slick-slider-m mb-16",
           arrows: false,
-        },
+          dots: true,
+        }
       },
     ],
   };
+
   const opts = {
     width: "100%",
     height: "200px",
     playerVars: {
-      // https://developers.google.com/youtube/player_parameters
       showinfo: 0,
       fs: 0,
       modestbranding: 1,
@@ -360,45 +448,28 @@ function Index(props) {
   }, [searchResultsVisible]);
 
   return (
-    <div
-      className={clsx(
-        classes.root,
-        props.innerScroll && classes.innerScroll,
-        "min-h-md"
-      )}
-    >
+    <div className={clsx(classes.root, props.innerScroll && classes.innerScroll, "min-h-md")}>
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
       </Helmet>
-      {/** 
-             ===================HEADER=================
-            **/}
-      <div
-        className={clsx(
-          classes.header,
-          "relative flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24 h-256 sm:h-288"
-        )}
-      >
-        <div
-          className={clsx(
-            classes.mainHeader,
-            "items-center md:w-xl xs:w-auto z-999 px-8 py-20 rounded-lg"
-          )}
-        >
+
+      {/** HEADER **/}
+      <div className={classes.header}>
+        <div className={classes.mainHeader}>
           <FuseAnimate duration={400} delay={600}>
             <Typography
               variant="h1"
               component="h1"
-              className="sm:text-18 uppercase leading-normal text-13 font-bold mb-16 text-white mx-auto max-w-xl"
+              className="text-16 sm:text-18 md:text-20 uppercase leading-normal font-bold mb-8 sm:mb-12 md:mb-16 text-white mx-auto text-center"
             >
               Boopursal, c'est la communauté de +1000 sociétés,
               Acheteurs et Fournisseurs
             </Typography>
           </FuseAnimate>
-          <div className="md:w-md xs:w-auto m-auto bg-white rounded-8">
+          <div className="w-full max-w-2xl m-auto bg-white rounded-8">
             <Search 
-              className="" 
+              className="w-full" 
               variant="basic" 
               onResultsVisibilityChange={setSearchResultsVisible}
             />
@@ -411,490 +482,374 @@ function Index(props) {
             </div>
           </div>
         )}
-
       </div>
 
-      {/**===================CATEGORIES & RFQs=================**/}
-     {/**===================CATEGORIES & RFQs=================**/}
-<div style={{ marginTop: searchResultsVisible ? '21%' : undefined }}>
-  <Categories categories={portail.categories} />
-</div>
+      {/** CATEGORIES **/}
+      <div style={{ marginTop: searchResultsVisible ? '21%' : undefined }} className={classes.mainContainer}>
+        <Categories categories={portail.categories} />
+      </div>
 
-<Grid
-  container
-  spacing={3}
-  style={{ maxWidth: 1690, margin: '0 auto', width: '100%', padding: '2rem 1rem' }}
-  className="max-w-7xl mx-auto px-4 sm:px-8 py-12"
->
-  
+      {/** DEMANDES DE DEVIS & BANNERS **/}
+      <Container maxWidth="xl" className={classes.mainContainer}>
+        <Grid container spacing={3} className={classes.contentGrid}>
+          {/* Colonne gauche (banners) */}
+          <Grid item xs={12} md={3} className={classes.bannerColumn}>
+            <div className="flex flex-col space-y-4 sm:space-y-6">
+              <a href="https://www.3findustrie.com/" rel="noopener noreferrer" target="_blank" className="block">
+                <img
+                  src="assets/images/banners/Web-Banner-Material-handling-450-x-90.gif"
+                  alt="3fi banner 1"
+                  className={classes.bannerImage}
+                />
+              </a>
+              <a href="https://www.3findustrie.com/" rel="noopener noreferrer" target="_blank" className="block">
+                <img
+                  src="assets/images/banners/Steel-Australia-900X300-PX.gif"
+                  alt="3fi banner 2"
+                  className={classes.bannerImage}
+                />
+              </a>
+            </div>
+          </Grid>
 
-  {/* Colonne gauche (banners) */}
-  <Grid item xs={12} sm={4} md={3} className="flex flex-col space-y-6">
-    <a
-      href="https://www.3findustrie.com/"
-      rel="noopener noreferrer"
-      target="_blank"
-      className="block"
-    >
-      <img
-        src="assets/images/banners/Web-Banner-Material-handling-450-x-90.gif"
-        alt="3fi banner 1"
-        className="w-full h-auto rounded-md"
-      />
-    </a>
-    <a
-      href="https://www.3findustrie.com/"
-      rel="noopener noreferrer"
-      target="_blank"
-      className="block"
-    >
-      <img
-        src="assets/images/banners/Steel-Australia-900X300-PX.gif"
-        alt="3fi banner 2"
-        className="w-full h-auto rounded-md"
-      />
-    </a>
-  </Grid>
+          {/* Centre - Dernières demandes */}
+          <Grid item xs={12} md={6} className={classes.centerColumn}>
+            <div className={classes.section}>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar className={classes.sectionHeaderIcon}>
+                    <Icon>featured_play_list</Icon>
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    <Typography variant="h5" style={{ fontWeight: 700 }}>
+                      DERNIÈRES DEMANDES DE DEVIS
+                    </Typography>
+                  }
+                />
+              </ListItem>
 
-  {/* Centre - Dernières demandes */}
-  <Grid item xs={12} sm={8} md={6}>
-    <div className={classes.section}>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar className={classes.headerIcon}>
-            <Icon>featured_play_list</Icon>
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={
-            <Typography variant="h5" style={{ fontWeight: 700 }}>
-              DERNIÈRES DEMANDES DE DEVIS
-            </Typography>
-          }
-        />
-      </ListItem>
+              <List>
+                {portail.loading ? (
+                  <ContentLoader speed={2} width={400} height={60} viewBox="0 0 400 100">
+                    <rect x="1" y="2" rx="3" ry="3" width="54" height="6" />
+                    <rect x="1" y="20" rx="3" ry="3" width="200" height="6" />
+                    <rect x="1" y="35" rx="9" ry="9" width="79" height="15" />
+                    <rect x="88" y="35" rx="9" ry="9" width="79" height="15" />
+                    <circle cx="373" cy="21" r="11" />
+                    <rect x="1" y="57" rx="0" ry="0" width="390" height="2" />
+                  </ContentLoader>
+                ) : (
+                  <FuseAnimateGroup enter={{ animation: 'transition.slideUpBigIn' }}>
+                    {portail.data && portail.data.map((item, index) => {
+                      const countryMapping = {
+                        "États-Unis": "us",
+                        Allemagne: "de",
+                        France: "fr",
+                        Maroc: "ma",
+                        Espagne: "es",
+                        Italie: "it",
+                        "Royaume-Uni": "gb",
+                      };
+                      const code = countryMapping[item.pays] || null;
 
-      <List>
-        {portail.loading ? (
-          <ContentLoader speed={2} width={400} height={60} viewBox="0 0 400 100">
-            <rect x="1" y="2" rx="3" ry="3" width="54" height="6" />
-            <rect x="1" y="20" rx="3" ry="3" width="200" height="6" />
-            <rect x="1" y="35" rx="9" ry="9" width="79" height="15" />
-            <rect x="88" y="35" rx="9" ry="9" width="79" height="15" />
-            <circle cx="373" cy="21" r="11" />
-            <rect x="1" y="57" rx="0" ry="0" width="390" height="2" />
-          </ContentLoader>
-        ) : (
-          <FuseAnimateGroup enter={{ animation: 'transition.slideUpBigIn' }}>
-            {portail.data &&
-              portail.data.map((item, index) => {
-                const countryMapping = {
-                  "États-Unis": "us",
-                  Allemagne: "de",
-                  France: "fr",
-                  Maroc: "ma",
-                  Espagne: "es",
-                  Italie: "it",
-                  "Royaume-Uni": "gb",
-                };
-                const code = countryMapping[item.pays] || null;
-
-                return (
-                  <Link
-                    key={index}
-                    to={`/demandes-achat/${item.id}-${item.slug}`} // URL dynamique avec la référence de la demande
-                    style={{ textDecoration: 'none' }} // Enlever la décoration du lien
-                  >
-                    <div
-                      style={{
-                        backgroundColor: '#f9f9f9',
-                        borderRadius: 12,
-                        padding: 16,
-                        marginBottom: 20,
-                        boxShadow: '0px 2px 8px rgba(0,0,0,0.05)',
-                      }}
-                    >
-                      <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
-                        [ RFQ-{item.reference} ] {item.titre}
-                      </Typography>
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                        <Icon fontSize="small" style={{ color: '#616161' }}>
-                          description
-                        </Icon>
-                        <Typography variant="body2" color="textSecondary">
-                          {item.description.length > 100
-                            ? item.description.slice(0, 100) + '…'
-                            : item.description}
-                        </Typography>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                        <Icon fontSize="small" style={{ color: '#616161' }}>
-                          access_time
-                        </Icon>
-                        <Typography variant="body2" color="textSecondary">
-                          Créée {moment(item.created).fromNow()}
-                        </Typography>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                        <Icon fontSize="small" style={{ color: '#616161' }}>
-                          hourglass_empty
-                        </Icon>
-                        <Typography variant="body2" color="textSecondary">
-                          Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}
-                        </Typography>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-                        <Icon fontSize="small" style={{ color: '#616161' }}>
-                          public
-                        </Icon>
-                        <Typography variant="body2" color="textSecondary">
-                          {item.ville}, {item.pays}
-                        </Typography>
-                        {code && (
-                          <Avatar
-                            src={`https://flagcdn.com/w40/${code}.png`}
-                            alt={item.pays}
-                            style={{ width: 20, height: 20, borderRadius: '50%' }}
-                          />
-                        )}
-                      </div>
-                      {/* Bouton "Voir plus" */}
-                      <div style={{ textAlign: 'right', marginTop: 16 }}>
-                        <Button
-                          size="small"
-                          color="primary"
-                          endIcon={<Icon fontSize="small">arrow_forward</Icon>}
-                          style={{ fontWeight: 600, textTransform: 'none' }}
+                      return (
+                        <Link
+                          key={index}
+                          to={`/demandes-achat/${item.id}-${item.slug}`}
+                          style={{ textDecoration: 'none' }}
                         >
-                          Voir plus
-                        </Button>
-                      </div>
-                    </div>
+                          <Box
+                            sx={{
+                              backgroundColor: '#f9f9f9',
+                              borderRadius: 12,
+                              padding: 2,
+                              marginBottom: 2.5,
+                              boxShadow: '0px 2px 8px rgba(0,0,0,0.05)',
+                            }}
+                          >
+                            <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
+                              [ RFQ-{item.reference} ] {item.titre}
+                            </Typography>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginTop: 0.75 }}>
+                              <Icon fontSize="small" style={{ color: '#616161' }}>
+                                description
+                              </Icon>
+                              <Typography variant="body2" color="textSecondary">
+                                {item.description.length > 100
+                                  ? item.description.slice(0, 100) + '…'
+                                  : item.description}
+                              </Typography>
+                            </Box>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginTop: 0.75 }}>
+                              <Icon fontSize="small" style={{ color: '#616161' }}>
+                                access_time
+                              </Icon>
+                              <Typography variant="body2" color="textSecondary">
+                                Créée {moment(item.created).fromNow()}
+                              </Typography>
+                            </Box>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginTop: 0.75 }}>
+                              <Icon fontSize="small" style={{ color: '#616161' }}>
+                                hourglass_empty
+                              </Icon>
+                              <Typography variant="body2" color="textSecondary">
+                                Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}
+                              </Typography>
+                            </Box>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginTop: 0.75 }}>
+                              <Icon fontSize="small" style={{ color: '#616161' }}>
+                                public
+                              </Icon>
+                              <Typography variant="body2" color="textSecondary">
+                                {item.ville}, {item.pays}
+                              </Typography>
+                              {code && (
+                                <Avatar
+                                  src={`https://flagcdn.com/w40/${code}.png`}
+                                  alt={item.pays}
+                                  style={{ width: 20, height: 20, borderRadius: '50%' }}
+                                />
+                              )}
+                            </Box>
+
+                            <Box sx={{ textAlign: 'right', marginTop: 2 }}>
+                              <Button
+                                size="small"
+                                color="primary"
+                                endIcon={<Icon fontSize="small">arrow_forward</Icon>}
+                                style={{ fontWeight: 600, textTransform: 'none' }}
+                              >
+                                Voir plus
+                              </Button>
+                            </Box>
+                          </Box>
+                        </Link>
+                      );
+                    })}
+                  </FuseAnimateGroup>
+                )}
+              </List>
+
+              {portail.data && (
+                <Box sx={{ textAlign: 'right', marginTop: 2 }}>
+                  <Link className={classes.link} to="/demandes-achats">
+                    Toutes les demandes de devis &rarr;
                   </Link>
-                );
-              })}
-          </FuseAnimateGroup>
-        )}
-      </List>
+                </Box>
+              )}
+            </div>
+          </Grid>
 
-      {portail.data && (
-        <div style={{ textAlign: 'right', marginTop: 16 }}>
-          <Link className={classes.link} to="/demandes-achats">
-            Toutes les demandes de devis &rarr;
-          </Link>
-        </div>
-      )}
-    </div>
-  </Grid>
-
-  {/* Colonne droite (banners) */}
-  <Grid item xs={12} sm={12} md={3} className="flex flex-col space-y-6">
-    <a href="https://www.3findustrie.com/" rel="noopener noreferrer" target="_blank" className="block">
-      <img
-        src="assets/images/banners/banner2.jpeg"
-        alt="3fi banner 2"
-        className="w-full h-auto rounded-md"
-      />
-    </a>
-    <a href="https://www.mecalux.fr/" rel="noopener noreferrer" target="_blank" className="block">
-      <img
-        src="assets/images/banners/Mecalux2025.png"
-        alt="3fi banner 2"
-        className="w-full h-auto rounded-md"
-      />
-    </a>
-  </Grid>
-</Grid>
-
-
-      {/** 
-             ===================FOCUS PORDUCTS=================
-            **/}
-      <Grid container className="max-w-2xl mx-auto mb-16 px-8 sm:px-16 py-24">
-        <Grid item sm={12}>
-          <div>
-            <ListItem
-              classes={{
-                container: classes.container,
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar className={classes.mainAvatar}>
-                  <Icon>collections_bookmark</Icon>
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <Typography
-                    variant="h2"
-                    component="h2"
-                    className="text-20 font-bold xs:text-11 mb-1"
-                  >
-                    FOCUS PRODUITS
-                  </Typography>
-                }
-                secondary="Un aperçu des catalogues produits B2B des fabricants et distributeurs présents sur Boopursal."
-              />
-              <ListItemSecondaryAction
-                classes={{
-                  root: classes.buttonSm,
-                }}
-              >
-                <Button
-                  component={Link}
-                  to="/vente-produits"
-                  className="whitespace-no-wrap"
-                  color="secondary"
-                  variant="outlined"
-                >
-                  Plus de produits
-                  <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon>
-                </Button>
-              </ListItemSecondaryAction>
-            </ListItem>
-            {portail.loadingProduits ? (
-              <ContentLoader
-                viewBox="0 0 1360 400"
-                height={400}
-                width={1360}
-                speed={2}
-              >
-                <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
-                <rect x="30" y="250" rx="0" ry="0" width="200" height="18" />
-                <rect x="30" y="275" rx="0" ry="0" width="120" height="20" />
-                <rect x="250" y="20" rx="8" ry="8" width="200" height="200" />
-                <rect x="250" y="250" rx="0" ry="0" width="200" height="18" />
-                <rect x="250" y="275" rx="0" ry="0" width="120" height="20" />
-                <rect x="470" y="20" rx="8" ry="8" width="200" height="200" />
-                <rect x="470" y="250" rx="0" ry="0" width="200" height="18" />
-                <rect x="470" y="275" rx="0" ry="0" width="120" height="20" />
-                <rect x="690" y="20" rx="8" ry="8" width="200" height="200" />
-                <rect x="690" y="250" rx="0" ry="0" width="200" height="18" />
-                <rect x="690" y="275" rx="0" ry="0" width="120" height="20" />
-                <rect x="910" y="20" rx="8" ry="8" width="200" height="200" />
-                <rect x="910" y="250" rx="0" ry="0" width="200" height="18" />
-                <rect x="910" y="275" rx="0" ry="0" width="120" height="20" />
-                <rect x="1130" y="20" rx="8" ry="8" width="200" height="200" />
-                <rect x="1130" y="250" rx="0" ry="0" width="200" height="18" />
-                <rect x="1130" y="275" rx="0" ry="0" width="120" height="20" />
-              </ContentLoader>
-            ) : (
-              <Slider {...settings}>
-                {portail.produits &&
-                  portail.produits.map((item, index) => (
-                    <Produit produit={item.produit} key={index} />
-                  ))}
-              </Slider>
-            )}
-          </div>
+          {/* Colonne droite (banners) */}
+          <Grid item xs={12} md={3} className={classes.bannerColumn}>
+            <div className="flex flex-col space-y-4 sm:space-y-6">
+              <a href="https://www.3findustrie.com/" rel="noopener noreferrer" target="_blank" className="block">
+                <img
+                  src="assets/images/banners/banner2.jpeg"
+                  alt="3fi banner 2"
+                  className={classes.bannerImage}
+                />
+              </a>
+              <a href="https://www.mecalux.fr/" rel="noopener noreferrer" target="_blank" className="block">
+                <img
+                  src="assets/images/banners/Mecalux2025.png"
+                  alt="Mecalux banner"
+                  className={classes.bannerImage}
+                />
+              </a>
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
+      </Container>
 
-      <div
-        className={clsx(
-          classes.bannerLeadeboard,
-          "flex flex-wrap content-center"
-        )}
-      >
-        <a
-          href="https://www.3findustrie.com/"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
+      {/** FOCUS PRODUITS **/}
+      <Container maxWidth="xl" className={classes.mainContainer}>
+        <Box sx={{ py: { xs: 4, sm: 6, md: 8 } }}>
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar className={classes.mainAvatar}>
+                <Icon>collections_bookmark</Icon>
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={
+                <Typography variant="h4" component="h2" className="font-bold">
+                  FOCUS PRODUITS
+                </Typography>
+              }
+              secondary="Un aperçu des catalogues produits B2B des fabricants et distributeurs présents sur Boopursal."
+            />
+            <ListItemSecondaryAction className={classes.buttonSm}>
+              <Button
+                component={Link}
+                to="/vente-produits"
+                className="whitespace-no-wrap"
+                color="secondary"
+                variant="outlined"
+              >
+                Plus de produits
+                <Icon className="ml-4">keyboard_arrow_right</Icon>
+              </Button>
+            </ListItemSecondaryAction>
+          </ListItem>
+          
+          {portail.loadingProduits ? (
+            <ContentLoader
+              viewBox="0 0 1360 400"
+              height={400}
+              width="100%"
+              speed={2}
+            >
+              <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
+              <rect x="30" y="250" rx="0" ry="0" width="200" height="18" />
+              <rect x="30" y="275" rx="0" ry="0" width="120" height="20" />
+              <rect x="250" y="20" rx="8" ry="8" width="200" height="200" />
+              <rect x="250" y="250" rx="0" ry="0" width="200" height="18" />
+              <rect x="250" y="275" rx="0" ry="0" width="120" height="20" />
+              <rect x="470" y="20" rx="8" ry="8" width="200" height="200" />
+              <rect x="470" y="250" rx="0" ry="0" width="200" height="18" />
+              <rect x="470" y="275" rx="0" ry="0" width="120" height="20" />
+            </ContentLoader>
+          ) : (
+            <div className={classes.sliderContainer}>
+              <Slider {...settings}>
+                {portail.produits && portail.produits.map((item, index) => (
+                  <Produit produit={item.produit} key={index} />
+                ))}
+              </Slider>
+            </div>
+          )}
+        </Box>
+      </Container>
+
+      {/** BANNER LEADERBOARD **/}
+      <div className={classes.bannerLeadeboard}>
+        <a href="https://www.3findustrie.com/" rel="noopener noreferrer" target="_blank">
           <img
-            className=""
+            className="w-full h-auto rounded-lg"
             src="assets/images/banners/banniere_preventica.jpg"
             alt="preventica banner"
           />
         </a>
       </div>
-      {/*===================DECOUVREZ LES SHA=================**/}
-      <div
-        className={clsx(
-          classes.middle,
-          "relative hidden overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-512 sm:h-288 "
-        )}
-      >
-        <div className={classes.overlay} />
-        <Grid
-          container
-          className="max-w-2xl mx-auto px-8 sm:px-16 items-center py-24 z-9999"
-        >
-          <Grid item sm={7} xs={12}>
-            <Typography
-              variant="h2"
-              component="h2"
-              className="text-white text-24 uppercase mb-16"
-            >
-              Découvrez le service{" "}
-              <span className="font-extrabold">Les Achats Industriels</span>
-            </Typography>
-            <Typography className="text-white opacity-75">
-              La place de marché N°1 au Maroc, qui permet aux Acheteurs et aux
-              Fournisseurs de se rencontrer dans une même plate-forme
-              (électronique).
-            </Typography>
-          </Grid>
-          <Grid item sm={5} xs={12}>
-            <YouTube videoId="rv2v5pNCQb4" opts={opts} />
-          </Grid>
-        </Grid>
 
-        <Icon className={classes.headerIcon}>school</Icon>
+      {/** SECTION VIDEO **/}
+      <div className={clsx(classes.middle, classes.videoSection)}>
+        <Container maxWidth="xl" className={classes.mainContainer}>
+          <Grid container spacing={4} alignItems="center" sx={{ py: { xs: 4, sm: 6, md: 8 } }}>
+            <Grid item xs={12} md={7}>
+              <Typography variant="h4" className="text-white uppercase mb-4 font-bold">
+                Découvrez le service{" "}
+                <span className="font-extrabold">Les Achats Industriels</span>
+              </Typography>
+              <Typography className="text-white opacity-75 text-lg">
+                La place de marché N°1 au Maroc, qui permet aux Acheteurs et aux
+                Fournisseurs de se rencontrer dans une même plate-forme
+                (électronique).
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <YouTube videoId="rv2v5pNCQb4" opts={opts} />
+            </Grid>
+          </Grid>
+        </Container>
       </div>
 
-      {/** 
-             ===================INSCRIPTION FOURNISSEUR=================
-            **/}
-     <Grid
-  container
-  direction="row" // 👈 horizontal : VENDRE à gauche, ACHETER à droite
-  justifyContent="center" // 👈 centre horizontalement le bloc
-  alignItems="stretch" // 👈 aligne verticalement les hauteurs
-  spacing={8}
-  style={{ padding: '8rem' }}
->
-  <Grid item xs={12} md={6} style={{ display: 'flex' }}>
-    <BioFournisseur />
-  </Grid>
-  <Grid item xs={12} md={6} style={{ display: 'flex' }}>
-    <BioAcheteur />
-  </Grid>
-</Grid>
+      {/** INSCRIPTION FOURNISSEUR/ACHETEUR **/}
+      <Container maxWidth="xl" className={classes.subscriptionSection}>
+        <Grid container spacing={4} justifyContent="center" alignItems="stretch">
+          <Grid item xs={12} md={6}>
+            <BioFournisseur />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <BioAcheteur />
+          </Grid>
+        </Grid>
+      </Container>
 
-
-
-
-      {/** 
-             ===================NEWS=================
-            **/}
-      <Grid container className="max-w-2xl mx-auto px-8 mb-16 sm:px-16 py-24">
-        <Grid item sm={12}>
-          <div>
-            <ListItem
-              classes={{
-                container: classes.container,
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar className={classes.mainAvatar}>
-                  <Icon>local_library</Icon>
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <Typography
-                    variant="h2"
-                    component="h2"
-                    className="text-20 font-bold uppercase xs:text-11 mb-1"
-                  >
-                    LES DERNIERS ARTICLES DE L'ACTUALITÉ
-                  </Typography>
-                }
-              />
-              <ListItemSecondaryAction
-                classes={{
-                  root: classes.buttonXs,
-                }}
+      {/** ACTUALITÉS **/}
+      <Container maxWidth="xl" className={classes.mainContainer}>
+        <Box sx={{ py: { xs: 4, sm: 6, md: 8 } }}>
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar className={classes.mainAvatar}>
+                <Icon>local_library</Icon>
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={
+                <Typography variant="h4" component="h2" className="font-bold uppercase">
+                  LES DERNIERS ARTICLES DE L'ACTUALITÉ
+                </Typography>
+              }
+            />
+            <ListItemSecondaryAction className={classes.buttonXs}>
+              <Button
+                component={Link}
+                to="/actualites"
+                className="whitespace-no-wrap"
+                color="secondary"
+                variant="outlined"
               >
-                <Button
-                  component={Link}
-                  to="/actualites"
-                  className="whitespace-no-wrap"
-                  color="secondary"
-                  variant="outlined"
-                >
-                  Toute l'actualité
-                  <Icon className="ml-4 arrow-icon">keyboard_arrow_right</Icon>
-                </Button>
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Grid container spacing={2} className="justify-center">
-              {portail.loadingNews
-                ? generate(
-                    <Grid item sm={3}>
-                      <ContentLoader
-                        speed={2}
-                        width={119}
-                        height={100}
-                        viewBox="0 0 119 100"
-                      >
-                        <rect
-                          x="4"
-                          y="7"
-                          rx="0"
-                          ry="0"
-                          width="125"
-                          height="77"
-                        />
-                        <rect
-                          x="7"
-                          y="95"
-                          rx="3"
-                          ry="3"
-                          width="85"
-                          height="7"
-                        />
-                      </ContentLoader>
-                    </Grid>
-                  )
-                : portail.news &&
-                  portail.news.map((item, index) => (
-                    <Grid item sm={3} key={index}>
-                      <News news={item} />
-                    </Grid>
-                  ))}
+                Toute l'actualité
+                <Icon className="ml-4">keyboard_arrow_right</Icon>
+              </Button>
+            </ListItemSecondaryAction>
+          </ListItem>
+          
+          <Grid container spacing={3} className={classes.newsGrid}>
+            {portail.loadingNews
+              ? generate(
+                  <Grid item xs={12} sm={6} md={3}>
+                    <ContentLoader
+                      speed={2}
+                      width={119}
+                      height={100}
+                      viewBox="0 0 119 100"
+                    >
+                      <rect x="4" y="7" rx="0" ry="0" width="125" height="77" />
+                      <rect x="7" y="95" rx="3" ry="3" width="85" height="7" />
+                    </ContentLoader>
+                  </Grid>
+                )
+              : portail.news && portail.news.map((item, index) => (
+                  <Grid item xs={12} sm={6} md={3} key={index}>
+                    <News news={item} />
+                  </Grid>
+                ))}
+          </Grid>
+        </Box>
+      </Container>
+
+      {/** NEWSLETTER **/}
+      <div className={clsx(classes.middle, "py-8 sm:py-12 md:py-16")}>
+        <Container maxWidth="xl" className={classes.mainContainer}>
+          <Grid container spacing={4} alignItems="center" sx={{ py: { xs: 4, sm: 6 } }}>
+            <Grid item xs={12} md={7}>
+              <Typography variant="h4" className="text-white uppercase mb-2 font-bold">
+                Newsletters{" "}
+                <span className="font-extrabold">Boopursal</span>
+              </Typography>
+              <Typography className="text-white opacity-75 text-lg">
+                Inscrivez-vous pour recevoir les newsletters dans votre boîte mail.
+              </Typography>
             </Grid>
-          </div>
-        </Grid>
-      </Grid>
-
-      {/** 
-             ===================NEWSLETTER=================
-            **/}
-      <div
-        className={clsx(
-          classes.middle,
-          "mb-0 relative overflow-hidden flex flex-col flex-shrink-0  p-16 sm:p-24 h-300 sm:h-96 "
-        )}
-      >
-        <div className={classes.overlay} />
-        <Grid
-          container
-          className="max-w-2xl mx-auto px-8  sm:px-16 items-center z-9999"
-        >
-          <Grid item sm={7} xs={12}>
-            <Typography
-              variant="h2"
-              component="h2"
-              className="text-white text-24 uppercase mb-2"
-            >
-              Newsletters{" "}
-              <span className="font-extrabold"> Boopursal</span>
-            </Typography>
-            <Typography className="text-white opacity-75">
-              Inscrivez-vous pour recevoir les newsletters dans votre boîte
-              mail.
-            </Typography>
+            <Grid item xs={12} md={5}>
+              <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
+                <Newsletter />
+              </FuseAnimate>
+            </Grid>
           </Grid>
-          <Grid item sm={5} xs={12}>
-            <FuseAnimate
-              animation="transition.slideUpIn"
-              duration={400}
-              delay={100}
-            >
-              <Newsletter />
-            </FuseAnimate>
-          </Grid>
-        </Grid>
-
-       
+        </Container>
       </div>
     </div>
   );
 }
+
 export default withReducer("IndexApp", reducer)(Index);
