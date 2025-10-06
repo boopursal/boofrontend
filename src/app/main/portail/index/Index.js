@@ -25,7 +25,7 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 import DemandeAchatsListItem from "./DemandeAchatsListItem";
 import Newsletter from "./Newsletter";
-import BioAcheteur from "./BioAcheteur";
+import BioAcheteur from "./BioFournisseur";
 import BioFournisseur from "./BioFournisseur";
 import News from "./News";
 import Produit from "./Produit";
@@ -389,6 +389,46 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#eeeeee',
     },
   },
+  // NOUVEAUX STYLES POUR L'ALIGNEMENT
+  demandDetailsContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    borderBottom: '1px solid #eaeaea',
+  },
+  locationContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+  },
+  flag: {
+    fontSize: '18px',
+    lineHeight: 1,
+  },
+  locationText: {
+    fontSize: '14px',
+    color: '#555',
+  },
+  seeMoreLink: {
+    color: '#1976d2',
+    fontWeight: 600,
+    fontSize: '14px',
+    cursor: 'pointer',
+    textDecoration: 'none',
+    '&:hover': {
+      color: '#1565c0',
+      textDecoration: 'underline',
+    },
+  },
+  demandFooter: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    color: '#666',
+    fontSize: '13px',
+    marginTop: theme.spacing(1),
+  },
 }));
 
 function generate(element) {
@@ -628,60 +668,50 @@ function Index(props) {
                                 </Typography>
                               </Box>
 
-                              {/* Date de création */}
-                              <Box className={classes.detailRow}>
-                                <Icon fontSize="small" style={{ color: '#616161' }}>
-                                  access_time
-                                </Icon>
-                                <Typography variant="body2" className={classes.detailText}>
-                                  Créée {moment(item.created).fromNow()}
-                                </Typography>
-                              </Box>
-
-                              {/* Date d'expiration */}
-                              <Box className={classes.detailRow}>
-                                <Icon fontSize="small" style={{ color: '#616161' }}>
-                                  hourglass_empty
-                                </Icon>
-                                <Typography variant="body2" className={classes.detailText}>
-                                  Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}
-                                </Typography>
-                              </Box>
-
-                              {/* Localisation */}
-                              <Box className={classes.detailRow}>
-                                <Icon fontSize="small" style={{ color: '#616161' }}>
-                                  location_on
-                                </Icon>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1 }}>
-                                  <Typography variant="body2" className={classes.detailText}>
+                              {/* Section avec localisation et Voir plus - CORRIGÉ */}
+                              <Box className={classes.demandDetailsContainer}>
+                                {/* Localisation avec drapeau */}
+                                <Box className={classes.locationContainer}>
+                                  {code ? (
+                                    <img 
+                                      src={`https://flagcdn.com/w20/${code}.png`} 
+                                      alt={item.pays}
+                                      className={classes.flag}
+                                      style={{ width: '20px', height: '15px', borderRadius: '2px' }}
+                                    />
+                                  ) : (
+                                    <Icon fontSize="small" style={{ color: '#616161' }}>
+                                      location_on
+                                    </Icon>
+                                  )}
+                                  <Typography variant="body2" className={classes.locationText}>
                                     {item.ville}, {item.pays}
                                   </Typography>
-                                  {code && (
-                                    <Avatar
-                                      src={`https://flagcdn.com/w40/${code}.png`}
-                                      alt={item.pays}
-                                      style={{ 
-                                        width: 20, 
-                                        height: 20, 
-                                        borderRadius: '50%',
-                                      }}
-                                    />
-                                  )}
                                 </Box>
-                              </Box>
 
-                              {/* Bouton Voir plus */}
-                              <Box sx={{ textAlign: 'right', marginTop: 2 }}>
-                                <Button
-                                  size="small"
-                                  color="primary"
-                                  variant="contained"
-                                  endIcon={<Icon fontSize="small">arrow_forward</Icon>}
-                                  className={classes.seeMoreButton}
+                                {/* Voir plus à droite */}
+                                <Link 
+                                  className={classes.seeMoreLink}
+                                  to={`/demandes-achat/${item.id}-${item.slug}`}
                                 >
                                   Voir plus
-                                </Button>
+                                </Link>
+                              </Box>
+
+                              {/* Dates en bas */}
+                              <Box className={classes.demandFooter}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                  <Icon fontSize="small" style={{ color: '#616161', fontSize: '14px' }}>
+                                    access_time
+                                  </Icon>
+                                  <span>Créée {moment(item.created).fromNow()}</span>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                  <Icon fontSize="small" style={{ color: '#616161', fontSize: '14px' }}>
+                                    hourglass_empty
+                                  </Icon>
+                                  <span>Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}</span>
+                                </Box>
                               </Box>
                             </CardContent>
                           </Card>
