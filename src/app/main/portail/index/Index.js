@@ -14,6 +14,8 @@ import {
   IconButton,
   Container,
   Box,
+  Card,
+  CardContent,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { FuseAnimate, FuseAnimateGroup } from "@fuse";
@@ -231,29 +233,60 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '21%',
   },
   section: {
-    backgroundColor: '#f4f6f8',
-    padding: theme.spacing(2),
-    borderRadius: 12,
-    boxShadow: '0 3px 10px rgba(0,0,0,0.05)',
+    backgroundColor: '#ffffff',
+    padding: theme.spacing(3),
+    borderRadius: 16,
+    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
     width: '100%',
+    border: '1px solid #e0e0e0',
     [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(1.5),
+      padding: theme.spacing(2),
     },
   },
   sectionHeaderIcon: {
     backgroundColor: '#1976d2',
     color: '#fff',
   },
-  listItem: {
-    borderBottom: '1px solid #e0e0e0',
-    padding: '12px 0',
+  demandCard: {
+    backgroundColor: '#f8fbff',
+    borderRadius: 12,
+    padding: theme.spacing(3),
+    marginBottom: theme.spacing(2),
+    boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+    border: '1px solid #e3f2fd',
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      boxShadow: '0 4px 20px rgba(25, 118, 210, 0.15)',
+      transform: 'translateY(-2px)',
+      borderColor: '#1976d2',
+    },
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(2),
+    },
   },
-  details: {
+  demandTitle: {
+    fontWeight: 700,
+    color: '#1976d2',
+    marginBottom: theme.spacing(2),
+    lineHeight: 1.4,
+    fontSize: '1.1rem',
+    borderBottom: '2px solid #e3f2fd',
+    paddingBottom: theme.spacing(1),
+  },
+  detailRow: {
     display: 'flex',
-    alignItems: 'center',
-    fontSize: '0.9rem',
+    alignItems: 'flex-start',
+    gap: theme.spacing(1.5),
+    marginBottom: theme.spacing(1.5),
+    '& .MuiSvgIcon-root': {
+      marginTop: 2,
+      flexShrink: 0,
+    },
+  },
+  detailText: {
+    lineHeight: 1.5,
     color: '#555',
-    marginTop: 4,
+    flex: 1,
   },
   chip: {
     marginLeft: 8,
@@ -265,7 +298,11 @@ const useStyles = makeStyles((theme) => ({
   link: {
     textDecoration: 'none',
     color: '#1976d2',
-    fontWeight: 500,
+    fontWeight: 600,
+    '&:hover': {
+      color: '#1565c0',
+      textDecoration: 'underline',
+    },
   },
   mainContainer: {
     width: '100%',
@@ -331,13 +368,25 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 8,
     display: 'block',
   },
-  responsiveSpacing: {
-    padding: theme.spacing(4, 2),
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(6, 3),
-    },
-    [theme.breakpoints.up('md')]: {
-      padding: theme.spacing(8, 4),
+  seeMoreButton: {
+    fontWeight: 600,
+    textTransform: 'none',
+    borderRadius: 20,
+    padding: '8px 20px',
+    boxShadow: '0 2px 8px rgba(25, 118, 210, 0.2)',
+    marginTop: theme.spacing(1),
+  },
+  viewAllLink: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    fontSize: '1rem',
+    fontWeight: 600,
+    padding: theme.spacing(1, 2),
+    borderRadius: 8,
+    backgroundColor: '#f5f5f5',
+    '&:hover': {
+      backgroundColor: '#eeeeee',
     },
   },
 }));
@@ -512,7 +561,7 @@ function Index(props) {
             </div>
           </Grid>
 
-          {/* Centre - Dernières demandes */}
+          {/* Centre - Dernières demandes - CORRIGÉ */}
           <Grid item xs={12} md={6} className={classes.centerColumn}>
             <div className={classes.section}>
               <ListItem>
@@ -523,7 +572,7 @@ function Index(props) {
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Typography variant="h5" style={{ fontWeight: 700 }}>
+                    <Typography variant="h5" style={{ fontWeight: 700, color: '#1976d2' }}>
                       DERNIÈRES DEMANDES DE DEVIS
                     </Typography>
                   }
@@ -560,75 +609,82 @@ function Index(props) {
                           to={`/demandes-achat/${item.id}-${item.slug}`}
                           style={{ textDecoration: 'none' }}
                         >
-                          <Box
-                            sx={{
-                              backgroundColor: '#f9f9f9',
-                              borderRadius: 12,
-                              padding: 2,
-                              marginBottom: 2.5,
-                              boxShadow: '0px 2px 8px rgba(0,0,0,0.05)',
-                            }}
-                          >
-                            <Typography variant="subtitle2" style={{ fontWeight: 700, color: '#1976d2' }}>
-                              [ RFQ-{item.reference} ] {item.titre}
-                            </Typography>
-
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginTop: 0.75 }}>
-                              <Icon fontSize="small" style={{ color: '#616161' }}>
-                                description
-                              </Icon>
-                              <Typography variant="body2" color="textSecondary">
-                                {item.description.length > 100
-                                  ? item.description.slice(0, 100) + '…'
-                                  : item.description}
+                          <Card className={classes.demandCard}>
+                            <CardContent>
+                              {/* Titre */}
+                              <Typography className={classes.demandTitle}>
+                                [ RFQ-{item.reference} ] {item.titre}
                               </Typography>
-                            </Box>
 
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginTop: 0.75 }}>
-                              <Icon fontSize="small" style={{ color: '#616161' }}>
-                                access_time
-                              </Icon>
-                              <Typography variant="body2" color="textSecondary">
-                                Créée {moment(item.created).fromNow()}
-                              </Typography>
-                            </Box>
+                              {/* Description */}
+                              <Box className={classes.detailRow}>
+                                <Icon fontSize="small" style={{ color: '#616161' }}>
+                                  description
+                                </Icon>
+                                <Typography variant="body2" className={classes.detailText}>
+                                  {item.description.length > 120 
+                                    ? item.description.slice(0, 120) + '…' 
+                                    : item.description}
+                                </Typography>
+                              </Box>
 
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginTop: 0.75 }}>
-                              <Icon fontSize="small" style={{ color: '#616161' }}>
-                                hourglass_empty
-                              </Icon>
-                              <Typography variant="body2" color="textSecondary">
-                                Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}
-                              </Typography>
-                            </Box>
+                              {/* Date de création */}
+                              <Box className={classes.detailRow}>
+                                <Icon fontSize="small" style={{ color: '#616161' }}>
+                                  access_time
+                                </Icon>
+                                <Typography variant="body2" className={classes.detailText}>
+                                  Créée {moment(item.created).fromNow()}
+                                </Typography>
+                              </Box>
 
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginTop: 0.75 }}>
-                              <Icon fontSize="small" style={{ color: '#616161' }}>
-                                public
-                              </Icon>
-                              <Typography variant="body2" color="textSecondary">
-                                {item.ville}, {item.pays}
-                              </Typography>
-                              {code && (
-                                <Avatar
-                                  src={`https://flagcdn.com/w40/${code}.png`}
-                                  alt={item.pays}
-                                  style={{ width: 20, height: 20, borderRadius: '50%' }}
-                                />
-                              )}
-                            </Box>
+                              {/* Date d'expiration */}
+                              <Box className={classes.detailRow}>
+                                <Icon fontSize="small" style={{ color: '#616161' }}>
+                                  hourglass_empty
+                                </Icon>
+                                <Typography variant="body2" className={classes.detailText}>
+                                  Expire le {moment(item.dateExpiration).format('DD/MM/YYYY à HH:mm')}
+                                </Typography>
+                              </Box>
 
-                            <Box sx={{ textAlign: 'right', marginTop: 2 }}>
-                              <Button
-                                size="small"
-                                color="primary"
-                                endIcon={<Icon fontSize="small">arrow_forward</Icon>}
-                                style={{ fontWeight: 600, textTransform: 'none' }}
-                              >
-                                Voir plus
-                              </Button>
-                            </Box>
-                          </Box>
+                              {/* Localisation */}
+                              <Box className={classes.detailRow}>
+                                <Icon fontSize="small" style={{ color: '#616161' }}>
+                                  location_on
+                                </Icon>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1 }}>
+                                  <Typography variant="body2" className={classes.detailText}>
+                                    {item.ville}, {item.pays}
+                                  </Typography>
+                                  {code && (
+                                    <Avatar
+                                      src={`https://flagcdn.com/w40/${code}.png`}
+                                      alt={item.pays}
+                                      style={{ 
+                                        width: 20, 
+                                        height: 20, 
+                                        borderRadius: '50%',
+                                      }}
+                                    />
+                                  )}
+                                </Box>
+                              </Box>
+
+                              {/* Bouton Voir plus */}
+                              <Box sx={{ textAlign: 'right', marginTop: 2 }}>
+                                <Button
+                                  size="small"
+                                  color="primary"
+                                  variant="contained"
+                                  endIcon={<Icon fontSize="small">arrow_forward</Icon>}
+                                  className={classes.seeMoreButton}
+                                >
+                                  Voir plus
+                                </Button>
+                              </Box>
+                            </CardContent>
+                          </Card>
                         </Link>
                       );
                     })}
@@ -637,9 +693,10 @@ function Index(props) {
               </List>
 
               {portail.data && (
-                <Box sx={{ textAlign: 'right', marginTop: 2 }}>
-                  <Link className={classes.link} to="/demandes-achats">
-                    Toutes les demandes de devis &rarr;
+                <Box sx={{ textAlign: 'center', marginTop: 3 }}>
+                  <Link className={classes.viewAllLink} to="/demandes-achats">
+                    Voir toutes les demandes de devis
+                    <Icon>arrow_forward</Icon>
                   </Link>
                 </Box>
               )}
@@ -738,29 +795,7 @@ function Index(props) {
           />
         </a>
       </div>
- 
-      {/** SECTION VIDEO **/}
-     {/*  <div className={clsx(classes.middle, classes.videoSection)}>
-        <Container maxWidth="xl" className={classes.mainContainer}>
-          <Grid container spacing={4} alignItems="center" sx={{ py: { xs: 4, sm: 6, md: 8 } }}>
-            <Grid item xs={12} md={7}>
-              <Typography variant="h4" className="text-white uppercase mb-4 font-bold">
-                Découvrez le service{" "}
-                <span className="font-extrabold">Les Achats Industriels</span>
-              </Typography>
-              <Typography className="text-white opacity-75 text-lg">
-                La place de marché N°1 au Maroc, qui permet aux Acheteurs et aux
-                Fournisseurs de se rencontrer dans une même plate-forme
-                (électronique).
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={5}>
-              <YouTube videoId="rv2v5pNCQb4" opts={opts} />
-            </Grid>
-          </Grid>
-        </Container>
-      </div>
-} */}
+
       {/** INSCRIPTION FOURNISSEUR/ACHETEUR **/}
       <Container maxWidth="xl" className={classes.subscriptionSection}>
         <Grid container spacing={4} justifyContent="center" alignItems="stretch">
